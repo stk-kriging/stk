@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of example01</title>
+  <meta name="keywords" content="example01">
+  <meta name="description" content="Example 01 constructs a kriging approximation in 1D">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">examples</a> &gt; example01.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for examples&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>example01
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>Example 01 constructs a kriging approximation in 1D</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Example 01 constructs a kriging approximation in 1D
+ ===================================================
+    Construct a kriging approximation in 1D. In this example, the model is
+    fixed by the user.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)">stk_predict</a>	STK_PREDICT performs a kriging prediction from data</li><li><a href="../sampling/stk_sampling_cartesiangrid.html" class="code" title="function x = stk_sampling_cartesiangrid( n, d, box )">stk_sampling_cartesiangrid</a>	STK_SAMPLING_CARTESIANGRID builds a regular grid</li><li><a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a>	STK_FEVAL evaluates a function at given locations points</li><li><a href="../utils/stk_plot1d.html" class="code" title="function stk_plot1d(xi,zi,xt,zt,zp)">stk_plot1d</a>	STK_PLOT1D is a convenient plot function in 1D</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Example 01 constructs a kriging approximation in 1D</span>
+0002 <span class="comment">% ===================================================</span>
+0003 <span class="comment">%    Construct a kriging approximation in 1D. In this example, the model is</span>
+0004 <span class="comment">%    fixed by the user.</span>
+0005 
+0006 <span class="comment">%          STK : a Small (Matlab/Octave) Toolbox for Kriging</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Copyright Notice</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    Copyright (C) 2011 SUPELEC</span>
+0011 <span class="comment">%    Version:   1.0</span>
+0012 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
+0013 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0014 <span class="comment">%    URL:       http://sourceforge.net/projects/kriging</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Copying Permission Statement</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for</span>
+0019 <span class="comment">%    Kriging.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0022 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0023 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0024 <span class="comment">%    option) any later version.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0027 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0028 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0029 <span class="comment">%    License for more details.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0032 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0033 <span class="comment">%</span>
+0034 
+0035 clear all; close all;
+0036 
+0037 f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );  <span class="comment">% define a 1D test function</span>
+0038 DIM = 1;                                        <span class="comment">% dimension of the factor space</span>
+0039 box = [-1.0; 1.0];                              <span class="comment">% factor space</span>
+0040 
+0041 NT = 400; <span class="comment">% nb of points in the grid</span>
+0042 xt = <a href="../sampling/stk_sampling_cartesiangrid.html" class="code" title="function x = stk_sampling_cartesiangrid( n, d, box )">stk_sampling_cartesiangrid</a>( NT, DIM, box );
+0043 zt = <a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a>( f, xt );
+0044 
+0045 figure(1); set( gcf, <span class="string">'Name'</span>, <span class="string">'Plot of the function to be approximated'</span>);
+0046 plot( xt.a, zt.a ); xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'z'</span>);
+0047 
+0048 <span class="comment">% In SMTK, the inputs and outputs are members of a structure array</span>
+0049 <span class="comment">% The field 'a' is used to store the numerical values</span>
+0050 
+0051 
+0052 <span class="comment">%% Generate a space-filling design</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% The objective is to construct an approximation of f with a budget of NI</span>
+0055 <span class="comment">% evaluations performed on a &quot;space-filling design&quot;.</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">% A regular grid (i.e., a grid with constant spacing) is constructed using</span>
+0058 <span class="comment">% stk_sampling_cartesiangrid(), which is equivalent to linspace() in this</span>
+0059 <span class="comment">% 1d example.</span>
+0060 <span class="comment">%</span>
+0061 
+0062 NI = 6;                                         <span class="comment">% nb of evaluations that will be used</span>
+0063 xi = <a href="../sampling/stk_sampling_cartesiangrid.html" class="code" title="function x = stk_sampling_cartesiangrid( n, d, box )">stk_sampling_cartesiangrid</a>( NI, DIM, box); <span class="comment">% evaluation points</span>
+0064 zi = <a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a>( f, xi );                        <span class="comment">% evaluation results</span>
+0065 
+0066 
+0067 <span class="comment">%% Specification of the model</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">% We choose a Matern covariance with &quot;fixed parameters&quot; (in other</span>
+0070 <span class="comment">% words, the parameters of the covariance function are provided by the user</span>
+0071 <span class="comment">% rather than estimated from data).</span>
+0072 <span class="comment">%</span>
+0073 
+0074 <span class="comment">% Parameters for the Matern covariance (&quot;help stk_materncov_iso&quot; for more information)</span>
+0075 SIGMA2 = 1.0;  <span class="comment">% variance parameter</span>
+0076 NU     = 4.0;  <span class="comment">% regularity parameter</span>
+0077 RHO1   = 0.4;  <span class="comment">% scale (range) parameter</span>
+0078 
+0079 <span class="comment">% Specification of the model (see &quot;help stk_model&quot; for more information)</span>
+0080 model.covariance_type  = <span class="string">'stk_materncov_iso'</span>;     <span class="comment">% isotropic Matern covariance function</span>
+0081 model.order = 0;                                  <span class="comment">% ordinary kriging (i.e., constant mean)</span>
+0082 model.param = [log(SIGMA2),log(NU),log(1/RHO1)]'; <span class="comment">% vector of parameters</span>
+0083 
+0084 
+0085 <span class="comment">%% Carry out the kriging prediction and display the result</span>
+0086 <span class="comment">%</span>
+0087 <span class="comment">% The result of a kriging predicition is provided by stk_predict() in a</span>
+0088 <span class="comment">% structure, called &quot;zp&quot; in this example, which has two fields: &quot;zp.a&quot; (the</span>
+0089 <span class="comment">% kriging mean) and &quot;zp.v&quot; (the kriging variance).</span>
+0090 <span class="comment">%</span>
+0091 
+0092 <span class="comment">% Carry out the kriging prediction at points xt.a</span>
+0093 zp = <a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)">stk_predict</a>( xi, zi, xt, model );
+0094 
+0095 <span class="comment">% Display the result</span>
+0096 <a href="../utils/stk_plot1d.html" class="code" title="function stk_plot1d(xi,zi,xt,zt,zp)">stk_plot1d</a>( xi, zi, xt, zt, zp );
+0097 t = <span class="string">'Kriging prediction based on noiseless observations'</span>;
+0098 set( gcf, <span class="string">'Name'</span>, t ); title(t);
+0099 xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'z'</span>);
+0100 
+0101 
+0102 <span class="comment">%% Repeat the experiment in a noisy setting</span>
+0103 
+0104 NOISEVARIANCE = (1e-1)^2;
+0105 
+0106 <span class="comment">% Now the observations are perturbed by an additive Gaussian noise</span>
+0107 noise = sqrt(NOISEVARIANCE) * randn(size(zi.a));
+0108 zi_n = struct( <span class="string">'a'</span>, zi.a + noise  );
+0109 
+0110 <span class="comment">% We also include the observation noise in the model</span>
+0111 model_n = model;
+0112 model_n.lognoisevariance = log(NOISEVARIANCE);
+0113 
+0114 <span class="comment">% Carry out the kriging prediction at locations xt.a</span>
+0115 zp_n = <a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)">stk_predict</a>( xi, zi_n, xt, model_n );
+0116 
+0117 <span class="comment">% Display the result</span>
+0118 <a href="../utils/stk_plot1d.html" class="code" title="function stk_plot1d(xi,zi,xt,zt,zp)">stk_plot1d</a>( xi, zi_n, xt, zt, zp_n );
+0119 t = <span class="string">'Kriging prediction based on noisy observations'</span>;
+0120 set( gcf, <span class="string">'Name'</span>, t ); title(t);
+0121 xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'z'</span>);</pre></div>
+<hr><address>Generated on Wed 28-Sep-2011 09:58:41 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

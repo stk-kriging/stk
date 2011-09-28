@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_sampling_cartesiangrid</title>
+  <meta name="keywords" content="stk_sampling_cartesiangrid">
+  <meta name="description" content="STK_SAMPLING_CARTESIANGRID builds a regular grid">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">sampling</a> &gt; stk_sampling_cartesiangrid.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sampling&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_sampling_cartesiangrid
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_SAMPLING_CARTESIANGRID builds a regular grid</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function x = stk_sampling_cartesiangrid( n, d, box ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_SAMPLING_CARTESIANGRID builds a regular grid
+
+ CALL: x = stk_sampling_cartesiangrid( n, d, box )
+
+ FIXME: documentation incomplete</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="../examples/example01.html" class="code" title="">example01</a>	Example 01 constructs a kriging approximation in 1D</li><li><a href="../examples/example02.html" class="code" title="">example02</a>	Example 02 constructs a kriging approximation in 1D</li><li><a href="../examples/example04.html" class="code" title="">example04</a>	Example 04 shows two-dimensional designs</li><li><a href="../examples/example05.html" class="code" title="">example05</a>	Example 05 generates conditioned sample paths</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_SAMPLING_CARTESIANGRID builds a regular grid</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: x = stk_sampling_cartesiangrid( n, d, box )</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% FIXME: documentation incomplete</span>
+0006 
+0007 <span class="comment">%          STK : a Small (Matlab/Octave) Toolbox for Kriging</span>
+0008 <span class="comment">%          =================================================</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Copyright Notice</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    Copyright (C) 2011 SUPELEC</span>
+0013 <span class="comment">%    Version:   1.0</span>
+0014 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
+0015 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0016 <span class="comment">%    URL:       http://sourceforge.net/projects/kriging</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">% Copying Permission Statement</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for</span>
+0021 <span class="comment">%    Kriging.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0024 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0025 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0026 <span class="comment">%    option) any later version.</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0029 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0030 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0031 <span class="comment">%    License for more details.</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0034 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0035 <span class="comment">%</span>
+0036 <a name="_sub0" href="#_subfunctions" class="code">function x = stk_sampling_cartesiangrid( n, d, box )</a>
+0037 
+0038 <span class="keyword">if</span> (nargin &lt; 3) || isempty(box)
+0039     xmin = zeros(1,d);
+0040     xmax = ones(1,d);
+0041 <span class="keyword">else</span>
+0042     [s1,s2] = size(box);
+0043     <span class="keyword">if</span> ~( (s1==2) &amp;&amp; (s2==d) ),
+0044         error(<span class="string">'box should be a 2xd array'</span>);
+0045     <span class="keyword">end</span>
+0046     xmin = box(1,:);
+0047     xmax = box(2,:);
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="comment">% NOT COMPATIBLE WITh OCTAVE</span>
+0051 <span class="comment">% validateattributes( n, {'numeric'}, {'integer','vector','&gt;=',0} );</span>
+0052 <span class="comment">% validateattributes( d, {'numeric'}, {'integer','scalar','&gt;=',1} );</span>
+0053 <span class="comment">% validateattributes( xmin, {'numeric'}, {'vector','finite','nonnan'} );</span>
+0054 <span class="comment">% validateattributes( xmax, {'numeric'}, {'vector','finite','nonnan'} );</span>
+0055 
+0056 <span class="keyword">if</span> (length(n)~=1) &amp;&amp; (length(n)~=d)
+0057     error(<span class="string">'n should either be a scalar or a vector of length d'</span>);
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="keyword">if</span> any(n==0), <span class="comment">% empty grid</span>
+0061     
+0062     xdata = zeros(0,d);
+0063     
+0064 <span class="keyword">else</span> <span class="comment">% at least one input point</span>
+0065     
+0066     <span class="keyword">if</span> length(n) == 1, n = n * ones(1,d); <span class="keyword">end</span>
+0067     
+0068     xmin = reshape( xmin, 1, d ); <span class="comment">% make sure we work we row vectors</span>
+0069     xmax = reshape( xmax, 1, d );   assert(all( xmin &lt; xmax ));
+0070     
+0071     <span class="keyword">if</span> d == 1, <span class="comment">% univariate inputs</span>
+0072         
+0073         xdata = linspace( xmin, xmax, n )';
+0074         
+0075     <span class="keyword">else</span> <span class="comment">% multivariate inputs</span>
+0076         
+0077         vect = cell( 1, d );
+0078         <span class="keyword">for</span> j = 1:d,
+0079             vect{j} = linspace( xmin(j), xmax(j), n(j) );
+0080         <span class="keyword">end</span>
+0081         
+0082         tmp = cell( 1, d );
+0083         [ tmp{:} ] = ndgrid( vect{:} );
+0084         
+0085         xdata = zeros( prod(n), d );
+0086         <span class="keyword">for</span> j = 1:d,
+0087             xdata(:,j) = tmp{j}(:);
+0088         <span class="keyword">end</span>
+0089         
+0090     <span class="keyword">end</span> <span class="comment">% if d == 1</span>
+0091     
+0092 <span class="keyword">end</span>
+0093 
+0094 x = struct( <span class="string">'a'</span>, xdata );
+0095 
+0096 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Wed 28-Sep-2011 09:58:41 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

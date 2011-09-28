@@ -1,0 +1,10 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  stk_feval [URL="stk_feval.html"];
+  stk_is_fmincon_available [URL="stk_is_fmincon_available.html"];
+  stk_is_octave_in_use [URL="stk_is_octave_in_use.html"];
+  stk_is_pct_installed [URL="stk_is_pct_installed.html"];
+  stk_plot1d [URL="stk_plot1d.html"];
+  stk_plot1dsim [URL="stk_plot1dsim.html"];
+}

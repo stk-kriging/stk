@@ -1,0 +1,245 @@
+% STK_MAKE_MATCOV computes a covariance matrix
+%
+% CALL: [K,P] = stk_make_matcov( x, [], model,... )
+%       x = 
+%
+% CALL: [K,P] = stk_make_matcov( x, xco, model,...)
+%
+%
+% CALL: [K,P] = stk_make_matcov( x, model,...)
+%
+% STK_MAKE_MATCOV 
+%
+% BE CAREFUL: stk_make_matcov(x,model) and stk_makematcov(x,x,model) are
+% NOT equivalent if model.lognoisevariance exists (in the first case the
+% nois variance is added on the diagonal).
+
+%                  Small (Matlab/Octave) Toolbox for Kriging
+%
+% Copyright Notice
+%
+%    Copyright (C) 2011 SUPELEC
+%    Version: 1.0
+%    Authors: Julien Bect <julien.bect@supelec.fr>
+%             Emmanuel Vazquez <emmanuel.vazquez@supelec.fr>
+%    URL:     http://sourceforge.net/projects/kriging/
+%
+% Copying Permission Statement
+%
+%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
+%    Kriging.
+%
+%    STK is free software: you can redistribute it and/or modify it under
+%    the terms of the GNU General Public License as published by the Free
+%    Software Foundation,  either version 3  of the License, or  (at your
+%    option) any later version.
+%
+%    STK is distributed  in the hope that it will  be useful, but WITHOUT
+%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY
+%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public
+%    License for more details.
+%
+%    You should  have received a copy  of the GNU  General Public License
+%    along with STK.  If not, see <http://www.gnu.org/licenses/>.
+%
+
+function [K,P] = stk_make_matcov( x, varargin )
+
+if nargin < 2, error('Not enough input arguments'); end
+
+%=== guess which syntax has been used based on the second input arg
+
+if isempty( varargin{1} ), % stk_make_matcov(x,[],model,...)
+    
+    model = varargin{2};
+    varargin = varargin(3:end);
+    make_matcov_auto = true;
+    
+elseif isfield( varargin{1}, 'a' ), % stk_make_matcov(x,xco,model,...)
+    
+    if nargin < 3, error('Not enough input arguments'); end
+    
+    xco = varargin{1};
+    model = varargin{2};
+    varargin = varargin(3:end);
+    make_matcov_auto = false;
+    
+else % stk_make_matcov(x,model,...)
+    
+    model = varargin{1};
+    varargin = varargin(2:end);
+    make_matcov_auto = true;
+    
+end
+
+if ~isempty(varargin), error('Too many input arguments'); end
+
+if isfield(model,'covariance_cache'), % handle the case where a 'covariance_cache' field is present
+    
+    if make_matcov_auto,
+        K = model.covariance_cache( x, x );
+    else
+        K = model.covariance_cache( x, xco );
+    end
+    
+else % handle the case where the covariance matrix must be computed
+    
+    %=== blocking parameters
+    
+    % If the size of the covariance matrix to be computed is smaller than
+    % MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.
+    MIN_SIZE_FOR_BLOCKING = 500^2;
+    
+    % If it is decided to use parfor, the number of blocks will be chosen in
+    % such a way that blocks smaller than MIN_BLOCK_SIZE are never used
+    MIN_BLOCK_SIZE = 100^2;
+    
+    %=== decide whether blocks should be used or not
+    
+    if isfield(model,'covariance_cache'), % SYNTAX: x(indices), model
+        ncores = 1; % avoids a call to matlabpool() which is slow
+    else
+        N = size(x.a,1);
+        if make_matcov_auto, N=N*N; else N=N*size(xco.a,1); end
+        if (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
+            ncores = 1; % do not use blocking
+        else
+            ncores = max( 1, matlabpool('size') );
+            % note: matlabpool('size') returns 0 if the PCT is not started
+        end
+    end
+    
+    %=== call the subfunction that does the actual computations
+    
+    if make_matcov_auto,
+        %
+        % FIXME: avoid computing twice each off-diagonal term
+        %
+        if ncores == 1, % shortcut when blocking is not used
+            K = feval( model.covariance_type, x, x, model.param );
+        else
+            K = stk_make_matcov_auto_parfor( x, model, ncores, MIN_BLOCK_SIZE );
+        end
+        if isfield( model, 'lognoisevariance' ),
+            K = K + stk_noisecov( size(K,1), model.lognoisevariance );
+        end
+    else
+        if ncores == 1, % shortcut when blocking is not used
+            K = feval( model.covariance_type, x, xco, model.param );
+        else
+            K = stk_make_matcov_inter_parfor( x, xco, model, ncores, MIN_BLOCK_SIZE );
+        end
+    end
+    
+end
+
+%=== compute the regression functions
+
+if nargout > 1, P = stk_ortho_func( x, model ); end
+
+end
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% stk_make_matcov_auto_parfor %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function K = stk_make_matcov_auto_parfor( x, model, ncores, min_block_size )
+
+%=== choose the actual block size & number of blocks
+B = 0; % number of blocks of x_i's
+n = size(x.a,1); n_min = ceil(sqrt(min_block_size));
+while 1, B = B + 1;
+    % stop if the blocks are becoming too small
+    if n/B < n_min, B = max(1,B-1); break; end
+    % stop if the number of blocks is a multiple of ncores
+    if mod( B*(B+1)/2, ncores ) == 0, break; end
+end
+block_size = ceil(n/B); % the last block can be slightly smaller than the others
+nb_blocks = B*(B+1)/2;
+
+%=== prepare blocks
+ind = zeros(B,2); % begin/end positions
+ind(:,1) = 1 + ((1:B)'-1)*block_size;
+ind(:,2) = min( n, ind(:,1)+block_size-1 );
+blocks = struct( 'i',cell(1,nb_blocks), 'j',[], 'xi',[], 'xj',[], 'K',[] );
+i = 1; j = 0;
+for b = 1:nb_blocks;
+    j = j+1; if(j>i), i=i+1; j=1; end
+    blocks(b).i = i; blocks(b).xi = struct( 'a', x.a(ind(i,1):ind(i,2),:) );
+    blocks(b).j = j; blocks(b).xj = struct( 'a', x.a(ind(j,1):ind(j,2),:) );
+end
+
+%=== process blocks
+name = model.covariance_type; param = model.param; % avoids a "parfor" warning
+parfor b = 1:nb_blocks,
+    blocks(b).K = feval( name, blocks(b).xi, blocks(b).xj, param );
+    % FIXME: avoid computing each term in the covariance matrix twice
+    % on the diagonal blocks !
+end
+
+%=== piece the whole matrix out from the blocks
+K = zeros(n);
+for b = 1:nb_blocks,
+    i = blocks(b).i; j = blocks(b).j;
+    K( ind(i,1):ind(i,2), ind(j,1):ind(j,2) ) = blocks(b).K;
+    K( ind(j,1):ind(j,2), ind(i,1):ind(i,2) ) = ( blocks(b).K )';
+end
+
+end % function stk_make_matcov_auto_parfor
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% stk_make_matcov_inter_parfor %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function K = stk_make_matcov_inter_parfor( x, xco, model, ncores, min_block_size )
+
+%=== choose the actual block size & number of blocks
+B1 = 1; n1 = size(x.a,1);   dB1 = 0;
+B2 = 1; n2 = size(xco.a,1); dB2 = 0;
+while 1, bs1 = n1/B1; bs2 = n2/B2;
+    % stop if the blocks are becoming too small
+    if bs1*bs2 < min_block_size, B1=B1-dB1; B2=B2-dB2; break; end
+    % stop if the number of blocks is a multiple of ncores
+    if mod( B1*B2, ncores ) == 0, break; end
+    % split the largest of both sides
+    if bs1 > bs2, B1=B1+1; dB1=1; dB2=0;
+    else B2=B2+1; dB1=0; dB2=1; end
+end
+bs1 = ceil(bs1); bs2 = ceil(bs2); nb_blocks = B1*B2;
+
+%=== prepare blocks
+ind1 = zeros(B1,2); % begin/end positions in the first dimension
+ind1(:,1) = 1 + ((1:B1)'-1)*bs1;
+ind1(:,2) = min( n1, ind1(:,1)+bs1-1 );
+ind2 = zeros(B2,2); % begin/end positions in the second dimension
+ind2(:,1) = 1 + ((1:B2)'-1)*bs2;
+ind2(:,2) = min( n2, ind2(:,1)+bs2-1 );
+blocks = struct( 'i',cell(1,nb_blocks), 'j',[], 'xi',[], 'xcoj',[], 'K',[] );
+for i = 1:B1,
+    for j = 1:B2,
+        b = i + (j-1)*B1; % block number
+        blocks(b).i = i; blocks(b).xi = struct( 'a', x.a(ind1(i,1):ind1(i,2),:) );
+        blocks(b).j = j; blocks(b).xcoj = struct( 'a', xco.a(ind2(j,1):ind2(j,2),:) );
+    end
+end
+
+%=== process blocks
+name = model.covariance_type; param = model.param; % avoids a "parfor" warning
+parfor b = 1:nb_blocks,
+    blocks(b).K = feval( name, blocks(b).xi, blocks(b).xcoj, param );
+end
+
+%=== piece the whole matrix out from the blocks
+K = zeros(n1,n2);
+for i = 1:B1,
+    for j = 1:B2,
+        b = i + (j-1)*B1; % block number
+        K( ind1(i,1):ind1(i,2), ind2(j,1):ind2(j,2) ) = blocks(b).K;
+    end
+end
+
+end % function stk_make_matcov_inter_parfor
