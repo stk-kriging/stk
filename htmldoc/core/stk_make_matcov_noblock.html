@@ -1,0 +1,171 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_make_matcov_noblock</title>
+  <meta name="keywords" content="stk_make_matcov_noblock">
+  <meta name="description" content="stk_make_matcov_noblock blah blah">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">core</a> &gt; stk_make_matcov_noblock.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for core&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_make_matcov_noblock
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>stk_make_matcov_noblock blah blah</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [K,P] = stk_make_matcov_noblock( x, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> stk_make_matcov_noblock blah blah
+
+ NOTE: for testing only, NOT to be included in public releases</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="stk_ortho_func.html" class="code" title="function P = stk_ortho_func( x, model )">stk_ortho_func</a>	STK_ORTHO_FUNC basis functions for the mean</li><li><a href="../covfcs/stk_noisecov.html" class="code" title="function [K]=stk_noisecov(ni, lognoisevariance, diff)">stk_noisecov</a>	STK_NOISECOV computes a noise covariance</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function K = stk_make_matcov_auto( x, model )</a></li><li><a href="#_sub2" class="code">function K = stk_make_matcov_inter( x, xco, model )</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% stk_make_matcov_noblock blah blah</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% NOTE: for testing only, NOT to be included in public releases</span>
+0004 <span class="comment">%</span>
+0005 
+0006 <span class="comment">%                  Small (Matlab/Octave) Toolbox for Kriging</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Copyright Notice</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    Copyright (C) 2011 SUPELEC</span>
+0011 <span class="comment">%    Version: 1.0</span>
+0012 <span class="comment">%    Authors: Julien Bect &lt;julien.bect@supelec.fr&gt;</span>
+0013 <span class="comment">%             Emmanuel Vazquez &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0014 <span class="comment">%    URL:     http://sourceforge.net/projects/kriging/</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% Copying Permission Statement</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for</span>
+0019 <span class="comment">%    Kriging.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0022 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0023 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0024 <span class="comment">%    option) any later version.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0027 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0028 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0029 <span class="comment">%    License for more details.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0032 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0033 <span class="comment">%</span>
+0034 <a name="_sub0" href="#_subfunctions" class="code">function [K,P] = stk_make_matcov_noblock( x, varargin )</a>
+0035 
+0036 <span class="keyword">if</span> nargin &lt; 2, error(<span class="string">'Not enough input arguments'</span>); <span class="keyword">end</span>
+0037 
+0038 <span class="comment">%=== guess which syntax has been used based on the second input arg</span>
+0039 
+0040 <span class="keyword">if</span> isempty( varargin{1} ), <span class="comment">% stk_make_matcov(x,[],model,...)</span>
+0041     
+0042     model = varargin{2};
+0043     varargin = varargin(3:end);
+0044     make_matcov_auto = true;
+0045     
+0046 <span class="keyword">elseif</span> isfield( varargin{1}, <span class="string">'a'</span> ), <span class="comment">% stk_make_matcov(x,xco,model,...)</span>
+0047     
+0048     <span class="keyword">if</span> nargin &lt; 3, error(<span class="string">'Not enough input arguments'</span>); <span class="keyword">end</span>
+0049     
+0050     xco = varargin{1};
+0051     model = varargin{2};
+0052     varargin = varargin(3:end);
+0053     make_matcov_auto = false;
+0054     
+0055 <span class="keyword">else</span> <span class="comment">% stk_make_matcov(x,model,...)</span>
+0056     
+0057     model = varargin{1};
+0058     varargin = varargin(2:end);
+0059     make_matcov_auto = true;
+0060     
+0061 <span class="keyword">end</span>
+0062 
+0063 <span class="keyword">if</span> ~isempty(varargin), error(<span class="string">'Too many input arguments'</span>); <span class="keyword">end</span>
+0064 
+0065 <span class="comment">%=== call the subfunction that does the actual computations</span>
+0066 
+0067 <span class="keyword">if</span> make_matcov_auto,
+0068     K = <a href="#_sub1" class="code" title="subfunction K = stk_make_matcov_auto( x, model )">stk_make_matcov_auto</a>( x, model );
+0069 <span class="keyword">else</span>
+0070     K = <a href="#_sub2" class="code" title="subfunction K = stk_make_matcov_inter( x, xco, model )">stk_make_matcov_inter</a>( x, xco, model );
+0071 <span class="keyword">end</span>
+0072 
+0073 <span class="comment">%=== compute the regression functions</span>
+0074 
+0075 <span class="keyword">if</span> nargout &gt; 1, P = <a href="stk_ortho_func.html" class="code" title="function P = stk_ortho_func( x, model )">stk_ortho_func</a>( x, model ); <span class="keyword">end</span>
+0076 
+0077 <span class="keyword">end</span>
+0078 
+0079 
+0080 
+0081 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0082 <span class="comment">%%% stk_make_matcov_auto %%%</span>
+0083 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0084 
+0085 <a name="_sub1" href="#_subfunctions" class="code">function K = stk_make_matcov_auto( x, model )</a>
+0086 
+0087 <span class="keyword">if</span> isfield(model,<span class="string">'K0'</span>), <span class="comment">% SYNTAX: x(indices), model</span>
+0088     
+0089     K = model.K0( x, x );
+0090     
+0091 <span class="keyword">else</span> <span class="comment">% SYNTAX: x(factors), model</span>
+0092     
+0093     K = feval( model.name, x, x, model.param );
+0094     
+0095 <span class="keyword">end</span>
+0096 
+0097 <span class="keyword">if</span> isfield( model, <span class="string">'lognoisevariance'</span> )
+0098     K = K + <a href="../covfcs/stk_noisecov.html" class="code" title="function [K]=stk_noisecov(ni, lognoisevariance, diff)">stk_noisecov</a>( size(K,1), model.lognoisevariance );
+0099 <span class="keyword">end</span>
+0100 
+0101 <span class="keyword">end</span>
+0102 
+0103 
+0104 
+0105 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0106 <span class="comment">%%% stk_make_matcov_inter %%%</span>
+0107 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0108 
+0109 <a name="_sub2" href="#_subfunctions" class="code">function K = stk_make_matcov_inter( x, xco, model )</a>
+0110 
+0111 <span class="keyword">if</span> ~isfield(model,<span class="string">'K0'</span>), <span class="comment">% SYNTAX: x(factors), xco(factors), model</span>
+0112     K = feval( model.name, x, xco, model.param );
+0113     
+0114 <span class="keyword">else</span> <span class="comment">% SYNTAX: x(indices), xco(indices), model</span>
+0115     K = model.K0( x, xco );
+0116     
+0117 <span class="keyword">end</span>
+0118 
+0119 <span class="keyword">end</span>
+0120</pre></div>
+<hr><address>Generated on Tue 27-Sep-2011 18:32:21 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

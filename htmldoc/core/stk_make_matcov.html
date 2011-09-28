@@ -1,0 +1,308 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_make_matcov</title>
+  <meta name="keywords" content="stk_make_matcov">
+  <meta name="description" content="STK_MAKE_MATCOV computes a covariance matrix">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">core</a> &gt; stk_make_matcov.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for core&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_make_matcov
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_MAKE_MATCOV computes a covariance matrix</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [K,P] = stk_make_matcov( x, varargin ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_MAKE_MATCOV computes a covariance matrix
+
+ CALL: [K,P] = stk_make_matcov( x, [], model,... )
+       x = 
+
+ CALL: [K,P] = stk_make_matcov( x, xco, model,...)
+
+
+ CALL: [K,P] = stk_make_matcov( x, model,...)
+
+ STK_MAKE_MATCOV 
+
+ BE CAREFUL: stk_make_matcov(x,model) and stk_makematcov(x,x,model) are
+ NOT equivalent if model.lognoisevariance exists (in the first case the
+ nois variance is added on the diagonal).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="stk_ortho_func.html" class="code" title="function P = stk_ortho_func( x, model )">stk_ortho_func</a>	STK_ORTHO_FUNC basis functions for the mean</li><li><a href="../covfcs/stk_noisecov.html" class="code" title="function [K]=stk_noisecov(ni, lognoisevariance, diff)">stk_noisecov</a>	STK_NOISECOV computes a noise covariance</li><li><a href="../utils/stk_is_pct_installed.html" class="code" title="function pct_found = stk_is_pct_installed()">stk_is_pct_installed</a>	STK_IS_PCT_INSTALLED returns true if the Parallel Toolbox is available</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="stk_generate_samplepaths.html" class="code" title="function zsim = stk_generate_samplepaths(xt, model, nb_paths)">stk_generate_samplepaths</a>	STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process</li><li><a href="stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)">stk_predict</a>	STK_PREDICT performs a kriging prediction from data</li><li><a href="stk_remlqrg.html" class="code" title="function [rl,drl_param,drl_lnv] = stk_remlqrg(xi, yi, model)">stk_remlqrg</a>	STK_REMLQRG computes restricted likelihood</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function K = stk_make_matcov_auto_parfor( x, model, ncores, min_block_size )</a></li><li><a href="#_sub2" class="code">function K = stk_make_matcov_inter_parfor( x, xco, model, ncores, min_block_size )</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_MAKE_MATCOV computes a covariance matrix</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: [K,P] = stk_make_matcov( x, [], model,... )</span>
+0004 <span class="comment">%       x =</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% CALL: [K,P] = stk_make_matcov( x, xco, model,...)</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% CALL: [K,P] = stk_make_matcov( x, model,...)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% STK_MAKE_MATCOV</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% BE CAREFUL: stk_make_matcov(x,model) and stk_makematcov(x,x,model) are</span>
+0014 <span class="comment">% NOT equivalent if model.lognoisevariance exists (in the first case the</span>
+0015 <span class="comment">% nois variance is added on the diagonal).</span>
+0016 
+0017 <span class="comment">%                  Small (Matlab/Octave) Toolbox for Kriging</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% Copyright Notice</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    Copyright (C) 2011 SUPELEC</span>
+0022 <span class="comment">%    Version: 1.0</span>
+0023 <span class="comment">%    Authors: Julien Bect &lt;julien.bect@supelec.fr&gt;</span>
+0024 <span class="comment">%             Emmanuel Vazquez &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0025 <span class="comment">%    URL:     http://sourceforge.net/projects/kriging/</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% Copying Permission Statement</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for</span>
+0030 <span class="comment">%    Kriging.</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0033 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0034 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0035 <span class="comment">%    option) any later version.</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0038 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0039 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0040 <span class="comment">%    License for more details.</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0043 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0044 <span class="comment">%</span>
+0045 
+0046 <a name="_sub0" href="#_subfunctions" class="code">function [K,P] = stk_make_matcov( x, varargin )</a>
+0047 
+0048 <span class="keyword">if</span> nargin &lt; 2, error(<span class="string">'Not enough input arguments'</span>); <span class="keyword">end</span>
+0049 
+0050 <span class="comment">%=== guess which syntax has been used based on the second input arg</span>
+0051 
+0052 <span class="keyword">if</span> isempty( varargin{1} ), <span class="comment">% stk_make_matcov(x,[],model,...)</span>
+0053     
+0054     model = varargin{2};
+0055     varargin = varargin(3:end);
+0056     make_matcov_auto = true;
+0057     
+0058 <span class="keyword">elseif</span> isfield( varargin{1}, <span class="string">'a'</span> ), <span class="comment">% stk_make_matcov(x,xco,model,...)</span>
+0059     
+0060     <span class="keyword">if</span> nargin &lt; 3, error(<span class="string">'Not enough input arguments'</span>); <span class="keyword">end</span>
+0061     
+0062     xco = varargin{1};
+0063     model = varargin{2};
+0064     varargin = varargin(3:end);
+0065     make_matcov_auto = false;
+0066     
+0067 <span class="keyword">else</span> <span class="comment">% stk_make_matcov(x,model,...)</span>
+0068     
+0069     model = varargin{1};
+0070     varargin = varargin(2:end);
+0071     make_matcov_auto = true;
+0072     
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="keyword">if</span> ~isempty(varargin), error(<span class="string">'Too many input arguments'</span>); <span class="keyword">end</span>
+0076 
+0077 <span class="keyword">if</span> isfield(model,<span class="string">'covariance_cache'</span>), <span class="comment">% handle the case where a 'covariance_cache' field is present</span>
+0078     
+0079     <span class="keyword">if</span> make_matcov_auto,
+0080         K = model.covariance_cache( x, x );
+0081     <span class="keyword">else</span>
+0082         K = model.covariance_cache( x, xco );
+0083     <span class="keyword">end</span>
+0084     
+0085 <span class="keyword">else</span> <span class="comment">% handle the case where the covariance matrix must be computed</span>
+0086     
+0087     <span class="comment">%=== blocking parameters</span>
+0088     
+0089     <span class="comment">% If the size of the covariance matrix to be computed is smaller than</span>
+0090     <span class="comment">% MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.</span>
+0091     MIN_SIZE_FOR_BLOCKING = 500^2;
+0092     
+0093     <span class="comment">% If it is decided to use parfor, the number of blocks will be chosen in</span>
+0094     <span class="comment">% such a way that blocks smaller than MIN_BLOCK_SIZE are never used</span>
+0095     MIN_BLOCK_SIZE = 100^2;
+0096     
+0097     <span class="comment">%=== decide whether blocks should be used or not</span>
+0098     
+0099     <span class="keyword">if</span> isfield(model,<span class="string">'covariance_cache'</span>), <span class="comment">% SYNTAX: x(indices), model</span>
+0100         ncores = 1; <span class="comment">% avoids a call to matlabpool() which is slow</span>
+0101     <span class="keyword">else</span>
+0102         N = size(x.a,1);
+0103         <span class="keyword">if</span> make_matcov_auto, N=N*N; <span class="keyword">else</span> N=N*size(xco.a,1); <span class="keyword">end</span>
+0104         <span class="keyword">if</span> (N &lt; MIN_SIZE_FOR_BLOCKING) || ~<a href="../utils/stk_is_pct_installed.html" class="code" title="function pct_found = stk_is_pct_installed()">stk_is_pct_installed</a>(),
+0105             ncores = 1; <span class="comment">% do not use blocking</span>
+0106         <span class="keyword">else</span>
+0107             ncores = max( 1, matlabpool(<span class="string">'size'</span>) );
+0108             <span class="comment">% note: matlabpool('size') returns 0 if the PCT is not started</span>
+0109         <span class="keyword">end</span>
+0110     <span class="keyword">end</span>
+0111     
+0112     <span class="comment">%=== call the subfunction that does the actual computations</span>
+0113     
+0114     <span class="keyword">if</span> make_matcov_auto,
+0115         <span class="comment">%</span>
+0116         <span class="comment">% FIXME: avoid computing twice each off-diagonal term</span>
+0117         <span class="comment">%</span>
+0118         <span class="keyword">if</span> ncores == 1, <span class="comment">% shortcut when blocking is not used</span>
+0119             K = feval( model.covariance_type, x, x, model.param );
+0120         <span class="keyword">else</span>
+0121             K = <a href="#_sub1" class="code" title="subfunction K = stk_make_matcov_auto_parfor( x, model, ncores, min_block_size )">stk_make_matcov_auto_parfor</a>( x, model, ncores, MIN_BLOCK_SIZE );
+0122         <span class="keyword">end</span>
+0123         <span class="keyword">if</span> isfield( model, <span class="string">'lognoisevariance'</span> ),
+0124             K = K + <a href="../covfcs/stk_noisecov.html" class="code" title="function [K]=stk_noisecov(ni, lognoisevariance, diff)">stk_noisecov</a>( size(K,1), model.lognoisevariance );
+0125         <span class="keyword">end</span>
+0126     <span class="keyword">else</span>
+0127         <span class="keyword">if</span> ncores == 1, <span class="comment">% shortcut when blocking is not used</span>
+0128             K = feval( model.covariance_type, x, xco, model.param );
+0129         <span class="keyword">else</span>
+0130             K = <a href="#_sub2" class="code" title="subfunction K = stk_make_matcov_inter_parfor( x, xco, model, ncores, min_block_size )">stk_make_matcov_inter_parfor</a>( x, xco, model, ncores, MIN_BLOCK_SIZE );
+0131         <span class="keyword">end</span>
+0132     <span class="keyword">end</span>
+0133     
+0134 <span class="keyword">end</span>
+0135 
+0136 <span class="comment">%=== compute the regression functions</span>
+0137 
+0138 <span class="keyword">if</span> nargout &gt; 1, P = <a href="stk_ortho_func.html" class="code" title="function P = stk_ortho_func( x, model )">stk_ortho_func</a>( x, model ); <span class="keyword">end</span>
+0139 
+0140 <span class="keyword">end</span>
+0141 
+0142 
+0143 
+0144 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0145 <span class="comment">%%% stk_make_matcov_auto_parfor %%%</span>
+0146 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0147 
+0148 <a name="_sub1" href="#_subfunctions" class="code">function K = stk_make_matcov_auto_parfor( x, model, ncores, min_block_size )</a>
+0149 
+0150 <span class="comment">%=== choose the actual block size &amp; number of blocks</span>
+0151 B = 0; <span class="comment">% number of blocks of x_i's</span>
+0152 n = size(x.a,1); n_min = ceil(sqrt(min_block_size));
+0153 <span class="keyword">while</span> 1, B = B + 1;
+0154     <span class="comment">% stop if the blocks are becoming too small</span>
+0155     <span class="keyword">if</span> n/B &lt; n_min, B = max(1,B-1); <span class="keyword">break</span>; <span class="keyword">end</span>
+0156     <span class="comment">% stop if the number of blocks is a multiple of ncores</span>
+0157     <span class="keyword">if</span> mod( B*(B+1)/2, ncores ) == 0, <span class="keyword">break</span>; <span class="keyword">end</span>
+0158 <span class="keyword">end</span>
+0159 block_size = ceil(n/B); <span class="comment">% the last block can be slightly smaller than the others</span>
+0160 nb_blocks = B*(B+1)/2;
+0161 
+0162 <span class="comment">%=== prepare blocks</span>
+0163 ind = zeros(B,2); <span class="comment">% begin/end positions</span>
+0164 ind(:,1) = 1 + ((1:B)'-1)*block_size;
+0165 ind(:,2) = min( n, ind(:,1)+block_size-1 );
+0166 blocks = struct( <span class="string">'i'</span>,cell(1,nb_blocks), <span class="string">'j'</span>,[], <span class="string">'xi'</span>,[], <span class="string">'xj'</span>,[], <span class="string">'K'</span>,[] );
+0167 i = 1; j = 0;
+0168 <span class="keyword">for</span> b = 1:nb_blocks;
+0169     j = j+1; <span class="keyword">if</span>(j&gt;i), i=i+1; j=1; <span class="keyword">end</span>
+0170     blocks(b).i = i; blocks(b).xi = struct( <span class="string">'a'</span>, x.a(ind(i,1):ind(i,2),:) );
+0171     blocks(b).j = j; blocks(b).xj = struct( <span class="string">'a'</span>, x.a(ind(j,1):ind(j,2),:) );
+0172 <span class="keyword">end</span>
+0173 
+0174 <span class="comment">%=== process blocks</span>
+0175 name = model.covariance_type; param = model.param; <span class="comment">% avoids a &quot;parfor&quot; warning</span>
+0176 parfor b = 1:nb_blocks,
+0177     blocks(b).K = feval( name, blocks(b).xi, blocks(b).xj, param );
+0178     <span class="comment">% FIXME: avoid computing each term in the covariance matrix twice</span>
+0179     <span class="comment">% on the diagonal blocks !</span>
+0180 <span class="keyword">end</span>
+0181 
+0182 <span class="comment">%=== piece the whole matrix out from the blocks</span>
+0183 K = zeros(n);
+0184 <span class="keyword">for</span> b = 1:nb_blocks,
+0185     i = blocks(b).i; j = blocks(b).j;
+0186     K( ind(i,1):ind(i,2), ind(j,1):ind(j,2) ) = blocks(b).K;
+0187     K( ind(j,1):ind(j,2), ind(i,1):ind(i,2) ) = ( blocks(b).K )';
+0188 <span class="keyword">end</span>
+0189 
+0190 <span class="keyword">end</span> <span class="comment">% function stk_make_matcov_auto_parfor</span>
+0191 
+0192 
+0193 
+0194 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0195 <span class="comment">%%% stk_make_matcov_inter_parfor %%%</span>
+0196 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0197 
+0198 <a name="_sub2" href="#_subfunctions" class="code">function K = stk_make_matcov_inter_parfor( x, xco, model, ncores, min_block_size )</a>
+0199 
+0200 <span class="comment">%=== choose the actual block size &amp; number of blocks</span>
+0201 B1 = 1; n1 = size(x.a,1);   dB1 = 0;
+0202 B2 = 1; n2 = size(xco.a,1); dB2 = 0;
+0203 <span class="keyword">while</span> 1, bs1 = n1/B1; bs2 = n2/B2;
+0204     <span class="comment">% stop if the blocks are becoming too small</span>
+0205     <span class="keyword">if</span> bs1*bs2 &lt; min_block_size, B1=B1-dB1; B2=B2-dB2; <span class="keyword">break</span>; <span class="keyword">end</span>
+0206     <span class="comment">% stop if the number of blocks is a multiple of ncores</span>
+0207     <span class="keyword">if</span> mod( B1*B2, ncores ) == 0, <span class="keyword">break</span>; <span class="keyword">end</span>
+0208     <span class="comment">% split the largest of both sides</span>
+0209     <span class="keyword">if</span> bs1 &gt; bs2, B1=B1+1; dB1=1; dB2=0;
+0210     <span class="keyword">else</span> B2=B2+1; dB1=0; dB2=1; <span class="keyword">end</span>
+0211 <span class="keyword">end</span>
+0212 bs1 = ceil(bs1); bs2 = ceil(bs2); nb_blocks = B1*B2;
+0213 
+0214 <span class="comment">%=== prepare blocks</span>
+0215 ind1 = zeros(B1,2); <span class="comment">% begin/end positions in the first dimension</span>
+0216 ind1(:,1) = 1 + ((1:B1)'-1)*bs1;
+0217 ind1(:,2) = min( n1, ind1(:,1)+bs1-1 );
+0218 ind2 = zeros(B2,2); <span class="comment">% begin/end positions in the second dimension</span>
+0219 ind2(:,1) = 1 + ((1:B2)'-1)*bs2;
+0220 ind2(:,2) = min( n2, ind2(:,1)+bs2-1 );
+0221 blocks = struct( <span class="string">'i'</span>,cell(1,nb_blocks), <span class="string">'j'</span>,[], <span class="string">'xi'</span>,[], <span class="string">'xcoj'</span>,[], <span class="string">'K'</span>,[] );
+0222 <span class="keyword">for</span> i = 1:B1,
+0223     <span class="keyword">for</span> j = 1:B2,
+0224         b = i + (j-1)*B1; <span class="comment">% block number</span>
+0225         blocks(b).i = i; blocks(b).xi = struct( <span class="string">'a'</span>, x.a(ind1(i,1):ind1(i,2),:) );
+0226         blocks(b).j = j; blocks(b).xcoj = struct( <span class="string">'a'</span>, xco.a(ind2(j,1):ind2(j,2),:) );
+0227     <span class="keyword">end</span>
+0228 <span class="keyword">end</span>
+0229 
+0230 <span class="comment">%=== process blocks</span>
+0231 name = model.covariance_type; param = model.param; <span class="comment">% avoids a &quot;parfor&quot; warning</span>
+0232 parfor b = 1:nb_blocks,
+0233     blocks(b).K = feval( name, blocks(b).xi, blocks(b).xcoj, param );
+0234 <span class="keyword">end</span>
+0235 
+0236 <span class="comment">%=== piece the whole matrix out from the blocks</span>
+0237 K = zeros(n1,n2);
+0238 <span class="keyword">for</span> i = 1:B1,
+0239     <span class="keyword">for</span> j = 1:B2,
+0240         b = i + (j-1)*B1; <span class="comment">% block number</span>
+0241         K( ind1(i,1):ind1(i,2), ind2(j,1):ind2(j,2) ) = blocks(b).K;
+0242     <span class="keyword">end</span>
+0243 <span class="keyword">end</span>
+0244 
+0245 <span class="keyword">end</span> <span class="comment">% function stk_make_matcov_inter_parfor</span></pre></div>
+<hr><address>Generated on Wed 28-Sep-2011 09:58:41 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

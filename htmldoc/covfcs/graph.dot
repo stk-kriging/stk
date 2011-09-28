@@ -1,0 +1,10 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  stk_materncov_aniso -> stk_materncov_;
+  stk_materncov_iso -> stk_materncov_;
+
+  stk_materncov_ [URL="stk_materncov_.html"];
+  stk_materncov_aniso [URL="stk_materncov_aniso.html"];
+  stk_materncov_iso [URL="stk_materncov_iso.html"];
+  stk_noisecov [URL="stk_noisecov.html"];
+}

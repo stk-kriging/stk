@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  example01 [URL="example01.html"];
+  example02 [URL="example02.html"];
+  example03 [URL="example03.html"];
+  example04 [URL="example04.html"];
+  example05 [URL="example05.html"];
+}
