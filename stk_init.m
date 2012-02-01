@@ -127,6 +127,5 @@ end
 
 %=== Cleanup
 
-fprintf('\n ');
-clear here STK_* pct_found
-
+fprintf('\n');
+clear here STK_* pct_found fmincon_found octave_in_use s ans
