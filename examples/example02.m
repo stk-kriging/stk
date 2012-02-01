@@ -31,8 +31,6 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-clear all; close all;
-
 
 %% Define a 1d test function (the same as in example01.m)
 
