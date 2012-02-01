@@ -42,16 +42,22 @@ PARAMPRIOR = isfield( model, 'prior' );
 NOISYOBS   = isfield( model, 'lognoisevariance' );
 NOISEPRIOR = isfield( model, 'noiseprior' );
 
-assert( (~NOISEPRIOR) || (NOISYOBS), 'something''s wrong' );
-
-if ~NOISYOBS, model.lognoisevariance = log(eps); end
+if ~NOISYOBS, 
+    if NOISEPRIOR,
+        error([...
+            'Having a prior on the noise variance when there is' ...
+            'no observation noise doesn''t make sense...']);
+    else
+        % log(eps) is harmless
+        model.lognoisevariance = log(eps);
+    end
+end
 
 n = size(xi.a,1);
 
 %% compute rl
 
 [K,P] = stk_make_matcov( xi, model );
-
 q = size(P,2);
 
 [Q,R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
@@ -99,17 +105,20 @@ if nargout >= 2
         drl_param = drl_param + model.prior.invcov*(model.param - model.prior.mean);
     end
         
-    if nargout >= 3,
-        
-        diff = 1;
-        V = stk_noisecov(n, model.lognoisevariance, diff);
-        WVW = W'*V*W;
-        drl_lnv = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wyi'*WVW*WKWinv_Wyi);
-        
-        if NOISEPRIOR
-            drl_lnv = drl_lnv + (model.lognoisevariance - model.noiseprior.mean)/model.noiseprior.var;
+    if nargout >= 3,   
+        if NOISYOBS,
+            diff = 1;
+            V = stk_noisecov(n, model.lognoisevariance, diff);
+            WVW = W'*V*W;
+            drl_lnv = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wyi'*WVW*WKWinv_Wyi);            
+            if NOISEPRIOR
+                drl_lnv = drl_lnv + (model.lognoisevariance - model.noiseprior.mean)/model.noiseprior.var;
+            end
+        else
+            % returns NaN for the derivative with respect to the noise
+            % variance in the case of a model without observation noise
+            drl_lnv = NaN;
         end
-        
     end
     
 end
