@@ -57,13 +57,9 @@ disp( '                                                                     ' );
 
 %=== Add STK folders to the path
 
-STK_ROOT   = fileparts( mfilename('fullpath') );
-STK_CORE   = fullfile( STK_ROOT, 'core'     );
-STK_UTILS  = fullfile( STK_ROOT, 'utils'    );
-STK_COVFCS = fullfile( STK_ROOT, 'covfcs'   );
-STK_SAMPL  = fullfile( STK_ROOT, 'sampling' );
-
-addpath( STK_CORE, STK_UTILS, STK_COVFCS, STK_SAMPL );
+STK_ROOT = fileparts(mfilename('fullpath'));
+addpath(fullfile(STK_ROOT,'utils','config'));
+stk_set_root(STK_ROOT);
 
 %=== Check which of Matlab or Octave is in use
 
@@ -107,26 +103,13 @@ else
     end
 end
 
-%=== Build MEX-files if necessary
+%=== Build MEX-files (if necessary)
 
-fprintf('stk_distance_matrix()... ');
-
-if exist('stk_distance_matrix','file') ~= 3,
-    here = pwd();
-    cd( STK_COVFCS );
-    mex stk_distance_matrix.c
-    cd( here );
-end
-
-if exist('stk_distance_matrix','file') == 3,
-    fprintf('ok\n');
-else
-    fprintf('\n\n');
-    error('compilation error ?\n');
-end
+% to force recompilation of all MEX-files, use stk_compile_all(true);
+stk_compile_all();
 
 %=== Cleanup
 
-fprintf('\n ');
-clear here STK_* pct_found
+fprintf('\n');
+clear here STK_ROOT pct_found fmincon_found octave_in_use s ans
 
