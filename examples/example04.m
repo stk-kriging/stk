@@ -30,7 +30,6 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-clear all
 
 octave_in_use = stk_is_octave_in_use();
 if octave_in_use

@@ -31,7 +31,6 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-clear all
 
 % define a 2D test function
 f_=inline('exp(1.8*(x1+x2))+3*x1+6*x2.^2+3*sin(4*pi*x1)','x1','x2');
