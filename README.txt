@@ -1,4 +1,4 @@
-	  STK : a Small (Matlab/Octave) Toolbox for Kriging
+          STK : a Small (Matlab/Octave) Toolbox for Kriging
           =================================================
 
 o Copyright Notice
@@ -12,7 +12,7 @@ o Copyright Notice
 
     URL:       http://sourceforge.net/projects/kriging
 
- o Copying Permission Statement
+o Copying Permission Statement
 
     The STK is free software: you can redistribute it and/or modify it
     under the terms of the GNU General Public License as published by
@@ -27,18 +27,28 @@ o Copyright Notice
     You should have received a  copy of the GNU General Public License
     along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
- o Quick Start
+o Quick Start
 
     Run stk_init.m in Matlab(TM) or GNU Octave.
 
-    For running under Matlab, the Optimization Toolbox is needed.
+    Once  the STK is properly initialized,  you should be able  to run
+    the examples located in the 'examples' directory.
 
-    For running under GNU Octave, note that the STK relies on some mex
-    files  that are  compiled  during the  initialization. Thus,  your
-    installation must be able to compile mex files.
+o Requirements and recommendations for running under GNU Octave
 
-    Once  the STK  is initialized,  you can  run the  examples  in the
-    directory 'examples'.
+    Note  that  the STK relies  on  some mex files  that  are compiled
+    during the initialization. Thus, your installation must be able to
+    compile mex files.
+
+    Two Octave-forge packages are currently required to run the STK
+      o  optim  (for the sqp() function)
+      o  statistics  (for the pdist() function)
+
+o Requirements and recommendations for running under Matlab
+
+    The Optimization Toolbox is recommended.
+
+    The Parallel Computing Toolbox is optional.
 
 o Content
 
@@ -59,11 +69,11 @@ o Content
     code of the  toolbox is meant to be  easily understandable, modular,
     and reusable.  By  way of illustration, it is very  easy to use this
     toolbox  for implementing  the EGO  algorithm  of (Jones et al. 98).
-    Besides, this toolbox  can serve as a basis  for the implement2ation
+    Besides, this toolbox  can serve as a basis  for  the implementation
     of  advanced  algorithms  such  as  Stepwise  Uncertainty  Reduction
     algorithms (see, e.g., Bect et al. 2010)
 
-    The  toolbox consists of  three parts:
+    The toolbox consists of three parts:
     
     a. The  first part is the  implementation of a  number of covariance
        functions, and tools to  compute covariance vectors and matrices.
