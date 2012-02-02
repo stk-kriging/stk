@@ -70,19 +70,20 @@ end
 % FIXME: il peut se produire que param0 ne soit pas entre lb et ub, ce qui
 % produit un warning inesthetique !
 
-if stk_is_fmincon_available()
-    % Use fmincon() from Matlab's optimization toolbox if available
-    f = @(param)(f_(xi,yi,model,param));
-    paramopt = fmincon(f,param0,[],[],[],[],lb,ub,[],options);
-elseif stk_is_octave_in_use()
-    % Use sqp() from Octave
-    f      = @(param)(f_      (xi,yi,model,param));
+f = @(param)(f_(xi,yi,model,param));
+
+if stk_is_octave_in_use()
+    % Use sqp() from the Octave-forge "optim" package
     nablaf = @(param)(nablaf_ (xi,yi,model,param));
     paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);  
 else
-    f = @(param)(f_(xi,yi,model,param));
-    disp('Warning: falling back on fminsearch. Expect wrong results.')
-    paramopt = fminsearch(f,param0,options);
+	if stk_is_fmincon_available()
+		% Use fmincon() from Matlab's optimization toolbox if available
+		paramopt = fmincon(f,param0,[],[],[],[],lb,ub,[],options);
+    else
+        % otherwise fall back on fminsearch
+		paramopt = fminsearch(f,param0,options);
+	end
 end
 
 % NESTED FUNCTIONS ARE NOT OCTAVE-COMPLIANT !
@@ -101,7 +102,7 @@ end
 
 function dl = nablaf_(xi,yi,model,param)
 model.param = param;
-[l, dl] = stk_remlqrg(xi, yi, model); %#ok<ASGLU>
+[l_ignored, dl] = stk_remlqrg(xi, yi, model); %#ok<ASGLU>
 end
 
 function [lb,ub] = get_default_bounds( param0, xi, yi, model )
