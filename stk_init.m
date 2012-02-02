@@ -71,6 +71,7 @@ octave_in_use = stk_is_octave_in_use();
 if octave_in_use,
     s = ver('Octave');
     fprintf('Using Octave %s\n',s.Version);
+	stk_check_octave_packages();
 else
     s = ver('Matlab');
     fprintf('Using Matlab %s %s\n',s.Version,s.Release);
@@ -78,7 +79,7 @@ end
 
 %=== Check for presence of the Parallel Computing Toolbox
 
-fprintf('parallel computing toolbox... ');
+fprintf('Parallel Computing toolbox... ');
 if octave_in_use,
     fprintf('not available in Octave.\n');
 else
@@ -87,23 +88,26 @@ else
     else fprintf('not found.\n'); end
 end
 
-%=== Check for presence of fmincon() or fminsearch()
+%=== Check for presence of an appropriate optimizer
 
-fmincon_found = stk_is_fmincon_available();
 if octave_in_use,
-    % fmincon() does not exist (yet) in Octave
-    % fminsearch() is provided by the "optim" package
-    fprintf('fminsearch()... ');
-    if exist('fminsearch','file') ~= 2,
-        error('Please install the optim package from octave-forge !');
+    fprintf('sqp()... ');
+    % sqp() should be available since the "optim" package is loaded
+	% but we check anyway (better safe than sorry)
+    if exist('sqp','file') == 2,
+		fprintf('found.\n');
+	else
+		fprintf('not found.\n');
+        error('Please check that the optim package is properly installed.');
     end
-    fprintf('found.\n');
-else
+else	
     fprintf('fmincon()... ');
+	fmincon_found = stk_is_fmincon_available();
     if fmincon_found == true,
         fprintf('found.\n');
     else
-        fprintf('not found, fminsearch will be used instead.\n');
+        fprintf('not found.\n');
+		warning('Falling back on fminsearch. Expect wrong results.')
     end
 end
 
