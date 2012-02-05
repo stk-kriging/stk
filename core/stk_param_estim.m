@@ -52,7 +52,7 @@ if stk_is_octave_in_use()
     nablaf = @(param)(nablaf_ (xi,yi,model,param));
     paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);  
 else
-	if stk_is_fmincon_available()
+	if stk_is_fmincon_available() && ~isempty(lb) && ~isempty(ub)
 		% Use fmincon() from Matlab's optimization toolbox if available
         options = optimset( 'Display', 'iter',                ...
             'Algorithm', 'interior-point', 'GradObj', 'on',   ...
@@ -60,7 +60,7 @@ else
 		paramopt = fmincon(f, param0, [], [], [], [], lb, ub, [], options);
     else
         % otherwise fall back on fminsearch()
-        % (derivative-free Nelder-Mead alogorithm)
+        % (derivative-free unconstrained optimization algorithm (Nelder-Mead))
         options = optimset( 'Display', 'iter',                ...
             'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
 		paramopt = fminsearch(f,param0,options);
