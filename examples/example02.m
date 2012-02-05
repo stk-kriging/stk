@@ -35,21 +35,17 @@
 %% Define a 1d test function (the same as in example01.m)
 
 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
-DIM = 1;                                        % dimension of the factor space  
+DIM = 1;                                        % dimension of the factor space
 box = [-1.0; 1.0];                              % factor space
 
 NT = 400; % nb of points in the grid
 xt = stk_sampling_cartesiangrid( NT, DIM, box );
 zt = stk_feval( f, xt );
 
-%% Generate a space-filling design
+%% Generate a random sampling plan
 %
 % The objective is to construct an approximation of f with a budget of NI
-% evaluations performed on a "space-filling design".
-%
-% A regular grid (i.e., a grid with constant spacing) is constructed using
-% stk_sampling_cartesiangrid(), which is equivalent to linspace() for this
-% simple 1d example.
+% evaluations performed on a randomly generated (uniform) design.
 %
 % Change the value of NOISEVARIANCE to add a Gaussian evaluation noise on
 % the observations.
@@ -57,9 +53,9 @@ zt = stk_feval( f, xt );
 
 NOISEVARIANCE = 0;
 
-NI = 6;                                         % nb of evaluations that will be used 
-xi = stk_sampling_randunif( NI, DIM, box); % evaluation points
-zi = stk_feval( f, xi );                        % evaluation results
+NI = 6;                                     % nb of evaluations that will be used
+xi = stk_sampling_randunif(NI, DIM, box);   % evaluation points
+zi = stk_feval(f, xi);                      % evaluation results
 
 if NOISEVARIANCE > 0,
     zi.a = zi.a + sqrt(NOISEVARIANCE) * randn(NI,1);
@@ -90,11 +86,10 @@ if NOISEVARIANCE > 0,
     model.lognoisevariance = log( 3 * NOISEVARIANCE );
     % (this is not the true value of the noise variance !)
 else
-    % Even if we don't assume that the observations are noisy, 
+    % Even if we don't assume that the observations are noisy,
     % it is wiser to add a small "regularization noise".
     model.lognoisevariance = log( 100 * eps );
 end
-
 
 %% Estimatation the parameters of the covariance
 %
@@ -103,7 +98,7 @@ end
 
 model.param = stk_param_estim( model.param, xi, zi, model);
 
-%% carry out kriging prediction 
+%% carry out kriging prediction
 
 zp = stk_predict(xi, zi, xt, model);
 
