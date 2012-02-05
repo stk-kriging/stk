@@ -34,22 +34,23 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function stk_plot1d(xi,zi,xt,zt,zp)
+function stk_plot1d(xi, zi, xt, zt, zp, h_axis)
 
-% Create figure
-figure1 = figure('InvertHardcopy','off','Color',[1 1 1]);
-% Create axes
-axes1 = axes('Parent',figure1,'FontSize', 12);
+if nargin < 6,
+    % Create figure
+    figure1 = figure('InvertHardcopy', 'off', 'Color', [1 1 1]);
+    % Create axes
+    h_axis = axes('Parent', figure1, 'FontSize', 12);
+end
 
-h=area(xt.a,[zp.a-1.96*sqrt(abs(zp.v)), 2*1.96*sqrt(abs(zp.v))]);
-set(h(1),'FaceColor','none');
-set(h(2),'FaceColor',[0.8 0.8 0.8]);
-set(h,'LineStyle','-','LineWidth', 1, 'EdgeColor', 'none');
+h = area(xt.a, [zp.a - 1.96 * sqrt(abs(zp.v)), 2 * 1.96 * sqrt(abs(zp.v))]);
+set(h(1), 'FaceColor', 'none');
+set(h(2), 'FaceColor', [0.8 0.8 0.8]);
+set(h, 'LineStyle', '-', 'LineWidth', 1, 'EdgeColor', 'none');
 hold on
-plot(xt.a,zt.a, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64])
-plot(xt.a,zp.a, 'LineWidth', 4, 'Color', [0.95 0.25 0.3])
-plot(xi.a,zi.a,'ks','MarkerSize',10, 'LineWidth', 3, ...
-        'MarkerEdgeColor', [0.95 0.25 0.3], 'MarkerFaceColor', [0.8 0.8 0.8] )
+plot(xt.a, zt.a, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
+plot(xt.a, zp.a, 'LineWidth', 4, 'Color', [0.95 0.25 0.3]);
+plot(xi.a, zi.a, 'ks', 'MarkerSize', 10, 'LineWidth', 3, ...
+    'MarkerEdgeColor', [0.95 0.25 0.3], 'MarkerFaceColor', [0.8 0.8 0.8]);
 hold off
-h=gca;
-set(h,'Box', 'off')
+set(h_axis, 'Box', 'off');
