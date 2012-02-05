@@ -1,10 +1,9 @@
-% STK_MATERNCOV_ANISO computes the isotropic Matern covariance
+% STK_MATERNCOV_ANISO computes the anisotropic Matern covariance
 %
-% CALL: [k]=stk_materncov_aniso(x, y, param, diff)
+% CALL: k = stk_materncov_aniso(x, y, param, diff)
 %   x      = structure whose field 'a' contains the observed points.
-%            x.a  is a matrix of size n x d, where n is the number of 
-%            points and d is the dimension of the 
-%            factor space
+%            x.a  is a matrix of size n x d, where n is the number of
+%            points and d is the dimension of the factor space
 %   y      = same as x
 %   param  = vector of parameters of size 2+d
 %   diff   = differentiation parameter
@@ -50,9 +49,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function k = stk_materncov_aniso( x, y, param, diff )
+function k = stk_materncov_aniso(x, y, param, diff)
 
-persistent x0 y0 xs ys param0 D covariance_cache computecovariance_cache
+persistent x0 y0 xs ys param0 D covariance_cache compute_covariance_cache
 
 % default: compute the value (not a derivative)
 if (nargin<4), diff = -1; end
@@ -79,28 +78,27 @@ if isempty(x0) || isempty(y0) || isempty(param0) || ...
     % save arguments for the next call
     x0 = x; y0 = y; param0 = param;
     % recomputation of covariance_cache is required
-    computecovariance_cache = true;
+    compute_covariance_cache = true;
 end
 
-
-if (diff == -1) % compute the value (not a derivative)    
-    k = Sigma2 * stk_materncov_ (D,  Nu, -1);
-
-elseif diff == 1 % diff wrt param(1) = log(Sigma2)
-    k = Sigma2 * stk_materncov_ (D,  Nu, -1);
-
-elseif diff == 2 % diff wrt param(2) = log(Nu)
-    k = Nu * Sigma2 * stk_materncov_ (D,  Nu, 1);
-
-elseif diff >= 3 % diff wrt param(diff) = - log(invRho(diff-2))
+if diff == -1,
+    %%% compute the value (not a derivative)
+    k = Sigma2 * stk_sf_matern(Nu, D, -1);
+elseif diff == 1,
+    %%% diff wrt param(1) = log(Sigma2)
+    k = Sigma2 * stk_sf_matern(Nu, D, -1);
+elseif diff == 2,
+    %%% diff wrt param(2) = log(Nu)
+    k = Nu * Sigma2 * stk_sf_matern(Nu, D, 1);
+elseif diff >= 3,
+    %%% diff wrt param(diff) = - log(invRho(diff-2))
     ind = diff - 2;
-    if computecovariance_cache || isempty(covariance_cache)
-        covariance_cache  = 1./(D+eps) .* (Sigma2 * stk_materncov_ (D, Nu, 2));
-        computecovariance_cache = false;
+    if compute_covariance_cache || isempty(covariance_cache)
+        covariance_cache  = 1./(D+eps) .* (Sigma2 * stk_sf_matern(Nu, D, 2));
+        compute_covariance_cache = false;
     end
     nx = size(x.a,1); ny = size(y.a,1);
     k = (repmat(xs(:,ind),1,ny) - repmat(ys(:,ind)',nx,1)).^2 .* covariance_cache;
-
 else
     error('there must be something wrong here !');
 end
