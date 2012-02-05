@@ -1,12 +1,12 @@
-% STK_PARAM_ESTIM estimates the parameters of the covariance from data 
+% STK_PARAM_ESTIM estimates the parameters of the covariance from data
 %
 % CALL: paramopt = stk_param_estim( param0, xi, yi, model,...)
 %
-% STK_PARAM_ESTIM helper function to estimate the parameters of a 
+% STK_PARAM_ESTIM helper function to estimate the parameters of a
 % covariance from data using rectricted maximum likelihood
 %
 % FIXME: documentation incomplete
-% 
+%
 % EXAMPLE: see examples/example02.m
 
 %                  Small (Matlab/Octave) Toolbox for Kriging
@@ -39,7 +39,7 @@
 %
 function paramopt = stk_param_estim(param0, xi, yi, model)
 
-% TODO: turn param0 into an optional argument 
+% TODO: turn param0 into an optional argument
 %       => provide a reasonable default choice
 
 % TODO: allow user-defined bounds
@@ -50,21 +50,21 @@ f = @(param)(f_(xi,yi,model,param));
 if stk_is_octave_in_use()
     % Use sqp() from the Octave-forge "optim" package
     nablaf = @(param)(nablaf_ (xi,yi,model,param));
-    paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);  
+    paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);
 else
-	if stk_is_fmincon_available() && ~isempty(lb) && ~isempty(ub)
-		% Use fmincon() from Matlab's optimization toolbox if available
+    if stk_is_fmincon_available() && ~isempty(lb) && ~isempty(ub)
+        % Use fmincon() from Matlab's optimization toolbox if available
         options = optimset( 'Display', 'iter',                ...
             'Algorithm', 'interior-point', 'GradObj', 'on',   ...
             'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
-		paramopt = fmincon(f, param0, [], [], [], [], lb, ub, [], options);
+        paramopt = fmincon(f, param0, [], [], [], [], lb, ub, [], options);
     else
         % otherwise fall back on fminsearch()
         % (derivative-free unconstrained optimization algorithm (Nelder-Mead))
         options = optimset( 'Display', 'iter',                ...
             'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
-		paramopt = fminsearch(f,param0,options);
-	end
+        paramopt = fminsearch(f,param0,options);
+    end
 end
 
 % NESTED FUNCTIONS ARE NOT OCTAVE-COMPLIANT !
@@ -103,7 +103,7 @@ dim = size( xi.a, 2 );
 switch model.covariance_type,
     
     case {'stk_materncov_aniso', 'stk_materncov_iso'}
-               
+        
         lbnu = min(log(0.5), param0(2));
         ubnu = max(log(4*dim), param0(2));
         
@@ -113,6 +113,15 @@ switch model.covariance_type,
         
         lb = [lbv; lbnu; lba];
         ub = [ubv; ubnu; uba];
+        
+    case {'stk_materncov52_aniso', 'stk_materncov52_iso'}
+        
+        scale = param0(2:end);
+        lba = scale(:) - TOLSCALE;
+        uba = scale(:) + TOLSCALE;
+        
+        lb = [lbv; lba];
+        ub = [ubv; uba];
         
     otherwise
         
