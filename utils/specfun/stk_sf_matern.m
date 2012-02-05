@@ -1,4 +1,4 @@
-% STK_MATERNCOV_ computes the isotropic Matern covariance with unit scale
+% STK_SF_MATERN computes the Matern function
 %
 % FIXME: documentation missing
 %
@@ -34,7 +34,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function k = stk_materncov_(h, Nu, diff)
+function k = stk_sf_matern(Nu, h, diff)
 
 % default: compute the value (not a derivative)
 if (nargin<3), diff = -1; end
