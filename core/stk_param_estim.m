@@ -37,38 +37,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function paramopt = stk_param_estim( param0, xi, yi, model, varargin )
+function paramopt = stk_param_estim(param0, xi, yi, model)
 
-% TODO: put 'param0' in the list of optional arguments and provide a
-% default value for it !
+% TODO: turn param0 into an optional argument 
+%       => provide a reasonable default choice
 
-% parser = inputParser;
-% parser.addOptional( 'bounds', {}, @(x)(iscell(x)) );
-% parser.addOptional( 'opt_options', [], @(x)(isstruct(x)) );
-% parser.parse( varargin{:} );
-
-% if ~isempty( parser.Results.bounds ),
-%     lb = parser.Results.bounds{1};
-%     ub = parser.Results.bounds{2};    
-% else
-    [lb,ub] = get_default_bounds( param0, xi, yi, model );
-% end
-
-assert( isempty(lb) || isempty(ub) || all( lb < ub ) );
-
-if stk_is_octave_in_use() == false,
-    % if ismember( 'opt_options', parser.UsingDefaults )
-    options = optimset( 'Display', 'iter', 'Algorithm', 'interior-point', ...
-        'GradObj', 'on', 'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6 );
-    % end
-    % options = optimset( options, 'PlotFcn', @optimplotfval );
-else
-    % use default options for 'fminsearch' in Octave
-    options = [];
-end
-
-% FIXME: il peut se produire que param0 ne soit pas entre lb et ub, ce qui
-% produit un warning inesthetique !
+% TODO: allow user-defined bounds
+[lb, ub] = get_default_bounds( param0, xi, yi, model );
 
 f = @(param)(f_(xi,yi,model,param));
 
@@ -77,11 +52,17 @@ if stk_is_octave_in_use()
     nablaf = @(param)(nablaf_ (xi,yi,model,param));
     paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);  
 else
-	if stk_is_fmincon_available()
+	if stk_is_fmincon_available() && ~isempty(lb) && ~isempty(ub)
 		% Use fmincon() from Matlab's optimization toolbox if available
-		paramopt = fmincon(f,param0,[],[],[],[],lb,ub,[],options);
+        options = optimset( 'Display', 'iter',                ...
+            'Algorithm', 'interior-point', 'GradObj', 'on',   ...
+            'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
+		paramopt = fmincon(f, param0, [], [], [], [], lb, ub, [], options);
     else
-        % otherwise fall back on fminsearch
+        % otherwise fall back on fminsearch()
+        % (derivative-free unconstrained optimization algorithm (Nelder-Mead))
+        options = optimset( 'Display', 'iter',                ...
+            'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
 		paramopt = fminsearch(f,param0,options);
 	end
 end
@@ -105,7 +86,7 @@ model.param = param;
 [l_ignored, dl] = stk_remlqrg(xi, yi, model); %#ok<ASGLU>
 end
 
-function [lb,ub] = get_default_bounds( param0, xi, yi, model )
+function [lb,ub] = get_default_bounds(param0, xi, yi, model)
 
 % constants
 TOLVAR = 5.0;
@@ -113,8 +94,8 @@ TOLSCALE = 5.0;
 
 % bounds for the variance parameter
 empirical_variance = var(yi.a);
-lbv = log(empirical_variance) - TOLVAR;
-ubv = log(empirical_variance) + TOLVAR;
+lbv = min(log(empirical_variance) - TOLVAR, param0(1));
+ubv = max(log(empirical_variance) + TOLVAR, param0(1));
 
 % FIXME: write an function stk_get_dim() to do this
 dim = size( xi.a, 2 );
@@ -123,8 +104,8 @@ switch model.covariance_type,
     
     case {'stk_materncov_aniso', 'stk_materncov_iso'}
                
-        lbnu = log(0.5);
-        ubnu = log(4*dim);
+        lbnu = min(log(0.5), param0(2));
+        ubnu = max(log(4*dim), param0(2));
         
         scale = param0(3:end);
         lba = scale(:) - TOLSCALE;
@@ -132,7 +113,7 @@ switch model.covariance_type,
         
         lb = [lbv; lbnu; lba];
         ub = [ubv; ubnu; uba];
-                
+        
     otherwise
         
         lb = [];
