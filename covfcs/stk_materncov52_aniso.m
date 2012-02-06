@@ -8,7 +8,7 @@
 %   param  = vector of parameters of size 1+d
 %   diff   = differentiation parameter
 %
-% MATERNCOV52_ANISO computes a Matern covariance between two random vectors
+% STK_MATERNCOV52_ANISO computes a Matern covariance between two random vectors
 % specified by the locations of the observations. This anisotropic
 % covariance function has 2+d parameters, where d is the dimension of the
 % factor space. They are defined as follows:

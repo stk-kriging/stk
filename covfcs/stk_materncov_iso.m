@@ -9,7 +9,7 @@
 %   param  = vector of parameters of size 3
 %   diff   = differentiation parameter
 %
-% MATERNCOV_ISO computes a Matern covariance between two random vectors
+% STK_MATERNCOV_ISO computes a Matern covariance between two random vectors
 % specified by the locations of the observations. The isotropic covariance
 % function has three parameters
 %    param(1) = log(sigma^2) is the logarithm of the variance of random
