@@ -41,7 +41,7 @@ if (nargin<2), diff = -1; end
 
 Nu = 5/2;
 C  = 2 * sqrt(Nu);   % dt/dh
-t  = C * h;
+t  = C * abs(h);
 
 switch diff,
     
