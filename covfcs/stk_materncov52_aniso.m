@@ -8,14 +8,14 @@
 %   param  = vector of parameters of size 1+d
 %   diff   = differentiation parameter
 %
-% MATERNCOV_ANISO computes a Matern covariance between two random vectors
+% MATERNCOV52_ANISO computes a Matern covariance between two random vectors
 % specified by the locations of the observations. This anisotropic
 % covariance function has 2+d parameters, where d is the dimension of the
-% factor space
-%    param(1) = log(sigma^2) is the logarithm of the variance of random
-%               process
-%    param(1+i) = -log(rho(i)) is the logarithm of the inverse of the range
-%               parameter for the ith dimension
+% factor space. They are defined as follows:
+%    param(1)   = log(sigma^2) is the logarithm of the variance
+%    param(1+i) = -log(rho(i)) is  the logarithm of  the inverse  of  the
+%                 i^th range parameter
+%
 % If diff ~= -1, the function returns the derivative of the covariance wrt
 % param(diff)
 
@@ -80,15 +80,15 @@ end
 
 if diff == -1,
     %%% compute the value (not a derivative)
-    k = Sigma2 * stk_materncov52_(D, -1);
+    k = Sigma2 * stk_sf_matern52(D, -1);
 elseif diff == 1,
     %%% diff wrt param(1) = log(Sigma2)
-    k = Sigma2 * stk_materncov52_(D, -1);
+    k = Sigma2 * stk_sf_matern52(D, -1);
 elseif diff >= 2,
     %%% diff wrt param(diff) = - log(invRho(diff-1))
     ind = diff - 1;
     if compute_covariance_cache || isempty(covariance_cache)
-        covariance_cache  = 1./(D+eps) .* (Sigma2 * stk_materncov52_(D, 1));
+        covariance_cache  = 1./(D+eps) .* (Sigma2 * stk_sf_matern52(D, 1));
         compute_covariance_cache = false;
     end
     nx = size(x.a,1); ny = size(y.a,1);
