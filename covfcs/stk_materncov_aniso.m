@@ -11,13 +11,12 @@
 % MATERNCOV_ANISO computes a Matern covariance between two random vectors
 % specified by the locations of the observations. This anisotropic
 % covariance function has 2+d parameters, where d is the dimension of the
-% factor space
-%    param(1) = log(sigma^2) is the logarithm of the variance of random
-%               process
-%    param(2) = log(nu) is the logarithm of the regularity parameter of the
-%               Matern covariance
-%    param(2+i) = -log(rho(i)) is the logarithm of the inverse of the range
-%               parameter for the ith dimension
+% factor space. They are defined as follows:
+%    param(1)   = log(sigma^2) is the logarithm of the variance
+%    param(2)   = log(nu) is the logarithm of the regularity parameter
+%    param(2+i) = -log(rho(i)) is the logarithm of the inverse of the
+%                 range parameter for the ith dimension
+%
 % If diff ~= -1, the function returns the derivative of the covariance wrt
 % param(diff)
 
