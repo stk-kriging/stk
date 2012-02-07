@@ -31,7 +31,7 @@
 
 clear all; close all; clc;
 
-NB_EXAMPLES = 6;
+NB_EXAMPLES = 7;
 script_name = cell(1, NB_EXAMPLES);
 err = cell(1, NB_EXAMPLES);
 
