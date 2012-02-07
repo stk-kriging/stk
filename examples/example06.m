@@ -47,7 +47,7 @@ zi = stk_feval(f, xi);                      % evaluation results
 
 %% Several Matern models
 
-NB_MODELS = 4; model = cell(1, NB_MODELS);
+NB_MODELS = 6; model = cell(1, NB_MODELS);
 
 % Parameters used as initial values for stk_param_estim()
 SIGMA2 = 1.0;  % variance parameter
@@ -65,7 +65,7 @@ model{1} = struct('covariance_type', 'stk_materncov_iso', 'order', 0, ...
 model{2} = model{1}; 
 model{2}.order = 1;
 
-%%% two other Matern models with regularity parameter fixed to 5/2
+%%% two other Matern models with regularity parameter fixed to 3/2
 
 % kriging with constant mean function ("ordinary kriging)
 model{3} = struct('covariance_type', 'stk_materncov52_iso', 'order', 0, ...
@@ -76,12 +76,23 @@ model{3} = struct('covariance_type', 'stk_materncov52_iso', 'order', 0, ...
 model{4} = model{3}; 
 model{4}.order = 1;
 
+%%% two other Matern models with regularity parameter fixed to 5/2
+
+% kriging with constant mean function ("ordinary kriging)
+model{5} = struct('covariance_type', 'stk_materncov32_iso', 'order', 0, ...
+                  'param', [log(SIGMA2), log(1/RHO1)]', ...
+                  'lognoisevariance', log(100 * eps));
+                 
+% kriging with affine mean function
+model{6} = model{5}; 
+model{6}.order = 1;
+
 
 %% Parameter estimation and prediction for each model
 
 zp = cell(1, NB_MODELS);
-nr = floor(sqrt(NB_MODELS));
-nc = ceil(NB_MODELS / nr);
+nc = floor(sqrt(NB_MODELS));
+nr = ceil(NB_MODELS / nc);
 
 for j = 1:NB_MODELS,
     % Estimate the parameters of the covariance
@@ -93,6 +104,8 @@ for j = 1:NB_MODELS,
     stk_plot1d(xi, zi, xt, zt, zp{j}, h_axis);
     % Title
     switch model{j}.covariance_type,
+        case 'stk_materncov32_iso',
+            title(sprintf('Matern 3/2, order=%d', model{j}.order));
         case 'stk_materncov52_iso',
             title(sprintf('Matern 5/2, order=%d', model{j}.order));
         case 'stk_materncov_iso',
