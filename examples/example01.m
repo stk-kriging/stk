@@ -32,6 +32,17 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+%% Welcome
+
+disp('                  ');
+disp('#================#');
+disp('#   Example 01   #');
+disp('#================#');
+disp('                  ');
+
+
+%% Define a 1d test function
+
 f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space  
 box = [-1.0; 1.0];                              % factor space

@@ -30,6 +30,16 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+%% welcome
+
+disp('                  ');
+disp('#================#');
+disp('#   Example 07   #');
+disp('#================#');
+disp('                  ');
+
+
+
 %% List of correlation functions
 
 % Parameters used as initial values for stk_param_estim()
@@ -46,7 +56,8 @@ list_cov = {...
 
 NB_COVARIANCE_FUNCTIONS = size(list_cov, 1);
 
-%% visualisation
+
+%% Visualisation
 
 x1 = struct('a', 0.0);
 x2 = stk_sampling_cartesiangrid(1000, 1, [-5; 5]);

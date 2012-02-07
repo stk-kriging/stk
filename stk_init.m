@@ -34,7 +34,11 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-% Displaying the Copying Permission Statement
+%=== Turn output pagination OFF
+
+more off;
+
+%=== Displaying the Copying Permission Statement
 
 disp( '                                                                     ' );
 disp( '=====================================================================' );
@@ -71,6 +75,12 @@ if octave_in_use,
 else
     s = ver('Matlab');
     fprintf('Using Matlab %s %s\n',s.Version,s.Release);
+end
+
+%=== Suppress additional help information in Octave
+
+if octave_in_use,
+    suppress_verbose_help_message(true);
 end
 
 %=== Check for presence of the Parallel Computing Toolbox
