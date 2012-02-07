@@ -29,7 +29,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-clear all; close all; clc;
+%% Run all the examples
+
+clear all; close all;
 
 NB_EXAMPLES = 7;
 script_name = cell(1, NB_EXAMPLES);
@@ -38,11 +40,20 @@ err = cell(1, NB_EXAMPLES);
 for example_num = 1:NB_EXAMPLES,
     try
         script_name{example_num} = sprintf('example%02d', example_num);
-        run(script_name{example_num});
+        run(script_name{example_num}); drawnow;
     catch e
         err{example_num} = e;
     end
 end
+
+
+%% Display a summary
+
+disp('                                ');
+disp('#==============================#');
+disp('#   run_all_examples summary   #');
+disp('#==============================#');
+disp('                                ');
 
 for example_num = 1:NB_EXAMPLES,
     fprintf('%s : ', script_name{example_num});
@@ -53,4 +64,4 @@ for example_num = 1:NB_EXAMPLES,
     end
 end
 
-close all;
+close all;  fprintf('\n\n');

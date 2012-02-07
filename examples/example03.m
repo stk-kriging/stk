@@ -32,6 +32,18 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+%% Welcome
+
+disp('                  ');
+disp('#================#');
+disp('#   Example 03   #');
+disp('#================#');
+disp('                  ');
+
+
+
+%% Definition of a 2D test function
+
 % define a 2D test function
 f_=inline('exp(1.8*(x1+x2))+3*x1+6*x2.^2+3*sin(4*pi*x1)','x1','x2');
 f = @(x)(f_(x(:,1), x(:,2)));

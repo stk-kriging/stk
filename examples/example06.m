@@ -30,6 +30,16 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
+%% Welcome
+
+disp('                  ');
+disp('#================#');
+disp('#   Example 06   #');
+disp('#================#');
+disp('                  ');
+
+
+
 %% Define 1d test function (the same as in example01.m)
 
 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
