@@ -1,4 +1,8 @@
-% STK_COMPILE_ALL compile all MEX-files in the STK toolbox
+% STK_SAMPLING_RANDOMLHS builds a random LHS design
+%
+% CALL: x = stk_sampling_randomlhs(n, d, box)
+%
+% FIXME: documentation incomplete
 
 %          STK : a Small (Matlab/Octave) Toolbox for Kriging
 %          =================================================
@@ -29,41 +33,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
+function x = stk_sampling_randomlhs(n, d, box)
 
-function stk_compile_all(force_recompile)
+niter = 1;
 
-root = stk_get_root();
-here = pwd();
-
-force_recompile = ~((nargin==0) || ~force_recompile);
-
-stk_compile(fullfile(root,'covfcs'),      ...
-    'stk_distance_matrix', force_recompile );
-
-stk_compile(fullfile(root,'sampling'),    ...
-    'stk_mindist', force_recompile         );
-
-% add other MEX-files to be compiled here
-
-cd(here);
-
-end
-
-
-function stk_compile(folder, mexname, force_recompile, varargin)
-
-fprintf('%s()... ', mexname); 
-
-if force_recompile || exist(mexname, 'file') ~= 3;
-    cd(folder);
-    mex(sprintf('%s.c',mexname), varargin{:});
-end
-
-if exist(mexname, 'file') == 3,
-    fprintf('ok\n');
-else
-    fprintf('\n\n');
-    error('compilation error ?\n');
-end
-
-end
+x = stk_sampling_maximinlhs(n, d, box, niter);

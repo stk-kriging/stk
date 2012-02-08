@@ -1,7 +1,4 @@
-% STK_COMPILE_ALL compile all MEX-files in the STK toolbox
-
 %          STK : a Small (Matlab/Octave) Toolbox for Kriging
-%          =================================================
 %
 % Copyright Notice
 %
@@ -30,40 +27,34 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-function stk_compile_all(force_recompile)
+nrep = 10;
 
-root = stk_get_root();
-here = pwd();
+for irep = 1:nrep,
 
-force_recompile = ~((nargin==0) || ~force_recompile);
-
-stk_compile(fullfile(root,'covfcs'),      ...
-    'stk_distance_matrix', force_recompile );
-
-stk_compile(fullfile(root,'sampling'),    ...
-    'stk_mindist', force_recompile         );
-
-% add other MEX-files to be compiled here
-
-cd(here);
-
-end
-
-
-function stk_compile(folder, mexname, force_recompile, varargin)
-
-fprintf('%s()... ', mexname); 
-
-if force_recompile || exist(mexname, 'file') ~= 3;
-    cd(folder);
-    mex(sprintf('%s.c',mexname), varargin{:});
-end
-
-if exist(mexname, 'file') == 3,
-    fprintf('ok\n');
-else
-    fprintf('\n\n');
-    error('compilation error ?\n');
-end
-
+    dim  = 1 + floor(rand*5);
+    xmin = randn(1,dim);
+    xmax = xmin + 1 + rand(1,dim);
+    box  = [xmin; xmax];
+    
+    n = 10 + floor(rand*50);
+    
+    x = stk_sampling_maximinlhs(n, dim, box );
+    
+    assert(isstruct(x));
+    assert(isequal(fieldnames(x), {'a'}));    
+    assert(isequal(size(x.a), [n,dim]));    
+    
+    for j = 1:dim,
+        
+        y = x.a(:,j);
+        
+        assert(xmin(j) <= min(y));
+        assert(xmax(j) >= max(y));
+        
+        y = (y - xmin(j)) / (xmax(j) - xmin(j));
+        y = ceil(y * n);
+        assert(isequal(sort(y), (1:n)'));
+        
+    end
+    
 end

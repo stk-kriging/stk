@@ -43,11 +43,6 @@ disp('                  ');
 
 %% Preliminaries
 
-octave_in_use = stk_is_octave_in_use();
-if octave_in_use
-    fprintf(stderr, 'Please, be patient...\n');
-    fflush(stderr);
-end
 dim = 2;
 box = [[0 0]; [2 4]]; % xmin, xmax
 

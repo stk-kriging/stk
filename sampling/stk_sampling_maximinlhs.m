@@ -1,6 +1,6 @@
 % STK_SAMPLING_MAXIMINLHS builds a maximin LHS design
 %
-% CALL: x = stk_sampling_maximinlhs( n, d, box, niter )
+% CALL: x = stk_sampling_maximinlhs(n, d, box, niter)
 %
 % FIXME: documentation incomplete
 
@@ -33,14 +33,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function x = stk_sampling_maximinlhs( n, d, box, niter )
+function x = stk_sampling_maximinlhs(n, d, box, niter)
 
 if (nargin < 3) || isempty(box)
-    xmin = zeros(1,d);
-    xmax = ones(1,d);
+    xmin = zeros(1, d);
+    xmax = ones(1, d);
 else
-    [s1,s2] = size(box);
-    if ~( (s1==2) && (s2==d) ),
+    if ~isequal(size(box), [2, d]),
         error('box should be a 2xd array');
     end
     xmin = box(1,:);
@@ -51,60 +50,59 @@ if nargin < 4,
     niter = 1000;
 end
 
-% NOT COMPATIBLE WITh OCTAVE
-% validateattributes( n, {'numeric'}, {'integer','scalar','>=',0} ); 
-% validateattributes( d, {'numeric'}, {'integer','scalar','>=',1} ); 
-% validateattributes( xmin, {'numeric'}, {'vector','finite','nonnan'} );
-% validateattributes( xmax, {'numeric'}, {'vector','finite','nonnan'} );
-
 if n == 0, % no input => no output
     
-    xdata = zeros(0,d);
+    xdata = zeros(0, d);
     
 else % at least one input point
     
-    xmin  = reshape( xmin, 1, d ); % make sure we work we row vectors
-    delta = reshape( xmax, 1, d ) - xmin;   assert(all( delta > 0 ));
+    xmin  = reshape(xmin, 1, d); % make sure we work we row vectors
+    delta = reshape(xmax, 1, d) - xmin;   assert(all(delta > 0));
     
-    xx = lhsdesign_( n, d, niter );
+    xx = lhsdesign_(n, d, niter);
     
-    xdata = ones(n,1)*xmin + xx*diag(delta);
-
+    xdata = ones(n, 1) * xmin + xx * diag(delta);
+    
 end
 
 x = struct( 'a', xdata );
 
 end
 
-function X = lhsdesign_( n, d, niter)
-   bestscore = 0;
-   
-   for j=1:niter
-      x = generatedesign_ (n, d);
-      
-      score = score_(x);
-      
-      if score > bestscore
-         X = x;
-         bestscore = score;
-      end
-   end
+
+%%%%%%%%%%%%%%%%%%
+%%% lhsdesign_ %%%
+%%%%%%%%%%%%%%%%%%
+
+function x = lhsdesign_( n, d, niter)
+
+bestscore = 0;
+x = [];
+
+for j = 1:niter
+    y = generatedesign_(n, d);    
+    score = stk_mindist(y);    
+    if isempty(x) || (score > bestscore)
+        x = y;
+        bestscore = score;
+    end
 end
+
+end
+
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%%% generatedesign_ %%%
+%%%%%%%%%%%%%%%%%%%%%%%
 
 function x = generatedesign_( n, d )
 
-x = zeros(n,d);
-for i=1:d % for each dimension, do a randperm
-    [sx, idx] = sort(rand(n,1));
-    x(:,i) = idx;
+x = zeros(n, d);
+
+for i = 1:d % for each dimension, draw a random permutation
+    [sx, x(:,i)] = sort(rand(n,1)); %#ok<ASGLU>
 end
 
-x = x - rand(size(x));
+x = (x - rand(size(x))) / n;
 
-x = x / n;
-end
-
-function s = score_(x)
-% compute score
-   s = min(pdist(x));
 end

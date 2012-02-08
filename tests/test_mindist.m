@@ -1,7 +1,4 @@
-% STK_COMPILE_ALL compile all MEX-files in the STK toolbox
-
 %          STK : a Small (Matlab/Octave) Toolbox for Kriging
-%          =================================================
 %
 % Copyright Notice
 %
@@ -30,40 +27,65 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-function stk_compile_all(force_recompile)
+%% test 1 : x = a matrix with zero lines
 
-root = stk_get_root();
-here = pwd();
+for nc = [0 5 10],
 
-force_recompile = ~((nargin==0) || ~force_recompile);
-
-stk_compile(fullfile(root,'covfcs'),      ...
-    'stk_distance_matrix', force_recompile );
-
-stk_compile(fullfile(root,'sampling'),    ...
-    'stk_mindist', force_recompile         );
-
-% add other MEX-files to be compiled here
-
-cd(here);
-
+    x = zeros(0, nc);
+    d = stk_mindist(x);
+    
+    assert(isempty(d));
+    
 end
 
 
-function stk_compile(folder, mexname, force_recompile, varargin)
+%% test 2 : x = a matrix with one line
 
-fprintf('%s()... ', mexname); 
+for nc = [0 5 10],
 
-if force_recompile || exist(mexname, 'file') ~= 3;
-    cd(folder);
-    mex(sprintf('%s.c',mexname), varargin{:});
+    x = rand(1, nc);
+    d = stk_mindist(x);
+    
+    assert(isempty(d));
+    
 end
 
-if exist(mexname, 'file') == 3,
-    fprintf('ok\n');
-else
-    fprintf('\n\n');
-    error('compilation error ?\n');
+
+%% test 3 : x = a matrix with zero columns (but at least 2 lines)
+
+for nr = [2 5 10],
+
+    x = zeros(nr, 0);
+    d = stk_mindist(x);
+    
+    assert(isequal(d, 0.0));
+    
 end
 
+
+%% test 4 : random matrices with at least 2 lines and 1 column
+
+nrep = 20;
+TOL_REL = 1e-15;
+
+for irep = 1:nrep,
+
+    n = 2 + floor(rand * 10);
+    d = 1 + floor(rand * 10);
+    x = rand(n, d);       
+    z = stk_mindist(x);
+       
+    assert(isequal(size(d), [1, 1]));
+    assert(~isnan(d));
+    assert(~isinf(d));
+    
+    % check the result
+    mindist = Inf;
+    for i = 1:(n-1),
+        for j = (i+1):n,
+            mindist = min(mindist, norm(x(i,:) - x(j,:)));
+        end
+    end
+    assert(abs(z - mindist) <= TOL_REL * mindist);
+    
 end
