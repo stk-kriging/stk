@@ -40,9 +40,8 @@ o Requirements and recommendations for running under GNU Octave
     during the initialization. Thus, your installation must be able to
     compile mex files.
 
-    Two Octave-forge packages are currently required to run the STK
-      o  optim  (for the sqp() function)
-      o  statistics  (for the pdist() function)
+    Octave-forge: the 'optim' package is required.
+                  (for the sqp() function)
 
 o Requirements and recommendations for running under Matlab
 

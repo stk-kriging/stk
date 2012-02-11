@@ -39,7 +39,9 @@ function stk_check_octave_packages()
 pkg_list = pkg('list');
 
 stk_check_octave_package_('optim', pkg_list);
-stk_check_octave_package_('statistics', pkg_list);
+
+% The 'statistics" package is no longer required
+% stk_check_octave_package_('statistics', pkg_list);
 
 end
 
