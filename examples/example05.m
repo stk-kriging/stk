@@ -40,11 +40,10 @@ disp('#================#');
 disp('                  ');
 
 
-
 %% Define a 1d test function
 
 f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
-DIM = 1;                                        % dimension of the factor space  
+DIM = 1;                                        % dimension of the factor space
 box = [-1.0; 1.0];                              % factor space
 
 NT = 400; % nb of points in the grid
@@ -59,28 +58,30 @@ zt = stk_feval( f, xt );
 % are chosen as a subset of xt.a.
 %
 
-NI = 6;                               % nb of evaluations that will be used 
-xi_ind  = [1 20 90 200 300 350];      %           
+NI = 6;                               % nb of evaluations that will be used
+xi_ind  = [1 20 90 200 300 350];      %
 xi.a = xt.a(xi_ind, 1);
 zi = stk_feval( f, xi );              % evaluation results
 
 
 %% Specification of the model
 %
-% We choose a Matern covariance with "fixed parameters" (in other 
+% We choose a Matern covariance with "fixed parameters" (in other
 % words, the parameters of the covariance function are provided by the user
 % rather than estimated from data).
 %
 
-% Parameters for the Matern covariance ("help stk_materncov_iso" for more information)
+% The following line defines a model with a constant but unknown mean
+% (ordinary kriging) and a Matern covariance function. (Some default
+% parameters are also set, but we override them below.)
+model = stk_model('stk_materncov_iso');
+
+% Parameters for the Matern covariance
+% ("help stk_materncov_iso" for more information)
 SIGMA2 = 1.0;  % variance parameter
 NU     = 4.0;  % regularity parameter
 RHO1   = 0.4;  % scale (range) parameter
-
-% Specification of the model (see "help stk_model" for more information)
-model.covariance_type  = 'stk_materncov_iso';     % isotropic Matern covariance function
-model.order = 0;                                  % ordinary kriging (i.e., constant mean)
-model.param = [log(SIGMA2),log(NU),log(1/RHO1)]'; % vector of parameters
+model.param = log([SIGMA2; NU; 1/RHO1]);
 
 
 %% Carry out the kriging prediction and generate conditional sample paths

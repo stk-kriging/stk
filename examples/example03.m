@@ -41,28 +41,27 @@ disp('#================#');
 disp('                  ');
 
 
-
 %% Definition of a 2D test function
 
 % define a 2D test function
-f_=inline('exp(1.8*(x1+x2))+3*x1+6*x2.^2+3*sin(4*pi*x1)','x1','x2');
-f = @(x)(f_(x(:,1), x(:,2)));
+f_ = inline('exp(1.8*(x1+x2))+3*x1+6*x2.^2+3*sin(4*pi*x1)', 'x1', 'x2');
+f  = @(x)(f_(x(:,1), x(:,2)));
 DIM = 2;
 NG = 60;
 
-XG=linspace(-1,1,NG)';
-[XX,YY] = meshgrid(XG);
-ZZ=f_(XX,YY);
+XG = linspace(-1, 1, NG)';
+[XX, YY] = meshgrid(XG);
+ZZ = f_(XX, YY);
 % ... and plot it on a grid
-figure(1)
-subplot(2,2,1);
-surf(XX,YY,ZZ);
+figure(1);
+subplot(2, 2, 1);
+surf(XX, YY, ZZ);
 title('function to be approximated')
 
 % In SMTK, the inputs and outputs are members of a structure array
-% The field 'a' is used to store the numerical values 
-nt = NG*NG;
-xt.a = [reshape(XX,nt,1), reshape(YY,nt,1)]; % nt x DIM, 
+% The field 'a' is used to store the numerical values
+nt = NG * NG;
+xt.a = [reshape(XX,nt,1), reshape(YY,nt,1)]; % nt x DIM,
 zt.a = reshape(ZZ,nt,1);                     % nt x 1
 
 
@@ -70,11 +69,11 @@ zt.a = reshape(ZZ,nt,1);                     % nt x 1
 % Some examples given below
 
 COVSTRUCT = 1 ; % 1: Matern anisotropic covariance, with unknown
-                %    constant mean, without noise
-                % 2: Matern anisotropic covariance, with unknown
-                %    constant mean, with noise
-                % 3: Matern anisotropic covariance, with unknown
-                %    polynomial mean of degree 2, without noise
+%    constant mean, without noise
+% 2: Matern anisotropic covariance, with unknown
+%    constant mean, with noise
+% 3: Matern anisotropic covariance, with unknown
+%    polynomial mean of degree 2, without noise
 
 switch COVSTRUCT
     case 1
@@ -84,8 +83,8 @@ switch COVSTRUCT
         NU       = 4;
         RHO1     = 0.1;
         RHO2     = 0.1;
-        % parameter vector [ log(variance), log(regularity), log(scale), ..., log(scale) ]
-        PARAM0   = [log(SIGMA2),log(NU),log(1/RHO1),log(1/RHO2)]';
+        PARAM0   = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
+        
     case 2
         COVNAME  = 'stk_materncov_aniso';
         COVORDER = 0;
@@ -93,23 +92,23 @@ switch COVSTRUCT
         NU       = 4;
         RHO1     = 0.1;
         RHO2     = 0.1;
-        % parameter vector [ log(variance), log(regularity), log(scale), ..., log(scale) ]
-        PARAM0   = [log(SIGMA2),log(NU),log(1/RHO1),log(1/RHO2)]';
-        NOISEVARIANCE = 1e0;
+        PARAM0   = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
+        NOISEVARIANCE = 1e0;  %% here we add some observation noise
+        
     case 3
         COVNAME  = 'stk_materncov_aniso';
         COVORDER = 2;
         SIGMA2   = 3;
         NU       = 4;
         RHO1     = 0.1;
-        RHO2     = 0.01;
-        % parameter vector [ log(variance), log(regularity), log(scale), ..., log(scale) ]
-        PARAM0   = [log(SIGMA2),log(NU),log(1/RHO1),log(1/RHO2)]';
+        RHO2     = 0.01;  %% shorter range for the second input variable
+        PARAM0   = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
+        
 end
 
-model.covariance_type  = COVNAME;
+model = stk_model(COVNAME, DIM);
 model.order = COVORDER;
-model.param  = PARAM0;
+model.param = PARAM0;
 
 if exist('NOISEVARIANCE', 'var')
     model.lognoisevariance = log(NOISEVARIANCE);
@@ -132,7 +131,7 @@ end
 model.param = stk_param_estim(PARAM0, xi, zi, model);
 
 
-%% carry out kriging prediction 
+%% carry out kriging prediction
 
 zp = stk_predict(xi, zi, xt, model);
 

@@ -40,7 +40,6 @@ disp('#================#');
 disp('                  ');
 
 
-
 %% Preliminaries
 
 dim = 2;
