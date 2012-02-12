@@ -47,24 +47,29 @@ function paramopt = stk_param_estim(param0, xi, yi, model)
 
 f = @(param)(f_(xi,yi,model,param));
 
-if stk_is_octave_in_use()
-    % Use sqp() from the Octave-forge "optim" package
-    nablaf = @(param)(nablaf_ (xi,yi,model,param));
-    paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);
-else
-    if stk_is_fmincon_available() && ~isempty(lb) && ~isempty(ub)
-        % Use fmincon() from Matlab's optimization toolbox if available
+bounds_available = ~isempty(lb) && ~isempty(ub);
+
+% switch according to preferred optimizer
+switch stk_select_optimizer(bounds_available)
+    
+    case 1, % Octave / sqp
+        nablaf = @(param)(nablaf_ (xi,yi,model,param));
+        paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);
+        
+    case 2, % Matlab / fminsearch (Nelder-Mead)
+        options = optimset( 'Display', 'iter',                ...
+            'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
+        paramopt = fminsearch(f,param0,options);
+        
+    case 3, % Matlab / fmincon
         options = optimset( 'Display', 'iter',                ...
             'Algorithm', 'interior-point', 'GradObj', 'on',   ...
             'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
         paramopt = fmincon(f, param0, [], [], [], [], lb, ub, [], options);
-    else
-        % otherwise fall back on fminsearch()
-        % (derivative-free unconstrained optimization algorithm (Nelder-Mead))
-        options = optimset( 'Display', 'iter',                ...
-            'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
-        paramopt = fminsearch(f,param0,options);
-    end
+        
+    otherwise
+        error('Unexpected value returned by stk_select_optimizer.');
+        
 end
 
 % NESTED FUNCTIONS ARE NOT OCTAVE-COMPLIANT !

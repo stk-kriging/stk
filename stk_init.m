@@ -71,7 +71,7 @@ octave_in_use = stk_is_octave_in_use();
 if octave_in_use,
     s = ver('Octave');
     fprintf('Using Octave %s\n',s.Version);
-	stk_check_octave_packages();
+    stk_check_octave_packages();
 else
     s = ver('Matlab');
     fprintf('Using Matlab %s %s\n',s.Version,s.Release);
@@ -90,32 +90,13 @@ if octave_in_use,
     fprintf('not available in Octave.\n');
 else
     pct_found = stk_is_pct_installed();
-    if pct_found, fprintf('found\n');
+    if pct_found, fprintf('found.\n');
     else fprintf('not found.\n'); end
 end
 
-%=== Check for presence of an appropriate optimizer
+%=== Select optimizers for stk_param_estim
 
-if octave_in_use,
-    fprintf('sqp()... ');
-    % sqp() should be available since the "optim" package is loaded
-	% but we check anyway (better safe than sorry)
-    if exist('sqp','file') == 2,
-		fprintf('found.\n');
-	else
-		fprintf('not found.\n');
-        error('Please check that the optim package is properly installed.');
-    end
-else	
-    fprintf('fmincon()... ');
-	fmincon_found = stk_is_fmincon_available();
-    if fmincon_found == true,
-        fprintf('found.\n');
-    else
-        fprintf('not found.\n');
-		warning('Falling back on fminsearch. Expect wrong results.')
-    end
-end
+stk_select_optimizer();
 
 %=== Build MEX-files (if necessary)
 
@@ -125,5 +106,6 @@ stk_compile_all();
 %=== Cleanup
 
 fprintf('\n');
+
 clear here STK_ROOT pct_found fmincon_found octave_in_use s ans
 
