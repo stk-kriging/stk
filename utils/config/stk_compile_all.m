@@ -52,7 +52,7 @@ end
 
 function stk_compile(folder, mexname, force_recompile, varargin)
 
-fprintf('%s()... ', mexname); 
+fprintf('MEX-file %s... ', mexname); 
 
 if force_recompile || exist(mexname, 'file') ~= 3;
     cd(folder);
@@ -60,9 +60,9 @@ if force_recompile || exist(mexname, 'file') ~= 3;
 end
 
 if exist(mexname, 'file') == 3,
-    fprintf('ok\n');
+    fprintf('ok.\n');
 else
-    fprintf('\n\n');
+    fprintf('not found.\n\n');
     error('compilation error ?\n');
 end
 
