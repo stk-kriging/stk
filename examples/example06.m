@@ -43,14 +43,14 @@ disp('                  ');
 %% Define 1d test function (the same as in example01.m)
 
 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
-DIM = 1;                                        % dimension of the factor space  
+DIM = 1;                                        % dimension of the factor space
 box = [-1.0; 1.0];                              % factor space
 
 NT = 400; % nb of points in the grid
 xt = stk_sampling_cartesiangrid( NT, DIM, box );
 zt = stk_feval( f, xt );
 
-NI = 6;                                     % nb of evaluations that will be used 
+NI = 6;                                     % nb of evaluations that will be used
 xi = stk_sampling_randunif(NI, DIM, box);   % evaluation points
 zi = stk_feval(f, xi);                      % evaluation results
 
@@ -66,35 +66,35 @@ RHO1   = 0.4;  % scale (range) parameter
 
 %%% first, two Matern models with estimated regularity
 
-% kriging with constant mean function ("ordinary kriging)
-model{1} = struct('covariance_type', 'stk_materncov_iso', 'order', 0, ...
-                  'param', [log(SIGMA2), log(NU), log(1/RHO1)]', ...
-                  'lognoisevariance', log(100 * eps));
+% kriging with constant mean function (ordinary kriging)
+model{1} = stk_model('stk_materncov_iso');
+model{1}.param = log([SIGMA2; NU; 1/RHO1]);
+model{1}.lognoisevariance = log(100 * eps);
 
 % kriging with affine mean function
-model{2} = model{1}; 
+model{2} = model{1};
 model{2}.order = 1;
 
 %%% two other Matern models with regularity parameter fixed to 3/2
 
 % kriging with constant mean function ("ordinary kriging)
-model{3} = struct('covariance_type', 'stk_materncov52_iso', 'order', 0, ...
-                  'param', [log(SIGMA2), log(1/RHO1)]', ...
-                  'lognoisevariance', log(100 * eps));
-                 
+model{3} = stk_model('stk_materncov52_iso');
+model{3}.param = log([SIGMA2; log(1/RHO1)]);
+model{3}.lognoisevariance = log(100 * eps);
+
 % kriging with affine mean function
-model{4} = model{3}; 
+model{4} = model{3};
 model{4}.order = 1;
 
 %%% two other Matern models with regularity parameter fixed to 5/2
 
 % kriging with constant mean function ("ordinary kriging)
-model{5} = struct('covariance_type', 'stk_materncov32_iso', 'order', 0, ...
-                  'param', [log(SIGMA2), log(1/RHO1)]', ...
-                  'lognoisevariance', log(100 * eps));
-                 
+model{5} = stk_model('stk_materncov32_iso');
+model{5}.param = log([SIGMA2; 1/RHO1]);
+model{5}.lognoisevariance = log(100 * eps);
+
 % kriging with affine mean function
-model{6} = model{5}; 
+model{6} = model{5};
 model{6}.order = 1;
 
 
@@ -120,6 +120,6 @@ for j = 1:NB_MODELS,
             title(sprintf('Matern 5/2, order=%d', model{j}.order));
         case 'stk_materncov_iso',
             title(sprintf('Matern, estimated nu=%.2f, order=%d', ...
-                  exp(model{j}.param(2)), model{j}.order));
+                exp(model{j}.param(2)), model{j}.order));
     end
 end

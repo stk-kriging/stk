@@ -41,7 +41,6 @@ disp('#================#');
 disp('                  ');
 
 
-
 %% Define a 1d test function (the same as in example01.m)
 
 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
@@ -51,6 +50,7 @@ box = [-1.0; 1.0];                              % factor space
 NT = 400; % nb of points in the grid
 xt = stk_sampling_cartesiangrid( NT, DIM, box );
 zt = stk_feval( f, xt );
+
 
 %% Generate a random sampling plan
 %
@@ -81,15 +81,10 @@ end
 % only used as an initial point for the optimization algorithm used in stk_param_estim().
 %
 
-% Parameters for the Matern covariance (see "help stk_materncov_iso" for more information)
-SIGMA2 = 1.0;  % variance parameter
-NU     = 4.0;  % regularity parameter
-RHO1   = 0.4;  % scale (range) parameter
-
-% Specification of the model (see "help stk_model" for more information)
-model.covariance_type  = 'stk_materncov_iso';     % isotropic Matern covariance function
-model.order = 0;                                  % ordinary kriging (i.e., constant mean)
-model.param = [log(SIGMA2),log(NU),log(1/RHO1)]'; % vector of parameters
+% The following line defines a model with a constant but unknown mean (ordinary
+% kriging) and a Matern covariance function. (Some default parameters are also
+% set, but they will be replaced below by estimated parameters.)
+model = stk_model('stk_materncov_iso');
 
 % Noise variance
 if NOISEVARIANCE > 0,
@@ -101,16 +96,27 @@ else
     model.lognoisevariance = log( 100 * eps );
 end
 
+
 %% Estimatation the parameters of the covariance
 %
-% The parameters are estimated by the REML (REstricted Maximum Likelihood) method.
+% Here, the parameters of the Matern covariance function are estimated by the
+% REML (REstricted Maximum Likelihood) method using stk_param_estim().
 %
 
-model.param = stk_param_estim( model.param, xi, zi, model);
+% Initial guess for the parameters for the Matern covariance
+% (see "help stk_materncov_iso" for more information)
+SIGMA2 = 1.0;  % variance parameter
+NU     = 4.0;  % regularity parameter
+RHO1   = 0.4;  % scale (range) parameter
+param0 = log([SIGMA2; NU; 1/RHO1]);
+
+model.param = stk_param_estim(param0, xi, zi, model);
+
 
 %% carry out kriging prediction
 
 zp = stk_predict(xi, zi, xt, model);
+
 
 %% display results
 

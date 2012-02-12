@@ -44,7 +44,7 @@ disp('                  ');
 %% Define a 1d test function
 
 f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
-DIM = 1;                                        % dimension of the factor space  
+DIM = 1;                                        % dimension of the factor space
 box = [-1.0; 1.0];                              % factor space
 
 NT = 400; % nb of points in the grid
@@ -55,7 +55,7 @@ figure(1); set( gcf, 'Name', 'Plot of the function to be approximated');
 plot( xt.a, zt.a ); xlabel('x'); ylabel('z');
 
 % In SMTK, the inputs and outputs are members of a structure array
-% The field 'a' is used to store the numerical values 
+% The field 'a' is used to store the numerical values
 
 
 %% Generate a space-filling design
@@ -68,27 +68,32 @@ plot( xt.a, zt.a ); xlabel('x'); ylabel('z');
 % 1d example.
 %
 
-NI = 6;                                         % nb of evaluations that will be used 
+NI = 6;                                         % nb of evaluations that will be used
 xi = stk_sampling_cartesiangrid( NI, DIM, box); % evaluation points
 zi = stk_feval( f, xi );                        % evaluation results
 
 
 %% Specification of the model
 %
-% We choose a Matern covariance with "fixed parameters" (in other 
+% We choose a Matern covariance with "fixed parameters" (in other
 % words, the parameters of the covariance function are provided by the user
 % rather than estimated from data).
 %
 
-% Parameters for the Matern covariance ("help stk_materncov_iso" for more information)
+% The following line defines a model with a constant but unknown mean
+% (ordinary kriging) and a Matern covariance function. (Some default
+% parameters are also set, but we override them below.)
+model = stk_model('stk_materncov_iso');
+
+% NOTE: the suffix '_iso' indicates an ISOTROPIC covariance function, but the
+% distinction isotropic / anisotropic is irrelevant here since DIM = 1.
+
+% Parameters for the Matern covariance function
+% ("help stk_materncov_iso" for more information)
 SIGMA2 = 1.0;  % variance parameter
 NU     = 4.0;  % regularity parameter
 RHO1   = 0.4;  % scale (range) parameter
-
-% Specification of the model (see "help stk_model" for more information)
-model.covariance_type  = 'stk_materncov_iso';     % isotropic Matern covariance function
-model.order = 0;                                  % ordinary kriging (i.e., constant mean)
-model.param = [log(SIGMA2),log(NU),log(1/RHO1)]'; % vector of parameters
+model.param = log([SIGMA2; NU; 1/RHO1]);
 
 
 %% Carry out the kriging prediction and display the result

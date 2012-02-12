@@ -49,14 +49,69 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function model = stk_model()
+function model = stk_model(covariance_type, dim)
 
-% example : an isotropic Matern covariance
 model = struct();
-model.covariance_type = 'stk_materncov_iso';
-model.order = 0;
-model.param = [ ...
-    log(1.0), ... % variance = 1.0
-    log(1.5), ... % regularity nu = 1.5
-    log(1/0.3) ]; % range parameter rho = 0.3
 
+%%% covariance type
+
+if nargin < 1,
+    % use the anisotropic Matern covariance function as a default choice
+    model.covariance_type = 'stk_materncov_aniso';
+else
+    model.covariance_type = covariance_type;
+end
+
+%%% model.order
+
+% use ordinary kriging as a default choice
+model.order = 0;
+
+%%% model.dim
+
+% default dimension is d = 1
+if nargin < 2,
+    model.dim = 1;
+else
+    model.dim = dim;
+end
+
+%%% model.param
+
+VAR0 = 1.0; % default value for the variance parameter
+
+switch model.covariance_type
+    
+    case 'stk_materncov_iso'
+
+        NU0 = 2.0;   % smoothness (regularity) parameter
+        RHO = 0.3;   % range parameter (spatial scale)
+        
+        model.param = log([VAR0; NU0; 1/RHO]);
+
+    case {'stk_materncov32_iso', 'stk_materncov52_iso'}
+
+        RHO = 0.3;   % range parameter (spatial scale)
+        
+        model.param = log([VAR0; 1/RHO]);
+        
+    case 'stk_materncov_aniso'
+
+        NU0 = 2.0;   % smoothness (regularity) parameter
+        RHO = 0.3;   % range parameter (spatial scale)
+        
+        model.param = log([VAR0; NU0; 1/RHO * ones(dim,1)]);
+
+    case {'stk_materncov32_aniso', 'stk_materncov52_aniso'}
+
+        RHO = 0.3;   % range parameter (spatial scale)
+        
+        model.param = log([VAR0; 1/RHO * ones(dim,1)]);
+
+    otherwise
+        
+        warning('Unknown covariance type, model.param cannot be initialized.');
+        
+        model.param = [];
+
+end
