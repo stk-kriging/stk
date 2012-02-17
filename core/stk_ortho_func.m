@@ -39,14 +39,14 @@
 %
 function P = stk_ortho_func( x, model )
 
-if ~isfield(model,'covariance_cache'), % SYNTAX: x(factors), model            
+if ~isfield(model,'Kx_cache'), % SYNTAX: x(factors), model            
     P = stk_ortho_func_( x, model.order );
         
 else % SYNTAX: x(indices), model    
-    if ~isfield(model,'P0'),
-        P = zeros( size(model.covariance_cache,1), 0 );
+    if ~isfield(model,'Px_cache'),
+        P = zeros( size(model.Kx_cache,1), 0 );
     else
-        P = model.P0( x, : );
+        P = model.Px_cache( x, : );
     end
 
 end

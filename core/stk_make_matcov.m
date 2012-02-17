@@ -55,31 +55,26 @@ if isempty( varargin{1} ), % stk_make_matcov(x,[],model,...)
     varargin = varargin(3:end);
     make_matcov_auto = true;
     
-elseif isfield( varargin{1}, 'a' ), % stk_make_matcov(x,xco,model,...)
-    
-    if nargin < 3, error('Not enough input arguments'); end
-    
-    xco = varargin{1};
-    model = varargin{2};
-    varargin = varargin(3:end);
-    make_matcov_auto = false;
-    
-else % stk_make_matcov(x,model,...)
-    
+elseif nargin == 2 % stk_make_matcov(x,model,...)
     model = varargin{1};
     varargin = varargin(2:end);
     make_matcov_auto = true;
-    
+ 
+else
+    xco = varargin{1};
+    model = varargin{2};
+    varargin = varargin(3:end);
+    make_matcov_auto = false;    
 end
 
 if ~isempty(varargin), error('Too many input arguments'); end
 
-if isfield(model,'covariance_cache'), % handle the case where a 'covariance_cache' field is present
+if isfield(model,'Kx_cache'), % handle the case where a 'Kx_cache' field is present
     
     if make_matcov_auto,
-        K = model.covariance_cache( x, x );
+        K = model.Kx_cache( x, x );
     else
-        K = model.covariance_cache( x, xco );
+        K = model.Kx_cache( x, xco );
     end
     
 else % handle the case where the covariance matrix must be computed
@@ -96,7 +91,7 @@ else % handle the case where the covariance matrix must be computed
     
     %=== decide whether blocks should be used or not
     
-    if isfield(model,'covariance_cache'), % SYNTAX: x(indices), model
+    if isfield(model,'Kx_cache'), % SYNTAX: x(indices), model
         ncores = 1; % avoids a call to matlabpool() which is slow
     else
         N = size(x.a,1);
