@@ -1,12 +1,10 @@
 % STK_MAKE_MATCOV computes a covariance matrix
 %
-% CALL: [K,P] = stk_make_matcov( x, [], model,... )
-%       x = 
+% CALL: [K, P] = stk_make_matcov(x, [], model)
 %
-% CALL: [K,P] = stk_make_matcov( x, xco, model,...)
+% CALL: [K, P] = stk_make_matcov(x, xco, model)
 %
-%
-% CALL: [K,P] = stk_make_matcov( x, model,...)
+% CALL: [K, P] = stk_make_matcov(x, model)
 %
 % STK_MAKE_MATCOV 
 %
@@ -43,38 +41,31 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-function [K,P] = stk_make_matcov( x, varargin )
+function [K, P] = stk_make_matcov(x, arg2, arg3)
 
 if nargin < 2, error('Not enough input arguments'); end
 
 %=== guess which syntax has been used based on the second input arg
 
-if isempty( varargin{1} ), % stk_make_matcov(x,[],model,...)
-    
-    model = varargin{2};
-    varargin = varargin(3:end);
-    make_matcov_auto = true;
-    
-elseif nargin == 2 % stk_make_matcov(x,model,...)
-    model = varargin{1};
-    varargin = varargin(2:end);
-    make_matcov_auto = true;
- 
-else
-    xco = varargin{1};
-    model = varargin{2};
-    varargin = varargin(3:end);
-    make_matcov_auto = false;    
+switch nargin
+    case 2, % stk_make_matcov(x, model)
+        model = arg2;
+        make_matcov_auto = true;
+    case 3, % stk_make_matcov(x, xco, model)
+        xco = arg2;
+        model = arg3;        
+        make_matcov_auto = isempty(xco);
+    otherwise
+        error('Incorrect number of input arguments.');
 end
 
-if ~isempty(varargin), error('Too many input arguments'); end
-
-if isfield(model,'Kx_cache'), % handle the case where a 'Kx_cache' field is present
+if isfield(model, 'Kx_cache'),
     
+    % handle the case where a 'Kx_cache' field is present    
     if make_matcov_auto,
-        K = model.Kx_cache( x, x );
+        K = model.Kx_cache(x, x);
     else
-        K = model.Kx_cache( x, xco );
+        K = model.Kx_cache(x, xco);
     end
     
 else % handle the case where the covariance matrix must be computed
