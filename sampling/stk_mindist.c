@@ -39,7 +39,7 @@
 static double compute_mindist(double* x, int nx, int dim)
 {
   int i, j, k1, k2;
-  double diff, lambda, dist_squared, mindist_squared;
+  double diff, dist_squared, mindist_squared;
 
   mindist_squared = -1;
 
