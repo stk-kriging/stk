@@ -69,12 +69,10 @@ stk_set_root(STK_ROOT);
 
 octave_in_use = stk_is_octave_in_use();
 if octave_in_use,
-    s = ver('Octave');
-    fprintf('Using Octave %s\n',s.Version);
+    fprintf('Using Octave %s\n', OCTAVE_VERSION);
     stk_check_octave_packages();
 else
-    s = ver('Matlab');
-    fprintf('Using Matlab %s %s\n',s.Version,s.Release);
+    fprintf('Using Matlab %s\n', version());
 end
 
 %=== Suppress additional help information in Octave
