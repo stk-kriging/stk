@@ -28,17 +28,24 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function [K]=stk_noisecov(ni, lognoisevariance, diff)
+function K = stk_noisecov(ni, lognoisevariance, diff)
 
-[n,m] = size(lognoisevariance);
-assert( m==1, 'Dimension mismatch !');
+s = size(lognoisevariance);
+n = max(s);
+if ~isequal(s, [1,n]) && ~isequal(s, [n,1])
+    error('lognoisvariance must be a vector.');
+end
 
-if (n==1)
+if nargin == 2,
+    diff = -1; % default: compute the value (not a derivative)
+end
+
+if n == 1
     % the result does not depend on diff
     K = exp(lognoisevariance) * eye(ni);
 else
-    assert( (nargin==2) || (diff==-1), 'not implemented' );
+    if diff ~= -1,
+        error('not implemented');
+    end
     K = diag(exp(lognoisevariance));
-end
-
 end
