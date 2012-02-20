@@ -41,9 +41,9 @@ for example_num = 1:NB_EXAMPLES,
     try
         script_name{example_num} = sprintf('example%02d', example_num);
         run(script_name{example_num});
-		close all;
+        drawnow; pause(1.0); close all;
     catch %#ok<CTCH>
-        err{example_num} = lasterror();
+        err{example_num} = lasterror(); %#ok<LERR>
     end
 end
 
