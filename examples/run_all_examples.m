@@ -40,9 +40,10 @@ err = cell(1, NB_EXAMPLES);
 for example_num = 1:NB_EXAMPLES,
     try
         script_name{example_num} = sprintf('example%02d', example_num);
-        run(script_name{example_num}); drawnow;
-    catch e
-        err{example_num} = e;
+        run(script_name{example_num});
+		close all;
+    catch %#ok<CTCH>
+        err{example_num} = lasterror();
     end
 end
 
@@ -58,10 +59,15 @@ disp('                                ');
 for example_num = 1:NB_EXAMPLES,
     fprintf('%s : ', script_name{example_num});
     if isempty(err{example_num})
-        fprintf('ok\n');
+        fprintf('OK\n');
     else
-        fprintf('%s\n', err{example_num}.identifier);
+		id = err{example_num}.identifier;
+		if isempty(id),
+			fprintf('ERROR (no identifier provided)\n');
+		else
+			fprintf('%s\n', id);
+		end        
     end
 end
 
-close all;  fprintf('\n\n');
+fprintf('\n\n');
