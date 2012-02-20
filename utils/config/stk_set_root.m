@@ -35,24 +35,59 @@ function out = stk_set_root(root)
 persistent root_folder
 
 if nargin > 0,    
-    if ~isempty(root_folder), stk_rmpath(root_folder); end   
-    root_folder = root; mlock();
-    stk_addpath(root_folder);    
+    
+	first_time = isempty(root_folder);
+	
+	if ~first_time
+		if ~strcmp(root, root_folder),
+			% changing STK's root folder: we remove
+			% the previous one from the path
+			stk_rmpath(root_folder);			
+		end
+	end
+	
+	% NOTE: calling stk_rmpath when root and root_folder are identical
+	% is harmless in recent versions of Matlab and Octave, but has been
+	% found to cause a bug in Octave 3.0.2 when calling stk_init twice
+	% in a row.
+	
+	root_folder = root;
+	if first_time,
+		% lock this M-file into memory to prevent clear
+		% all from erasing the persistent variable
+		mlock(); 
+	end
+	
+	% finally, add STK folders to the path
+	stk_addpath(root_folder);
+
 end
 
 out = root_folder;
    
-end
+end % stk_set_root
 
+
+%%%%%%%%%%%%%%%%%%
+%%% stk_rmpath %%%
+%%%%%%%%%%%%%%%%%%
 
 function stk_rmpath(root)
+
 warning('off','MATLAB:rmpath:DirNotFound');
 path = stk_makepath(root);
 rmpath( path{:} );
 warning('on','MATLAB:rmpath:DirNotFound');
-end
+
+end % stk_rmpath
+
+
+%%%%%%%%%%%%%%%%%%%
+%%% stk_addpath %%%
+%%%%%%%%%%%%%%%%%%%
 
 function stk_addpath(root)
+
 path = stk_makepath(root);
 for i=1:length(path),
     if exist(path{i},'dir')
@@ -61,9 +96,16 @@ for i=1:length(path),
         error('problem in stk_makepath ?');
     end
 end
-end
+
+end % stk_addpath
+
+
+%%%%%%%%%%%%%%%%%%%%
+%%% stk_makepath %%%
+%%%%%%%%%%%%%%%%%%%%
 
 function path = stk_makepath(root)
+
 path = { ...
     fullfile(root, 'core'             ), ...
     fullfile(root, 'covfcs'           ), ...
@@ -72,4 +114,5 @@ path = { ...
     fullfile(root, 'utils', 'config'  ), ...
     fullfile(root, 'utils', 'plot'    ), ...
     fullfile(root, 'utils', 'specfun' )   };
-end
+
+end % stk_makepath
