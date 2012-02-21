@@ -43,8 +43,26 @@ stk_check_octave_package_('optim', pkg_list);
 % The 'statistics" package is no longer required
 % stk_check_octave_package_('statistics', pkg_list);
 
+% We need to check that the GLPK library is installed. This is the case
+% in most recent releases of Octave, but some older releases do not contain
+% GLPK (e.g., the binary release 3.0.2 for Windows available from
+% Octave-forge, or the packaged release 3.0.5 in OpenBSD)
+try
+    stk_test_glpk_();
+catch %#ok<CTCH>
+    error('The GLPK library does not seem to be properly installed');
 end
 
+% Note: simply checking that __glpk__.oct is present is not good enough,
+% since some distribution include (or so it seems) a fake __glpk__.oct
+% package, which is in charge of issuing an error message...
+
+end
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% stk_check_octave_package_ %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function stk_check_octave_package_(name, pkg_list)
 
@@ -60,5 +78,24 @@ for i = 1:length(pkg_list)
 end
 
 error('Octave package %s not installed.', name);
+
+end
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% stk_test_glpk_ %%%
+%%%%%%%%%%%%%%%%%%%%%%
+
+function stk_test_glpk_()
+
+% minimize c*x
+% under a*x = b, x >= 0
+a = 1;
+b = 1;
+c = 1;
+
+% solve this difficult problem using GLPK ;-)
+x = glpk (c, a, b);
+assert(x == 1);
 
 end
