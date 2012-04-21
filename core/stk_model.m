@@ -12,7 +12,7 @@
 %
 % MANDATORY FIELDS: name, param
 %
-% OPTIONAL FIELDS: covariance_cache, lognoisevariance
+% OPTIONAL FIELDS: Kx_cache, lognoisevariance
 %
 % FIXME: incomplete documentation
 %

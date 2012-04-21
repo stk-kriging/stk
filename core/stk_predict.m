@@ -6,7 +6,7 @@
 %
 % FIXME: documentation incomplete
 %
-% USE #1: if model.covariance_cache exist,
+% USE #1: if model.Kx_cache exist,
 %   - it is assumed that xi and xt are indices (integers)
 %   - xi is required
 %   - xt is optional (can be empty)
@@ -47,20 +47,22 @@
 %
 function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)
 
-ni = size(xi.a,1); % number of observations
-assert( isempty(zi) || (size(zi.a,1)==ni) );
-
 %=== use indices or matrices for xi & xt ?
 
-use_indices = isfield(model,'covariance_cache');
+use_indices = isfield(model,'Kx_cache');
 
 if use_indices,
-    if isempty(xt), xt = 1:size(model.covariance_cache,1); end
+    xi = xi(:);
+    ni = size(xi, 1); % number of observations
+    if isempty(xt), xt = 1:size(model.Kx_cache,1); end
     nt = length(xt);
 else
+    ni = size(xi.a, 1); % number of observations
     assert( ~isempty(xt.a) );
     nt = size(xt.a,1);
 end
+
+assert( isempty(zi) || (size(zi.a,1)==ni) );
 
 %=== handle other optional arguments
 

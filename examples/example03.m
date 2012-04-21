@@ -48,14 +48,14 @@ subplot(2,2,1);
 surf(XX,YY,ZZ);
 title('function to be approximated')
 
-% In SMTK, the inputs and outputs are members of a structure array
+% In STK, the inputs and outputs are members of a structure array
 % The field 'a' is used to store the numerical values 
 nt = NG*NG;
 xt.a = [reshape(XX,nt,1), reshape(YY,nt,1)]; % nt x DIM, 
 zt.a = reshape(ZZ,nt,1);                     % nt x 1
 
 
-%% To run SMTK, choose a covariance structure
+%% To run STK, choose a covariance structure
 % Some examples given below
 
 COVSTRUCT = 1 ; % 1: Matern anisotropic covariance, with unknown
