@@ -45,7 +45,7 @@ zt = stk_feval( f, xt );
 figure(1); set( gcf, 'Name', 'Plot of the function to be approximated');
 plot( xt.a, zt.a ); xlabel('x'); ylabel('z');
 
-% In SMTK, the inputs and outputs are members of a structure array
+% In STK, the inputs and outputs are members of a structure array
 % The field 'a' is used to store the numerical values 
 
 
