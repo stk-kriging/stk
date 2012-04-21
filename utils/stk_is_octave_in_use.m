@@ -34,12 +34,9 @@ function octave_in_use = stk_is_octave_in_use()
 
 persistent b;
 
-if isempty(b),
-    
-    b = ~isempty( ver('Octave') );
-    
-    mlock();
-    
+if isempty(b),    
+    b = exist('OCTAVE_VERSION', 'builtin');
+    mlock();    
 end
 
 octave_in_use = b;
