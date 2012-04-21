@@ -6,8 +6,6 @@
 %
 % CALL: [K, P] = stk_make_matcov(x, model)
 %
-% STK_MAKE_MATCOV 
-%
 % BE CAREFUL: stk_make_matcov(x,model) and stk_makematcov(x,x,model) are
 % NOT equivalent if model.lognoisevariance exists (in the first case the
 % nois variance is added on the diagonal).

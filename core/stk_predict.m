@@ -12,7 +12,9 @@
 %   - xt is optional (can be empty)
 %
 % USE #2: otherwise,
-%   - xi and xt are expected to be provided as numerical matrices
+%   - xi and xt are expected to be structures, whose field 'a' contains
+%     the observed points (matrix of size n x d, where n is the number 
+%     of points and d is the dimension of the factor space)
 %   - both arguments are required
 % 
 % EXAMPLE: see examples/example01.m
