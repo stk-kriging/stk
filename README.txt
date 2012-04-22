@@ -34,20 +34,17 @@ o Quick Start
     Once  the STK is properly initialized,  you should be able  to run
     the examples located in the 'examples' directory.
 
-o Requirements and recommendations for running under GNU Octave
+o Requirements and recommendations for use with GNU Octave
 
     Note  that  the STK relies  on  some mex files  that  are compiled
     during the initialization. Thus, your installation must be able to
     compile mex files.
 
-    Octave-forge: the 'optim' package is required.
-                  (for the sqp() function)
-
     The sqp() function from the optim package internally relies on the
     GLPK library, which is shipped with most (but not all) versions of
-    Octave. The STK toolbox will to start if GLPK is not installed.
+    Octave. The STK will not start if GLPK is not installed.
 
-o Requirements and recommendations for running under Matlab
+o Requirements and recommendations for use with Matlab
 
     The Optimization Toolbox is recommended.
 
