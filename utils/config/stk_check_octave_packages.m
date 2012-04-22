@@ -38,9 +38,12 @@ function stk_check_octave_packages()
 
 pkg_list = pkg('list');
 
-stk_check_octave_package_('optim', pkg_list);
+% The Octave-forge 'optim' package was indicated by mistake as a dependency
+% in release 1.0.1 but it turns out that sqp() is provided by Octave itself
+% and not by the optim package ;-)
+% stk_check_octave_package_('optim', pkg_list);
 
-% The 'statistics" package is no longer required
+% The Octave-Forge 'statistics' package is no longer required.
 % stk_check_octave_package_('statistics', pkg_list);
 
 % We need to check that the GLPK library is installed. This is the case
