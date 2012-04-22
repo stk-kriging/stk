@@ -38,25 +38,69 @@ function stk_check_octave_packages()
 
 pkg_list = pkg('list');
 
-stk_check_octave_package_('optim', pkg_list);
+% The Octave-forge 'optim' package was indicated by mistake as a dependency
+% in release 1.0.1 but it turns out that sqp() is provided by Octave itself
+% and not by the optim package ;-)
+% stk_check_octave_package_('optim', pkg_list);
+
+% The Octave-Forge 'statistics' package is currently required for the 
+% pdist() function. A mex-file will replace pdist() in the next release,
+% thereby removing this dependency.
 stk_check_octave_package_('statistics', pkg_list);
+
+% We need to check that the GLPK library is installed. This is the case
+% in most recent releases of Octave, but some older releases do not contain
+% GLPK (e.g., the binary release 3.0.2 for Windows available from
+% Octave-forge, or the packaged release 3.0.5 in OpenBSD)
+try
+  stk_test_glpk_();
+catch %#ok<CTCH>
+  error('The GLPK library does not seem to be properly installed');
+end
+
+% Note: simply checking that __glpk__.oct is present is not good enough,
+% since some distribution include (or so it seems) a fake __glpk__.oct
+% package, which is in charge of issuing an error message...
 
 end
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% stk_check_octave_package_ %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 function stk_check_octave_package_(name, pkg_list)
 
 for i = 1:length(pkg_list)
-	if strcmp(pkg_list{i}.name, name),
-		if ~pkg_list{i}.loaded,
-			pkg('load', name);
-		end
-		fprintf('Octave package %s-%s loaded.\n', ...
-		         pkg_list{i}.name, pkg_list{i}.version);
-		return
-	end
+  if strcmp(pkg_list{i}.name, name),
+    if ~pkg_list{i}.loaded,
+      pkg('load', name);
+    end
+    fprintf('Octave package %s-%s loaded.\n', ...
+	    pkg_list{i}.name, pkg_list{i}.version);
+    return
+  end
 end
 
 error('Octave package %s not installed.', name);
+
+end
+
+
+%%%%%%%%%%%%%%%%%%%%%%
+%%% stk_test_glpk_ %%%
+%%%%%%%%%%%%%%%%%%%%%%
+
+function stk_test_glpk_()
+
+% minimize c*x
+% under a*x = b, x >= 0
+a = 1;
+b = 1;
+c = 1;
+
+% solve this difficult problem using GLPK ;-)
+x = glpk (c, a, b);
+assert(x == 1);
 
 end
