@@ -36,7 +36,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="../core/stk_param_estim.html" class="code" title="function paramopt = stk_param_estim( param0, xi, yi, model, varargin )">stk_param_estim</a>	STK_PARAM_ESTIM estimates the parameters of the covariance from data</li><li><a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)">stk_predict</a>	STK_PREDICT performs a kriging prediction from data</li><li><a href="../sampling/stk_sampling_cartesiangrid.html" class="code" title="function x = stk_sampling_cartesiangrid( n, d, box )">stk_sampling_cartesiangrid</a>	STK_SAMPLING_CARTESIANGRID builds a regular grid</li><li><a href="../sampling/stk_sampling_randunif.html" class="code" title="function x = stk_sampling_randunif( n, d, box )">stk_sampling_randunif</a>	STK_SAMPLING_RANDUNIF yields uniformly distributed points on a box domain</li><li><a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a>	STK_FEVAL evaluates a function at given locations points</li><li><a href="../utils/stk_plot1d.html" class="code" title="function stk_plot1d(xi,zi,xt,zt,zp)">stk_plot1d</a>	STK_PLOT1D is a convenient plot function in 1D</li></ul>
+<li><a href="../core/stk_param_estim.html" class="code" title="function paramopt = stk_param_estim(param0, xi, yi, model)">stk_param_estim</a>	STK_PARAM_ESTIM estimates the parameters of the covariance from data</li><li><a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)">stk_predict</a>	STK_PREDICT performs a kriging prediction from data</li><li><a href="../sampling/stk_sampling_cartesiangrid.html" class="code" title="function x = stk_sampling_cartesiangrid( n, d, box )">stk_sampling_cartesiangrid</a>	STK_SAMPLING_CARTESIANGRID builds a regular grid</li><li><a href="../sampling/stk_sampling_randunif.html" class="code" title="function x = stk_sampling_randunif( n, d, box )">stk_sampling_randunif</a>	STK_SAMPLING_RANDUNIF yields uniformly distributed points on a box domain</li><li><a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a>	STK_FEVAL evaluates a function at given locations points</li><li><a href="../utils/stk_plot1d.html" class="code" title="function stk_plot1d(xi,zi,xt,zt,zp)">stk_plot1d</a>	STK_PLOT1D is a convenient plot function in 1D</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
 </ul>
@@ -54,8 +54,8 @@ This function is called by:
 0007 <span class="comment">%</span>
 0008 <span class="comment">% Copyright Notice</span>
 0009 <span class="comment">%</span>
-0010 <span class="comment">%    Copyright (C) 2011 SUPELEC</span>
-0011 <span class="comment">%    Version:   1.0</span>
+0010 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
+0011 <span class="comment">%    Version:   1.0.2</span>
 0012 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
 0013 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
 0014 <span class="comment">%    URL:       http://sourceforge.net/projects/kriging</span>
@@ -91,75 +91,70 @@ This function is called by:
 0044 xt = <a href="../sampling/stk_sampling_cartesiangrid.html" class="code" title="function x = stk_sampling_cartesiangrid( n, d, box )">stk_sampling_cartesiangrid</a>( NT, DIM, box );
 0045 zt = <a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a>( f, xt );
 0046 
-0047 <span class="comment">%% Generate a space-filling design</span>
+0047 <span class="comment">%% Generate a random sampling plan</span>
 0048 <span class="comment">%</span>
 0049 <span class="comment">% The objective is to construct an approximation of f with a budget of NI</span>
-0050 <span class="comment">% evaluations performed on a &quot;space-filling design&quot;.</span>
+0050 <span class="comment">% evaluations performed on a randomly generated (uniform) design.</span>
 0051 <span class="comment">%</span>
-0052 <span class="comment">% A regular grid (i.e., a grid with constant spacing) is constructed using</span>
-0053 <span class="comment">% stk_sampling_cartesiangrid(), which is equivalent to linspace() for this</span>
-0054 <span class="comment">% simple 1d example.</span>
-0055 <span class="comment">%</span>
-0056 <span class="comment">% Change the value of NOISEVARIANCE to add a Gaussian evaluation noise on</span>
-0057 <span class="comment">% the observations.</span>
-0058 <span class="comment">%</span>
-0059 
-0060 NOISEVARIANCE = 0;
+0052 <span class="comment">% Change the value of NOISEVARIANCE to add a Gaussian evaluation noise on</span>
+0053 <span class="comment">% the observations.</span>
+0054 <span class="comment">%</span>
+0055 
+0056 NOISEVARIANCE = 0;
+0057 
+0058 NI = 6;                                     <span class="comment">% nb of evaluations that will be used</span>
+0059 xi = <a href="../sampling/stk_sampling_randunif.html" class="code" title="function x = stk_sampling_randunif( n, d, box )">stk_sampling_randunif</a>(NI, DIM, box);   <span class="comment">% evaluation points</span>
+0060 zi = <a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a>(f, xi);                      <span class="comment">% evaluation results</span>
 0061 
-0062 NI = 6;                                         <span class="comment">% nb of evaluations that will be used</span>
-0063 xi = <a href="../sampling/stk_sampling_randunif.html" class="code" title="function x = stk_sampling_randunif( n, d, box )">stk_sampling_randunif</a>( NI, DIM, box); <span class="comment">% evaluation points</span>
-0064 zi = <a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a>( f, xi );                        <span class="comment">% evaluation results</span>
-0065 
-0066 <span class="keyword">if</span> NOISEVARIANCE &gt; 0,
-0067     zi.a = zi.a + sqrt(NOISEVARIANCE) * randn(NI,1);
-0068     <span class="comment">% (don't forget that the data is in the &quot;.a&quot; field!)</span>
-0069 <span class="keyword">end</span>
-0070 
-0071 
-0072 <span class="comment">%% Specification of the model</span>
-0073 <span class="comment">%</span>
-0074 <span class="comment">% We choose a Matern covariance, the parameters of which will be estimated from the data.</span>
-0075 <span class="comment">%</span>
-0076 <span class="comment">% The values of the parameters that are provided here, including the noise variance, are</span>
-0077 <span class="comment">% only used as an initial point for the optimization algorithm used in stk_param_estim().</span>
-0078 <span class="comment">%</span>
-0079 
-0080 <span class="comment">% Parameters for the Matern covariance (see &quot;help stk_materncov_iso&quot; for more information)</span>
-0081 SIGMA2 = 1.0;  <span class="comment">% variance parameter</span>
-0082 NU     = 4.0;  <span class="comment">% regularity parameter</span>
-0083 RHO1   = 0.4;  <span class="comment">% scale (range) parameter</span>
-0084 
-0085 <span class="comment">% Specification of the model (see &quot;help stk_model&quot; for more information)</span>
-0086 model.covariance_type  = <span class="string">'stk_materncov_iso'</span>;     <span class="comment">% isotropic Matern covariance function</span>
-0087 model.order = 0;                                  <span class="comment">% ordinary kriging (i.e., constant mean)</span>
-0088 model.param = [log(SIGMA2),log(NU),log(1/RHO1)]'; <span class="comment">% vector of parameters</span>
-0089 
-0090 <span class="comment">% Noise variance</span>
-0091 <span class="keyword">if</span> NOISEVARIANCE &gt; 0,
-0092     model.lognoisevariance = log( 3 * NOISEVARIANCE );
-0093     <span class="comment">% (this is not the true value of the noise variance !)</span>
-0094 <span class="keyword">else</span>
-0095     <span class="comment">% Even if we don't assume that the observations are noisy,</span>
-0096     <span class="comment">% it is wiser to add a small &quot;regularization noise&quot;.</span>
-0097     model.lognoisevariance = log( 100 * eps );
-0098 <span class="keyword">end</span>
-0099 
+0062 <span class="keyword">if</span> NOISEVARIANCE &gt; 0,
+0063     zi.a = zi.a + sqrt(NOISEVARIANCE) * randn(NI,1);
+0064     <span class="comment">% (don't forget that the data is in the &quot;.a&quot; field!)</span>
+0065 <span class="keyword">end</span>
+0066 
+0067 
+0068 <span class="comment">%% Specification of the model</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% We choose a Matern covariance, the parameters of which will be estimated from the data.</span>
+0071 <span class="comment">%</span>
+0072 <span class="comment">% The values of the parameters that are provided here, including the noise variance, are</span>
+0073 <span class="comment">% only used as an initial point for the optimization algorithm used in stk_param_estim().</span>
+0074 <span class="comment">%</span>
+0075 
+0076 <span class="comment">% Parameters for the Matern covariance (see &quot;help stk_materncov_iso&quot; for more information)</span>
+0077 SIGMA2 = 1.0;  <span class="comment">% variance parameter</span>
+0078 NU     = 4.0;  <span class="comment">% regularity parameter</span>
+0079 RHO1   = 0.4;  <span class="comment">% scale (range) parameter</span>
+0080 
+0081 <span class="comment">% Specification of the model (see &quot;help stk_model&quot; for more information)</span>
+0082 model.covariance_type  = <span class="string">'stk_materncov_iso'</span>;     <span class="comment">% isotropic Matern covariance function</span>
+0083 model.order = 0;                                  <span class="comment">% ordinary kriging (i.e., constant mean)</span>
+0084 model.param = [log(SIGMA2),log(NU),log(1/RHO1)]'; <span class="comment">% vector of parameters</span>
+0085 
+0086 <span class="comment">% Noise variance</span>
+0087 <span class="keyword">if</span> NOISEVARIANCE &gt; 0,
+0088     model.lognoisevariance = log( 3 * NOISEVARIANCE );
+0089     <span class="comment">% (this is not the true value of the noise variance !)</span>
+0090 <span class="keyword">else</span>
+0091     <span class="comment">% Even if we don't assume that the observations are noisy,</span>
+0092     <span class="comment">% it is wiser to add a small &quot;regularization noise&quot;.</span>
+0093     model.lognoisevariance = log( 100 * eps );
+0094 <span class="keyword">end</span>
+0095 
+0096 <span class="comment">%% Estimatation the parameters of the covariance</span>
+0097 <span class="comment">%</span>
+0098 <span class="comment">% The parameters are estimated by the REML (REstricted Maximum Likelihood) method.</span>
+0099 <span class="comment">%</span>
 0100 
-0101 <span class="comment">%% Estimatation the parameters of the covariance</span>
-0102 <span class="comment">%</span>
-0103 <span class="comment">% The parameters are estimated by the REML (REstricted Maximum Likelihood) method.</span>
-0104 <span class="comment">%</span>
-0105 
-0106 model.param = <a href="../core/stk_param_estim.html" class="code" title="function paramopt = stk_param_estim( param0, xi, yi, model, varargin )">stk_param_estim</a>( model.param, xi, zi, model);
-0107 
-0108 <span class="comment">%% carry out kriging prediction</span>
-0109 
-0110 zp = <a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)">stk_predict</a>(xi, zi, xt, model);
-0111 
-0112 <span class="comment">%% display results</span>
-0113 
-0114 <a href="../utils/stk_plot1d.html" class="code" title="function stk_plot1d(xi,zi,xt,zt,zp)">stk_plot1d</a>(xi,zi,xt,zt,zp)
-0115 model <span class="comment">%#ok&lt;NOPTS&gt;</span></pre></div>
-<hr><address>Generated on Wed 28-Sep-2011 09:58:41 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0101 model.param = <a href="../core/stk_param_estim.html" class="code" title="function paramopt = stk_param_estim(param0, xi, yi, model)">stk_param_estim</a>( model.param, xi, zi, model);
+0102 
+0103 <span class="comment">%% carry out kriging prediction</span>
+0104 
+0105 zp = <a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)">stk_predict</a>(xi, zi, xt, model);
+0106 
+0107 <span class="comment">%% display results</span>
+0108 
+0109 <a href="../utils/stk_plot1d.html" class="code" title="function stk_plot1d(xi,zi,xt,zt,zp)">stk_plot1d</a>(xi,zi,xt,zt,zp)
+0110 model <span class="comment">%#ok&lt;NOPTS&gt;</span></pre></div>
+<hr><address>Generated by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

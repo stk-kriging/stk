@@ -1,6 +1,7 @@
 /* Created by mdot for Matlab */
 digraph m2html {
 
+  stk_check_octave_packages [URL="stk_check_octave_packages.html"];
   stk_feval [URL="stk_feval.html"];
   stk_is_fmincon_available [URL="stk_is_fmincon_available.html"];
   stk_is_octave_in_use [URL="stk_is_octave_in_use.html"];
