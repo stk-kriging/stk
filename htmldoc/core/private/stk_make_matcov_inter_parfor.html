@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_make_matcov_inter_parfor</title>
+  <meta name="keywords" content="stk_make_matcov_inter_parfor">
+  <meta name="description" content="STK_MAKE_MATCOV_INTER_PARFOR [STK internal function]">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">core</a> &gt; <a href="index.html">private</a> &gt; stk_make_matcov_inter_parfor.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for core/private&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_make_matcov_inter_parfor
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_MAKE_MATCOV_INTER_PARFOR [STK internal function]</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function K = stk_make_matcov_inter_parfor( x, xco, model, ncores, min_block_size ) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_MAKE_MATCOV_INTER_PARFOR [STK internal function]</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="../../core/stk_make_matcov.html" class="code" title="function [K,P] = stk_make_matcov( x, varargin )">stk_make_matcov</a>	STK_MAKE_MATCOV computes a covariance matrix</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_MAKE_MATCOV_INTER_PARFOR [STK internal function]</span>
+0002 
+0003 <span class="comment">%                  Small (Matlab/Octave) Toolbox for Kriging</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% Copyright Notice</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
+0008 <span class="comment">%    Version:   1.0.2</span>
+0009 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
+0010 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0011 <span class="comment">%    URL:       http://sourceforge.net/projects/kriging/</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Copying Permission Statement</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for</span>
+0016 <span class="comment">%    Kriging.</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0019 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0020 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0021 <span class="comment">%    option) any later version.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0024 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0025 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0026 <span class="comment">%    License for more details.</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0029 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0030 <span class="comment">%</span>
+0031 
+0032 <a name="_sub0" href="#_subfunctions" class="code">function K = stk_make_matcov_inter_parfor( x, xco, model, ncores, min_block_size )</a>
+0033 
+0034 <span class="comment">%=== choose the actual block size &amp; number of blocks</span>
+0035 B1 = 1; n1 = size(x.a,1);   dB1 = 0;
+0036 B2 = 1; n2 = size(xco.a,1); dB2 = 0;
+0037 <span class="keyword">while</span> 1, bs1 = n1/B1; bs2 = n2/B2;
+0038     <span class="comment">% stop if the blocks are becoming too small</span>
+0039     <span class="keyword">if</span> bs1*bs2 &lt; min_block_size, B1=B1-dB1; B2=B2-dB2; <span class="keyword">break</span>; <span class="keyword">end</span>
+0040     <span class="comment">% stop if the number of blocks is a multiple of ncores</span>
+0041     <span class="keyword">if</span> mod( B1*B2, ncores ) == 0, <span class="keyword">break</span>; <span class="keyword">end</span>
+0042     <span class="comment">% split the largest of both sides</span>
+0043     <span class="keyword">if</span> bs1 &gt; bs2, B1=B1+1; dB1=1; dB2=0;
+0044     <span class="keyword">else</span> B2=B2+1; dB1=0; dB2=1; <span class="keyword">end</span>
+0045 <span class="keyword">end</span>
+0046 bs1 = ceil(bs1); bs2 = ceil(bs2); nb_blocks = B1*B2;
+0047 
+0048 <span class="comment">%=== prepare blocks</span>
+0049 ind1 = zeros(B1,2); <span class="comment">% begin/end positions in the first dimension</span>
+0050 ind1(:,1) = 1 + ((1:B1)'-1)*bs1;
+0051 ind1(:,2) = min( n1, ind1(:,1)+bs1-1 );
+0052 ind2 = zeros(B2,2); <span class="comment">% begin/end positions in the second dimension</span>
+0053 ind2(:,1) = 1 + ((1:B2)'-1)*bs2;
+0054 ind2(:,2) = min( n2, ind2(:,1)+bs2-1 );
+0055 blocks = struct( <span class="string">'i'</span>,cell(1,nb_blocks), <span class="string">'j'</span>,[], <span class="string">'xi'</span>,[], <span class="string">'xcoj'</span>,[], <span class="string">'K'</span>,[] );
+0056 <span class="keyword">for</span> i = 1:B1,
+0057     <span class="keyword">for</span> j = 1:B2,
+0058         b = i + (j-1)*B1; <span class="comment">% block number</span>
+0059         blocks(b).i = i; blocks(b).xi = struct( <span class="string">'a'</span>, x.a(ind1(i,1):ind1(i,2),:) );
+0060         blocks(b).j = j; blocks(b).xcoj = struct( <span class="string">'a'</span>, xco.a(ind2(j,1):ind2(j,2),:) );
+0061     <span class="keyword">end</span>
+0062 <span class="keyword">end</span>
+0063 
+0064 <span class="comment">%=== process blocks</span>
+0065 name = model.covariance_type; param = model.param; <span class="comment">% avoids a &quot;parfor&quot; warning</span>
+0066 parfor b = 1:nb_blocks,
+0067     blocks(b).K = feval( name, blocks(b).xi, blocks(b).xcoj, param );
+0068 <span class="keyword">end</span>
+0069 
+0070 <span class="comment">%=== piece the whole matrix out from the blocks</span>
+0071 K = zeros(n1,n2);
+0072 <span class="keyword">for</span> i = 1:B1,
+0073     <span class="keyword">for</span> j = 1:B2,
+0074         b = i + (j-1)*B1; <span class="comment">% block number</span>
+0075         K( ind1(i,1):ind1(i,2), ind2(j,1):ind2(j,2) ) = blocks(b).K;
+0076     <span class="keyword">end</span>
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="keyword">end</span> <span class="comment">% function stk_make_matcov_inter_parfor</span></pre></div>
+<hr><address>Generated by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

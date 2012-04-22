@@ -1,6 +1,8 @@
 /* Created by mdot for Matlab */
 digraph m2html {
   stk_generate_samplepaths -> stk_make_matcov;
+  stk_make_matcov -> stk_make_matcov_auto_parfor;
+  stk_make_matcov -> stk_make_matcov_inter_parfor;
   stk_make_matcov -> stk_ortho_func;
   stk_make_matcov -> stk_noisecov;
   stk_make_matcov -> stk_is_pct_installed;
@@ -38,6 +40,8 @@ digraph m2html {
   example05 -> stk_feval;
   example05 -> stk_plot1dsim;
 
+  stk_make_matcov_auto_parfor [URL="core/private/stk_make_matcov_auto_parfor.html"];
+  stk_make_matcov_inter_parfor [URL="core/private/stk_make_matcov_inter_parfor.html"];
   stk_conditionning [URL="core/stk_conditionning.html"];
   stk_generate_samplepaths [URL="core/stk_generate_samplepaths.html"];
   stk_make_matcov [URL="core/stk_make_matcov.html"];
@@ -58,6 +62,7 @@ digraph m2html {
   stk_sampling_cartesiangrid [URL="sampling/stk_sampling_cartesiangrid.html"];
   stk_sampling_maximinlhs [URL="sampling/stk_sampling_maximinlhs.html"];
   stk_sampling_randunif [URL="sampling/stk_sampling_randunif.html"];
+  stk_check_octave_packages [URL="utils/stk_check_octave_packages.html"];
   stk_feval [URL="utils/stk_feval.html"];
   stk_is_fmincon_available [URL="utils/stk_is_fmincon_available.html"];
   stk_is_octave_in_use [URL="utils/stk_is_octave_in_use.html"];
