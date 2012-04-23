@@ -1,0 +1,131 @@
+=====================================================
+===  Release 1.0.2 : changes since release 1.0.1  ===
+=====================================================
+
+2012-04-22  Julien Bect  <julien.bect@supelec.fr>
+
+	Preparing for release 1.0.2.
+
+	* htmldoc/*: Updated HTML documentation.
+	* almost-all-files: Updated headers (copyright, version).
+
+	Fixed Octave dependencies (GLPK, optim).
+
+	* utils/stk_check_octave_packages.m: Now checks for presence of
+	the GLPK library, which is used by sqp().
+	* utils/stk_check_octave_packages.m: Removed unnecessary depency
+	on Octave-Forge package 'optim' (it turns out that sqp() is
+	provided by Octave itself !).
+	* README.txt: Updated doc.
+
+	Fixed a bug in Octave (use of Matlab-like assert statements).
+
+	* covfcs/stk_noisecov.m: Replaced Matlab-style assert() statements
+	with explicit calls to error().
+
+	Bugfix for compatibility with older versions of Octave---more
+	precisely, of the miscellaneous package.
+
+	* stk_init.m: use OCTAVE_VERSION instead of ver(), see below.
+
+2012-04-21  Julien Bect  <julien.bect@supelec.fr>
+
+	Bugfix for compatibility with older versions of Octave---more
+	precisely, of the miscellaneous package.
+
+	* utils/stk_is_octave_in_use.m: Test for the existence of built-in
+	variable OCTAVE_VERSION to check if running under Octave (instead
+	of calling ver(), which was not working properly with some old
+	versions of the miscellaneous package).
+
+	Fixed two bugs related to the use of a "covariance cache": when xi
+	is a vector of indices, xi.a does not exist !
+
+	* core/stk_make_matcov.m: Bugfix.
+	* core/stk_predict.m: Bugfix.
+
+	Renamed fields in "model" structures (covariance_cache to Kx_cache
+	and P0 to Px_cache).
+
+	* core/stk_ortho_func.m: Renamed variables.
+	* core/stk_make_matcov.m: idem.
+	* core/stk_predict.m: idem.
+	* core/stk_model.m: idem.
+
+	Miscellaneous changes, mostly doc fixing.
+
+	* covfcs/stk_materncov_aniso.m: Fixed doc. Renamed a variable.
+	* examples/example01.m: Fixed doc (SMTK -> STK).
+	* examples/example03.m: idem.
+	* core/stk_make_matcov.m: Fixed doc (header).
+	* core/stk_predict.m: idem.
+
+
+2012-02-05  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixed issues in stk_param_estim.m related to the definition of the
+	search domain and the selection of (constrained/unconstrained)
+	optimizer.
+
+	* core/stk_param_estim.m: Enlarged the search domain in such a way
+	that param0 is always inside it. Changed the selection of
+	optimizer to use fminsearch when either the upper- or the
+	lower-bound are empty. Moved the definition of the 'options'
+	struct to the Matlab-specific part of the code.
+
+	Doc & code formatting.
+
+	* examples/example02.m: Doc & code formatting.
+
+
+===================================================
+===  Release 1.0.1 : changes since release 1.0  ===
+===================================================
+
+2012-02-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Miscellaneous changes.
+
+	* README.txt: Improved requirements and recommendations.
+	* core/stk_param_estim.m: Clarified selection of optimizer.
+
+	Improved handling of Octave packages.
+
+	* utils/stk_check_octave_packages.m: New function to check
+	for required packages under Octave.
+	* stk_init.m: Added a call to stk_check_octave_packages(). Removed
+	some left-overs from an earlier version of stk_init where
+	fminsearch() was used instead of sqp() under Octave. Moved call to
+	stk_is_fmincon_available() to the Matlab-conditional part.
+
+	Fixed a parsing problem occuring in Octave 3.4.3 (at least),
+	related to the fact that parfor loops are supposed to end with an
+	"endparfor" instead of a simple "end"... but we don't use "parfor"
+	at all if we are running in Octave.
+
+	* core/stk_make_matcov.m: Moved some sub-functions to independent
+	M-files stored in a private sub-folder.
+	* core/private: New folder.
+	* core/private/stk_make_matcov_auto_parfor.m: New file (the code
+	in this file was previously part of stk_make_matcov.m).
+	* core/private/stk_make_matcov_inter_parfor.m: New file (the code
+	in this file was previously part of stk_make_matcov.m).
+
+2012-02-01  Julien Bect  <julien.bect@supelec.fr>
+
+	* core/stk_remlqrg.m: Minor bugfix: returns NaN for the derivative
+	with respect to the noise variance in the case of a model without
+	observation noise.  Improved error message if NOISEPRIOR &&
+	~NOISYOBS (doesn't use assert anymore).
+
+	* stk_init.m: Added a clear statement for temporary variables
+	fmincon_found, octave_in_use, s and ans at the end of the script.
+
+2012-01-30  Julien Bect  <julien.bect@supelec.fr>
+
+	Creating maintenance branch 1.0.x.
+
+2011-09-28  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
+	Initial commit of STK.
+
