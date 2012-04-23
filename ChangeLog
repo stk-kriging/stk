@@ -38,6 +38,13 @@
 	of calling ver(), which was not working properly with some old
 	versions of the miscellaneous package).
 
+	Doc fixing.
+
+	* core/stk_make_matcov.m: Fixed doc (header).
+	* core/stk_predict.m: idem.
+
+2012-04-21  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
 	Fixed two bugs related to the use of a "covariance cache": when xi
 	is a vector of indices, xi.a does not exist !
 
@@ -57,9 +64,6 @@
 	* covfcs/stk_materncov_aniso.m: Fixed doc. Renamed a variable.
 	* examples/example01.m: Fixed doc (SMTK -> STK).
 	* examples/example03.m: idem.
-	* core/stk_make_matcov.m: Fixed doc (header).
-	* core/stk_predict.m: idem.
-
 
 2012-02-05  Julien Bect  <julien.bect@supelec.fr>
 
