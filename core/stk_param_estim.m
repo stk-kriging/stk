@@ -1,12 +1,12 @@
-% STK_PARAM_ESTIM estimates the parameters of the covariance from data 
+% STK_PARAM_ESTIM estimates the parameters of the covariance from data
 %
 % CALL: paramopt = stk_param_estim( param0, xi, yi, model,...)
 %
-% STK_PARAM_ESTIM helper function to estimate the parameters of a 
+% STK_PARAM_ESTIM helper function to estimate the parameters of a
 % covariance from data using rectricted maximum likelihood
 %
 % FIXME: documentation incomplete
-% 
+%
 % EXAMPLE: see examples/example02.m
 
 %                  Small (Matlab/Octave) Toolbox for Kriging
@@ -15,8 +15,8 @@
 %
 %    Copyright (C) 2011, 2012 SUPELEC
 %    Version:   1.0.2
-%    Authors:   Julien Bect <julien.bect@supelec.fr>
-%               Emmanuel Vazquez <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect        <julien.bect@supelec.fr>
+%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
 %    URL:       http://sourceforge.net/projects/kriging/
 %
 % Copying Permission Statement
@@ -39,39 +39,47 @@
 %
 function paramopt = stk_param_estim(param0, xi, yi, model)
 
-% TODO: turn param0 into an optional argument 
+% TODO: turn param0 into an optional argument
 %       => provide a reasonable default choice
 
 % TODO: allow user-defined bounds
-[lb, ub] = get_default_bounds( param0, xi, yi, model );
+[lb, ub] = get_default_bounds(param0, xi, yi, model);
 
-f = @(param)(f_(xi,yi,model,param));
+f = @(param)(f_(xi, yi, model, param));
 
 if stk_is_octave_in_use()
-    % Use sqp() from the Octave-forge "optim" package
-    nablaf = @(param)(nablaf_ (xi,yi,model,param));
-    paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);  
+    % Use sqp() from Octave (core)
+    nablaf = @(param)(nablaf_(xi, yi, model, param));
+    paramopt = sqp(param0, {f, nablaf}, [], [], lb, ub, [], 1e-5);
 else
-	if stk_is_fmincon_available() && ~isempty(lb) && ~isempty(ub)
-		% Use fmincon() from Matlab's optimization toolbox if available
-        options = optimset( 'Display', 'iter',                ...
-            'Algorithm', 'interior-point', 'GradObj', 'on',   ...
-            'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
-		paramopt = fmincon(f, param0, [], [], [], [], lb, ub, [], options);
+    if stk_is_fmincon_available() && ~isempty(lb) && ~isempty(ub)
+        % Use fmincon() from Matlab's optimization toolbox if available
+        try
+            % We first try to use the interior-point algorithm, which has
+            % been found to provide satisfactory results in many cases
+            options = optimset('Display', 'iter', ...
+                'Algorithm', 'interior-point', 'GradObj', 'on', ...
+                'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
+        catch
+            % The 'Algorithm' option does not exist in some old versions of
+            % Matlab (e.g., version 3.1.1 provided with R2007a)...
+            err = lasterror();
+            if strcmp(err.identifier, 'MATLAB:optimset:InvalidParamName')
+                options = optimset('Display', 'iter', 'GradObj', 'on', ...
+                    'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
+            else
+                rethrow(err);
+            end
+        end
+        paramopt = fmincon(f, param0, [], [], [], [], lb, ub, [], options);
     else
         % otherwise fall back on fminsearch()
         % (derivative-free unconstrained optimization algorithm (Nelder-Mead))
-        options = optimset( 'Display', 'iter',                ...
-            'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
-		paramopt = fminsearch(f,param0,options);
-	end
+        options = optimset('Display', 'iter', ...
+            'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
+        paramopt = fminsearch(f, param0, options);
+    end
 end
-
-% NESTED FUNCTIONS ARE NOT OCTAVE-COMPLIANT !
-%     function [l, dl] = f(param)
-%         model.param = param;
-%         [l, dl] = stk_remlqrg(xi, yi, model);
-%     end
 
 end
 
@@ -101,24 +109,24 @@ ubv = max(log(empirical_variance) + TOLVAR, param0(1));
 dim = size( xi.a, 2 );
 
 switch model.covariance_type,
-    
+
     case {'stk_materncov_aniso', 'stk_materncov_iso'}
-               
+
         lbnu = min(log(0.5), param0(2));
         ubnu = max(log(4*dim), param0(2));
-        
+
         scale = param0(3:end);
         lba = scale(:) - TOLSCALE;
         uba = scale(:) + TOLSCALE;
-        
+
         lb = [lbv; lbnu; lba];
         ub = [ubv; ubnu; uba];
-        
+
     otherwise
-        
+
         lb = [];
         ub = [];
-        
+
 end
 
 end
