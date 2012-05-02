@@ -43,40 +43,48 @@ function paramopt = stk_param_estim(param0, xi, yi, model)
 %       => provide a reasonable default choice
 
 % TODO: allow user-defined bounds
-[lb, ub] = get_default_bounds( param0, xi, yi, model );
+[lb, ub] = get_default_bounds(param0, xi, yi, model);
 
-f = @(param)(f_(xi,yi,model,param));
+f = @(param)(f_(xi, yi, model, param));
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
 
 % switch according to preferred optimizer
 switch stk_select_optimizer(bounds_available)
-    
+
     case 1, % Octave / sqp
         nablaf = @(param)(nablaf_ (xi,yi,model,param));
         paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);
-        
+
     case 2, % Matlab / fminsearch (Nelder-Mead)
         options = optimset( 'Display', 'iter',                ...
             'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
         paramopt = fminsearch(f,param0,options);
-        
+
     case 3, % Matlab / fmincon
-        options = optimset( 'Display', 'iter',                ...
-            'Algorithm', 'interior-point', 'GradObj', 'on',   ...
-            'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
+        try
+            % We first try to use the interior-point algorithm, which has
+            % been found to provide satisfactory results in many cases
+            options = optimset('Display', 'iter', ...
+                'Algorithm', 'interior-point', 'GradObj', 'on', ...
+                'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
+        catch
+            % The 'Algorithm' option does not exist in some old versions of
+            % Matlab (e.g., version 3.1.1 provided with R2007a)...
+            err = lasterror();
+            if strcmp(err.identifier, 'MATLAB:optimset:InvalidParamName')
+                options = optimset('Display', 'iter', 'GradObj', 'on', ...
+                    'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
+            else
+                rethrow(err);
+            end
+        end
         paramopt = fmincon(f, param0, [], [], [], [], lb, ub, [], options);
-        
+
     otherwise
         error('Unexpected value returned by stk_select_optimizer.');
-        
-end
 
-% NESTED FUNCTIONS ARE NOT OCTAVE-COMPLIANT !
-%     function [l, dl] = f(param)
-%         model.param = param;
-%         [l, dl] = stk_remlqrg(xi, yi, model);
-%     end
+end
 
 end
 
@@ -106,33 +114,33 @@ ubv = max(log(empirical_variance) + TOLVAR, param0(1));
 dim = size( xi.a, 2 );
 
 switch model.covariance_type,
-    
+
     case {'stk_materncov_aniso', 'stk_materncov_iso'}
-        
+
         lbnu = min(log(0.5), param0(2));
         ubnu = max(log(4*dim), param0(2));
-        
+
         scale = param0(3:end);
         lba = scale(:) - TOLSCALE;
         uba = scale(:) + TOLSCALE;
-        
+
         lb = [lbv; lbnu; lba];
         ub = [ubv; ubnu; uba];
-        
+
     case {'stk_materncov52_aniso', 'stk_materncov52_iso'}
-        
+
         scale = param0(2:end);
         lba = scale(:) - TOLSCALE;
         uba = scale(:) + TOLSCALE;
-        
+
         lb = [lbv; lba];
         ub = [ubv; uba];
-        
+
     otherwise
-        
+
         lb = [];
         ub = [];
-        
+
 end
 
 end
