@@ -1,9 +1,10 @@
 % STK_FEVAL evaluates a function at given locations points
 %
-% CALL: z = stk_feval( f, x )
+% CALL: z = stk_feval(f, x, progress_msg)
 %       f = function handle
 %       x = structure whose field 'a' contains the evaluations points
 %       z = structure whose field 'a" contains the evaluations results
+%       progress_msg = display progress messages ? (default: false)
 %
 % STK_FEVAL passes the evaluations points x.a to the function f and returns
 % the result in z.a. The function f must comply with the convention of the
@@ -15,17 +16,17 @@
 %       xt.a = linspace ( 0, 1, 100 );
 %       yt = stk_feval( f, xt );
 %       plot(xt.a, yt.a);
-%   
+%
 
 %                  Small (Matlab/Octave) Toolbox for Kriging
 %
 % Copyright Notice
 %
 %    Copyright (C) 2011 SUPELEC
-%    Version: 1.0
-%    Authors: Julien Bect <julien.bect@supelec.fr>
-%             Emmanuel Vazquez <emmanuel.vazquez@supelec.fr>
-%    URL:     http://sourceforge.net/projects/kriging/
+%    Version:   1.0
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    URL:       http://sourceforge.net/projects/kriging/
 %
 % Copying Permission Statement
 %
@@ -45,26 +46,27 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function z = stk_feval( f, x )
+function z = stk_feval(f, x, progress_msg)
 
-% validateattributes( f, {'function_handle','char'}, {} );
-if isstruct(x), xdata = x.a; else xdata = x; end 
-% validateattributes( xdata, {'numeric'}, {'2d'} );
+if isstruct(x), xdata = x.a; else xdata = x; end
+if nargin < 3, progress_msg = false; end
 
 [n,d] = size(xdata);
 if d == 0,
     error('zero-dimensional inputs are not allowed.');
 end
-    
+
 if n == 0, % no input => no output
     
-    zdata = zeros(0,1);    
-
+    zdata = zeros(0,1);
+    
 else % at least one input point
-
+    
     zdata = zeros(n,1);
     for i = 1:n,
-        zdata(i) = feval( f, xdata(i,:) );        
+        if progress_msg, fprintf('feval %d/%d... ', i, n); end
+        zdata(i) = feval( f, xdata(i,:) );
+        if progress_msg, fprintf('done.\n'); end
     end
     
 end
