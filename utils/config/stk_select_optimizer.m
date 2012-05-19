@@ -51,7 +51,7 @@ if nargin == 0, % invocation with no arguments (typically, in stk_init)
 else % invocation with at least one argument (typically, in stk_param_estim)
     
     if nargin < 2, display = false; end  % default: don't display anything
-    force_recheck = true;                % don't recheck which optimizer to use
+    force_recheck = false;                % don't recheck which optimizer to use
     
 end
 
