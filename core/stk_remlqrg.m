@@ -1,6 +1,6 @@
 % STK_REMLQRG computes restricted likelihood 
 %
-% CALL: [rl,drl_param] = stk_remlqrg(param, xi, yi, model, options)
+% CALL: [rl,drl_param] = stk_remlqrg(model, param, xi, yi, options)
 %
 % STK_REMLQRG computes the restricted likelihood given data and its
 % gradient with respect to the parameters of the covariance
@@ -36,7 +36,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function [rl,drl_param,drl_lnv] = stk_remlqrg(xi, yi, model)
+function [rl,drl_param,drl_lnv] = stk_remlqrg(model, xi, yi)
 
 PARAMPRIOR = isfield( model, 'prior' );
 NOISYOBS   = isfield( model, 'lognoisevariance' );
@@ -57,7 +57,7 @@ n = size(xi.a,1);
 
 %% compute rl
 
-[K,P] = stk_make_matcov( xi, model );
+[K,P] = stk_make_matcov( model, xi );
 q = size(P,2);
 
 [Q,R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
@@ -96,7 +96,7 @@ if nargout >= 2
     drl_param = zeros( nbparam, 1 );
     
     for paramdiff = 1:nbparam,
-        V = feval(model.covariance_type, xi, xi, model.param, paramdiff);
+        V = feval(model.covariance_type, model.param, xi, xi, paramdiff);
         WVW = W'*V*W;
         drl_param(paramdiff) = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wyi'*WVW*WKWinv_Wyi);
     end
