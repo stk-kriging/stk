@@ -1,5 +1,12 @@
 2012-05-30  Julien Bect  <julien.bect@supelec.fr>
 
+	Reorganizing folders.
+
+	* paramestim: New folder.
+	* core/stk_param_estim.m: Moved to paramestim.
+	* core/stk_remlqrg.m: Moved to paramestim.
+	* utils/config/stk_set_root.m : Changed path.
+
 	Miscellaneous changes.
 
 	* sampling/stk_mindist.c: Fixed a comment.
