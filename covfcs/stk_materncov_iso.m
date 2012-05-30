@@ -1,12 +1,12 @@
 % STK_MATERNCOV_ISO computes the isotropic Matern covariance
 %
-% CALL: [k]=stk_materncov_iso(x, y, param, diff)
+% CALL: [k]=stk_materncov_iso(param, x, y, diff)
+%   param  = vector of parameters of size 3
 %   x      = structure whose field 'a' contains the observed points.
 %            x.a  is a matrix of size n x d, where n is the number of 
 %            points and d is the dimension of the 
 %            factor space
 %   y      = same as x
-%   param  = vector of parameters of size 3
 %   diff   = differentiation parameter
 %
 % STK_MATERNCOV_ISO computes a Matern covariance between two random vectors
@@ -49,7 +49,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function k = stk_materncov_iso( x, y, param, diff )
+function k = stk_materncov_iso( param, x, y, diff )
 
 persistent x0 y0 param0 D
 

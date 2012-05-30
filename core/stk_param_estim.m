@@ -1,6 +1,6 @@
 % STK_PARAM_ESTIM estimates the parameters of the covariance from data
 %
-% CALL: paramopt = stk_param_estim( param0, xi, yi, model,...)
+% CALL: paramopt = stk_param_estim( model, param0, xi, yi,...)
 %
 % STK_PARAM_ESTIM helper function to estimate the parameters of a
 % covariance from data using rectricted maximum likelihood
@@ -37,15 +37,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function paramopt = stk_param_estim(param0, xi, yi, model)
+function paramopt = stk_param_estim(model, xi, yi, param0 )
 
 % TODO: turn param0 into an optional argument
 %       => provide a reasonable default choice
 
 % TODO: allow user-defined bounds
-[lb, ub] = get_default_bounds(param0, xi, yi, model);
+[lb, ub] = get_default_bounds(model, param0, xi, yi);
 
-f = @(param)(f_(xi, yi, model, param));
+f = @(param)(f_(model, param, xi, yi));
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
 
@@ -53,7 +53,7 @@ bounds_available = ~isempty(lb) && ~isempty(ub);
 switch stk_select_optimizer(bounds_available)
 
     case 1, % Octave / sqp
-        nablaf = @(param)(nablaf_ (xi,yi,model,param));
+        nablaf = @(param)(nablaf_ (model,param,xi,yi));
         paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);
 
     case 2, % Matlab / fminsearch (Nelder-Mead)
@@ -89,17 +89,17 @@ end
 end
 
 
-function [l,dl] = f_(xi,yi,model,param)
+function [l,dl] = f_(model, param, xi, yi)
 model.param = param;
-[l, dl] = stk_remlqrg(xi, yi, model);
+[l, dl] = stk_remlqrg(model, xi, yi);
 end
 
-function dl = nablaf_(xi,yi,model,param)
+function dl = nablaf_(model, param, xi, yi)
 model.param = param;
-[l_ignored, dl] = stk_remlqrg(xi, yi, model); %#ok<ASGLU>
+[l_ignored, dl] = stk_remlqrg(model, xi, yi); %#ok<ASGLU>
 end
 
-function [lb,ub] = get_default_bounds(param0, xi, yi, model)
+function [lb,ub] = get_default_bounds(model, param0, xi, yi)
 
 % constants
 TOLVAR = 5.0;
