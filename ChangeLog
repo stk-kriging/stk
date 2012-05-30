@@ -4,8 +4,10 @@
 
 	* paramestim: New folder.
 	* core/stk_param_estim.m: Moved to paramestim.
-	* core/stk_remlqrg.m: Moved to paramestim.
-	* utils/config/stk_set_root.m : Changed path.
+	* core/stk_remlqrg.m: idem.
+	* misc: New name of the old utils folder.
+	* misc/config/stk_set_root.m: Changed path.
+	* stk_init.m: Changed the location of stk_set_root.
 
 	Miscellaneous changes.
 

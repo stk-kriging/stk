@@ -62,7 +62,7 @@ disp( '                                                                     ' );
 %=== Add STK folders to the path
 
 STK_ROOT = fileparts(mfilename('fullpath'));
-addpath(fullfile(STK_ROOT,'utils','config'));
+addpath(fullfile(STK_ROOT, 'misc', 'config'));
 stk_set_root(STK_ROOT);
 
 %=== Check which of Matlab or Octave is in use
