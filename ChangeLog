@@ -3,10 +3,14 @@
 	Reorganizing folders.
 
 	* paramestim: New folder.
-	* core/stk_param_estim.m: Moved to paramestim.
-	* core/stk_remlqrg.m: idem.
-	* misc: New name of the old utils folder.
+	* paramestim/stk_param_estim.m: Moved from core.
+	* paramestim/stk_remlqrg.m: idem.
+	* misc: New name of the "old" utils folder.
 	* misc/config/stk_set_root.m: Changed path.
+	* utils: New name of the "old" utils/misc folder.
+	* utils/stk_model.m: Moved to utils.
+        * utils/stk_conditionning.m: idem.
+        * utils/stk_generate_samplepaths.m: idem.
 	* stk_init.m: Changed the location of stk_set_root.
 
 	Miscellaneous changes.
