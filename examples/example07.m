@@ -65,7 +65,7 @@ col = {'r', 'b', 'g', 'k'}; figure;
 for j = 1:NB_COVARIANCE_FUNCTIONS,
     covfun = list_cov{j, 2};
     param = list_cov{j, 3};
-    plot(x2.a, feval(covfun, x1, x2, param), 'Color', col{j});
+    plot(x2.a, feval(covfun, param, x1, x2 ), 'Color', col{j});
     hold on;
 end
 

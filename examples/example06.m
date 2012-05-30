@@ -106,9 +106,9 @@ nr = ceil(NB_MODELS / nc);
 
 for j = 1:NB_MODELS,
     % Estimate the parameters of the covariance
-    model{j}.param = stk_param_estim(model{j}.param, xi, zi, model{j});
+    model{j}.param = stk_param_estim(model{j}, xi, zi, model{j}.param);
     % Carry out kriging prediction
-    zp{j} = stk_predict(xi, zi, xt, model{j});
+    zp{j} = stk_predict(model{j}, xi, zi, xt);
     % Plot the result
     h_axis = subplot(nr, nc, j);
     stk_plot1d(xi, zi, xt, zt, zp{j}, h_axis);

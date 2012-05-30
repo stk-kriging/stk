@@ -110,12 +110,12 @@ NU     = 4.0;  % regularity parameter
 RHO1   = 0.4;  % scale (range) parameter
 param0 = log([SIGMA2; NU; 1/RHO1]);
 
-model.param = stk_param_estim(param0, xi, zi, model);
+model.param = stk_param_estim(model, xi, zi, param0);
 
 
 %% carry out kriging prediction
 
-zp = stk_predict(xi, zi, xt, model);
+zp = stk_predict(model, xi, zi, xt);
 
 
 %% display results

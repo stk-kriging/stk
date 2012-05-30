@@ -1,6 +1,6 @@
 % STK_PREDICT performs a kriging prediction from data 
 %
-% CALL: [zp, lambda, mu] = stk_predict(xi, zi, xt, model,...)
+% CALL: [zp, lambda, mu] = stk_predict(model, xi, zi, xt,...)
 %
 % STK_PREDICT computes a kriging approximation given data and a model
 %
@@ -47,7 +47,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)
+function [zp, lambda, mu] = stk_predict(model, xi, zi, xt, varargin)
 
 %=== use indices or matrices for xi & xt ?
 
@@ -85,7 +85,7 @@ block_size = [];
 
 %=== prepare lefthand side of the kriging equation
 
-[Kii,Pi] = stk_make_matcov( xi, model );
+[Kii,Pi] = stk_make_matcov( model,  xi );
 
 LS = [ [ Kii, Pi                ]; ...
        [ Pi', zeros(size(Pi,2)) ] ];
@@ -141,7 +141,7 @@ for block_num = 1:nb_blocks
     else xt_block = struct('a',xt.a(idx,:)); end
     
     % right-hand side of the kriging equation
-    [Kti,Pt] = stk_make_matcov( xt_block, xi, model );
+    [Kti,Pt] = stk_make_matcov( model, xt_block, xi );
     RS = [ Kti Pt ]';
     
     % solve the upper-triangular system to get the extended
