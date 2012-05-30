@@ -48,17 +48,14 @@ static double compute_mindist(double* x, int nx, int dim)
 
       /* compute distance between x[i,:] and x[j,:] */
       dist_squared = 0.0;
-      for (k1 = i, k2 = j; k1 < dim * nx; k1 += nx, k2 += nx)
-	{
-	  diff = x[k1] - x[k2];
-	  dist_squared += diff * diff;
-	}
+      for (k1 = i, k2 = j; k1 < dim * nx; k1 += nx, k2 += nx) {
+        diff = x[k1] - x[k2];
+        dist_squared += diff * diff;
+      }
 
-      /* store the result in h, twice for symmetry */
+      /* update mindist_squared */
       if ((dist_squared < mindist_squared) || (mindist_squared < 0))
-	{
-	  mindist_squared = dist_squared;
-	}
+	mindist_squared = dist_squared;
     }
   }
 

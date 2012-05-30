@@ -1,10 +1,16 @@
-2012-05-30	Emmanuel Vazquez <emmanuel.vazquez@supelec.fr>
+2012-05-30  Julien Bect  <julien.bect@supelec.fr>
+
+	Miscellaneous changes.
+
+	* sampling/stk_mindist.c: Fixed a comment.
+
+2012-05-30  Emmanuel Vazquez <emmanuel.vazquez@supelec.fr>
 
 	* almost-all-files: Changed the order of the arguments of the
-	functions that use the structure 'model'. Now, 'model' is the
-	always the first argument. Because of this change, it seems
-	better to make the argument 'param' in covariance functions
-	coming in first position too.
+	functions that use the structure 'model'. Now, 'model' is always
+	the first argument. Because of this change, it seems better to
+	make the argument 'param' in covariance functions coming in first
+	position too.
 
 2012-05-19  Julien Bect  <julien.bect@supelec.fr>
 
