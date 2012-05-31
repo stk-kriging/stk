@@ -35,12 +35,12 @@ function stk_compile_all(force_recompile)
 root = stk_get_root();
 here = pwd();
 
-force_recompile = ~((nargin==0) || ~force_recompile);
+force_recompile = ~((nargin == 0) || ~force_recompile);
 
-stk_compile(fullfile(root,'covfcs'),      ...
+stk_compile(fullfile(root, 'misc', 'dist'),      ...
     'stk_distance_matrix', force_recompile );
 
-stk_compile(fullfile(root,'sampling'),    ...
+stk_compile(fullfile(root, 'misc', 'dist'),    ...
     'stk_mindist', force_recompile         );
 
 % add other MEX-files to be compiled here

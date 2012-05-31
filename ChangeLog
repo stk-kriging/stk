@@ -1,3 +1,13 @@
+2012-05-31  Julien Bect  <julien.bect@supelec.fr>
+
+	Reorganizing folders.
+
+	* misc/dist: New folder.
+	* misc/dist/stk_mindist.c: Moved from sampling.
+	* misc/dist/stk_distance_matrix.c: Moved from covfcs.
+	* misc/config/stk_set_root.m: Added misc/dist to path.
+	* misc/config/stk_compile_all.m: Changed paths.
+
 2012-05-30  Julien Bect  <julien.bect@supelec.fr>
 
 	Reorganizing folders.
