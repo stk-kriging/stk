@@ -175,3 +175,28 @@ if display_waitbar, close(hwb); end
 end
 
 
+%!test
+%!
+%! n = 20; % 10 observations + 10 predictions
+%! d = 1;  % dimension of the input space
+%!
+%! x0 = stk_sampling_cartesiangrid(n, d, [0; pi]);
+%!
+%! idx_obs = 1:2:n;
+%! idx_prd = 2:2:n;
+%!
+%! x_obs = struct('a', x0.a(idx_obs));
+%! z_obs = stk_feval(@sin, x_obs);
+%! x_prd = struct('a', x0.a(idx_prd));
+%!
+%! %% method 1: direct use of stk_predict
+%! model = stk_model('stk_materncov32_iso');
+%! y_prd1 = stk_predict(model, x_obs, z_obs, x_prd);
+%! 
+%! %% method 2: use of Kx_cache
+%! model = stk_model('stk_materncov32_iso');
+%! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
+%! y_prd2 = stk_predict(model, idx_obs, z_obs, idx_prd);
+%! 
+%! %% check that both methods give the same result
+%! assert(isequal(y_prd1, y_prd2));
