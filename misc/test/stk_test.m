@@ -326,11 +326,11 @@ function [x__ret1, x__ret2, x__ret3, x__ret4] = stk_test (x__name, x__flag, x__f
         x__code = x__code (x__idx(1):length(x__code));
       end
 
-      %       % Strip comments off the variables.
-      %       x__idx = find (x__vars == '%' | x__vars == '%%');
-      %       if (~ isempty (x__idx))
-      %         x__vars = x__vars(1:x__idx(1)-1);
-      %       end
+      % Strip comments off the variables.
+      x__idx = find(x__vars == '%');
+      if (~ isempty (x__idx))
+          x__vars = x__vars(1:x__idx(1)-1);
+      end
 
       % Assign default values to variables.
       try
@@ -696,166 +696,170 @@ function body = x__extract_test_code (nm)
   end
 end
 
-%%% Test for test for missing features
-% !testif OCTAVE_SOURCE
-% ! % This test should be run
-% ! assert (true);
+% %%% Test for test for missing features
+% % !testif OCTAVE_SOURCE
+% % ! % This test should be run
+% % ! assert (true);
+% 
+% %%% Disable this test to avoid spurious skipped test for 'make check'
+% % !testif HAVE_FOOBAR
+% % ! % missing feature. Fail if this test is run
+% % ! error('Failed missing feature test');
+% 
+% %%% Test for a known failure
+% % !xtest error('This test is known to fail')
+% 
+% %%% example from toeplitz
+% %!shared msg1,msg2
+% %! msg1='C must be a vector';
+% %! msg2='C and R must be vectors';
+% %!fail ('toeplitz([])', msg1);
+% %!fail ('toeplitz([1,2;3,4])', msg1);
+% %!fail ('toeplitz([1,2],[])', msg2);
+% %!fail ('toeplitz([1,2],[1,2;3,4])', msg2);
+% %!fail ('toeplitz ([1,2;3,4],[1,2])', msg2);
+% % !fail ('toeplitz','usage: toeplitz'); % usage doesn't generate an error
+% % !fail ('toeplitz(1, 2, 3)', 'usage: toeplitz');
+% %!test  assert (toeplitz ([1,2,3], [1,4]), [1,4; 2,1; 3,2]);
+% %!demo  toeplitz ([1,2,3,4],[1,5,6])
+% 
+% %%% example from kron
+% %!%error kron  % FIXME suppress these until we can handle output
+% %!%error kron(1,2,3)
+% %!test assert (isempty (kron ([], rand(3, 4))))
+% %!test assert (isempty (kron (rand (3, 4), [])))
+% %!test assert (isempty (kron ([], [])))
+% %!shared A, B
+% %!test
+% %! A = [1, 2, 3; 4, 5, 6];
+% %! B = [1, -1; 2, -2];
+% %!assert (size (kron (zeros (3, 0), A)), [ 3*rows(A), 0 ])
+% %!assert (size (kron (zeros (0, 3), A)), [ 0, 3*columns(A) ])
+% %!assert (size (kron (A, zeros (3, 0))), [ 3*rows(A), 0 ])
+% %!assert (size (kron (A, zeros (0, 3))), [ 0, 3*columns(A) ])
+% %!assert (kron (pi, e), pi*e)
+% %!assert (kron (pi, A), pi*A)
+% %!assert (kron (A, e), e*A)
+% %!assert (kron ([1, 2, 3], A), [ A, 2*A, 3*A ])
+% %!assert (kron ([1; 2; 3], A), [ A; 2*A; 3*A ])
+% %!assert (kron ([1, 2; 3, 4], A), [ A, 2*A; 3*A, 4*A ])
+% %!test
+% %! res = [1,-1,2,-2,3,-3; 2,-2,4,-4,6,-6; 4,-4,5,-5,6,-6; 8,-8,10,-10,12,-12];
+% %! assert (kron (A, B), res)
+% 
+% %%% an extended demo from specgram
+% %!%demo
+% %! % Speech spectrogram
+% %! [x, Fs] = auload(file_in_loadpath('sample.wav')); % audio file
+% %! step = fix(5*Fs/1000);     % one spectral slice every 5 ms
+% %! window = fix(40*Fs/1000);  % 40 ms data window
+% %! fftn = 2^nextpow2(window); % next highest power of 2
+% %! [S, f, t] = specgram(x, fftn, Fs, window, window-step);
+% %! S = abs(S(2:fftn*4000/Fs,:)); % magnitude in range 0<f<=4000 Hz.
+% %! S = S/max(max(S));         % normalize magnitude so that max is 0 dB.
+% %! S = max(S, 10^(-40/10));   % clip below -40 dB.
+% %! S = min(S, 10^(-3/10));    % clip above -3 dB.
+% %! imagesc(flipud(20*log10(S)), 1);
+% %! % you should now see a spectrogram in the image window
+% 
+% 
+% %%% now test test itself
+% 
+% %!% usage and error testing
+% % !fail ('test','usage.*test')           % no args, generates usage()
+% % !fail ('test(1,2,3,4)','usage.*test')  % too many args, generates usage()
+% %!fail ('test('test', 'bogus')','unknown flag')      % incorrect args
+% %!fail ('garbage','garbage.*undefined')  % usage on nonexistent function should be
+% 
+% %!error test                     % no args, generates usage()
+% %!error test(1,2,3,4)            % too many args, generates usage()
+% %!error <unknown flag> test('test', 'bogus');  % incorrect args, generates error()
+% %!error <garbage' undefined> garbage           % usage on nonexistent function should be
+% 
+% %!error test('test', 'bogus');           % test without pattern
+% 
+% %!test
+% %! lastwarn();            % clear last warning just in case
+% 
+% %!warning <warning message> warning('warning message');
+% 
 
-%%% Disable this test to avoid spurious skipped test for 'make check'
-% !testif HAVE_FOOBAR
-% ! % missing feature. Fail if this test is run
-% ! error('Failed missing feature test');
+%%
+% Tests of shared variables
 
-%%% Test for a known failure
-% !xtest error('This test is known to fail')
+%!shared a              % create a shared variable
+%!test a=3;             % assign to a shared variable
+%!test assert(a == 3)   % variable should equal 3
 
-%%% example from toeplitz
-%!shared msg1,msg2
-%! msg1='C must be a vector';
-%! msg2='C and R must be vectors';
-%!fail ('toeplitz([])', msg1);
-%!fail ('toeplitz([1,2;3,4])', msg1);
-%!fail ('toeplitz([1,2],[])', msg2);
-%!fail ('toeplitz([1,2],[1,2;3,4])', msg2);
-%!fail ('toeplitz ([1,2;3,4],[1,2])', msg2);
-% !fail ('toeplitz','usage: toeplitz'); % usage doesn't generate an error
-% !fail ('toeplitz(1, 2, 3)', 'usage: toeplitz');
-%!test  assert (toeplitz ([1,2,3], [1,4]), [1,4; 2,1; 3,2]);
-%!demo  toeplitz ([1,2,3,4],[1,5,6])
-
-%%% example from kron
-%!%error kron  % FIXME suppress these until we can handle output
-%!%error kron(1,2,3)
-%!test assert (isempty (kron ([], rand(3, 4))))
-%!test assert (isempty (kron (rand (3, 4), [])))
-%!test assert (isempty (kron ([], [])))
-%!shared A, B
-%!test
-%! A = [1, 2, 3; 4, 5, 6];
-%! B = [1, -1; 2, -2];
-%!assert (size (kron (zeros (3, 0), A)), [ 3*rows(A), 0 ])
-%!assert (size (kron (zeros (0, 3), A)), [ 0, 3*columns(A) ])
-%!assert (size (kron (A, zeros (3, 0))), [ 3*rows(A), 0 ])
-%!assert (size (kron (A, zeros (0, 3))), [ 0, 3*columns(A) ])
-%!assert (kron (pi, e), pi*e)
-%!assert (kron (pi, A), pi*A)
-%!assert (kron (A, e), e*A)
-%!assert (kron ([1, 2, 3], A), [ A, 2*A, 3*A ])
-%!assert (kron ([1; 2; 3], A), [ A; 2*A; 3*A ])
-%!assert (kron ([1, 2; 3, 4], A), [ A, 2*A; 3*A, 4*A ])
-%!test
-%! res = [1,-1,2,-2,3,-3; 2,-2,4,-4,6,-6; 4,-4,5,-5,6,-6; 8,-8,10,-10,12,-12];
-%! assert (kron (A, B), res)
-
-%%% an extended demo from specgram
-%!%demo
-%! % Speech spectrogram
-%! [x, Fs] = auload(file_in_loadpath('sample.wav')); % audio file
-%! step = fix(5*Fs/1000);     % one spectral slice every 5 ms
-%! window = fix(40*Fs/1000);  % 40 ms data window
-%! fftn = 2^nextpow2(window); % next highest power of 2
-%! [S, f, t] = specgram(x, fftn, Fs, window, window-step);
-%! S = abs(S(2:fftn*4000/Fs,:)); % magnitude in range 0<f<=4000 Hz.
-%! S = S/max(max(S));         % normalize magnitude so that max is 0 dB.
-%! S = max(S, 10^(-40/10));   % clip below -40 dB.
-%! S = min(S, 10^(-3/10));    % clip above -3 dB.
-%! imagesc(flipud(20*log10(S)), 1);
-%! % you should now see a spectrogram in the image window
-
-
-%%% now test test itself
-
-%!% usage and error testing
-% !fail ('test','usage.*test')           % no args, generates usage()
-% !fail ('test(1,2,3,4)','usage.*test')  % too many args, generates usage()
-%!fail ('test('test', 'bogus')','unknown flag')      % incorrect args
-%!fail ('garbage','garbage.*undefined')  % usage on nonexistent function should be
-
-%!error test                     % no args, generates usage()
-%!error test(1,2,3,4)            % too many args, generates usage()
-%!error <unknown flag> test('test', 'bogus');  % incorrect args, generates error()
-%!error <garbage' undefined> garbage           % usage on nonexistent function should be
-
-%!error test('test', 'bogus');           % test without pattern
-
-%!test
-%! lastwarn();            % clear last warning just in case
-
-%!warning <warning message> warning('warning message');
-
-%!% test of shared variables
-%!shared a                % create a shared variable
-%!test   a=3;             % assign to a shared variable
-%!test   assert(a,3)      % variable should equal 3
-%!shared b,c              % replace shared variables
-%!test assert (~exist('a'));   % a no longer exists
-%!test assert (isempty(b));    % variables start off empty
-%!shared a,b,c            % recreate a shared variable
-%!test assert (isempty(a));    % value is empty even if it had a previous value
-%!test a=1; b=2; c=3;   % give values to all variables
-%!test assert ([a,b,c],[1,2,3]); % test all of them together
-%!test c=6;             % update a value
-%!test assert([a, b, c],[1, 2, 6]); % show that the update sticks
-%!shared                    % clear all shared variables
-%!test assert(~exist('a'))  % show that they are cleared
-%!shared a,b,c              % support for initializer shorthand
-%! a=1; b=2; c=4;
-
-%!function x = x__test_a(y)
-%! x = 2*y;
-%!end
-%!assert(x__test_a(2),4);       % Test a test function
-
-%!function x__test_a (y)
-%! x = 2*y;
-%!end
-%!test
-%! x__test_a(2);                % Test a test function with no return value
-
-%!function [x,z] = x__test_a (y)
-%! x = 2*y;
-%! z = 3*y;
-%!end
-%!test                   % Test a test function with multiple returns
-%! [x,z] = x__test_a(3);
-%! assert(x,6);
-%! assert(z,9);
-
-%!% test of assert block
-%!assert (isempty([]))      % support for test assert shorthand
-
-%!% demo blocks
-%!demo                   % multiline demo block
-%! t=[0:0.01:2*pi]; x=sin(t);
-%! plot(t,x);
-%! % you should now see a sine wave in your figure window
-%!demo a=3               % single line demo blocks work too
-
-%!% this is a comment block. it can contain anything.
-%!%
-%! it is the '%%' as the block type that makes it a comment
-%! and it  stays as a comment even through continuation lines
-%! which means that it works well with commenting out whole tests
-
-% !% failure tests.  All the following should fail. These tests should
-% !% be disabled unless you are developing test() since users don't
-% !% like to be presented with expected failures.  I use % ! to disable.
-% !test   error('---------Failure tests.  Use test(''test'',''verbose'',1)');
-% !test   assert([a,b,c],[1,3,6]);   % variables have wrong values
-% !bogus                     % unknown block type
-% !error  toeplitz([1,2,3]); % correct usage
-% !test   syntax errors)     % syntax errors fail properly
-% !shared garbage in         % variables must be comma separated
-% !error  syntax++error      % error test fails on syntax errors
-% !error  'succeeds.';       % error test fails if code succeeds
-% !error <wrong pattern> error('message')  % error pattern must match
-% !demo   with syntax error  % syntax errors in demo fail properly
-% !shared a,b,c
-% !demo                      % shared variables not available in demo
-% ! assert(exist('a'))
-% !error
-% ! test('/etc/passwd');
-% ! test('nonexistent file');
-% ! % These don't signal an error, so the test for an error fails. Note
-% ! % that the call doesn't reference the current fid (it is unavailable),
-% ! % so of course the informational message is not printed in the log.
+% %!shared b,c              % replace shared variables
+% %!test assert (~exist('a'));   % a no longer exists
+% %!test assert (isempty(b));    % variables start off empty
+% %!shared a,b,c            % recreate a shared variable
+% %!test assert (isempty(a));    % value is empty even if it had a previous value
+% %!test a=1; b=2; c=3;   % give values to all variables
+% %!test assert ([a,b,c],[1,2,3]); % test all of them together
+% %!test c=6;             % update a value
+% %!test assert([a, b, c],[1, 2, 6]); % show that the update sticks
+% %!shared                    % clear all shared variables
+% %!test assert(~exist('a'))  % show that they are cleared
+% %!shared a,b,c              % support for initializer shorthand
+% %! a=1; b=2; c=4;
+% 
+% %!function x = x__test_a(y)
+% %! x = 2*y;
+% %!end
+% %!assert(x__test_a(2),4);       % Test a test function
+% 
+% %!function x__test_a (y)
+% %! x = 2*y;
+% %!end
+% %!test
+% %! x__test_a(2);                % Test a test function with no return value
+% 
+% %!function [x,z] = x__test_a (y)
+% %! x = 2*y;
+% %! z = 3*y;
+% %!end
+% %!test                   % Test a test function with multiple returns
+% %! [x,z] = x__test_a(3);
+% %! assert(x,6);
+% %! assert(z,9);
+% 
+% %!% test of assert block
+% %!assert (isempty([]))      % support for test assert shorthand
+% 
+% %!% demo blocks
+% %!demo                   % multiline demo block
+% %! t=[0:0.01:2*pi]; x=sin(t);
+% %! plot(t,x);
+% %! % you should now see a sine wave in your figure window
+% %!demo a=3               % single line demo blocks work too
+% 
+% %!% this is a comment block. it can contain anything.
+% %!%
+% %! it is the '%%' as the block type that makes it a comment
+% %! and it  stays as a comment even through continuation lines
+% %! which means that it works well with commenting out whole tests
+% 
+% % !% failure tests.  All the following should fail. These tests should
+% % !% be disabled unless you are developing test() since users don't
+% % !% like to be presented with expected failures.  I use % ! to disable.
+% % !test   error('---------Failure tests.  Use test(''test'',''verbose'',1)');
+% % !test   assert([a,b,c],[1,3,6]);   % variables have wrong values
+% % !bogus                     % unknown block type
+% % !error  toeplitz([1,2,3]); % correct usage
+% % !test   syntax errors)     % syntax errors fail properly
+% % !shared garbage in         % variables must be comma separated
+% % !error  syntax++error      % error test fails on syntax errors
+% % !error  'succeeds.';       % error test fails if code succeeds
+% % !error <wrong pattern> error('message')  % error pattern must match
+% % !demo   with syntax error  % syntax errors in demo fail properly
+% % !shared a,b,c
+% % !demo                      % shared variables not available in demo
+% % ! assert(exist('a'))
+% % !error
+% % ! test('/etc/passwd');
+% % ! test('nonexistent file');
+% % ! % These don't signal an error, so the test for an error fails. Note
+% % ! % that the call doesn't reference the current fid (it is unavailable),
+% % ! % so of course the informational message is not printed in the log.
