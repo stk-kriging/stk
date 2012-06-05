@@ -48,15 +48,15 @@ COVARIANCE_TYPE = 'stk_materncov32_iso';
 
 model = stk_model(COVARIANCE_TYPE);
 
-y_prd1 = stk_predict(x_obs, z_obs, x_prd, model);
+y_prd1 = stk_predict(model, x_obs, z_obs, x_prd);
 
 
 %% method 2: use of Kx_cache
 
 model = stk_model(COVARIANCE_TYPE);
-[model.Kx_cache, model.Px_cache] = stk_make_matcov(x0, model);
+[model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
 
-y_prd2 = stk_predict(idx_obs, z_obs, idx_prd, model);
+y_prd2 = stk_predict(model, idx_obs, z_obs, idx_prd);
 
 
 %% check that both methods give the same result

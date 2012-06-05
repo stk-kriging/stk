@@ -1,3 +1,10 @@
+2012-06-05  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixing a bug related to the change of parameter ordering.
+
+	* tests/test_Kx_cache.m: Changed the position of the 'model'
+	parameter in several function calls.
+
 2012-05-31  Julien Bect  <julien.bect@supelec.fr>
 
 	Reorganizing folders.
