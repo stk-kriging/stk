@@ -139,7 +139,7 @@ end
 %!     xmax = xmin + 1 + rand(1,dim);
 %!     box  = [xmin; xmax];
 %!     
-%!     n = 10 + floor(rand*50);
+%!     n = 5 + floor(rand*10);
 %!     
 %!     x = stk_sampling_maximinlhs(n, dim, box );
 %!     
