@@ -31,7 +31,16 @@ function name = file_in_loadpath(filename, flag)
 
 if nargin < 2, flag = ''; end
 
-searchpath = [pwd pathsep path()];
+searchpath = [pwd pathsep() path()];
 name = file_in_path(searchpath, filename, flag);
 
+if isempty(name),
+    % maybe an absolute path ?
+    fid = fopen(filename);
+    if fid ~= -1,
+        name = {filename};
+        fclose(fid);
+    end
+end
+        
 end % function file_in_loadpath

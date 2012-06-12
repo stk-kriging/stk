@@ -35,7 +35,8 @@
 %
 function x = stk_sampling_maximinlhs(n, d, box, niter)
 
-if (nargin < 2), error('Not enough input arguments.'); end
+if nargin < 2, error('Not enough input arguments.'); end
+if nargin > 4, error('Too many input arguments.'); end
 
 if (nargin < 3) || isempty(box)
     xmin = zeros(1, d);
