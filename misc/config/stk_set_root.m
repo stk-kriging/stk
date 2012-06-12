@@ -1,15 +1,11 @@
 % STK_SET_ROOT sets STK's root folder and add subfolder to the path
 
-%          STK : a Small (Matlab/Octave) Toolbox for Kriging
-%          =================================================
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
+%
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging
 %
 % Copying Permission Statement
 %
@@ -75,7 +71,7 @@ end % stk_set_root
 function stk_rmpath(root)
 
 warning('off','MATLAB:rmpath:DirNotFound');
-path = stk_makepath(root);
+path = stk_path(root);
 rmpath( path{:} );
 warning('on','MATLAB:rmpath:DirNotFound');
 
@@ -88,39 +84,14 @@ end % stk_rmpath
 
 function stk_addpath(root)
 
-path = stk_makepath(root);
-for i=1:length(path),
+path = stk_path(root);
+
+for i = 1:length(path),
     if exist(path{i},'dir')
         addpath(path{i});
     else
-        error('problem in stk_makepath ?');
+        error('problem in stk_path ?');
     end
 end
 
 end % stk_addpath
-
-
-%%%%%%%%%%%%%%%%%%%%
-%%% stk_makepath %%%
-%%%%%%%%%%%%%%%%%%%%
-
-function path = stk_makepath(root)
-
-path = { ...
-    fullfile(root, 'core'            ), ...
-    fullfile(root, 'covfcs'          ), ...
-    fullfile(root, 'paramestim'      ), ...
-    fullfile(root, 'sampling'        ), ...
-    fullfile(root, 'utils'           ), ...
-    fullfile(root, 'misc'            ), ...
-    fullfile(root, 'misc', 'config'  ), ...
-    fullfile(root, 'misc', 'dist'    ), ...
-    fullfile(root, 'misc', 'plot'    ), ...
-    fullfile(root, 'misc', 'specfun' ), ...
-    fullfile(root, 'misc', 'test'    )  };
-
-if ~stk_is_octave_in_use(),
-    path = [path, {fullfile(root, 'misc', 'matlab')}];
-end
-        
-end % stk_makepath
