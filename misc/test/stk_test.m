@@ -77,38 +77,38 @@
 %
 % If the second argument is 'explain', then @var{name} is ignored and an
 % explanation of the line markers used is written to the file @var{fid}.
-% @seealso{assert, fail, error, example}
+% @seealso{assert, error, example}
 % @end deftypefn
 
-function [x__ret1, x__ret2, x__ret3, x__ret4] = stk_test (x__name, x__flag, x__fid)
-% Information from test will be introduced by 'key'.
-persistent x__signal_fail
-x__signal_fail =  '!!!!! ';
-persistent x__signal_empty
-x__signal_empty = '????? ';
-persistent x__signal_block
-x__signal_block = '  ***** ';
-persistent x__signal_file
-x__signal_file =  '>>>>> ';
-persistent x__signal_skip
-x__signal_skip = '----- ';
+function [x__ret1, x__ret2, x__ret3] = stk_test (x__name, x__flag, x__fid)
 
-x__xfail = 0;
-x__xskip = 0;
+SIGNAL_FAIL  = '!!!!! ';  % prefix: test had an unexpected result
+SIGNAL_EMPTY = '????? ';  % prefix: no tests in file
+SIGNAL_BLOCK = '***** ';  % prefix: code for the test
+SIGNAL_FILE  = '>>>>> ';  % prefix: new test file
 
-if (nargin < 2 || isempty (x__flag))
-    x__flag = 'quiet';
+nb_expected_failures = 0;  % counter for expected failures ('xtest' blocks)
+
+% default value for input arg #2: 'quiet'
+if nargin < 2 || isempty(x__flag), x__flag = 'quiet'; end
+
+% default value for input arg #2: []  (interactive mode, output --> stdout)
+if nargin < 3, x__fid = []; end
+
+if (nargin < 1) || (nargin > 3),
+    error('Incorrect number of input arguments.');
 end
-if (nargin < 3)
-    x__fid = [];
+
+% first argument must be a non-empty string
+if isempty(x__name) || ~ischar(x__name),
+    error('The first argument of stk_test() must be a non-empty string');
 end
-if (nargin < 1 || nargin > 3 ...
-        || (~ ischar (x__name) && ~isempty (x__name)) || ~ischar (x__flag))
-    print_usage ();
+
+% second argument must be a non-empty string
+if ~isempty(x__flag) && ~ischar(x__flag),
+    error('The first argument of stk_test() must be either empty or a string');
 end
-if (isempty (x__name) && (nargin ~= 3 || ~strcmp (x__flag, 'explain')))
-    print_usage ();
-end
+    
 x__batch = (~ isempty (x__fid));
 
 % Decide if error messages should be collected.
@@ -121,47 +121,21 @@ if (x__batch)
         end
         x__close_fid = 1;
     end
-    fprintf (x__fid, '%sprocessing %s\n', x__signal_file, x__name);
+    fprintf (x__fid, '%sprocessing %s\n', SIGNAL_FILE, x__name);
     fflush (x__fid);
 else
     x__fid = stdout;
 end
 
-if (strcmp (x__flag, 'normal'))
-    x__grabdemo = 0;
-    x__rundemo = 0;
-    x__verbose = x__batch;
-elseif (strcmp (x__flag, 'quiet'))
-    x__grabdemo = 0;
-    x__rundemo = 0;
-    x__verbose = 0;
-elseif (strcmp (x__flag, 'verbose'))
-    x__grabdemo = 0;
-    x__rundemo = 1;
-    x__verbose = 1;
-elseif (strcmp (x__flag, 'grabdemo'))
-    x__grabdemo = 1;
-    x__rundemo = 0;
-    x__verbose = 0;
-    x__demo_code = '';
-    x__demo_idx = [];
-elseif (strcmp (x__flag, 'explain'))
-    fprintf (x__fid, '%% %s new test file\n', x__signal_file);
-    fprintf (x__fid, '%% %s no tests in file\n', x__signal_empty);
-    fprintf (x__fid, '%% %s test had an unexpected result\n', x__signal_fail);
-    fprintf (x__fid, '%% %s code for the test\n', x__signal_block);
-    fprintf (x__fid, '%% Search for the unexpected results in the file\n');
-    fprintf (x__fid, '%% then page back to find the file name which caused it.\n');
-    fprintf (x__fid, '%% The result may be an unexpected failure (in which\n');
-    fprintf (x__fid, '%% case an error will be reported) or an unexpected\n');
-    fprintf (x__fid, '%% success (in which case no error will be reported).\n');
-    fflush (x__fid);
-    if (x__close_fid)
-        fclose(x__fid);
-    end
-    return;
-else
-    error ('test: unknown flag ''%s''', x__flag);
+switch x__flag,
+    case 'normal',
+        x__verbose = x__batch;
+    case 'quiet',
+        x__verbose = 0;
+    case 'verbose',
+        x__verbose = 1;
+    otherwise,
+        error('test: unknown flag ''%s''', x__flag);
 end
 
 % Locate the file to test.
@@ -172,6 +146,7 @@ end
 if (isempty (x__file))
     x__file = file_in_loadpath ([x__name, '.cc'], 'all');
 end
+
 if (iscell (x__file))
     % If repeats, return first in path.
     if (isempty (x__file))
@@ -181,19 +156,14 @@ if (iscell (x__file))
     end
 end
 if (isempty (x__file))
-    if (x__grabdemo)
-        x__ret1 = '';
-        x__ret2 = [];
+    if (exist (x__name) == 3)
+        fprintf (x__fid, '%s%s source code with tests for dynamically linked function not found\n', SIGNAL_EMPTY, x__name);
     else
-        if (exist (x__name) == 3)
-            fprintf (x__fid, '%s%s source code with tests for dynamically linked function not found\n', x__signal_empty, x__name);
-        else
-            fprintf (x__fid, '%s%s does not exist in path\n', x__signal_empty, x__name);
-        end
-        fflush (x__fid);
-        if (nargout > 0)
-            x__ret1 = 0; x__ret2 = 0;
-        end
+        fprintf (x__fid, '%s%s does not exist in path\n', SIGNAL_EMPTY, x__name);
+    end
+    fflush (x__fid);
+    if (nargout > 0)
+        x__ret1 = 0; x__ret2 = 0;
     end
     if (x__close_fid)
         fclose(x__fid);
@@ -205,15 +175,10 @@ end
 x__body = x__extract_test_code (x__file);
 
 if (isempty (x__body))
-    if (x__grabdemo)
-        x__ret1 = '';
-        x__ret2 = [];
-    else
-        fprintf (x__fid, '%s%s has no tests available\n', x__signal_empty, x__file);
-        fflush (x__fid);
-        if (nargout > 0)
-            x__ret1 = 0; x__ret2 = 0;
-        end
+    fprintf (x__fid, '%s%s has no tests available\n', SIGNAL_EMPTY, x__file);
+    fflush (x__fid);
+    if (nargout > 0)
+        x__ret1 = 0; x__ret2 = 0;
     end
     if (x__close_fid)
         fclose(x__fid);
@@ -234,7 +199,7 @@ x__blockidx = x__lineidx(find (~ isspace (x__body(x__lineidx+1))))+1;
 
 % Ready to start tests ... if in batch mode, tell us what is happening.
 if (x__verbose)
-    disp ([x__signal_file, x__file]);
+    disp ([SIGNAL_FILE, x__file]);
 end
 
 % Assume all tests will pass.
@@ -244,7 +209,6 @@ x__all_success = 1;
 x__tests = 0; x__successes = 0;
 x__shared_names = {};
 x__shared_vals = {};
-x__clear = '';
 for x__i = 1:length(x__blockidx)-1
     
     % Extract the block.
@@ -252,7 +216,7 @@ for x__i = 1:length(x__blockidx)-1
     
     % Let the user/logfile know what is happening.
     if (x__verbose)
-        fprintf (x__fid, '%s%s\n', x__signal_block, x__block);
+        fprintf (x__fid, '%s%s\n', SIGNAL_BLOCK, x__block);
         fflush (x__fid);
     end
     
@@ -295,11 +259,9 @@ for x__i = 1:length(x__blockidx)-1
         try
             x__vars = deblank (x__vars);
             if (~ isempty (x__vars))
-                eval ([strrep(x__vars, ',', '=[];'), '=[];']);
-                x__tmp = x__vars;
                 x__shared_names = {};
-                while ~isempty(x__tmp),
-                    [x__shared_names{end+1}, x__tmp] = strtok(x__tmp, ', ');
+                while ~isempty(x__vars),
+                    [x__shared_names{end+1}, x__vars] = strtok(x__vars, ', ');
                 end
                 x__shared_vals = repmat({[]}, 1, length(x__shared_names));
             else
@@ -311,41 +273,10 @@ for x__i = 1:length(x__blockidx)-1
             x__code = '';
             x__success = 0;
             x__msg = sprintf ('%sshared variable initialization failed\n', ...
-                x__signal_fail);
+                SIGNAL_FAIL);
         end
-        
-        % Clear shared function definitions.
-        eval (x__clear, '');
-        x__clear = '';
-        
+               
         % Initialization code will be evaluated below.
-        
-        %%% FUNCTION
-        
-    elseif (strcmp (x__type, 'function'))
-        x__istest = 0;
-        persistent x__fn
-        x__fn = 0;
-        x__name_position = function_name (x__block);
-        if (isempty (x__name_position))
-            x__success = 0;
-            x__msg = sprintf ('%stest failed: missing function name\n', ...
-                x__signal_fail);
-        else
-            x__name = x__block(x__name_position(1):x__name_position(2));
-            x__code = x__block;
-            try
-                eval(x__code); % Define the function
-                x__clear = sprintf ('%sclear %s;\n', x__clear, x__name);
-            catch
-                x__success = 0;
-                x__msg = sprintf ('%stest failed: syntax error\n%s', ...
-                    x__signal_fail, lasterr ());
-            end
-        end
-        x__code = '';
-        
-        %%% ENDFUNCTION
         
     elseif (strcmp (x__type, 'end'))
         % end simply declares the end of a previous function block.
@@ -353,9 +284,9 @@ for x__i = 1:length(x__blockidx)-1
         x__istest = 0;
         x__code = '';
         
-        %%% ASSERT/FAIL
+        %%% ASSERT
         
-    elseif (strcmp (x__type, 'assert') || strcmp (x__type, 'fail'))
+    elseif strcmp(x__type, 'assert')
         x__istest = 1;
         % Put the keyword back on the code.
         x__code = x__block;
@@ -386,7 +317,7 @@ for x__i = 1:length(x__blockidx)-1
                 eval_test_code(x__code, x__shared_names, x__shared_vals{:});
                 if (~ x__warning)
                     x__msg = sprintf ('%sexpected %s but got no error\n', ...
-                        x__signal_fail, x__patstr);
+                        SIGNAL_FAIL, x__patstr);
                 else
                     if (~ isempty (x__id))
                         [ignore_arg, x__err] = lastwarn;
@@ -398,10 +329,10 @@ for x__i = 1:length(x__blockidx)-1
                     %warning (x__warnstate.state, 'quiet');
                     if (isempty (x__err))
                         x__msg = sprintf ('%sexpected %s but got no warning\n', ...
-                            x__signal_fail, x__patstr);
+                            SIGNAL_FAIL, x__patstr);
                     elseif (x__mismatch)
                         x__msg = sprintf ('%sexpected %s but got %s\n', ...
-                            x__signal_fail, x__patstr, x__err);
+                            SIGNAL_FAIL, x__patstr, x__err);
                     else
                         x__success = 1;
                     end
@@ -409,19 +340,19 @@ for x__i = 1:length(x__blockidx)-1
                 
             catch
                 if (~ isempty (x__id))
-                    [ignore_arg, x__err] = lasterr;
+                    [ignore_arg, x__err] = lasterr();
                     x__mismatch =~strcmp (x__err, x__id);
                 else
-                    x__err = trimerr (lasterr, 'error');
+                    x__err = trimerr (lasterr(), 'error');
                     x__mismatch = isempty (regexp (x__err, x__pattern, 'once'));
                 end
                 %warning (x__warnstate.state, 'quiet');
                 if (x__warning)
                     x__msg = sprintf ('%sexpected warning %s but got error %s\n', ...
-                        x__signal_fail, x__patstr, x__err);
+                        SIGNAL_FAIL, x__patstr, x__err);
                 elseif (x__mismatch)
                     x__msg = sprintf ('%sexpected %s but got %s\n', ...
-                        x__signal_fail, x__patstr, x__err);
+                        SIGNAL_FAIL, x__patstr, x__err);
                 else
                     x__success = 1;
                 end
@@ -448,7 +379,7 @@ for x__i = 1:length(x__blockidx)-1
     else
         x__istest = 1;
         x__success = 0;
-        x__msg = sprintf ('%sunknown test type!\n', x__signal_fail);
+        x__msg = sprintf ('%sunknown test type!\n', SIGNAL_FAIL);
         x__code = ''; % skip the code
     end
     
@@ -467,10 +398,10 @@ for x__i = 1:length(x__blockidx)-1
             end
         catch
             if (strcmp (x__type, 'xtest'))
-                x__msg = sprintf ('%sknown failure\n%s', x__signal_fail, lasterr ());
-                x__xfail = x__xfail + 1;
+                x__msg = sprintf ('%sknown failure\n%s', SIGNAL_FAIL, lasterr ());
+                nb_expected_failures = nb_expected_failures + 1;
             else
-                x__msg = sprintf ('%stest failed\n%s', x__signal_fail, lasterr ());
+                x__msg = sprintf ('%stest failed\n%s', SIGNAL_FAIL, lasterr ());
                 x__success = 0;
             end
             if (isempty (lasterr ()))
@@ -484,7 +415,7 @@ for x__i = 1:length(x__blockidx)-1
     if (~ isempty (x__msg))
         % Make sure the user knows what caused the error.
         if (~ x__verbose)
-            fprintf (x__fid, '%s%s\n', x__signal_block, x__block);
+            fprintf (x__fid, '%s%s\n', SIGNAL_BLOCK, x__block);
             fflush (x__fid);
         end
         fprintf(x__fid, '%s', x__msg);
@@ -509,39 +440,33 @@ for x__i = 1:length(x__blockidx)-1
     x__tests = x__tests + x__istest;
     x__successes = x__successes + x__success * x__istest;
 end
-eval (x__clear, '');
 
-if (nargout == 0)
-    if (x__tests || x__xfail || x__xskip)
-        if (x__xfail)
+if nargout == 0
+    if x__tests || (nb_expected_failures > 0)
+        if (nb_expected_failures)
             fprintf ('PASSES %d out of %d tests (%d expected failures)\n', ...
-                x__successes, x__tests, x__xfail);
+                x__successes, x__tests, nb_expected_failures);
         else
             fprintf ('PASSES %d out of %d tests\n', x__successes, x__tests);
         end
-        if (x__xskip)
-            fprintf ('Skipped %d tests due to missing features\n', x__xskip);
-        end
     else
-        fprintf ('%s%s has no tests available\n', x__signal_empty, x__file);
+        fprintf ('%s%s has no tests available\n', SIGNAL_EMPTY, x__file);
     end
-elseif (x__grabdemo)
-    x__ret1 = x__demo_code;
-    x__ret2 = x__demo_idx;
 elseif (nargout == 1)
     x__ret1 = x__all_success;
 else
     x__ret1 = x__successes;
     x__ret2 = x__tests;
-    x__ret3 = x__xfail;
-    x__ret4 = x__xskip;
+    x__ret3 = nb_expected_failures;
 end
 end
 
 %%%%%%%%%%%%%%%%%%
 % eval_test_code %
 %%%%%%%%%%%%%%%%%%
-
+%
+% Evaluate a block of code in a 'controlled' environment.
+%
 function varargout = eval_test_code(x__code, x__list_shared, varargin)
 
 % Check input arguments
@@ -578,39 +503,15 @@ end
 
 end
 
-% Create structure with fieldnames the name of the input variables.
-function s = varstruct (varargin)
-for i = 1:nargin
-    s.(deblank (argn(i,:))) = varargin{i};
-end
-end
-
-% Find [start,end] of fn in 'function [a,b] = fn'.
-function pos = function_name (def)
-pos = [];
-
-% Find the end of the name.
-right = find (def == '(', 1);
-if (isempty (right))
-    return;
-end
-right = find (def(1:right-1) ~= ' ', 1, 'last');
-
-% Find the beginning of the name.
-left = max ([find(def(1:right)==' ', 1, 'last'), ...
-    find(def(1:right)=='=', 1, 'last')]);
-if (isempty (left))
-    return;
-end
-left = left + 1;
-
-% Return the end points of the name.
-pos = [left, right];
-end
-
+%%%%%%%%%%%%%%
+% getpattern %
+%%%%%%%%%%%%%%
+%
 % Strip <pattern> from '<pattern> code'.
 % Also handles 'id=ID code'
+%
 function [pattern, id, rest] = getpattern (str)
+
 pattern = '.';
 id = [];
 rest = str;
@@ -624,9 +525,15 @@ if (~ isempty (str) && str(1) == '<')
 elseif (strncmp (str, 'id=', 3))
     [id, rest] = strtok (str(4:end));
 end
+
 end
 
+%%%%%%%%%%%
+% trimerr %
+%%%%%%%%%%%
+%
 % Strip '.*prefix:' from '.*prefix: msg\n' and strip trailing blanks.
+%
 function msg = trimerr (msg, prefix)
 idx = index (msg, [prefix, ':']);
 if (idx > 0)
@@ -635,7 +542,12 @@ end
 msg = trimleft (deblank (msg));
 end
 
+%%%%%%%%%%%%
+% trimleft %
+%%%%%%%%%%%%
+%
 % Strip leading blanks from string.
+%
 function str = trimleft (str)
 idx = find (isspace (str));
 leading = find (idx == 1:length(idx));
@@ -644,8 +556,17 @@ if (~ isempty (leading))
 end
 end
 
+%%%%%%%%%%%%%%%%%%%%%%%%
+% x__extract_test_code %
+%%%%%%%%%%%%%%%%%%%%%%%%
+%
 function body = x__extract_test_code (nm)
+
 fid = fopen (nm, 'rt');
+if fid == -1,
+    error(sprintf('File %s cannot be opened.', nm));
+end
+
 body = [];
 if (fid >= 0)
     while (~ feof (fid))
@@ -659,60 +580,15 @@ if (fid >= 0)
     end
     fclose (fid);
 end
-end
+
+end % x__extract_test_code
 
 
-% %%% Test for a known failure
-% % !xtest error('This test is known to fail')
-%
-% %%% example from toeplitz
-% %!shared msg1,msg2
-% %! msg1='C must be a vector';
-% %! msg2='C and R must be vectors';
-% %!fail ('toeplitz([])', msg1);
-% %!fail ('toeplitz([1,2;3,4])', msg1);
-% %!fail ('toeplitz([1,2],[])', msg2);
-% %!fail ('toeplitz([1,2],[1,2;3,4])', msg2);
-% %!fail ('toeplitz ([1,2;3,4],[1,2])', msg2);
-% % !fail ('toeplitz','usage: toeplitz'); % usage doesn't generate an error
-% % !fail ('toeplitz(1, 2, 3)', 'usage: toeplitz');
-% %!test  assert (toeplitz ([1,2,3], [1,4]), [1,4; 2,1; 3,2]);
-%
-% %%% example from kron
-% %!%error kron  % FIXME suppress these until we can handle output
-% %!%error kron(1,2,3)
-% %!test assert (isempty (kron ([], rand(3, 4))))
-% %!test assert (isempty (kron (rand (3, 4), [])))
-% %!test assert (isempty (kron ([], [])))
-% %!shared A, B
-% %!test
-% %! A = [1, 2, 3; 4, 5, 6];
-% %! B = [1, -1; 2, -2];
-% %!assert (size (kron (zeros (3, 0), A)), [ 3*rows(A), 0 ])
-% %!assert (size (kron (zeros (0, 3), A)), [ 0, 3*columns(A) ])
-% %!assert (size (kron (A, zeros (3, 0))), [ 3*rows(A), 0 ])
-% %!assert (size (kron (A, zeros (0, 3))), [ 0, 3*columns(A) ])
-% %!assert (kron (pi, e), pi*e)
-% %!assert (kron (pi, A), pi*A)
-% %!assert (kron (A, e), e*A)
-% %!assert (kron ([1, 2, 3], A), [ A, 2*A, 3*A ])
-% %!assert (kron ([1; 2; 3], A), [ A; 2*A; 3*A ])
-% %!assert (kron ([1, 2; 3, 4], A), [ A, 2*A; 3*A, 4*A ])
-% %!test
-% %! res = [1,-1,2,-2,3,-3; 2,-2,4,-4,6,-6; 4,-4,5,-5,6,-6; 8,-8,10,-10,12,-12];
-% %! assert (kron (A, B), res)
-%
-% %%% now test test itself
-%
-% %!% usage and error testing
-% % !fail ('test','usage.*test')           % no args, generates usage()
-% % !fail ('test(1,2,3,4)','usage.*test')  % too many args, generates usage()
-% %!fail ('test('test', 'bogus')','unknown flag')      % incorrect args
-% %!fail ('garbage','garbage.*undefined')  % usage on nonexistent function should be
-%
+%%%%%%%%%
+% TESTS %
+%%%%%%%%%
 
-%%
-% Tests of comments
+%% Tests of comments
 
 %!% This is a lonely comment
 
@@ -727,14 +603,12 @@ end
 %! zobi la mouche
 %!
 
-%%
-% Tests of 'assert' blocks
+%% Tests of 'assert' blocks
 
 %!assert(isempty([]))      % support for test assert shorthand
 %!assert((1 + 1) == 2)
 
-%%
-% Tests of shared variables
+%% Tests of shared variables
 
 %!% Default: variables are not shared between blocks.
 %!test a=1;
@@ -762,8 +636,7 @@ end
 %!shared                    % clear all shared variables
 %!assert(~exist('a'))       % show that they are cleared
 
-%%
-% Tests for 'error' and 'warning' blocks.
+%% Tests for 'error' and 'warning' blocks
 
 %!error test                   % not enough input arguments
 %!error test(1, 2, 3, 4)       % too many input args
@@ -773,30 +646,40 @@ end
 %!error stt_test('test', 'bogus');   % undefined function error
 %!error stk_test('test', 'bogus');   % error raised by stk_test itself
 
-%!test lastwarn();        % clear last warning just in case
-%!warning <worry about>   % we expect a warning msg including "worry about"
-%! warning('Don''t worry about this warning');
+% !test lastwarn();        % clear last warning just in case
+% !warning <worry about>   % we expect a warning msg including "worry about"
+% ! warning('Don''t worry about this warning');
 
+%!% 'error' tests succeed on syntax errors if no pattern is provided (this
+%!% is not the behaviour of Octave's test() function)
+%!error }{
 
-% !% failure tests.  All the following should fail. These tests should
-% !% be disabled unless you are developing test() since users don't
-% !% like to be presented with expected failures.  I use % ! to disable.
+%% Tests the behaviour of stk_test() itself
+
+%!% The number of input arguments should be between one and three
+%!error stk_test();
+%!error stk_test('disp', 'verbose', [], 'extra arg !!!');
+
+%!% The first argument of stk_test() must be a non-empty string
+%!error <non-empty string> stk_test([])
+%!error <non-empty string> stk_test(0.0)
+
+%!% The second argument of stk_test() must be a either empty, or one of the
+%%! following strings: normal, quiet, verbose
+%!error <empty or a string> stk_test('stk_mindist', 0.0)
+%!error <unknown flag> stk_test('stk_mindist', 'dudule')
+
+%% Failure tests
+% All the following should fail. These tests should be disabled unless you
+% are developing stk_test() since users don't like to be presented with
+% expected failures.  Use % ! to disable.
+
+% !xtest  error('This test is known to fail') % expected failure
 % !test   error('---------Failure tests.  Use test(''test'',''verbose'',1)');
-% !test   assert([a,b,c],[1,3,6]);   % variables have wrong values
+% !test   assert(1 == 2);
 % !bogus                     % unknown block type
 % !error  toeplitz([1,2,3]); % correct usage
-% !test   syntax errors)     % syntax errors fail properly
 % !shared garbage in         % variables must be comma separated
-% !error  syntax++error      % error test fails on syntax errors
+% !test   }{                 % syntax errors fail properly
 % !error  'succeeds.';       % error test fails if code succeeds
-% !error <wrong pattern> error('message')  % error pattern must match
-% !demo   with syntax error  % syntax errors in demo fail properly
-% !shared a,b,c
-% !demo                      % shared variables not available in demo
-% ! assert(exist('a'))
-% !error
-% ! test('/etc/passwd');
-% ! test('nonexistent file');
-% ! % These don't signal an error, so the test for an error fails. Note
-% ! % that the call doesn't reference the current fid (it is unavailable),
-% ! % so of course the informational message is not printed in the log.
+% !error  <wrong pattern> error('message')  % error pattern must match
