@@ -94,7 +94,7 @@ nb_expected_failures = 0;  % counter for expected failures ('xtest' blocks)
 % default value for input arg #2: 'quiet'
 if nargin < 2 || isempty(x__flag), x__flag = 'quiet'; end
 
-% default value for input arg #2: []  (interactive mode, output --> stdout)
+% default value for input arg #3: []  (interactive mode, output --> stdout)
 if nargin < 3, x__fid = []; end
 
 if (nargin < 1) || (nargin > 3),
@@ -123,8 +123,8 @@ if (x__batch)
         end
         x__close_fid = 1;
     end
-    fprintf (x__fid, '%sprocessing %s\n', SIGNAL_FILE, x__name);
-    fflush (x__fid);
+    %fprintf (x__fid, '%sprocessing %s\n', SIGNAL_FILE, x__name);
+    %fflush (x__fid);
 else
     x__fid = stdout;
 end
