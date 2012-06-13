@@ -1,7 +1,4 @@
-% STK_PATH returns the searchpath of STK.
-%
-% FIXME: missing doc
-%
+% STK_NARGCHK checks whether the number of input arguments is acceptable.
 
 % Copyright Notice
 %
@@ -29,28 +26,29 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-function path = stk_path(root)
+function err_msg = stk_nargchk(n_low, n_high, n_argin)
 
-if nargin == 0,
-    root = stk_get_root();
+if nargin ~= 3,
+    error('stk_nargchk must be called with exactly 3 input arguments.');
 end
 
-path = { ...
-    fullfile(root, 'core'            ); ...
-    fullfile(root, 'covfcs'          ); ...
-    fullfile(root, 'paramestim'      ); ...
-    fullfile(root, 'sampling'        ); ...
-    fullfile(root, 'utils'           ); ...
-    fullfile(root, 'misc'            ); ...
-    fullfile(root, 'misc', 'config'  ); ...
-    fullfile(root, 'misc', 'dist'    ); ...
-    fullfile(root, 'misc', 'error'   ); ...
-    fullfile(root, 'misc', 'plot'    ); ...
-    fullfile(root, 'misc', 'specfun' ); ...
-    fullfile(root, 'misc', 'test'    )  };
-
-if ~stk_is_octave_in_use(),
-    path = [path; {fullfile(root, 'misc', 'matlab')}];
+% find caller name
+s = dbstack();
+if length(s) == 1,
+    caller_name = 'base workspace';
+else
+    caller_name = s(2).name;
 end
-        
-end % stk_path
+
+err_msg = [];
+if n_argin < n_low,
+    err_msg = 'not enough input arguments provided';
+elseif n_argin > n_high,
+    err_msg = 'too many output arguments requested';
+end
+
+if (nargout == 0) && ~isempty(err_msg),
+    error(sprintf('Error in %s: %s.', caller_name, err_msg));
+end
+
+end % stk_nargchk
