@@ -35,7 +35,7 @@
 %
 function x = stk_sampling_maximinlhs(n, d, box, niter)
 
-stk_nargchk(2, 4, nargin);
+stk_narginchk(2, 4, nargin);
 
 if (nargin < 3) || isempty(box)
     xmin = zeros(1, d);
