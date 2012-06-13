@@ -33,7 +33,7 @@
 
 function x = stk_sampling_maximinlhs(n, d, box, niter)
 
-stk_narginchk(2, 4, nargin);
+stk_narginchk(2, 4);
 
 if (nargin < 3) || isempty(box)
     xmin = zeros(1, d);
@@ -128,7 +128,7 @@ end
 
 %!test
 %!
-%! nrep = 10;
+%! nrep = 4;
 %! 
 %! for irep = 1:nrep,
 %! 
@@ -137,9 +137,9 @@ end
 %!     xmax = xmin + 1 + rand(1,dim);
 %!     box  = [xmin; xmax];
 %!     
-%!     n = 5 + floor(rand*10);
+%!     n = 5 + floor(rand * 5);
 %!     
-%!     x = stk_sampling_maximinlhs(n, dim, box );
+%!     x = stk_sampling_maximinlhs(n, dim, box);
 %!     
 %!     assert(isstruct(x));
 %!     assert(isequal(fieldnames(x), {'a'}));    

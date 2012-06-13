@@ -48,7 +48,7 @@
 
 function [zp, lambda, mu] = stk_predict(model, xi, zi, xt)
 
-stk_narginchk(4, 4, nargin);
+stk_narginchk(4, 4);
 
 %=== use indices or matrices for xi & xt ?
 
