@@ -29,20 +29,17 @@
 
 function stk_error(errmsg, mnemonic, stack)
 
-% first component of error identifier = toolbox name
-x1 = 'STK';
-
 % second component of error identifier = name of calling function
 % (unless stk_error has been called directly from the base workspace)
 if nargin < 3,
     stack = dbstack();
     if length(stack) == 1,
-        x2 = 'BaseWorkspace';
+        caller = 'BaseWorkspace';
     else        
         % pretend that the error has been thrown by the caller
         stack = stack(2:end);
         % and get caller name to form the error identifier
-        x2 = stack(1).name;
+        caller = stack(1).name;
     end
 else
     % if a "stack" has been provided by the user, we use it without asking
@@ -53,13 +50,19 @@ else
         mnemonic = 'InvalidArgument';
         stack = dbstack();
     end
-    x2 = stack(1).name;
+    caller = stack(1).name;
+end
+
+% keep only subfunction name (Octave)
+gt_pos = strfind(caller, '>');
+if ~isempty(gt_pos),
+    caller = caller((gt_pos + 1):end);
 end
 
 % construct the error structure
 errstruct = struct( ...
     'message', errmsg, ...
-    'identifier', sprintf('%s:%s:%s', x1, x2, mnemonic), ...
+    'identifier', sprintf('STK:%s:%s', caller, mnemonic), ...
     'stack', stack);
 
 error(errstruct);
