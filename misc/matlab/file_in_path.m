@@ -9,6 +9,9 @@
 %
 %    Copyright (C) 2012 SUPELEC
 %
+%    Authors:   Julien Bect        <julien.bect@supelec.fr>
+%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%
 %    This file is based on the Oct2mat package, version 1.0.7. The
 %    following information was provided in the DESCRIPTION of the 
 %    package: 
@@ -27,8 +30,10 @@
 %
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -86,20 +91,5 @@ for i = 1:length(idx) - 1,
         end
     end
 end
-
-% remain = dirlist;
-% get_all = strcmp(flag, 'all');
-% loc = {};
-% while ~isempty(remain),
-%     [dirname, remain] = strtok(remain, pathsep); %#ok<STTOK>
-%     fullfn = fullfile(dirname, filename);
-%     if exist(fullfn, 'file'),
-%         if get_all,
-%             loc = [loc; {fullfn}]; %#ok<AGROW>
-%         else
-%             loc = fullfn; break
-%         end
-%     end
-% end
 
 end % function file_in_path_

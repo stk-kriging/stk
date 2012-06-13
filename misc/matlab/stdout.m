@@ -4,10 +4,15 @@
 %
 %    Copyright (C) 2012 SUPELEC
 %
+%    Authors:   Julien Bect        <julien.bect@supelec.fr>
+%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
