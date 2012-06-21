@@ -1,6 +1,6 @@
 % STK_PARAM_ESTIM estimates the parameters of the covariance from data
 %
-% CALL: paramopt = stk_param_estim( model, param0, xi, yi,...)
+% CALL: paramopt = stk_param_estim( model, xi, yi, param0 ...)
 %
 % STK_PARAM_ESTIM helper function to estimate the parameters of a
 % covariance from data using rectricted maximum likelihood
@@ -37,15 +37,43 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function paramopt = stk_param_estim(model, xi, yi, param0 )
+function [paramopt, paramlnvopt] = stk_param_estim(model, xi, yi, param0, param0lnv)
 
 % TODO: turn param0 into an optional argument
 %       => provide a reasonable default choice
 
+% TODO: think of a better way to tell we want to estimate the noise
+% variance
+NOISYOBS   = isfield( model, 'lognoisevariance' );
+if nargin == 5
+    NOISEESTIM = true;
+else
+    NOISEESTIM  = false;
+end
+if ~NOISYOBS, 
+    if NOISEESTIM,
+        error('Please set lognoisevariance in model...');
+    end
+end
+
 % TODO: allow user-defined bounds
 [lb, ub] = get_default_bounds(model, param0, xi, yi);
 
-f = @(param)(f_(model, param, xi, yi));
+if NOISEESTIM
+    [lblnv, ublnv] = get_default_bounds_lnv(model, param0lnv, xi, yi);
+    lb = [lb ; lblnv];
+    ub = [ub ; ublnv];
+    param0 = [param0; param0lnv];
+end
+
+switch NOISEESTIM
+    case false,
+        f = @(param)(f_(model, param, xi, yi));
+        nablaf = @(param)(nablaf_ (model, param, xi, yi)); % only used in Octave
+    case true, 
+        f = @(param)(f_with_noise_(model, param, xi, yi));
+        nablaf = @(param)(nablaf_with_noise_ (model, param, xi, yi)); % only used in Octave
+end
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
 
@@ -53,7 +81,6 @@ bounds_available = ~isempty(lb) && ~isempty(ub);
 switch stk_select_optimizer(bounds_available)
 
     case 1, % Octave / sqp
-        nablaf = @(param)(nablaf_ (model,param,xi,yi));
         paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);
 
     case 2, % Matlab / fminsearch (Nelder-Mead)
@@ -86,8 +113,12 @@ switch stk_select_optimizer(bounds_available)
 
 end
 
+if NOISEESTIM
+    paramlnvopt = paramopt(end);
+    paramopt(end) = [];
 end
 
+end
 
 function [l,dl] = f_(model, param, xi, yi)
 model.param = param;
@@ -97,6 +128,20 @@ end
 function dl = nablaf_(model, param, xi, yi)
 model.param = param;
 [l_ignored, dl] = stk_remlqrg(model, xi, yi); %#ok<ASGLU>
+end
+
+function [l,dl] = f_with_noise_(model, param, xi, yi)
+model.param = param(1:end-1);
+model.lognoisevariance  = param(end);
+[l, dl, dln] = stk_remlqrg(model, xi, yi);
+dl = [dl; dln];
+end
+
+function dl = nablaf_with_noise_(model, param, xi, yi)
+model.param = param(1:end-1);
+model.lognoisevariance  = param(end);
+[l_ignored, dl, dln] = stk_remlqrg(model, xi, yi); %#ok<ASGLU>
+dl = [dl; dln];
 end
 
 function [lb,ub] = get_default_bounds(model, param0, xi, yi)
@@ -142,5 +187,17 @@ switch model.covariance_type,
         ub = [];
 
 end
+
+end
+
+function [lblnv,ublnv] = get_default_bounds_lnv(model, param0lnv, xi, yi) %#ok<INUSL>
+% assume NOISEESTIM
+% constants
+TOLVAR = 0.5;
+
+% bounds for the variance parameter
+empirical_variance = var(yi.a);
+lblnv = log(eps);
+ublnv = log(empirical_variance) + TOLVAR;
 
 end
