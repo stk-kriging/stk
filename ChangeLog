@@ -1,3 +1,13 @@
+2012-06-05  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
+	Changed stk_param_estim to make it possible to estimate noise
+	variance.
+
+	* examples/example02.m: Bug fix
+    * examples/example08.m: Example added about noise estimation
+    * paramestim/stk_param_estim.m: Modified
+
+
 2012-06-05  Julien Bect  <julien.bect@supelec.fr>
 
 	Fixing a bug related to the change of parameter ordering.
