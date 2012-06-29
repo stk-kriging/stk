@@ -37,23 +37,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function [paramopt, paramlnvopt] = stk_param_estim(model, xi, yi, param0, param0lnv)
+function [paramopt, paramlnvopt] = stk_param_estim ...
+    (model, xi, yi, param0, param0lnv)
 
 % TODO: turn param0 into an optional argument
 %       => provide a reasonable default choice
 
-% TODO: think of a better way to tell we want to estimate the noise
-% variance
-NOISYOBS   = isfield( model, 'lognoisevariance' );
+% TODO: think of a better way to tell we want to estimate the noise variance
 if nargin == 5
     NOISEESTIM = true;
 else
     NOISEESTIM  = false;
 end
-if ~NOISYOBS, 
-    if NOISEESTIM,
-        error('Please set lognoisevariance in model...');
-    end
+
+NOISYOBS = isfield(model, 'lognoisevariance');
+if (~NOISYOBS) && NOISEESTIM,
+    error('Please set lognoisevariance in model...');    
 end
 
 % TODO: allow user-defined bounds
@@ -69,10 +68,11 @@ end
 switch NOISEESTIM
     case false,
         f = @(param)(f_(model, param, xi, yi));
-        nablaf = @(param)(nablaf_ (model, param, xi, yi)); % only used in Octave
+        nablaf = @(param)(nablaf_ (model, param, xi, yi));
+        % note: currently, nablaf is only used with sqp in Octave
     case true, 
         f = @(param)(f_with_noise_(model, param, xi, yi));
-        nablaf = @(param)(nablaf_with_noise_ (model, param, xi, yi)); % only used in Octave
+        nablaf = @(param)(nablaf_with_noise_ (model, param, xi, yi));
 end
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
@@ -190,7 +190,9 @@ end
 
 end
 
-function [lblnv,ublnv] = get_default_bounds_lnv(model, param0lnv, xi, yi) %#ok<INUSL>
+function [lblnv,ublnv] = get_default_bounds_lnv ...
+    (model, param0lnv, xi, yi) %#ok<INUSL>
+
 % assume NOISEESTIM
 % constants
 TOLVAR = 0.5;

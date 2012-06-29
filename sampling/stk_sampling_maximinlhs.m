@@ -4,21 +4,19 @@
 %
 % FIXME: documentation incomplete
 
-%          STK : a Small (Matlab/Octave) Toolbox for Kriging
-%          =================================================
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
+%
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging
 %
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -32,8 +30,10 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
+
 function x = stk_sampling_maximinlhs(n, d, box, niter)
+
+stk_narginchk(2, 4);
 
 if (nargin < 3) || isempty(box)
     xmin = zeros(1, d);
@@ -106,3 +106,56 @@ end
 x = (x - rand(size(x))) / n;
 
 end
+
+
+%%
+% Check error for incorrect number of input arguments
+
+%!shared n, d, box, niter, extra1, extra2
+%! n = 10; d = 2; box = [0, 0; 1, 1]; niter = 1;
+%! extra1 = pi^2; extra2 = 2.718;
+
+%!error stk_sampling_maximinlhs();
+%!error stk_sampling_maximinlhs(n);
+%!test  stk_sampling_maximinlhs(n, d);
+%!test  stk_sampling_maximinlhs(n, d, box);
+%!test  stk_sampling_maximinlhs(n, d, box, niter);
+%!error stk_sampling_maximinlhs(n, d, box, niter, extra1);
+%!error stk_sampling_maximinlhs(n, d, box, niter, extrat1, extra2);
+
+%%
+% Check the result for some random instances of the problem
+
+%!test
+%!
+%! nrep = 4;
+%! 
+%! for irep = 1:nrep,
+%! 
+%!     dim  = 1 + floor(rand*5);
+%!     xmin = randn(1,dim);
+%!     xmax = xmin + 1 + rand(1,dim);
+%!     box  = [xmin; xmax];
+%!     
+%!     n = 5 + floor(rand * 5);
+%!     
+%!     x = stk_sampling_maximinlhs(n, dim, box);
+%!     
+%!     assert(isstruct(x));
+%!     assert(isequal(fieldnames(x), {'a'}));    
+%!     assert(isequal(size(x.a), [n,dim]));    
+%!     
+%!     for j = 1:dim,
+%!         
+%!         y = x.a(:,j);
+%!         
+%!         assert(xmin(j) <= min(y));
+%!         assert(xmax(j) >= max(y));
+%!         
+%!         y = (y - xmin(j)) / (xmax(j) - xmin(j));
+%!         y = ceil(y * n);
+%!         assert(isequal(sort(y), (1:n)'));
+%!         
+%!     end
+%!     
+%! end

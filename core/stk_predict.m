@@ -19,20 +19,19 @@
 % 
 % EXAMPLE: see examples/example01.m
 
-%                  Small (Matlab/Octave) Toolbox for Kriging
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
+%
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging/
 %
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -46,8 +45,10 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
-function [zp, lambda, mu] = stk_predict(model, xi, zi, xt, varargin)
+
+function [zp, lambda, mu] = stk_predict(model, xi, zi, xt)
+
+stk_narginchk(4, 4);
 
 %=== use indices or matrices for xi & xt ?
 
@@ -174,4 +175,36 @@ if display_waitbar, close(hwb); end
 
 end
 
+%!shared model, x0, x_obs, z_obs, x_prd, y_prd1, idx_obs, idx_prd
+%!
+%! n = 20; % 10 observations + 10 predictions
+%! d = 1;  % dimension of the input space
+%!
+%! x0 = stk_sampling_cartesiangrid(n, d, [0; pi]);
+%!
+%! idx_obs = 1:2:n;
+%! idx_prd = 2:2:n;
+%!
+%! x_obs = struct('a', x0.a(idx_obs));
+%! z_obs = stk_feval(@sin, x_obs);
+%! x_prd = struct('a', x0.a(idx_prd));
+%! 
+%! model = stk_model('stk_materncov32_iso');
 
+%!error y_prd1 = stk_predict();
+%!error y_prd1 = stk_predict(model);
+%!error y_prd1 = stk_predict(model, x_obs);
+%!error y_prd1 = stk_predict(model, x_obs, z_obs);
+%!test  y_prd1 = stk_predict(model, x_obs, z_obs, x_prd);
+%!error y_prd1 = stk_predict(model, x_obs, z_obs, x_prd, 0);
+%!error y_prd1 = stk_predict(model, x_obs, z_obs, x_prd, 0, 1);
+
+%!test
+%!
+%! %% use of Kx_cache
+%! model = stk_model('stk_materncov32_iso');
+%! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
+%! y_prd2 = stk_predict(model, idx_obs, z_obs, idx_prd);
+%! 
+%! %% check that both methods give the same result
+%! assert(isequal(y_prd1, y_prd2));

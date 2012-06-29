@@ -1,12 +1,58 @@
+2012-06-29  Julien Bect  <julien.bect@supelec.fr>
+
+	A first series of Octave-style unit tests.
+
+	* core/stk_predict.m: modified
+	* sampling/stk_sampling_maximinlhs.m: modified
+	* misc/dist/stk_distance_matrix.m: new function
+	* misc/dist/stk_mindist.m: new function
+
+	Modified STK's path handling. A separate function stk_path() has
+	been created, since stk_set_root() is no longer the only function
+	that needs it. Also, several new folders have been added to the
+	path.
+
+	* misc/config/stk_set_root.m: modified
+	* misc/config/stk_path.m: new function
+
+	Imported and adapted Octave's unit testing functions.
+
+	* misc/test: new folder
+	* misc/test/stk_test.m: new function
+	* misc/test/stk_runtests.m: new function
+
+	Removed old test scripts (the tests that they contained are now
+	included as Octave-style unit tests in the M-file themselves).
+
+	* tests: deleted
+	* tests/test_distance_matrix.m: idem
+	* tests/test_sampling_maximinlhs.m: idem
+	* tests/test_Kx_cache.m: idem
+	* tests/test_mindist.m: idem
+
+	Added new functions for improved error handling.
+
+	* misc/error: new folder
+	* misc/error/stk_narginchk.m: new function
+	* misc/error/stk_error.m: new function
+
+	Added new functions for improved M/O inter-operability.
+
+	* misc/matlab: new folder
+	* misc/matlab/fflush.m: new function
+	* misc/matlab/file_in_loadpath.m: idem
+	* misc/matlab/file_in_path.m: idem
+	* misc/matlab/index.m: idem
+	* misc/matlab/stdout.m: idem
+
 2012-06-05  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 	Changed stk_param_estim to make it possible to estimate noise
 	variance.
 
 	* examples/example02.m: Bug fix
-    * examples/example08.m: Example added about noise estimation
-    * paramestim/stk_param_estim.m: Modified
-
+        * examples/example08.m: Example added about noise estimation
+	* paramestim/stk_param_estim.m: Modified
 
 2012-06-05  Julien Bect  <julien.bect@supelec.fr>
 
@@ -62,7 +108,7 @@
 
 	* core/stk_feval.m: Added optional argument 'progress_msg'.
 	* utils/config/stk_select_optimizer.m: Minor change to avoid
-	systematic checkinging which optimizer has to be used (as shown by
+	systematic checking of which optimizer has to be used (as shown by
 	the comments, this was a mistake...).
 	* examples/example07.m: Fixed doc.
 
