@@ -175,6 +175,10 @@ if display_waitbar, close(hwb); end
 
 end
 
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
 %!shared model, x0, x_obs, z_obs, x_prd, y_prd1, idx_obs, idx_prd
 %!
 %! n = 20; % 10 observations + 10 predictions
@@ -207,4 +211,4 @@ end
 %! y_prd2 = stk_predict(model, idx_obs, z_obs, idx_prd);
 %! 
 %! %% check that both methods give the same result
-%! assert(isequal(y_prd1, y_prd2));
+%! assert(stk_isequal_tolrel(y_prd1, y_prd2));

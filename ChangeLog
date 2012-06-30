@@ -1,5 +1,12 @@
 2012-06-30  Julien Bect  <julien.bect@supelec.fr>
 
+	Added a new function for approximate comparisons.
+
+	* misc/test/stk_isequal_tolrel.m: new function
+	* core/stk_predict.m: modified test.
+
+	Miscellaneous.
+
 	* misc/error/stk_narginchk.m: fixed doc and comments.
 
 2012-06-29  Julien Bect  <julien.bect@supelec.fr>
