@@ -1,3 +1,7 @@
+2012-06-30  Julien Bect  <julien.bect@supelec.fr>
+
+	* misc/error/stk_narginchk.m: fixed doc and comments.
+
 2012-06-29  Julien Bect  <julien.bect@supelec.fr>
 
 	A first series of Octave-style unit tests.
