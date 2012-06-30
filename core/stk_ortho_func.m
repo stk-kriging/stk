@@ -6,7 +6,7 @@
 % random process
 %
 % FIXME: documentation incomplete
-% 
+%
 % EXAMPLE: see examples/example02.m
 
 %                  Small (Matlab/Octave) Toolbox for Kriging
@@ -37,18 +37,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function P = stk_ortho_func( model, x )
+function P = stk_ortho_func(model, x)
 
-if ~isfield(model,'Kx_cache'), % SYNTAX: x(factors), model            
-    P = stk_ortho_func_( model.order, x );
-        
-else % SYNTAX: x(indices), model    
-    if ~isfield(model,'Px_cache'),
-        P = zeros( size(model.Kx_cache,1), 0 );
+stk_narginchk(2, 2);
+
+if ~isfield(model, 'Kx_cache'), % SYNTAX: x(factors), model
+    
+    P = stk_ortho_func_(model.order, x);
+    
+else % SYNTAX: x(indices), model
+    
+    if ~isfield(model, 'Px_cache'),
+        P = zeros(size(model.Kx_cache,1), 0);
     else
-        P = model.Px_cache( x, : );
+        P = model.Px_cache(x, :);
     end
-
+    
 end
 
 end
@@ -57,34 +61,64 @@ end
 %%% stk_ortho_func_ %%%
 %%%%%%%%%%%%%%%%%%%%%%%
 
-function P = stk_ortho_func_( order, x )
+function P = stk_ortho_func_(order, x)
 
-[n,d] = size( x.a );
+[n,d] = size(x.a);
 
 switch order
     
     case -1, % 'simple' kriging
-        P = [];
-    
+        P = zeros(n, 0);
+        
     case 0, % 'ordinary' kriging
-        P = ones(n,1);
-    
+        P = ones(n, 1);
+        
     case 1, % linear trend
-        P = [ ones(n,1) x.a ];
-    
+        P = [ones(n, 1) x.a];
+        
     case 2, % quadratic trend
-        P = [ ones(n,1) x.a zeros(n,d*(d+1)/2) ];
-        k = d+2;
+        P = [ones(n, 1) x.a zeros(n, d*(d+1)/2)];
+        k = d + 2;
         for i = 1:d
             for j = i:d
-                P(:,k) = x.a(:,i) .* x.a(:,j);
-                k = k+1;
+                P(:,k) = x.a(:, i) .* x.a(:, j);
+                k = k + 1;
             end
         end
-    
+        
     otherwise, % syntax error
         error('order should be in {-1,0,1,2}');
-
+        
 end
 
 end
+
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+%!shared model, x, n, d
+%! n = 15; d = 4;
+%! model = stk_model('stk_materncov_aniso', d);
+%! x = stk_sampling_randunif(n, d);
+
+%!error P = stk_ortho_func();
+%!error P = stk_ortho_func(model);
+%!test  P = stk_ortho_func(model, x);
+%!error P = stk_ortho_func(model, x, pi);
+
+%!test
+%! model.order = -1; P = stk_ortho_func(model, x);
+%! assert(isequal(size(P), [n, 0]));
+%!test
+%! model.order =  0; P = stk_ortho_func(model, x);
+%! assert(isequal(size(P), [n, 1]));
+%!test
+%! model.order =  1; P = stk_ortho_func(model, x);
+%! assert(isequal(size(P), [n, d + 1]));
+%!test
+%! model.order =  2; P = stk_ortho_func(model, x);
+%! assert(isequal(size(P), [n, 1 + d * (d + 3) / 2]));
+%!error 
+%! model.order =  3; P = stk_ortho_func(model, x);
+%! % model.order > 2 is not allowed

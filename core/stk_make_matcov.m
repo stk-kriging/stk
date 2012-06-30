@@ -41,7 +41,7 @@
 
 function [K, P] = stk_make_matcov(model, x0, x1)
 
-if nargin < 2, error('Not enough input arguments'); end
+stk_narginchk(2, 3);
 
 %=== guess which syntax has been used based on the second input arg
 
@@ -119,3 +119,41 @@ end
 if nargout > 1, P = stk_ortho_func( model, x0 ); end
 
 end
+
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+%!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
+%! n0 = 20; n1 = 10; d = 4;
+%! model = stk_model('stk_materncov_aniso', d); model.order = 1;
+%! model2 = model; model2.lognoisevariance = log(0.01);
+%! x0 = stk_sampling_randunif(n0, d);
+%! x1 = stk_sampling_randunif(n1, d);
+
+%!error [KK, PP] = stk_make_matcov();
+%!error [KK, PP] = stk_make_matcov(model);
+%!test  [Ka, Pa] = stk_make_matcov(model, x0);           % (1)
+%!test  [Kb, Pb] = stk_make_matcov(model, x0, x0);       % (2)
+%!test  [Kc, Pc] = stk_make_matcov(model, x0, x1);       % (3)
+%!error [KK, PP] = stk_make_matcov(model, x0, x1, pi);
+
+%!test  assert(isequal(size(Ka), [n0 n0]));
+%!test  assert(isequal(size(Kb), [n0 n0]));
+%!test  assert(isequal(size(Kc), [n0 n1]));
+
+%!test  assert(isequal(size(Pa), [n0 d + 1]));
+%!test  assert(isequal(size(Pb), [n0 d + 1]));
+%!test  assert(isequal(size(Pc), [n0 d + 1]));
+
+%!% In the noiseless case, (1) and (2) should give the same results
+%!test  assert(isequal(Kb, Ka));
+
+%!% In the noisy case, however... 
+%!test  [Ka, Pa] = stk_make_matcov(model2, x0);           % (1')
+%!test  [Kb, Pb] = stk_make_matcov(model2, x0, x0);       % (2')
+%!error assert(isequal(Kb, Ka));
+
+%!% The second output depends on x0 only => should be the same for (1)--(3)
+%!test  assert(isequal(Pa, Pb));
+%!test  assert(isequal(Pa, Pc));

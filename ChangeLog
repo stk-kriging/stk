@@ -7,12 +7,14 @@
 
 	Added a new function for approximate comparisons.
 
-	* misc/test/stk_isequal_tolrel.m: new function
+	* misc/test/stk_isequal_tolrel.m: new function.
 	* core/stk_predict.m: modified test.
 
 	Miscellaneous.
 
 	* misc/error/stk_narginchk.m: fixed doc and comments.
+	* core/stk_ortho_func.m: tests.
+	* core/stk_make_matcov.m: idem.
 
 2012-06-29  Julien Bect  <julien.bect@supelec.fr>
 
