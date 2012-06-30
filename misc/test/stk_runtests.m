@@ -92,6 +92,8 @@ function [n_pass, n_total, n_notest, n_files] = run_all_tests(directory)
 dirinfo = dir(directory);
 flist = {dirinfo.name};
 
+here = pwd(); cd(directory);
+
 fprintf ('Processing files in %s:\n\n', directory);
 fflush (stdout);
 
@@ -103,10 +105,9 @@ for i = 1:numel (flist)
     f = flist{i};
     if (length (f) > 2 && strcmp (f((end-1):end), '.m'))
         n_files = n_files + 1;
-        ff = fullfile (directory, f);
         print_test_file_name (f);
-        if has_tests(ff)
-            [p, n] = stk_test (ff, 'quiet', stdout);
+        if has_tests(f)
+            [p, n] = stk_test (f, 'quiet', stdout);
             % Note: the presence of the third argument (fid=stdout) forces
             % stk_test in batch mode, which means that it doesn't stop at
             % the first failed test.
@@ -123,6 +124,8 @@ end
 fprintf('   --> passed %d/%d tests\n', n_pass, n_total);
 fprintf('   --> %d/%d files had no tests\n', n_notest, n_files);
 fprintf('\n');
+
+cd(here);
 
 end % run_all_tests
 
