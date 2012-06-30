@@ -1,4 +1,23 @@
 % STK_NARGINCHK checks whether the number of input arguments is acceptable.
+%
+% CALL: stk_narginchk(n_low, n_high)
+%
+%   checks whether the number of input arguments in the calling function is
+%   between n_low and n_high, and throws an exception if it's note the case.
+%
+% CALL: [err_msg, err_mnemonic] = stk_narginchk(n_low, n_high)
+% 
+%   returns the error message and error mnemonic instead of throwing the
+%   exception. The mnemonic is either 'NotEnoughInputArgs' (if the first
+%   condition is violated) or 'TooManyInputArgs' (if the second condition is
+%   violated).
+%
+% NOTES: 
+%  * Although the exception is actually raised by stk_narginchk(), everything
+%    looks like it has been sent by the calling function.
+%  * Both Matlab and Octave have a function that does this, but unfortunately
+%    they have different names (narginchk() in Matlab, nargchk() in Octave) and
+%    different calling syntaxes.
 
 % Copyright Notice
 %
@@ -60,11 +79,9 @@ elseif n_argin > n_high,
 end
 
 % If one of the conditions is violated AND no output argument is requested,
-% then we throw an error (otherwise
+% then we throw an error
 if (nargout == 0) && ~isempty(err_msg),
-    % Pretend that the error has been thrown by the caller (unless
-    % stk_narginchk has been called from the base workspace, which should
-    % only happen when testing).
+    % Pretend that the error has been thrown by the caller
     stack = stack(2:end);
     % And now we proceed to throw the exception.
     stk_error(err_msg, err_mnemonic, stack);
