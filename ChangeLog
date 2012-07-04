@@ -1,5 +1,10 @@
 2012-07-04  Julien Bect  <julien.bect@supelec.fr>
 
+	Fixed a bug in stk_compile_all() under Octave, related to a
+	strange behaviour of exist().
+
+	* misc/config/stk_compile_all.m: bugfix.
+
 	Improved doc and added tests in several functions. Also, fixed a
 	minor bug in stk_model().
 
