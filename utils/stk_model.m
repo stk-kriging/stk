@@ -1,40 +1,43 @@
-% STK_MODEL generates a default model for the STK
+% STK_MODEL generates a model with default covariance parameters.
 %
-% CALL: model = stk_model()
-%       model = default kriging model
+% CALL: MODEL = stk_model()
 %
-% STK_MODEL provides a default model, namely a stationary, isotropic
-% Gaussian random process with constant but unknown mean. This should not
-% be considered as a canonical choice.
+%   returns a structure MODEL (see below for a description of the fields in such
+%   as structure) corresponding to one-dimensional Gaussian process prior with a
+%   constant but unknown mean ("ordinary" kriging) and a stationary Matern
+%   covariance function.
+%
+% CALL: MODEL = stk_model(COVARIANCE_TYPE)
+%
+%   uses the user-supplied COVARIANCE_TYPE instead of the default.
+%
+% CALL: MODEL = stk_model(COVARIANCE_TYPE, DIM)
+%
+%   creates a DIM-dimensional model. Note that, for DIM > 1, anisotropic
+%   covariance functions are provided with default parameters that make them
+%   isotropic.
 %
 % In STK, a Gaussian process model is described by a 'model' structure,
 % which has mandatory fields and optional fields.
 %
-% MANDATORY FIELDS: name, param
+%   MANDATORY FIELDS: covariance_type, param
+%   OPTIONAL FIELDS: Kx_cache, lognoisevariance
 %
-% OPTIONAL FIELDS: Kx_cache, lognoisevariance
-%
-% FIXME: incomplete documentation
-%
-% FIXME: ici on documente la structure "model". On pourrait aussi s'en
-% servir pour fournir des valeurs par defaut des parametres pour les
-% differentes familles de covariance ?
-%
+% See also stk_materncov_iso, stk_materncov_aniso, ...
 
-%                  Small (Matlab/Octave) Toolbox for Kriging
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
+%
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging/
 %
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -51,13 +54,16 @@
 %
 function model = stk_model(covariance_type, dim)
 
+stk_narginchk(0, 2);
+
 model = struct();
 
 %%% covariance type
 
 if nargin < 1,
-    % use the anisotropic Matern covariance function as a default choice
-    model.covariance_type = 'stk_materncov_aniso';
+    % use the (isotropic) Matern covariance function as a default choice
+    % (note that, since nargin == 0 here, a one-dimensional will be produced)
+    model.covariance_type = 'stk_materncov_iso';
 else
     model.covariance_type = covariance_type;
 end
@@ -100,13 +106,13 @@ switch model.covariance_type
         NU0 = 2.0;   % smoothness (regularity) parameter
         RHO = 0.3;   % range parameter (spatial scale)
         
-        model.param = log([VAR0; NU0; 1/RHO * ones(dim,1)]);
+        model.param = log([VAR0; NU0; 1/RHO * ones(model.dim,1)]);
 
     case {'stk_materncov32_aniso', 'stk_materncov52_aniso'}
 
         RHO = 0.3;   % range parameter (spatial scale)
         
-        model.param = log([VAR0; 1/RHO * ones(dim,1)]);
+        model.param = log([VAR0; 1/RHO * ones(model.dim,1)]);
 
     otherwise
         
@@ -115,3 +121,34 @@ switch model.covariance_type
         model.param = [];
 
 end
+
+
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+%!test model = stk_model();
+
+%!test model = stk_model('stk_materncov_iso');
+%!test model = stk_model('stk_materncov_iso', 1);
+%!test model = stk_model('stk_materncov_iso', 3);
+
+%!test model = stk_model('stk_materncov_aniso');
+%!test model = stk_model('stk_materncov_aniso', 1);
+%!test model = stk_model('stk_materncov_aniso', 3);
+
+%!test model = stk_model('stk_materncov32_iso');
+%!test model = stk_model('stk_materncov32_iso', 1);
+%!test model = stk_model('stk_materncov32_iso', 3);
+
+%!test model = stk_model('stk_materncov32_aniso');
+%!test model = stk_model('stk_materncov32_aniso', 1);
+%!test model = stk_model('stk_materncov32_aniso', 3);
+
+%!test model = stk_model('stk_materncov52_iso');
+%!test model = stk_model('stk_materncov52_iso', 1);
+%!test model = stk_model('stk_materncov52_iso', 3);
+
+%!test model = stk_model('stk_materncov52_aniso');
+%!test model = stk_model('stk_materncov52_aniso', 1);
+%!test model = stk_model('stk_materncov52_aniso', 3);

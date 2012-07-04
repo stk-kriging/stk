@@ -1,3 +1,13 @@
+2012-07-04  Julien Bect  <julien.bect@supelec.fr>
+
+	Improved doc and added tests in several functions. Also, fixed a
+	minor bug in stk_model().
+
+	* examples/example07.m: fixed comment
+	* utils/stk_model.m: bugfix + doc + tests
+	* paramestim/stk_remlqrg.m: doc + tests
+	* paramestim/stk_param_estim.m: doc + tests
+
 2012-06-30  Julien Bect  <julien.bect@supelec.fr>
 
 	Fixed a bug in stk_runtests() under Octave. It is now possible to
