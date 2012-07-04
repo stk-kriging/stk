@@ -41,7 +41,6 @@ disp('                  ');
 
 %% List of correlation functions
 
-% Parameters used as initial values for stk_param_estim()
 SIGMA2 = 1.0;  % variance parameter
 RHO1   = 1.0;  % scale (range) parameter
 

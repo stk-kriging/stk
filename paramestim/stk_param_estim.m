@@ -1,28 +1,36 @@
-% STK_PARAM_ESTIM estimates the parameters of the covariance from data
+% STK_PARAM_ESTIM estimates the parameters of a covariance function.
 %
-% CALL: paramopt = stk_param_estim( model, xi, yi, param0 ...)
+% CALL: PARAM = stk_param_estim(MODEL, XI, YI, PARAM0)
 %
-% STK_PARAM_ESTIM helper function to estimate the parameters of a
-% covariance from data using rectricted maximum likelihood
+%   estimates the parameters PARAM of the covariance function in MODEL from the 
+%   data (XI, YI) using the rectricted maximum likelihood (ReML) method. A
+%   starting point PARAM0 has to be provided.
 %
-% FIXME: documentation incomplete
+% CALL: [PARAM, LNV] = stk_param_estim(MODEL, XI, YI, PARAM0, LNV0)
 %
-% EXAMPLE: see examples/example02.m
+%   also estimate the (logarithm of the) noise variance. This form only applies
+%   to the case where the observations are assumed noisy. A starting point
+%   (PARAM0, LNV0) has to be provided.
+%
+% NOTE: the first form can be used with noisy observations, in which case the
+% variance of the observation noise is assumed to be known (and given by
+% exp(MODEL.lognoisevariance).
+%
+% EXAMPLES: see example02.m, example03.m, example08.m
 
-%                  Small (Matlab/Octave) Toolbox for Kriging
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
-%    Authors:   Julien Bect <julien.bect@supelec.fr>
-%               Emmanuel Vazquez <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging/
+%
+%    Authors:   Julien Bect        <julien.bect@supelec.fr>
+%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
 %
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -36,9 +44,11 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
+
 function [paramopt, paramlnvopt] = stk_param_estim ...
     (model, xi, yi, param0, param0lnv)
+
+stk_narginchk(4, 5);
 
 % TODO: turn param0 into an optional argument
 %       => provide a reasonable default choice
@@ -203,3 +213,40 @@ lblnv = log(eps);
 ublnv = log(empirical_variance) + TOLVAR;
 
 end
+
+
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+%!shared f, xi, zi, NI, param0, model
+%!
+%! f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );
+%! DIM = 1; NI = 20; box = [-1.0; 1.0];
+%! xi = stk_sampling_cartesiangrid(NI, DIM, box);
+%!
+%! SIGMA2 = 1.0;  % variance parameter
+%! NU     = 4.0;  % regularity parameter
+%! RHO1   = 0.4;  % scale (range) parameter
+%! param0 = log([SIGMA2; NU; 1/RHO1]);
+%!
+%! model = stk_model('stk_materncov_iso');
+
+%!test  % noiseless
+%! zi = stk_feval(f, xi);
+%! param = stk_param_estim(model, xi, zi, param0);
+
+%!test  % noisy
+%! NOISE_STD_TRUE = 0.1;
+%! NOISE_STD_INIT = 1e-5;
+%! zi.a = zi.a + NOISE_STD_TRUE * randn(NI, 1);
+%! model.lognoisevariance = 2 * log(NOISE_STD_INIT);
+%! [param, lnv] = stk_param_estim ...
+%!    (model, xi, zi, param0, model.lognoisevariance);
+
+%!% incorrect number of input arguments
+%!error param = stk_param_estim()
+%!error param = stk_param_estim(model);
+%!error param = stk_param_estim(model, xi);
+%!error param = stk_param_estim(model, xi, zi);
+%!error param = stk_param_estim(model, xi, zi, param0, log(eps), pi);
