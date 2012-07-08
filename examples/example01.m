@@ -48,7 +48,7 @@ DIM = 1;                                        % dimension of the factor space
 box = [-1.0; 1.0];                              % factor space
 
 NT = 400; % nb of points in the grid
-xt = stk_sampling_cartesiangrid( NT, DIM, box );
+xt = stk_sampling_regulargrid( NT, DIM, box );
 zt = stk_feval( f, xt );
 
 figure(1); set( gcf, 'Name', 'Plot of the function to be approximated');
@@ -64,12 +64,12 @@ plot( xt.a, zt.a ); xlabel('x'); ylabel('z');
 % evaluations performed on a "space-filling design".
 %
 % A regular grid (i.e., a grid with constant spacing) is constructed using
-% stk_sampling_cartesiangrid(), which is equivalent to linspace() in this
+% stk_sampling_regulargrid(), which is equivalent to linspace() in this
 % 1d example.
 %
 
 NI = 6;                                         % nb of evaluations that will be used
-xi = stk_sampling_cartesiangrid( NI, DIM, box); % evaluation points
+xi = stk_sampling_regulargrid( NI, DIM, box); % evaluation points
 zi = stk_feval( f, xi );                        % evaluation results
 
 

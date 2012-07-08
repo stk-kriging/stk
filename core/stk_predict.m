@@ -184,7 +184,7 @@ end
 %! n = 20; % 10 observations + 10 predictions
 %! d = 1;  % dimension of the input space
 %!
-%! x0 = stk_sampling_cartesiangrid(n, d, [0; pi]);
+%! x0 = stk_sampling_regulargrid(n, d, [0; pi]);
 %!
 %! idx_obs = 1:2:n;
 %! idx_prd = 2:2:n;

@@ -1,8 +1,18 @@
-% STK_SAMPLING_RANDOMLHS builds a random LHS design
+% STK_SAMPLING_RANDOMLHS generates a random LHS design.
 %
-% CALL: x = stk_sampling_randomlhs(n, d, box)
+% CALL: X = stk_sampling_randomlhs(N, DIM)
 %
-% FIXME: documentation incomplete
+%   generates a random Latin Hypercube Sample of size N in the DIM-dimensional
+%   hypercube [0; 1]^DIM.
+%
+% CALL: X = stk_sampling_randomlhs(N, DIM, BOX)
+%
+%   generates a random Latin Hypercube Sample of size N in the DIM-dimensional
+%   hyperrectangle specified by the argument BOX, which is a 2 x DIM matrix
+%   where BOX(1, j) and BOX(2, j) are the lower- and upper-bound of the interval
+%   on the j^th coordinate.
+%
+% See also: stk_sampling_maximinlhs, stk_sampling_randunif
 
 %          STK : a Small (Matlab/Octave) Toolbox for Kriging
 %          =================================================
@@ -33,8 +43,47 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function x = stk_sampling_randomlhs(n, d, box)
+function x = stk_sampling_randomlhs(n, dim, box)
+
+stk_narginchk(2, 3);
+
+if nargin < 3,
+    box = [zeros(1, dim); ones(1, dim)];
+end
 
 niter = 1;
 
-x = stk_sampling_maximinlhs(n, d, box, niter);
+x = stk_sampling_maximinlhs(n, dim, box, niter);
+
+end % function stk_sampling_randomlhs
+
+
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+%%
+% Check error for incorrect number of input arguments
+
+%!shared n, dim, box
+%! n = 10; dim = 2; box = [0, 0; 1, 1];
+
+%!error stk_sampling_randomlhs();
+%!error stk_sampling_randomlhs(n);
+%!test  stk_sampling_randomlhs(n, dim);
+%!test  stk_sampling_randomlhs(n, dim, box);
+%!error stk_sampling_randomlhs(n, dim, box, pi);
+
+%%
+% Check output argument
+
+%!test
+%! for dim = 1:5,
+%!   x = stk_sampling_randomlhs(n, dim);
+%!   assert(isstruct(x) && isnumeric(x.a));
+%!   assert(isequal(size(x.a), [n dim]));
+%!   u = x.a(:);
+%!   assert(~any(isnan(u) | isinf(u)));
+%!   assert((min(u) >= 0) && (max(u) <= 1));
+%!   assert(stk_is_lhs(x, n, dim));
+%! end

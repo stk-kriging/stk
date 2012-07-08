@@ -42,42 +42,41 @@ disp('                  ');
 
 %% Preliminaries
 
-dim = 2;
-box = [[0 0]; [2 4]]; % xmin, xmax
+DIM = 2; BOX = [[0 0]; [2 4]]; % xmin, xmax
+N1 = 9; N2 = 200; N1_ = [3 3]; N2_ = [25 8];
 
 figure; set( gcf, 'Name', 'Example 4' );
-
 nr = 2; nc = 3;
 
 
 %% Cartesian grid ("full factorial" design)
 
-x = stk_sampling_cartesiangrid( 3, dim, box );
-subplot(nr,nc,1); plot( x.a(:,1), x.a(:,2), '*' );
-title('3 x 3 regular grid');
+x = stk_sampling_regulargrid(N1, DIM, BOX);
+subplot(nr, nc, 1); plot(x.a(:,1), x.a(:,2), '*');
+title(sprintf('%d x %d regular grid', N1_(1), N1_(2)));
 
-x = stk_sampling_cartesiangrid( [25 8], dim, box );
-subplot(nr,nc,4); plot( x.a(:,1), x.a(:,2), '*' );
-title('25 x 8 regular grid');
+x = stk_sampling_regulargrid(N2_, DIM, BOX);
+subplot(nr, nc, 4); plot(x.a(:,1), x.a(:,2), '*');
+title(sprintf('%d x %d regular grid', N2_(1), N2_(2)));
 
 
 %% Maximin LHS
 
-x = stk_sampling_maximinlhs( 9, dim, box );
-subplot(nr,nc,2); plot( x.a(:,1), x.a(:,2), '*' );
-title('9-points maximin LHS');
+x = stk_sampling_maximinlhs(N1, DIM, BOX);
+subplot(nr, nc, 2); plot(x.a(:,1), x.a(:,2), '*');
+title(sprintf('%d-points maximin LHS', N1));
 
-x = stk_sampling_maximinlhs( 200, dim, box );
-subplot(nr,nc,5); plot( x.a(:,1), x.a(:,2), '*' );
-title('200-points maximin LHS');
+x = stk_sampling_maximinlhs(N2, DIM, BOX);
+subplot(nr, nc, 5); plot(x.a(:,1), x.a(:,2), '*');
+title(sprintf('%d-points maximin LHS', N2));
 
 
 %% Random (uniform) sampling
 
-x = stk_sampling_randunif( 9, dim, box );
-subplot(nr,nc,3); plot( x.a(:,1), x.a(:,2), '*' );
-title('9-points randunif MCS');
+x = stk_sampling_randunif(N1, DIM, BOX);
+subplot(nr, nc, 3); plot(x.a(:,1), x.a(:,2), '*');
+title(sprintf('%d-points randunif MCS', N1));
 
-x = stk_sampling_randunif( 200, dim, box );
-subplot(nr,nc,6); plot( x.a(:,1), x.a(:,2), '*' );
-title('200-points randunif MCS');
+x = stk_sampling_randunif(N2, DIM, BOX);
+subplot(nr, nc, 6); plot(x.a(:,1), x.a(:,2), '*');
+title(sprintf('%d-points randunif MCS', N2));
