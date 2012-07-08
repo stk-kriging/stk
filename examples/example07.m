@@ -57,7 +57,7 @@ NB_COVARIANCE_FUNCTIONS = size(list_cov, 1);
 %% Visualisation
 
 x1 = struct('a', 0.0);
-x2 = stk_sampling_cartesiangrid(1000, 1, [-5; 5]);
+x2 = stk_sampling_regulargrid(1000, 1, [-5; 5]);
 
 col = {'r', 'b', 'g', 'k'}; figure;
 

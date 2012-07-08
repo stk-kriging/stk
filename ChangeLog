@@ -1,3 +1,31 @@
+2012-07-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Added tests and improved documentation.
+
+	* sampling/stk_sampling_randunif.m: tests & doc
+	* sampling/stk_sampling_randomlhs.m: idem
+	* sampling/stk_sampling_regulargrid.m: idem
+	* sampling/stk_sampling_maximinlhs.m: idem
+
+	New function to test the LHS property.
+
+	* misc/test/stk_is_lhs.m: new function
+
+	Renamed stk_sampling_cartesiangrid to stk_sampling_regulargrid,
+	and changed the meaning of the first argument for consistency with
+	other stk_sampling_* functions.
+
+	* sampling/stk_sampling_cartesiangrid.m: renamed and modified
+	* examples/example01.m: modified accordingly
+	* examples/example02.m: idem
+	* examples/example04.m: idem
+	* examples/example05.m: idem
+	* examples/example06.m: idem
+	* examples/example07.m: idem
+	* examples/example08.m: idem
+	* paramestim/stk_param_estim.m: idem
+	* core/stk_predict.m: idem
+
 2012-07-04  Julien Bect  <julien.bect@supelec.fr>
 
 	Fixed a bug in stk_compile_all() under Octave, related to a

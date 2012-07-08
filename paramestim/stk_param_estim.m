@@ -223,7 +223,7 @@ end
 %!
 %! f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );
 %! DIM = 1; NI = 20; box = [-1.0; 1.0];
-%! xi = stk_sampling_cartesiangrid(NI, DIM, box);
+%! xi = stk_sampling_regulargrid(NI, DIM, box);
 %!
 %! SIGMA2 = 1.0;  % variance parameter
 %! NU     = 4.0;  % regularity parameter

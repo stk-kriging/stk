@@ -47,7 +47,7 @@ DIM = 1;                                        % dimension of the factor space
 box = [-1.0; 1.0];                              % factor space
 
 NT = 400; % nb of points in the grid
-xt = stk_sampling_cartesiangrid( NT, DIM, box );
+xt = stk_sampling_regulargrid( NT, DIM, box );
 zt = stk_feval( f, xt );
 
 

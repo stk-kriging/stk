@@ -1,8 +1,23 @@
-% STK_SAMPLING_MAXIMINLHS builds a maximin LHS design
+% STK_SAMPLING_MAXIMINLHS generates a "maximin" LHS design.
 %
-% CALL: x = stk_sampling_maximinlhs(n, d, box, niter)
+% CALL: X = stk_sampling_maximinlhs(N, DIM)
 %
-% FIXME: documentation incomplete
+%   generates a "maximin" Latin Hypercube Sample of size N in the
+%   DIM-dimensional hypercube [0; 1]^DIM. More precisely, NITER = 1000
+%   independent random LHS are generated, and the one with the biggest
+%   separation distance is returned.
+%
+% CALL: X = stk_sampling_maximinlhs(N, DIM, BOX)
+%
+%   does the same thing in the DIM-dimensional hyperrectangle specified by the
+%   argument BOX, which is a 2 x DIM matrix where BOX(1, j) and BOX(2, j) are
+%   the lower- and upper-bound of the interval on the j^th coordinate.
+%
+% CALL: X = stk_sampling_maximinlhs(N, DIM, BOX, NITER)
+%
+%   allows to change the number of independent random LHS that are used.
+%
+% See also: stk_mindist, stk_sampling_randomlhs
 
 % Copyright Notice
 %
@@ -108,54 +123,33 @@ x = (x - rand(size(x))) / n;
 end
 
 
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
 %%
 % Check error for incorrect number of input arguments
 
-%!shared n, d, box, niter, extra1, extra2
-%! n = 10; d = 2; box = [0, 0; 1, 1]; niter = 1;
-%! extra1 = pi^2; extra2 = 2.718;
+%!shared n, dim, box, niter
+%! n = 20; dim = 2; box = [0, 0; 1, 1]; niter = 1;
 
 %!error stk_sampling_maximinlhs();
 %!error stk_sampling_maximinlhs(n);
-%!test  stk_sampling_maximinlhs(n, d);
-%!test  stk_sampling_maximinlhs(n, d, box);
-%!test  stk_sampling_maximinlhs(n, d, box, niter);
-%!error stk_sampling_maximinlhs(n, d, box, niter, extra1);
-%!error stk_sampling_maximinlhs(n, d, box, niter, extrat1, extra2);
+%!test  stk_sampling_maximinlhs(n, dim);
+%!test  stk_sampling_maximinlhs(n, dim, box);
+%!test  stk_sampling_maximinlhs(n, dim, box, niter);
+%!error stk_sampling_maximinlhs(n, dim, box, niter, pi);
 
 %%
-% Check the result for some random instances of the problem
+% Check output argument
 
 %!test
-%!
-%! nrep = 4;
-%! 
-%! for irep = 1:nrep,
-%! 
-%!     dim  = 1 + floor(rand*5);
-%!     xmin = randn(1,dim);
-%!     xmax = xmin + 1 + rand(1,dim);
-%!     box  = [xmin; xmax];
-%!     
-%!     n = 5 + floor(rand * 5);
-%!     
-%!     x = stk_sampling_maximinlhs(n, dim, box);
-%!     
-%!     assert(isstruct(x));
-%!     assert(isequal(fieldnames(x), {'a'}));    
-%!     assert(isequal(size(x.a), [n,dim]));    
-%!     
-%!     for j = 1:dim,
-%!         
-%!         y = x.a(:,j);
-%!         
-%!         assert(xmin(j) <= min(y));
-%!         assert(xmax(j) >= max(y));
-%!         
-%!         y = (y - xmin(j)) / (xmax(j) - xmin(j));
-%!         y = ceil(y * n);
-%!         assert(isequal(sort(y), (1:n)'));
-%!         
-%!     end
-%!     
+%! for dim = 1:5,
+%!   x = stk_sampling_randomlhs(n, dim);
+%!   assert(isstruct(x) && isnumeric(x.a));
+%!   assert(isequal(size(x.a), [n dim]));
+%!   u = x.a(:);
+%!   assert(~any(isnan(u) | isinf(u)));
+%!   assert((min(u) >= 0) && (max(u) <= 1));
+%!   assert(stk_is_lhs(x, n, dim));
 %! end
