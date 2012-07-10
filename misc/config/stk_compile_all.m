@@ -54,8 +54,9 @@ function stk_compile(folder, mexname, force_recompile, varargin)
 
 fprintf('MEX-file %s... ', mexname);
 
+cd(folder);
+
 if force_recompile || exist(mexname, 'file') ~= 3;
-    cd(folder);
     mex(sprintf('%s.c',mexname), varargin{:});
 end
 
