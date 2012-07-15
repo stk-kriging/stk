@@ -57,11 +57,11 @@ function n = index (s, t, direction)
 
 if nargin < 3, direction = 'first'; end
 
-if (ischar (s))
-    if (~isrow (s))
+if ischar(s)
+    if size(s, 1) > 1
         s = cellstr (s);  % Handle string arrays by conversion to cellstr
     end
-elseif (~iscellstr (s))
+elseif ~iscellstr(s)
     error ('index: S must be a string, string array, or cellstr');
 end
 
