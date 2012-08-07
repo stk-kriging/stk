@@ -1,10 +1,19 @@
-% STK_SF_MATERN computes the Matern function
+% STK_SF_MATERN computes the Matern correlation function.
 %
-% FIXME: documentation missing
+% CALL: K = stk_sf_matern(NU, H)
 %
-% if diff != -1 returns the derivative with respect to parameter
-% number diff
+%    computes the value of the Matern correlation function of order NU at
+%    distance H. Note that the Matern correlation function is a valid
+%    correlation function for all dimensions.
 %
+% CALL: K = stk_sf_matern(NU, H, DIFF)
+%    
+%    computes the derivative of the Matern correlation function of order NU, at
+%    distance H, with respect to the order NU if DIFF is equal to 1, or with 
+%    respect the distance H if DIFF is equal to 2. (If DIFF is equal to -1,
+%    this is the same as K = stk_sf_matern(NU, H).)
+%
+% See also: stk_sf_matern32, stk_sf_matern52
 
 %                  Small (Matlab/Octave) Toolbox for Kriging
 %
@@ -35,6 +44,8 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 function k = stk_sf_matern(Nu, h, diff)
+
+stk_narginchk(2, 3);
 
 % default: compute the value (not a derivative)
 if (nargin<3), diff = -1; end
@@ -86,3 +97,23 @@ elseif (diff == 2) % deriv. wrt h
 end
 
 k = reshape(k,N,M);
+
+
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+%!shared nu, h, diff
+%! nu = 1.0; h = 1.0; diff = -1;
+
+%!error stk_sf_matern();
+%!error stk_sf_matern(nu);
+%!test  stk_sf_matern(nu, h);
+%!test  stk_sf_matern(nu, h, diff);
+%!error stk_sf_matern(nu, h, diff, pi);
+
+%!test %% h = 0.0 => correlation = 1.0
+%! for nu = 0.1:0.2:5.0,
+%!   x = stk_sf_matern(nu, 0.0);
+%!   assert(stk_isequal_tolrel(x, 1.0, 1e-8));
+%! end
