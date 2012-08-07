@@ -1,3 +1,11 @@
+2012-08-07  Julien Bect  <julien.bect@supelec.fr>
+
+	Added tests and improved documentation.
+
+	* misc/specfun/stk_sf_matern.m: tests & doc
+	* misc/specfun/stk_sf_matern32.m: idem
+	* misc/specfun/stk_sf_matern52.m: idem
+
 2012-07-15  Julien Bect  <julien.bect@supelec.fr>
 
 	Replaced a call to isrow(), which didn't exist in some recent Matlab
