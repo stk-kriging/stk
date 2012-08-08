@@ -1,15 +1,11 @@
-% STK_ISEQUAL_TOLREL tests approximate equality of two matrices or structures.
+% STK_ISEQUAL_TOLABS tests approximate equality of two matrices or structures.
 %
-% CALL: BOOL = stk_isequal_tolrel(A, B, TOLREL)
+% CALL: BOOL = stk_isequal_tolabs(A, B, TOLABS)
 %
 %   returns true if A and B are numeric arrays of the same size, such that for
 %   any pair (a, b) of corresponding entries,
 %
-%      abs(b - a) <= TOLABS,                                                (1)
-%
-%   where
-%
-%      TOLABS = max(max(A(:)), max(B(:))) * TOLREL.
+%      abs(b - a) <= TOLABS.                                                (1)
 %
 %   For numeric array, the function returns false is either
 %
@@ -20,9 +16,9 @@
 %   works recursively on the fields, and returns true iff all the fields are
 %   approximately equal.
 %
-% CALL: b = stk_isequal_tolrel(a, b)
+% CALL: b = stk_isequal_tolabs(a, b)
 %
-%   uses the default value 1e-8 for TOLREL.
+%   uses the default value 1e-8 for TOLABS.
 %
 % See also isequal.
 
@@ -53,14 +49,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function res = stk_isequal_tolrel(a, b, tolrel)
+function res = stk_isequal_tolabs(a, b, tolabs)
 
-DEFAULT_TOLREL = 1e-8;
+DEFAULT_TOLABS = 1e-8;
 
 stk_narginchk(2, 3);
 
 if nargin == 2,
-    tolrel = DEFAULT_TOLREL;
+    tolabs = DEFAULT_TOLABS;
 end
 
 if isstruct(a) && isstruct(b),
@@ -76,16 +72,13 @@ if isstruct(a) && isstruct(b),
             res = false;
             return;
         end
-        res = stk_isequal_tolrel(a.(L{k}), b.(L{k}), tolrel);
+        res = stk_isequal_tolabs(a.(L{k}), b.(L{k}), tolabs);
         if ~ res, return; end
     end
     
 elseif isnumeric(a) && isnumeric(b)
     
-    aa = a(:);
-    bb = b(:);
-    tolabs = max(abs(aa), abs(bb)) * tolrel; 
-    res = any(abs(bb - aa) <= tolabs);
+    res = any(abs(b(:) - a(:)) <= tolabs);
     
 else
     
@@ -93,27 +86,27 @@ else
     
 end
 
-end % function stk_isequal_tolrel
+end % function stk_isequal_tolabs
 
 %%%%%%%%%%%%%
 %%% tests %%%
 %%%%%%%%%%%%%
 
-%!shared r1, r2, a, b, tolrel
-%! a = 1.01; b = 1.02; tolrel = 0.1;
+%!shared r1, r2, a, b, tolabs
+%! a = 1.01; b = 1.02; tolabs = 0.1;
 
-%!error rr = stk_isequal_tolrel();
-%!error rr = stk_isequal_tolrel(a);
-%!test  r1 = stk_isequal_tolrel(a, b);
-%!test  r2 = stk_isequal_tolrel(a, b, tolrel);
-%!error rr = stk_isequal_tolrel(a, b, tolrel, pi);
+%!error rr = stk_isequal_tolabs();
+%!error rr = stk_isequal_tolabs(a);
+%!test  r1 = stk_isequal_tolabs(a, b);
+%!test  r2 = stk_isequal_tolabs(a, b, tolabs);
+%!error rr = stk_isequal_tolabs(a, b, tolabs, pi);
 
 %!test assert(~r1);
 %!test assert(r2);
 
 %!test
 %! a = struct('u', []); b = struct('v', []);
-%! assert(~ stk_isequal_tolrel(a, b))
+%! assert(~ stk_isequal_tolabs(a, b))
 %!test
 %! a = struct('u', 1.01); b = struct('u', 1.02);
-%! assert(stk_isequal_tolrel(a, b, tolrel))
+%! assert(stk_isequal_tolabs(a, b, tolabs))
