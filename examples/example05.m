@@ -95,7 +95,7 @@ NB_PATHS = 10;
 zsim = stk_generate_samplepaths( model, xt, NB_PATHS );
 
 % Condition sample paths on the observations
-zsimc = stk_conditionning( lambda, zi, zsim, xi_ind );
+zsimc = stk_conditioning( lambda, zi, zsim, xi_ind );
 
 % Display the result
 stk_plot1dsim ( xi, zi, xt, zt, zp, zsimc );
