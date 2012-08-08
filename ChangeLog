@@ -1,5 +1,15 @@
 2012-08-08  Julien Bect  <julien.bect@supelec.fr>
 
+	Added a new function for approximate comparisons with an
+	absolute tolerance threshold.
+
+	* misc/test/stk_isequal_tolabs.m: new function
+
+	Fixed a bug in stk_isequal_tolrel (the function wasn't working as
+	expected for non-vector arrays) and improved documentation.
+
+	* misc/test/stk_isequal_tolrel.m: modified
+
 	Renamed stk_conditionning to stk_conditioning.
 
 	* utils/stk_conditionning.m: renamed and modified
