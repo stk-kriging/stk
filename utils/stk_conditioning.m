@@ -1,6 +1,6 @@
-% STK_CONDITIONNING conditions sample paths on observations
+% STK_CONDITIONING conditions sample paths on observations
 %
-% CALL: zsimc = stk_conditionning(lambda, zi, zsim, xi_ind)
+% CALL: zsimc = stk_conditioning(lambda, zi, zsim, xi_ind)
 %       lambda = kriging weights, as provided by stk_predict
 %       zi     = structure that contains the observed values on which on
 %                wants to condition sample paths
@@ -8,7 +8,7 @@
 %       xi_ind = indices of the observations in the vector ysim.a
 %       zsimc  = conditional sample paths
 %
-% STK_CONDITIONNING uses the technique called conditionning by kriging
+% STK_CONDITIONING uses the technique called conditioning by kriging
 % (see, e.g., Chiles and Delfiner, Geostatistics: Modeling Spatial
 %  Uncertainty, 1999) 
 %
@@ -43,8 +43,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function zsimc = stk_conditionning(lambda, zi, zsim, xi_ind)
+
+function zsimc = stk_conditioning(lambda, zi, zsim, xi_ind)
 
 nsim = size(zsim.a,2);
 zsimc.a = zsim.a + lambda'*(repmat(zi.a,1,nsim) - zsim.a(xi_ind,:));
 
+end

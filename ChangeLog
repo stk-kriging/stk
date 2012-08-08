@@ -1,3 +1,10 @@
+2012-08-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Renamed stk_conditionning to stk_conditioning.
+
+	* utils/stk_conditionning.m: renamed and modified
+	* examples/example05.m: modified accordingly
+
 2012-08-07  Julien Bect  <julien.bect@supelec.fr>
 
 	Added tests and improved documentation.
