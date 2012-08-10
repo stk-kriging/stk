@@ -1,21 +1,40 @@
 % STK_PREDICT performs a kriging prediction from data 
 %
-% CALL: [zp, lambda, mu] = stk_predict(model, xi, zi, xt,...)
+% CALL: ZP = stk_predict(MODEL, XI, ZI, XP)
 %
-% STK_PREDICT computes a kriging approximation given data and a model
+%    computes the kriging predictor ZP at the points XP, given the observations
+%    (XI, ZI) and the prior MODEL. In general (see special cases below), XI, ZI,
+%    XP and ZP are structures whose field 'a' contains the actual numerical
+%    data. More precisely, on a DIM-dimensional factor space,
 %
-% FIXME: documentation incomplete
+%     * XI.a must be a NI x DIM matrix, where NI is the number of observations,
+%     * ZI.a must be a column vector of length NI,
+%     * XP.a must be a NP x DIM matrix, where NP is the number of prediction
+%       points,
+%     * ZP.a is a column vector of length NP.
 %
-% USE #1: if model.Kx_cache exist,
-%   - it is assumed that xi and xt are indices (integers)
-%   - xi is required
-%   - xt is optional (can be empty)
+%    Additionally to the predicted values ZP.a, stk_predict() returns the
+%    kriging variances ZP.v at the same points. ZP.v is a column vector of
+%    length NP.
 %
-% USE #2: otherwise,
-%   - xi and xt are expected to be structures, whose field 'a' contains
-%     the observed points (matrix of size n x d, where n is the number 
-%     of points and d is the dimension of the factor space)
-%   - both arguments are required
+% CALL: [ZP, LAMBDA, MU] = stk_predict(MODEL, XI, ZI, XP)
+%
+%    also returns the matrix of kriging weights LAMBDA and the matrix of
+%    Lagrange multipliers MU.
+%
+% SPECIAL CASE #1
+%
+%    If MODEL has a field 'Kx_cache', XI and XP are expected to be vectors of
+%    integer indices (instead of structures with an 'a' field). This feature is
+%    not fully documented as of today... If XT is empty, it is assumed that
+%    predictions must be computed at all points of the underlying discrete
+%    space.
+%
+% SPECIAL CASE #2
+%
+%    If ZI is empty, everything but ZP.a is computed. Indeed, neither the
+%    kriging variance ZP.v nor the matrices LAMBDA and MU actually depend on the
+%    observed values.
 % 
 % EXAMPLE: see examples/example01.m
 
