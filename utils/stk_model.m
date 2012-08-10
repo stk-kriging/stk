@@ -51,7 +51,7 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
+
 function model = stk_model(covariance_type, dim)
 
 stk_narginchk(0, 2);
@@ -89,38 +89,40 @@ VAR0 = 1.0; % default value for the variance parameter
 switch model.covariance_type
     
     case 'stk_materncov_iso'
-
+        
         NU0 = 2.0;   % smoothness (regularity) parameter
         RHO = 0.3;   % range parameter (spatial scale)
         
         model.param = log([VAR0; NU0; 1/RHO]);
-
+        
     case {'stk_materncov32_iso', 'stk_materncov52_iso'}
-
+        
         RHO = 0.3;   % range parameter (spatial scale)
         
         model.param = log([VAR0; 1/RHO]);
         
     case 'stk_materncov_aniso'
-
+        
         NU0 = 2.0;   % smoothness (regularity) parameter
         RHO = 0.3;   % range parameter (spatial scale)
         
         model.param = log([VAR0; NU0; 1/RHO * ones(model.dim,1)]);
-
+        
     case {'stk_materncov32_aniso', 'stk_materncov52_aniso'}
-
+        
         RHO = 0.3;   % range parameter (spatial scale)
         
         model.param = log([VAR0; 1/RHO * ones(model.dim,1)]);
-
+        
     otherwise
         
         warning('Unknown covariance type, model.param cannot be initialized.');
         
         model.param = [];
+        
+end % switch
 
-end
+end % function stk_model
 
 
 %%%%%%%%%%%%%

@@ -1,3 +1,18 @@
+2012-08-10  Julien Bect  <julien.bect@supelec.fr>
+
+	Added tests, improved documentation (help, copyright notices,
+	...). Added a little bit of arg checking in stk_conditioning.
+
+	* utils/stk_generate_samplepaths.m: tests + doc
+	* utils/stk_feval.m: tests + doc
+	* utils/stk_model.m: source code formatting only
+	* utils/stk_conditioning.m: tests + doc + arg checking
+	* core/stk_ortho_func.m: doc
+	* core/stk_make_matcov.m: doc
+	* core/stk_predict.m: doc
+	* core/private/stk_make_matcov_inter_parfor.m: doc
+	* core/private/stk_make_matcov_auto_parfor.m: doc
+
 2012-08-08  Julien Bect  <julien.bect@supelec.fr>
 
 	Added a new function for approximate comparisons with an
