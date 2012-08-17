@@ -53,5 +53,5 @@ path = { ...
 if ~stk_is_octave_in_use(),
     path = [path; {fullfile(root, 'misc', 'matlab')}];
 end
-        
+
 end % stk_path

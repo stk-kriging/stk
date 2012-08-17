@@ -9,8 +9,8 @@
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
 %
-%    This file has been adapted from runtests.m in Octave 3.6.2 (which is  
-%    distributed under the GNU General Public Licence version 3 (GPLv3). 
+%    This file has been adapted from runtests.m in Octave 3.6.2 (which is
+%    distributed under the GNU General Public Licence version 3 (GPLv3).
 %    The original copyright notice was as follows:
 %
 %        Copyright (C) 2010-2012 John W. Eaton
@@ -35,7 +35,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% 
+%%
 % Check that sk_mindist(x) is empty when x has zero lines
 
 %!test
@@ -45,7 +45,7 @@
 %!   assert(isempty(d));
 %! end
 
-%% 
+%%
 % Check that sk_mindist(x) is empty when x has only one line.
 
 %!test
@@ -65,25 +65,25 @@
 %!   assert(isequal(d, 0.0));
 %! end
 
-%% 
+%%
 % Random matrices with at least 2 lines and 1 column
 
 %!test
-%! 
+%!
 %! nrep = 20;
 %! TOL_REL = 1e-15;
-%! 
+%!
 %! for irep = 1:nrep,
-%! 
+%!
 %!     n = 2 + floor(rand * 10);
 %!     d = 1 + floor(rand * 10);
-%!     x = rand(n, d);       
+%!     x = rand(n, d);
 %!     z = stk_mindist(x);
-%!        
+%!
 %!     assert(isequal(size(d), [1, 1]));
 %!     assert(~isnan(d));
 %!     assert(~isinf(d));
-%!     
+%!
 %!     % check the result
 %!     mindist = Inf;
 %!     for i = 1:(n-1),
@@ -92,5 +92,5 @@
 %!         end
 %!     end
 %!     assert(abs(z - mindist) <= TOL_REL * mindist);
-%!     
+%!
 %! end

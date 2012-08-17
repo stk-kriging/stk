@@ -7,28 +7,27 @@
 %    correlation function for all dimensions.
 %
 % CALL: K = stk_sf_matern(NU, H, DIFF)
-%    
+%
 %    computes the derivative of the Matern correlation function of order NU, at
-%    distance H, with respect to the order NU if DIFF is equal to 1, or with 
+%    distance H, with respect to the order NU if DIFF is equal to 1, or with
 %    respect the distance H if DIFF is equal to 2. (If DIFF is equal to -1,
 %    this is the same as K = stk_sf_matern(NU, H).)
 %
 % See also: stk_sf_matern32, stk_sf_matern52
 
-%                  Small (Matlab/Octave) Toolbox for Kriging
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
+%
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging/
 %
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -42,7 +41,7 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
+
 function k = stk_sf_matern(Nu, h, diff)
 
 stk_narginchk(2, 3);
@@ -62,11 +61,11 @@ z = 2^(Nu - 1) * gamma(Nu) * t.^(-Nu);
 I = (z < BIGNUM);
 
 if (diff==-1)
-        
-    k = ones(N*M,1);    
+    
+    k = ones(N*M,1);
     %k(I) = 1 ./ z(I) .* besselmx(double('K'),Nu,t(I),0);
     k(I) = 1 ./ z(I) .* besselk(Nu,t(I));
-        
+    
 elseif (diff == 1) % numerical derivative wrt Nu
     
     itermax = 2;
@@ -79,10 +78,10 @@ elseif (diff == 1) % numerical derivative wrt Nu
         t_m = 2 * sqrt (Nu_m) * hp;
         k_p = 1 / (2^(Nu_p - 1) * gamma(Nu_p)) .* t_p(I).^Nu_p .* ...
             besselk( Nu_p, t_p(I) );
-            % besselmx( double('K'), Nu_p, t_p(I), 0 );
+        % besselmx( double('K'), Nu_p, t_p(I), 0 );
         k_m = 1 / (2^(Nu_m - 1) * gamma(Nu_m)) .* t_m(I).^Nu_m .* ...
             besselk( Nu_m, t_m(I) );
-            % besselmx( double('K'), Nu_m, t_m(I), 0 );
+        % besselmx( double('K'), Nu_m, t_m(I), 0 );
         dk(I,l) =  k_p - k_m;
     end
     k = 1/(12 * delta)* (- dk(:,2) + 8*dk(:,1));

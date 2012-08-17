@@ -31,37 +31,37 @@ function out = stk_set_root(root)
 
 persistent root_folder
 
-if nargin > 0,    
+if nargin > 0,
     
-	first_time = isempty(root_folder);
-	
-	if ~first_time
-		if ~strcmp(root, root_folder),
-			% changing STK's root folder: we remove
-			% the previous one from the path
-			stk_rmpath(root_folder);			
-		end
-	end
-	
-	% NOTE: calling stk_rmpath when root and root_folder are identical
-	% is harmless in recent versions of Matlab and Octave, but has been
-	% found to cause a bug in Octave 3.0.2 when calling stk_init twice
-	% in a row.
-	
-	root_folder = root;
-	if first_time,
-		% lock this M-file into memory to prevent clear
-		% all from erasing the persistent variable
-		mlock(); 
-	end
-	
-	% finally, add STK folders to the path
-	stk_addpath(root_folder);
-
+    first_time = isempty(root_folder);
+    
+    if ~first_time
+        if ~strcmp(root, root_folder),
+            % changing STK's root folder: we remove
+            % the previous one from the path
+            stk_rmpath(root_folder);
+        end
+    end
+    
+    % NOTE: calling stk_rmpath when root and root_folder are identical
+    % is harmless in recent versions of Matlab and Octave, but has been
+    % found to cause a bug in Octave 3.0.2 when calling stk_init twice
+    % in a row.
+    
+    root_folder = root;
+    if first_time,
+        % lock this M-file into memory to prevent clear
+        % all from erasing the persistent variable
+        mlock();
+    end
+    
+    % finally, add STK folders to the path
+    stk_addpath(root_folder);
+    
 end
 
 out = root_folder;
-   
+
 end % stk_set_root
 
 

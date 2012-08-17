@@ -6,6 +6,9 @@
 %
 %    Copyright (C) 2012 SUPELEC
 %
+%    Authors:   Julien Bect        <julien.bect@supelec.fr>
+%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%
 %    This file has been adapted from test.m in Octave 3.6.2,  distributed
 %    under the GNU General Public Licence version 3 (GPLv3). The original
 %    copyright notice was as follows:
@@ -110,7 +113,7 @@ end
 if ~isempty(x__flag) && ~ischar(x__flag),
     error('The first argument of stk_test() must be either empty or a string');
 end
-    
+
 x__batch = (~ isempty (x__fid));
 
 % Decide if error messages should be collected.
@@ -277,7 +280,7 @@ for x__i = 1:length(x__blockidx)-1
             x__msg = sprintf ('%sshared variable initialization failed\n', ...
                 SIGNAL_FAIL);
         end
-               
+        
         % Initialization code will be evaluated below.
         
     elseif (strcmp (x__type, 'end'))

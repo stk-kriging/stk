@@ -6,13 +6,13 @@
 %   between N_LOW and N_HIGH, and throws an exception if it's note the case.
 %
 % CALL: [err_msg, err_mnemonic] = stk_narginchk(N_LOW, N_HIGH)
-% 
+%
 %   returns the error message and error mnemonic instead of throwing the
 %   exception. The mnemonic is either 'NotEnoughInputArgs' (if the first
 %   condition is violated) or 'TooManyInputArgs' (if the second condition is
 %   violated).
 %
-% NOTES: 
+% NOTES:
 %  * Although the exception is actually raised by stk_narginchk(), everything
 %    looks like it has been sent by the calling function.
 %  * Both Matlab and Octave have a function that does this, but unfortunately
@@ -67,7 +67,7 @@ if length(stack) == 1,
     err_msg = 'stk_narginchk() must be called from a function';
     stk_error(err_msg, 'MustBeCalledFromAFunction');
 end
-    
+
 n_argin = evalin('caller', 'nargin');
 err_msg = [];
 if n_argin < n_low,

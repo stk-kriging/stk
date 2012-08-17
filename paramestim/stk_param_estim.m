@@ -2,7 +2,7 @@
 %
 % CALL: PARAM = stk_param_estim(MODEL, XI, YI, PARAM0)
 %
-%   estimates the parameters PARAM of the covariance function in MODEL from the 
+%   estimates the parameters PARAM of the covariance function in MODEL from the
 %   data (XI, YI) using the rectricted maximum likelihood (ReML) method. A
 %   starting point PARAM0 has to be provided.
 %
@@ -62,7 +62,7 @@ end
 
 NOISYOBS = isfield(model, 'lognoisevariance');
 if (~NOISYOBS) && NOISEESTIM,
-    error('Please set lognoisevariance in model...');    
+    error('Please set lognoisevariance in model...');
 end
 
 % TODO: allow user-defined bounds
@@ -80,7 +80,7 @@ switch NOISEESTIM
         f = @(param)(f_(model, param, xi, yi));
         nablaf = @(param)(nablaf_ (model, param, xi, yi));
         % note: currently, nablaf is only used with sqp in Octave
-    case true, 
+    case true,
         f = @(param)(f_with_noise_(model, param, xi, yi));
         nablaf = @(param)(nablaf_with_noise_ (model, param, xi, yi));
 end
@@ -89,15 +89,15 @@ bounds_available = ~isempty(lb) && ~isempty(ub);
 
 % switch according to preferred optimizer
 switch stk_select_optimizer(bounds_available)
-
+    
     case 1, % Octave / sqp
         paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);
-
+        
     case 2, % Matlab / fminsearch (Nelder-Mead)
         options = optimset( 'Display', 'iter',                ...
             'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
         paramopt = fminsearch(f,param0,options);
-
+        
     case 3, % Matlab / fmincon
         try
             % We first try to use the interior-point algorithm, which has
@@ -117,10 +117,10 @@ switch stk_select_optimizer(bounds_available)
             end
         end
         paramopt = fmincon(f, param0, [], [], [], [], lb, ub, [], options);
-
+        
     otherwise
         error('Unexpected value returned by stk_select_optimizer.');
-
+        
 end
 
 if NOISEESTIM
@@ -169,33 +169,33 @@ ubv = max(log(empirical_variance) + TOLVAR, param0(1));
 dim = size( xi.a, 2 );
 
 switch model.covariance_type,
-
+    
     case {'stk_materncov_aniso', 'stk_materncov_iso'}
-
+        
         lbnu = min(log(0.5), param0(2));
         ubnu = max(log(4*dim), param0(2));
-
+        
         scale = param0(3:end);
         lba = scale(:) - TOLSCALE;
         uba = scale(:) + TOLSCALE;
-
+        
         lb = [lbv; lbnu; lba];
         ub = [ubv; ubnu; uba];
-
+        
     case {'stk_materncov52_aniso', 'stk_materncov52_iso'}
-
+        
         scale = param0(2:end);
         lba = scale(:) - TOLSCALE;
         uba = scale(:) + TOLSCALE;
-
+        
         lb = [lbv; lba];
         ub = [ubv; uba];
-
+        
     otherwise
-
+        
         lb = [];
         ub = [];
-
+        
 end
 
 end

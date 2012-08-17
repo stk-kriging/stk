@@ -95,8 +95,8 @@ bestscore = 0;
 x = [];
 
 for j = 1:niter
-    y = generatedesign_(n, d);    
-    score = stk_mindist(y);    
+    y = generatedesign_(n, d);
+    score = stk_mindist(y);
     if isempty(x) || (score > bestscore)
         x = y;
         bestscore = score;

@@ -35,7 +35,7 @@ if nargin < 3,
     stack = dbstack();
     if length(stack) == 1,
         caller = 'BaseWorkspace';
-    else        
+    else
         % pretend that the error has been thrown by the caller
         stack = stack(2:end);
         % and get caller name to form the error identifier
