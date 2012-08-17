@@ -7,9 +7,17 @@
 	* almost-all-files: doc & code formatting modified
 	* NEWS: new file
 
-	Renamed README.txt to README.
+	Added a new function (stk_runscript) to solve a problem of 
+	inconsistent behaviour of the run function between Matlab and the
+	latest version of Octave (one want a '.m', the other doesn't).
 
-	* README.txt: renamed
+	* misc/test/stk_runscript.m: new function
+	* examples/run_all_examples.m: modified
+
+	Renamed README.txt to README. Added explicit version requirements 
+	for GNU Octave (3.2.0) and Matlab (R2007a).
+
+	* README.txt: renamed and renamed
 
 	Added tests and a little bit of arg checking.
 
