@@ -9,8 +9,8 @@
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
 %
-%    This file has been adapted from runtests.m in Octave 3.6.2 (which is  
-%    distributed under the GNU General Public Licence version 3 (GPLv3). 
+%    This file has been adapted from runtests.m in Octave 3.6.2 (which is
+%    distributed under the GNU General Public Licence version 3 (GPLv3).
 %    The original copyright notice was as follows:
 %
 %        Copyright (C) 2010-2012 John W. Eaton

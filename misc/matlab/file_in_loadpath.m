@@ -47,5 +47,5 @@ if isempty(name),
         fclose(fid);
     end
 end
-        
+
 end % function file_in_loadpath

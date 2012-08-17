@@ -1,9 +1,19 @@
 2012-08-17  Julien Bect  <julien.bect@supelec.fr>
 
-	Doc, tests and a little bit of arg checking.
+	Preparing for release 1.1: updating copyright notices and copying
+	permission statements, removing trailing white spaces, added a
+	user-level log of changes.
 
-	* misc/error/stk_narginchk.m: doc
-	* covfcs/stk_materncov32_aniso.m: tests + doc + arg checking
+	* almost-all-files: doc & code formatting modified
+	* NEWS: new file
+
+	Renamed README.txt to README.
+
+	* README.txt: renamed
+
+	Added tests and a little bit of arg checking.
+
+	* covfcs/stk_materncov32_aniso.m: tests + arg checking
 	* covfcs/stk_materncov32_iso.m: idem
 	* covfcs/stk_materncov52_aniso.m: idem
 	* covfcs/stk_materncov52_iso.m: idem

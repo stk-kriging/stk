@@ -7,27 +7,26 @@
 %    correlation function for all dimensions.
 %
 % CALL: K = stk_sf_matern32(H, DIFF)
-%    
+%
 %    computes the derivative of the Matern correlation function of order 3/2, at
-%    distance H, with respect the distance H if DIFF is equal to 1. (If DIFF is 
+%    distance H, with respect the distance H if DIFF is equal to 1. (If DIFF is
 %    equal to -1, this is the same as K = stk_sf_matern32(H).)
 %
 % See also: stk_sf_matern, stk_sf_matern52
 
-%                  Small (Matlab/Octave) Toolbox for Kriging
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
+%
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging/
 %
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -41,7 +40,7 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
+
 function k = stk_sf_matern32(h, diff)
 
 stk_narginchk(1, 2);
@@ -60,9 +59,9 @@ switch diff,
         k = (1 + t) .* exp(-t);
         
     case 1, % derivative wrt h
-            
+        
         k = - C * t .* exp(-t);
-
+        
     otherwise
         
         error('incorrect value for diff.');

@@ -13,8 +13,8 @@
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
 %
 %    This file is based on the Oct2mat package, version 1.0.7. The
-%    following information was provided in the DESCRIPTION of the 
-%    package: 
+%    following information was provided in the DESCRIPTION of the
+%    package:
 %
 %        Name: Oct2Mat
 %        Version: 1.0.7

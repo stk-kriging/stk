@@ -1,0 +1,50 @@
+Changes in version 1.1
+======================
+
+* New special functions for the Matern 3/2 and 5/2 correlation
+  functions (stk_sf_matern32, stk_sf_matern52). New covariance
+  functions (stk_materncov32_iso, stk_materncov32_aniso, ...).
+
+* New MEX-file to compute the separation distance (stk_mindist).
+
+* New function to generate random Latin Hypercube Samples
+  (stk_sampling_randomlhs). Renamed stk_sampling_cartesiangrid to
+  stk_sampling_regulargrid, and changed the meaning of the first
+  argument for consistency with other stk_sampling_* functions.
+
+* Improved stk_model function. Now provides default parameters for
+  several families of covariance functions.
+
+* Renamed fields in "model" structures (covariance_cache to Kx_cache
+  and P0 to Px_cache). A new field 'dim' has been added to the 'model'
+  structure.
+
+* Changed the order of the arguments of the functions that use the
+  structure 'model'. Now, 'model' is always the first argument.
+
+* Changed stk_param_estim to make it possible to estimate noise
+  variance.
+
+* Fixed issues in stk_param_estim.m related to the definition of the
+  search domain and the selection of (constrained/unconstrained)
+  optimizer.
+
+* Renamed stk_conditionning to stk_conditioning.
+
+* New functions for a more flexible and efficient management of STK's
+  configuration in stk_init (path, compilation of MEX-file, checking
+  for optional packages, selection of the default optimizer, ...).
+
+* New functions for unit testing, based on Octave's testing system
+  (stk_test, stk_runtests). Tests have been added to most functions in
+  the toolbox.
+
+* Improved documentation & new examples.
+
+* Improved argument checking and error messages.
+
+* Improved compatibility with older versions of Octave and Matlab.
+
+* Lots of minor changes and bug fixes.
+
+* Complete reorganization of the code (better directory structure).

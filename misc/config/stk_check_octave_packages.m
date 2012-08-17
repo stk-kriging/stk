@@ -5,20 +5,19 @@
 % An error is raised is one of the required packages is not installed.
 % Otherwise, all required packages are loaded (if they are not already).
 
-%                  Small (Matlab/Octave) Toolbox for Kriging
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
+%
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging/
 %
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -32,11 +31,10 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
 
 function stk_check_octave_packages()
 
-pkg_list = pkg('list');
+% pkg_list = pkg('list');
 
 % The Octave-forge 'optim' package was indicated by mistake as a dependency
 % in release 1.0.1 but it turns out that sqp() is provided by Octave itself
@@ -67,17 +65,17 @@ end
 %%% stk_check_octave_package_ %%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-function stk_check_octave_package_(name, pkg_list)
+function stk_check_octave_package_(name, pkg_list) %#ok<DEFNU>
 
 for i = 1:length(pkg_list)
-	if strcmp(pkg_list{i}.name, name),
-		if ~pkg_list{i}.loaded,
-			pkg('load', name);
-		end
-		fprintf('Octave package %s-%s loaded.\n', ...
-		         pkg_list{i}.name, pkg_list{i}.version);
-		return
-	end
+    if strcmp(pkg_list{i}.name, name),
+        if ~pkg_list{i}.loaded,
+            pkg('load', name);
+        end
+        fprintf('Octave package %s-%s loaded.\n', ...
+            pkg_list{i}.name, pkg_list{i}.version);
+        return
+    end
 end
 
 error('Octave package %s not installed.', name);

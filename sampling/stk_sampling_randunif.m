@@ -11,21 +11,19 @@
 %   argument BOX, which is a 2 x DIM matrix where BOX(1, j) and BOX(2, j) are
 %   the lower- and upper-bound of the interval on the j^th coordinate.
 
-%          STK : a Small (Matlab/Octave) Toolbox for Kriging
-%          =================================================
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging
+%
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 %
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -39,7 +37,7 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
+
 function x = stk_sampling_randunif(n, dim, box)
 
 stk_narginchk(2, 3);
@@ -58,8 +56,8 @@ end
 
 
 % NOT COMPATIBLE WITh OCTAVE
-% validateattributes( n, {'numeric'}, {'integer','scalar','>=',0} ); 
-% validateattributes( d, {'numeric'}, {'integer','scalar','>=',1} ); 
+% validateattributes( n, {'numeric'}, {'integer','scalar','>=',0} );
+% validateattributes( d, {'numeric'}, {'integer','scalar','>=',1} );
 % validateattributes( xmin, {'numeric'}, {'vector','finite','nonnan'} );
 % validateattributes( xmax, {'numeric'}, {'vector','finite','nonnan'} );
 
@@ -72,14 +70,14 @@ if n==0, % empty sample
     xdata = zeros(0,dim);
     
 else % at least one input point
-        
+    
     xmin  = reshape( xmin, 1, dim ); % make sure we work we row vectors
     delta = reshape( xmax, 1, dim ) - xmin;   assert(all( delta > 0 ));
     
     xx = rand( n, dim );
     
     xdata = ones(n,1)*xmin + xx*diag(delta);
-
+    
 end
 
 x = struct( 'a', xdata );
