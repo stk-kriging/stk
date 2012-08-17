@@ -1,11 +1,11 @@
 % STK_NARGINCHK checks whether the number of input arguments is acceptable.
 %
-% CALL: stk_narginchk(n_low, n_high)
+% CALL: stk_narginchk(N_LOW, N_HIGH)
 %
 %   checks whether the number of input arguments in the calling function is
-%   between n_low and n_high, and throws an exception if it's note the case.
+%   between N_LOW and N_HIGH, and throws an exception if it's note the case.
 %
-% CALL: [err_msg, err_mnemonic] = stk_narginchk(n_low, n_high)
+% CALL: [err_msg, err_mnemonic] = stk_narginchk(N_LOW, N_HIGH)
 % 
 %   returns the error message and error mnemonic instead of throwing the
 %   exception. The mnemonic is either 'NotEnoughInputArgs' (if the first
