@@ -1,19 +1,18 @@
 % STK_NOISECOV computes a noise covariance
 
-%                  Small (Matlab/Octave) Toolbox for Kriging
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
-%    Authors:   Julien Bect <julien.bect@supelec.fr>
-%               Emmanuel Vazquez <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging/
+%
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 %
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -27,8 +26,10 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
+
 function K = stk_noisecov(ni, lognoisevariance, diff)
+
+stk_narginchk(2, 3);
 
 s = size(lognoisevariance);
 n = max(s);
@@ -49,3 +50,21 @@ else
     end
     K = diag(exp(lognoisevariance));
 end
+
+end % function
+
+
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+%!shared ni, lognoisevariance, diff
+%!  ni = 5;
+%!  lognoisevariance = 0.0;
+%!  diff = -1;
+
+%!error K = stk_noisecov();
+%!error K = stk_noisecov(ni);
+%!test  K = stk_noisecov(ni, lognoisevariance);
+%!test  K = stk_noisecov(ni, lognoisevariance, diff);
+%!error K = stk_noisecov(ni, lognoisevariance, diff, pi^2);

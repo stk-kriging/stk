@@ -19,20 +19,19 @@
 % If diff ~= -1, the function returns the derivative of the covariance wrt
 % param(diff)
 
-%                  Small (Matlab/Octave) Toolbox for Kriging
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
+%
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging/
 %
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -46,13 +45,25 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
+
 function k = stk_materncov52_aniso(param, x, y, diff)
 
 persistent x0 y0 xs ys param0 D Kx_cache compute_Kx_cache
 
+stk_narginchk(3, 4);
+
 % default: compute the value (not a derivative)
 if (nargin<4), diff = -1; end
+
+% check consistency for the number of factors
+dim = size(x.a, 2);
+if (size(y.a, 2) ~= dim),
+    stk_error('xi.a and yi.a have incompatible sizes.', 'InvalidArgument');
+end
+nb_params = dim + 1;
+if (numel(param) ~= nb_params)
+    stk_error('xi.a and param have incompatible sizes.', 'InvalidArgument');
+end
 
 % extract parameters from the "param" vector
 Sigma2 = exp(param(1));
@@ -84,7 +95,7 @@ if diff == -1,
 elseif diff == 1,
     %%% diff wrt param(1) = log(Sigma2)
     k = Sigma2 * stk_sf_matern52(D, -1);
-elseif diff >= 2,
+elseif (diff >= 2) && (diff <= nb_params),
     %%% diff wrt param(diff) = - log(invRho(diff-1))
     ind = diff - 1;
     if compute_Kx_cache || isempty(Kx_cache)
@@ -94,5 +105,62 @@ elseif diff >= 2,
     nx = size(x.a,1); ny = size(y.a,1);
     k = (repmat(xs(:,ind),1,ny) - repmat(ys(:,ind)',nx,1)).^2 .* Kx_cache;
 else
-    error('there must be something wrong here !');
+    stk_error('Incorrect value for the ''diff'' parameter.', 'InvalidArgument');
 end
+
+end % function
+
+
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+
+%%
+% 1D, 5x5
+
+%!shared param x y
+%!  dim = 1;
+%!  model = stk_model('stk_materncov52_aniso', dim);
+%!  param = model.param;
+%!  x = stk_sampling_randunif(5, dim);
+%!  y = stk_sampling_randunif(5, dim);
+
+%!error stk_materncov52_aniso();
+%!error stk_materncov52_aniso(param);
+%!error stk_materncov52_aniso(param, x);
+%!test  stk_materncov52_aniso(param, x, y);
+%!test  stk_materncov52_aniso(param, x, y, -1);
+%!error stk_materncov52_aniso(param, x, y, -1, pi^2);
+
+%!error stk_materncov52_aniso(param, x, y, -2);
+%!test  stk_materncov52_aniso(param, x, y, -1);
+%!error stk_materncov52_aniso(param, x, y,  0);
+%!test  stk_materncov52_aniso(param, x, y,  1);
+%!test  stk_materncov52_aniso(param, x, y,  2);
+%!error stk_materncov52_aniso(param, x, y,  3);
+%!error stk_materncov52_aniso(param, x, y,  nan);
+%!error stk_materncov52_aniso(param, x, y,  inf);
+
+%%
+% 3D, 4x10
+
+%!shared dim param x y nx ny
+%!  dim = 3;
+%!  model = stk_model('stk_materncov52_aniso', dim);
+%!  param = model.param;
+%!  nx = 4; ny = 10;
+%!  x = stk_sampling_randunif(nx,  dim);
+%!  y = stk_sampling_randunif(ny, dim);
+
+%!test
+%!  K1 = stk_materncov52_aniso(param, x, y);
+%!  K2 = stk_materncov52_aniso(param, x, y, -1);
+%!  assert(isequal(size(K1), [nx ny]));
+%!  assert(stk_isequal_tolabs(K1, K2));
+
+%!test
+%!  for i = 1:(dim+1),
+%!    dK = stk_materncov52_aniso(param, x, y,  i);
+%!    assert(isequal(size(dK), [nx ny]));
+%!  end
