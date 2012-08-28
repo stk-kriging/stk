@@ -4,7 +4,7 @@
 <head>
   <title>Description of stk_feval</title>
   <meta name="keywords" content="stk_feval">
-  <meta name="description" content="STK_FEVAL evaluates a function at given locations points">
+  <meta name="description" content="STK_FEVAL evaluates a function at given evaluation points.">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,115 +21,147 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>STK_FEVAL evaluates a function at given locations points</strong></div>
+<div class="box"><strong>STK_FEVAL evaluates a function at given evaluation points.</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>function z = stk_feval( f, x ) </strong></div>
+<div class="box"><strong>function z = stk_feval(f, x, progress_msg) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> STK_FEVAL evaluates a function at given locations points
+<div class="fragment"><pre class="comment"> STK_FEVAL evaluates a function at given evaluation points.
 
- CALL: z = stk_feval( f, x )
-       f = function handle
-       x = structure whose field 'a' contains the evaluations points
-       z = structure whose field 'a&quot; contains the evaluations results
+ CALL: Z = stk_feval(F, X)
 
- STK_FEVAL passes the evaluations points x.a to the function f and returns
- the result in z.a. The function f must comply with the convention of the
- STK for the factors; that is, x.a is a NxDIM matrix and f should return a
- column vector.
+    evaluates the function F on the evaluation points X. F can be either a
+    function handle or a function name (string). X can be either a matrix or a
+    structure whose field 'a' contains the actual values. In both cases, Z will
+    be a structure whose field 'a' contains the responses.
+
+ CALL: Z = stk_feval(F, X, DISPLAY_PROGRESS)
+
+    displays progress messages if DISPLAY_PROGRESS is true. This is especially
+    useful if each evaluation of F requires a significant computation time.
 
  EXAMPLE:
        f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );
-       xt.a = linspace ( 0, 1, 100 );
+       xt = stk_sampling_regulargrid(100, 1, [0; 1]);
        yt = stk_feval( f, xt );
-       plot(xt.a, yt.a);</pre></div>
+       plot(xt.a, yt.a);
+
+ See also feval</pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-</ul>
+<li><a href="../misc/error/stk_narginchk.html" class="code" title="function [err_msg, err_mnemonic] = stk_narginchk(n_low, n_high)">stk_narginchk</a>	STK_NARGINCHK checks whether the number of input arguments is acceptable.</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="../examples/example01.html" class="code" title="">example01</a>	Example 01 constructs a kriging approximation in 1D</li><li><a href="../examples/example02.html" class="code" title="">example02</a>	Example 02 constructs a kriging approximation in 1D</li><li><a href="../examples/example03.html" class="code" title="">example03</a>	Example 03 constructs a kriging approximation in 2D</li><li><a href="../examples/example05.html" class="code" title="">example05</a>	Example 05 generates conditioned sample paths</li></ul>
+<li><a href="../examples/example01.html" class="code" title="">example01</a>	Example 01 constructs a kriging approximation in 1D</li><li><a href="../examples/example02.html" class="code" title="">example02</a>	Example 02 constructs a kriging approximation in 1D</li><li><a href="../examples/example03.html" class="code" title="">example03</a>	Example 03 constructs a kriging approximation in 2D</li><li><a href="../examples/example05.html" class="code" title="">example05</a>	Example 05 generates conditioned sample paths</li><li><a href="../examples/example06.html" class="code" title="">example06</a>	Example 06 compares several kriging approximations in 1D</li><li><a href="../examples/example08.html" class="code" title="">example08</a>	Example 08 constructs a kriging approximation in 1D from noisy</li></ul>
 <!-- crossreference -->
 
 
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% STK_FEVAL evaluates a function at given locations points</span>
+<div class="fragment"><pre>0001 <span class="comment">% STK_FEVAL evaluates a function at given evaluation points.</span>
 0002 <span class="comment">%</span>
-0003 <span class="comment">% CALL: z = stk_feval( f, x )</span>
-0004 <span class="comment">%       f = function handle</span>
-0005 <span class="comment">%       x = structure whose field 'a' contains the evaluations points</span>
-0006 <span class="comment">%       z = structure whose field 'a&quot; contains the evaluations results</span>
-0007 <span class="comment">%</span>
-0008 <span class="comment">% STK_FEVAL passes the evaluations points x.a to the function f and returns</span>
-0009 <span class="comment">% the result in z.a. The function f must comply with the convention of the</span>
-0010 <span class="comment">% STK for the factors; that is, x.a is a NxDIM matrix and f should return a</span>
-0011 <span class="comment">% column vector.</span>
-0012 <span class="comment">%</span>
-0013 <span class="comment">% EXAMPLE:</span>
-0014 <span class="comment">%       f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );</span>
-0015 <span class="comment">%       xt.a = linspace ( 0, 1, 100 );</span>
-0016 <span class="comment">%       yt = stk_feval( f, xt );</span>
-0017 <span class="comment">%       plot(xt.a, yt.a);</span>
-0018 <span class="comment">%</span>
-0019 
-0020 <span class="comment">%                  Small (Matlab/Octave) Toolbox for Kriging</span>
-0021 <span class="comment">%</span>
-0022 <span class="comment">% Copyright Notice</span>
-0023 <span class="comment">%</span>
-0024 <span class="comment">%    Copyright (C) 2011 SUPELEC</span>
-0025 <span class="comment">%    Version: 1.0</span>
-0026 <span class="comment">%    Authors: Julien Bect &lt;julien.bect@supelec.fr&gt;</span>
-0027 <span class="comment">%             Emmanuel Vazquez &lt;emmanuel.vazquez@supelec.fr&gt;</span>
-0028 <span class="comment">%    URL:     http://sourceforge.net/projects/kriging/</span>
+0003 <span class="comment">% CALL: Z = stk_feval(F, X)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    evaluates the function F on the evaluation points X. F can be either a</span>
+0006 <span class="comment">%    function handle or a function name (string). X can be either a matrix or a</span>
+0007 <span class="comment">%    structure whose field 'a' contains the actual values. In both cases, Z will</span>
+0008 <span class="comment">%    be a structure whose field 'a' contains the responses.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% CALL: Z = stk_feval(F, X, DISPLAY_PROGRESS)</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    displays progress messages if DISPLAY_PROGRESS is true. This is especially</span>
+0013 <span class="comment">%    useful if each evaluation of F requires a significant computation time.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% EXAMPLE:</span>
+0016 <span class="comment">%       f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );</span>
+0017 <span class="comment">%       xt = stk_sampling_regulargrid(100, 1, [0; 1]);</span>
+0018 <span class="comment">%       yt = stk_feval( f, xt );</span>
+0019 <span class="comment">%       plot(xt.a, yt.a);</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% See also feval</span>
+0022 
+0023 <span class="comment">% Copyright Notice</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0028 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
 0029 <span class="comment">%</span>
 0030 <span class="comment">% Copying Permission Statement</span>
 0031 <span class="comment">%</span>
-0032 <span class="comment">%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for</span>
-0033 <span class="comment">%    Kriging.</span>
-0034 <span class="comment">%</span>
-0035 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
-0036 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
-0037 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
-0038 <span class="comment">%    option) any later version.</span>
-0039 <span class="comment">%</span>
-0040 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
-0041 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
-0042 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
-0043 <span class="comment">%    License for more details.</span>
-0044 <span class="comment">%</span>
-0045 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
-0046 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-0047 <span class="comment">%</span>
-0048 <a name="_sub0" href="#_subfunctions" class="code">function z = stk_feval( f, x )</a>
+0032 <span class="comment">%    This file is part of</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0035 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0038 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0039 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0040 <span class="comment">%    option) any later version.</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0043 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0044 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0045 <span class="comment">%    License for more details.</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0048 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 0049 
-0050 <span class="comment">% validateattributes( f, {'function_handle','char'}, {} );</span>
-0051 <span class="keyword">if</span> isstruct(x), xdata = x.a; <span class="keyword">else</span> xdata = x; <span class="keyword">end</span> 
-0052 <span class="comment">% validateattributes( xdata, {'numeric'}, {'2d'} );</span>
+0050 <a name="_sub0" href="#_subfunctions" class="code">function z = stk_feval(f, x, progress_msg)</a>
+0051 
+0052 <a href="../misc/error/stk_narginchk.html" class="code" title="function [err_msg, err_mnemonic] = stk_narginchk(n_low, n_high)">stk_narginchk</a>(2, 3);
 0053 
-0054 [n,d] = size(xdata);
-0055 <span class="keyword">if</span> d == 0,
-0056     error(<span class="string">'zero-dimensional inputs are not allowed.'</span>);
-0057 <span class="keyword">end</span>
-0058     
-0059 <span class="keyword">if</span> n == 0, <span class="comment">% no input =&gt; no output</span>
-0060     
-0061     zdata = zeros(0,1);    
-0062 
-0063 <span class="keyword">else</span> <span class="comment">% at least one input point</span>
-0064 
-0065     zdata = zeros(n,1);
-0066     <span class="keyword">for</span> i = 1:n,
-0067         zdata(i) = feval( f, xdata(i,:) );        
-0068     <span class="keyword">end</span>
-0069     
-0070 <span class="keyword">end</span>
-0071 
-0072 z = struct( <span class="string">'a'</span>, zdata );</pre></div>
-<hr><address>Generated on Wed 28-Sep-2011 09:58:41 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0054 <span class="keyword">if</span> isstruct(x), xdata = x.a; <span class="keyword">else</span> xdata = x; <span class="keyword">end</span>
+0055 <span class="keyword">if</span> nargin &lt; 3, progress_msg = false; <span class="keyword">end</span>
+0056 
+0057 [n,d] = size(xdata);
+0058 <span class="keyword">if</span> d == 0,
+0059     error(<span class="string">'zero-dimensional inputs are not allowed.'</span>);
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="keyword">if</span> n == 0, <span class="comment">% no input =&gt; no output</span>
+0063     
+0064     zdata = zeros(0, 1);
+0065     
+0066 <span class="keyword">else</span> <span class="comment">% at least one input point</span>
+0067     
+0068     zdata = zeros(n, 1);
+0069     <span class="keyword">for</span> i = 1:n,
+0070         <span class="keyword">if</span> progress_msg, fprintf(<span class="string">'feval %d/%d... '</span>, i, n); <span class="keyword">end</span>
+0071         zdata(i) = feval(f, xdata(i,:));
+0072         <span class="keyword">if</span> progress_msg, fprintf(<span class="string">'done.\n'</span>); <span class="keyword">end</span>
+0073     <span class="keyword">end</span>
+0074     
+0075 <span class="keyword">end</span>
+0076 
+0077 z = struct(<span class="string">'a'</span>, zdata);
+0078 
+0079 <span class="keyword">end</span> <span class="comment">% function stk_feval</span>
+0080 
+0081 
+0082 <span class="comment">%%%%%%%%%%%%%</span>
+0083 <span class="comment">%%% tests %%%</span>
+0084 <span class="comment">%%%%%%%%%%%%%</span>
+0085 
+0086 <span class="comment">%!shared f xt</span>
+0087 <span class="comment">%!  f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );</span>
+0088 <span class="comment">%!  xt = stk_sampling_regulargrid(20, 1, [0; 1]);</span>
+0089 
+0090 <span class="comment">%!error  yt = stk_feval();</span>
+0091 <span class="comment">%!error  yt = stk_feval(f);</span>
+0092 <span class="comment">%!test   yt = stk_feval(f, xt);</span>
+0093 <span class="comment">%!test   yt = stk_feval(f, xt, false);</span>
+0094 <span class="comment">%!error  yt = stk_feval(f, xt, false, pi^2);</span>
+0095 
+0096 <span class="comment">%!test</span>
+0097 <span class="comment">%!  N = 15;</span>
+0098 <span class="comment">%!  xt = stk_sampling_regulargrid(N, 1, [0; 1]);</span>
+0099 <span class="comment">%!  yt = stk_feval(f, xt);</span>
+0100 <span class="comment">%!  assert(isstruct(yt) &amp;&amp; isfield(yt, 'a') &amp;&amp; isequal(size(yt.a), [N 1]));</span></pre></div>
+<hr><address>Generated on Tue 28-Aug-2012 13:49:02 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

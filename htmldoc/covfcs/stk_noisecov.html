@@ -24,7 +24,7 @@
 <div class="box"><strong>STK_NOISECOV computes a noise covariance</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>function [K]=stk_noisecov(ni, lognoisevariance, diff) </strong></div>
+<div class="box"><strong>function K = stk_noisecov(ni, lognoisevariance, diff) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> STK_NOISECOV computes a noise covariance</pre></div>
@@ -33,10 +33,10 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-</ul>
+<li><a href="../misc/error/stk_narginchk.html" class="code" title="function [err_msg, err_mnemonic] = stk_narginchk(n_low, n_high)">stk_narginchk</a>	STK_NARGINCHK checks whether the number of input arguments is acceptable.</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="../core/stk_make_matcov.html" class="code" title="function [K,P] = stk_make_matcov( x, varargin )">stk_make_matcov</a>	STK_MAKE_MATCOV computes a covariance matrix</li><li><a href="../core/stk_remlqrg.html" class="code" title="function [rl,drl_param,drl_lnv] = stk_remlqrg(xi, yi, model)">stk_remlqrg</a>	STK_REMLQRG computes restricted likelihood</li></ul>
+<li><a href="../core/stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov(model, x0, x1)">stk_make_matcov</a>	STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).</li><li><a href="../paramestim/stk_remlqrg.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_remlqrg(model, xi, yi)">stk_remlqrg</a>	STK_REMLQRG computes the restricted likelihood of a model given data.</li></ul>
 <!-- crossreference -->
 
 
@@ -44,48 +44,74 @@ This function is called by:
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="fragment"><pre>0001 <span class="comment">% STK_NOISECOV computes a noise covariance</span>
 0002 
-0003 <span class="comment">%                  Small (Matlab/Octave) Toolbox for Kriging</span>
+0003 <span class="comment">% Copyright Notice</span>
 0004 <span class="comment">%</span>
-0005 <span class="comment">% Copyright Notice</span>
+0005 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
 0006 <span class="comment">%</span>
-0007 <span class="comment">%    Copyright (C) 2011 SUPELEC</span>
-0008 <span class="comment">%    Version: 1.0</span>
-0009 <span class="comment">%    Authors: Julien Bect &lt;julien.bect@supelec.fr&gt;</span>
-0010 <span class="comment">%             Emmanuel Vazquez &lt;emmanuel.vazquez@supelec.fr&gt;</span>
-0011 <span class="comment">%    URL:     http://sourceforge.net/projects/kriging/</span>
-0012 <span class="comment">%</span>
-0013 <span class="comment">% Copying Permission Statement</span>
-0014 <span class="comment">%</span>
-0015 <span class="comment">%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for</span>
-0016 <span class="comment">%    Kriging.</span>
-0017 <span class="comment">%</span>
-0018 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
-0019 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
-0020 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
-0021 <span class="comment">%    option) any later version.</span>
-0022 <span class="comment">%</span>
-0023 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
-0024 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
-0025 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
-0026 <span class="comment">%    License for more details.</span>
-0027 <span class="comment">%</span>
-0028 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
-0029 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-0030 <span class="comment">%</span>
-0031 <a name="_sub0" href="#_subfunctions" class="code">function [K]=stk_noisecov(ni, lognoisevariance, diff)</a>
-0032 
-0033 [n,m] = size(lognoisevariance);
-0034 assert( m==1, <span class="string">'Dimension mismatch !'</span>);
-0035 
-0036 <span class="keyword">if</span> (n==1)
-0037     <span class="comment">% the result does not depend on diff</span>
-0038     K = exp(lognoisevariance) * eye(ni);
-0039 <span class="keyword">else</span>
-0040     assert( (nargin==2) || (diff==-1), <span class="string">'not implemented'</span> );
-0041     K = diag(exp(lognoisevariance));
+0007 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0008 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% Copying Permission Statement</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    This file is part of</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0015 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0018 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0019 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0020 <span class="comment">%    option) any later version.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0023 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0024 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0025 <span class="comment">%    License for more details.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0028 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0029 
+0030 <a name="_sub0" href="#_subfunctions" class="code">function K = stk_noisecov(ni, lognoisevariance, diff)</a>
+0031 
+0032 <a href="../misc/error/stk_narginchk.html" class="code" title="function [err_msg, err_mnemonic] = stk_narginchk(n_low, n_high)">stk_narginchk</a>(2, 3);
+0033 
+0034 s = size(lognoisevariance);
+0035 n = max(s);
+0036 <span class="keyword">if</span> ~isequal(s, [1,n]) &amp;&amp; ~isequal(s, [n,1])
+0037     error(<span class="string">'lognoisvariance must be a vector.'</span>);
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="keyword">if</span> nargin == 2,
+0041     diff = -1; <span class="comment">% default: compute the value (not a derivative)</span>
 0042 <span class="keyword">end</span>
 0043 
-0044 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Wed 28-Sep-2011 09:58:41 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0044 <span class="keyword">if</span> n == 1
+0045     <span class="comment">% the result does not depend on diff</span>
+0046     K = exp(lognoisevariance) * eye(ni);
+0047 <span class="keyword">else</span>
+0048     <span class="keyword">if</span> diff ~= -1,
+0049         error(<span class="string">'not implemented'</span>);
+0050     <span class="keyword">end</span>
+0051     K = diag(exp(lognoisevariance));
+0052 <span class="keyword">end</span>
+0053 
+0054 <span class="keyword">end</span> <span class="comment">% function</span>
+0055 
+0056 
+0057 <span class="comment">%%%%%%%%%%%%%</span>
+0058 <span class="comment">%%% tests %%%</span>
+0059 <span class="comment">%%%%%%%%%%%%%</span>
+0060 
+0061 <span class="comment">%!shared ni, lognoisevariance, diff</span>
+0062 <span class="comment">%!  ni = 5;</span>
+0063 <span class="comment">%!  lognoisevariance = 0.0;</span>
+0064 <span class="comment">%!  diff = -1;</span>
+0065 
+0066 <span class="comment">%!error K = stk_noisecov();</span>
+0067 <span class="comment">%!error K = stk_noisecov(ni);</span>
+0068 <span class="comment">%!test  K = stk_noisecov(ni, lognoisevariance);</span>
+0069 <span class="comment">%!test  K = stk_noisecov(ni, lognoisevariance, diff);</span>
+0070 <span class="comment">%!error K = stk_noisecov(ni, lognoisevariance, diff, pi^2);</span></pre></div>
+<hr><address>Generated on Tue 28-Aug-2012 13:49:02 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
