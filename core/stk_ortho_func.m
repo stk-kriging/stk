@@ -22,7 +22,7 @@
 %    up to order 2.
 %
 % See also stk_make_matcov
-
+ 
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
@@ -49,22 +49,18 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-
+%
 function P = stk_ortho_func(model, x)
 
 stk_narginchk(2, 2);
 
-if ~isfield(model, 'Kx_cache'), % SYNTAX: x(factors), model
+if ~model.private.config.use_cache, % SYNTAX: x(factors), model
     
-    P = stk_ortho_func_(model.order, x);
+    P = stk_ortho_func_(model.randomprocess.priormean.param, x);
     
 else % SYNTAX: x(indices), model
     
-    if ~isfield(model, 'Px_cache'),
-        P = zeros(size(model.Kx_cache,1), 0);
-    else
-        P = model.Px_cache(x, :);
-    end
+    P = model.private.Px_cache(x, :);
     
 end
 
@@ -123,19 +119,15 @@ end
 %!test
 %! model.order = -1; P = stk_ortho_func(model, x);
 %! assert(isequal(size(P), [n, 0]));
-
 %!test
 %! model.order =  0; P = stk_ortho_func(model, x);
 %! assert(isequal(size(P), [n, 1]));
-
 %!test
 %! model.order =  1; P = stk_ortho_func(model, x);
 %! assert(isequal(size(P), [n, d + 1]));
-
 %!test
 %! model.order =  2; P = stk_ortho_func(model, x);
 %! assert(isequal(size(P), [n, 1 + d * (d + 3) / 2]));
-
 %!error 
 %! model.order =  3; P = stk_ortho_func(model, x);
 %! % model.order > 2 is not allowed

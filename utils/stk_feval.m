@@ -1,11 +1,14 @@
 % STK_FEVAL evaluates a function at given evaluation points.
 %
 % CALL: Z = stk_feval(F, X)
+%       F = function handle
+%       X = matrix or structure (see below)
+%       Z = structure whose field 'a' contains the evaluations results
 %
 %    evaluates the function F on the evaluation points X. F can be either a
 %    function handle or a function name (string). X can be either a matrix or a
 %    structure whose field 'a' contains the actual values. In both cases, Z will
-%    be a structure whose field 'a' contains the responses.
+%    be a structure that contains the responses.
 %
 % CALL: Z = stk_feval(F, X, DISPLAY_PROGRESS)
 %
@@ -14,9 +17,9 @@
 %
 % EXAMPLE:
 %       f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );
-%       xt = stk_sampling_regulargrid(100, 1, [0; 1]);
-%       yt = stk_feval( f, xt );
-%       plot(xt.a, yt.a);
+%       xt.a = linspace ( 0, 1, 100 );
+%       zt = stk_feval( f, xt );
+%       plot(xt.a, zt.a);
 %
 % See also feval
 
@@ -46,55 +49,27 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-
+%
 function z = stk_feval(f, x, progress_msg)
 
 stk_narginchk(2, 3);
 
-if isstruct(x), xdata = x.a; else xdata = x; end
+if ~isstruct(x), x.a = x; end % we assume that x is a matrix here
 if nargin < 3, progress_msg = false; end
 
-[n,d] = size(xdata);
+[n, d] = size(x.a);
+
 if d == 0,
     error('zero-dimensional inputs are not allowed.');
 end
 
-if n == 0, % no input => no output
+if n > 0, % at least one input point
     
-    zdata = zeros(0, 1);
-    
-else % at least one input point
-    
-    zdata = zeros(n, 1);
+    z.a = zeros(n,1);
     for i = 1:n,
         if progress_msg, fprintf('feval %d/%d... ', i, n); end
-        zdata(i) = feval(f, xdata(i,:));
+        z.a(i) = feval( f, x.a(i,:) );
         if progress_msg, fprintf('done.\n'); end
     end
     
 end
-
-z = struct('a', zdata);
-
-end % function stk_feval
-
-
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
-%!shared f xt
-%!  f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );
-%!  xt = stk_sampling_regulargrid(20, 1, [0; 1]);
-
-%!error  yt = stk_feval();
-%!error  yt = stk_feval(f);
-%!test   yt = stk_feval(f, xt);
-%!test   yt = stk_feval(f, xt, false);
-%!error  yt = stk_feval(f, xt, false, pi^2);
-
-%!test
-%!  N = 15;
-%!  xt = stk_sampling_regulargrid(N, 1, [0; 1]);
-%!  yt = stk_feval(f, xt);
-%!  assert(isstruct(yt) && isfield(yt, 'a') && isequal(size(yt.a), [N 1]));

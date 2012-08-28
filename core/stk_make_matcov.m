@@ -7,8 +7,8 @@
 %    space of factors, X0 is expected to be a structure whose field 'a' contains
 %    an N x DIM matrix. As a result, a matrix K of size N x N and a matrix P of
 %    size N x L are obtained, where L is the number of regression functions in
-%    the linear part of the model; e.g., L = 1 if MODEL.order is zero (ordinary
-%    kriging).
+%    the linear part of the model; e.g., L = 1 if MODEL.randomprocess.priormean.param
+%    is zero (ordinary kriging).
 %
 % CALL: K = stk_make_matcov(MODEL, X0, X1)
 %
@@ -21,8 +21,8 @@
 % BE CAREFUL: 
 %    
 %    stk_make_matcov(MODEL, X0) and stk_makematcov(MODEL, X0, X0) are NOT 
-%    equivalent if model.lognoisevariance exists (in the first case, the
-%    noise variance is added on the diagonal of the covariance matrix).
+%    equivalent if model.noise.type != 'none' (the noise variance is added
+%    on the diagonal of the covariance matrix).
 
 % Copyright Notice
 %
@@ -50,85 +50,91 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
+%
 
 function [K, P] = stk_make_matcov(model, x0, x1)
 
 stk_narginchk(2, 3);
 
-%=== guess which syntax has been used based on the second input arg
-
 switch nargin
     case 2, % stk_make_matcov(model, x0)
         make_matcov_auto = true;
     case 3, % stk_make_matcov(model, x0, x1)
-        make_matcov_auto = false;
+        make_matcov_auto = isempty(x1);
     otherwise
         error('Incorrect number of input arguments.');
 end
 
-if isfield(model, 'Kx_cache'),
-    
-    % handle the case where a 'Kx_cache' field is present    
-    if make_matcov_auto,
-        K = model.Kx_cache(x0, x0);
-    else
-        K = model.Kx_cache(x0, x1);
-    end
-    
-else % handle the case where the covariance matrix must be computed
-    
-    %=== blocking parameters for parallel computing
-    
-    % If the size of the covariance matrix to be computed is smaller than
-    % MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.
-    MIN_SIZE_FOR_BLOCKING = 500^2;
-    
-    % If it is decided to use parfor, the number of blocks will be chosen
-    % in such a way that blocks smaller than MIN_BLOCK_SIZE are never used
-    MIN_BLOCK_SIZE = 100^2;
-    
-    %=== decide whether parallel computing should be used or not
-    
-    if isfield(model,'Kx_cache'), % SYNTAX: model, x(indices)
-        ncores = 1; % avoids a call to matlabpool() which is slow
-    else
-        N = size(x0.a,1);
-        if make_matcov_auto, N=N*N; else N=N*size(x1.a,1); end
+n0 = size(x0.a, 1);
+
+%=== blocking parameters for parallel computing
+
+% If the size of the covariance matrix to be computed is smaller than
+% MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.
+MIN_SIZE_FOR_BLOCKING = 500^2;
+% If it is decided to use parfor, the number of blocks will be chosen
+% in such a way that blocks smaller than MIN_BLOCK_SIZE are never used
+MIN_BLOCK_SIZE = 100^2;
+
+switch  model.domain.type
+    case 'discrete',
+        switch model.private.config.use_cache
+            case true,  % handle the case where a 'Kx_cache' field is present
+                        % NB: this feature only works with a discrete domain
+                if make_matcov_auto,
+                    K = model.private.Kx_cache(x0.a, x0.a);
+                else
+                    K = model.private.Kx_cache(x0.a, x1.a);
+                end
+            case false, % handle the case where the covariance matrix must be computed
+                error('feature not implemented yet'); % FIXME
+        end
+        
+    case 'continuous'
+        %=== decide whether parallel computing should be used
+        if make_matcov_auto, N=n0*n0; else N=n0*size(x1.a,1); end
         if (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
             ncores = 1; % do not use parallel computing
         else
             ncores = max( 1, matlabpool('size') );
             % note: matlabpool('size') returns 0 if the PCT is not started
         end
-    end
-    
-    %=== call the subfunction that does the actual computations
-    
-    if make_matcov_auto,
-        %
-        % FIXME: avoid computing twice each off-diagonal term
-        %
-        if ncores == 1, % shortcut when parallelization is not used
-            K = feval( model.covariance_type, model.param, x0, x0 );
+
+        %=== call the subfunction that does the actual computation
+        if make_matcov_auto,
+            
+            %
+            % FIXME: avoid computing twice each off-diagonal term
+            %
+            if ncores == 1, % parallelization is not used
+                K = feval( model.randomprocess.priorcov.type, model.randomprocess.priorcov.param, x0, x0 );
+            else
+                K = stk_make_matcov_auto_parfor( model, x0, ncores, MIN_BLOCK_SIZE );
+            end
+            
+            switch model.noise.type
+                case 'none',
+                    % nothing to do!
+                case 'swn',                   
+                    K = K + stk_noisecov( size(K, 1), model.noise.lognoisevariance );
+                case 'wwn'
+                    K = K + diag(model.observations.x.v);
+            end
+        
         else
-            K = stk_make_matcov_auto_parfor( model, x0, ncores, MIN_BLOCK_SIZE );
+            
+            if ncores == 1, % parallelization is not used
+                K = feval( model.randomprocess.priorcov.type, model.randomprocess.priorcov.param, x0, x1 );
+            else
+                K = stk_make_matcov_inter_parfor( model, x0, x1, ncores, MIN_BLOCK_SIZE );
+            end
         end
-        if isfield( model, 'lognoisevariance' ),
-            K = K + stk_noisecov( size(K,1), model.lognoisevariance );
-        end
-    else
-        if ncores == 1, % shortcut when parallelization is not used
-            K = feval( model.covariance_type, model.param, x0, x1 );
-        else
-            K = stk_make_matcov_inter_parfor( model, x0, x1, ncores, MIN_BLOCK_SIZE );
-        end
-    end
     
-end
+end % switch model.domain.type
 
 %=== compute the regression functions
 
-if nargout > 1, P = stk_ortho_func(model, x0); end
+if nargout > 1, P = stk_ortho_func( model, x0 ); end
 
 end
 

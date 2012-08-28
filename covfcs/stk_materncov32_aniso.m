@@ -1,6 +1,6 @@
-% STK_MATERNCOV32_ANISO computes the anisotropic Matern covariance with nu=5/2
+% STK_MATERNCOV32_ANISO computes the anisotropic Matern covariance with nu=3/2
 %
-% CALL: k = stk_materncov52_aniso(param, x, y, diff)
+% CALL: k = stk_materncov32_aniso(param, x, y, diff)
 %   param  = vector of parameters of size 1+d
 %   x      = structure whose field 'a' contains the observed points.
 %            x.a  is a matrix of size n x d, where n is the number of

@@ -1,27 +1,38 @@
-% STK_MODEL generates a model with default covariance parameters.
-%
-% CALL: MODEL = stk_model()
-%
-%   returns a structure MODEL (see below for a description of the fields in such
-%   as structure) corresponding to one-dimensional Gaussian process prior with a
-%   constant but unknown mean ("ordinary" kriging) and a stationary Matern
-%   covariance function.
+% STK_MODEL generates a model with default parameters
 %
 % CALL: MODEL = stk_model(COVARIANCE_TYPE)
 %
-%   uses the user-supplied COVARIANCE_TYPE instead of the default.
+%   returns a structure MODEL (see below for a description of the fields in such
+%   a structure) corresponding to a Gaussian process prior with a
+%   constant but unknown mean ("ordinary" kriging), and the user-supplied
+%   COVARIANCE_TYPE covariance function.
 %
-% CALL: MODEL = stk_model(COVARIANCE_TYPE, DIM)
+%   In STK, a Gaussian process model is described by a 'model' structure
+%   with the following fields
 %
-%   creates a DIM-dimensional model. Note that, for DIM > 1, anisotropic
-%   covariance functions are provided with default parameters that make them
-%   isotropic.
+%    * private: [1x1 struct]
+%                       config: [1x1 struct]
+%                     Kx_cache: []
+%                     Px_cache: []
+%    * domain: [1x1 struct]
+%                         type: 'continuous', 'discrete
+%                          dim: integer
+%                          box: []
+%                           xt: []
+%                           nt: 0
+%            indicatorfunction: []
 %
-% In STK, a Gaussian process model is described by a 'model' structure,
-% which has mandatory fields and optional fields.
-%
-%   MANDATORY FIELDS: covariance_type, param
-%   OPTIONAL FIELDS: Kx_cache, lognoisevariance
+%    * randomprocess: [1x1 struct]
+%                         type: 'GP'
+%                    priormean: [1x1 struct]
+%                     priorcov: [1x1 struct]
+%    * noise: [1x1 struct]
+%                         type: 'none', 'swn'
+%             lognoisevariance: real
+%    * observations: [1x1 struct]
+%                            n: integer
+%                            x: [1x1 struct]
+%                            z: [1x1 struct]
 %
 % See also stk_materncov_iso, stk_materncov_aniso, ...
 
@@ -51,78 +62,116 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-
-function model = stk_model(covariance_type, dim)
-
+%
+function model = stk_model(covariance_type)
+% =======
 stk_narginchk(0, 2);
 
-model = struct();
+%=== set default values
+                   
+config        = struct('use_cache',       false, ...
+                       'parallel_comput', false, ...
+                       'guess_params',    true ...
+                       );
+private       = struct('config', config, ...
+                       'Kx_cache', [], ...
+                       'Px_cache', []);
+
+dim = 1;
+domain        = struct('type', 'continuous', ...
+                       'dim',   dim, ...
+                       'box',   [], ...
+                       'xt',    [], ...
+                       'nt',    0,  ...
+                       'indicatorfunction', [] ...
+                       );
+
+priorcov      = struct('type', [], ...
+                       'param', [] ...
+                       );
+priormean     = struct('type', 'polynomial', ...
+                       'param', 0 ...
+                      );
+randomprocess = struct('type', 'GP', ...
+                       'priormean', priormean, ...
+                       'priorcov',  priorcov ...
+                       );               
+
+noise         = struct('type', 'none');
+
+n             = 0;
+x             = struct('a', zeros(n, dim));
+z             = struct('a', zeros(n,1));
+observations  = struct('x',  x, ...
+                       'z',  z, ...
+                       'n',  n ...
+                       );
+
+model         = struct('private',       private, ...
+                       'domain',        domain, ...
+                       'randomprocess', randomprocess, ...
+                       'noise',         noise, ...
+                       'observations',  observations ...
+                       );
+
 
 %%% covariance type
 
 if nargin < 1,
     % use the (isotropic) Matern covariance function as a default choice
     % (note that, since nargin == 0 here, a one-dimensional will be produced)
-    model.covariance_type = 'stk_materncov_iso';
+    model.randomprocess.priorcov.type = 'stk_materncov_iso';
 else
-    model.covariance_type = covariance_type;
+    model.randomprocess.priorcov.type = covariance_type;
 end
 
-%%% model.order
+%%% model.randomprocess.priormean
 
 % use ordinary kriging as a default choice
-model.order = 0;
-
-%%% model.dim
-
-% default dimension is d = 1
-if nargin < 2,
-    model.dim = 1;
-else
-    model.dim = dim;
-end
+model.randomprocess.priormean.type  = 'polynomial';
+model.randomprocess.priormean.param = 0;
 
 %%% model.param
 
 VAR0 = 1.0; % default value for the variance parameter
 
-switch model.covariance_type
+switch model.randomprocess.priorcov.type
     
     case 'stk_materncov_iso'
-        
+
         NU0 = 2.0;   % smoothness (regularity) parameter
         RHO = 0.3;   % range parameter (spatial scale)
         
-        model.param = log([VAR0; NU0; 1/RHO]);
-        
+        model.randomprocess.priorcov.param = log([VAR0; NU0; 1/RHO]);
+
     case {'stk_materncov32_iso', 'stk_materncov52_iso'}
-        
+
         RHO = 0.3;   % range parameter (spatial scale)
         
-        model.param = log([VAR0; 1/RHO]);
+        model.randomprocess.priorcov.param = log([VAR0; 1/RHO]);
         
     case 'stk_materncov_aniso'
-        
+
         NU0 = 2.0;   % smoothness (regularity) parameter
         RHO = 0.3;   % range parameter (spatial scale)
         
-        model.param = log([VAR0; NU0; 1/RHO * ones(model.dim,1)]);
-        
+        model.randomprocess.priorcov.param = log([VAR0; NU0; 1/RHO ...
+                            * ones(model.domain.dim, 1)]);
+
     case {'stk_materncov32_aniso', 'stk_materncov52_aniso'}
-        
+
         RHO = 0.3;   % range parameter (spatial scale)
         
-        model.param = log([VAR0; 1/RHO * ones(model.dim,1)]);
-        
+        model.randomprocess.priorcov.param = log([VAR0; 1/RHO * ...
+                            ones(model.domain.dim, 1)]);
+
     otherwise
         
-        warning('Unknown covariance type, model.param cannot be initialized.');
+        warning('Unknown covariance type, model.param could not be initialized.');
         
-        model.param = [];
-        
-end % switch
+        model.randomprocess.priorcov.param = [];
 
-end % function stk_model
+end
 
 
 %%%%%%%%%%%%%

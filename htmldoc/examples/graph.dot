@@ -6,4 +6,8 @@ digraph m2html {
   example03 [URL="example03.html"];
   example04 [URL="example04.html"];
   example05 [URL="example05.html"];
+  example06 [URL="example06.html"];
+  example07 [URL="example07.html"];
+  example08 [URL="example08.html"];
+  run_all_examples [URL="run_all_examples.html"];
 }

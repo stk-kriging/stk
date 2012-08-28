@@ -4,7 +4,7 @@
 <head>
   <title>Description of stk_ortho_func</title>
   <meta name="keywords" content="stk_ortho_func">
-  <meta name="description" content="STK_ORTHO_FUNC basis functions for the mean">
+  <meta name="description" content="STK_ORTHO_FUNC computes the design matrix for the linear part of a model.">
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
   <meta name="robots" content="index, follow">
@@ -21,128 +21,193 @@
 </h1>
 
 <h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>STK_ORTHO_FUNC basis functions for the mean</strong></div>
+<div class="box"><strong>STK_ORTHO_FUNC computes the design matrix for the linear part of a model.</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>function P = stk_ortho_func( x, model ) </strong></div>
+<div class="box"><strong>function P = stk_ortho_func(model, x) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre class="comment"> STK_ORTHO_FUNC basis functions for the mean
+<div class="fragment"><pre class="comment"> STK_ORTHO_FUNC computes the design matrix for the linear part of a model.
 
- CALL: P = stk_ortho_func( x, model )
+ CALL: P = stk_ortho_func(MODEL, X)
 
- STK_ORTHO_FUNC computes basis functions to deal with the mean of the
- random process
+    computes the design matrix for the linear part of model MODEL at the set of
+    evaluation points X. In general (see special case below), X is expected to
+    be a structure, whose field 'a' contains the actual numerical data as an N
+    x DIM matrix, where N is the number of evaluation points and and DIM the
+    dimension of the space of factors. A matrix P of size N x L is returned,
+    where L is the number of regression functions in the linear part of the
+    model; e.g., L = 1 if MODEL.order is zero (ordinary kriging).
 
- FIXME: documentation incomplete
- 
- EXAMPLE: see examples/example02.m</pre></div>
+ SPECIAL CASE:
+
+    If MODEL has a field 'Kx_cache', X is expected to be a vector of integer
+    indices (instead of structures with an 'a' field). This feature is not
+    fully documented as of today...
+
+ NOTE:
+
+    At the present time, stk_ortho_func() only handles polynomial regressions,
+    up to order 2.
+
+ See also <a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov(model, x0, x1)">stk_make_matcov</a></pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-</ul>
+<li><a href="../misc/error/stk_narginchk.html" class="code" title="function [err_msg, err_mnemonic] = stk_narginchk(n_low, n_high)">stk_narginchk</a>	STK_NARGINCHK checks whether the number of input arguments is acceptable.</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="stk_make_matcov.html" class="code" title="function [K,P] = stk_make_matcov( x, varargin )">stk_make_matcov</a>	STK_MAKE_MATCOV computes a covariance matrix</li></ul>
+<li><a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov(model, x0, x1)">stk_make_matcov</a>	STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).</li></ul>
 <!-- crossreference -->
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="#_sub1" class="code">function P = stk_ortho_func_( x, order )</a></li></ul>
+<li><a href="#_sub1" class="code">function P = stk_ortho_func_(order, x)</a></li></ul>
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="fragment"><pre>0001 <span class="comment">% STK_ORTHO_FUNC basis functions for the mean</span>
+<div class="fragment"><pre>0001 <span class="comment">% STK_ORTHO_FUNC computes the design matrix for the linear part of a model.</span>
 0002 <span class="comment">%</span>
-0003 <span class="comment">% CALL: P = stk_ortho_func( x, model )</span>
+0003 <span class="comment">% CALL: P = stk_ortho_func(MODEL, X)</span>
 0004 <span class="comment">%</span>
-0005 <span class="comment">% STK_ORTHO_FUNC computes basis functions to deal with the mean of the</span>
-0006 <span class="comment">% random process</span>
-0007 <span class="comment">%</span>
-0008 <span class="comment">% FIXME: documentation incomplete</span>
-0009 <span class="comment">%</span>
-0010 <span class="comment">% EXAMPLE: see examples/example02.m</span>
-0011 
-0012 <span class="comment">%                  Small (Matlab/Octave) Toolbox for Kriging</span>
-0013 <span class="comment">%</span>
-0014 <span class="comment">% Copyright Notice</span>
-0015 <span class="comment">%</span>
-0016 <span class="comment">%    Copyright (C) 2011 SUPELEC</span>
-0017 <span class="comment">%    Version: 1.0</span>
-0018 <span class="comment">%    Authors: Julien Bect &lt;julien.bect@supelec.fr&gt;</span>
-0019 <span class="comment">%             Emmanuel Vazquez &lt;emmanuel.vazquez@supelec.fr&gt;</span>
-0020 <span class="comment">%    URL:     http://sourceforge.net/projects/kriging/</span>
-0021 <span class="comment">%</span>
-0022 <span class="comment">% Copying Permission Statement</span>
+0005 <span class="comment">%    computes the design matrix for the linear part of model MODEL at the set of</span>
+0006 <span class="comment">%    evaluation points X. In general (see special case below), X is expected to</span>
+0007 <span class="comment">%    be a structure, whose field 'a' contains the actual numerical data as an N</span>
+0008 <span class="comment">%    x DIM matrix, where N is the number of evaluation points and and DIM the</span>
+0009 <span class="comment">%    dimension of the space of factors. A matrix P of size N x L is returned,</span>
+0010 <span class="comment">%    where L is the number of regression functions in the linear part of the</span>
+0011 <span class="comment">%    model; e.g., L = 1 if MODEL.order is zero (ordinary kriging).</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% SPECIAL CASE:</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%    If MODEL has a field 'Kx_cache', X is expected to be a vector of integer</span>
+0016 <span class="comment">%    indices (instead of structures with an 'a' field). This feature is not</span>
+0017 <span class="comment">%    fully documented as of today...</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% NOTE:</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    At the present time, stk_ortho_func() only handles polynomial regressions,</span>
+0022 <span class="comment">%    up to order 2.</span>
 0023 <span class="comment">%</span>
-0024 <span class="comment">%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for</span>
-0025 <span class="comment">%    Kriging.</span>
-0026 <span class="comment">%</span>
-0027 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
-0028 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
-0029 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
-0030 <span class="comment">%    option) any later version.</span>
-0031 <span class="comment">%</span>
-0032 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
-0033 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
-0034 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
-0035 <span class="comment">%    License for more details.</span>
+0024 <span class="comment">% See also stk_make_matcov</span>
+0025 
+0026 <span class="comment">% Copyright Notice</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0031 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">% Copying Permission Statement</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%    This file is part of</span>
 0036 <span class="comment">%</span>
-0037 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
-0038 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0037 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0038 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
 0039 <span class="comment">%</span>
-0040 <a name="_sub0" href="#_subfunctions" class="code">function P = stk_ortho_func( x, model )</a>
-0041 
-0042 <span class="keyword">if</span> ~isfield(model,<span class="string">'covariance_cache'</span>), <span class="comment">% SYNTAX: x(factors), model</span>
-0043     P = <a href="#_sub1" class="code" title="subfunction P = stk_ortho_func_( x, order )">stk_ortho_func_</a>( x, model.order );
-0044         
-0045 <span class="keyword">else</span> <span class="comment">% SYNTAX: x(indices), model</span>
-0046     <span class="keyword">if</span> ~isfield(model,<span class="string">'P0'</span>),
-0047         P = zeros( size(model.covariance_cache,1), 0 );
-0048     <span class="keyword">else</span>
-0049         P = model.P0( x, : );
-0050     <span class="keyword">end</span>
-0051 
-0052 <span class="keyword">end</span>
-0053 
-0054 <span class="keyword">end</span>
-0055 
-0056 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
-0057 <span class="comment">%%% stk_ortho_func_ %%%</span>
-0058 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
-0059 
-0060 <a name="_sub1" href="#_subfunctions" class="code">function P = stk_ortho_func_( x, order )</a>
-0061 
-0062 [n,d] = size( x.a );
-0063 
-0064 <span class="keyword">switch</span> order
-0065     
-0066     <span class="keyword">case</span> -1, <span class="comment">% 'simple' kriging</span>
-0067         P = [];
+0040 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0041 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0042 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0043 <span class="comment">%    option) any later version.</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0046 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0047 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0048 <span class="comment">%    License for more details.</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0051 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0052 
+0053 <a name="_sub0" href="#_subfunctions" class="code">function P = stk_ortho_func(model, x)</a>
+0054 
+0055 <a href="../misc/error/stk_narginchk.html" class="code" title="function [err_msg, err_mnemonic] = stk_narginchk(n_low, n_high)">stk_narginchk</a>(2, 2);
+0056 
+0057 <span class="keyword">if</span> ~isfield(model, <span class="string">'Kx_cache'</span>), <span class="comment">% SYNTAX: x(factors), model</span>
+0058     
+0059     P = <a href="#_sub1" class="code" title="subfunction P = stk_ortho_func_(order, x)">stk_ortho_func_</a>(model.order, x);
+0060     
+0061 <span class="keyword">else</span> <span class="comment">% SYNTAX: x(indices), model</span>
+0062     
+0063     <span class="keyword">if</span> ~isfield(model, <span class="string">'Px_cache'</span>),
+0064         P = zeros(size(model.Kx_cache,1), 0);
+0065     <span class="keyword">else</span>
+0066         P = model.Px_cache(x, :);
+0067     <span class="keyword">end</span>
 0068     
-0069     <span class="keyword">case</span> 0, <span class="comment">% 'ordinary' kriging</span>
-0070         P = ones(n,1);
-0071     
-0072     <span class="keyword">case</span> 1, <span class="comment">% linear trend</span>
-0073         P = [ ones(n,1) x.a ];
-0074     
-0075     <span class="keyword">case</span> 2, <span class="comment">% quadratic trend</span>
-0076         P = [ ones(n,1) x.a zeros(n,d*(d+1)/2) ];
-0077         k = d+2;
-0078         <span class="keyword">for</span> i = 1:d
-0079             <span class="keyword">for</span> j = i:d
-0080                 P(:,k) = x.a(:,i) .* x.a(:,j);
-0081                 k = k+1;
-0082             <span class="keyword">end</span>
-0083         <span class="keyword">end</span>
-0084     
-0085     <span class="keyword">otherwise</span>, <span class="comment">% syntax error</span>
-0086         error(<span class="string">'order should be in {-1,0,1,2}'</span>);
-0087 
-0088 <span class="keyword">end</span>
-0089 
-0090 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Wed 28-Sep-2011 09:58:41 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0069 <span class="keyword">end</span>
+0070 
+0071 <span class="keyword">end</span>
+0072 
+0073 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0074 <span class="comment">%%% stk_ortho_func_ %%%</span>
+0075 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0076 
+0077 <a name="_sub1" href="#_subfunctions" class="code">function P = stk_ortho_func_(order, x)</a>
+0078 
+0079 [n,d] = size(x.a);
+0080 
+0081 <span class="keyword">switch</span> order
+0082     
+0083     <span class="keyword">case</span> -1, <span class="comment">% 'simple' kriging</span>
+0084         P = zeros(n, 0);
+0085         
+0086     <span class="keyword">case</span> 0, <span class="comment">% 'ordinary' kriging</span>
+0087         P = ones(n, 1);
+0088         
+0089     <span class="keyword">case</span> 1, <span class="comment">% linear trend</span>
+0090         P = [ones(n, 1) x.a];
+0091         
+0092     <span class="keyword">case</span> 2, <span class="comment">% quadratic trend</span>
+0093         P = [ones(n, 1) x.a zeros(n, d*(d+1)/2)];
+0094         k = d + 2;
+0095         <span class="keyword">for</span> i = 1:d
+0096             <span class="keyword">for</span> j = i:d
+0097                 P(:,k) = x.a(:, i) .* x.a(:, j);
+0098                 k = k + 1;
+0099             <span class="keyword">end</span>
+0100         <span class="keyword">end</span>
+0101         
+0102     <span class="keyword">otherwise</span>, <span class="comment">% syntax error</span>
+0103         error(<span class="string">'order should be in {-1,0,1,2}'</span>);
+0104         
+0105 <span class="keyword">end</span>
+0106 
+0107 <span class="keyword">end</span>
+0108 
+0109 <span class="comment">%%%%%%%%%%%%%</span>
+0110 <span class="comment">%%% tests %%%</span>
+0111 <span class="comment">%%%%%%%%%%%%%</span>
+0112 
+0113 <span class="comment">%!shared model, x, n, d</span>
+0114 <span class="comment">%! n = 15; d = 4;</span>
+0115 <span class="comment">%! model = stk_model('stk_materncov_aniso', d);</span>
+0116 <span class="comment">%! x = stk_sampling_randunif(n, d);</span>
+0117 
+0118 <span class="comment">%!error P = stk_ortho_func();</span>
+0119 <span class="comment">%!error P = stk_ortho_func(model);</span>
+0120 <span class="comment">%!test  P = stk_ortho_func(model, x);</span>
+0121 <span class="comment">%!error P = stk_ortho_func(model, x, pi);</span>
+0122 
+0123 <span class="comment">%!test</span>
+0124 <span class="comment">%! model.order = -1; P = stk_ortho_func(model, x);</span>
+0125 <span class="comment">%! assert(isequal(size(P), [n, 0]));</span>
+0126 
+0127 <span class="comment">%!test</span>
+0128 <span class="comment">%! model.order =  0; P = stk_ortho_func(model, x);</span>
+0129 <span class="comment">%! assert(isequal(size(P), [n, 1]));</span>
+0130 
+0131 <span class="comment">%!test</span>
+0132 <span class="comment">%! model.order =  1; P = stk_ortho_func(model, x);</span>
+0133 <span class="comment">%! assert(isequal(size(P), [n, d + 1]));</span>
+0134 
+0135 <span class="comment">%!test</span>
+0136 <span class="comment">%! model.order =  2; P = stk_ortho_func(model, x);</span>
+0137 <span class="comment">%! assert(isequal(size(P), [n, 1 + d * (d + 3) / 2]));</span>
+0138 
+0139 <span class="comment">%!error</span>
+0140 <span class="comment">%! model.order =  3; P = stk_ortho_func(model, x);</span>
+0141 <span class="comment">%! % model.order &gt; 2 is not allowed</span></pre></div>
+<hr><address>Generated on Tue 28-Aug-2012 13:49:02 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
