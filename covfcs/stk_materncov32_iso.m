@@ -1,6 +1,6 @@
-% STK_MATERNCOV32_ISO computes the isotropic Matern covariance
+% STK_MATERNCOV32_ISO computes the isotropic Matern covariance with nu=3/2
 %
-% CALL: k = stk_materncov52_iso(param, x, y, diff)
+% CALL: k = stk_materncov32_iso(param, x, y, diff)
 %   param  = vector of parameters of size 2
 %   x      = structure whose field 'a' contains the observed points.
 %            x.a  is a matrix of size n x d, where n is the number of

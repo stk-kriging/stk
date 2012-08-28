@@ -36,7 +36,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="../core/stk_param_estim.html" class="code" title="function paramopt = stk_param_estim( param0, xi, yi, model, varargin )">stk_param_estim</a>	STK_PARAM_ESTIM estimates the parameters of the covariance from data</li><li><a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)">stk_predict</a>	STK_PREDICT performs a kriging prediction from data</li><li><a href="../sampling/stk_sampling_maximinlhs.html" class="code" title="function x = stk_sampling_maximinlhs( n, d, box, niter )">stk_sampling_maximinlhs</a>	STK_SAMPLING_MAXIMINLHS builds a maximin LHS design</li><li><a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a>	STK_FEVAL evaluates a function at given locations points</li></ul>
+<li><a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(model, xi, zi, xt)">stk_predict</a>	STK_PREDICT performs a kriging prediction from data</li><li><a href="../paramestim/stk_param_estim.html" class="code" title="function [paramopt, paramlnvopt] = stk_param_estim(model, xi, yi, param0, param0lnv)">stk_param_estim</a>	STK_PARAM_ESTIM estimates the parameters of a covariance function.</li><li><a href="../sampling/stk_sampling_maximinlhs.html" class="code" title="function x = stk_sampling_maximinlhs(n, d, box, niter)">stk_sampling_maximinlhs</a>	STK_SAMPLING_MAXIMINLHS generates a "maximin" LHS design.</li><li><a href="../utils/stk_feval.html" class="code" title="function z = stk_feval(f, x, progress_msg)">stk_feval</a>	STK_FEVAL evaluates a function at given evaluation points.</li><li><a href="../utils/stk_model.html" class="code" title="function model = stk_model(covariance_type, dim)">stk_model</a>	STK_MODEL generates a model with default covariance parameters.</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
 </ul>
@@ -50,145 +50,153 @@ This function is called by:
 0003 <span class="comment">%    Construct a kriging approximation in 2D. In this example, the model is</span>
 0004 <span class="comment">%    estimated from data.</span>
 0005 
-0006 <span class="comment">%          STK : a Small (Matlab/Octave) Toolbox for Kriging</span>
+0006 <span class="comment">% Copyright Notice</span>
 0007 <span class="comment">%</span>
-0008 <span class="comment">% Copyright Notice</span>
+0008 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
 0009 <span class="comment">%</span>
-0010 <span class="comment">%    Copyright (C) 2011 SUPELEC</span>
-0011 <span class="comment">%    Version:   1.0</span>
-0012 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
-0013 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
-0014 <span class="comment">%    URL:       http://sourceforge.net/projects/kriging</span>
-0015 <span class="comment">%</span>
-0016 <span class="comment">% Copying Permission Statement</span>
-0017 <span class="comment">%</span>
-0018 <span class="comment">%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for</span>
-0019 <span class="comment">%    Kriging.</span>
-0020 <span class="comment">%</span>
-0021 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
-0022 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
-0023 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
-0024 <span class="comment">%    option) any later version.</span>
-0025 <span class="comment">%</span>
-0026 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
-0027 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
-0028 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
-0029 <span class="comment">%    License for more details.</span>
-0030 <span class="comment">%</span>
-0031 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
-0032 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-0033 <span class="comment">%</span>
-0034 clear all
-0035 
-0036 <span class="comment">% define a 2D test function</span>
-0037 f_=inline(<span class="string">'exp(1.8*(x1+x2))+3*x1+6*x2.^2+3*sin(4*pi*x1)'</span>,<span class="string">'x1'</span>,<span class="string">'x2'</span>);
-0038 f = @(x)(f_(x(:,1), x(:,2)));
-0039 DIM = 2;
-0040 NG = 60;
+0010 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0011 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% Copying Permission Statement</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%    This file is part of</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0018 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0021 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0022 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0023 <span class="comment">%    option) any later version.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0026 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0027 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0028 <span class="comment">%    License for more details.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0031 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0032 
+0033 <span class="comment">%% Welcome</span>
+0034 
+0035 disp(<span class="string">'                  '</span>);
+0036 disp(<span class="string">'#================#'</span>);
+0037 disp(<span class="string">'#   Example 03   #'</span>);
+0038 disp(<span class="string">'#================#'</span>);
+0039 disp(<span class="string">'                  '</span>);
+0040 
 0041 
-0042 XG=linspace(-1,1,NG)';
-0043 [XX,YY] = meshgrid(XG);
-0044 ZZ=f_(XX,YY);
-0045 <span class="comment">% ... and plot it on a grid</span>
-0046 figure(1)
-0047 subplot(2,2,1);
-0048 surf(XX,YY,ZZ);
-0049 title(<span class="string">'function to be approximated'</span>)
-0050 
-0051 <span class="comment">% In SMTK, the inputs and outputs are members of a structure array</span>
-0052 <span class="comment">% The field 'a' is used to store the numerical values</span>
-0053 nt = NG*NG;
-0054 xt.a = [reshape(XX,nt,1), reshape(YY,nt,1)]; <span class="comment">% nt x DIM,</span>
-0055 zt.a = reshape(ZZ,nt,1);                     <span class="comment">% nt x 1</span>
-0056 
-0057 
-0058 <span class="comment">%% To run SMTK, choose a covariance structure</span>
-0059 <span class="comment">% Some examples given below</span>
-0060 
-0061 COVSTRUCT = 1 ; <span class="comment">% 1: Matern anisotropic covariance, with unknown</span>
-0062                 <span class="comment">%    constant mean, without noise</span>
-0063                 <span class="comment">% 2: Matern anisotropic covariance, with unknown</span>
-0064                 <span class="comment">%    constant mean, with noise</span>
-0065                 <span class="comment">% 3: Matern anisotropic covariance, with unknown</span>
-0066                 <span class="comment">%    polynomial mean of degree 2, without noise</span>
-0067 
-0068 <span class="keyword">switch</span> COVSTRUCT
-0069     <span class="keyword">case</span> 1
-0070         COVNAME  = <span class="string">'stk_materncov_aniso'</span>;
-0071         COVORDER = 0; <span class="comment">% degree of the polynomial mean</span>
-0072         SIGMA2   = 3;
-0073         NU       = 4;
-0074         RHO1     = 0.1;
-0075         RHO2     = 0.1;
-0076         <span class="comment">% parameter vector [ log(variance), log(regularity), log(scale), ..., log(scale) ]</span>
-0077         PARAM0   = [log(SIGMA2),log(NU),log(1/RHO1),log(1/RHO2)]';
-0078     <span class="keyword">case</span> 2
-0079         COVNAME  = <span class="string">'stk_materncov_aniso'</span>;
-0080         COVORDER = 0;
-0081         SIGMA2   = 3;
-0082         NU       = 4;
-0083         RHO1     = 0.1;
-0084         RHO2     = 0.1;
-0085         <span class="comment">% parameter vector [ log(variance), log(regularity), log(scale), ..., log(scale) ]</span>
-0086         PARAM0   = [log(SIGMA2),log(NU),log(1/RHO1),log(1/RHO2)]';
-0087         NOISEVARIANCE = 1e0;
-0088     <span class="keyword">case</span> 3
-0089         COVNAME  = <span class="string">'stk_materncov_aniso'</span>;
-0090         COVORDER = 2;
-0091         SIGMA2   = 3;
-0092         NU       = 4;
-0093         RHO1     = 0.1;
-0094         RHO2     = 0.01;
-0095         <span class="comment">% parameter vector [ log(variance), log(regularity), log(scale), ..., log(scale) ]</span>
-0096         PARAM0   = [log(SIGMA2),log(NU),log(1/RHO1),log(1/RHO2)]';
-0097 <span class="keyword">end</span>
-0098 
-0099 model.covariance_type  = COVNAME;
-0100 model.order = COVORDER;
-0101 model.param  = PARAM0;
-0102 
-0103 <span class="keyword">if</span> exist(<span class="string">'NOISEVARIANCE'</span>, <span class="string">'var'</span>)
-0104     model.lognoisevariance = log(NOISEVARIANCE);
-0105     <span class="comment">% FIXME : provide an example with options.noiseopt=1;</span>
-0106 <span class="keyword">end</span>
-0107 
-0108 
-0109 <span class="comment">%% generate a random space-filling design</span>
+0042 <span class="comment">%% Definition of a 2D test function</span>
+0043 
+0044 <span class="comment">% define a 2D test function</span>
+0045 f_ = inline(<span class="string">'exp(1.8*(x1+x2))+3*x1+6*x2.^2+3*sin(4*pi*x1)'</span>, <span class="string">'x1'</span>, <span class="string">'x2'</span>);
+0046 f  = @(x)(f_(x(:,1), x(:,2)));
+0047 DIM = 2;
+0048 NG = 60;
+0049 
+0050 XG = linspace(-1, 1, NG)';
+0051 [XX, YY] = meshgrid(XG);
+0052 ZZ = f_(XX, YY);
+0053 <span class="comment">% ... and plot it on a grid</span>
+0054 figure(1);
+0055 subplot(2, 2, 1);
+0056 surf(XX, YY, ZZ);
+0057 title(<span class="string">'function to be approximated'</span>)
+0058 
+0059 <span class="comment">% In STK, the inputs and outputs are members of a structure array</span>
+0060 <span class="comment">% The field 'a' is used to store the numerical values</span>
+0061 nt = NG * NG;
+0062 xt.a = [reshape(XX,nt,1), reshape(YY,nt,1)]; <span class="comment">% nt x DIM,</span>
+0063 zt.a = reshape(ZZ,nt,1);                     <span class="comment">% nt x 1</span>
+0064 
+0065 
+0066 <span class="comment">%% To run STK, choose a covariance structure</span>
+0067 <span class="comment">% Some examples given below</span>
+0068 
+0069 COVSTRUCT = 1 ; <span class="comment">% 1: Matern anisotropic covariance, with unknown</span>
+0070 <span class="comment">%    constant mean, without noise</span>
+0071 <span class="comment">% 2: Matern anisotropic covariance, with unknown</span>
+0072 <span class="comment">%    constant mean, with noise</span>
+0073 <span class="comment">% 3: Matern anisotropic covariance, with unknown</span>
+0074 <span class="comment">%    polynomial mean of degree 2, without noise</span>
+0075 
+0076 <span class="keyword">switch</span> COVSTRUCT
+0077     <span class="keyword">case</span> 1
+0078         COVNAME  = <span class="string">'stk_materncov_aniso'</span>;
+0079         COVORDER = 0; <span class="comment">% degree of the polynomial mean</span>
+0080         SIGMA2   = 3;
+0081         NU       = 4;
+0082         RHO1     = 0.1;
+0083         RHO2     = 0.1;
+0084         PARAM0   = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
+0085         
+0086     <span class="keyword">case</span> 2
+0087         COVNAME  = <span class="string">'stk_materncov_aniso'</span>;
+0088         COVORDER = 0;
+0089         SIGMA2   = 3;
+0090         NU       = 4;
+0091         RHO1     = 0.1;
+0092         RHO2     = 0.1;
+0093         PARAM0   = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
+0094         NOISEVARIANCE = 1e0;  <span class="comment">%% here we add some observation noise</span>
+0095         
+0096     <span class="keyword">case</span> 3
+0097         COVNAME  = <span class="string">'stk_materncov_aniso'</span>;
+0098         COVORDER = 2;
+0099         SIGMA2   = 3;
+0100         NU       = 4;
+0101         RHO1     = 0.1;
+0102         RHO2     = 0.01;  <span class="comment">%% shorter range for the second input variable</span>
+0103         PARAM0   = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
+0104         
+0105 <span class="keyword">end</span>
+0106 
+0107 model = <a href="../utils/stk_model.html" class="code" title="function model = stk_model(covariance_type, dim)">stk_model</a>(COVNAME, DIM);
+0108 model.order = COVORDER;
+0109 model.param = PARAM0;
 0110 
-0111 NI = 36;
-0112 xi = <a href="../sampling/stk_sampling_maximinlhs.html" class="code" title="function x = stk_sampling_maximinlhs( n, d, box, niter )">stk_sampling_maximinlhs</a>(NI, DIM, [[-1 -1];[1 1]]);
-0113 zi = <a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a> (f, xi);
-0114 <span class="keyword">if</span> exist(<span class="string">'NOISEVARIANCE'</span>, <span class="string">'var'</span>)
-0115     zi.a = zi.a + randn(size(zi.a))*sqrt(NOISEVARIANCE);
-0116 <span class="keyword">end</span>
-0117 
+0111 <span class="keyword">if</span> exist(<span class="string">'NOISEVARIANCE'</span>, <span class="string">'var'</span>)
+0112     model.lognoisevariance = log(NOISEVARIANCE);
+0113     <span class="comment">% FIXME : provide an example with options.noiseopt=1;</span>
+0114 <span class="keyword">end</span>
+0115 
+0116 
+0117 <span class="comment">%% generate a random space-filling design</span>
 0118 
-0119 <span class="comment">%% estimate the parameters of the covariance</span>
-0120 
-0121 model.param = <a href="../core/stk_param_estim.html" class="code" title="function paramopt = stk_param_estim( param0, xi, yi, model, varargin )">stk_param_estim</a>(PARAM0, xi, zi, model);
-0122 
-0123 
-0124 <span class="comment">%% carry out kriging prediction</span>
+0119 NI = 36;
+0120 xi = <a href="../sampling/stk_sampling_maximinlhs.html" class="code" title="function x = stk_sampling_maximinlhs(n, d, box, niter)">stk_sampling_maximinlhs</a>(NI, DIM, [[-1 -1];[1 1]]);
+0121 zi = <a href="../utils/stk_feval.html" class="code" title="function z = stk_feval(f, x, progress_msg)">stk_feval</a> (f, xi);
+0122 <span class="keyword">if</span> exist(<span class="string">'NOISEVARIANCE'</span>, <span class="string">'var'</span>)
+0123     zi.a = zi.a + randn(size(zi.a))*sqrt(NOISEVARIANCE);
+0124 <span class="keyword">end</span>
 0125 
-0126 zp = <a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)">stk_predict</a>(xi, zi, xt, model);
-0127 
+0126 
+0127 <span class="comment">%% estimate the parameters of the covariance</span>
 0128 
-0129 <span class="comment">%% display results</span>
+0129 model.param = <a href="../paramestim/stk_param_estim.html" class="code" title="function [paramopt, paramlnvopt] = stk_param_estim(model, xi, yi, param0, param0lnv)">stk_param_estim</a>(model, xi, zi, PARAM0);
 0130 
-0131 figure(1)
-0132 subplot(2,2,2)
-0133 surf(XX,YY,reshape(zp.a,NG,NG));
-0134 tsc = sprintf(<span class="string">'approximation from %d points'</span>, NI);
-0135 hold on
-0136 plot3(xi.a(:,1), xi.a(:,2), zi.a, <span class="string">'ro'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>);
-0137 hold off
-0138 title(tsc);
-0139 subplot(2,2,3)
-0140 surf(XX,YY,reshape(abs(zp.a-zt.a),NG,NG));
-0141 hold on
-0142 plot3(xi.a(:,1), xi.a(:,2), 1.0*ones(size(zi.a)), <span class="string">'ro'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>);
-0143 hold off
-0144 title(<span class="string">'approximation error'</span>);</pre></div>
-<hr><address>Generated on Wed 28-Sep-2011 09:58:41 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0131 
+0132 <span class="comment">%% carry out kriging prediction</span>
+0133 
+0134 zp = <a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(model, xi, zi, xt)">stk_predict</a>(model, xi, zi, xt);
+0135 
+0136 
+0137 <span class="comment">%% display results</span>
+0138 
+0139 figure(1)
+0140 subplot(2,2,2)
+0141 surf(XX,YY,reshape(zp.a,NG,NG));
+0142 tsc = sprintf(<span class="string">'approximation from %d points'</span>, NI);
+0143 hold on
+0144 plot3(xi.a(:,1), xi.a(:,2), zi.a, <span class="string">'ro'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>);
+0145 hold off
+0146 title(tsc);
+0147 subplot(2,2,3)
+0148 surf(XX,YY,reshape(abs(zp.a-zt.a),NG,NG));
+0149 hold on
+0150 plot3(xi.a(:,1), xi.a(:,2), 1.0*ones(size(zi.a)), <span class="string">'ro'</span>,<span class="string">'MarkerFaceColor'</span>,<span class="string">'r'</span>);
+0151 hold off
+0152 title(<span class="string">'approximation error'</span>);</pre></div>
+<hr><address>Generated on Tue 28-Aug-2012 13:49:02 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

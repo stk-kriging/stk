@@ -35,7 +35,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../matlabicon.gif)">
-<li><a href="../core/stk_conditionning.html" class="code" title="function zsimc = stk_conditionning(lambda, zi, zsim, xi_ind)">stk_conditionning</a>	STK_CONDITIONNING conditions sample paths on observations</li><li><a href="../core/stk_generate_samplepaths.html" class="code" title="function zsim = stk_generate_samplepaths(xt, model, nb_paths)">stk_generate_samplepaths</a>	STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process</li><li><a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)">stk_predict</a>	STK_PREDICT performs a kriging prediction from data</li><li><a href="../sampling/stk_sampling_cartesiangrid.html" class="code" title="function x = stk_sampling_cartesiangrid( n, d, box )">stk_sampling_cartesiangrid</a>	STK_SAMPLING_CARTESIANGRID builds a regular grid</li><li><a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a>	STK_FEVAL evaluates a function at given locations points</li><li><a href="../utils/stk_plot1dsim.html" class="code" title="function stk_plot1dsim ( xi, zi, xt, zt, zp, zsim)">stk_plot1dsim</a>	STK_PLOT1DSIM is a plot helper for using with conditional sample paths</li></ul>
+<li><a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(model, xi, zi, xt)">stk_predict</a>	STK_PREDICT performs a kriging prediction from data</li><li><a href="../misc/plot/stk_plot1dsim.html" class="code" title="function stk_plot1dsim ( xi, zi, xt, zt, zp, zsim)">stk_plot1dsim</a>	STK_PLOT1DSIM is a plot helper for using with conditional sample paths</li><li><a href="../sampling/stk_sampling_regulargrid.html" class="code" title="function x = stk_sampling_regulargrid(n, dim, box)">stk_sampling_regulargrid</a>	STK_SAMPLING_REGULARGRID builds a regular grid.</li><li><a href="../utils/stk_conditioning.html" class="code" title="function zsimc = stk_conditioning(lambda, zi, zsim, xi_ind)">stk_conditioning</a>	STK_CONDITIONING produces conditioned sample paths.</li><li><a href="../utils/stk_feval.html" class="code" title="function z = stk_feval(f, x, progress_msg)">stk_feval</a>	STK_FEVAL evaluates a function at given evaluation points.</li><li><a href="../utils/stk_generate_samplepaths.html" class="code" title="function zsim = stk_generate_samplepaths(model, xt, nb_paths)">stk_generate_samplepaths</a>	STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process.</li><li><a href="../utils/stk_model.html" class="code" title="function model = stk_model(covariance_type, dim)">stk_model</a>	STK_MODEL generates a model with default covariance parameters.</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../matlabicon.gif)">
 </ul>
@@ -48,93 +48,104 @@ This function is called by:
 0002 <span class="comment">% =============================================</span>
 0003 <span class="comment">%    Generate conditioned sample paths.</span>
 0004 
-0005 <span class="comment">%          STK : a Small (Matlab/Octave) Toolbox for Kriging</span>
+0005 <span class="comment">% Copyright Notice</span>
 0006 <span class="comment">%</span>
-0007 <span class="comment">% Copyright Notice</span>
+0007 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
 0008 <span class="comment">%</span>
-0009 <span class="comment">%    Copyright (C) 2011 SUPELEC</span>
-0010 <span class="comment">%    Version:   1.0</span>
-0011 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
-0012 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
-0013 <span class="comment">%    URL:       http://sourceforge.net/projects/kriging</span>
-0014 <span class="comment">%</span>
-0015 <span class="comment">% Copying Permission Statement</span>
-0016 <span class="comment">%</span>
-0017 <span class="comment">%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for</span>
-0018 <span class="comment">%    Kriging.</span>
-0019 <span class="comment">%</span>
-0020 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
-0021 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
-0022 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
-0023 <span class="comment">%    option) any later version.</span>
-0024 <span class="comment">%</span>
-0025 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
-0026 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
-0027 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
-0028 <span class="comment">%    License for more details.</span>
-0029 <span class="comment">%</span>
-0030 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
-0031 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
-0032 <span class="comment">%</span>
-0033 clear all; close all;
-0034 
-0035 f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );  <span class="comment">% define a 1D test function</span>
-0036 DIM = 1;                                        <span class="comment">% dimension of the factor space</span>
-0037 box = [-1.0; 1.0];                              <span class="comment">% factor space</span>
-0038 
-0039 NT = 400; <span class="comment">% nb of points in the grid</span>
-0040 xt = <a href="../sampling/stk_sampling_cartesiangrid.html" class="code" title="function x = stk_sampling_cartesiangrid( n, d, box )">stk_sampling_cartesiangrid</a>( NT, DIM, box );
-0041 zt = <a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a>( f, xt );
+0009 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0010 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% Copying Permission Statement</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%    This file is part of</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0017 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0020 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0021 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0022 <span class="comment">%    option) any later version.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0025 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0026 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0027 <span class="comment">%    License for more details.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0030 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0031 
+0032 <span class="comment">%% Welcome</span>
+0033 
+0034 disp(<span class="string">'                  '</span>);
+0035 disp(<span class="string">'#================#'</span>);
+0036 disp(<span class="string">'#   Example 05   #'</span>);
+0037 disp(<span class="string">'#================#'</span>);
+0038 disp(<span class="string">'                  '</span>);
+0039 
+0040 
+0041 <span class="comment">%% Define a 1d test function</span>
 0042 
-0043 <span class="comment">%% Generate observations</span>
-0044 <span class="comment">%</span>
-0045 <span class="comment">% The objective is to construct an approximation of f and to simulate</span>
-0046 <span class="comment">% conditioned sample paths from NI observations. The observation locations</span>
-0047 <span class="comment">% are chosen as a subset of xt.a.</span>
-0048 <span class="comment">%</span>
-0049 
-0050 NI = 6;                               <span class="comment">% nb of evaluations that will be used</span>
-0051 xi_ind  = [1 20 90 200 300 350];      <span class="comment">%</span>
-0052 xi.a = xt.a(xi_ind, 1);
-0053 zi = <a href="../utils/stk_feval.html" class="code" title="function z = stk_feval( f, x )">stk_feval</a>( f, xi );              <span class="comment">% evaluation results</span>
-0054 
-0055 
-0056 <span class="comment">%% Specification of the model</span>
+0043 f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );  <span class="comment">% define a 1D test function</span>
+0044 DIM = 1;                                        <span class="comment">% dimension of the factor space</span>
+0045 box = [-1.0; 1.0];                              <span class="comment">% factor space</span>
+0046 
+0047 NT = 400; <span class="comment">% nb of points in the grid</span>
+0048 xt = <a href="../sampling/stk_sampling_regulargrid.html" class="code" title="function x = stk_sampling_regulargrid(n, dim, box)">stk_sampling_regulargrid</a>( NT, DIM, box );
+0049 zt = <a href="../utils/stk_feval.html" class="code" title="function z = stk_feval(f, x, progress_msg)">stk_feval</a>( f, xt );
+0050 
+0051 
+0052 <span class="comment">%% Generate observations</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">% The objective is to construct an approximation of f and to simulate</span>
+0055 <span class="comment">% conditioned sample paths from NI observations. The observation locations</span>
+0056 <span class="comment">% are chosen as a subset of xt.a.</span>
 0057 <span class="comment">%</span>
-0058 <span class="comment">% We choose a Matern covariance with &quot;fixed parameters&quot; (in other</span>
-0059 <span class="comment">% words, the parameters of the covariance function are provided by the user</span>
-0060 <span class="comment">% rather than estimated from data).</span>
-0061 <span class="comment">%</span>
-0062 
-0063 <span class="comment">% Parameters for the Matern covariance (&quot;help stk_materncov_iso&quot; for more information)</span>
-0064 SIGMA2 = 1.0;  <span class="comment">% variance parameter</span>
-0065 NU     = 4.0;  <span class="comment">% regularity parameter</span>
-0066 RHO1   = 0.4;  <span class="comment">% scale (range) parameter</span>
-0067 
-0068 <span class="comment">% Specification of the model (see &quot;help stk_model&quot; for more information)</span>
-0069 model.covariance_type  = <span class="string">'stk_materncov_iso'</span>;     <span class="comment">% isotropic Matern covariance function</span>
-0070 model.order = 0;                                  <span class="comment">% ordinary kriging (i.e., constant mean)</span>
-0071 model.param = [log(SIGMA2),log(NU),log(1/RHO1)]'; <span class="comment">% vector of parameters</span>
-0072 
-0073 
-0074 <span class="comment">%% Carry out the kriging prediction and generate conditional sample paths</span>
-0075 <span class="comment">%</span>
+0058 
+0059 NI = 6;                               <span class="comment">% nb of evaluations that will be used</span>
+0060 xi_ind  = [1 20 90 200 300 350];      <span class="comment">%</span>
+0061 xi.a = xt.a(xi_ind, 1);
+0062 zi = <a href="../utils/stk_feval.html" class="code" title="function z = stk_feval(f, x, progress_msg)">stk_feval</a>( f, xi );              <span class="comment">% evaluation results</span>
+0063 
+0064 
+0065 <span class="comment">%% Specification of the model</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">% We choose a Matern covariance with &quot;fixed parameters&quot; (in other</span>
+0068 <span class="comment">% words, the parameters of the covariance function are provided by the user</span>
+0069 <span class="comment">% rather than estimated from data).</span>
+0070 <span class="comment">%</span>
+0071 
+0072 <span class="comment">% The following line defines a model with a constant but unknown mean</span>
+0073 <span class="comment">% (ordinary kriging) and a Matern covariance function. (Some default</span>
+0074 <span class="comment">% parameters are also set, but we override them below.)</span>
+0075 model = <a href="../utils/stk_model.html" class="code" title="function model = stk_model(covariance_type, dim)">stk_model</a>(<span class="string">'stk_materncov_iso'</span>);
 0076 
-0077 <span class="comment">% Carry out the kriging prediction at points xt.a</span>
-0078 [zp, lambda] = <a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(xi, zi, xt, model, varargin)">stk_predict</a>( xi, zi, xt, model );
-0079 
-0080 <span class="comment">% Generate (unconditional) sample paths according to the model</span>
-0081 NB_PATHS = 10;
-0082 zsim = <a href="../core/stk_generate_samplepaths.html" class="code" title="function zsim = stk_generate_samplepaths(xt, model, nb_paths)">stk_generate_samplepaths</a>( xt, model, NB_PATHS );
+0077 <span class="comment">% Parameters for the Matern covariance</span>
+0078 <span class="comment">% (&quot;help stk_materncov_iso&quot; for more information)</span>
+0079 SIGMA2 = 1.0;  <span class="comment">% variance parameter</span>
+0080 NU     = 4.0;  <span class="comment">% regularity parameter</span>
+0081 RHO1   = 0.4;  <span class="comment">% scale (range) parameter</span>
+0082 model.param = log([SIGMA2; NU; 1/RHO1]);
 0083 
-0084 <span class="comment">% Condition sample paths on the observations</span>
-0085 zsimc = <a href="../core/stk_conditionning.html" class="code" title="function zsimc = stk_conditionning(lambda, zi, zsim, xi_ind)">stk_conditionning</a>( lambda, zi, zsim, xi_ind );
-0086 
-0087 <span class="comment">% Display the result</span>
-0088 <a href="../utils/stk_plot1dsim.html" class="code" title="function stk_plot1dsim ( xi, zi, xt, zt, zp, zsim)">stk_plot1dsim</a> ( xi, zi, xt, zt, zp, zsimc );
-0089 t = <span class="string">'Kriging prediction and conditional sample paths'</span>;
-0090 set( gcf, <span class="string">'Name'</span>, t ); title(t);
-0091 xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'z'</span>);</pre></div>
-<hr><address>Generated on Wed 28-Sep-2011 09:58:41 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0084 
+0085 <span class="comment">%% Carry out the kriging prediction and generate conditional sample paths</span>
+0086 <span class="comment">%</span>
+0087 
+0088 <span class="comment">% Carry out the kriging prediction at points xt.a</span>
+0089 [zp, lambda] = <a href="../core/stk_predict.html" class="code" title="function [zp, lambda, mu] = stk_predict(model, xi, zi, xt)">stk_predict</a>( model, xi, zi, xt );
+0090 
+0091 <span class="comment">% Generate (unconditional) sample paths according to the model</span>
+0092 NB_PATHS = 10;
+0093 zsim = <a href="../utils/stk_generate_samplepaths.html" class="code" title="function zsim = stk_generate_samplepaths(model, xt, nb_paths)">stk_generate_samplepaths</a>( model, xt, NB_PATHS );
+0094 
+0095 <span class="comment">% Condition sample paths on the observations</span>
+0096 zsimc = <a href="../utils/stk_conditioning.html" class="code" title="function zsimc = stk_conditioning(lambda, zi, zsim, xi_ind)">stk_conditioning</a>( lambda, zi, zsim, xi_ind );
+0097 
+0098 <span class="comment">% Display the result</span>
+0099 <a href="../misc/plot/stk_plot1dsim.html" class="code" title="function stk_plot1dsim ( xi, zi, xt, zt, zp, zsim)">stk_plot1dsim</a> ( xi, zi, xt, zt, zp, zsimc );
+0100 t = <span class="string">'Kriging prediction and conditional sample paths'</span>;
+0101 set( gcf, <span class="string">'Name'</span>, t ); title(t);
+0102 xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'z'</span>);</pre></div>
+<hr><address>Generated on Tue 28-Aug-2012 13:49:02 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
