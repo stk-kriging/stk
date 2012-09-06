@@ -1,12 +1,12 @@
 % STK_PARAM_ESTIM estimates the parameters of a covariance function.
 %
-% CALL: PARAM = stk_param_estim(MODEL, XI, YI, PARAM0)
+% CALL: PARAM = stk_param_estim(MODEL, PARAM0)
 %
 %   estimates the parameters PARAM of the covariance function in MODEL from the
-%   data (XI, YI) using the rectricted maximum likelihood (ReML) method. A
-%   starting point PARAM0 has to be provided.
+%   data MODEL.observations using the rectricted maximum likelihood (ReML) method.
+%   A starting point PARAM0 has to be provided.
 %
-% CALL: [PARAM, LNV] = stk_param_estim(MODEL, XI, YI, PARAM0, LNV0)
+% CALL: [PARAM, LNV] = stk_param_estim(MODEL, PARAM0, LNV0)
 %
 %   also estimate the (logarithm of the) noise variance. This form only applies
 %   to the case where the observations are assumed noisy. A starting point
@@ -14,7 +14,7 @@
 %
 % NOTE: the first form can be used with noisy observations, in which case the
 % variance of the observation noise is assumed to be known (and given by
-% exp(MODEL.lognoisevariance).
+% exp(MODEL.noise.lognoisevariance).
 %
 % EXAMPLES: see example02.m, example03.m, example08.m
 
@@ -45,31 +45,30 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [paramopt, paramlnvopt] = stk_param_estim ...
-    (model, xi, yi, param0, param0lnv)
+function [paramopt, paramlnvopt] = stk_param_estim (model, param0, param0lnv)
 
-stk_narginchk(4, 5);
+stk_narginchk(2, 3);
 
 % TODO: turn param0 into an optional argument
 %       => provide a reasonable default choice
 
 % TODO: think of a better way to tell we want to estimate the noise variance
-if nargin == 5
+if nargin == 3
     NOISEESTIM = true;
 else
     NOISEESTIM  = false;
 end
 
-NOISYOBS = isfield(model, 'lognoisevariance');
+NOISYOBS = ~strcmp (model.noise.type, 'none');
 if (~NOISYOBS) && NOISEESTIM,
-    error('Please set lognoisevariance in model...');
+    error('Please set model.noise...');
 end
 
 % TODO: allow user-defined bounds
-[lb, ub] = get_default_bounds(model, param0, xi, yi);
+[lb, ub] = get_default_bounds(model, param0);
 
 if NOISEESTIM
-    [lblnv, ublnv] = get_default_bounds_lnv(model, param0lnv, xi, yi);
+    [lblnv, ublnv] = get_default_bounds_lnv(model, param0lnv);
     lb = [lb ; lblnv];
     ub = [ub ; ublnv];
     param0 = [param0; param0lnv];
@@ -77,12 +76,12 @@ end
 
 switch NOISEESTIM
     case false,
-        f = @(param)(f_(model, param, xi, yi));
-        nablaf = @(param)(nablaf_ (model, param, xi, yi));
+        f = @(param)(f_(model, param));
+        nablaf = @(param)(nablaf_ (model, param));
         % note: currently, nablaf is only used with sqp in Octave
     case true,
-        f = @(param)(f_with_noise_(model, param, xi, yi));
-        nablaf = @(param)(nablaf_with_noise_ (model, param, xi, yi));
+        f = @(param)(f_with_noise_(model, param));
+        nablaf = @(param)(nablaf_with_noise_ (model, param));
 end
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
@@ -108,7 +107,7 @@ switch stk_select_optimizer(bounds_available)
         catch
             % The 'Algorithm' option does not exist in some old versions of
             % Matlab (e.g., version 3.1.1 provided with R2007a)...
-            err = lasterror();
+            err = lasterror(); %#ok<LERR>
             if strcmp(err.identifier, 'MATLAB:optimset:InvalidParamName')
                 options = optimset('Display', 'iter', 'GradObj', 'on', ...
                     'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
@@ -130,45 +129,44 @@ end
 
 end
 
-function [l,dl] = f_(model, param, xi, yi)
-model.param = param;
-[l, dl] = stk_remlqrg(model, xi, yi);
+function [l,dl] = f_(model, param)
+model.randomprocess.priorcov.param = param;
+[l, dl] = stk_reml(model);
 end
 
-function dl = nablaf_(model, param, xi, yi)
-model.param = param;
-[l_ignored, dl] = stk_remlqrg(model, xi, yi); %#ok<ASGLU>
+function dl = nablaf_(model, param)
+model.randomprocess.priorcov.param = param;
+[l_ignored, dl] = stk_reml(model); %#ok<ASGLU>
 end
 
-function [l,dl] = f_with_noise_(model, param, xi, yi)
-model.param = param(1:end-1);
-model.lognoisevariance  = param(end);
-[l, dl, dln] = stk_remlqrg(model, xi, yi);
+function [l,dl] = f_with_noise_(model, param)
+model.randomprocess.priorcov.param = param(1:end-1);
+model.noise.lognoisevariance  = param(end);
+[l, dl, dln] = stk_reml(model);
 dl = [dl; dln];
 end
 
-function dl = nablaf_with_noise_(model, param, xi, yi)
-model.param = param(1:end-1);
-model.lognoisevariance  = param(end);
-[l_ignored, dl, dln] = stk_remlqrg(model, xi, yi); %#ok<ASGLU>
+function dl = nablaf_with_noise_(model, param)
+model.randomprocess.priorcov.param = param(1:end-1);
+model.noise.lognoisevariance  = param(end);
+[l_ignored, dl, dln] = stk_remlqrg(model); %#ok<ASGLU>
 dl = [dl; dln];
 end
 
-function [lb,ub] = get_default_bounds(model, param0, xi, yi)
+function [lb,ub] = get_default_bounds(model, param0)
 
 % constants
 TOLVAR = 5.0;
 TOLSCALE = 5.0;
 
 % bounds for the variance parameter
-empirical_variance = var(yi.a);
+empirical_variance = var(model.observations.z.a);
 lbv = min(log(empirical_variance) - TOLVAR, param0(1));
 ubv = max(log(empirical_variance) + TOLVAR, param0(1));
 
-% FIXME: write an function stk_get_dim() to do this
-dim = size( xi.a, 2 );
+dim = model.domain.dim;
 
-switch model.covariance_type,
+switch model.randomprocess.priorcov.type,
     
     case {'stk_materncov_aniso', 'stk_materncov_iso'}
         
@@ -200,15 +198,13 @@ end
 
 end
 
-function [lblnv,ublnv] = get_default_bounds_lnv ...
-    (model, param0lnv, xi, yi) %#ok<INUSL>
-
+function [lblnv,ublnv] = get_default_bounds_lnv (model, param0lnv) %#ok<INUSD>
 % assume NOISEESTIM
 % constants
 TOLVAR = 0.5;
 
 % bounds for the variance parameter
-empirical_variance = var(yi.a);
+empirical_variance = var(model.observations.z.a);
 lblnv = log(eps);
 ublnv = log(empirical_variance) + TOLVAR;
 

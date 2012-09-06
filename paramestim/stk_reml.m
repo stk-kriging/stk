@@ -1,12 +1,12 @@
 % STK_REMLQRG computes the restricted likelihood of a model given data.
 %
-% CALL: [ARL, dARL_dtheta, dARL_dLNV] = stk_remlqrg(MODEL, XI, YI)
+% CALL: [ARL, dARL_dtheta, dARL_dLNV] = stk_remlqrg(MODEL)
 %
 %   computes the opposite of the restricted likelihood (denoted by ARL for
-%   Anti-Restricted Likelihood) of MODEL given the data (XI, YI). The function
-%   also returns the gradient dARL_dtheta of ARL with respect to the parameters
-%   of the covariance function and the derivative dARL_dLNV of ARL with respect
-%   to the logarithm of the noise variance.
+%   Anti-Restricted Likelihood) of MODEL given the data. The function also
+%   returns the gradient dARL_dtheta of ARL with respect to the parameters
+%   of the covariance function and the derivative dARL_dLNV of ARL with 
+%   respect to the logarithm of the noise variance.
 %
 % EXAMPLE: see paramestim/stk_param_estim.m
 
@@ -37,85 +37,101 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [rl, drl_param, drl_lnv] = stk_remlqrg(model, xi, yi)
+function [rl, drl_param, drl_lnv] = stk_reml(model)
 
-stk_narginchk(3, 3);
+stk_narginchk(1, 1);
+          
+PARAMPRIOR = isfield( model.randomprocess.priorcov, 'hyperprior' );
+NOISYOBS   = ~strcmp( model.noise.type, 'none' );
+NOISEPRIOR = isfield( model.noise, 'lognoisevarprior' );
 
-PARAMPRIOR = isfield( model, 'prior' );
-NOISYOBS   = isfield( model, 'lognoisevariance' );
-NOISEPRIOR = isfield( model, 'noiseprior' );
-
-if ~NOISYOBS,
-    if NOISEPRIOR,
-        error([...
-            'Having a prior on the noise variance when there is' ...
-            'no observation noise doesn''t make sense...']);
-    else
-        % log(eps) is harmless
-        model.lognoisevariance = log(eps);
+if NOISYOBS,
+    if (nargout == 3) && ~strcmp (model.noise.type, 'swn')
+        error(['In order to estimate the variance of the observation noise' ...
+               'please set model.noise.type = ''swn''']);
     end
+else
+    if NOISEPRIOR,
+        error(['Do not set a prior on the noise variance when there is' ...
+               'no observation noise']);
+    end
+    % adding a small observation noise helps
+    NOISYOBS = true;
+    model.noise.type = 'swn';
+    model.noise.lognoisevariance = log(100*eps);
 end
 
-n = size(xi.a,1);
+n = model.observations.n;
 
 %% compute rl
 
-[K,P] = stk_make_matcov( model, xi );
+[K,P] = stk_make_matcov( model, model.observations.x );
 q = size(P,2);
 
 [Q,R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
 W = Q(:,(q+1):n);
-Wyi = W'*yi.a;
+Wz = W'*model.observations.z.a;
 
 G = W'*(K*W);
 
 Ginv = inv(G);
-WKWinv_Wyi = Ginv*Wyi; %#ok<MINV>
+WKWinv_Wz = Ginv*Wz; %#ok<MINV>
 
 [C,p]=chol(G); %#ok<NASGU>
 ldetWKW= 2*sum(log(diag(C))); % log(det(G));
 
-attache= Wyi'*WKWinv_Wyi;
+attache= Wz'*WKWinv_Wz;
 
 if PARAMPRIOR
-    prior = (model.param - model.prior.mean)'*model.prior.invcov*(model.param - model.prior.mean);
+    prior = ...
+        (model.randomprocess.priorcov.param - model.randomprocess.priorcov.hyperprior.mean)' ...
+        * model.randomprocess.priorcov.hyperprior.invcov * ...
+        (model.randomprocess.priorcov.param - model.randomprocess.priorcov.hyperprior.mean);
 else
     prior = 0;
 end
 
 if NOISEPRIOR
-    noiseprior = (model.lognoisevariance - model.noiseprior.mean)^2/model.noiseprior.var;
+    noiseprior = (model.noise.lognoisevariance - model.noise.lognoisevarprior.mean)^2 ...
+        / model.noise.lognoisevarprior.var;
 else
     noiseprior = 0;
 end
 
 rl = 1/2*((n-q)*log(2*pi) + ldetWKW + attache + prior + noiseprior);
 
-%% compute gradient
+%% compute rl gradient
 
 if nargout >= 2
     
-    nbparam = length(model.param);
+    nbparam = length(model.randomprocess.priorcov.param);
     drl_param = zeros( nbparam, 1 );
     
     for paramdiff = 1:nbparam,
-        V = feval(model.covariance_type, model.param, xi, xi, paramdiff);
+        V = feval(model.randomprocess.priorcov.type, ...
+                  model.randomprocess.priorcov.param, ...
+                  model.observations.x, model.observations.x, ...
+                  paramdiff);
         WVW = W'*V*W;
-        drl_param(paramdiff) = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wyi'*WVW*WKWinv_Wyi);
+        drl_param(paramdiff) = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wz'*WVW*WKWinv_Wz);
     end
     
     if PARAMPRIOR
-        drl_param = drl_param + model.prior.invcov*(model.param - model.prior.mean);
-    end
+        drl_param = drl_param + ...
+            model.randomprocess.priorcov.hyperprior.invcov ...
+            * (model.randomprocess.priorcov.param - model.randomprocess.priorcov.hyperprior.mean);
+    end 
     
     if nargout >= 3,
         if NOISYOBS,
             diff = 1;
-            V = stk_noisecov(n, model.lognoisevariance, diff);
+            V = stk_noisecov(n, model.noise.lognoisevariance, diff);
             WVW = W'*V*W;
-            drl_lnv = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wyi'*WVW*WKWinv_Wyi);
+            drl_lnv = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wz'*WVW*WKWinv_Wz);
             if NOISEPRIOR
-                drl_lnv = drl_lnv + (model.lognoisevariance - model.noiseprior.mean)/model.noiseprior.var;
+                drl_lnv = drl_lnv + ...
+                    (model.noise.lognoisevariance - model.noise.lognoisevarprior.mean) ...
+                    /model.noise.lognoisevarprior.var;
             end
         else
             % returns NaN for the derivative with respect to the noise

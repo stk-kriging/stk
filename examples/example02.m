@@ -30,27 +30,28 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% Welcome
 
-disp('                  ');
+%% ******** WELCOME ********
 disp('#================#');
 disp('#   Example 02   #');
 disp('#================#');
-disp('                  ');
+disp('This example demonstrates how to carry out a kriging prediction');
+disp('from a  set  of  observations.  In this example, the parameters');
+disp('of the model are estimated from data. See also example01.m');
+disp('');
 
-
-%% Define a 1d test function (the same as in example01.m)
+%% ******** DEFINE A 1D TEST FUNCTION ********
 
 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space
 box = [-1.0; 1.0];                              % factor space
 
-NT = 400; % nb of points in the grid
-xt = stk_sampling_regulargrid( NT, DIM, box );
-zt = stk_feval( f, xt );
+NG = 400; % nb of points in the grid
+xg = stk_sampling_regulargrid( NG, DIM, box );
+zg = stk_feval( f, xg );
+xzg = stk_makedata(xg, zg); % data structure containing information about evaluations
 
-
-%% Generate a random sampling plan
+%% ******** GENERATE A RANDOM SAMPLING PLAN ********
 %
 % The objective is to construct an approximation of f with a budget of NI
 % evaluations performed on a randomly generated (uniform) design.
@@ -59,7 +60,7 @@ zt = stk_feval( f, xt );
 % the observations.
 %
 
-NOISEVARIANCE = 0.0;
+NOISEVARIANCE = 0.15^2;
 
 NI = 6;                                     % nb of evaluations that will be used
 xi = stk_sampling_randunif(NI, DIM, box);   % evaluation points
@@ -70,8 +71,9 @@ if NOISEVARIANCE > 0,
     % (don't forget that the data is in the ".a" field!)
 end
 
+xzi = stk_makedata( xi, zi );
 
-%% Specification of the model
+%% ******** SPECIFICATION OF THE MODEL ********
 %
 % We choose a Matern covariance, the parameters of which will be estimated from the data.
 %
@@ -86,15 +88,19 @@ model = stk_model('stk_materncov_iso');
 
 % Noise variance
 if NOISEVARIANCE > 0,
-    model.lognoisevariance = log( NOISEVARIANCE );
+    model.noise.type = 'swn';
+    model.noise.lognoisevariance = log( NOISEVARIANCE );
 else
     % Even if we don't assume that the observations are noisy,
     % it is wiser to add a small "regularization noise".
-    model.lognoisevariance = log( 100 * eps );
+    model.noise.type = 'swn';
+    model.noise.lognoisevariance = log( 100 * eps );
 end
 
+% Set observations for the model
+model = stk_setobs( model, xzi );
 
-%% Estimatation the parameters of the covariance
+%% ******** ESTIMATION OF THE PARAMETERS OF THE COVARIANCE ********
 %
 % Here, the parameters of the Matern covariance function are estimated by the
 % REML (REstricted Maximum Likelihood) method using stk_param_estim().
@@ -107,15 +113,15 @@ NU     = 4.0;  % regularity parameter
 RHO1   = 0.4;  % scale (range) parameter
 param0 = log([SIGMA2; NU; 1/RHO1]);
 
-model.param = stk_param_estim(model, xi, zi, param0);
+model.param = stk_param_estim(model, param0);
 
 
-%% carry out kriging prediction
+%% ******** CARRY OUT THE KRIGING PREDICTION AND DISPLAY THE RESULT ********
 
-zp = stk_predict(model, xi, zi, xt);
+zp = stk_predict( model, xg );
 
-
-%% display results
-
-stk_plot1d(xi,zi,xt,zt,zp)
-model %#ok<NOPTS>
+% Display the result
+figure(2)
+xzp = stk_makedata( xg, zp );
+stk_plot1d( xzi, xzg, xzp, ['Kriging prediction with noise std '...
+                             sprintf('%.3e', sqrt(NOISEVARIANCE) )]);

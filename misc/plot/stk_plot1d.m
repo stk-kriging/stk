@@ -1,6 +1,6 @@
 % STK_PLOT1D is a convenient plot function in 1D
 %
-% CALL: stk_plot1d ( obsi, obst, preds )
+% CALL: stk_plot1d ( obsi, obst, preds, title )
 %
 % STK_PLOT1D plots the result of a 1D approximation
 %
@@ -35,8 +35,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function stk_plot1d(obsi, obst, pred)
-stk_narginchk(1, 3);
+function stk_plot1d(obsi, obst, pred, ftitle)
+stk_narginchk(3, 4);
 
 % get current figure handle and set properties
 h = gcf;
@@ -75,3 +75,6 @@ end
 hold off
 set(h_axis, 'Box', 'off');
 xlabel('x'); ylabel('z');
+if nargin > 3
+    title(ftitle);
+end

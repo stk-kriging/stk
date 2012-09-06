@@ -36,16 +36,14 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-%% Welcome
-
-disp('                  ');
+%% ******** WELCOME ********
 disp('#================#');
 disp('#   Example 01   #');
 disp('#================#');
-disp('                  ');
+disp('This example demonstrates how to carry out a kriging prediction');
+disp('from a set of possibly noisy observations.');
 
-
-%% Define a 1d test function
+%% ******** DEFINE A 1D TEST FUNCTION ********
 
 f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space
@@ -59,7 +57,7 @@ xzg = stk_makedata(xg, zg); % data structure containing information about evalua
 figure(1); set( gcf, 'Name', 'Plot of the function to be approximated');
 stk_plot1d( [], xzg, [] );
 
-%% Generate a space-filling design
+%% ******** GENERATE A SPACE-FILLING DESIGN ********
 %
 % The objective is to construct an approximation of f with a budget of NI
 % evaluations performed on a "space-filling design".
@@ -74,7 +72,7 @@ xi = stk_sampling_regulargrid( NI, DIM, box);   % evaluation points
 zi = stk_feval( f, xi );                        % structure of evaluation results
 xzi = stk_makedata( xi, zi );
 
-%% Specification of the model
+%% ******** SPECIFICATION OF THE MODEL ********
 %
 
 % The following line defines a model with a constant but unknown mean
@@ -91,10 +89,12 @@ NU     = 4.0;  % regularity parameter
 RHO1   = 0.4;  % scale (range) parameter
 model = stk_setcovparams(model, log([SIGMA2; NU; 1/RHO1]));
 
-% Set observations for the model
+% Set observations for the model. NB: We consider that observations are part
+% of the model (the model is actualy a Gaussian process conditioned on a set of
+% observations)
 model = stk_setobs( model, xzi );
 
-%% Carry out the kriging prediction and display the result
+%% ******** CARRY OUT THE KRIGING PREDICTION AND DISPLAY THE RESULT ********
 %
 % The result of a kriging predicition is provided by stk_predict() in a
 % structure, called "zp" in this example, which has two fields: "zp.a" (the
@@ -107,29 +107,28 @@ zp = stk_predict( model, xg );
 % Display the result
 figure(2)
 xzp = stk_makedata( xg, zp );
-stk_plot1d( xzi, xzg, xzp );
-t = 'Kriging prediction based on noiseless observations';
-set( gcf, 'Name', t ); title(t);
+stk_plot1d( xzi, xzg, xzp, 'Kriging prediction based on noiseless observations' );
 
-%% Repeat the experiment in a noisy setting
-
-model_noisy = model;
+%% ******** REPEAT THE EXPERIMENT IN A NOISY SETTING ********
 NOISEVARIANCE = (1e-1)^2;
 
-xzi_noisy = xzi;
+% Make the observations perturbed by an additive Gaussian noise
 noise = sqrt(NOISEVARIANCE) * randn(xzi.n, 1);
+xzi_noisy = xzi;
+xzi_noisy.z.a = xzi.z.a + noise; 
 
-% Now the observations are perturbed by an additive Gaussian noise
-xzi_noisy.z.a = xzi.z.a + noise;
-
-%=== There is two ways to specify noisy observations in the model
-% (1)
+%=== There are two ways for specifying noisy observations in the model
+% (1) information about the noise is included in the observation structure
+%
 %     model_noisy.noise.type = 'wwn';
 %     xzi_noisy.x.v = NOISEVARIANCE * ones(xzi_noisy.n,1);
 %
-% (2) 
+% (2) information about the noise is carried by the noise struture
+%
 %     model_noisy.noise.type = 'swn';
 %     model_noisy.noise.lognoisevariance = log(NOISEVARIANCE);
+
+model_noisy = model;
 
 model_noisy.noise.type = 'swn';
 model_noisy.noise.lognoisevariance = log(NOISEVARIANCE);
@@ -142,7 +141,4 @@ zp_noisy = stk_predict( model_noisy, xg );
 % Display the result
 xzp_noisy = stk_makedata( xg, zp_noisy );
 figure(3)
-stk_plot1d( xzi_noisy, xzg, xzp_noisy );
-t = 'Kriging prediction based on noisy observations';
-set( gcf, 'Name', t ); title(t);
-xlabel('x'); ylabel('z');
+stk_plot1d( xzi_noisy, xzg, xzp_noisy, 'Kriging prediction based on noisy observations' );

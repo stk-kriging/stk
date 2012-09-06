@@ -35,4 +35,5 @@
 %
 function model = stk_setobs(model, xz)
 
+model.domain.dim   = size(xz.x.a, 2);
 model.observations = xz;
