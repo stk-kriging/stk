@@ -61,3 +61,6 @@ assert(k1.sigma2 == exp(t1(1)));
 assert(k1.nu     == exp(t1(2)));
 assert(k1.rho    == exp(-t1(3)));
 assert(k1.alpha  == exp(t1(3)));
+
+k1.sigma2 = 3.0; assert(stk_isequal_tolrel(k1.sigma2, 3.0));
+k1.sigma2 = 2.0; assert(stk_isequal_tolrel(k1.sigma2, 2.0));

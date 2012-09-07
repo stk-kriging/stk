@@ -46,8 +46,12 @@ else % set a specific parameter
     
     F = cov.set_param;
     
-    if isempty(F), % no setter available, try direct indexing
-        cov.param_(idx) = val;
+    if isempty(F), % no setter available,
+        if isa(idx, 'double') % try direct indexing
+            cov.param_(idx) = val;
+        else
+            stk_error('Invalid parameter idx.', 'InvalidArgument');
+        end
     else % user user-provided setter
         cov.param_ = F(cov.param_, idx, val);
     end

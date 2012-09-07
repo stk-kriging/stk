@@ -50,8 +50,8 @@ switch propertyname
             
         catch % OK, I give up
             
-            errmsg = sprintf('Class %s has no %s property.', class(cov), propertyname);
-            stk_error(errmsg, 'NonExistentProperty');
+            stk_error(sprintf('No %s property to get in class %s.', propertyname, ...
+                class(cov), propertyname), 'NonExistentProperty');
             
         end % try/catch
         

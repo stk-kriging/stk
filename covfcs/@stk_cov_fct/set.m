@@ -43,6 +43,7 @@ switch propertyname
         try % perhaps a "named" parameter ?
             
             cov = stk_set_param(cov, propertyname, value);
+
             % there should be no additional parameter in varargin
             if ~isempty(varargin)
                 stk_error('Too many input arguments', 'TooManyInputArgs');
@@ -50,8 +51,8 @@ switch propertyname
             
         catch % OK, I give up
             
-            errmsg = sprintf('Class %s has no %s property.', class(cov), propertyname);
-            stk_error(errmsg, 'NonExistentProperty');
+	  stk_error(sprintf('Class %s has no %s property to be set.', ...
+                class(cov), propertyname), 'NonExistentProperty');
             
         end % try/catch
         

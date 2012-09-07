@@ -55,8 +55,12 @@ function t = get_param_(F, param, idx)
 
 if isempty(idx), % "full parameter"
     t = param;
-elseif isempty(F), % no getter available, try direct indexing
-    t = param(idx);
+elseif isempty(F), % no getter available
+    if isa(idx, 'double') % try direct indexing
+        t = param(idx);
+    else
+        stk_error('Invalid parameter idx.', 'InvalidArgument');
+    end
 else % user user-provided setter
     t = F(param, idx);
 end
