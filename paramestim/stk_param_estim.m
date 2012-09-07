@@ -65,7 +65,8 @@ if (~NOISYOBS) && NOISEESTIM,
 end
 
 % TODO: allow user-defined bounds
-[lb, ub] = get_default_bounds(model, param0);
+[lb, ub] = stk_get_default_bounds( ...
+    model.randomprocess.priorcov.k, param0, model.observations.z);
 
 if NOISEESTIM
     [lblnv, ublnv] = get_default_bounds_lnv(model, param0lnv);
@@ -129,74 +130,30 @@ end
 
 end
 
-function [l,dl] = f_(model, param)
-model.randomprocess.priorcov.param = param;
+function [l,dl] = f_(model, u)
+model.randomprocess.priorcov.k.cparam = u;
 [l, dl] = stk_reml(model);
 end
 
-function dl = nablaf_(model, param)
-model.randomprocess.priorcov.param = param;
+function dl = nablaf_(model, u)
+model.randomprocess.priorcov.k.cparam = u;
 [l_ignored, dl] = stk_reml(model); %#ok<ASGLU>
 end
 
-function [l,dl] = f_with_noise_(model, param)
-model.randomprocess.priorcov.param = param(1:end-1);
-model.noise.lognoisevariance  = param(end);
+function [l,dl] = f_with_noise_(model, u)
+model.randomprocess.priorcov.k.cparam = u(1:end-1);
+model.noise.lognoisevariance  = u(end);
 [l, dl, dln] = stk_reml(model);
 dl = [dl; dln];
 end
 
-function dl = nablaf_with_noise_(model, param)
-model.randomprocess.priorcov.param = param(1:end-1);
-model.noise.lognoisevariance  = param(end);
+function dl = nablaf_with_noise_(model, u)
+model.randomprocess.priorcov.k.cparam = u(1:end-1);
+model.noise.lognoisevariance  = u(end);
 [l_ignored, dl, dln] = stk_remlqrg(model); %#ok<ASGLU>
 dl = [dl; dln];
 end
 
-function [lb,ub] = get_default_bounds(model, param0)
-
-% constants
-TOLVAR = 5.0;
-TOLSCALE = 5.0;
-
-% bounds for the variance parameter
-empirical_variance = var(model.observations.z.a);
-lbv = min(log(empirical_variance) - TOLVAR, param0(1));
-ubv = max(log(empirical_variance) + TOLVAR, param0(1));
-
-dim = model.domain.dim;
-
-switch model.randomprocess.priorcov.type,
-    
-    case {'stk_materncov_aniso', 'stk_materncov_iso'}
-        
-        lbnu = min(log(0.5), param0(2));
-        ubnu = max(log(4*dim), param0(2));
-        
-        scale = param0(3:end);
-        lba = scale(:) - TOLSCALE;
-        uba = scale(:) + TOLSCALE;
-        
-        lb = [lbv; lbnu; lba];
-        ub = [ubv; ubnu; uba];
-        
-    case {'stk_materncov52_aniso', 'stk_materncov52_iso'}
-        
-        scale = param0(2:end);
-        lba = scale(:) - TOLSCALE;
-        uba = scale(:) + TOLSCALE;
-        
-        lb = [lbv; lba];
-        ub = [ubv; uba];
-        
-    otherwise
-        
-        lb = [];
-        ub = [];
-        
-end
-
-end
 
 function [lblnv,ublnv] = get_default_bounds_lnv (model, param0lnv) %#ok<INUSD>
 % assume NOISEESTIM

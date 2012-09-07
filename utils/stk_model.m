@@ -78,6 +78,7 @@ private       = struct('config', config, ...
                        'Px_cache', []);
 
 dim = 1;
+
 domain        = struct('type', 'continuous', ...
                        'dim',   dim, ...
                        'box',   [], ...
@@ -86,12 +87,12 @@ domain        = struct('type', 'continuous', ...
                        'indicatorfunction', [] ...
                        );
 
-priorcov      = struct('type', [], ...
-                       'param', [] ...
-                       );
 priormean     = struct('type', 'polynomial', ...
                        'param', 0 ...
-                      );
+                       );
+
+priorcov      = struct('k', []);
+
 randomprocess = struct('type', 'GP', ...
                        'priormean', priormean, ...
                        'priorcov',  priorcov ...
@@ -120,9 +121,7 @@ model         = struct('private',       private, ...
 if nargin < 1,
     % use the (isotropic) Matern covariance function as a default choice
     % (note that, since nargin == 0 here, a one-dimensional will be produced)
-    model.randomprocess.priorcov.type = 'stk_materncov_iso';
-else
-    model.randomprocess.priorcov.type = covariance_type;
+    covariance_type = 'stk_materncov_iso';
 end
 
 %%% model.randomprocess.priormean
@@ -133,43 +132,7 @@ model.randomprocess.priormean.param = 0;
 
 %%% model.param
 
-VAR0 = 1.0; % default value for the variance parameter
-
-switch model.randomprocess.priorcov.type
-    
-    case 'stk_materncov_iso'
-
-        NU0 = 2.0;   % smoothness (regularity) parameter
-        RHO = 0.3;   % range parameter (spatial scale)
-        
-        model.randomprocess.priorcov.param = log([VAR0; NU0; 1/RHO]);
-
-    case {'stk_materncov32_iso', 'stk_materncov52_iso'}
-
-        RHO = 0.3;   % range parameter (spatial scale)
-        
-        model.randomprocess.priorcov.param = log([VAR0; 1/RHO]);
-        
-    case 'stk_materncov_aniso'
-
-        NU0 = 2.0;   % smoothness (regularity) parameter
-        RHO = 0.3;   % range parameter (spatial scale)
-        
-        model.randomprocess.priorcov.param = log([VAR0; NU0; 1/RHO ...
-                            * ones(model.domain.dim, 1)]);
-
-    case {'stk_materncov32_aniso', 'stk_materncov52_aniso'}
-
-        RHO = 0.3;   % range parameter (spatial scale)
-        
-        model.randomprocess.priorcov.param = log([VAR0; 1/RHO * ...
-                            ones(model.domain.dim, 1)]);
-
-    otherwise
-        
-        warning('Unknown covariance type, model.param could not be initialized.');
-        
-        model.randomprocess.priorcov.param = [];
+model.randomprocess.priorcov.k = stk_cov_fct(covariance_type, 'dim', dim);
 
 end
 

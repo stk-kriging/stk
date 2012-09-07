@@ -40,10 +40,10 @@
 function [rl, drl_param, drl_lnv] = stk_reml(model)
 
 stk_narginchk(1, 1);
-          
-PARAMPRIOR = isfield( model.randomprocess.priorcov, 'hyperprior' );
-NOISYOBS   = ~strcmp( model.noise.type, 'none' );
-NOISEPRIOR = isfield( model.noise, 'lognoisevarprior' );
+
+PARAMPRIOR = ~isempty(model.randomprocess.priorcov.hyperprior);
+NOISYOBS   = ~strcmp(model.noise.type, 'none');
+NOISEPRIOR = isfield(model.noise, 'lognoisevarprior');
 
 if NOISYOBS,
     if (nargout == 3) && ~strcmp (model.noise.type, 'swn')
@@ -82,11 +82,11 @@ ldetWKW= 2*sum(log(diag(C))); % log(det(G));
 
 attache= Wz'*WKWinv_Wz;
 
+priorcov = model.randomprocess.priorcov; % GP prior
+
 if PARAMPRIOR
-    prior = ...
-        (model.randomprocess.priorcov.param - model.randomprocess.priorcov.hyperprior.mean)' ...
-        * model.randomprocess.priorcov.hyperprior.invcov * ...
-        (model.randomprocess.priorcov.param - model.randomprocess.priorcov.hyperprior.mean);
+    u = priorcov.k.cparam - priorcov.hyperprior.mean;
+    prior = u' * priorcov.hyperprior.invcov * u;
 else
     prior = 0;
 end
@@ -104,22 +104,17 @@ rl = 1/2*((n-q)*log(2*pi) + ldetWKW + attache + prior + noiseprior);
 
 if nargout >= 2
     
-    nbparam = length(model.randomprocess.priorcov.param);
-    drl_param = zeros( nbparam, 1 );
+    drl_param = zeros(priorcov.k.nb_cparam, 1);
     
-    for paramdiff = 1:nbparam,
-        V = feval(model.randomprocess.priorcov.type, ...
-                  model.randomprocess.priorcov.param, ...
-                  model.observations.x, model.observations.x, ...
-                  paramdiff);
+    for paramdiff = 1:size(drl_param, 1),
+        V = priorcov.k(model.observations.x, model.observations.x, paramdiff);
         WVW = W'*V*W;
         drl_param(paramdiff) = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wz'*WVW*WKWinv_Wz);
     end
     
     if PARAMPRIOR
-        drl_param = drl_param + ...
-            model.randomprocess.priorcov.hyperprior.invcov ...
-            * (model.randomprocess.priorcov.param - model.randomprocess.priorcov.hyperprior.mean);
+        drl_param = drl_param + priorcov.hyperprior.invcov ...
+            * (priorcov.k.cparam - priorcov.hyperprior.mean);
     end 
     
     if nargout >= 3,

@@ -1,11 +1,3 @@
-% STK_SETCOVPARAMS set parameters of the covariance of the random process
-%
-% CALL: MODEL = stk_setcovparams(MODEL, PARAMS)
-%
-%   returns a structure MODEL with covariance parameters set to the PARAMS
-%
-% See also stk_materncov_iso, stk_materncov_aniso, ...
-
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
@@ -32,7 +24,43 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
-function model = stk_setcovparams(model, param_vec)
 
-model.randomprocess.priorcov.param = param_vec;
+function varargout = stk_get_cparam(cov, varargin)
+
+switch length(varargin)
+    case 0,
+        idx = [];
+    case 1,
+        idx = varargin{1};
+    otherwise
+        stk_error('Incorrect number of arguments', 'IncorrectNumberOfArgs');
+end
+
+F = cov.get_cparam;
+
+if ~iscell(idx), % single index
+    idx = {idx};
+end
+
+varargout = cell(size(idx));
+
+if isempty(F), % no getter available, can we assume that cparam = param ?
+    
+    if isa(get(cov, 'param'), 'double'), % yes, we can
+        [varargout{:}] = stk_get_param(cov, idx);
+    else
+        errmsg = 'cparam does not exist for this covariance.';
+        stk_error(errmsg, 'CParamMissing');
+    end
+    
+else
+    
+    for i = 1:numel(idx)
+        varargout{i} = F(get(cov, 'param'), idx{i});
+        % using get() instead of cov.param_ make derived classes easier to
+        % write -> no need to overload stk_get_cparam
+    end
+    
+end % if
+
+end % function stk_get_param
