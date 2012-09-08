@@ -37,7 +37,7 @@ err = cell(1, NB_EXAMPLES);
 
 for example_num = 1:NB_EXAMPLES,
     script_name{example_num} = sprintf('example%02d', example_num);
-    stk_runscript(script_name{example_num});
+    err{example_num} = stk_runscript(script_name{example_num});
     drawnow; pause(1.0); close all;
 end
 
