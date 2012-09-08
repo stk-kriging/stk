@@ -105,11 +105,13 @@ switch COVSTRUCT
 end
 
 model = stk_model(COVNAME, DIM);
-model.order = COVORDER;
-model.param = PARAM0;
+
+model.randomprocess.priormean.type   = 'polynomial';
+model.randomprocess.priormean.param  = COVORDER;
+model.randomprocess.priorcov.k.param = PARAM0;
 
 if exist('NOISEVARIANCE', 'var')
-    model.lognoisevariance = log(NOISEVARIANCE);
+    model.noise.lognoisevariance = log(NOISEVARIANCE);
     % FIXME : provide an example with options.noiseopt=1;
 end
 
@@ -126,12 +128,13 @@ end
 
 %% estimate the parameters of the covariance
 
-model.param = stk_param_estim(model, xi, zi, PARAM0);
+model = stk_setobs(model, stk_makedata(xi, zi));
+model.randomprocess.priorcov.k.param = stk_param_estim(model);
 
 
 %% carry out kriging prediction
 
-zp = stk_predict(model, xi, zi, xt);
+zp = stk_predict(model, xt);
 
 
 %% display results
