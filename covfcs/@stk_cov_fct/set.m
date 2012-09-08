@@ -29,8 +29,8 @@ function cov = set(cov, propertyname, value, varargin)
 
 switch propertyname
     
-    case 'nb_param'
-        stk_error('Property nb_param is immutable.', 'SetImmutableProp');
+    case 'nb_cparam'
+        stk_error('Property nb_cparam is immutable.', 'SetImmutableProp');
         
     case 'param',
         cov = stk_set_param(cov, value, varargin{:});

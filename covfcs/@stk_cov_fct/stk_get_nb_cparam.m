@@ -25,8 +25,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function nb_param = stk_get_nb_param(cov)
+function nb_cparam = stk_get_nb_cparam(cov)
 
-nb_param = length(cov.param_);
+nb_cparam = length(stk_get_cparam(cov));
 
 end
