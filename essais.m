@@ -8,13 +8,13 @@ k3 = stk_cov_fct('stk_materncov32_aniso', 'dim', 3);
 
 whos
 
-assert(k1.nb_param == 3);
-assert(k2.nb_param == 2);
-assert(k3.nb_param == 4);
+assert(k1.nb_cparam == 3);
+assert(k2.nb_cparam == 2);
+assert(k3.nb_cparam == 4);
 
-assert(k1.nb_param == get(k1, 'nb_param'));
-assert(k2.nb_param == get(k2, 'nb_param'));
-assert(k3.nb_param == get(k3, 'nb_param'));
+assert(k1.nb_cparam == get(k1, 'nb_cparam'));
+assert(k2.nb_cparam == get(k2, 'nb_cparam'));
+assert(k3.nb_cparam == get(k3, 'nb_cparam'));
 
 t1 = k1.param
 t2 = k2.param

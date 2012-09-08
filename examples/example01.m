@@ -84,9 +84,9 @@ model = stk_model('stk_materncov_iso');
 % distinction isotropic / anisotropic is irrelevant here since DIM = 1.
 
 % Parameters for the Matern covariance function ("help stk_materncov_iso" for more information)
-model.randomprocess.priorcov.sigma2 = 1.0;  % variance parameter
-model.randomprocess.priorcov.nu     = 4.0;  % regularity parameter
-model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
+model.randomprocess.priorcov.k.sigma2 = 1.0;  % variance parameter
+model.randomprocess.priorcov.k.nu     = 4.0;  % regularity parameter
+model.randomprocess.priorcov.k.rho    = 0.4;  % scale (range) parameter
 
 % Set observations for the model. NB: We consider that observations are part
 % of the model (the model is actualy a Gaussian process conditioned on a set of

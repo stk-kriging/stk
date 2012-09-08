@@ -108,12 +108,11 @@ model = stk_setobs( model, xzi );
 
 % Initial guess for the parameters for the Matern covariance
 % (see "help stk_materncov_iso" for more information)
-SIGMA2 = 1.0;  % variance parameter
-NU     = 4.0;  % regularity parameter
-RHO1   = 0.4;  % scale (range) parameter
-param0 = log([SIGMA2; NU; 1/RHO1]);
+model.randomprocess.priorcov.k.sigma2 = 1.0;  % variance parameter
+model.randomprocess.priorcov.k.nu     = 4.0;  % regularity parameter
+model.randomprocess.priorcov.k.rho    = 0.4;  % scale (range) parameter
 
-model.param = stk_param_estim(model, param0);
+model.randomprocess.priorcov.k.cparam = stk_param_estim(model);
 
 
 %% ******** CARRY OUT THE KRIGING PREDICTION AND DISPLAY THE RESULT ********
