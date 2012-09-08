@@ -63,9 +63,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function model = stk_model(covariance_type)
-% =======
+function model = stk_model(covariance_type, dim)
+
 stk_narginchk(0, 2);
+
+%=== handle optional arguments
+
+if nargin < 1,
+    % use the (isotropic) Matern covariance function as a default choice
+    % (note that, since nargin == 0 here, a one-dimensional will be produced)
+    covariance_type = 'stk_materncov_iso';
+end
+
+if nargin < 2,
+    dim = 1;
+end
 
 %=== set default values
                    
@@ -73,11 +85,10 @@ config        = struct('use_cache',       false, ...
                        'parallel_comput', false, ...
                        'guess_params',    true ...
                        );
+
 private       = struct('config', config, ...
                        'Kx_cache', [], ...
                        'Px_cache', []);
-
-dim = 1;
 
 domain        = struct('type', 'continuous', ...
                        'dim',   dim, ...

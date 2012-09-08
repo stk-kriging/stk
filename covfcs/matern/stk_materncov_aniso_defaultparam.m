@@ -31,6 +31,6 @@ VAR0 = 1;
 NU0  = 2.0;   % smoothness (regularity) parameter
 RHO  = 0.3;   % range parameter (spatial scale)
 
-param = log([VAR0; NU0; 1/RHO * ones(1, dim)]);
+param = log([VAR0; NU0; 1/RHO * ones(dim, 1)]);
 
 end
