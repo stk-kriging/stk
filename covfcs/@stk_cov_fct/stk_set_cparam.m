@@ -43,10 +43,19 @@ F = cov.set_cparam;
 % if F is empty, it is assumed that cparam = param
 % (i.e., param is an ordinary double-precision vector of parameter)
 
-if isempty(F), % no setter available, try direct indexing
-    cov.param_(idx) = val;
+if isempty(F), % no setter available, can we assume that cparam = param ?
+    
+    if isa(get(cov, 'param'), 'double'), % yes, we can
+        cov = stk_set_param(cov, idx, val);
+    else
+        errmsg = 'cparam does not exist for this covariance.';
+        stk_error(errmsg, 'CParamMissing');
+    end
+       
 else % user user-provided setter
-    cov.param_ = F(cov.param_, idx, param);
+    
+    cov.param_ = F(cov.param_, idx, val);
+    
 end
 
 end
