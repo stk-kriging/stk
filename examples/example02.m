@@ -47,8 +47,8 @@ DIM = 1;                                        % dimension of the factor space
 box = [-1.0; 1.0];                              % factor space
 
 NG = 400; % nb of points in the grid
-xg = stk_sampling_regulargrid( NG, DIM, box );
-zg = stk_feval( f, xg );
+xg = stk_sampling_regulargrid(NG, DIM, box);
+zg = stk_feval(f, xg);
 xzg = stk_makedata(xg, zg); % data structure containing information about evaluations
 
 %% ******** GENERATE A RANDOM SAMPLING PLAN ********
@@ -71,7 +71,7 @@ if NOISEVARIANCE > 0,
     % (don't forget that the data is in the ".a" field!)
 end
 
-xzi = stk_makedata( xi, zi );
+xzi = stk_makedata(xi, zi);
 
 %% ******** SPECIFICATION OF THE MODEL ********
 %
@@ -89,16 +89,16 @@ model = stk_model('stk_materncov_iso');
 % Noise variance
 if NOISEVARIANCE > 0,
     model.noise.type = 'swn';
-    model.noise.lognoisevariance = log( NOISEVARIANCE );
+    model.noise.lognoisevariance = log(NOISEVARIANCE);
 else
     % Even if we don't assume that the observations are noisy,
     % it is wiser to add a small "regularization noise".
     model.noise.type = 'swn';
-    model.noise.lognoisevariance = log( 100 * eps );
+    model.noise.lognoisevariance = log(100 * eps);
 end
 
 % Set observations for the model
-model = stk_setobs( model, xzi );
+model = stk_setobs(model, xzi);
 
 %% ******** ESTIMATION OF THE PARAMETERS OF THE COVARIANCE ********
 %
@@ -112,15 +112,17 @@ model.randomprocess.priorcov.k.sigma2 = 1.0;  % variance parameter
 model.randomprocess.priorcov.k.nu     = 4.0;  % regularity parameter
 model.randomprocess.priorcov.k.rho    = 0.4;  % scale (range) parameter
 
+% This is ugly... but it will get better when we have a @model class !
 model.randomprocess.priorcov.k.cparam = stk_param_estim(model);
 
 
 %% ******** CARRY OUT THE KRIGING PREDICTION AND DISPLAY THE RESULT ********
 
-zp = stk_predict( model, xg );
+zp  = stk_predict(model, xg);
+xzp = stk_makedata(xg, zp);
 
 % Display the result
-figure(2)
-xzp = stk_makedata( xg, zp );
-stk_plot1d( xzi, xzg, xzp, ['Kriging prediction with noise std '...
-                             sprintf('%.3e', sqrt(NOISEVARIANCE) )]);
+figure;
+n_std = sqrt(NOISEVARIANCE);
+fig_title = sprintf('%s %.3e', 'Kriging prediction with noise std', n_std);
+stk_plot1d(xzi, xzg, xzp, fig_title);
