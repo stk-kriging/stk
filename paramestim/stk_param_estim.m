@@ -182,7 +182,8 @@ switch model.covariance_type,
         lb = [lbv; lbnu; lba];
         ub = [ubv; ubnu; uba];
         
-    case {'stk_materncov52_aniso', 'stk_materncov52_iso'}
+    case {'stk_materncov32_aniso', 'stk_materncov32_iso', ...
+          'stk_materncov52_aniso', 'stk_materncov52_iso'}
         
         scale = param0(2:end);
         lba = scale(:) - TOLSCALE;

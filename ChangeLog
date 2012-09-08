@@ -1,3 +1,20 @@
+2012-09-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Adding default bounds for Matern 3/2 covariances.
+
+	* paramestim/stk_param_estim.m: modified
+
+2012-08-28  Emmanuel Vazquez <emmanuel.vazquez@supelec.fr>
+
+	Fixing comments (5/2 -> 3/2).
+
+	* covfcs/stk_materncov32_aniso.m: doc modified
+	* covfcs/stk_materncov32_iso.m: idem
+
+	Updating HTML doc.
+
+	* htmldoc/*: modified
+
 2012-08-17  Julien Bect  <julien.bect@supelec.fr>
 
 	Preparing for release 1.1: updating copyright notices and copying
