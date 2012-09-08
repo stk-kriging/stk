@@ -45,34 +45,38 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [paramopt, paramlnvopt] = stk_param_estim (model, param0, param0lnv)
+function [paramopt, paramlnvopt] = stk_param_estim (model, cparam0, param0lnv)
 
-stk_narginchk(2, 3);
+stk_narginchk(1, 3);
 
-% TODO: turn param0 into an optional argument
-%       => provide a reasonable default choice
 
 % TODO: think of a better way to tell we want to estimate the noise variance
-if nargin == 3
-    NOISEESTIM = true;
-else
-    NOISEESTIM  = false;
-end
+NOISEESTIM = (nargin == 3);
 
 NOISYOBS = ~strcmp (model.noise.type, 'none');
 if (~NOISYOBS) && NOISEESTIM,
     error('Please set model.noise...');
 end
 
+if (nargin < 2) || isempty(cparam0),
+    cparam0 = model.randomprocess.priorcov.k.cparam;
+end
+    
 % TODO: allow user-defined bounds
 [lb, ub] = stk_get_default_bounds( ...
-    model.randomprocess.priorcov.k, param0, model.observations.z);
+    model.randomprocess.priorcov.k, cparam0, model.observations.z);
 
-if NOISEESTIM
+bounds_available = ~isempty(lb) && ~isempty(ub);
+
+if NOISEESTIM % optize wrt to an "extended" vector of parameters
     [lblnv, ublnv] = get_default_bounds_lnv(model, param0lnv);
-    lb = [lb ; lblnv];
-    ub = [ub ; ublnv];
-    param0 = [param0; param0lnv];
+    w_lb = [lb; lblnv];
+    w_ub = [ub; ublnv];
+    w0 = [cparam0; param0lnv];
+else % optimize with respect to cparam
+    w_lb = lb;
+    w_ub = ub;
+    w0 = cparam0;
 end
 
 switch NOISEESTIM
@@ -85,18 +89,16 @@ switch NOISEESTIM
         nablaf = @(param)(nablaf_with_noise_ (model, param));
 end
 
-bounds_available = ~isempty(lb) && ~isempty(ub);
-
 % switch according to preferred optimizer
 switch stk_select_optimizer(bounds_available)
     
     case 1, % Octave / sqp
-        paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);
+        w0 = sqp(w0,{f,nablaf},[],[],w_lb,w_ub,[],1e-5);
         
     case 2, % Matlab / fminsearch (Nelder-Mead)
         options = optimset( 'Display', 'iter',                ...
             'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
-        paramopt = fminsearch(f,param0,options);
+        w0 = fminsearch(f,w0,options);
         
     case 3, % Matlab / fmincon
         try
@@ -116,7 +118,7 @@ switch stk_select_optimizer(bounds_available)
                 rethrow(err);
             end
         end
-        paramopt = fmincon(f, param0, [], [], [], [], lb, ub, [], options);
+        w0 = fmincon(f, w0, [], [], [], [], w_lb, w_ub, [], options);
         
     otherwise
         error('Unexpected value returned by stk_select_optimizer.');
@@ -124,8 +126,10 @@ switch stk_select_optimizer(bounds_available)
 end
 
 if NOISEESTIM
-    paramlnvopt = paramopt(end);
-    paramopt(end) = [];
+    paramlnvopt = w0(end);
+    paramopt = w0(1:end-1);
+else
+    paramopt = w0;
 end
 
 end
