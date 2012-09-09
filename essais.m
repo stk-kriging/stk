@@ -1,10 +1,10 @@
-% stk_cov_fct()                      % error incorrect nb args
-% stk_cov_fct('toto')                % error toto doesn't exist
-% stk_cov_fct('stk_materncov_iso')   % error cannot initialze params (defaultparam not created)
+% stk_cov()                      % error incorrect nb args
+% stk_cov('toto')                % error toto doesn't exist
+% stk_cov('stk_materncov_iso')   % error cannot initialze params (defaultparam not created)
 
-k1 = stk_cov_fct('stk_materncov_iso');
-k2 = stk_cov_fct('stk_materncov32_aniso', 'dim', 1);
-k3 = stk_cov_fct('stk_materncov32_aniso', 'dim', 3);
+k1 = stk_cov('stk_materncov_iso');
+k2 = stk_cov('stk_materncov32_aniso', 'dim', 1);
+k3 = stk_cov('stk_materncov32_aniso', 'dim', 3);
 
 whos
 

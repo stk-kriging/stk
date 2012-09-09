@@ -51,7 +51,7 @@ box = [-1.0; 1.0];                              % factor space
 
 NG = 400; % nb of points in the grid
 xg = stk_sampling_regulargrid( NG, DIM, box );
-zg = stk_feval( f, xg );
+zg = stk_feval(f, xg);
 xzg = stk_makedata(xg, zg); % data structure containing information about evaluations
 
 figure(1); set( gcf, 'Name', 'Plot of the function to be approximated');
@@ -68,9 +68,9 @@ stk_plot1d( [], xzg, [] );
 %
 
 NI = 6;                                         % nb of evaluations that will be used
-xi = stk_sampling_regulargrid( NI, DIM, box);   % evaluation points
-zi = stk_feval( f, xi );                        % structure of evaluation results
-xzi = stk_makedata( xi, zi );
+xi = stk_sampling_regulargrid(NI, DIM, box);   % evaluation points
+zi = stk_feval(f, xi);                        % structure of evaluation results
+xzi = stk_makedata(xi, zi);
 
 %% ******** SPECIFICATION OF THE MODEL ********
 %
@@ -84,14 +84,14 @@ model = stk_model('stk_materncov_iso');
 % distinction isotropic / anisotropic is irrelevant here since DIM = 1.
 
 % Parameters for the Matern covariance function ("help stk_materncov_iso" for more information)
-model.randomprocess.priorcov.k.sigma2 = 1.0;  % variance parameter
-model.randomprocess.priorcov.k.nu     = 4.0;  % regularity parameter
-model.randomprocess.priorcov.k.rho    = 0.4;  % scale (range) parameter
+model.randomprocess.priorcov.sigma2 = 1.0;  % variance parameter
+model.randomprocess.priorcov.nu     = 4.0;  % regularity parameter
+model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
 
 % Set observations for the model. NB: We consider that observations are part
 % of the model (the model is actualy a Gaussian process conditioned on a set of
 % observations)
-model = stk_setobs( model, xzi );
+model = stk_setobs(model, xzi);
 
 %% ******** CARRY OUT THE KRIGING PREDICTION AND DISPLAY THE RESULT ********
 %
@@ -101,12 +101,12 @@ model = stk_setobs( model, xzi );
 %
 
 % Carry out the kriging prediction at points xg.a
-zp = stk_predict( model, xg );
+zp = stk_predict(model, xg);
 
 % Display the result
 figure(2)
-xzp = stk_makedata( xg, zp );
-stk_plot1d( xzi, xzg, xzp, 'Kriging prediction based on noiseless observations' );
+xzp = stk_makedata(xg, zp);
+stk_plot1d(xzi, xzg, xzp, 'Kriging prediction based on noiseless observations');
 
 %% ******** REPEAT THE EXPERIMENT IN A NOISY SETTING ********
 NOISEVARIANCE = (1e-1)^2;
@@ -135,9 +135,9 @@ model_noisy.noise.lognoisevariance = log(NOISEVARIANCE);
 % Carry out the kriging prediction at locations xg.a
 
 model_noisy = stk_setobs(model_noisy, xzi_noisy);
-zp_noisy = stk_predict( model_noisy, xg );
+zp_noisy = stk_predict(model_noisy, xg);
 
 % Display the result
-xzp_noisy = stk_makedata( xg, zp_noisy );
+xzp_noisy = stk_makedata(xg, zp_noisy);
 figure(3)
-stk_plot1d( xzi_noisy, xzg, xzp_noisy, 'Kriging prediction based on noisy observations' );
+stk_plot1d(xzi_noisy, xzg, xzp_noisy, 'Kriging prediction based on noisy observations');

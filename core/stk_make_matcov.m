@@ -107,7 +107,7 @@ switch  model.domain.type
             % FIXME: avoid computing twice each off-diagonal term
             %
             if ncores == 1, % parallelization is not used
-                K = model.randomprocess.priorcov.k(x0, x0);
+                K = model.randomprocess.priorcov(x0, x0);
             else
                 K = stk_make_matcov_auto_parfor( model, x0, ncores, MIN_BLOCK_SIZE );
             end
@@ -124,7 +124,7 @@ switch  model.domain.type
         else
             
             if ncores == 1, % parallelization is not used
-                K = model.randomprocess.priorcov.k(x0, x1);
+                K = model.randomprocess.priorcov(x0, x1);
             else
                 K = stk_make_matcov_inter_parfor( model, x0, x1, ncores, MIN_BLOCK_SIZE );
             end

@@ -41,7 +41,7 @@ function [rl, drl_param, drl_lnv] = stk_reml(model)
 
 stk_narginchk(1, 1);
 
-PARAMPRIOR = ~isempty(model.randomprocess.priorcov.hyperprior);
+PARAMPRIOR = ~isempty(model.randomprocess.hyperprior);
 NOISYOBS   = ~strcmp(model.noise.type, 'none');
 NOISEPRIOR = isfield(model.noise, 'lognoisevarprior');
 
@@ -85,8 +85,9 @@ attache= Wz'*WKWinv_Wz;
 priorcov = model.randomprocess.priorcov; % GP prior
 
 if PARAMPRIOR
-    u = priorcov.k.cparam - priorcov.hyperprior.mean;
-    prior = u' * priorcov.hyperprior.invcov * u;
+    hyperprior = model.randomprocess.hyperprior;
+    u = priorcov.cparam - hyperprior.mean;
+    prior = u' * hyperprior.invcov * u;
 else
     prior = 0;
 end
@@ -104,17 +105,17 @@ rl = 1/2*((n-q)*log(2*pi) + ldetWKW + attache + prior + noiseprior);
 
 if nargout >= 2
     
-    drl_param = zeros(priorcov.k.nb_cparam, 1);
+    drl_param = zeros(priorcov.nb_cparam, 1);
     
     for paramdiff = 1:size(drl_param, 1),
-        V = priorcov.k(model.observations.x, model.observations.x, paramdiff);
+        V = priorcov(model.observations.x, model.observations.x, paramdiff);
         WVW = W'*V*W;
         drl_param(paramdiff) = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wz'*WVW*WKWinv_Wz);
     end
     
     if PARAMPRIOR
-        drl_param = drl_param + priorcov.hyperprior.invcov ...
-            * (priorcov.k.cparam - priorcov.hyperprior.mean);
+        drl_param = drl_param + hyperprior.invcov ...
+            * (priorcov.cparam - hyperprior.mean);
     end 
     
     if nargout >= 3,

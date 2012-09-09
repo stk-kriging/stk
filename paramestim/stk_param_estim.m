@@ -59,12 +59,12 @@ if (~NOISYOBS) && NOISEESTIM,
 end
 
 if (nargin < 2) || isempty(cparam0),
-    cparam0 = model.randomprocess.priorcov.k.cparam;
+    cparam0 = model.randomprocess.priorcov.cparam;
 end
     
 % TODO: allow user-defined bounds
 [lb, ub] = stk_get_default_bounds( ...
-    model.randomprocess.priorcov.k, cparam0, model.observations.z);
+    model.randomprocess.priorcov, cparam0, model.observations.z);
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
 
@@ -135,24 +135,24 @@ end
 end
 
 function [l,dl] = f_(model, u)
-model.randomprocess.priorcov.k.cparam = u;
+model.randomprocess.priorcov.cparam = u;
 [l, dl] = stk_reml(model);
 end
 
 function dl = nablaf_(model, u)
-model.randomprocess.priorcov.k.cparam = u;
+model.randomprocess.priorcov.cparam = u;
 [l_ignored, dl] = stk_reml(model); %#ok<ASGLU>
 end
 
 function [l,dl] = f_with_noise_(model, u)
-model.randomprocess.priorcov.k.cparam = u(1:end-1);
+model.randomprocess.priorcov.cparam = u(1:end-1);
 model.noise.lognoisevariance  = u(end);
 [l, dl, dln] = stk_reml(model);
 dl = [dl; dln];
 end
 
 function dl = nablaf_with_noise_(model, u)
-model.randomprocess.priorcov.k.cparam = u(1:end-1);
+model.randomprocess.priorcov.cparam = u(1:end-1);
 model.noise.lognoisevariance  = u(end);
 [l_ignored, dl, dln] = stk_remlqrg(model); %#ok<ASGLU>
 dl = [dl; dln];

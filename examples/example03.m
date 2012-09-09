@@ -108,7 +108,7 @@ model = stk_model(COVNAME, DIM);
 
 model.randomprocess.priormean.type   = 'polynomial';
 model.randomprocess.priormean.param  = COVORDER;
-model.randomprocess.priorcov.k.param = PARAM0;
+model.randomprocess.priorcov.param = PARAM0;
 
 if exist('NOISEVARIANCE', 'var')
     model.noise.lognoisevariance = log(NOISEVARIANCE);
@@ -129,7 +129,7 @@ end
 %% estimate the parameters of the covariance
 
 model = stk_setobs(model, stk_makedata(xi, zi));
-model.randomprocess.priorcov.k.param = stk_param_estim(model);
+model.randomprocess.priorcov.param = stk_param_estim(model);
 
 
 %% carry out kriging prediction

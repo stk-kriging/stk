@@ -1,3 +1,14 @@
+% classdef stk_cov
+% properties
+%    dim
+%    param_
+% methods
+%    get_default_bounds
+%    get_cparam
+%    set_cparam
+%    get_param
+%    set_cparam
+
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
@@ -25,7 +36,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_cov_fct(arg1, varargin)
+function cov = stk_cov(arg1, varargin)
 
 if mod(nargin, 2) ~= 1,
     stk_error('Incorrect number of arguments.', 'InvalidArguments');
@@ -44,27 +55,22 @@ else
     init_name = sprintf('%s_defaultparam', covname);
     try
         cov.param_ = feval(init_name, opt.dim);
-    catch
-        disp(lasterr());
+    catch  %#ok<*CTCH>
+        disp(lasterr()); %#ok<LERR>
         stk_error('Cannot initialize covariance parameters', 'CovInitFailed');
     end
 end
 
 % set function handles
-cov = set_handle_( cov, ...
-    opt, covname, 'get_default_bounds', '_defaultbounds');
-cov = set_handle_( cov, ...
-    opt, covname, 'get_cparam', '_getcparam');
-cov = set_handle_( cov, ...
-    opt, covname, 'get_param', '_getparam');
-cov = set_handle_( cov, ...
-    opt, covname, 'set_cparam', '_setcparam');
-cov = set_handle_( cov, ...
-    opt, covname, 'set_param', '_setparam');
+cov = set_handle_(cov, opt, covname, 'get_default_bounds', '_defaultbounds');
+cov = set_handle_(cov, opt, covname, 'get_cparam', '_getcparam');
+cov = set_handle_(cov, opt, covname, 'get_param', '_getparam');
+cov = set_handle_(cov, opt, covname, 'set_cparam', '_setcparam');
+cov = set_handle_(cov, opt, covname, 'set_param', '_setparam');
 
-cov = class(cov, 'stk_cov_fct');
+cov = class(cov, 'stk_cov');
 
-end % function stk_cov_fct
+end % function stk_cov
 
 
 function opt = analyze_options(varargin)
@@ -78,7 +84,7 @@ for i = 1:L,
         opt.(optname) = varargin{2 + (i-1) * 2};
     else
         stk_error(['Incorrect list of parameter names/values ' ...
-            'passed to stk_cov_fct().'], 'InvalidArgument');
+            'passed to stk_cov().'], 'InvalidArgument');
     end
 end
 
