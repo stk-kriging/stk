@@ -1,6 +1,16 @@
-% STK_DISTANCE_MATRIX...
+% STK_DISTANCE_MATRIX computes a matrix of (Euclidean) distances
 %
-% FIXME: missing doc, copyright, ...
+% CALL: D = stk_distance_matrix(X, Y)
+%
+%    computes the matrix of distances between X and Y. More precisely, if
+%    X is an nX x d matrix, and Y an nY x d matrix, the D is an nX x nY
+%    matrix with
+%
+%       D_{i,j} = norm(X(i,:) - Y(j,:)),
+%
+%    where norm(.) denotes the Euclidean norm in R^d.
+%
+% See also: stk_mindist, norm
 
 % Copyright Notice
 %
@@ -8,12 +18,6 @@
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%
-%    This file has been adapted from runtests.m in Octave 3.6.2 (which is
-%    distributed under the GNU General Public Licence version 3 (GPLv3).
-%    The original copyright notice was as follows:
-%
-%        Copyright (C) 2010-2012 John W. Eaton
 %
 % Copying Permission Statement
 %
