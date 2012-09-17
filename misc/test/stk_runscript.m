@@ -49,7 +49,7 @@ err = [];
 try
     run(scriptname);    
 catch %#ok<CTCH>
-    err{example_num} = lasterror(); %#ok<LERR>
+    err = lasterror(); %#ok<LERR>
 end
 
 end % function stk_runscript

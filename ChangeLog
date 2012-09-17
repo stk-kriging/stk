@@ -1,3 +1,37 @@
+2012-09-16  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixing docs and copyright notices.
+
+	* misc/dist/stk_mindist.m: doc modified
+	* misc/dist/stk_distance_matrix.m: doc modified
+
+	Fixing bugs in stk_runscript.m and run_all_examples.m
+
+	* examples/run_all_examples.m: bugfix
+	* misc/test/stk_runscript.m: bugfix
+
+2012-09-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Adding default bounds for Matern 3/2 covariances.
+
+	* paramestim/stk_param_estim.m: modified
+
+
+=====================
+===  Release 1.1  ===
+=====================
+
+2012-08-28  Emmanuel Vazquez <emmanuel.vazquez@supelec.fr>
+
+	Fixing comments (5/2 -> 3/2).
+
+	* covfcs/stk_materncov32_aniso.m: doc modified
+	* covfcs/stk_materncov32_iso.m: idem
+
+	Updating HTML doc.
+
+	* htmldoc/*: modified
+
 2012-08-17  Julien Bect  <julien.bect@supelec.fr>
 
 	Preparing for release 1.1: updating copyright notices and copying
@@ -9,7 +43,7 @@
 
 	Added a new function (stk_runscript) to solve a problem of 
 	inconsistent behaviour of the run function between Matlab and the
-	latest version of Octave (one want a '.m', the other doesn't).
+	latest version of Octave (one wants a '.m', the other doesn't).
 
 	* misc/test/stk_runscript.m: new function
 	* examples/run_all_examples.m: modified
