@@ -1,3 +1,10 @@
+2012-09-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Better initial guess for the log of the noise variance
+	in example08.m (log(eps) wasn't working well with sqp())
+
+	* examples/example08.m: modified
+
 2012-09-16  Julien Bect  <julien.bect@supelec.fr>
 
 	Fixing docs and copyright notices.
