@@ -27,6 +27,6 @@
 
 function [lb, ub] = stk_materncov52_aniso_defaultbounds(varargin)
 
-[lb, ub] = stk_materncov32_iso_defaultbounds(varargin{:});
+[lb, ub] = stk_materncov32_aniso_defaultbounds(varargin{:});
 
 end % function stk_materncov52_aniso_defaultbounds
