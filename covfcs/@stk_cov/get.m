@@ -29,6 +29,9 @@ function t = get(cov, propertyname, varargin)
 
 switch propertyname
     
+    case 'name'
+        t = cov.name;
+        
     case 'nb_cparam'
         t = stk_get_nb_cparam(cov);
         

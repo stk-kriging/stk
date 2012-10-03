@@ -113,6 +113,8 @@ switch class(arg1)
         
 end
 
+cov.name = covname;
+
 end % function analyze_first_arg
 
 
