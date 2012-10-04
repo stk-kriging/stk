@@ -1,4 +1,4 @@
-% STK_MAKE_MATCOV_AUTO_PARFOR [STK internal function]
+% STK_MAKE_MATCOV_INTER_PARFOR [STK internal function]
 
 %                  Small (Matlab/Octave) Toolbox for Kriging
 %
@@ -29,46 +29,50 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-function K = stk_make_matcov_auto_parfor( model, x, ncores, min_block_size )
+function K = stk_make_matcov_inter_parfor(kfun, x0, x1, ncores, min_block_size)
 
 %=== choose the actual block size & number of blocks
-B = 0; % number of blocks of x_i's
-n = size(x.a,1); n_min = ceil(sqrt(min_block_size));
-while 1, B = B + 1;
+B0 = 1; n0 = size(x0.a,1); dB0 = 0;
+B1 = 1; n1 = size(x1.a,1); dB1 = 0;
+while 1, bs0 = n0/B0; bs1 = n1/B1;
     % stop if the blocks are becoming too small
-    if n/B < n_min, B = max(1,B-1); break; end
+    if bs0*bs1 < min_block_size, B0=B0-dB0; B1=B1-dB1; break; end
     % stop if the number of blocks is a multiple of ncores
-    if mod( B*(B+1)/2, ncores ) == 0, break; end
+    if mod(B0*B1, ncores) == 0, break; end
+    % split the largest of both sides
+    if bs0 > bs1, B0=B0+1; dB0=1; dB1=0;
+    else B1=B1+1; dB0=0; dB1=1; end
 end
-block_size = ceil(n/B); % the last block can be slightly smaller than the others
-nb_blocks = B*(B+1)/2;
+bs0 = ceil(bs0); bs1 = ceil(bs1); nb_blocks = B0*B1;
 
 %=== prepare blocks
-ind = zeros(B,2); % begin/end positions
-ind(:,1) = 1 + ((1:B)'-1)*block_size;
-ind(:,2) = min( n, ind(:,1)+block_size-1 );
-blocks = struct( 'i',cell(1,nb_blocks), 'j',[], 'xi',[], 'xj',[], 'K',[] );
-i = 1; j = 0;
-for b = 1:nb_blocks;
-    j = j+1; if(j>i), i=i+1; j=1; end
-    blocks(b).i = i; blocks(b).xi = struct( 'a', x.a(ind(i,1):ind(i,2),:) );
-    blocks(b).j = j; blocks(b).xj = struct( 'a', x.a(ind(j,1):ind(j,2),:) );
+ind1 = zeros(B0,2); % begin/end positions in the first dimension
+ind1(:,1) = 1 + ((1:B0)'-1)*bs0;
+ind1(:,2) = min(n0, ind1(:,1)+bs0-1);
+ind2 = zeros(B1,2); % begin/end positions in the second dimension
+ind2(:,1) = 1 + ((1:B1)'-1)*bs1;
+ind2(:,2) = min(n1, ind2(:,1)+bs1-1);
+blocks = struct('i',cell(1,nb_blocks), 'j',[], 'xi',[], 'xcoj',[], 'K',[]);
+for i = 1:B0,
+    for j = 1:B1,
+        b = i + (j-1)*B0; % block number
+        blocks(b).i = i; blocks(b).xi = struct('a', x0.a(ind1(i,1):ind1(i,2),:));
+        blocks(b).j = j; blocks(b).xcoj = struct('a', x1.a(ind2(j,1):ind2(j,2),:));
+    end
 end
 
 %=== process blocks
-name = model.covariance_type; param = model.param; % avoids a "parfor" warning
 parfor b = 1:nb_blocks,
-    blocks(b).K = feval( name, param, blocks(b).xi, blocks(b).xj );
-    % FIXME: avoid computing each term in the covariance matrix twice
-    % on the diagonal blocks !
+    blocks(b).K = feval(kfun, blocks(b).xi, blocks(b).xcoj);
 end
 
 %=== piece the whole matrix out from the blocks
-K = zeros(n);
-for b = 1:nb_blocks,
-    i = blocks(b).i; j = blocks(b).j;
-    K( ind(i,1):ind(i,2), ind(j,1):ind(j,2) ) = blocks(b).K;
-    K( ind(j,1):ind(j,2), ind(i,1):ind(i,2) ) = ( blocks(b).K )';
+K = zeros(n0,n1);
+for i = 1:B0,
+    for j = 1:B1,
+        b = i + (j-1)*B0; % block number
+        K(ind1(i,1):ind1(i,2), ind2(j,1):ind2(j,2)) = blocks(b).K;
+    end
 end
 
-end % function stk_make_matcov_auto_parfor
+end % function stk_make_matcov_inter_parfor

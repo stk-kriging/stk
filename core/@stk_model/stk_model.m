@@ -146,6 +146,8 @@ model.randomprocess.priormean.param = 0;
 
 model.randomprocess.priorcov = stk_cov(covariance_type, 'dim', dim);
 
+model = class(model, 'stk_model');
+
 end
 
 

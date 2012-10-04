@@ -100,6 +100,9 @@ switch  model.domain.type
             % note: matlabpool('size') returns 0 if the PCT is not started
         end
 
+        % covariance function
+        kfun = model.randomprocess.priorcov;
+
         %=== call the subfunction that does the actual computation
         if make_matcov_auto,
             
@@ -107,16 +110,16 @@ switch  model.domain.type
             % FIXME: avoid computing twice each off-diagonal term
             %
             if ncores == 1, % parallelization is not used
-                K = model.randomprocess.priorcov(x0, x0);
+                K = kfun(x0, x0);
             else
-                K = stk_make_matcov_auto_parfor( model, x0, ncores, MIN_BLOCK_SIZE );
+                K = stk_make_matcov_auto_parfor(kfun, x0, ncores, MIN_BLOCK_SIZE);
             end
             
             switch model.noise.type
                 case 'none',
                     % nothing to do!
                 case 'swn',                   
-                    K = K + stk_noisecov( size(K, 1), model.noise.lognoisevariance );
+                    K = K + stk_noisecov(size(K, 1), model.noise.lognoisevariance);
                 case 'wwn'
                     K = K + diag(model.observations.x.v);
             end
@@ -124,9 +127,9 @@ switch  model.domain.type
         else
             
             if ncores == 1, % parallelization is not used
-                K = model.randomprocess.priorcov(x0, x1);
+                K = kfun(x0, x1);
             else
-                K = stk_make_matcov_inter_parfor( model, x0, x1, ncores, MIN_BLOCK_SIZE );
+                K = stk_make_matcov_inter_parfor(kfun, x0, x1, ncores, MIN_BLOCK_SIZE);
             end
         end
     
