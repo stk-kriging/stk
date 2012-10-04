@@ -38,35 +38,57 @@
 
 function cov = stk_cov(arg1, varargin)
 
-if mod(nargin, 2) ~= 1,
+if nargin == 0,
+    arg1 = 'NULL';
+    opt = struct();
+elseif mod(nargin, 2) ~= 1,
     stk_error('Incorrect number of arguments.', 'InvalidArguments');
+else
+    opt = analyze_options(varargin{:});
 end
-
-opt = analyze_options(varargin{:});
-if ~isfield(opt, 'dim'), opt.dim = 1; end
 
 % initialize a structure with a "fun" field containing a function_handle
-[cov, covname] = analyze_first_arg(arg1);
+cov = analyze_first_arg(arg1);
 
-% set field "param"
-if isfield(opt, 'param'),
-    cov.param_ = opt.param;
-else
-    init_name = sprintf('%s_defaultparam', covname);
-    try
-        cov.param_ = feval(init_name, opt.dim);
-    catch  %#ok<*CTCH>
-        disp(lasterr()); %#ok<LERR>
-        stk_error('Cannot initialize covariance parameters', 'CovInitFailed');
+if strcmp(cov.name, 'NULL'),
+    
+    % for a NULL object, we are not expecting any optional argument
+    if ~isempty(fieldnames(opt))
+        stk_error('Unexpected optional arguments', 'TooManyArguments');
     end
-end
+    
+    cov.param_              = [];
+    cov.get_default_bounds  = [];
+    cov.get_cparam          = [];
+    cov.get_param           = [];
+    cov.set_cparam          = [];
+    cov.set_param           = [];
+    
+else
 
-% set function handles
-cov = set_handle_(cov, opt, covname, 'get_default_bounds', '_defaultbounds');
-cov = set_handle_(cov, opt, covname, 'get_cparam', '_getcparam');
-cov = set_handle_(cov, opt, covname, 'get_param', '_getparam');
-cov = set_handle_(cov, opt, covname, 'set_cparam', '_setcparam');
-cov = set_handle_(cov, opt, covname, 'set_param', '_setparam');
+    if ~isfield(opt, 'dim'), opt.dim = 1; end
+    
+    % set field "param"
+    if isfield(opt, 'param'),
+        cov.param_ = opt.param;
+    else
+        init_name = sprintf('%s_defaultparam', cov.name);
+        try
+            cov.param_ = feval(init_name, opt.dim);
+        catch  %#ok<*CTCH>
+            disp(lasterr()); %#ok<LERR>
+            stk_error('Cannot initialize covariance parameters', 'CovInitFailed');
+        end
+    end
+    
+    % set function handles
+    cov = set_handle_(cov, opt, cov.name, 'get_default_bounds', '_defaultbounds');
+    cov = set_handle_(cov, opt, cov.name, 'get_cparam', '_getcparam');
+    cov = set_handle_(cov, opt, cov.name, 'get_param', '_getparam');
+    cov = set_handle_(cov, opt, cov.name, 'set_cparam', '_setcparam');
+    cov = set_handle_(cov, opt, cov.name, 'set_param', '_setparam');
+
+end
 
 cov = class(cov, 'stk_cov');
 
@@ -91,29 +113,31 @@ end
 end % function analyze_options
 
 
-function [cov, covname] = analyze_first_arg(arg1)
+function cov = analyze_first_arg(arg1)
 
 switch class(arg1)
     
     case 'char'
         try
-            cov.fun = str2func(arg1);
+            if strcmp(arg1, 'NULL')
+                cov.fun = [];
+            else
+                cov.fun = str2func(arg1);
+            end
         catch
             errmsg = sprintf('Failed to create a function handle for %s.', arg1);
             stk_error(errmsg, 'InvalidArgument');
         end
-        covname = arg1;
+        cov.name = arg1;
         
     case 'function_handle'
         cov.fun = arg1;
-        covname = func2str(arg1);
+        cov.name = func2str(arg1);
         
     otherwise
         stk_error('Invalid argument', 'InvalidArgument');
         
 end
-
-cov.name = covname;
 
 end % function analyze_first_arg
 
