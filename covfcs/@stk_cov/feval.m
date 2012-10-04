@@ -25,9 +25,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = feval(cov, varargin)
+function K = feval(cov, x, y, diff)
 
-K = feval(cov.fun, cov.param_, varargin{:});
+% no special case for cov(x, x)
+if (nargin < 3) || isempty(y),
+    y = x;
+end
+
+% default: compute the value (not a derivative)
+if nargin < 4,
+    diff = -1;
+end
+
+K = feval(cov.fun, cov.param_, x, y, diff);
 
 end % function feval
 
