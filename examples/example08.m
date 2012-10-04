@@ -31,7 +31,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% Welcome
+%% WELCOME
 
 disp('                  ');
 disp('#================#');
@@ -40,18 +40,18 @@ disp('#================#');
 disp('                  ');
 
 
-%% Define a 1d test function (the same as in example01.m)
+%% DEFINE A 1D TEST FUNCTION (THE SAME AS IN EXAMPLE01.M)
 
 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space
 box = [-1.0; 1.0];                              % factor space
 
 NT = 400; % nb of points in the grid
-xt = stk_sampling_regulargrid( NT, DIM, box );
-zt = stk_feval( f, xt );
+xt = stk_sampling_regulargrid(NT, DIM, box);
+zt = stk_feval(f, xt);
 
 
-%% Generate a random sampling plan
+%% GENERATE A RANDOM SAMPLING PLAN
 %
 % The objective is to construct an approximation of f with a budget of NI
 % evaluations performed on a randomly generated (uniform) design.
@@ -68,7 +68,10 @@ zi = stk_feval(f, xi);                      % evaluation results
 
 zi.a = zi.a + sqrt(NOISEVARIANCE) * randn(NI,1);
 
-%% Specification of the model
+obs = stk_makedata(xi, zi);
+
+
+%% SPECIFICATION OF THE MODEL
 %
 % We choose a Matern covariance, the parameters of which will be estimated from the data.
 %
@@ -80,13 +83,11 @@ zi.a = zi.a + sqrt(NOISEVARIANCE) * randn(NI,1);
 % kriging) and a Matern covariance function. (Some default parameters are also
 % set, but they will be replaced below by estimated parameters.)
 model = stk_model('stk_materncov_iso');
-
-% Noise variance
-model.lognoisevariance = log( 100 * eps);
-% (this is not the true value of the noise variance !)
+model = stk_setobs(model, obs);
+model.noise.type = 'swn';
 
 
-%% Estimation the parameters of the covariance
+%% ESTIMATION THE PARAMETERS OF THE COVARIANCE
 %
 % Here, the parameters of the Matern covariance function are estimated by the
 % REML (REstricted Maximum Likelihood) method using stk_param_estim().
@@ -99,17 +100,18 @@ NU     = 4.0;  % regularity parameter
 RHO1   = 0.4;  % scale (range) parameter
 param0 = log([SIGMA2; NU; 1/RHO1]);
 
-[param, paramlnv] = stk_param_estim(model, xi, zi, param0, log(eps));
+% Initial guess for the (log of the) noise variance
+lnv0 = 2 * log(std(zi.a) / 100);
 
-model.param = param;
-model.lognoisevariance = paramlnv;
+[param, paramlnv] = stk_param_estim(model, param0, lnv0);
 
-%% carry out kriging prediction
-
-zp = stk_predict(model, xi, zi, xt);
+model.randomprocess.priorcov.param = param;
+model.noise.lognoisevariance = paramlnv;
 
 
-%% display results
+%% CARRY OUT KRIGING PREDICTION & DISPLAY THE RESULT
 
-stk_plot1d(xi,zi,xt,zt,zp)
+zp = stk_predict(model, xt);
+
+stk_plot1d(obs, stk_makedata(xt, zt), stk_makedata(xt, zp))
 model %#ok<NOPTS>

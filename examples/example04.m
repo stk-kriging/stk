@@ -29,7 +29,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% Welcome
+%% WELCOME
 
 disp('                  ');
 disp('#================#');
@@ -38,7 +38,7 @@ disp('#================#');
 disp('                  ');
 
 
-%% Preliminaries
+%% PRELIMINARIES
 
 DIM = 2; BOX = [[0 0]; [2 4]]; % xmin, xmax
 N1 = 9; N2 = 200; N1_ = [3 3]; N2_ = [25 8];
@@ -47,7 +47,7 @@ figure; set( gcf, 'Name', 'Example 4' );
 nr = 2; nc = 3;
 
 
-%% Cartesian grid ("full factorial" design)
+%% REGULAR GRID ("FULL FACTORIAL" DESIGN)
 
 x = stk_sampling_regulargrid(N1, DIM, BOX);
 subplot(nr, nc, 1); plot(x.a(:,1), x.a(:,2), '*');
@@ -58,7 +58,7 @@ subplot(nr, nc, 4); plot(x.a(:,1), x.a(:,2), '*');
 title(sprintf('%d x %d regular grid', N2_(1), N2_(2)));
 
 
-%% Maximin LHS
+%% MAXIMIN LHS
 
 x = stk_sampling_maximinlhs(N1, DIM, BOX);
 subplot(nr, nc, 2); plot(x.a(:,1), x.a(:,2), '*');
@@ -69,7 +69,7 @@ subplot(nr, nc, 5); plot(x.a(:,1), x.a(:,2), '*');
 title(sprintf('%d-points maximin LHS', N2));
 
 
-%% Random (uniform) sampling
+%% RANDOM (UNIFORM) SAMPLING
 
 x = stk_sampling_randunif(N1, DIM, BOX);
 subplot(nr, nc, 3); plot(x.a(:,1), x.a(:,2), '*');

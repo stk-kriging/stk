@@ -30,7 +30,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% Welcome
+
+%% WELCOME
 
 disp('                  ');
 disp('#================#');
@@ -39,7 +40,7 @@ disp('#================#');
 disp('                  ');
 
 
-%% Definition of a 2D test function
+%% DEFINITION OF A 2D TEST FUNCTION
 
 % define a 2D test function
 f_ = inline('exp(1.8*(x1+x2))+3*x1+6*x2.^2+3*sin(4*pi*x1)', 'x1', 'x2');
@@ -63,7 +64,7 @@ xt.a = [reshape(XX,nt,1), reshape(YY,nt,1)]; % nt x DIM,
 zt.a = reshape(ZZ,nt,1);                     % nt x 1
 
 
-%% To run STK, choose a covariance structure
+%% TO RUN STK, CHOOSE A COVARIANCE STRUCTURE
 % Some examples given below
 
 COVSTRUCT = 1 ; % 1: Matern anisotropic covariance, with unknown
@@ -116,7 +117,7 @@ if exist('NOISEVARIANCE', 'var')
 end
 
 
-%% generate a random space-filling design
+%% GENERATE A RANDOM SPACE-FILLING DESIGN
 
 NI = 36;
 xi = stk_sampling_maximinlhs(NI, DIM, [[-1 -1];[1 1]]);
@@ -126,18 +127,15 @@ if exist('NOISEVARIANCE', 'var')
 end
 
 
-%% estimate the parameters of the covariance
+%% ESTIMATE THE PARAMETERS OF THE COVARIANCE
 
 model = stk_setobs(model, stk_makedata(xi, zi));
 model.randomprocess.priorcov.param = stk_param_estim(model);
 
 
-%% carry out kriging prediction
+%% CARRY OUT KRIGING PREDICTION & DISPLAY THE RESULT
 
 zp = stk_predict(model, xt);
-
-
-%% display results
 
 figure(1)
 subplot(2,2,2)

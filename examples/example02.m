@@ -31,7 +31,8 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 
-%% ******** WELCOME ********
+%% WELCOME
+
 disp('#================#');
 disp('#   Example 02   #');
 disp('#================#');
@@ -40,7 +41,8 @@ disp('from a  set  of  observations.  In this example, the parameters');
 disp('of the model are estimated from data. See also example01.m');
 disp('');
 
-%% ******** DEFINE A 1D TEST FUNCTION ********
+
+%% DEFINE A 1D TEST FUNCTION
 
 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space
@@ -51,7 +53,8 @@ xg = stk_sampling_regulargrid(NG, DIM, box);
 zg = stk_feval(f, xg);
 xzg = stk_makedata(xg, zg); % data structure containing information about evaluations
 
-%% ******** GENERATE A RANDOM SAMPLING PLAN ********
+
+%% GENERATE A RANDOM SAMPLING PLAN
 %
 % The objective is to construct an approximation of f with a budget of NI
 % evaluations performed on a randomly generated (uniform) design.
@@ -73,7 +76,8 @@ end
 
 xzi = stk_makedata(xi, zi);
 
-%% ******** SPECIFICATION OF THE MODEL ********
+
+%% SPECIFICATION OF THE MODEL
 %
 % We choose a Matern covariance, the parameters of which will be estimated from the data.
 %
@@ -100,7 +104,8 @@ end
 % Set observations for the model
 model = stk_setobs(model, xzi);
 
-%% ******** ESTIMATION OF THE PARAMETERS OF THE COVARIANCE ********
+
+%% ESTIMATION OF THE PARAMETERS OF THE COVARIANCE
 %
 % Here, the parameters of the Matern covariance function are estimated by the
 % REML (REstricted Maximum Likelihood) method using stk_param_estim().
@@ -116,7 +121,7 @@ model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
 model.randomprocess.priorcov.cparam = stk_param_estim(model);
 
 
-%% ******** CARRY OUT THE KRIGING PREDICTION AND DISPLAY THE RESULT ********
+%% CARRY OUT THE KRIGING PREDICTION AND DISPLAY THE RESULT
 
 zp  = stk_predict(model, xg);
 xzp = stk_makedata(xg, zp);

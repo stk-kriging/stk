@@ -28,7 +28,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% welcome
+%% WELCOME
 
 disp('                  ');
 disp('#================#');
@@ -37,7 +37,7 @@ disp('#================#');
 disp('                  ');
 
 
-%% List of correlation functions
+%% LIST OF CORRELATION FUNCTIONS
 
 SIGMA2 = 1.0;  % variance parameter
 RHO1   = 1.0;  % scale (range) parameter
@@ -52,7 +52,7 @@ list_cov = {...
 NB_COVARIANCE_FUNCTIONS = size(list_cov, 1);
 
 
-%% Visualisation
+%% VISUALISATION
 
 x1 = struct('a', 0.0);
 x2 = stk_sampling_regulargrid(1000, 1, [-5; 5]);
