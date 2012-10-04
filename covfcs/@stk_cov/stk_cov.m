@@ -39,7 +39,7 @@
 function cov = stk_cov(arg1, varargin)
 
 if nargin == 0,
-    arg1 = 'NULL';
+    arg1 = 'stk_nullcov';
     opt = struct();
 elseif mod(nargin, 2) ~= 1,
     stk_error('Incorrect number of arguments.', 'InvalidArguments');
@@ -47,47 +47,44 @@ else
     opt = analyze_options(varargin{:});
 end
 
-% initialize a structure with a "fun" field containing a function_handle
+% initialize a structure with fields "fun" and "name"
 cov = analyze_first_arg(arg1);
 
-if strcmp(cov.name, 'NULL'),
-    
-    % for a NULL object, we are not expecting any optional argument
-    if ~isempty(fieldnames(opt))
-        stk_error('Unexpected optional arguments', 'TooManyArguments');
-    end
-    
-    cov.param_              = [];
-    cov.get_default_bounds  = [];
-    cov.get_cparam          = [];
-    cov.get_param           = [];
-    cov.set_cparam          = [];
-    cov.set_param           = [];
-    
+% dimension of factor space
+if ~isfield(opt, 'dim'), 
+    dim = 1; 
 else
-
-    if ~isfield(opt, 'dim'), opt.dim = 1; end
+    dim = opt.dim;
+    opt = rmfield(opt, 'dim');
+end
     
-    % set field "param"
-    if isfield(opt, 'param'),
-        cov.param_ = opt.param;
-    else
-        init_name = sprintf('%s_defaultparam', cov.name);
-        try
-            cov.param_ = feval(init_name, opt.dim);
-        catch  %#ok<*CTCH>
-            disp(lasterr()); %#ok<LERR>
-            stk_error('Cannot initialize covariance parameters', 'CovInitFailed');
-        end
+% set field "param"
+if isfield(opt, 'param'),
+    cov.param_ = opt.param;
+    opt = rmfield(opt, 'param');
+else
+    init_name = sprintf('%s_defaultparam', cov.name);
+    try
+        cov.param_ = feval(init_name, dim);
+    catch  %#ok<*CTCH>
+        disp(lasterr()); %#ok<LERR>
+        stk_error('Cannot initialize covariance parameters', 'CovInitFailed');
     end
+end
     
-    % set function handles
-    cov = set_handle_(cov, opt, cov.name, 'get_default_bounds', '_defaultbounds');
-    cov = set_handle_(cov, opt, cov.name, 'get_cparam', '_getcparam');
-    cov = set_handle_(cov, opt, cov.name, 'get_param', '_getparam');
-    cov = set_handle_(cov, opt, cov.name, 'set_cparam', '_setcparam');
-    cov = set_handle_(cov, opt, cov.name, 'set_param', '_setparam');
+% set function handles
+[cov, opt] = set_handle_(cov, opt, cov.name, 'get_default_bounds', '_defaultbounds');
+[cov, opt] = set_handle_(cov, opt, cov.name, 'get_cparam', '_getcparam');
+[cov, opt] = set_handle_(cov, opt, cov.name, 'get_param', '_getparam');
+[cov, opt] = set_handle_(cov, opt, cov.name, 'set_cparam', '_setcparam');
+[cov, opt] = set_handle_(cov, opt, cov.name, 'set_param', '_setparam');
 
+% unused options ?
+optnames = fieldnames(opt);
+if ~isempty(optnames),
+    for i = 1:length(optnames),
+        warning('Unused option: %s.', optnames{i});
+    end
 end
 
 cov = class(cov, 'stk_cov');
@@ -142,10 +139,11 @@ end
 end % function analyze_first_arg
 
 
-function cov = set_handle_(cov, opt, covname, propname, suffix)
+function [cov, opt] = set_handle_(cov, opt, covname, propname, suffix)
 
 if isfield(opt, propname)
     cov.(propname) = opt.(propname);
+    opt = rmfield(opt, propname);
 else
     fct_name = sprintf('%s%s', covname, suffix);
     if exist([fct_name '.m'], 'file')
@@ -156,4 +154,4 @@ else
     end
 end
 
-end
+end % function set_handle_
