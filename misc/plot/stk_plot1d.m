@@ -38,11 +38,7 @@
 function stk_plot1d(obsi, obst, pred, ftitle)
 stk_narginchk(3, 4);
 
-% get current figure handle and set properties
-h = gcf;
-set(h, 'InvertHardcopy', 'off', 'Color', [1 1 1]);
-% Create axes
-h_axis = axes('Parent', h, 'FontSize', 12);
+set(gcf, 'InvertHardcopy', 'off', 'Color', [1 1 1]); % white background
 
 %=== checking arguments
 plot_obsi = ~isempty(obsi);
@@ -73,7 +69,7 @@ if plot_obsi
          'MarkerFaceColor', [0.8  0.8 0.8]);
 end
 hold off
-set(h_axis, 'Box', 'off');
+set(gca, 'Box', 'off');
 xlabel('x'); ylabel('z');
 if nargin > 3
     title(ftitle);
