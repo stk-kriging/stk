@@ -25,8 +25,28 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_set_cparam(cov, value) %#ok<INUSD>
+function t = stk_get_param(cov, propertyname)
 
-stk_error('Method undefined (stk_cov is a virtual class).', 'MethodUndefined');
+if isempty(propertyname), % "full parameter"
 
-end
+    t = cov.param;
+
+else
+
+    if isempty(cov.get_param), % no getter available
+        
+        if isstruct(cov.param) && isfield(cov.param, propertyname)
+            % direct indexing
+            t = cov.param.(propertyname);
+        else
+            errmsg = sprintf('Unable to get the value of property %s.', propertyname);
+            stk_error(errmsg, 'InvalidArgument');
+        end
+
+    else % user user-provided getter
+
+        t = cov.get_param(cov.param, propertyname);
+
+    end
+
+end % function stk_get_param

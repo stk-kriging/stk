@@ -25,8 +25,28 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_set_cparam(cov, value) %#ok<INUSD>
+function t = stk_get_param(cov, propertyname) %#ok<INUSL>
 
-stk_error('Method undefined (stk_cov is a virtual class).', 'MethodUndefined');
+if isempty(propertyname), % "full parameter"
+    
+    t = [];
+    
+else
+    
+    switch propertyname,
+        
+        case 'variance',
+            t = 0.0;
 
-end
+        case 'logvariance',
+            t = -Inf;
+
+        otherwise,
+            errmsg = sprintf('Property %s does not exist.', propertyname);
+            stk_error(errmsg, 'IncorrectArgument');
+            
+    end % switch
+
+end % if
+
+end % function stk_get_param

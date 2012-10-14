@@ -25,8 +25,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_set_cparam(cov, value) %#ok<INUSD>
+function [lb, ub] = stk_get_defaultbounds(cov, cparam0, z) %#ok<INUSL,INUSD>
+stk_narginchk(1, 3);
 
-stk_error('Method undefined (stk_cov is a virtual class).', 'MethodUndefined');
-
+if (nargin > 1) && ~isempty(cparam0),
+    stk_error('Incorrect size for cparam0.', 'IncorrectArgument');
 end
+
+lb = [];
+ub = [];
+
+end % function stk_get_defaultbounds

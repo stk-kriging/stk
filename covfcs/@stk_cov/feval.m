@@ -27,17 +27,6 @@
 
 function K = feval(cov, x, y, diff)
 
-% no special case for cov(x, x)
-if (nargin < 3) || isempty(y),
-    y = x;
-end
-
-% default: compute the value (not a derivative)
-if nargin < 4,
-    diff = -1;
-end
-
-K = feval(cov.fun, cov.param_, x, y, diff);
+stk_error('Method undefined (stk_cov is a virtual class).', 'MethodUndefined');
 
 end % function feval
-

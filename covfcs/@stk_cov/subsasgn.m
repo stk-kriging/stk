@@ -25,20 +25,31 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = subsasgn(cov, idx, rhs)
+function cov = subsasgn(cov, idx, value)
 
-switch idx.type
+switch idx(1).type
     
     case '()'
-        stk_error('Syntax error', 'SyntaxError');
+        errmsg = 'Improper use of () indexing.';
+        stk_error(errmsg, 'IllegalIndexing');
         
     case '{}'
-        cov = stk_set_param(cov, idx.sub);
+        errmsg = 'Indexing with curly braces is not allowed.';
+        stk_error(errmsg, 'IllegalIndexing');
         
     case '.'
-        cov = set(cov, idx.subs, rhs);
+        propertyname = idx(1).subs;
+        idx = idx(2:end);
+        if isempty(idx)
+            % simply set the field to rhs
+            cov = set(cov, propertyname, value);
+        else
+            % several level of indexing... use a get/set combo !
+            t = get(cov, propertyname);
+            t = subsasgn(t, idx, value);
+            cov = set(cov, propertyname, t);
+        end
         
 end
 
 end % function subsref
-

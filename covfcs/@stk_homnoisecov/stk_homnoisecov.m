@@ -25,8 +25,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_set_cparam(cov, value) %#ok<INUSD>
+function cov = stk_homnoisecov(variance)
 
-stk_error('Method undefined (stk_cov is a virtual class).', 'MethodUndefined');
+cov = struct();
 
+if nargin == 0, % default
+    cov.param.variance = 1.0;
+else
+    if (numel(variance) ~= 1) || ~(variance > 0),
+        stk_error('Incorrect variance argument.', 'IncorrectArgument');
+    end
+    cov.param.variance = variance;
 end
+
+cov = class(cov, 'stk_homnoisecov', stk_hetnoisecov());
+cov = set(cov, 'name', 'stk_homnoisecov');
+
+end % function stk_cov

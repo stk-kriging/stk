@@ -90,16 +90,11 @@ xzi = stk_makedata(xi, zi);
 % set, but they will be replaced below by estimated parameters.)
 model = stk_model('stk_materncov_iso');
 
-% Noise variance
-if NOISEVARIANCE > 0,
-    model.noise.type = 'swn';
-    model.noise.lognoisevariance = log(NOISEVARIANCE);
-else
-    % Even if we don't assume that the observations are noisy,
-    % it is wiser to add a small "regularization noise".
-    model.noise.type = 'swn';
-    model.noise.lognoisevariance = log(100 * eps);
-end
+% Homoscedastic white noise
+noise_variance = max(NOISEVARIANCE, 1e-10);
+model.noise.cov = stk_homnoisecov(noise_variance);
+% Even if we don't assume that the observations are noisy,
+% it is usually wiser to add a small "regularization noise".
 
 % Set observations for the model
 model = stk_setobs(model, xzi);

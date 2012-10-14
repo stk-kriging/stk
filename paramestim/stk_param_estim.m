@@ -53,9 +53,17 @@ stk_narginchk(1, 3);
 % TODO: think of a better way to tell we want to estimate the noise variance
 NOISEESTIM = (nargin == 3);
 
-NOISYOBS = ~strcmp (model.noise.type, 'none');
-if (~NOISYOBS) && NOISEESTIM,
-    error('Please set model.noise...');
+if NOISEESTIM,
+    % check if estimating the noise variance is possible
+    switch class(model.noise.cov)
+        case 'stk_nullcov'  % noiseless observations
+            stk_error('Please set model.noise...', 'IncorrectArgument');
+        case 'stk_homnoisecov'
+            % ok, we can handle it
+        otherwise
+            errmsg = 'Parameter estimation for general noise models is not supported.'
+            stk_error(errmsg, 'IncorrectArgument');
+    end
 end
 
 if (nargin < 2) || isempty(cparam0),
@@ -63,13 +71,13 @@ if (nargin < 2) || isempty(cparam0),
 end
     
 % TODO: allow user-defined bounds
-[lb, ub] = stk_get_default_bounds( ...
+[lb, ub] = stk_get_defaultbounds( ...
     model.randomprocess.priorcov, cparam0, model.observations.z);
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
 
 if NOISEESTIM % optize wrt to an "extended" vector of parameters
-    [lblnv, ublnv] = get_default_bounds_lnv(model, param0lnv);
+    [lblnv, ublnv] = get_defaultbounds_lnv(model, param0lnv);
     w_lb = [lb; lblnv];
     w_ub = [ub; ublnv];
     w0 = [cparam0; param0lnv];
@@ -146,20 +154,20 @@ end
 
 function [l,dl] = f_with_noise_(model, u)
 model.randomprocess.priorcov.cparam = u(1:end-1);
-model.noise.lognoisevariance  = u(end);
+model.noise.cov.logvariance  = u(end);
 [l, dl, dln] = stk_reml(model);
 dl = [dl; dln];
 end
 
 function dl = nablaf_with_noise_(model, u)
 model.randomprocess.priorcov.cparam = u(1:end-1);
-model.noise.lognoisevariance  = u(end);
+model.noise.cov.logvariance  = u(end);
 [l_ignored, dl, dln] = stk_remlqrg(model); %#ok<ASGLU>
 dl = [dl; dln];
 end
 
 
-function [lblnv,ublnv] = get_default_bounds_lnv (model, param0lnv) %#ok<INUSD>
+function [lblnv, ublnv] = get_defaultbounds_lnv (model, param0lnv) %#ok<INUSD>
 % assume NOISEESTIM
 % constants
 TOLVAR = 0.5;

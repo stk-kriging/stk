@@ -112,7 +112,7 @@ model.randomprocess.priormean.param  = COVORDER;
 model.randomprocess.priorcov.param = PARAM0;
 
 if exist('NOISEVARIANCE', 'var')
-    model.noise.lognoisevariance = log(NOISEVARIANCE);
+    model.noise.cov = stk_homnoisecov(NOISEVARIANCE);
     % FIXME : provide an example with options.noiseopt=1;
 end
 

@@ -25,8 +25,24 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_set_cparam(cov, value) %#ok<INUSD>
+function cov = stk_set_param(cov, propertyname, value)
 
-stk_error('Method undefined (stk_cov is a virtual class).', 'MethodUndefined');
+if isempty(propertyname), % "full parameter"
+
+    cov.param = value;
+
+else
+
+    % FIXME: argument checking
+    
+    if isstruct(cov.param) && isfield(cov.param, propertyname)
+        % direct indexing
+        cov.param.(propertyname) = value;
+    else
+        errmsg = sprintf('There is no property %s to set.', propertyname);
+        stk_error(errmsg, 'IncorrectArgument');
+    end
+
+end % if
 
 end

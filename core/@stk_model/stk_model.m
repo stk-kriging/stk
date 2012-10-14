@@ -110,7 +110,8 @@ randomprocess = struct('type', 'GP', ...
                        'hyperprior', [] ...
                        );               
 
-noise         = struct('type', 'none');
+noise         = struct('cov', stk_nullcov(), ...
+                       'lognoisevarprior', []);
 
 n             = 0;
 x             = struct('a', zeros(n, dim));

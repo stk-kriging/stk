@@ -25,21 +25,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function k = stk_nullcov(param, x, y, diff)
+function [lb, ub] = stk_get_defaultbounds(cov, cparam0, z) %#ok<INUSL>
+stk_narginchk(1, 3);
 
-stk_narginchk(3, 4);
-
-if ~isempty(param),
-    stk_error('Incorrect parameter vector (should be empty).', 'IncorrectArgument');
+if (nargin > 1) && ~isempty(cparam0),
+    stk_error('Incorrect size for cparam0.', 'IncorrectArgument');
 end
 
-if (nargin == 4) && (diff ~= -1)    
-    stk_error('Sorry, I have no derivative to provide...', 'IncorrectArgument');
-end
+lb = [];
+ub = [];
 
-if isstruct(x), x = x.a; end
-if isstruct(y), y = y.a; end
-
-k = sparse(size(x, 1), size(y, 1));
-
-end % function stk_nullcov
+end % function stk_get_defaultbounds

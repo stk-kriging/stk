@@ -25,36 +25,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = set(cov, propertyname, value, varargin)
+function cov = set(cov, propertyname, value)
 
 switch propertyname
     
-    case 'nb_cparam'
-        stk_error('Property nb_cparam is immutable.', 'SetImmutableProp');
-        
-    case 'param',
-        cov = stk_set_param(cov, value, varargin{:});
-        
-    case 'cparam',
-        cov = stk_set_cparam(cov, value, varargin{:});
-        
-    otherwise
-        
-        try % perhaps a "named" parameter ?
-            
-            cov = stk_set_param(cov, propertyname, value);
+    case 'name'
+        cov.name = value;
 
-            % there should be no additional parameter in varargin
-            if ~isempty(varargin)
-                stk_error('Too many input arguments', 'TooManyInputArgs');
-            end
-            
-        catch % OK, I give up
-            
-	  stk_error(sprintf('Class %s has no %s property to be set.', ...
-                class(cov), propertyname), 'NonExistentProperty');
-            
-        end % try/catch
+    case 'param',  % set the whole 'param' descriptor at once
+        cov = stk_set_param(cov, [], value);
+        
+    case 'cparam', % set the whole 'cparam' vector at once
+        cov = stk_set_cparam(cov, value);
+        
+    otherwise        
+        try            
+            cov = stk_set_param(cov, propertyname, value);            
+        catch %#ok<CTCH>            
+            stk_error(sprintf('Class %s has no %s property to be set.', ...
+                class(cov), propertyname), 'NonExistentProperty');            
+        end
         
 end
 

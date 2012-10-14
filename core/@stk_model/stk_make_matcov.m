@@ -18,9 +18,9 @@
 %    size N0 x N1, where N0 is the number of rows of XO.a and N1 the number of
 %    rows of X1.a.
 %
-% BE CAREFUL: 
-%    
-%    stk_make_matcov(MODEL, X0) and stk_makematcov(MODEL, X0, X0) are NOT 
+% BE CAREFUL:
+%
+%    stk_make_matcov(MODEL, X0) and stk_makematcov(MODEL, X0, X0) are NOT
 %    equivalent if model.noise.type != 'none' (the noise variance is added
 %    on the diagonal of the covariance matrix).
 
@@ -99,40 +99,33 @@ switch  model.domain.type
             ncores = max( 1, matlabpool('size') );
             % note: matlabpool('size') returns 0 if the PCT is not started
         end
-
+        
         % covariance function
-        kfun = model.randomprocess.priorcov;
-
+        cov = model.randomprocess.priorcov;
+        
         %=== call the subfunction that does the actual computation
         if make_matcov_auto,
             
-            %
             % FIXME: avoid computing twice each off-diagonal term
-            %
             if ncores == 1, % parallelization is not used
-                K = kfun(x0, x0);
+                K = feval(cov, x0, x0);
             else
-                K = stk_make_matcov_auto_parfor(kfun, x0, ncores, MIN_BLOCK_SIZE);
+                K = stk_make_matcov_auto_parfor(cov, x0, ncores, MIN_BLOCK_SIZE);
             end
             
-            switch model.noise.type
-                case 'none',
-                    % nothing to do!
-                case 'swn',                   
-                    K = K + stk_noisecov(size(K, 1), model.noise.lognoisevariance);
-                case 'wwn'
-                    K = K + diag(model.observations.x.v);
-            end
-        
+            % add noise
+            K = K + feval(model.noise.cov, x0);
+            
         else
             
             if ncores == 1, % parallelization is not used
-                K = kfun(x0, x1);
+                K = feval(cov, x0, x1);
             else
-                K = stk_make_matcov_inter_parfor(kfun, x0, x1, ncores, MIN_BLOCK_SIZE);
+                K = stk_make_matcov_inter_parfor(cov, x0, x1, ncores, MIN_BLOCK_SIZE);
             end
+            
         end
-    
+        
 end % switch model.domain.type
 
 %=== compute the regression functions
@@ -170,7 +163,7 @@ end
 %!% In the noiseless case, (1) and (2) should give the same results
 %!test  assert(isequal(Kb, Ka));
 
-%!% In the noisy case, however... 
+%!% In the noisy case, however...
 %!test  [Ka, Pa] = stk_make_matcov(model2, x0);           % (1')
 %!test  [Kb, Pb] = stk_make_matcov(model2, x0, x0);       % (2')
 %!error assert(isequal(Kb, Ka));

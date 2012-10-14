@@ -25,8 +25,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function param = stk_nullcov_setparam(param, idx, value) %#ok<INUSD>
+function cov = stk_set_cparam(cov, value)
 
-stk_error('Sorry, I have no parameter...', 'InvalidArgument');
+if length(value) ~= 1,
+    errmsg = 'Trying to set an incorrect value for cparam (should be scalar).';
+    stk_error(errmsg, 'IncorrectArgument');
+end
 
-end % function stk_materncov_iso_getparam
+cov.param.variance = exp(value);
+
+end

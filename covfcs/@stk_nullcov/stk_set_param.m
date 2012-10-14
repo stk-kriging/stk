@@ -25,8 +25,36 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function nb_cparam = stk_get_nb_cparam(cov)
+function cov = stk_set_param(cov, propertyname, value)
 
-nb_cparam = length(stk_get_cparam(cov));
+errmsg = 'param is immutable for stk_nullcov objects.';
+
+if isempty(propertyname), % "full parameter"
+    
+    if ~isempty(value),
+        stk_error(errmsg, 'SettingImmutableParameter');
+    end
+    
+else
+    
+    switch propertyname,
+        
+        case 'variance',
+            if value ~= 0.0,
+                stk_error(errmsg, 'SettingImmutableParameter');
+            end
+            
+        case 'logvariance',
+            if value ~= -Inf,
+                stk_error(errmsg, 'SettingImmutableParameter');
+            end
+            
+        otherwise,
+            errmsg = sprintf('Property %s does not exist.', propertyname);
+            stk_error(errmsg, 'IncorrectArgument');
+            
+    end % switch
+    
+end % if
 
 end

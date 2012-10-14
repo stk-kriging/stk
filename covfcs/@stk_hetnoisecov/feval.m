@@ -1,5 +1,3 @@
-% STK_NOISECOV computes a noise covariance
-
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
@@ -27,44 +25,36 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = stk_noisecov(ni, lognoisevariance, diff)
+function K = feval(cov, x, y, diff)
+stk_narginchk(2, 4);
 
-stk_narginchk(2, 3);
+% extract data matrices, if appropriate
+if isstruct(x), x = x.a; end
+if (nargin > 2) && isstruct(y), y = y.a; end
 
-s = size(lognoisevariance);
-n = max(s);
-if ~isequal(s, [1,n]) && ~isequal(s, [n,1])
-    error('lognoisvariance must be a vector.');
+% only cov(x, x) is supported for this class of covariance objects !
+if (nargin > 2) && ~isequal(x, y)
+    stk_error('cov(x, y) is not implemented yet.', 'NotImplementedYet');
+end
+        
+% default: compute the value (not a derivative)
+if (nargin > 3) && (diff ~= -1),
+    stk_error('Incorrect vaue for the diff parameter.', 'IncorrectArgument');
 end
 
-if nargin == 2,
-    diff = -1; % default: compute the value (not a derivative)
-end
+nx = size(x, 1);
 
-if n == 1
-    % the result does not depend on diff
-    K = exp(lognoisevariance) * eye(ni);
+if ~isempty(cov.param.fun),
+    % in this case we have a function that gives the value of the variance at any point
+    v = feval(cov.param.fun, x);
+    K = spdiags(v(:), 0, nx, nx);
 else
-    if diff ~= -1,
-        error('not implemented');
+    % otherwise cov.variance is a vector of variances corresponding to the locations cov.x
+    if isequal(cov.param.x, x),
+        K = spdiags(cov.param.v(:), 0, nx, nx);
+    else
+        stk_error('Improper use of this kind of covariance object.', 'IncorrectArgument');
     end
-    K = diag(exp(lognoisevariance));
 end
 
-end % function
-
-
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
-%!shared ni, lognoisevariance, diff
-%!  ni = 5;
-%!  lognoisevariance = 0.0;
-%!  diff = -1;
-
-%!error K = stk_noisecov();
-%!error K = stk_noisecov(ni);
-%!test  K = stk_noisecov(ni, lognoisevariance);
-%!test  K = stk_noisecov(ni, lognoisevariance, diff);
-%!error K = stk_noisecov(ni, lognoisevariance, diff, pi^2);
+end % function feval

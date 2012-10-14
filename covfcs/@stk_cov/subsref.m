@@ -27,18 +27,24 @@
 
 function t = subsref(cov, idx)
 
-switch idx.type
+switch idx(1).type
     
     case '()'
-        t = feval(cov, idx.subs{:});
+        t = feval(cov, idx(1).subs{:});
         
     case '{}'
         errmsg = 'Indexing with curly braces is not allowed.';
         stk_error(errmsg, 'IllegalIndexing');
         
     case '.'
-        t = get(cov, idx.subs);
+        t = get(cov, idx(1).subs);
         
+end
+
+% handle additional indices
+idx = idx(2:end);
+if ~isempty(idx),
+    t = subsref(t, idx);
 end
 
 end % function subsref

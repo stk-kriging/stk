@@ -42,13 +42,13 @@ function [rl, drl_param, drl_lnv] = stk_reml(model)
 stk_narginchk(1, 1);
 
 PARAMPRIOR = ~isempty(model.randomprocess.hyperprior);
-NOISYOBS   = ~strcmp(model.noise.type, 'none');
-NOISEPRIOR = isfield(model.noise, 'lognoisevarprior');
+NOISYOBS   = ~isa(model.noise.cov, 'stk_nullcov');
+NOISEPRIOR = ~isempty(model.noise.lognoisevarprior);
 
 if NOISYOBS,
-    if (nargout == 3) && ~strcmp (model.noise.type, 'swn')
+    if (nargout == 3) && ~isa(model.noise.cov, 'stk_homnoisecov')
         error(['In order to estimate the variance of the observation noise' ...
-               'please set model.noise.type = ''swn''']);
+               'please set model.noise.cov to an object of class stk_homnoisecov.']);
     end
 else
     if NOISEPRIOR,
@@ -57,15 +57,14 @@ else
     end
     % adding a small observation noise helps
     NOISYOBS = true;
-    model.noise.type = 'swn';
-    model.noise.lognoisevariance = log(100*eps);
+    model.noise.cov = stk_homnoisecov(100 * eps);
 end
 
 n = model.observations.n;
 
 %% compute rl
 
-[K,P] = stk_make_matcov( model, model.observations.x );
+[K,P] = stk_make_matcov(model, model.observations.x);
 q = size(P,2);
 
 [Q,R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
@@ -105,7 +104,7 @@ rl = 1/2*((n-q)*log(2*pi) + ldetWKW + attache + prior + noiseprior);
 
 if nargout >= 2
     
-    drl_param = zeros(priorcov.nb_cparam, 1);
+    drl_param = zeros(length(priorcov.cparam), 1);
     
     for paramdiff = 1:size(drl_param, 1),
         V = priorcov(model.observations.x, model.observations.x, paramdiff);
@@ -121,7 +120,7 @@ if nargout >= 2
     if nargout >= 3,
         if NOISYOBS,
             diff = 1;
-            V = stk_noisecov(n, model.noise.lognoisevariance, diff);
+            V = feval(model.noise.cov, model.observations.x, [], diff);
             WVW = W'*V*W;
             drl_lnv = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wz'*WVW*WKWinv_Wz);
             if NOISEPRIOR

@@ -84,7 +84,7 @@ obs = stk_makedata(xi, zi);
 % set, but they will be replaced below by estimated parameters.)
 model = stk_model('stk_materncov_iso');
 model = stk_setobs(model, obs);
-model.noise.type = 'swn';
+model.noise.cov = stk_homnoisecov();
 
 
 %% ESTIMATION THE PARAMETERS OF THE COVARIANCE
@@ -106,7 +106,7 @@ lnv0 = 2 * log(std(zi.a) / 100);
 [param, paramlnv] = stk_param_estim(model, param0, lnv0);
 
 model.randomprocess.priorcov.param = param;
-model.noise.lognoisevariance = paramlnv;
+model.noise.cov.variance = exp(paramlnv);
 
 
 %% CARRY OUT KRIGING PREDICTION & DISPLAY THE RESULT

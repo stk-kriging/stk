@@ -25,8 +25,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_set_cparam(cov, value) %#ok<INUSD>
+function t = stk_get_cparam(cov)
 
-stk_error('Method undefined (stk_cov is a virtual class).', 'MethodUndefined');
+t = log(cov.param.variance);
 
-end
+end % function stk_get_cparam

@@ -135,15 +135,13 @@ xzi_noisy.z.a = xzi.z.a + noise;
 %     model_noisy.noise.type = 'swn';
 %     model_noisy.noise.lognoisevariance = log(NOISEVARIANCE);
 
-model_noisy = model;
-
-model_noisy.noise.type = 'swn';
-model_noisy.noise.lognoisevariance = log(NOISEVARIANCE);
+model1 = model;
+model1.noise.cov = stk_homnoisecov(NOISEVARIANCE);  % homoscedastic white noise
 
 % Carry out the kriging prediction at locations xg.a
 
-model_noisy = stk_setobs(model_noisy, xzi_noisy);
-zp_noisy = stk_predict(model_noisy, xg);
+model1 = stk_setobs(model1, xzi_noisy);
+zp_noisy = stk_predict(model1, xg);
 
 % Display the result
 xzp_noisy = stk_makedata(xg, zp_noisy);

@@ -25,39 +25,28 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = get(cov, propertyname, varargin)
+function t = get(cov, propertyname)
 
 switch propertyname
     
     case 'name'
         t = cov.name;
         
-    case 'nb_cparam'
-        t = stk_get_nb_cparam(cov);
+    case 'param',  % get the whole 'param' descriptor at once
+        t = stk_get_param(cov, []);
         
-    case 'param',
-        t = stk_get_param(cov, varargin{:});
-        
-    case 'cparam',
-        t = stk_get_cparam(cov, varargin{:});
+    case 'cparam', % get the whole 'cparam' vector at once
+        t = stk_get_cparam(cov);
         
     otherwise
-        
-        try % perhaps a "named" parameter ?
-            
+        try
             t = stk_get_param(cov, propertyname);
-            % there should be no additional parameter in varargin
-            if ~isempty(varargin)
-                stk_error('Too many input arguments', 'TooManyInputArgs');
-            end
-            
-        catch % OK, I give up
-            
+        catch %#ok<CTCH>
             stk_error(sprintf('No %s property to get in class %s.', propertyname, ...
                 class(cov), propertyname), 'NonExistentProperty');
-            
-        end % try/catch
+        end
         
 end % switch
+
 
 end % function set

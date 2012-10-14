@@ -50,9 +50,25 @@ switch field,
     case {'randomprocess', 'noise'}
         
         if ~isempty(idx),
-            model.(field) = subsasgn(model.(field), idx, rhs);
+            
+            if ~strcmp(idx(1).type, '.')
+                stk_error('Illegal subscripting.', 'SyntaxError');
+            end
+            
+            s = [field '.' idx(1).subs];
+            
+            switch s
+                case {'randomprocess.type', 'randomprocess.priormean', ...
+                        'randomprocess.priorcov', 'noise.cov', 'noise.lognoisevariance'}
+                    model.(field) = builtin('subsasgn', model.(field), idx, rhs);
+                otherwise
+                    msg = sprintf('randomprocess.%s does not exist', idx(1).subs);
+                    stk_error(msg, 'PropertyDoesNotExist');
+            end
+            
         else
-            msg = sprintf('Direct assignment to %s is not allowed (currently).', field);
+            
+            msg = 'Direct assignment to randomprocess is not allowed (currently).';
             stk_error(msg, 'DirectAssignmentNotAllowed');
         end
         

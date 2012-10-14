@@ -25,8 +25,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = stk_nullcov_getparam(param, idx) %#ok<INUSD>
+function cov = stk_nullcov()
 
-stk_error('Sorry, I have no parameter...', 'InvalidArgument');
+cov = class(struct(), 'stk_nullcov', stk_homnoisecov());
+cov = set(cov, 'name', 'stk_nullcov');
 
-end % function stk_materncov_iso_getparam
+end % function stk_cov

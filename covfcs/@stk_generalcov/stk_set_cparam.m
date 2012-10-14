@@ -25,8 +25,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_set_cparam(cov, value) %#ok<INUSD>
+function cov = stk_set_cparam(cov, value)
 
-stk_error('Method undefined (stk_cov is a virtual class).', 'MethodUndefined');
+if isempty(cov.set_cparam), % no setter available, can we assume that cparam = param ?
+    
+    if isa(cov.param, 'double'), % yes, we can
+        cov = stk_set_param(cov, [], value);
+    else
+        errmsg = 'cparam does not exist for this covariance.';
+        stk_error(errmsg, 'CParamMissing');
+    end
+       
+else % user user-provided setter
+    
+    cov.param = cov.set_cparam(cov.param, value);
+    
+end
 
 end

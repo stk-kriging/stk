@@ -25,8 +25,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function param = stk_nullcov_defaultparam(dim) %#ok<INUSD>
+function t = stk_get_cparam(cov)
 
-param = [];
+if isempty(cov.get_cparam), % no getter available, can we assume that cparam = param ?        
+    
+    if isa(cov.param, 'double'), % yes, we can
+        t = cov.param;
+    else
+        errmsg = 'cparam does not exist for this covariance.';
+        stk_error(errmsg, 'cparamMissing');
+    end
+    
+else
+    
+    t = cov.get_cparam(cov.param);
+    
+end % if
 
-end
+end % function stk_get_cparam

@@ -25,17 +25,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [lb, ub] = stk_get_default_bounds(cov, varargin)
+function k = feval(cov, x, y, diff) %#ok<INUSL>
+stk_narginchk(2, 4);
 
-if isempty(varargin), varargin = {cov.param_}; end
+% x
+if isstruct(x), x = x.a; end
+nx = size(x, 1);
 
-F = cov.get_default_bounds;
-
-if ~isempty(F),
-    [lb, ub] = F(varargin{:});
+% y
+if (nargin > 2)
+    if isstruct(y), y = y.a; end
+    ny = size(y, 1);
 else
-    % sorry, we have no bounds to provide...
-    lb = []; ub = [];
+    % special case y = x
+    y = [];
+    ny = nx;
 end
 
-end % function get_default_bounds
+% check diff argument
+if (nargin == 4) && (diff ~= -1)
+    errmsg = 'diff can only be equal to -1 for stk_nullcov objects.';
+    stk_error(errmsg, 'IncorrectArgument');
+end
+
+k = sparse(nx, ny);
+
+end % function feval
