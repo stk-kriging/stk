@@ -3,7 +3,7 @@
 % CALL: k = stk_materncov52_iso(param, x, y, diff)
 %   param  = vector of parameters of size 2
 %   x      = structure whose field 'a' contains the observed points.
-%            x.a  is a matrix of size n x d, where n is the number of
+%            x  is a matrix of size n x d, where n is the number of
 %            points and d is the dimension of the
 %            factor space
 %   y      = same as x
@@ -55,6 +55,9 @@ stk_narginchk(3, 4);
 % default: compute the value (not a derivative)
 if (nargin<4), diff = -1; end
 
+if isstruct(x), x = x.a; end
+if isstruct(y), y = y.a; end
+
 % extract parameters from the "param" vector
 Sigma2 = exp(param(1));
 invRho = exp(param(2));
@@ -67,9 +70,9 @@ end
 % check if all input arguments are the same as before
 % (or if this is the first call to the function)
 if isempty(x0) || isempty(y0) || isempty(param0) || ...
-        ~isequal({x.a,y.a,param},{x0.a,y0.a,param0})
+        ~isequal({x, y, param},{x0, y0, param0})
     % compute the distance matrix
-    D  = invRho * stk_distance_matrix(x.a,y.a);
+    D  = invRho * stk_distance_matrix(x, y);
     % save arguments for the nex call
     x0 = x; y0 = y; param0 = param;
 end

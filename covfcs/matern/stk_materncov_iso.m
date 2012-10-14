@@ -3,7 +3,7 @@
 % CALL: [k]=stk_materncov_iso(param, x, y, diff)
 %   param  = vector of parameters of size 3
 %   x      = structure whose field 'a' contains the observed points.
-%            x.a  is a matrix of size n x d, where n is the number of
+%            x is a matrix of size n x d, where n is the number of
 %            points and d is the dimension of the
 %            factor space
 %   y      = same as x

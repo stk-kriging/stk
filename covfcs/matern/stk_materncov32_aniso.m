@@ -3,7 +3,7 @@
 % CALL: k = stk_materncov32_aniso(param, x, y, diff)
 %   param  = vector of parameters of size 1+d
 %   x      = structure whose field 'a' contains the observed points.
-%            x.a  is a matrix of size n x d, where n is the number of
+%            x is a matrix of size n x d, where n is the number of
 %            points and d is the dimension of the factor space
 %   y      = same as x
 %   diff   = differentiation parameter
@@ -84,7 +84,7 @@ invRho = diag(invRho);
 % check if all input arguments are the same as before
 % (or if this is the first call to the function)
 if isempty(x0) || isempty(y0) || isempty(param0) || ...
-        ~isequal({x, y, param},{x0, y0, param0})
+        ~isequal({x, y, param}, {x0, y0, param0})
     % compute the distance matrix
     xs = x * invRho; ys = y * invRho;
     D = stk_distance_matrix(xs, ys);
