@@ -48,7 +48,7 @@ function t = subsref_(model, field, idx)
 
 switch field,
     
-    case {'randomprocess', 'noise', 'observations'}
+    case {'randomprocess', 'noise', 'observations', 'domain'}
         
         if ~isempty(idx),
             t = subsref(model.(field), idx);

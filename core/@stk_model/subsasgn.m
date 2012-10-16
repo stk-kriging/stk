@@ -47,7 +47,13 @@ function model = subsasgn_(model, field, idx, rhs)
 
 switch field,
     
-    case {'randomprocess', 'noise'}
+    case 'observations'
+        
+        msg = 'Assignment to ''observations'' (or its fields) is not allowed; ';
+        msg = [msg 'Please use stk_set_obs() instead.'];
+        stk_error(msg, 'DirectAssignmentNotAllowed');
+        
+    case {'randomprocess', 'noise', 'domain'}
         
         if ~isempty(idx),
             
@@ -55,21 +61,20 @@ switch field,
                 stk_error('Illegal subscripting.', 'SyntaxError');
             end
             
-            s = [field '.' idx(1).subs];
-            
-            switch s
-                case {'randomprocess.type', 'randomprocess.priormean', ...
-                        'randomprocess.priorcov', 'noise.cov', 'noise.lognoisevariance'}
-                    model.(field) = builtin('subsasgn', model.(field), idx, rhs);
-                otherwise
-                    msg = sprintf('randomprocess.%s does not exist', idx(1).subs);
-                    stk_error(msg, 'PropertyDoesNotExist');
+            s = model.(field); % structure
+            if isfield(s, idx(1).subs)
+                model.(field) = builtin('subsasgn', s, idx, rhs);
+            else
+                % creation of new fields is not authorized
+                msg = sprintf('%s.%s does not exist', field, idx(1).subs);
+                stk_error(msg, 'PropertyDoesNotExist');
             end
             
         else
             
             msg = 'Direct assignment to randomprocess is not allowed (currently).';
             stk_error(msg, 'DirectAssignmentNotAllowed');
+
         end
         
     otherwise
