@@ -62,12 +62,13 @@ NB_MODELS = 6; model = cell(1, NB_MODELS);
 SIGMA2 = 1.0;  % variance parameter
 NU     = 2.0;  % regularity parameter
 RHO1   = 0.4;  % scale (range) parameter
+NOISE_VARIANCE = (1e-6)^2; % "rgularisation noise"
 
 % First, two Matern models with estimated regularity
 % 1) kriging with constant mean function (ordinary kriging)
 model{1} = stk_model('stk_materncov_iso');
 model{1}.randomprocess.priorcov.param = log([SIGMA2; NU; 1/RHO1]);
-model{1}.noise.lognoisevariance = log(100 * eps);
+model{1}.noise.cov = stk_homnoisecov(NOISE_VARIANCE);
 % 2) kriging with affine mean function
 model{2} = model{1};
 model{2}.randomprocess.priormean.param = 1; % order
@@ -76,7 +77,7 @@ model{2}.randomprocess.priormean.param = 1; % order
 % 3) kriging with constant mean function ("ordinary kriging)
 model{3} = stk_model('stk_materncov52_iso');
 model{3}.randomprocess.priorcov.param = log([SIGMA2; log(1/RHO1)]);
-model{3}.noise.lognoisevariance = log(100 * eps);
+model{3}.noise.cov = stk_homnoisecov(NOISE_VARIANCE);
 % 4) kriging with affine mean function
 model{4} = model{3};
 model{4}.randomprocess.priormean.param = 1; % order
@@ -85,10 +86,10 @@ model{4}.randomprocess.priormean.param = 1; % order
 % 5) kriging with constant mean function ("ordinary kriging)
 model{5} = stk_model('stk_materncov32_iso');
 model{5}.randomprocess.priorcov.param = log([SIGMA2; 1/RHO1]);
-model{5}.noise.lognoisevariance = log(100 * eps);
+model{5}.noise.cov = stk_homnoisecov(NOISE_VARIANCE);
 % 6) kriging with affine mean function
 model{6} = model{5};
-model{6}.noise.lognoisevariance = 1;
+model{6}.randomprocess.priormean.param = 1; % order
 
 
 %% PARAMETER ESTIMATION AND PREDICTION FOR EACH MODEL
