@@ -91,7 +91,7 @@ xzi = stk_makedata(xi, zi);
 model = stk_model('stk_materncov_iso');
 
 % Homoscedastic white noise
-noise_variance = max(NOISEVARIANCE, 1e-10);
+noise_variance = max(NOISEVARIANCE, (1e-6)^2);
 model.noise.cov = stk_homnoisecov(noise_variance);
 % Even if we don't assume that the observations are noisy,
 % it is usually wiser to add a small "regularization noise".

@@ -107,9 +107,9 @@ end
 
 model = stk_model(COVNAME, DIM);
 
-model.randomprocess.priormean.type   = 'polynomial';
-model.randomprocess.priormean.param  = COVORDER;
-model.randomprocess.priorcov.param = PARAM0;
+model.randomprocess.priormean.type  = 'polynomial';
+model.randomprocess.priormean.param = COVORDER;
+model.randomprocess.priorcov.param  = PARAM0;
 
 if exist('NOISEVARIANCE', 'var')
     model.noise.cov = stk_homnoisecov(NOISEVARIANCE);
