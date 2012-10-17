@@ -66,7 +66,6 @@ end
 nb_params = dim + 1;
 if (numel(param) ~= nb_params)
     errmsg = 'x and param have incompatible sizes.';
-    keyboard;
     stk_error(errmsg, 'InvalidArgument');
 end
 
