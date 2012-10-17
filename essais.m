@@ -298,3 +298,28 @@ assert(k1.alpha  == exp(t1(3)));
 
 k1.sigma2 = 3.0; assert(stk_isequal_tolrel(k1.sigma2, 3.0));
 k1.sigma2 = 2.0; assert(stk_isequal_tolrel(k1.sigma2, 2.0));
+
+
+%% essai stk_constrainedcov
+
+cov0 = stk_cov('stk_materncov32_aniso', 'dim', 3);
+cov0.cparam = [0 1.1 1.2 1.3];
+
+clist = {1, 2, [3 4]}; % equal ranges for factor #2 and #3
+cov = stk_constrainedcov(cov0, clist);
+assert(isequal(cov.cparam, [0 1.1 1.2]));
+assert(isequal(cov.base_cov.cparam, [0 1.1 1.2 1.2]));
+
+x = [0 0 0]; assert(isequal(cov(x, x), 1.0));
+
+[lb0, ub0] = stk_get_defaultbounds(cov0);
+[lb,  ub ] = stk_get_defaultbounds(cov);
+assert(isequal(lb, lb0(1:3)) && isequal(ub, ub0(1:3)));
+
+p0 = cov0.cparam; p1 = cov.cparam; assert(isequal(p1, p0(1:3)));
+
+cov.cparam = [0 1.27 2.28];
+assert(isequal(cov.cparam, [0 1.27 2.28]));
+assert(isequal(cov.base_cov.cparam, [0 1.27 2.28 2.28]));
+
+param = cov.param; assert(isstruct(param));
