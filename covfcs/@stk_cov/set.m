@@ -31,9 +31,6 @@ switch propertyname
     
     case 'name'
         cov.name = value;
-
-    case 'param',  % set the whole 'param' descriptor at once
-        cov = stk_set_param(cov, [], value);
         
     case 'cparam', % set the whole 'cparam' vector at once
         cov = stk_set_cparam(cov, value);

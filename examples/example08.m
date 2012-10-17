@@ -105,7 +105,7 @@ lnv0 = 2 * log(std(zi.a) / 100);
 
 [param, paramlnv] = stk_param_estim(model, param0, lnv0);
 
-model.randomprocess.priorcov.param = param;
+model.randomprocess.priorcov.cparam = param;
 model.noise.cov.variance = exp(paramlnv);
 
 

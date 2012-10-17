@@ -32,9 +32,6 @@ switch propertyname
     case 'name'
         t = cov.name;
         
-    case 'param',  % get the whole 'param' descriptor at once
-        t = stk_get_param(cov, []);
-        
     case 'cparam', % get the whole 'cparam' vector at once
         t = stk_get_cparam(cov);
         

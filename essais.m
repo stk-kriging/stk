@@ -197,25 +197,8 @@ assert(isequal(k.cparam(:), [0.32; -0.68]));
 k = stk_cov('stk_materncov_aniso');
 p = k.cparam; assert(length(p) == 3); % 3 parameters: logvariance, lognu, logalpha
 assert(isequal(p(:), [k.cparam(1); k.cparam(2); k.cparam(3)]));
-k.cparam(1) = 0.32; k.cparam(2) = -0.68; k.param(3) = 1.77;
+k.cparam(1) = 0.32; k.cparam(2) = -0.68; k.cparam(3) = 1.77;
 assert(isequal(k.cparam(:), [0.32; -0.68; 1.77]));
-
-
-%% get param
-
-k = stk_cov();
-try
-    k.param
-    error('What am I doing here ?');
-catch
-    e = lasterror(); 
-    assert(strcmp(e.identifier, 'STK:stk_get_param:MethodUndefined'));   
-end
-
-k = stk_cov('stk_hetnoisecov');        param = k.param
-k = stk_cov('stk_homnoisecov');        param = k.param
-k = stk_cov('stk_nullcov');            param = k.param
-k = stk_cov('stk_materncov32_aniso');  param = k.param
 
 
 %% set/get name
@@ -250,14 +233,6 @@ assert(length(k1.cparam) == 3);
 assert(length(k2.cparam) == 2);
 assert(length(k3.cparam) == 4);
 
-t1 = k1.param
-t2 = k2.param
-t3 = k3.param
-
-assert(isequal(t1, get(k1, 'param')))
-assert(isequal(t2, get(k2, 'param')))
-assert(isequal(t3, get(k3, 'param')))
-
 x1 = 0.0;
 x2 = zeros(1, 3);
 
@@ -275,9 +250,9 @@ assert(k3(x2, x2) == 1.0);
 t1 = [0; 0.5; 1.1];
 t2 = [0.1; 0.4; 1.2];
 
-k1.param = t1;                assert(isequal(k1.param, t1));  % NICER !
-k1 = set(k1, 'param', t2);    assert(isequal(k1.param, t2));
-k1 = set(k1, 'param', t1);    assert(isequal(k1.param, t1));
+k1.cparam = t1;                assert(isequal(k1.cparam, t1));  % NICER !
+k1 = set(k1, 'cparam', t2);    assert(isequal(k1.cparam, t2));
+k1 = set(k1, 'cparam', t1);    assert(isequal(k1.cparam, t1));
 
 n = 100; z = randn(n, 1);
 
@@ -288,8 +263,6 @@ n = 100; z = randn(n, 1);
 
 assert(isequal(lb1, lb2) && isequal(ub1, ub2));
 assert(~isequal(lb1, lb3) && ~isequal(ub1, ub3));
-
-assert(isequal(k1.param, k1.cparam));
 
 assert(k1.sigma2 == exp(t1(1)));
 assert(k1.nu     == exp(t1(2)));
@@ -321,5 +294,3 @@ p0 = cov0.cparam; p1 = cov.cparam; assert(isequal(p1, p0(1:3)));
 cov.cparam = [0 1.27 2.28];
 assert(isequal(cov.cparam, [0 1.27 2.28]));
 assert(isequal(cov.base_cov.cparam, [0 1.27 2.28 2.28]));
-
-param = cov.param; assert(isstruct(param));
