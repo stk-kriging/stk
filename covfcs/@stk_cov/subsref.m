@@ -44,8 +44,23 @@ end
 % handle additional indices
 idx = idx(2:end);
 if ~isempty(idx),
-    t = subsref(t, idx);
+    try
+        % this is how it should be written...
+        t = subsref(t, idx);        
+    catch
+        % but sometimes if fails... (for instance when subscripting an 
+        % object field in a structure, apparently)
+        err0 = lasterror();
+        try
+            while ~isempty(idx),
+                t = subsref(t, idx(1));
+                idx = idx(2:end);
+            end
+        catch
+            % if even the workaround fails, I give up
+            rethrow(err0);
+        end
+    end
 end
 
 end % function subsref
-
