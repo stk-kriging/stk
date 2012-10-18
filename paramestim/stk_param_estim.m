@@ -154,15 +154,15 @@ end
 
 function [l,dl] = f_with_noise_(model, u)
 model.randomprocess.priorcov.cparam = u(1:end-1);
-model.noise.cov.logvariance  = u(end);
+model.noise.cov.variance = exp(u(end));
 [l, dl, dln] = stk_reml(model);
 dl = [dl; dln];
 end
 
 function dl = nablaf_with_noise_(model, u)
 model.randomprocess.priorcov.cparam = u(1:end-1);
-model.noise.cov.logvariance  = u(end);
-[l_ignored, dl, dln] = stk_remlqrg(model); %#ok<ASGLU>
+model.noise.cov.variance = exp(u(end));
+[l_ignored, dl, dln] = stk_reml(model); %#ok<ASGLU>
 dl = [dl; dln];
 end
 
