@@ -49,7 +49,7 @@ switch field,
     
     case 'observations'
         
-        msg = 'Assignment to ''observations'' (or its fields) is not allowed; ';
+        msg = 'Direct assignment to ''observations'' (or its fields) is not allowed; ';
         msg = [msg 'Please use stk_set_obs() instead.'];
         stk_error(msg, 'DirectAssignmentNotAllowed');
         
@@ -59,17 +59,23 @@ switch field,
             
             if ~strcmp(idx(1).type, '.')
                 stk_error('Illegal subscripting.', 'SyntaxError');
-            end
+            end            
             
-            s = model.(field); % structure
-            if isfield(s, idx(1).subs)
-                model.(field) = builtin('subsasgn', s, idx, rhs);
-            else
+            subfield = idx(1).subs;
+            if ~isfield(model.(field), subfield)
                 % creation of new fields is not authorized
                 msg = sprintf('%s.%s does not exist', field, idx(1).subs);
                 stk_error(msg, 'PropertyDoesNotExist');
             end
             
+            idx = idx(2:end);
+            
+            if isempty(idx),
+                model.(field).(subfield) = rhs;
+            else
+                model.(field).(subfield) = subsasgn(model.(field).(subfield), idx, rhs);
+            end
+              
         else
             
             msg = 'Direct assignment to randomprocess is not allowed (currently).';
