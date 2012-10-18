@@ -25,13 +25,16 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_set_cparam(cov, value)
+function t = get(cov, propname)
 
-if length(value) ~= 1,
-    errmsg = 'Trying to set an incorrect value for cparam (should be scalar).';
-    stk_error(errmsg, 'IncorrectArgument');
-end
+switch propname,
+    
+    case 'cparam'
+        t = [];
+        
+    otherwise % name, varfun, x, v, variance
+        t = get(cov.stk_homnoisecov, propname);
+        
+end % switch
 
-cov.param.variance = exp(value);
-
-end
+end % function stk_get_param

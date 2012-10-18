@@ -28,9 +28,9 @@
 function [lb, ub] = stk_get_defaultbounds(cov, varargin)
 stk_narginchk(1, 3);
 
-[lb, ub] = stk_get_defaultbounds(cov.param.base_cov, varargin{:});
+[lb, ub] = stk_get_defaultbounds(cov.prop.basecov, varargin{:});
 
-lb = lb(cov.param.idx_free);
-ub = ub(cov.param.idx_free);
+lb = lb(cov.aux.idxfree);
+ub = ub(cov.aux.idxfree);
 
 end % function stk_get_defaultbounds

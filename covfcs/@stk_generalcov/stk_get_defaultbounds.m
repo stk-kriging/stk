@@ -25,21 +25,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [lb, ub] = stk_get_defaultbounds(cov, varargin)
+function [lb, ub] = stk_get_defaultbounds(cov, cparam0, varargin)
 stk_narginchk(1, 3);
 
-if nargin == 1,
-    varargin = {cov.param};
-else
-    if length(varargin{1}) ~= length(stk_get_cparam(cov)),
-        stk_error('Incorrect size for cparam0.', 'IncorrectArgument');
-    end
+if nargin > 1 && ~isempty(cparam0)
+    cov = set(cov, 'cparam', cparam0);
 end
 
-F = cov.get_defaultbounds;
+F = cov.prop.handlers.get_defaultbounds;
 
 if ~isempty(F),
-    [lb, ub] = F(varargin{:});
+    [lb, ub] = F(cov.prop.param, varargin{:});
 else
     % sorry, we have no bounds to provide...
     lb = []; ub = [];

@@ -25,22 +25,73 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_set_cparam(cov, value)
+function cov = set(cov, propname, value)
+
+switch propname
+    
+    case 'cparam'
+        cov = set_cparam_(cov, value);
+        
+    case 'base_cov'
+        errmsg = 'Property basecov is read-only.';
+        stk_error(errmsg, 'SettingReadOnlyProperty');
+        
+    case 'clist'
+        cov = set_clist_(cov, value);
+        
+    otherwise % name
+        cov.stk_cov = set(cov.stk_cov, propname, value);
+        
+end
+
+end
+
+
+function cov = set_cparam_(cov, value)
 
 % check arg #2
-nb_groups = length(cov.param.idx_free);
+nb_groups = length(cov.aux.idxfree);
 if ~isa(value, 'double') || (length(value) ~= nb_groups)
     stk_error('Incorrect ''value'' argument.', 'IncorrectArgument');
 end
 
 % build a "full" cparam vector
-clist = cov.param.clist;
+clist = cov.prop.clist;
 t = zeros(1, length([clist{:}]));
 for j = 1:nb_groups
     t(clist{j}) = value(j);
 end
 
 % set the "full" cparam vector
-cov.param.base_cov = stk_set_cparam(cov.param.base_cov, t);
+cov.prop.basecov = set(cov.prop.basecov, 'cparam', t);
+
+end
+
+
+function cov = set_clist_(cov, clist)
+
+basecov = cov.prop.basecov;
+
+% indices of free parameters
+nbgroups = length(clist);
+idxfree = zeros(1, nbgroups);
+for j = 1:nbgroups,
+    idxfree(j) = clist{j}(1);
+end
+
+% enforce equality constraints in basecov
+for j = 1:nbgroups,
+    L = length(clist{j}); 
+    if L > 1,
+        for k = 2:L,
+            basecov.cparam(clist{j}(k)) = basecov.cparam(clist{j}(1));
+        end
+    end
+end
+
+% update the structure
+cov.prop.basecov = basecov;
+cov.prop.clist   = clist;
+cov.aux.idxfree  = idxfree;
 
 end

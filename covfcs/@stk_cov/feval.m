@@ -25,7 +25,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = feval(cov, x, y, diff)
+function K = feval(cov, x, y, diff) %#ok<STOUT,INUSD>
 
 stk_error('Method undefined (stk_cov is a virtual class).', 'MethodUndefined');
 

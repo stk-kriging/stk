@@ -25,20 +25,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_constrainedcov(cov0, clist)
+function cov = stk_constrainedcov(basecov, clist)
 
 % default/check arg #1
 if nargin < 1,
-    cov0 = stk_nullcov();
+    basecov = stk_nullcov();
 else
-    if ~isa(cov0, 'stk_cov')
-        errmsg = 'cov0 must be an object of class stk_cov.';
+    if ~isa(basecov, 'stk_cov')
+        errmsg = 'basecov must be an object of class stk_cov.';
         stk_error(errmsg, 'IncorrectArgument');
     end
 end
 
 % default/check arg #2
-p = length(cov0.cparam);
+p = length(basecov.cparam);
 if nargin < 2,
     if p == 0,
         clist = {};
@@ -57,31 +57,16 @@ else % clist has been provided
     end
 end
 
-% indices of free parameters
-nb_groups = length(clist);
-idx_free = zeros(1, nb_groups);
-for j = 1:nb_groups,
-    idx_free(j) = clist{j}(1);
-end
-
-% enforce equality constraints
-for j = 1:nb_groups,
-    L = length(clist{j}); 
-    if L > 1,
-        for k = 2:L,
-            cov0.cparam(clist{j}(k)) = cov0.cparam(clist{j}(1));
-        end
-    end
-end
-
 % create the underlying structure
-cov = struct('param', struct(...
-    'base_cov', {cov0},     ...   % first param = unconstrained covariance
-    'idx_free', {idx_free}, ...   % second param = indices of free parameters
-    'clist',    {clist}     ));   % third param = list of equality constraints
-
+cov = struct('prop', struct(), 'aux', []);
+cov.prop = struct('basecov', basecov, 'clist', []);
+cov.aux = struct('idxfree', []);
+    
 % turn the structure into an object of class stk_constrainedcov
 cov = class(cov, 'stk_constrainedcov', stk_cov());
+
+% populate some fields
 cov = set(cov, 'name', 'stk_constrainedcov');
+cov = set(cov, 'clist', clist);
 
 end % function stk_constrainedcov

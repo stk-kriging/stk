@@ -25,8 +25,28 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_set_cparam(cov, value) %#ok<INUSD>
+function t = get(cov, propname)
 
-stk_error('Method undefined (stk_cov is a virtual class).', 'MethodUndefined');
+switch propname
+    
+    case 'cparam'
+        t = get(cov.prop.basecov, 'cparam');
+        t = t(cov.aux.idxfree);
+        
+    case {'basecov', 'clist'}
+        t = cov.prop.(propname);
+        
+    case 'name'
+        t = get(cov.stk_cov, 'name');
+        
+    otherwise % perhaps a property of the base covariance ?
+        try
+            t = get(cov.prop.basecov, propname);
+        catch
+            errmsg = sprintf('Property %s does not exist.', propname);
+            stk_error(errmsg, 'IncorrectArgument');
+        end
+        
+end % switch
 
-end
+end % function stk_get_param

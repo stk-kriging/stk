@@ -28,13 +28,11 @@
 function [lb, ub] = stk_get_defaultbounds(cov, cparam0, z)
 stk_narginchk(1, 3);
 
-if (nargin > 1) && (length(cparam0) ~= length(cov.cparam))
-    stk_error('Incorrect size for cparam0.', 'IncorrectArgument');
-else
-    cparam0 = cov.cparam;
+if nargin > 1 && ~isempty(cparam0)
+    cov = set(cov, 'cparam', cparam0); % raise an error
 end
 
-if nargin < 3,
+if nargin < 3 || isempty(z)
     empirical_variance = 1.0;
 else
     if isstruct(z), z = z.a; end
@@ -44,7 +42,8 @@ end
 TOLVAR = 5.0;
 
 % bounds for the logvariance parameter
-lb = min(log(empirical_variance), cparam0(1)) - TOLVAR;
-ub = max(log(empirical_variance), cparam0(1)) + TOLVAR;
+lnv0 = log(cov.prop.variance);
+lb = min(log(empirical_variance), lnv0) - TOLVAR;
+ub = max(log(empirical_variance), lnv0) + TOLVAR;
 
 end % function stk_get_defaultbounds

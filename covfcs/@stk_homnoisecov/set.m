@@ -25,8 +25,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = stk_get_cparam(cov) %#ok<STOUT,*INUSD>
+function cov = set(cov, propname, value)
 
-stk_error('Method undefined (stk_cov is a virtual class).', 'MethodUndefined');
+switch propname,
+    
+    case 'cparam' % FIXME: check
+        cov.prop.variance = exp(value);
+        
+    case 'variance',
+        cov.prop.variance = value;
+        
+    case 'varfun'
+        errmsg = 'Property varfun cannot be set directly.';
+        stk_error(errmsg, 'SettingReadOnlyProperty');
+        
+    case {'x', 'v'}
+        if ~isempty(value)
+            errmsg = sprintf('Property ''%s'' is immutable.', propname);
+            stk_error(errmsg, 'SettingImmutableProperty');
+        end
+        
+    otherwise, % name
+        cov.stk_hetnoisecov = set(cov.stk_hetnoisecov, propname, value);
+        
+end % switch
 
-end % function stk_get_cparam
+end % stk_homnoisecov.stk_set_param

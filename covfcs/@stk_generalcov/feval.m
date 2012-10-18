@@ -42,7 +42,7 @@ if nargin < 4,
     diff = -1;
 end
 
-K = feval(cov.fun, cov.param, x, y, diff);
+K = feval(cov.prop.handlers.fun, cov.prop.param, x, y, diff);
 
 end % function feval
 

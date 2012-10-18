@@ -48,7 +48,7 @@ function cov = stk_cov(arg1, varargin)
 
 if nargin == 0, % default constructor
     
-    cov = struct('name', 'NULL');
+    cov = struct('prop', struct('name', 'NULL'), 'aux', []);    
     cov = class(cov, 'stk_cov');
     
 else

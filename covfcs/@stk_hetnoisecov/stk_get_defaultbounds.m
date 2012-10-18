@@ -25,11 +25,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [lb, ub] = stk_get_defaultbounds(cov, cparam0, z)
+function [lb, ub] = stk_get_defaultbounds(cov, cparam0, z) %#ok<INUSD>
 stk_narginchk(1, 3);
 
-if (nargin > 1) && ~isempty(cparam0),
-    stk_error('Incorrect size for cparam0.', 'IncorrectArgument');
+if nargin > 1 && ~isempty(cparam0)
+    set(cov, 'cparam', cparam0); % raise an error
 end
 
 lb = [];

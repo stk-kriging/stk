@@ -27,7 +27,8 @@
 
 function cov = stk_nullcov()
 
-cov = class(struct(), 'stk_nullcov', stk_homnoisecov());
+cov = struct('prop', [], 'aux', []);
+cov = class(cov, 'stk_nullcov', stk_homnoisecov());
 cov = set(cov, 'name', 'stk_nullcov');
 
-end % function stk_cov
+end % function stk_nullcov

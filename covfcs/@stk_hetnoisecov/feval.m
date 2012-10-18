@@ -44,14 +44,14 @@ end
 
 nx = size(x, 1);
 
-if ~isempty(cov.param.fun),
+if ~isempty(cov.prop.varfun),
     % in this case we have a function that gives the value of the variance at any point
-    v = feval(cov.param.fun, x);
+    v = feval(cov.prop.varfun, x);
     K = spdiags(v(:), 0, nx, nx);
 else
     % otherwise cov.variance is a vector of variances corresponding to the locations cov.x
-    if isequal(cov.param.x, x),
-        K = spdiags(cov.param.v(:), 0, nx, nx);
+    if isequal(cov.prop.x, x),
+        K = spdiags(cov.prop.v(:), 0, nx, nx);
     else
         stk_error('Improper use of this kind of covariance object.', 'IncorrectArgument');
     end

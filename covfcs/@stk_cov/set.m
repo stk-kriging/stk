@@ -25,23 +25,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = set(cov, propertyname, value)
+function cov = set(cov, propname, value)
 
-switch propertyname
+switch propname
     
     case 'name'
-        cov.name = value;
+        cov.prop.name = value;
         
-    case 'cparam', % set the whole 'cparam' vector at once
-        cov = stk_set_cparam(cov, value);
-        
-    otherwise        
-        try            
-            cov = stk_set_param(cov, propertyname, value);            
-        catch %#ok<CTCH>            
-            stk_error(sprintf('Class %s has no %s property to be set.', ...
-                class(cov), propertyname), 'NonExistentProperty');            
+    case 'cparam',   
+        if ~isempty(value),
+            errmsg = 'Property cparam is immutable for stk_cov objects.';            
+            stk_error(errmsg, 'SettingImmutableProperty');
         end
+        
+    otherwise
+        errmsg = sprintf('Class %s has no %s property to be set.', class(cov), propname);
+        stk_error(errmsg, 'NonExistentProperty');
         
 end
 

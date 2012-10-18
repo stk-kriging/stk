@@ -13,6 +13,8 @@ assert(~isa(k, 'stk_generalcov'));
 assert(~isa(k, 'stk_hetnoisecov'));
 assert(~isa(k, 'stk_homnoisecov'));
 assert(~isa(k, 'stk_nullcov'));
+assert(~isa(k, 'stk_constrainedcov'));
+assert(isfield(struct(k), 'prop') && isfield(struct(k), 'aux'));
 
 k = stk_generalcov();
 assert( isa(k, 'stk_cov')); %%%
@@ -20,6 +22,8 @@ assert( isa(k, 'stk_generalcov')); %%%
 assert(~isa(k, 'stk_hetnoisecov'));
 assert(~isa(k, 'stk_homnoisecov'));
 assert(~isa(k, 'stk_nullcov'));
+assert(~isa(k, 'stk_constrainedcov'));
+assert(isfield(struct(k), 'prop') && isfield(struct(k), 'aux'));
 
 k = stk_hetnoisecov();
 assert( isa(k, 'stk_cov')); %%%
@@ -27,6 +31,8 @@ assert(~isa(k, 'stk_generalcov'));
 assert( isa(k, 'stk_hetnoisecov')); %%%
 assert(~isa(k, 'stk_homnoisecov'));
 assert(~isa(k, 'stk_nullcov'));
+assert(~isa(k, 'stk_constrainedcov'));
+assert(isfield(struct(k), 'prop') && isfield(struct(k), 'aux'));
 
 k = stk_homnoisecov();
 assert( isa(k, 'stk_cov')); %%%
@@ -34,6 +40,8 @@ assert(~isa(k, 'stk_generalcov'));
 assert( isa(k, 'stk_hetnoisecov')); %%%
 assert( isa(k, 'stk_homnoisecov')); %%%
 assert(~isa(k, 'stk_nullcov'));
+assert(~isa(k, 'stk_constrainedcov'));
+assert(isfield(struct(k), 'prop') && isfield(struct(k), 'aux'));
 
 k = stk_nullcov();
 assert( isa(k, 'stk_cov')); %%%
@@ -41,6 +49,17 @@ assert(~isa(k, 'stk_generalcov'));
 assert( isa(k, 'stk_hetnoisecov')); %%%
 assert( isa(k, 'stk_homnoisecov')); %%%
 assert( isa(k, 'stk_nullcov')); %%%
+assert(~isa(k, 'stk_constrainedcov'));
+assert(isfield(struct(k), 'prop') && isfield(struct(k), 'aux'));
+
+k = stk_constrainedcov();
+assert( isa(k, 'stk_cov')); %%%
+assert(~isa(k, 'stk_generalcov'));
+assert(~isa(k, 'stk_hetnoisecov'));
+assert(~isa(k, 'stk_homnoisecov'));
+assert(~isa(k, 'stk_nullcov'));
+assert( isa(k, 'stk_constrainedcov'));
+assert(isfield(struct(k), 'prop') && isfield(struct(k), 'aux'));
 
 
 %% Check inheritance / stk_cov constructor
@@ -164,7 +183,7 @@ try
     error('What am I doing here ?');
 catch
     e = lasterror(); 
-    assert(strcmp(e.identifier, 'STK:stk_set_cparam:IncorrectArgument'));   
+    assert(strcmp(e.identifier, 'STK:set:SettingImmutableProperty'));   
 end
     
 k = stk_cov('stk_homnoisecov');
@@ -185,7 +204,7 @@ try
     error('What am I doing here ?');
 catch 
     e = lasterror();
-    assert(strcmp(e.identifier, 'STK:stk_set_cparam:IncorrectArgument'));   
+    assert(strcmp(e.identifier, 'STK:set:SettingImmutableProperty'));   
 end
 
 k = stk_cov('stk_materncov32_iso');
@@ -281,7 +300,7 @@ cov0.cparam = [0 1.1 1.2 1.3];
 clist = {1, 2, [3 4]}; % equal ranges for factor #2 and #3
 cov = stk_constrainedcov(cov0, clist);
 assert(isequal(cov.cparam, [0 1.1 1.2]));
-assert(isequal(cov.base_cov.cparam, [0 1.1 1.2 1.2]));
+assert(isequal(cov.basecov.cparam, [0 1.1 1.2 1.2]));
 
 x = [0 0 0]; assert(isequal(cov(x, x), 1.0));
 
@@ -293,4 +312,4 @@ p0 = cov0.cparam; p1 = cov.cparam; assert(isequal(p1, p0(1:3)));
 
 cov.cparam = [0 1.27 2.28];
 assert(isequal(cov.cparam, [0 1.27 2.28]));
-assert(isequal(cov.base_cov.cparam, [0 1.27 2.28 2.28]));
+assert(isequal(cov.basecov.cparam, [0 1.27 2.28 2.28]));

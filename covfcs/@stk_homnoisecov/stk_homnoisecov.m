@@ -27,18 +27,18 @@
 
 function cov = stk_homnoisecov(variance)
 
-cov = struct();
+cov = struct('prop', [], 'aux', []);
 
 if nargin == 0, % default
-    cov.param.variance = 1.0;
+    cov.prop.variance = 1.0;
 else
     if (numel(variance) ~= 1) || ~(variance > 0),
         stk_error('Incorrect variance argument.', 'IncorrectArgument');
     end
-    cov.param.variance = variance;
+    cov.prop.variance = variance;
 end
 
 cov = class(cov, 'stk_homnoisecov', stk_hetnoisecov());
 cov = set(cov, 'name', 'stk_homnoisecov');
 
-end % function stk_cov
+end % function stk_homnoisecov

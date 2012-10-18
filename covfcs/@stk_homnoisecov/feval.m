@@ -49,7 +49,7 @@ end
 switch diff,
     
     case {-1, 1}, % value or derivative wrt logvariance
-        K = cov.param.variance * speye(nx, nx);
+        K = cov.prop.variance * speye(nx, nx);
 
     otherwise
         stk_error('Incorrect diff argument.', 'IncorrectArgument');

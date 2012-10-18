@@ -25,25 +25,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = get(cov, propertyname)
+function t = get(cov, propname)
 
-switch propertyname
+switch propname
     
     case 'name'
-        t = cov.name;
+        t = cov.prop.name;
         
-    case 'cparam', % get the whole 'cparam' vector at once
-        t = stk_get_cparam(cov);
+    case 'cparam',
+        t = [];
         
     otherwise
-        try
-            t = stk_get_param(cov, propertyname);
-        catch %#ok<CTCH>
-            stk_error(sprintf('No %s property to get in class %s.', propertyname, ...
-                class(cov), propertyname), 'NonExistentProperty');
-        end
+        errmsg = sprintf('No property %s to get in class %s.', propname, class(cov));
+        stk_error(errmsg, 'NonExistentProperty');
         
 end % switch
-
 
 end % function set

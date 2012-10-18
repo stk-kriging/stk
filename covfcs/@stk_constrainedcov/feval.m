@@ -27,6 +27,6 @@
 
 function k = feval(cov, varargin)
 
-k = feval(cov.param.base_cov, varargin{:});
+k = feval(cov.prop.basecov, varargin{:});
 
 end % function feval

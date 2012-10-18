@@ -25,23 +25,16 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_set_param(cov, propertyname, value)
+function cov = set(cov, propname, value)
 
-if isempty(propertyname), % "full parameter"
-
-    cov.param = value;
-
-else    
-    
-    if isfield(cov.param, propertyname)
-        % FIXME: argument checking
-        cov.param.(propertyname) = value;
-    else % perhaps a property of the base covariance ? 
+switch propname
+       
+    case {'varfun', 'x', 'v'} % FIXME: check
+        cov.(propname) = value;
         
-        errmsg = sprintf('There is no property %s to set.', propertyname);
-        stk_error(errmsg, 'IncorrectArgument');
-    end
-
-end % if
+    otherwise % name, cparam
+        cov.stk_cov = set(cov.stk_cov, propname, value);
+        
+end
 
 end

@@ -25,21 +25,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = stk_get_cparam(cov)
+function cov = set(cov, propname, value)
 
-if isempty(cov.get_cparam), % no getter available, can we assume that cparam = param ?        
-    
-    if isa(cov.param, 'double'), % yes, we can
-        t = cov.param;
-    else
-        errmsg = 'cparam does not exist for this covariance.';
-        stk_error(errmsg, 'cparamMissing');
-    end
-    
-else
-    
-    t = cov.get_cparam(cov.param);
-    
-end % if
+switch propname,        
+        
+    case {'cparam', 'x', 'v'}
+        if ~isempty(value)
+            errmsg = sprintf('Property ''%s'' is immutable.', propname);
+            stk_error(errmsg, 'SettingImmutableProperty');
+        end        
+        
+    case 'variance'
+        if value ~= 0.0,
+            errmsg = 'Property ''variance'' is immutable.';
+            stk_error(errmsg, 'SettingImmutableProperty');
+        end
 
-end % function stk_get_cparam
+    case 'varfun'
+        errmsg = 'Property ''varfun'' is immutable.';
+        stk_error(errmsg, 'SettingReadOnlyProperty');
+
+    otherwise % name
+        cov.stk_homnoisecov = set(cov.stk_homnoisecov, propname, value);
+        
+end % switch
+
+end

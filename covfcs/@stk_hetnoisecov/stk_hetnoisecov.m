@@ -27,31 +27,32 @@
 
 function cov = stk_hetnoisecov(arg)
 
-cov = struct();
+prop = struct();
 
 if nargin == 0, % default constructor
     
-    cov.param.fun = @(x)(1.0);
-    cov.param.x   = [];
-    cov.param.v   = [];
+    prop.varfun = @(x)(1.0);
+    prop.x   = [];
+    prop.v   = [];
     
 else
     
     if isstruct(arg),
-        cov.param.fun = [];
-        cov.param.x   = arg.x;
-        cov.param.v   = arg.v;
+        prop.varfun = [];
+        prop.x   = arg.x;
+        prop.v   = arg.v;
     elseif isa(arg, 'function_handle')
-        cov.param.fun = arg;
-        cov.param.x   = [];
-        cov.param.v   = [];
+        prop.varfun = arg;
+        prop.x   = [];
+        prop.v   = [];
     else
         stk_error('Incorrect variance argument.', 'IncorrectArgument');
     end
     
 end
 
+cov = struct('prop', prop, 'aux', []);
 cov = class(cov, 'stk_hetnoisecov', stk_cov());
 cov = set(cov, 'name', 'stk_hetnoisecov');
 
-end % function stk_hetgwncov
+end % function stk_hetnoisecov

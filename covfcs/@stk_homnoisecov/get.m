@@ -25,26 +25,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = stk_get_param(cov, propertyname)
+function t = get(cov, propname)
 
-if isempty(propertyname), % "full parameter"
+switch propname,
     
-    t = cov.param;
-    
-else
-    
-    switch propertyname,
+    case 'cparam'
+        t = log(cov.prop.variance);
+
+    case 'variance'
+        t = cov.prop.variance;
         
-        case 'variance',
-            t = cov.param.variance;
-            
-        case 'logvariance',
-            t = log(cov.param.variance);
-            
-        otherwise,
-            errmsg = sprintf('Property %s does not exist.', propertyname);
-            stk_error(errmsg, 'IncorrectArgument');
-            
-    end % switch
-    
+    otherwise % name, varfun, x, v
+        t = get(cov.stk_hetnoisecov, propname);
+        
+end % switch
+
 end % function stk_get_param

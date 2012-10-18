@@ -49,12 +49,12 @@ end
     
 % set field "param"
 if isfield(opt, 'param'),
-    cov.param = opt.param;
+    cov.prop.param = opt.param;
     opt = rmfield(opt, 'param');
 else
     init_name = sprintf('%s_defaultparam', covname);
     try
-        cov.param = feval(init_name, dim);
+        cov.prop.param = feval(init_name, dim);
     catch  %#ok<*CTCH>
         disp(lasterr()); %#ok<LERR>
         stk_error('Cannot initialize covariance parameters', 'CovInitFailed');
@@ -79,7 +79,7 @@ end
 cov = class(cov, 'stk_generalcov', stk_cov());
 cov = set(cov, 'name', covname);
 
-end % function stk_cov
+end % function stk_generalcov
 
 
 function opt = analyze_options(varargin)
@@ -100,48 +100,55 @@ end
 end % function analyze_options
 
 
-function [cov, name] = analyze_first_arg(arg1)
+function [cov, covname] = analyze_first_arg(arg1)
 
 switch class(arg1)
     
     case 'char'
         try
             if strcmp(arg1, 'NULL')
-                cov.fun = [];
+                fun = [];
             else
-                cov.fun = str2func(arg1);
+                fun = str2func(arg1);
             end
         catch
             errmsg = sprintf('Failed to create a function handle for %s.', arg1);
             stk_error(errmsg, 'InvalidArgument');
         end
-        name = arg1;
+        covname = arg1;
         
     case 'function_handle'
-        cov.fun = arg1;
-        name = func2str(arg1);
+        fun = arg1;
+        covname = func2str(arg1);
         
     otherwise
         stk_error('Invalid argument', 'InvalidArgument');
         
 end
 
+handlers = struct('fun', fun);
+cov = struct('prop', struct('name', [], 'handlers', handlers), 'aux', []);
+
 end % function analyze_first_arg
 
 
 function [cov, opt] = set_handle_(cov, opt, covname, propname, suffix)
 
+h = cov.prop.handlers;
+
 if isfield(opt, propname)
-    cov.(propname) = opt.(propname);
+    h.(propname) = opt.(propname);
     opt = rmfield(opt, propname);
 else
     fct_name = sprintf('%s%s', covname, suffix);
     if exist([fct_name '.m'], 'file')
-        cov.(propname) = str2func(fct_name);
+        h.(propname) = str2func(fct_name);
     else
         % not a big deal
-        cov.(propname) = [];
+        h.(propname) = [];
     end
 end
+
+cov.prop.handlers = h;
 
 end % function set_handle_
