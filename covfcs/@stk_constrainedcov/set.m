@@ -57,7 +57,7 @@ end
 
 % build a "full" cparam vector
 clist = cov.prop.clist;
-t = zeros(1, length([clist{:}]));
+t = zeros(length([clist{:}]), 1);
 for j = 1:nb_groups
     t(clist{j}) = value(j);
 end

@@ -40,12 +40,35 @@ switch propname
         param = cov.prop.param;
         set_cparam = cov.prop.handlers.set_cparam;
         
-        if isempty(set_cparam), % no setter available... assume that cparam = param ?
-            
-            if isa(param, 'double'), % yes, we can
-                cov.prop.param = value;
+        % check that value is a vector of type double, and make it a column
+        if isa(value, 'double')
+            if numel(value) == length(value)
+                if size(value, 1) ~= length(value)
+                    msg = 'Property ''cparam'' expects a COLUMN vector.';
+                    msg = sprintf('%s\nTransposing line vector...', msg);
+                    warning(msg);  value = value(:);
+                end
             else
-                errmsg = 'Property ''cparam'' does not exist for this covariance.';
+                errmsg = 'Property ''cparam'' expects a (column) vector.';
+                stk_error(errmsg, 'IncorrectArgument');
+            end
+        else
+            errmsg = 'Property ''cparam'' expects type double.';
+            stk_error(errmsg, 'IncorrectArgument');
+        end
+                    
+        if isempty(set_cparam), % no setter available... assume that cparam = param ?
+                        
+            if isa(param, 'double') && (size(param, 1) == length(param))
+                % ok, param is column vector, let's assume that cparam = param
+                if length(param) == length(value)
+                    cov.prop.param = value;
+                else
+                    errmsg = 'Incorrect size for the value of ''cparam''.';
+                    stk_error(errmsg, 'IncorrectArgument');
+                end                
+            else
+                errmsg = 'Unable to set property ''cparam'' for this covariance.';
                 stk_error(errmsg, 'CParamMissing');
             end
             
@@ -77,4 +100,4 @@ switch propname
       
 end % switch
 
-end % function stk_set_param
+end % function set
