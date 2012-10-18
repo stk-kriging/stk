@@ -25,10 +25,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [lb, ub] = stk_get_defaultbounds(cov, varargin)
+function [lb, ub] = stk_get_defaultbounds(cov, cparam0, varargin)
 stk_narginchk(1, 3);
 
-[lb, ub] = stk_get_defaultbounds(cov.prop.basecov, varargin{:});
+if (nargin > 1) && ~isempty(cparam0)
+    cov = set(cov, 'cparam', cparam0);
+end
+
+[lb, ub] = stk_get_defaultbounds(cov.prop.basecov, [], varargin{:});
 
 lb = lb(cov.aux.idxfree);
 ub = ub(cov.aux.idxfree);
