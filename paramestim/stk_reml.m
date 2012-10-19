@@ -41,9 +41,9 @@ function [rl, drl_param, drl_lnv] = stk_reml(model)
 
 stk_narginchk(1, 1);
 
-PARAMPRIOR = ~isempty(model.randomprocess.hyperprior);
 NOISYOBS   = ~isa(model.noise.cov, 'stk_nullcov');
-NOISEPRIOR = ~isempty(model.noise.lognoisevarprior);
+PARAMPRIOR = isa(model.randomprocess.priorcov, 'stk_bayescov');
+NOISEPRIOR = isa(model.noise.cov, 'stk_bayescov');
 
 if NOISYOBS,
     if (nargout == 3) && ~isa(model.noise.cov, 'stk_homnoisecov')
@@ -64,41 +64,31 @@ n = model.observations.n;
 
 %% compute rl
 
-[K,P] = stk_make_matcov(model, model.observations.x);
+[K, P] = stk_make_matcov(model, model.observations.x);
 q = size(P,2);
 
-[Q,R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
+[Q, R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
 W = Q(:,(q+1):n);
-Wz = W'*model.observations.z.a;
+Wz = W' * model.observations.z.a;
 
-G = W'*(K*W);
+G = W' * (K * W);
 
 Ginv = inv(G);
-WKWinv_Wz = Ginv*Wz; %#ok<MINV>
+WKWinv_Wz = Ginv * Wz; %#ok<MINV>
 
-[C,p]=chol(G); %#ok<NASGU>
-ldetWKW= 2*sum(log(diag(C))); % log(det(G));
+[C,p] = chol(G); %#ok<NASGU>
+ldetWKW = 2*sum(log(diag(C))); % log(det(G));
 
-attache= Wz'*WKWinv_Wz;
+attache = Wz' * WKWinv_Wz;
 
 priorcov = model.randomprocess.priorcov; % GP prior
 
-if PARAMPRIOR
-    hyperprior = model.randomprocess.hyperprior;
-    u = priorcov.cparam - hyperprior.mean;
-    prior = u' * hyperprior.invcov * u;
-else
-    prior = 0;
-end
+rl = 0.5*((n-q)*log(2*pi) + ldetWKW + attache);
 
-if NOISEPRIOR
-    noiseprior = (model.noise.lognoisevariance - model.noise.lognoisevarprior.mean)^2 ...
-        / model.noise.lognoisevarprior.var;
-else
-    noiseprior = 0;
-end
+% regularization (prior) terms
+if PARAMPRIOR, rl = rl - priorcov.logpdf; end
+if NOISEPRIOR, rl = rl - model.noise.cov.logpdf; end
 
-rl = 1/2*((n-q)*log(2*pi) + ldetWKW + attache + prior + noiseprior);
 
 %% compute rl gradient
 
@@ -109,12 +99,11 @@ if nargout >= 2
     for paramdiff = 1:size(drl_param, 1),
         V = priorcov(model.observations.x, model.observations.x, paramdiff);
         WVW = W'*V*W;
-        drl_param(paramdiff) = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wz'*WVW*WKWinv_Wz);
+        drl_param(paramdiff) = 1/2*(sum(sum(Ginv .* WVW)) - WKWinv_Wz' * WVW * WKWinv_Wz);
     end
     
     if PARAMPRIOR
-        drl_param = drl_param + hyperprior.invcov ...
-            * (priorcov.cparam - hyperprior.mean);
+        drl_param = drl_param - priorcov.logpdfgrad;
     end 
     
     if nargout >= 3,
@@ -124,9 +113,7 @@ if nargout >= 2
             WVW = W'*V*W;
             drl_lnv = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wz'*WVW*WKWinv_Wz);
             if NOISEPRIOR
-                drl_lnv = drl_lnv + ...
-                    (model.noise.lognoisevariance - model.noise.lognoisevarprior.mean) ...
-                    /model.noise.lognoisevarprior.var;
+                drl_lnv = drl_lnv - model.noise.logpdfgrad;
             end
         else
             % returns NaN for the derivative with respect to the noise
