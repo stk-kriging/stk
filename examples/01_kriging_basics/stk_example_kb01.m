@@ -1,7 +1,9 @@
-% Example 01 constructs a kriging approximation in 1D
-% ===================================================
-%    Construct a kriging approximation in 1D. In this example, the model is
-%    fixed by the user.
+% STK_EXAMPLE_KB01 constructs a kriging approximation in 1D.
+%
+%   This example shows how to construct an ordinary kriging predictor for a
+%   scalar input. The covariance function is assumed to be fully known (i.e., no
+%   parameter estimation is performed here).
+%
 
 % Copyright Notice
 %
@@ -30,13 +32,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% Welcome
-
-disp('                  ');
-disp('#================#');
-disp('#   Example 01   #');
-disp('#================#');
-disp('                  ');
+stk_disp_examplewelcome();
 
 
 %% Define a 1d test function
