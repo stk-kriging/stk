@@ -29,13 +29,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% WELCOME
-
-disp('                  ');
-disp('#================#');
-disp('#   Example 05   #');
-disp('#================#');
-disp('                  ');
+stk_disp_examplewelcome();
 
 
 %% DEFINE A 1D TEST FUNCTION
@@ -61,6 +55,7 @@ xi_ind  = [1 20 90 200 300 350];      %
 xi.a = xt.a(xi_ind, 1);
 zi = stk_feval(f, xi);              % evaluation results
 xzi = stk_makedata(xi, zi);
+
 
 %% SPECIFICATION OF THE MODEL
 %

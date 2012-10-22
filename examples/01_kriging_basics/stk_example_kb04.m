@@ -1,4 +1,5 @@
-% Example 02 constructs a kriging approximation in 1D
+% Example 08 constructs a kriging approximation in 1D from noisy
+% observations (estimates the noise)
 % ===================================================
 %    Construct a kriging approximation in 1D. In this example, the model is
 %    estimated from data.
@@ -30,28 +31,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-
-%% WELCOME
-
-disp('#================#');
-disp('#   Example 02   #');
-disp('#================#');
-disp('This example demonstrates how to carry out a kriging prediction');
-disp('from a  set  of  observations.  In this example, the parameters');
-disp('of the model are estimated from data. See also example01.m');
-disp('');
+stk_disp_examplewelcome();
 
 
-%% DEFINE A 1D TEST FUNCTION
+%% DEFINE A 1D TEST FUNCTION (THE SAME AS IN EXAMPLE01.M)
 
 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space
 box = [-1.0; 1.0];                              % factor space
 
-NG = 400; % nb of points in the grid
-xg = stk_sampling_regulargrid(NG, DIM, box);
-zg = stk_feval(f, xg);
-xzg = stk_makedata(xg, zg); % data structure containing information about evaluations
+NT = 400; % nb of points in the grid
+xt = stk_sampling_regulargrid(NT, DIM, box);
+zt = stk_feval(f, xt);
 
 
 %% GENERATE A RANDOM SAMPLING PLAN
@@ -63,18 +54,15 @@ xzg = stk_makedata(xg, zg); % data structure containing information about evalua
 % the observations.
 %
 
-NOISEVARIANCE = 0.15^2;
+NOISEVARIANCE = 0.05;
 
-NI = 6;                                     % nb of evaluations that will be used
+NI = 30;                                    % nb of evaluations that will be used
 xi = stk_sampling_randunif(NI, DIM, box);   % evaluation points
 zi = stk_feval(f, xi);                      % evaluation results
 
-if NOISEVARIANCE > 0,
-    zi.a = zi.a + sqrt(NOISEVARIANCE) * randn(NI,1);
-    % (don't forget that the data is in the ".a" field!)
-end
+zi.a = zi.a + sqrt(NOISEVARIANCE) * randn(NI,1);
 
-xzi = stk_makedata(xi, zi);
+obs = stk_makedata(xi, zi);
 
 
 %% SPECIFICATION OF THE MODEL
@@ -89,18 +77,11 @@ xzi = stk_makedata(xi, zi);
 % kriging) and a Matern covariance function. (Some default parameters are also
 % set, but they will be replaced below by estimated parameters.)
 model = stk_model('stk_materncov_iso');
-
-% Homoscedastic white noise
-noise_variance = max(NOISEVARIANCE, (1e-6)^2);
-model.noise.cov = stk_homnoisecov(noise_variance);
-% Even if we don't assume that the observations are noisy,
-% it is usually wiser to add a small "regularization noise".
-
-% Set observations for the model
-model = stk_setobs(model, xzi);
+model = stk_setobs(model, obs);
+model.noise.cov = stk_homnoisecov();
 
 
-%% ESTIMATION OF THE PARAMETERS OF THE COVARIANCE
+%% ESTIMATION THE PARAMETERS OF THE COVARIANCE
 %
 % Here, the parameters of the Matern covariance function are estimated by the
 % REML (REstricted Maximum Likelihood) method using stk_param_estim().
@@ -108,21 +89,23 @@ model = stk_setobs(model, xzi);
 
 % Initial guess for the parameters for the Matern covariance
 % (see "help stk_materncov_iso" for more information)
-model.randomprocess.priorcov.sigma2 = 1.0;  % variance parameter
-model.randomprocess.priorcov.nu     = 4.0;  % regularity parameter
-model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
+SIGMA2 = 1.0;  % variance parameter
+NU     = 4.0;  % regularity parameter
+RHO1   = 0.4;  % scale (range) parameter
+param0 = log([SIGMA2; NU; 1/RHO1]);
 
-% This is ugly... but it will get better when we have a @model class !
-model.randomprocess.priorcov.cparam = stk_param_estim(model);
+% Initial guess for the (log of the) noise variance
+lnv0 = 2 * log(std(zi.a) / 100);
+
+[param, paramlnv] = stk_param_estim(model, param0, lnv0);
+
+model.randomprocess.priorcov.cparam = param;
+model.noise.cov.variance = exp(paramlnv);
 
 
-%% CARRY OUT THE KRIGING PREDICTION AND DISPLAY THE RESULT
+%% CARRY OUT KRIGING PREDICTION & DISPLAY THE RESULT
 
-zp  = stk_predict(model, xg);
-xzp = stk_makedata(xg, zp);
+zp = stk_predict(model, xt);
 
-% Display the result
-figure;
-n_std = sqrt(NOISEVARIANCE);
-fig_title = sprintf('%s %.3e', 'Kriging prediction with noise std', n_std);
-stk_plot1d(xzi, xzg, xzp, fig_title);
+stk_plot1d(obs, stk_makedata(xt, zt), stk_makedata(xt, zp))
+model %#ok<NOPTS>

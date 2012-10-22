@@ -28,13 +28,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% WELCOME
-
-disp('                  ');
-disp('#================#');
-disp('#   Example 06   #');
-disp('#================#');
-disp('                  ');
+stk_disp_examplewelcome();
 
 
 %% DEFINE 1D TEST FUNCTION (THE SAME AS IN EXAMPLE01.M)

@@ -1,26 +1,23 @@
-% Example 01 constructs a kriging approximation in 1D
-% ===================================================
-%    Construct a kriging approximation in 1D. In this example, we choose a
-%    Matern covariance with "fixed parameters" (in other words, the parameters
-%    of the covariance function are provided by the user rather than
-%    estimated from data).
+% STK_EXAMPLE_KB01 constructs a kriging approximation in 1D.
+%
+%   This example shows how to construct an ordinary kriging predictor for a
+%   scalar input. The covariance function is assumed to be fully known (i.e., no
+%   parameter estimation is performed here).
 %
 
-
-%          STK : a Small (Matlab/Octave) Toolbox for Kriging
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging
+%
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 %
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -34,15 +31,9 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
 
-%% WELCOME
+stk_disp_examplewelcome();
 
-disp('#================#');
-disp('#   Example 01   #');
-disp('#================#');
-disp('This example demonstrates how to carry out a kriging prediction');
-disp('from a set of possibly noisy observations.');
 
 
 %% DEFINE A 1D TEST FUNCTION
