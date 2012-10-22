@@ -1,4 +1,5 @@
-% Example 02 constructs a kriging approximation in 1D
+% Example 08 constructs a kriging approximation in 1D from noisy
+% observations (estimates the noise)
 % ===================================================
 %    Construct a kriging approximation in 1D. In this example, the model is
 %    estimated from data.
@@ -30,13 +31,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% Welcome
-
-disp('                  ');
-disp('#================#');
-disp('#   Example 02   #');
-disp('#================#');
-disp('                  ');
+stk_disp_examplewelcome();
 
 
 %% Define a 1d test function (the same as in example01.m)
@@ -59,17 +54,13 @@ zt = stk_feval( f, xt );
 % the observations.
 %
 
-NOISEVARIANCE = 0.0;
+NOISEVARIANCE = 0.05;
 
-NI = 6;                                     % nb of evaluations that will be used
+NI = 30;                                    % nb of evaluations that will be used
 xi = stk_sampling_randunif(NI, DIM, box);   % evaluation points
 zi = stk_feval(f, xi);                      % evaluation results
 
-if NOISEVARIANCE > 0,
-    zi.a = zi.a + sqrt(NOISEVARIANCE) * randn(NI,1);
-    % (don't forget that the data is in the ".a" field!)
-end
-
+zi.a = zi.a + sqrt(NOISEVARIANCE) * randn(NI,1);
 
 %% Specification of the model
 %
@@ -85,16 +76,11 @@ end
 model = stk_model('stk_materncov_iso');
 
 % Noise variance
-if NOISEVARIANCE > 0,
-    model.lognoisevariance = log( NOISEVARIANCE );
-else
-    % Even if we don't assume that the observations are noisy,
-    % it is wiser to add a small "regularization noise".
-    model.lognoisevariance = log( 100 * eps );
-end
+model.lognoisevariance = log( 100 * eps);
+% (this is not the true value of the noise variance !)
 
 
-%% Estimatation the parameters of the covariance
+%% Estimation the parameters of the covariance
 %
 % Here, the parameters of the Matern covariance function are estimated by the
 % REML (REstricted Maximum Likelihood) method using stk_param_estim().
@@ -107,8 +93,13 @@ NU     = 4.0;  % regularity parameter
 RHO1   = 0.4;  % scale (range) parameter
 param0 = log([SIGMA2; NU; 1/RHO1]);
 
-model.param = stk_param_estim(model, xi, zi, param0);
+% Initial guess for the (log of the) noise variance
+lnv0 = 2 * log(std(zi.a) / 100);
 
+[param, paramlnv] = stk_param_estim(model, xi, zi, param0, lnv0);
+
+model.param = param;
+model.lognoisevariance = paramlnv;
 
 %% carry out kriging prediction
 

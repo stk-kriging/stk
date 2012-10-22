@@ -1,4 +1,4 @@
-% RUN_ALL_EXAMPLES runs all examples to check for errors
+% STK_RUNEXAMPLES checks that all the examples run without errors.
 
 % Copyright Notice
 %
@@ -27,35 +27,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% Run all the examples
+function stk_runexamples()
 
-clear all; close all;
+% run all examples, recursively
+example_dir = fullfile(stk_get_root(), 'examples');
+[scriptname, err] = stk_runexamples_recurs_(example_dir);
 
-NB_EXAMPLES = 8;
-script_name = cell(1, NB_EXAMPLES);
-err = cell(1, NB_EXAMPLES);
+% display a summary
+stk_disp_framedtext('stk_runexamples summary');
 
-for example_num = 1:NB_EXAMPLES,
-    script_name{example_num} = sprintf('example%02d', example_num);
-    err{example_num} = stk_runscript(script_name{example_num});
-    drawnow; pause(1.0); close all;
-end
-
-
-%% Display a summary
-
-disp('                                ');
-disp('#==============================#');
-disp('#   run_all_examples summary   #');
-disp('#==============================#');
-disp('                                ');
-
-for example_num = 1:NB_EXAMPLES,
-    fprintf('%s : ', script_name{example_num});
-    if isempty(err{example_num})
+for i = 1:length(scriptname)
+    fprintf('%s %s ', scriptname{i}, repmat('.', 1, 30 - length(scriptname{i})));
+    if isempty(err{i})
         fprintf('OK\n');
     else
-        id = err{example_num}.identifier;
+        id = err{i}.identifier;
         if isempty(id),
             fprintf('ERROR (no identifier provided)\n');
         else
@@ -64,4 +50,32 @@ for example_num = 1:NB_EXAMPLES,
     end
 end
 
-fprintf('\n\n');
+fprintf('\n');
+
+end % function stk_runexamples
+
+
+function [scriptname, err] = stk_runexamples_recurs_(example_dir)
+
+s = dir(example_dir);
+
+scriptname = {};
+err = {};
+
+for i = 1:length(s),
+    
+    if s(i).isdir && (s(i).name(1) ~= '.')
+        [n, e] = stk_runexamples_recurs_(fullfile(example_dir, s(i).name));
+        scriptname = [scriptname n];
+        err = [err e];
+    else
+        if ~isempty(regexp(s(i).name, '^stk_example.*.m$'))
+            scriptname{end+1} = s(i).name(1:end-2);
+            err{i} = stk_runscript(fullfile(example_dir, scriptname{end}));
+            drawnow; pause(1.0); close all;
+        end
+    end
+    
+end
+
+end % function stk_runexamples_recurs_

@@ -28,13 +28,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% Welcome
-
-disp('                  ');
-disp('#================#');
-disp('#   Example 06   #');
-disp('#================#');
-disp('                  ');
+stk_disp_examplewelcome();
 
 
 
