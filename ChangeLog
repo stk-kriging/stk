@@ -1,5 +1,11 @@
 2012-10-24  Julien Bect  <julien.bect@supelec.fr>
 
+	Added a new function to draw shaded area representing pointwise
+	confidence intervals.
+
+	* misc/plot/stk_plot_shadedci.m: new function
+	* misc/plot/stk_plot1d.m: modified
+
 	Added size checking and changed the upper bound for nu in
 	stk_param_estim.
 
