@@ -50,6 +50,16 @@ function [paramopt, paramlnvopt] = stk_param_estim ...
 
 stk_narginchk(4, 5);
 
+% size checking: xi, yi
+if size(yi.a, 1) ~= size(xi.a, 1),
+    errmsg = 'xi.a and yi.a should have the same number of lines.';
+    stk_error(errmsg, 'IncorrectArgument');
+end
+if size(yi.a, 2) ~= 1,
+    errmsg = 'yi.a should be a column vector.';
+    stk_error(errmsg, 'IncorrectArgument');
+end
+
 % TODO: turn param0 into an optional argument
 %       => provide a reasonable default choice
 
@@ -165,7 +175,6 @@ empirical_variance = var(yi.a);
 lbv = min(log(empirical_variance) - TOLVAR, param0(1));
 ubv = max(log(empirical_variance) + TOLVAR, param0(1));
 
-% FIXME: write an function stk_get_dim() to do this
 dim = size( xi.a, 2 );
 
 switch model.covariance_type,
@@ -173,7 +182,7 @@ switch model.covariance_type,
     case {'stk_materncov_aniso', 'stk_materncov_iso'}
         
         lbnu = min(log(0.5), param0(2));
-        ubnu = max(log(4*dim), param0(2));
+        ubnu = max(log(10*dim), param0(2));
         
         scale = param0(3:end);
         lba = scale(:) - TOLSCALE;
