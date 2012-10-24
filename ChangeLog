@@ -1,5 +1,10 @@
 2012-10-24  Julien Bect  <julien.bect@supelec.fr>
 
+	Added a new example to demonstrate the effect of adding a prior on
+	the covariance parameters.
+
+	* examples/03_miscellaneous/stk_example_misc03.m: new script
+
 	Added a new function to draw shaded area representing pointwise
 	confidence intervals.
 
