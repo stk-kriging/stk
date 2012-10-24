@@ -36,11 +36,11 @@ stk_disp_examplewelcome();
 
 f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space
-box = [-1.0; 1.0];                              % factor space
+BOX = [-1.0; 1.0];                              % factor space
 
 NT = 400; % nb of points in the grid
-xt = stk_sampling_regulargrid( NT, DIM, box );
-zt = stk_feval( f, xt );
+xt = stk_sampling_regulargrid(NT, DIM, BOX);
+zt = stk_feval(f, xt);
 
 
 %% Generate observations
@@ -53,7 +53,7 @@ zt = stk_feval( f, xt );
 NI = 6;                               % nb of evaluations that will be used
 xi_ind  = [1 20 90 200 300 350];      %
 xi.a = xt.a(xi_ind, 1);
-zi = stk_feval( f, xi );              % evaluation results
+zi = stk_feval(f, xi);                % evaluation results
 
 
 %% Specification of the model
@@ -80,17 +80,17 @@ model.param = log([SIGMA2; NU; 1/RHO1]);
 %
 
 % Carry out the kriging prediction at points xt.a
-[zp, lambda] = stk_predict( model, xi, zi, xt );
+[zp, lambda] = stk_predict(model, xi, zi, xt);
 
 % Generate (unconditional) sample paths according to the model
 NB_PATHS = 10;
-zsim = stk_generate_samplepaths( model, xt, NB_PATHS );
+zsim = stk_generate_samplepaths(model, xt, NB_PATHS);
 
 % Condition sample paths on the observations
-zsimc = stk_conditioning( lambda, zi, zsim, xi_ind );
+zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);
 
 % Display the result
-stk_plot1dsim ( xi, zi, xt, zt, zp, zsimc );
+stk_plot1dsim(xi, zi, xt, zt, zp, zsimc);
 t = 'Kriging prediction and conditional sample paths';
-set( gcf, 'Name', t ); title(t);
+set(gcf, 'Name', t); title(t);
 xlabel('x'); ylabel('z');

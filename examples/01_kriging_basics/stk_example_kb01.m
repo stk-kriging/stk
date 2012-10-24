@@ -39,14 +39,14 @@ stk_disp_examplewelcome();
 
 f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space
-box = [-1.0; 1.0];                              % factor space
+BOX = [-1.0; 1.0];                             % factor space
 
 NT = 400; % nb of points in the grid
-xt = stk_sampling_regulargrid( NT, DIM, box );
-zt = stk_feval( f, xt );
+xt = stk_sampling_regulargrid(NT, DIM, BOX);
+zt = stk_feval(f, xt);
 
 figure(1); set( gcf, 'Name', 'Plot of the function to be approximated');
-plot( xt.a, zt.a ); xlabel('x'); ylabel('z');
+plot(xt.a, zt.a); xlabel('x'); ylabel('z');
 
 % In STK, the inputs and outputs are members of a structure array
 % The field 'a' is used to store the numerical values
@@ -63,8 +63,8 @@ plot( xt.a, zt.a ); xlabel('x'); ylabel('z');
 %
 
 NI = 6;                                         % nb of evaluations that will be used
-xi = stk_sampling_regulargrid( NI, DIM, box); % evaluation points
-zi = stk_feval( f, xi );                        % evaluation results
+xi = stk_sampling_regulargrid(NI, DIM, BOX);    % evaluation points
+zi = stk_feval(f, xi);                          % evaluation results
 
 
 %% Specification of the model
@@ -98,12 +98,12 @@ model.param = log([SIGMA2; NU; 1/RHO1]);
 %
 
 % Carry out the kriging prediction at points xt.a
-zp = stk_predict( model, xi, zi, xt );
+zp = stk_predict(model, xi, zi, xt);
 
 % Display the result
-stk_plot1d( xi, zi, xt, zt, zp );
+stk_plot1d(xi, zi, xt, zt, zp);
 t = 'Kriging prediction based on noiseless observations';
-set( gcf, 'Name', t ); title(t);
+set(gcf, 'Name', t); title(t);
 xlabel('x'); ylabel('z');
 
 
@@ -113,17 +113,17 @@ NOISEVARIANCE = (1e-1)^2;
 
 % Now the observations are perturbed by an additive Gaussian noise
 noise = sqrt(NOISEVARIANCE) * randn(size(zi.a));
-zi_n = struct( 'a', zi.a + noise  );
+zi_n = struct('a', zi.a + noise);
 
 % We also include the observation noise in the model
 model_n = model;
 model_n.lognoisevariance = log(NOISEVARIANCE);
 
 % Carry out the kriging prediction at locations xt.a
-zp_n = stk_predict( model_n, xi, zi_n, xt );
+zp_n = stk_predict(model_n, xi, zi_n, xt);
 
 % Display the result
-stk_plot1d( xi, zi_n, xt, zt, zp_n );
+stk_plot1d(xi, zi_n, xt, zt, zp_n);
 t = 'Kriging prediction based on noisy observations';
-set( gcf, 'Name', t ); title(t);
+set(gcf, 'Name', t); title(t);
 xlabel('x'); ylabel('z');
