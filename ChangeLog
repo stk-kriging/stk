@@ -1,3 +1,42 @@
+2012-10-24  Julien Bect  <julien.bect@supelec.fr>
+
+	Added size checking and changed the upper bound for nu in
+	stk_param_estim.
+
+	* paramestim/stk_param_estim.m: modified
+
+	Renamed "box" into "BOX" in all example scripts, to
+	avoid conflicts with the box function.
+
+	* 01_kriging_basics/stk_example_kb01.m: modified
+	* 01_kriging_basics/stk_example_kb02.m: modified
+	* 01_kriging_basics/stk_example_kb04.m: modified
+	* 01_kriging_basics/stk_example_kb05.m: modified
+	* 03_miscellaneous/stk_example_misc01.m: modified
+
+2012-10-22  Julien Bect  <julien.bect@supelec.fr>
+
+	Improving welcome messages.
+
+	* misc/disp: new folder
+	* misc/disp/stk_disp_framedtext.m: new function
+	* misc/disp/stk_disp_examplewelcome.m: new function
+	* misc/config/stk_path.m: modified
+	* examples/01_kriging_basics/stk_example_kb*.m: modified
+	* examples/02_design_of_experiments/stk_example_doe01.m: modified
+	* examples/03_miscellaneous/stk_example_misc*.m: modified
+	* misc/test/stk_runexamples.m: modified
+
+	Moving example scripts to subfolders.
+
+	* misc/config/stk_path.m: modified
+	* misc/test/stk_runexamples.m: new function
+	* examples/example*.m: moved to a subfolder
+	* examples/run_all_examples: deleted
+	* examples/01_kriging_basics: new folder
+	* examples/02_design_of_experiments: new folder
+	* examples/03_miscellaneous: new folder
+
 2012-09-26  Julien Bect  <julien.bect@supelec.fr>
 
 	Better initial guess for the log of the noise variance
