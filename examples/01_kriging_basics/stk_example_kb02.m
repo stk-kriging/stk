@@ -37,11 +37,11 @@ stk_disp_examplewelcome();
 
 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space
-box = [-1.0; 1.0];                              % factor space
+BOX = [-1.0; 1.0];                              % factor space
 
 NT = 400; % nb of points in the grid
-xt = stk_sampling_regulargrid( NT, DIM, box );
-zt = stk_feval( f, xt );
+xt = stk_sampling_regulargrid(NT, DIM, BOX);
+zt = stk_feval(f, xt);
 
 
 %% Generate a random sampling plan
@@ -56,7 +56,7 @@ zt = stk_feval( f, xt );
 NOISEVARIANCE = 0.0;
 
 NI = 6;                                     % nb of evaluations that will be used
-xi = stk_sampling_randunif(NI, DIM, box);   % evaluation points
+xi = stk_sampling_randunif(NI, DIM, BOX);   % evaluation points
 zi = stk_feval(f, xi);                      % evaluation results
 
 if NOISEVARIANCE > 0,
@@ -80,11 +80,11 @@ model = stk_model('stk_materncov_iso');
 
 % Noise variance
 if NOISEVARIANCE > 0,
-    model.lognoisevariance = log( NOISEVARIANCE );
+    model.lognoisevariance = log(NOISEVARIANCE);
 else
     % Even if we don't assume that the observations are noisy,
     % it is wiser to add a small "regularization noise".
-    model.lognoisevariance = log( 100 * eps );
+    model.lognoisevariance = log(100 * eps);
 end
 
 
