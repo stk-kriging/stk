@@ -67,15 +67,10 @@ stk_set_root(STK_ROOT);
 octave_in_use = stk_is_octave_in_use();
 if octave_in_use,
     fprintf('Using Octave %s\n', OCTAVE_VERSION);
-    stk_check_octave_packages();
+    % some Octave-specific configuration
+    stk_octave_config();
 else
     fprintf('Using Matlab %s\n', version());
-end
-
-%=== Suppress additional help information in Octave
-
-if octave_in_use,
-    suppress_verbose_help_message(true);
 end
 
 %=== Check for presence of the Parallel Computing Toolbox

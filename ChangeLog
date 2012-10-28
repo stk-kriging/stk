@@ -1,3 +1,12 @@
+2012-10-28  Julien Bect  <julien.bect@supelec.fr>
+
+	Improved Octave-specific configuration.
+
+	* stk_init.m: modified
+	* misc/config/stk_octave_config.m: new function
+	* misc/config/stk_check_octave_packages.m: removed
+	* README: modified
+
 2012-10-24  Julien Bect  <julien.bect@supelec.fr>
 
 	Added a new example to demonstrate the effect of adding a prior on

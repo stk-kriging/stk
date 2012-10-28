@@ -1,9 +1,4 @@
-% STK_CHECK_OCTAVE_PACKAGES checks required Octave packages
-%
-% CALL: stk_check_octave_packages()
-%
-% An error is raised is one of the required packages is not installed.
-% Otherwise, all required packages are loaded (if they are not already).
+% STK_OCTAVECONFIG_CHECKGLPK checks that the GLPK library is installed.
 
 % Copyright Notice
 %
@@ -32,22 +27,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_check_octave_packages()
-
-% pkg_list = pkg('list');
-
-% The Octave-forge 'optim' package was indicated by mistake as a dependency
-% in release 1.0.1 but it turns out that sqp() is provided by Octave itself
-% and not by the optim package ;-)
-% stk_check_octave_package_('optim', pkg_list);
-
-% The Octave-Forge 'statistics' package is no longer required.
-% stk_check_octave_package_('statistics', pkg_list);
+function stk_octave_config()
 
 % We need to check that the GLPK library is installed. This is the case
 % in most recent releases of Octave, but some older releases do not contain
-% GLPK (e.g., the binary release 3.0.2 for Windows available from
-% Octave-forge, or the packaged release 3.0.5 in OpenBSD)
+% GLPK.
 try
     stk_test_glpk_();
 catch %#ok<CTCH>
@@ -58,27 +42,14 @@ end
 % since some distribution include (or so it seems) a fake __glpk__.oct
 % package, which is in charge of issuing an error message...
 
+% Suppress additional help information in Octave
+suppress_verbose_help_message(true);
+
+% Select FLTK as the graphics toolkit, if available
+if ismember('fltk', available_graphics_toolkits())
+    graphics_toolkit('fltk');
 end
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% stk_check_octave_package_ %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-function stk_check_octave_package_(name, pkg_list) %#ok<DEFNU>
-
-for i = 1:length(pkg_list)
-    if strcmp(pkg_list{i}.name, name),
-        if ~pkg_list{i}.loaded,
-            pkg('load', name);
-        end
-        fprintf('Octave package %s-%s loaded.\n', ...
-            pkg_list{i}.name, pkg_list{i}.version);
-        return
-    end
-end
-
-error('Octave package %s not installed.', name);
+fprintf('Graphics toolkit: %s\n', graphics_toolkit());
 
 end
 
