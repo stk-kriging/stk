@@ -1,3 +1,11 @@
+2012-11-01  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a new folder for test functions.
+
+	* examples/test_functions: new folder
+	* examples/test_functions/stk_testfun_braninhoo.m: new function
+	* misc/config/stk_path.m: modified
+
 2012-10-28  Julien Bect  <julien.bect@supelec.fr>
 
 	Improved Octave-specific configuration.
