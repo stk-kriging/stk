@@ -184,6 +184,13 @@ for block_num = 1:nb_blocks
     % compute kriging variances (STATIONARITY ASSUMED)
     zp.v(idx) = LS(1,1) - dot(lambda_mu, RS)';
     
+    b = (zp.v < 0);
+    if any(b),        
+        zp.v(b) = 0.0;
+        warning(sprintf(['Correcting numerical inaccuracies in kriging variance.\n' ...
+            '(%d negative variances have been set to zero)'], sum(b)));
+    end
+    
     if display_waitbar,
         waitbar( idx_end/nt, hwb, sprintf( ...
             'In stk\\_predict(): %d/%d predictions completed',idx_end,nt) );
