@@ -59,7 +59,7 @@ else
 end
 
 if length(n) == 1
-    n_coord = ceil(n^(1/dim));
+    n_coord = round(n^(1/dim));
     if n_coord^dim ~= n,
         stk_error('n^(1/dim) should be an integer', 'InvalidArgument');
     end
@@ -72,6 +72,8 @@ else
     end
 end
 
+coord = cell(1, dim);
+
 if any(n==0), % empty grid
     
     xdata = zeros(0,dim);
@@ -83,28 +85,28 @@ else % at least one input point
     
     if dim == 1, % univariate inputs
         
-        xdata = linspace( xmin, xmax, n )';
+        xdata = linspace(xmin, xmax, n)';
+        coord = {xdata};
         
     else % multivariate inputs
         
-        vect = cell( 1, dim );
+        vect = cell(1, dim);
         for j = 1:dim,
-            vect{j} = linspace( xmin(j), xmax(j), n(j) );
+            vect{j} = linspace(xmin(j), xmax(j), n(j));
         end
         
-        tmp = cell( 1, dim );
-        [ tmp{:} ] = ndgrid( vect{:} );
+        [coord{:}] = ndgrid(vect{:});
         
-        xdata = zeros( prod(n), dim );
+        xdata = zeros(prod(n), dim);
         for j = 1:dim,
-            xdata(:,j) = tmp{j}(:);
+            xdata(:,j) = coord{j}(:);
         end
         
     end % if d == 1
     
 end
 
-x = struct( 'a', xdata );
+x = struct('a', xdata, 'coord', {coord});
 
 end % function stk_sampling_regulargrid
 
