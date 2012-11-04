@@ -45,10 +45,15 @@ end
 % Suppress additional help information in Octave
 suppress_verbose_help_message(true);
 
-% Select FLTK as the graphics toolkit, if available
-if ismember('fltk', available_graphics_toolkits())
-    graphics_toolkit('fltk');
-end
+% Perhaps to early to use FLTK as a default choice
+% if ismember('fltk', available_graphics_toolkits())
+%    graphics_toolkit('fltk');
+% end
+
+% So, we keep gnuplot as a graphical backend
+% but use GNUTERM=wxt for prettier and faster plots!
+setenv('GNUTERM', 'wxt')
+
 fprintf('Graphics toolkit: %s\n', graphics_toolkit());
 
 end
