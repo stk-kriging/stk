@@ -32,115 +32,108 @@
 
 stk_disp_examplewelcome();
 
-
-%% Definition of a 2D test function
-
-% define a 2D test function
-f_ = inline('exp(1.8*(x1+x2))+3*x1+6*x2.^2+3*sin(4*pi*x1)', 'x1', 'x2');
-f  = @(x)(f_(x(:,1), x(:,2)));
-DIM = 2;
-NG = 60;
-
-XG = linspace(-1, 1, NG)';
-[XX, YY] = meshgrid(XG);
-ZZ = f_(XX, YY);
-% ... and plot it on a grid
-figure(1);
-subplot(2, 2, 1);
-surf(XX, YY, ZZ);
-title('function to be approximated')
-
-% In STK, the inputs and outputs are members of a structure array
-% The field 'a' is used to store the numerical values
-nt = NG * NG;
-xt.a = [reshape(XX,nt,1), reshape(YY,nt,1)]; % nt x DIM,
-zt.a = reshape(ZZ,nt,1);                     % nt x 1
+CONTOUR_LINES = 40; % number of levels in contour plots
+DOT_STYLE = {'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 4};
 
 
-%% To run STK, choose a covariance structure
-% Some examples given below
+%% CHOICE OF A TWO-DIMENSIONAL TEST FUNCTION
 
-COVSTRUCT = 1 ; % 1: Matern anisotropic covariance, with unknown
-%    constant mean, without noise
-% 2: Matern anisotropic covariance, with unknown
-%    constant mean, with noise
-% 3: Matern anisotropic covariance, with unknown
-%    polynomial mean of degree 2, without noise
+CASENUM = 1;
 
-switch COVSTRUCT
-    case 1
-        COVNAME  = 'stk_materncov_aniso';
-        COVORDER = 0; % degree of the polynomial mean
-        SIGMA2   = 3;
-        NU       = 4;
-        RHO1     = 0.1;
-        RHO2     = 0.1;
-        PARAM0   = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
-        
-    case 2
-        COVNAME  = 'stk_materncov_aniso';
-        COVORDER = 0;
-        SIGMA2   = 3;
-        NU       = 4;
-        RHO1     = 0.1;
-        RHO2     = 0.1;
-        PARAM0   = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
-        NOISEVARIANCE = 1e0;  %% here we add some observation noise
-        
-    case 3
-        COVNAME  = 'stk_materncov_aniso';
-        COVORDER = 2;
-        SIGMA2   = 3;
-        NU       = 4;
-        RHO1     = 0.1;
-        RHO2     = 0.01;  %% shorter range for the second input variable
-        PARAM0   = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
+switch CASENUM
+    
+    case 1,  % the classical BRANIN-HOO test function
+        f = @stk_testfun_braninhoo;
+        DIM = 2;
+        BOX = [[-5; 10], [0; 15]];
+        NI = 20;
+
+    case 2,  % another test function defined trhough
+        f_ = inline(['exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2' ...
+		      '+ 3*sin(4*pi*x1)'], 'x1', 'x2');
+        f  = @(x)(f_(x(:,1), x(:,2)));
+        DIM = 2;
+        BOX = [[-1; 1], [-1; 1]];
+        NI = 40; % this second function is much harder to approximate
         
 end
 
-model = stk_model(COVNAME, DIM);
-model.order = COVORDER;
-model.param = PARAM0;
 
-if exist('NOISEVARIANCE', 'var')
-    model.lognoisevariance = log(NOISEVARIANCE);
-    % FIXME : provide an example with options.noiseopt=1;
+%% COMPUTE AND VISUALIZE THE FUNCTION ON A 80 x 80 REGULAR GRID
+
+% Size of the regular grid
+NT = 80^2;
+
+% The function stk_sampling_regulargrid() does the job of creating the grid
+xt = stk_sampling_regulargrid(NT, DIM, BOX);
+
+% Compute the corresponding responses (stored in zt.a)
+zt = struct('a', f(xt.a));
+
+% Since xt is a regular grid, we can do a contour plot
+figure; h1 = subplot(2, 2, 1); stk_plot2d(@contour, xt, f, CONTOUR_LINES);
+axis(BOX(:)); title('function to be approximated');
+
+
+%% CHOOSE A KRIGING (GAUSSIAN PROCESS) MODEL
+
+% We start with a generic (anisotropic) Matern covariance function.
+model = stk_model('stk_materncov_aniso', DIM);
+
+% As a default choice, a constant (but unknown) mean is used, i.e.,  model.order = 0.
+% model.order = 1;  %%% UNCOMMENT TO USE A LINEAR TREND %%%
+% model.order = 2;  %%% UNCOMMENT TO USE A "FULL QUADRATIC" TREND %%%
+
+% Good practice: add a small "regularization noise" (nugget)
+MODEL_NOISE_STD = 1e-5;
+model.lognoisevariance = 2 * log(MODEL_NOISE_STD);
+
+
+%% EVALUATE THE FUNCTION ON A "MAXIMIN LHS" DESIGN
+
+xi = stk_sampling_maximinlhs(NI, DIM, BOX);
+zi = stk_feval(f, xi);
+
+% Simulate noisy evaluations (optional)
+TRUE_NOISE_STD = 0;
+if TRUE_NOISE_STD > 0
+    zi.a = zi.a + randn(size(zi.a)) * TRUE_NOISE_STD;
 end
 
-
-%% generate a random space-filling design
-
-NI = 36;
-xi = stk_sampling_maximinlhs(NI, DIM, [[-1 -1];[1 1]]);
-zi = stk_feval (f, xi);
-if exist('NOISEVARIANCE', 'var')
-    zi.a = zi.a + randn(size(zi.a))*sqrt(NOISEVARIANCE);
-end
+% Add the design points to the first plot
+hold on; plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
 
 
-%% estimate the parameters of the covariance
+%% ESTIMATE THE PARAMETERS OF THE COVARIANCE FUNCTION
+
+SIGMA2 = var(zi.a);
+NU     = 2;
+RHO1   = (BOX(2,1) - BOX(1,1)) / 10;
+RHO2   = (BOX(2,2) - BOX(1,2)) / 10;
+PARAM0 = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
 
 model.param = stk_param_estim(model, xi, zi, PARAM0);
 
 
-%% carry out kriging prediction
+%% CARRY OUT KRIGING PREDICITION AND VISUALIZE
 
+% Here, we compute the kriging prediction on each point of the grid
 zp = stk_predict(model, xi, zi, xt);
 
+% Display the result using a contour plot, to be compared with the contour
+% lines of the true function
+h2 = subplot(2, 2, 2); stk_plot2d(@contour, xt, zp, CONTOUR_LINES);
+tsc = sprintf('approximation from %d points', NI); hold on;
+plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
+hold off; axis(BOX(:)); title(tsc);
 
-%% display results
 
-figure(1)
-subplot(2,2,2)
-surf(XX,YY,reshape(zp.a,NG,NG));
-tsc = sprintf('approximation from %d points', NI);
-hold on
-plot3(xi.a(:,1), xi.a(:,2), zi.a, 'ro','MarkerFaceColor','r');
-hold off
-title(tsc);
-subplot(2,2,3)
-surf(XX,YY,reshape(abs(zp.a-zt.a),NG,NG));
-hold on
-plot3(xi.a(:,1), xi.a(:,2), 1.0*ones(size(zi.a)), 'ro','MarkerFaceColor','r');
-hold off
-title('approximation error');
+%% VISUALIZE THE ACTUAL PREDICTION ERROR AND THE KRIGING STANDARD DEVIATION
+
+h3 = subplot(2, 2, 3); stk_plot2d(@pcolor, xt, log(abs(zp.a - zt.a)));
+hold on; plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
+hold off; axis(BOX(:)); title('true approx error (log)');
+
+h4 = subplot(2, 2, 4); stk_plot2d(@pcolor, xt, 0.5 * log(zp.v));
+hold on; plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
+hold off; axis(BOX(:)); title('kriging std (log)');
