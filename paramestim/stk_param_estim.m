@@ -50,6 +50,9 @@ function [paramopt, paramlnvopt] = stk_param_estim ...
 
 stk_narginchk(4, 5);
 
+xi = stk_datastruct(xi);
+yi = stk_datastruct(yi);
+    
 % size checking: xi, yi
 if size(yi.a, 1) ~= size(xi.a, 1),
     errmsg = 'xi.a and yi.a should have the same number of lines.';
@@ -64,15 +67,10 @@ end
 %       => provide a reasonable default choice
 
 % TODO: think of a better way to tell we want to estimate the noise variance
-if nargin == 5
-    NOISEESTIM = true;
-else
-    NOISEESTIM  = false;
-end
+NOISEESTIM = (nargin == 5);
 
-NOISYOBS = isfield(model, 'lognoisevariance');
-if (~NOISYOBS) && NOISEESTIM,
-    error('Please set lognoisevariance in model...');
+if NOISEESTIM && ~isfield(model, 'lognoisevariance')
+    model.lognoisevariance = param0lnv;
 end
 
 % TODO: allow user-defined bounds
