@@ -69,22 +69,33 @@ function [zp, lambda, mu] = stk_predict(model, xi, zi, xt)
 
 stk_narginchk(4, 4);
 
+xi = stk_datastruct(xi);
+zi = stk_datastruct(zi);
+xt = stk_datastruct(xt);
+
 %=== use indices or matrices for xi & xt ?
 
 use_indices = isfield(model,'Kx_cache');
 
-if use_indices,
-    xi = xi(:);
-    ni = size(xi, 1); % number of observations
-    if isempty(xt), xt = 1:size(model.Kx_cache,1); end
-    nt = length(xt);
-else
-    ni = size(xi.a, 1); % number of observations
-    assert( ~isempty(xt.a) );
-    nt = size(xt.a,1);
+if use_indices
+    if isempty(xt.a)
+        xt.a = 1:size(model.Kx_cache, 1);
+    end
+    xi.a = ensure_column_vector_(xi.a, 'xi.a');
+    xt.a = ensure_column_vector_(xt.a, 'xt.a');
 end
 
-assert( isempty(zi) || (size(zi.a,1)==ni) );
+ni = size(xi.a, 1); % number of observations
+nt = size(xt.a, 1); % number of test points
+assert(nt > 0);
+
+if use_indices
+    xi = xi.a(:);
+    xt = xt.a(:);
+end
+
+assert(isempty(zi.a) || (size(zi.a,1) == ni));
+
 %=== handle other optional arguments
 
 % parser = inputParser; % parse optional arguments
@@ -115,7 +126,7 @@ LS = [ [ Kii, Pi                ]; ...
 %=== prepare the output arguments
 
 zp = struct('v',zeros(nt,1));
-compute_prediction = ~isempty(zi);
+compute_prediction = ~isempty(zi.a);
 
 % compute the kriging prediction, or just the variances ?
 if compute_prediction, zp.a = zeros(nt,1); 
@@ -200,6 +211,19 @@ end
 if display_waitbar, close(hwb); end
 
 end
+
+
+function v = ensure_column_vector_(u, uname)
+if size(u, 2) ~= 1,
+    if size(u, 1) == 1,
+        v = u';
+    else
+        errmsg = sprintf('%s should be a vector of indices', uname);
+        stk_error(errmsg, 'IncorrectArgument');
+    end
+end
+end
+
 
 %%%%%%%%%%%%%
 %%% tests %%%
