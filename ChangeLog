@@ -1,5 +1,9 @@
 2012-11-14  Julien Bect  <julien.bect@supelec.fr>
 
+	New function stk_normalize().
+
+	* utils/stk_normalize.m: new function
+
 	Renamed some internal variables in stk_param_estim().
 
 	* paramestim/stk_param_estim.m: modified
