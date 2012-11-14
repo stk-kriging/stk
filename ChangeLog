@@ -1,5 +1,9 @@
 2012-11-14  Julien Bect  <julien.bect@supelec.fr>
 
+	Fixed a bug in stk_param_init().
+
+	* paramestim/stk_param_init.m: modified
+
 	Added a new MEX-file to compute a discretized fill distance.
 
 	* misc/dist/stk_filldist.c: new MEX-file (source)

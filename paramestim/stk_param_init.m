@@ -71,7 +71,7 @@ switch model.covariance_type
     case 'stk_materncov52_aniso'
         xi = stk_normalize(xi, box);
         [param, lnv] = paraminit_(xi, yi, box, 5/2, model.order, noisy);
-        param = [param(1); param(3) + log(diff(box, [], 1))'];
+        param = [param(1); param(3) - log(diff(box, [], 1))'];
         
     otherwise
         errmsg = 'Unsupported covariance type.';
