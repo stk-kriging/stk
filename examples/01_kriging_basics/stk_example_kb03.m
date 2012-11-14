@@ -48,7 +48,7 @@ switch CASENUM
         BOX = [[-5; 10], [0; 15]];
         NI = 20;
 
-    case 2,  % another test function defined trhough
+    case 2,  % another test function
         f_ = inline(['exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2' ...
 		      '+ 3*sin(4*pi*x1)'], 'x1', 'x2');
         f  = @(x)(f_(x(:,1), x(:,2)));
@@ -106,13 +106,18 @@ hold on; plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
 
 %% ESTIMATE THE PARAMETERS OF THE COVARIANCE FUNCTION
 
-SIGMA2 = var(zi.a);
-NU     = 2;
-RHO1   = (BOX(2,1) - BOX(1,1)) / 10;
-RHO2   = (BOX(2,2) - BOX(1,2)) / 10;
-PARAM0 = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
+% Initial guess for the parameters of the Matern covariance
+param0 = stk_param_init(model, xi, zi, BOX);
 
-model.param = stk_param_estim(model, xi, zi, PARAM0);
+% % Alternative: user-defined initial guess for the parameters of the Matern covariance
+% % (see "help stk_materncov_aniso" for more information)
+% SIGMA2 = var(zi.a);
+% NU     = 2;
+% RHO1   = (BOX(2,1) - BOX(1,1)) / 10;
+% RHO2   = (BOX(2,2) - BOX(1,2)) / 10;
+% param0 = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
+
+model.param = stk_param_estim(model, xi, zi, param0);
 
 
 %% CARRY OUT KRIGING PREDICITION AND VISUALIZE
