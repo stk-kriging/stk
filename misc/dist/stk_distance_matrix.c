@@ -4,8 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright (C) 2011, 2012 SUPELEC                                             *
- *    Version:   1.1                                                         *
+ *    Copyright (C) 2011, 2012 SUPELEC                                       *
  *    Authors:   Julien Bect        <julien.bect@supelec.fr>                 *
  *               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>            *
  *    URL:       http://sourceforge.net/projects/kriging/                    *
