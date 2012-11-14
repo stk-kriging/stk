@@ -89,15 +89,15 @@ else % handle the case where the covariance matrix must be computed
     
     %=== decide whether parallel computing should be used or not
     
-    if isfield(model,'Kx_cache'), % SYNTAX: model, x(indices)
+    if isfield(model, 'Kx_cache'), % SYNTAX: model, x(indices)
         ncores = 1; % avoids a call to matlabpool() which is slow
     else
-        N = size(x0.a,1);
-        if make_matcov_auto, N=N*N; else N=N*size(x1.a,1); end
+        N = size(x0.a, 1);
+        if make_matcov_auto, N = N * N; else N = N * size(x1.a, 1); end
         if (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
             ncores = 1; % do not use parallel computing
         else
-            ncores = max( 1, matlabpool('size') );
+            ncores = max(1, matlabpool('size'));
             % note: matlabpool('size') returns 0 if the PCT is not started
         end
     end
@@ -109,18 +109,18 @@ else % handle the case where the covariance matrix must be computed
         % FIXME: avoid computing twice each off-diagonal term
         %
         if ncores == 1, % shortcut when parallelization is not used
-            K = feval( model.covariance_type, model.param, x0, x0 );
+            K = feval(model.covariance_type, model.param, x0, x0);
         else
-            K = stk_make_matcov_auto_parfor( model, x0, ncores, MIN_BLOCK_SIZE );
+            K = stk_make_matcov_auto_parfor(model, x0, ncores, MIN_BLOCK_SIZE);
         end
         if isfield( model, 'lognoisevariance' ),
-            K = K + stk_noisecov( size(K,1), model.lognoisevariance );
+            K = K + stk_noisecov(size(K,1), model.lognoisevariance);
         end
     else
         if ncores == 1, % shortcut when parallelization is not used
-            K = feval( model.covariance_type, model.param, x0, x1 );
+            K = feval(model.covariance_type, model.param, x0, x1);
         else
-            K = stk_make_matcov_inter_parfor( model, x0, x1, ncores, MIN_BLOCK_SIZE );
+            K = stk_make_matcov_inter_parfor(model, x0, x1, ncores, MIN_BLOCK_SIZE);
         end
     end
     
