@@ -170,34 +170,34 @@ TOLSCALE = 5.0;
 
 % bounds for the variance parameter
 empirical_variance = var(yi.a);
-lbv = min(log(empirical_variance) - TOLVAR, param0(1));
-ubv = max(log(empirical_variance) + TOLVAR, param0(1));
+logvar_lb = min(log(empirical_variance), param0(1)) - TOLVAR;
+logvar_ub = max(log(empirical_variance), param0(1)) + TOLVAR;
 
-dim = size( xi.a, 2 );
+dim = size(xi.a, 2);
 
 switch model.covariance_type,
     
     case {'stk_materncov_aniso', 'stk_materncov_iso'}
         
-        lbnu = min(log(0.5), param0(2));
-        ubnu = max(log(10*dim), param0(2));
+        nu_lb = min(log(0.5), param0(2));
+        nu_ub = max(log(10*dim), param0(2));
         
-        scale = param0(3:end);
-        lba = scale(:) - TOLSCALE;
-        uba = scale(:) + TOLSCALE;
+        range_mid = param0(3:end);
+        range_lb  = range_mid(:) - TOLSCALE;
+        range_ub  = range_mid(:) + TOLSCALE;
         
-        lb = [lbv; lbnu; lba];
-        ub = [ubv; ubnu; uba];
+        lb = [logvar_lb; nu_lb; range_lb];
+        ub = [logvar_ub; nu_ub; range_ub];
         
     case {'stk_materncov32_aniso', 'stk_materncov32_iso', ...
           'stk_materncov52_aniso', 'stk_materncov52_iso'}
         
-        scale = param0(2:end);
-        lba = scale(:) - TOLSCALE;
-        uba = scale(:) + TOLSCALE;
+        range_mid = param0(2:end);
+        range_lb  = range_mid(:) - TOLSCALE;
+        range_ub  = range_mid(:) + TOLSCALE;
         
-        lb = [lbv; lba];
-        ub = [ubv; uba];
+        lb = [logvar_lb; range_lb];
+        ub = [logvar_ub; range_ub];
         
     otherwise
         

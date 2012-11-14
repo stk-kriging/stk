@@ -1,3 +1,9 @@
+2012-11-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Renamed some internal variables in stk_param_estim().
+
+	* paramestim/stk_param_estim.m: modified
+
 2012-11-06  Julien Bect  <julien.bect@supelec.fr>
 
 	Improved the flexibility of stk_predict() and stk_param_estim(),
