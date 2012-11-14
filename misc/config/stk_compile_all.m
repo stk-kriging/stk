@@ -34,11 +34,14 @@ here = pwd();
 
 force_recompile = ~((nargin == 0) || ~force_recompile);
 
-stk_compile(fullfile(root, 'misc', 'dist'),      ...
-    'stk_distance_matrix', force_recompile );
+stk_compile(fullfile(root, 'misc', 'dist'),  ...
+    'stk_distance_matrix', force_recompile   );
 
-stk_compile(fullfile(root, 'misc', 'dist'),    ...
-    'stk_mindist', force_recompile         );
+stk_compile(fullfile(root, 'misc', 'dist'),  ...
+    'stk_mindist', force_recompile           );
+
+stk_compile(fullfile(root, 'misc', 'dist'),  ...
+    'stk_filldist', force_recompile          );
 
 % add other MEX-files to be compiled here
 
