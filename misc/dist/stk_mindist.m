@@ -9,7 +9,7 @@
 %
 %    where norm(.) denotes the Euclidean norm in R^d.
 %
-% See also: stk_distance_matrix, norm
+% See also: stk_distance_matrix, stk_filldist
 
 % Copyright Notice
 %

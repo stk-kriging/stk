@@ -1,5 +1,12 @@
 2012-11-14  Julien Bect  <julien.bect@supelec.fr>
 
+	Added a new MEX-file to compute a discretized fill distance.
+
+	* misc/dist/stk_filldist.c: new MEX-file (source)
+	* misc/dist/stk_filldist.m: new MEX-file (doc + tests)
+	* misc/dist/stk_mindist.m: modified
+	* misc/config/stk_compile_all.m: modified
+
 	Added a new function to help initialize stk_param_estim().
 
 	* paramestim/stk_param_init.m: new function
