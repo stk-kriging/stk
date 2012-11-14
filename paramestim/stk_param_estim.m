@@ -180,7 +180,7 @@ switch model.covariance_type,
     case {'stk_materncov_aniso', 'stk_materncov_iso'}
         
         nu_lb = min(log(0.5), param0(2));
-        nu_ub = max(log(10*dim), param0(2));
+        nu_ub = max(log(min(50, 10*dim)), param0(2));
         
         range_mid = param0(3:end);
         range_lb  = range_mid(:) - TOLSCALE;

@@ -1,5 +1,9 @@
 2012-11-14  Julien Bect  <julien.bect@supelec.fr>
 
+	Changed the upper bound on nu in stk_param_estim().
+
+	* paramestim/stk_param_estim.m: modified
+
 	Fixed a bug in stk_param_init().
 
 	* paramestim/stk_param_init.m: modified
