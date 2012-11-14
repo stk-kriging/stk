@@ -33,44 +33,42 @@
 stk_disp_examplewelcome();
 
 
-%% Define a 1d test function (the same as in example01.m)
+%% DEFINE A 1D TEST FUNCTION
 
-f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
-DIM = 1;                                        % dimension of the factor space
-BOX = [-1.0; 1.0];                              % factor space
+f = @(x)( -(0.8*x + sin(5*x+1) + 0.1*sin(10*x)) );  % Define a 1D test function
+DIM = 1;                                            % Dimension of the factor space
+BOX = [-1.0; 1.0];                                  % Factor space
 
-NT = 400; % nb of points in the grid
-xt = stk_sampling_regulargrid(NT, DIM, BOX);
-zt = stk_feval(f, xt);
+NOISY = false;         % Choose either a noiseless or a noisy demo.
+if ~NOISY              % NOISELESS DEMO ...
+    NI = 6;            %      NI = nb of evaluations that will be used
+else                   % OR NOISY DEMO ?
+    NI = 20;           %      NI = nb of evaluations that will be used
+    NOISESTD = 0.1;    %      NOISESTD = standard deviation of the observation noise
+end                    %
 
 
-%% Generate a random sampling plan
+%% "MAXIMIN LHS" SAMPLING PLAN & CORRESPONDING EVALUATIONS
 %
 % The objective is to construct an approximation of f with a budget of NI
-% evaluations performed on a randomly generated (uniform) design.
-%
-% Change the value of NOISEVARIANCE to add a Gaussian evaluation noise on
-% the observations.
+% evaluations performed on a "maximin LHS" design.
 %
 
-NOISEVARIANCE = 0.0;
+NITER = 5; % number of random designs generated in stk_sampling_maximinlhs()
 
-NI = 6;                                     % nb of evaluations that will be used
-xi = stk_sampling_randunif(NI, DIM, BOX);   % evaluation points
-zi = stk_feval(f, xi);                      % evaluation results
+xi = stk_sampling_maximinlhs(NI, DIM, BOX, NITER);  % evaluation points
+%xi = stk_sampling_randunif(NI, DIM, BOX);
+zi = stk_feval(f, xi);                              % evaluation results
 
-if NOISEVARIANCE > 0,
-    zi.a = zi.a + sqrt(NOISEVARIANCE) * randn(NI,1);
+if NOISY,
+    zi.a = zi.a + NOISESTD * randn(NI, 1);
     % (don't forget that the data is in the ".a" field!)
 end
 
 
-%% Specification of the model
+%% SPECIFICATION OF THE MODEL
 %
 % We choose a Matern covariance, the parameters of which will be estimated from the data.
-%
-% The values of the parameters that are provided here, including the noise variance, are
-% only used as an initial point for the optimization algorithm used in stk_param_estim().
 %
 
 % The following line defines a model with a constant but unknown mean (ordinary
@@ -78,38 +76,42 @@ end
 % set, but they will be replaced below by estimated parameters.)
 model = stk_model('stk_materncov_iso');
 
-% Noise variance
-if NOISEVARIANCE > 0,
-    model.lognoisevariance = log(NOISEVARIANCE);
-else
-    % Even if we don't assume that the observations are noisy,
-    % it is wiser to add a small "regularization noise".
-    model.lognoisevariance = log(100 * eps);
-end
 
-
-%% Estimatation the parameters of the covariance
+%% ESTIMATION OF THE PARAMETERS OF THE COVARIANCE FUNCTION
 %
 % Here, the parameters of the Matern covariance function are estimated by the
 % REML (REstricted Maximum Likelihood) method using stk_param_estim().
 %
 
-% Initial guess for the parameters for the Matern covariance
-% (see "help stk_materncov_iso" for more information)
-SIGMA2 = 1.0;  % variance parameter
-NU     = 4.0;  % regularity parameter
-RHO1   = 0.4;  % scale (range) parameter
-param0 = log([SIGMA2; NU; 1/RHO1]);
+% Initial guess for the parameters of the Matern covariance
+param0 = stk_param_init(model, xi, zi, BOX, NOISY);
 
-model.param = stk_param_estim(model, xi, zi, param0);
+% % Alternative: user-defined initial guess for the parameters of the Matern covariance
+% % (see "help stk_materncov_iso" for more information)
+% SIGMA2 = 1.0;  % variance parameter
+% NU     = 4.0;  % regularity parameter
+% RHO1   = 0.4;  % scale (range) parameter
+% param0 = log([SIGMA2; NU; 1/RHO1]);
+
+if ~NOISY, % noiseless case
+    model.lognoisevariance = 2 * log(1e-4); % small "regularization" noise (fixed)
+    model.param = stk_param_estim(model, xi, zi, param0);
+else
+    model.lognoisevariance = 2 * log(NOISESTD); % NOISESTD is assumed to be known
+    model.param = stk_param_estim(model, xi, zi, param0);
+end
+
+model %#ok<NOPTS>
 
 
-%% carry out kriging prediction
+%% CARRY OUT KRIGING PREDICTION AND DISPLAY RESULTS
 
+NT = 400;                                     % Number of points in the grid
+xt = stk_sampling_regulargrid(NT, DIM, BOX);  % Generate a regular grid of size NT
+zt = stk_feval(f, xt);                        % True value of the function on the grid
+
+% Compute the kriging predictor (and the kriging variance) on the grid
 zp = stk_predict(model, xi, zi, xt);
 
-
-%% display results
-
-stk_plot1d(xi,zi,xt,zt,zp)
-model %#ok<NOPTS>
+% Visualisation
+stk_plot1d(xi, zi, xt, zt, zp);

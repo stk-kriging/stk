@@ -1,5 +1,11 @@
 2012-11-14  Julien Bect  <julien.bect@supelec.fr>
 
+	Added a new function to help initialize stk_param_estim().
+
+	* paramestim/stk_param_init.m: new function
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+	* examples/01_kriging_basics/stk_example_kb03.m: modified
+
 	New function stk_normalize().
 
 	* utils/stk_normalize.m: new function
