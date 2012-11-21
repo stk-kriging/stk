@@ -1,3 +1,10 @@
+2012-11-21  Julien Bect  <julien.bect@supelec.fr>
+
+	Added default values for some input arguments of stk_is_lhs(),
+	and stricter dimension checking.
+
+	* misc/test/stk_is_lhs.m: modified
+
 2012-11-14  Julien Bect  <julien.bect@supelec.fr>
 
 	Changed the upper bound on nu in stk_param_estim().
