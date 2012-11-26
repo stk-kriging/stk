@@ -95,8 +95,10 @@ end
 q = 2^r; % = (n - 1)/2
 
 % box
-if nargin < 3,
+if (nargin < 3) || isempty(box),
     box = repmat([-1; 1], 1, d);
+else
+    stk_assert_box(box);
 end
 
 % permutation
@@ -168,10 +170,7 @@ x = x + q + 1;
 x = (2*x - 1) / (2*n);
 
 % And, finally, convert to box
-xmin = box(1, :);
-xmax = box(2, :);
-delta = xmax - xmin;
-x = ones(n,1) * xmin + x * diag(delta);
+x = stk_rescale(x, [], box);
     
 end % function stk_sampling_olhs
 

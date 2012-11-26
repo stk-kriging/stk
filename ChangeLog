@@ -1,5 +1,14 @@
 2012-11-26  Julien Bect  <julien.bect@supelec.fr>
 
+	Modified all stk_sampling* functions to use stk_rescale()
+	and stk_assert_box().
+
+	* sampling/stk_sampling_olhs.m: modified
+	* sampling/stk_sampling_randunif.m: modified
+	* sampling/stk_sampling_regulargrid.m: modified
+	* sampling/stk_sampling_randomlhs.m: modified
+	* sampling/stk_sampling_maximinlhs.m: modified
+
 	Minor improvements in stk_is_lhs().
 
 	* misc/test/stk_is_lhs.m: modified

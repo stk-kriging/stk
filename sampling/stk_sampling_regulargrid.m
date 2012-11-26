@@ -6,7 +6,7 @@
 %   an integer, a grid of size N is built; in this case, acceptable sizes are
 %   such that N^(1/DIM) is an integer. If N is a vector of length N, a grid of
 %   size prod(N) is built, with N(j) points on coordinate j.
-%   
+%
 % CALL: X = stk_sampling_regulargrid(N, DIM, BOX)
 %
 %   does the same thing in the DIM-dimensional hyperrectangle specified by the
@@ -43,19 +43,13 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_regulargrid(n, dim, box)
-
 stk_narginchk(2, 3);
 
+% read argument box
 if (nargin < 3) || isempty(box)
-    xmin = zeros(1, dim);
-    xmax = ones(1, dim);
+    box = repmat([0; 1], 1, dim);
 else
-    [s1,s2] = size(box);
-    if ~( (s1==2) && (s2==dim) ),
-        error('box should be a 2xd array');
-    end
-    xmin = box(1,:);
-    xmax = box(2,:);
+    stk_assert_box(box);
 end
 
 if length(n) == 1
@@ -79,20 +73,17 @@ if any(n==0), % empty grid
     xdata = zeros(0,dim);
     
 else % at least one input point
-        
-    xmin = reshape(xmin, 1, dim); % make sure we work we row vectors
-    xmax = reshape(xmax, 1, dim);   assert(all( xmin < xmax ));
     
     if dim == 1, % univariate inputs
         
-        xdata = linspace(xmin, xmax, n)';
+        xdata = linspace(box(1), box(2), n)';
         coord = {xdata};
         
     else % multivariate inputs
         
         vect = cell(1, dim);
         for j = 1:dim,
-            vect{j} = linspace(xmin(j), xmax(j), n(j));
+            vect{j} = linspace(box(1, j), box(2, j), n(j));
         end
         
         [coord{:}] = ndgrid(vect{:});

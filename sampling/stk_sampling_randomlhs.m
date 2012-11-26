@@ -42,11 +42,13 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_randomlhs(n, dim, box)
-
 stk_narginchk(2, 3);
 
-if nargin < 3,
-    box = [zeros(1, dim); ones(1, dim)];
+% read argument box
+if (nargin < 3) || isempty(box)
+    box = repmat([0; 1], 1, dim);
+else
+    stk_assert_box(box);
 end
 
 niter = 1;
