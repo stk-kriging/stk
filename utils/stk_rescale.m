@@ -1,4 +1,4 @@
-% STK_NORMALIZE normalizes a dataset to [0; 1]^DIM.
+% STK_RESCALE rescales a dataset from one box to another
 
 % Copyright Notice
 %
@@ -26,33 +26,53 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = stk_normalize(x, box)
+function y = stk_rescale(x, box1, box2)
+stk_narginchk(3, 3);
 
-stk_narginchk(1, 2);
-
-y = stk_datastruct(x);
-n = size(y.a, 1);
-
-if nargin < 2,
-    xmin = min(y.a, [], 1);
-    xmax = max(y.a, [], 1);
+% read argument x
+if isstruct(x), 
+    xx = x.a;
 else
-    xmin = box(1, :);
-    xmax = box(2, :);
+    xx = x;
+end
+[n, d] = size(xx);
+
+% read box1
+if ~isempty(box1),
+    stk_assert_box(box1, d);
 end
 
-y.a = (y.a - repmat(xmin, n, 1)) ./ repmat(xmax - xmin, n, 1);
+% read box2
+if ~isempty(box2),
+    stk_assert_box(box2, d);
+end
 
-end % function stk_normalize
+% scale to [0; 1] (xx --> zz)
+if ~isempty(box1),
+    xmin = box1(1, :);
+    xmax = box1(2, :);
+    delta = xmax - xmin;   
+    zz = (xx - repmat(xmin, n, 1)) ./ repmat(1./delta, n, 1);
+else
+    zz = xx;
+end
 
+% scale to box2 (zz --> yy)
+if ~isempty(box2),
+    zmin = box2(1, :);
+    zmax = box2(2, :);
+    delta = zmax - zmin;   
+    yy = repmat(zmin, n, 1) + zz .* repmat(delta, n, 1);
+else
+    yy = zz;
+end
 
-%!shared x box y1 y2 y3 y4
-%!  n = 5; box = [2; 3]; x = box(1) + diff(box) * rand(n, 1);
+% output
+if isstruct(x),
+    y = x;
+    y.a = yy;
+else
+    y = yy;
+end
 
-%!error  y1 = stk_normalize();
-%!test   y2 = stk_normalize(x);
-%!test   y3 = stk_normalize(x, box);
-%!error  y4 = stk_normalize(x, box, log(2));
-
-%!test assert(~any((y2.a < 0) | (y2.a > 1)));
-%!test assert(~any((y3.a < 0) | (y3.a > 1)));
+end % function stk_rescale

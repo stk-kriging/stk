@@ -1,3 +1,10 @@
+2012-11-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a new function to rescale data from one box to another.
+
+	* utils/stk_rescale.m: new function
+	* utils/stk_normalize.m: (slightly) modified
+
 2012-11-25  Julien Bect  <julien.bect@supelec.fr>
 
 	Added a new function to generate OLHSs, following Ye (1998).
