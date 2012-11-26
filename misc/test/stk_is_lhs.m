@@ -48,19 +48,25 @@
 function b = stk_is_lhs(x, n, dim, box)
 stk_narginchk(1, 4);
 
-x = stk_datastruct(x);
+if isstruct(x), x = x.a; end
 
 if nargin == 1,
-    [n dim] = size(x.a);
-else
-    if ~isequal(size(x.a), [n dim])
-        errmsg = 'Incorrect dimensions.';
-        stk_error(errmsg, 'IncorrectArgument');
+    [n dim] = size(x);
+elseif nargin == 2,
+    if size(x, 1) ~= n,
+        b = false; return;
+    end
+    dim = size(x, 2);
+else % nargin > 2
+    if ~isequal(size(x), [n dim])
+        b = false; return;
     end
 end
 
 if nargin < 4,
-    box = [zeros(1, dim); ones(1, dim)];
+    box = repmat([0; 1], 1, dim);
+else
+    stk_assert_box(box, dim);
 end
 
 xmin = box(1, :);
@@ -68,7 +74,7 @@ xmax = box(2, :);
 
 for j = 1:dim,
     
-    y = x.a(:,j);
+    y = x(:,j);
     
     if (xmin(j) > min(y)) || (xmax(j) < max(y))
         b = false; return;

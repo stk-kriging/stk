@@ -1,5 +1,9 @@
 2012-11-26  Julien Bect  <julien.bect@supelec.fr>
 
+	Minor improvements in stk_is_lhs().
+
+	* misc/test/stk_is_lhs.m: modified
+
 	Added a new function to rescale data from one box to another.
 
 	* utils/stk_rescale.m: new function
