@@ -47,40 +47,26 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_maximinlhs(n, d, box, niter)
-
 stk_narginchk(2, 4);
 
 if (nargin < 3) || isempty(box)
-    xmin = zeros(1, d);
-    xmax = ones(1, d);
+    box = repmat([0; 1], 1, d);
 else
-    if ~isequal(size(box), [2, d]),
-        error('box should be a 2xd array');
-    end
-    xmin = box(1,:);
-    xmax = box(2,:);
+    stk_assert_box(box);
 end
 
 if nargin < 4,
     niter = 1000;
 end
 
-if n == 0, % no input => no output
-    
-    xdata = zeros(0, d);
-    
+if n == 0, % no input => no output    
+    xdata = zeros(0, d);    
 else % at least one input point
-    
-    xmin  = reshape(xmin, 1, d); % make sure we work we row vectors
-    delta = reshape(xmax, 1, d) - xmin;   assert(all(delta > 0));
-    
     xx = lhsdesign_(n, d, niter);
-    
-    xdata = ones(n, 1) * xmin + xx * diag(delta);
-    
+    xdata = stk_rescale(xx, [], box);    
 end
 
-x = struct( 'a', xdata );
+x = struct('a', xdata);
 
 end
 
