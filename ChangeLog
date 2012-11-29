@@ -1,3 +1,10 @@
+2012-11-29  Julien Bect  <julien.bect@supelec.fr>
+
+	Modified stk_predict() to return the posterior covariance matrix
+	as a fourth output argument.
+
+	* core/stk_predict.m: modified
+
 2012-11-26  Julien Bect  <julien.bect@supelec.fr>
 
 	Modified all stk_sampling* functions to use stk_rescale()
