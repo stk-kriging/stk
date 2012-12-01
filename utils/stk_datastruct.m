@@ -1,4 +1,4 @@
-% STK_DISP_EXAMPLEWELCOME
+% STK_DATASTRUCT converts its input into an STK data structure, if possible
 
 % Copyright Notice
 %
@@ -26,15 +26,30 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_examplewelcome()
+function y = stk_datastruct(x)
 
-stack = dbstack();
-
-if length(stack) < 2,
-    errmsg = 'stk_disp_examplewelcome() is meant to be used in example scripts.';
-    stk_error(errmsg, 'WhatTheFuck');
+if isstruct(x) && isfield(x, 'a')
+    y = x;
+    return;
 end
 
-stk_disp_framedtext(stack(2).name);
+if isa(x, 'double')
+    y = struct('a', x);
+    return;
+end
 
-end % function stk_disp_examplewelcome
+if isempty(x)
+    y = struct('a', []);
+end
+
+xname = inputname(1);
+if isempty(xname), 
+    errmsg = 'x must be a matrix or a structure with an ''a'' field.';
+    stk_error(errmsg, 'IncorrectArgument');
+else
+    stack = dbstack();
+    errmsg = sprintf('%s must be a matrix or a structure with an ''a'' field.', xname);
+    stk_error(errmsg, 'IncorrectArgument', stack(2:end));
+end
+
+end % function stk_datastruct

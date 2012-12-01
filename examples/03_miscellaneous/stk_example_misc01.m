@@ -35,15 +35,15 @@ stk_disp_examplewelcome();
 
 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space
-box = [-1.0; 1.0];                              % factor space
+BOX = [-1.0; 1.0];                              % factor space
 
 NT = 400; % nb of points in the grid
-xt = stk_sampling_regulargrid( NT, DIM, box );
-zt = stk_feval( f, xt );
+xt = stk_sampling_regulargrid(NT, DIM, BOX);
+zt = stk_feval(f, xt);
 
-NI = 6;                                     % nb of evaluations that will be used
-xi = stk_sampling_randunif(NI, DIM, box);   % evaluation points
-zi = stk_feval(f, xi);                      % evaluation results
+NI = 6;                                      % nb of evaluations that will be used
+xi = stk_sampling_randunif(NI, DIM, BOX);    % evaluation points
+zi = stk_feval(f, xi);                       % evaluation results
 
 obs = stk_makedata(xi, zi);
 
@@ -101,7 +101,7 @@ for j = 1:NB_MODELS,
     zp{j} = stk_predict(model{j}, xt);
     % Plot the result
     h_axis = subplot(nr, nc, j);
-    stk_plot1d(obs, stk_makedata(xt, zt), stk_makedata(xt, zp{j}));
+    stk_plot1d(obs, stk_makedata(xt, zt), stk_makedata(xt, zp{j}), h_axis);
     % Title
     order = model{j}.randomprocess.priormean.param;
     switch model{j}.randomprocess.priorcov.name,

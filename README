@@ -5,7 +5,7 @@ o Copyright Notice
 
     Copyright (C) 2011, 2012 SUPELEC
 
-    Version:   1.1
+    Version:   devel:objectify-me
 
     Authors:   Julien Bect        <julien.bect@supelec.fr>
                Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -36,19 +36,19 @@ o Quick Start
 
 o Requirements and recommendations for use with GNU Octave
 
-	The STK works with GNU Octave 3.2.0 or newer.
+    The STK works with GNU Octave 3.2.0 or newer.
 
     Note  that  the STK relies  on  some mex files  that  are compiled
     during the initialization. Thus, your installation must be able to
     compile mex files.
 
-    The sqp() function from the optim package internally relies on the
-    GLPK library, which is shipped with most (but not all) versions of
-    Octave. The STK will not start if GLPK is not installed.
+    The sqp() function internally relies on the GLPK library, which is
+    shipped with most (but not all) versions of Octave.   The STK will
+    not start if GLPK is not installed.
 
 o Requirements and recommendations for use with Matlab
 
-	The STK works with Matlab R2007a or newer.
+    The STK works with Matlab R2007a or newer.
 
     The Optimization Toolbox is recommended.
 
@@ -78,7 +78,7 @@ o Content
     algorithms (see, e.g., Bect et al. 2010)
 
     The toolbox consists of three parts:
-    
+
     a. The  first part is the  implementation of a  number of covariance
        functions, and tools to  compute covariance vectors and matrices.
        The structure  of the STK  makes it possible  to use any  kind of

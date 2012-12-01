@@ -2,10 +2,10 @@
 %
 % CALL: ZP = stk_predict(MODEL, XP)
 %
-%    computes the kriging predictor ZP at the points XP, given MODEL. 
-%    In general (see special cases below), XP and ZP are structures 
-%    whose field 'a' contains the actual numerical data.
-%    More precisely, on a DIM-dimensional factor space,
+%    computes the kriging predictor ZP at the points XP, using the kriging model
+%    MODEL. In general (see special cases below), XP and ZP are structures whose
+%    field 'a' contains the actual numerical data. More precisely, on a 
+%    DIM-dimensional factor space,
 %
 %     * XP.a must be a NP x DIM matrix, where NP is the number of prediction
 %       points,
@@ -19,6 +19,12 @@
 %
 %    also returns the matrix of kriging weights LAMBDA and the matrix of
 %    Lagrange multipliers MU.
+%
+% CALL: [ZP, LAMBDA, MU, K] = stk_predict(MODEL, XP)
+%
+%    also returns the posterior covariance matrix K at the locations XP (this is
+%    an NP x NP covariance matrix). From a frequentist point of view, K can be
+%    seen as the covariance matrix of the prediction errors.
 %
 % SPECIAL CASE #1
 %
@@ -62,46 +68,52 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [zp, lambda, mu] = stk_predict(model, xp)
-
+function [zp, lambda, mu, K] = stk_predict(model, xt)
 stk_narginchk(2, 2);
 
-ni = model.observations.n;
+xt = stk_datastruct(xt);
 
-%=== process argument xp according to the nature of the domain
+%=== process argument xt according to the nature of the domain
 switch model.domain.type
-  case 'discrete',
-    if isempty(xp), xp.a = 1:model.domain.nt; end
-  case 'continuous',
-    assert( ~isempty(xp.a) );
-  otherwise
-    error('model.domain.type should be either "continuous" or "discrete"');
+    case 'discrete',
+        if isempty(xt.a)
+            % default: predict the response at all possible locations
+            xt.a = (1:size(model.domain.nt, 1))';
+        else
+            if size(xt.a, 2) ~= 1,
+                errmsg = 'xt.a should be a column vector of indices.';
+                stk_error(errmsg, 'IncorrectArgument');
+            end
+        end
+    case 'continuous',        
+        assert(~isempty(xt.a));
+    otherwise
+        error('model.domain.type should be either "continuous" or "discrete"');
 end
-np = size(xp.a, 1);
+
+ni = model.observations.n;   % number of observations
+nt = size(xt.a, 1);          % number of test points
+assert(nt > 0);
 
 %=== handle other optional arguments
-
-% parser = inputParser; % parse optional arguments
-% parser.addOptional( 'BlockSize', [] );
-% parser.addOptional( 'DisplayWaitBar', false );
-% parser.parse( varargin{:} );
-% 
-% display_waitbar = parser.Results.DisplayWaitBar;
-% if display_waitbar,
-%     hwb = waitbar(0,'In stk\_predict(). Please wait...');
-%     set( hwb, 'Name', 'stk_predict' );
-% end
-% 
-% block_size = parser.Results.BlockSize;
 
 display_waitbar = false;
 block_size = [];
 
+%=== prepare lefthand side of the kriging equation
+
+[Kii,Pi] = stk_make_matcov(model, model.observations.x);
+
+LS = [[ Kii, Pi                ]; ...
+      [ Pi', zeros(size(Pi,2)) ]];
+
+[LS_Q, LS_R] = qr(LS); % orthogonal-triangular decomposition
+
 %=== choose nb_blocks & block_size
 
-if isempty( block_size )
+if isempty(block_size)
     MAX_RS_SIZE = 5e6; SIZE_OF_DOUBLE = 8; % in bytes
-    block_size = ceil( MAX_RS_SIZE/(ni*SIZE_OF_DOUBLE) );
+    block_size = ceil(MAX_RS_SIZE / (size(LS, 1) * SIZE_OF_DOUBLE));
 end
 
 if block_size == inf, 
@@ -109,84 +121,96 @@ if block_size == inf,
     nb_blocks = 1;
 else
     % blocks of size approx. block_size
-    nb_blocks = ceil( np / block_size );
+    nb_blocks = ceil(nt / block_size);
 end
 
-block_size = ceil( np / nb_blocks );
-
-%=== prepare lefthand side of the kriging equation
-
-[Kii,Pi] = stk_make_matcov( model,  model.observations.x );
-
-LS = [ [ Kii, Pi                ]; ...
-       [ Pi', zeros(size(Pi,2)) ] ];
-
-[LS_Q,LS_R] = qr( LS ); % orthogonal-triangular decomposition
+block_size = ceil(nt / nb_blocks);
 
 %=== prepare the output arguments
 
-zp = struct('v', zeros(np,1));
+zp = struct('v', zeros(nt, 1));
 compute_prediction = ~isempty(model.observations.z);
 
 % compute the kriging prediction, or just the variances ?
-if compute_prediction, zp.a = zeros(np,1); 
-else zp.a = zeros(np,0); end
+if compute_prediction, zp.a = zeros(nt, 1); 
+else zp.a = zeros(nt, 0); end
 
-return_weights = ( nargout > 1 ); % return kriging weights ?
-if return_weights, lambda = zeros(ni,np); end
+return_weights = (nargout > 1); % return kriging weights ?
+if return_weights, lambda = zeros(ni, nt); end
 
-return_lm = ( nargout > 2 ); % return Lagrange multipliers ?
-if return_lm, mu = zeros(size(Pi,2),np); end
-    
+return_lm = (nargout > 2); % return Lagrange multipliers ?
+if return_lm, mu = zeros(size(Pi, 2), nt); end
+
+return_K = (nargout > 3); % return posterior covariance matrix ?
+
 %=== MAIN LOOP (over blocks)
 
-linsolve_opt = struct( 'UT', true );
+linsolve_opt = struct('UT', true);
+if return_K, RS = zeros(size(LS, 1), nt); end
 
 for block_num = 1:nb_blocks
     
     % compute the indices for the current block
-    idx_beg = 1 + block_size*(block_num-1);
-    idx_end = min( np, idx_beg+block_size-1 );
+    idx_beg = 1 + block_size * (block_num - 1);
+    idx_end = min(nt, idx_beg + block_size - 1);
     idx = idx_beg:idx_end;
     
     % extract the block of prediction locations
     switch model.domain.type
       case 'discrete'
-        xt_block = xp(idx);
+        xt_block = xt(idx);
       case 'continuous'
-        xt_block = struct('a', xp.a(idx,:));
+        xt_block = struct('a', xt.a(idx,:));
     end
     
     % right-hand side of the kriging equation
-    [Kti,Pt] = stk_make_matcov( model, xt_block, model.observations.x );
-    RS = [ Kti Pt ]';
+    [Kti, Pt] = stk_make_matcov(model, xt_block, model.observations.x);
+    RS_block = [Kti Pt]';
+    
+    % the full RHS will be required if the posterior covariance matrix is requested
+    if return_K, RS(:, idx) = RS_block; end
     
     % solve the upper-triangular system to get the extended
     % kriging weights vector (weights + Lagrange multipliers)
     if stk_is_octave_in_use(),
-        lambda_mu = LS_R \ ( LS_Q'*RS ); % linsolve is missing in Octave
+        lambda_mu = LS_R \ (LS_Q' * RS_block); % linsolve is missing in Octave
     else        
-        lambda_mu = linsolve( LS_R, LS_Q'*RS, linsolve_opt );
+        lambda_mu = linsolve(LS_R, LS_Q' * RS_block, linsolve_opt);
     end
     
     if return_weights, % extract weights
-        lambda(:,idx) = lambda_mu(1:ni,:); end
+        lambda(:, idx) = lambda_mu(1:ni, :); end
     
     if return_lm, % extracts Lagrange multipliers
-        mu(:,idx) = lambda_mu((ni+1):end,:); end
+        mu(:, idx) = lambda_mu((ni+1):end, :); end
     
     if compute_prediction, % compute the kriging mean
-        zp.a(idx) = lambda_mu(1:ni,:)' * model.observations.z.a; end
+        zp.a(idx) = lambda_mu(1:ni, :)' * model.observations.z.a; end
     
     % compute kriging variances (STATIONARITY ASSUMED)
-    zp.v(idx) = LS(1,1) - dot(lambda_mu, RS)';
+    % FIXME: remove STATIONARITY ASSUMPTION !!!
+    zp.v(idx) = LS(1,1) - dot(lambda_mu, RS_block)';
+
+    b = (zp.v < 0);
+    if any(b),        
+        zp.v(b) = 0.0;
+        warning(sprintf(['Correcting numerical inaccuracies in kriging variance.\n' ...
+            '(%d negative variances have been set to zero)'], sum(b)));
+    end
     
     if display_waitbar,
-        waitbar( idx_end/np, hwb, sprintf( ...
-            'In stk\\_predict(): %d/%d predictions completed',idx_end,np) );
+        waitbar( idx_end/nt, hwb, sprintf( ...
+            'In stk\\_predict(): %d/%d predictions completed',idx_end,nt) );
     end
 end
 
+% compute posterior covariance matrix (if requested)
+if return_K,
+    K0 = stk_make_matcov(model, xt);
+    K = K0 - [lambda; mu]' * RS_block;
+    K = 0.5 * (K + K');
+end
+        
 if display_waitbar, close(hwb); end
 
 end
@@ -195,29 +219,35 @@ end
 %%% tests %%%
 %%%%%%%%%%%%%
 
-%!shared model, x0, x_obs, z_obs, x_prd, y_prd1, idx_obs, idx_prd
+%!shared n, m, model, x0, x_obs, z_obs, x_prd, y_prd1, idx_obs, idx_prd
 %!
-%! n = 20; % 10 observations + 10 predictions
-%! d = 1;  % dimension of the input space
+%! n = 10;     % number of observations
+%! m = n + 1;  % number of predictions
+%! d = 1;      % dimension of the input space
 %!
-%! x0 = stk_sampling_regulargrid(n, d, [0; pi]);
+%! x0 = stk_sampling_regulargrid(n+m, d, [0; pi]);
 %!
-%! idx_obs = 1:2:n;
-%! idx_prd = 2:2:n;
+%! idx_obs = 2:2:(n+m-1);
+%! idx_prd = 1:2:(n+m);
 %!
 %! x_obs = struct('a', x0.a(idx_obs));
 %! z_obs = stk_feval(@sin, x_obs);
 %! x_prd = struct('a', x0.a(idx_prd));
 %! 
 %! model = stk_model('stk_materncov32_iso');
+%! model.order = 0; % this is currently the default, but better safe than sorry
 
 %!error y_prd1 = stk_predict();
 %!error y_prd1 = stk_predict(model);
-%!error y_prd1 = stk_predict(model, x_obs);
-%!error y_prd1 = stk_predict(model, x_obs, z_obs);
-%!test  y_prd1 = stk_predict(model, x_obs, z_obs, x_prd);
-%!error y_prd1 = stk_predict(model, x_obs, z_obs, x_prd, 0);
-%!error y_prd1 = stk_predict(model, x_obs, z_obs, x_prd, 0, 1);
+%!test  y_prd1 = stk_predict(model, x_prd);
+%!error y_prd1 = stk_predict(model, x_prd, 0);
+
+%!test
+%!
+%! [y_prd1, lambda, mu, K] = stk_predict(model, x_obs, z_obs, x_prd); 
+%! assert(isequal(size(lambda), [n m]));
+%! assert(isequal(size(mu), [1 m]));  % ordinary kriging
+%! assert(isequal(size(K), [m m]));
 
 %!test
 %!

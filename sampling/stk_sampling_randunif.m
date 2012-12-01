@@ -17,7 +17,7 @@
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -39,48 +39,27 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_randunif(n, dim, box)
-
 stk_narginchk(2, 3);
 
-if (nargin < 3) || isempty(box)
-    xmin = zeros(1,dim);
-    xmax = ones(1,dim);
-else
-    [s1,s2] = size(box);
-    if ~( (s1==2) && (s2==dim) ),
-        error('box should be a 2xd array');
-    end
-    xmin = box(1,:);
-    xmax = box(2,:);
-end
-
-
-% NOT COMPATIBLE WITh OCTAVE
-% validateattributes( n, {'numeric'}, {'integer','scalar','>=',0} );
-% validateattributes( d, {'numeric'}, {'integer','scalar','>=',1} );
-% validateattributes( xmin, {'numeric'}, {'vector','finite','nonnan'} );
-% validateattributes( xmax, {'numeric'}, {'vector','finite','nonnan'} );
-
-if (length(n)~=1) && (length(n)~=dim)
+% read argument n
+if (length(n) ~=1 ) && (length(n) ~= dim)
     error('n should either be a scalar or a vector of length d');
 end
 
-if n==0, % empty sample
-    
-    xdata = zeros(0,dim);
-    
-else % at least one input point
-    
-    xmin  = reshape( xmin, 1, dim ); % make sure we work we row vectors
-    delta = reshape( xmax, 1, dim ) - xmin;   assert(all( delta > 0 ));
-    
-    xx = rand( n, dim );
-    
-    xdata = ones(n,1)*xmin + xx*diag(delta);
-    
+% read argument box
+if (nargin < 3) || isempty(box)
+    box = repmat([0; 1], 1, dim);
+else
+    stk_assert_box(box);
 end
 
-x = struct( 'a', xdata );
+if n == 0, % empty sample    
+    xdata = zeros(0,dim);    
+else % at least one input point          
+    xdata = stk_rescale(rand(n, dim), [], box);
+end
+
+x = struct('a', xdata);
 
 end % function stk_sampling_randunif
 

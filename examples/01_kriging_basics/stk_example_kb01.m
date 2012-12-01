@@ -35,20 +35,20 @@
 stk_disp_examplewelcome();
 
 
-
 %% DEFINE A 1D TEST FUNCTION
 
 f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space
-box = [-1.0; 1.0];                              % factor space
+BOX = [-1.0; 1.0];                              % factor space
 
-NG = 400; % nb of points in the grid
-xg = stk_sampling_regulargrid( NG, DIM, box );
-zg = stk_feval(f, xg);
-xzg = stk_makedata(xg, zg); % data structure containing information about evaluations
+NT = 400; % nb of points in the grid
+xt = stk_sampling_regulargrid(NT, DIM, BOX);
+zt = stk_feval(f, xt);
+xzt = stk_makedata(xt, zt); % data structure containing (factors, response) pairs
 
-figure(1); set( gcf, 'Name', 'Plot of the function to be approximated');
-stk_plot1d( [], xzg, [] );
+stk_plot1d([], xzt, []);
+s = 'Plot of the function to be approximated';
+title(s); set(gcf, 'Name', s);
 
 
 %% GENERATE A SPACE-FILLING DESIGN
@@ -62,12 +62,16 @@ stk_plot1d( [], xzg, [] );
 %
 
 NI = 6;                                         % nb of evaluations that will be used
-xi = stk_sampling_regulargrid(NI, DIM, box);   % evaluation points
+xi = stk_sampling_regulargrid(NI, DIM, BOX);   % evaluation points
 zi = stk_feval(f, xi);                        % structure of evaluation results
 xzi = stk_makedata(xi, zi);
 
 
 %% SPECIFICATION OF THE MODEL
+%
+% We choose a Matern covariance with "fixed parameters" (in other
+% words, the parameters of the covariance function are provided by the user
+% rather than estimated from data).
 %
 
 % The following line defines a model with a constant but unknown mean
@@ -75,7 +79,7 @@ xzi = stk_makedata(xi, zi);
 % parameters are also set, but we override them below.)
 model = stk_model('stk_materncov_iso');
 
-% NB: the suffix '_iso' indicates an ISOTROPIC covariance function, but the
+% NOTE: the suffix '_iso' indicates an ISOTROPIC covariance function, but the
 % distinction isotropic / anisotropic is irrelevant here since DIM = 1.
 
 % Parameters for the Matern covariance function
@@ -97,13 +101,14 @@ model = stk_setobs(model, xzi);
 % kriging mean) and "zp.v" (the kriging variance).
 %
 
-% Carry out the kriging prediction at points xg.a
-zp = stk_predict(model, xg);
+% Carry out the kriging prediction at points xt.a
+zp = stk_predict(model, xt);
+xzp = stk_makedata(xt, zp);
 
 % Display the result
-figure(2)
-xzp = stk_makedata(xg, zp);
-stk_plot1d(xzi, xzg, xzp, 'Kriging prediction based on noiseless observations');
+stk_plot1d(xzi, xzt, xzp);
+s = 'Kriging prediction based on noiseless observations';
+title(s); set(gcf, 'Name', s);
 
 
 %% REPEAT THE EXPERIMENT IN A NOISY SETTING
@@ -132,9 +137,10 @@ model1.noise.cov = stk_homnoisecov(NOISEVARIANCE);  % homoscedastic white noise
 % Carry out the kriging prediction at locations xg.a
 
 model1 = stk_setobs(model1, xzi_noisy);
-zp_noisy = stk_predict(model1, xg);
+zp_noisy = stk_predict(model1, xt);
+xzp_noisy = stk_makedata(xt, zp_noisy);
 
 % Display the result
-xzp_noisy = stk_makedata(xg, zp_noisy);
-figure(3)
-stk_plot1d(xzi_noisy, xzg, xzp_noisy, 'Kriging prediction based on noisy observations');
+stk_plot1d(xzi_noisy, xzt, xzp_noisy);
+s = 'Kriging prediction based on noisy observations';
+title(s); set(gcf, 'Name', s);

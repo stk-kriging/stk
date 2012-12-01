@@ -21,8 +21,8 @@
 % BE CAREFUL:
 %
 %    stk_make_matcov(MODEL, X0) and stk_makematcov(MODEL, X0, X0) are NOT
-%    equivalent if model.noise.type != 'none' (the noise variance is added
-%    on the diagonal of the covariance matrix).
+%    equivalent, unless model.noise is an stk_nullcov (the noise variance is 
+%    added on the diagonal of the covariance matrix).
 
 % Copyright Notice
 %
@@ -50,30 +50,21 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
 
 function [K, P] = stk_make_matcov(model, x0, x1)
-
 stk_narginchk(2, 3);
 
-switch nargin
-    case 2, % stk_make_matcov(model, x0)
-        make_matcov_auto = true;
-    case 3, % stk_make_matcov(model, x0, x1)
-        make_matcov_auto = isempty(x1);
-    otherwise
-        error('Incorrect number of input arguments.');
-end
+% stk_make_matcov(model, x0) or stk_make_matcov(model, x0, x1) ?
+make_matcov_auto = (nargin == 2);
 
 n0 = size(x0.a, 1);
 
-%=== blocking parameters for parallel computing
-
-% If the size of the covariance matrix to be computed is smaller than
-% MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.
+% Blocking parameters for parallel computing
+% a) If the size of the covariance matrix to be computed is smaller than
+%    MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.
+% b) If it is decided to use parfor, the number of blocks will be chosen
+%    in such a way that blocks smaller than MIN_BLOCK_SIZE are never used
 MIN_SIZE_FOR_BLOCKING = 500^2;
-% If it is decided to use parfor, the number of blocks will be chosen
-% in such a way that blocks smaller than MIN_BLOCK_SIZE are never used
 MIN_BLOCK_SIZE = 100^2;
 
 switch  model.domain.type
@@ -91,19 +82,19 @@ switch  model.domain.type
         end
         
     case 'continuous'
-        %=== decide whether parallel computing should be used
+        % Decide whether parallel computing should be used
         if make_matcov_auto, N=n0*n0; else N=n0*size(x1.a,1); end
         if (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
             ncores = 1; % do not use parallel computing
         else
-            ncores = max( 1, matlabpool('size') );
+            ncores = max(1, matlabpool('size'));
             % note: matlabpool('size') returns 0 if the PCT is not started
         end
         
         % covariance function
         cov = model.randomprocess.priorcov;
         
-        %=== call the subfunction that does the actual computation
+        % Call the subfunction that does the actual computation
         if make_matcov_auto,
             
             % FIXME: avoid computing twice each off-diagonal term
@@ -128,9 +119,8 @@ switch  model.domain.type
         
 end % switch model.domain.type
 
-%=== compute the regression functions
-
-if nargout > 1, P = stk_ortho_func( model, x0 ); end
+% Compute the regression functions
+if nargout > 1, P = stk_ortho_func(model, x0); end
 
 end
 
@@ -163,7 +153,7 @@ end
 %!% In the noiseless case, (1) and (2) should give the same results
 %!test  assert(isequal(Kb, Ka));
 
-%!% In the noisy case, however...
+%!% In the noisy case, however... 
 %!test  [Ka, Pa] = stk_make_matcov(model2, x0);           % (1')
 %!test  [Kb, Pb] = stk_make_matcov(model2, x0, x0);       % (2')
 %!error assert(isequal(Kb, Ka));

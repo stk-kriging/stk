@@ -36,11 +36,11 @@ stk_disp_examplewelcome();
 
 f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space
-box = [-1.0; 1.0];                              % factor space
+BOX = [-1.0; 1.0];                              % factor space
 
 NT = 400; % nb of points in the grid
-xt = stk_sampling_regulargrid( NT, DIM, box );
-zt = stk_feval( f, xt );
+xt = stk_sampling_regulargrid(NT, DIM, BOX);
+zt = stk_feval(f, xt);
 
 
 %% GENERATE OBSERVATIONS
@@ -53,7 +53,7 @@ zt = stk_feval( f, xt );
 NI = 6;                               % nb of evaluations that will be used
 xi_ind  = [1 20 90 200 300 350];      %
 xi.a = xt.a(xi_ind, 1);
-zi = stk_feval(f, xi);              % evaluation results
+zi = stk_feval(f, xi);                % evaluation results
 xzi = stk_makedata(xi, zi);
 
 

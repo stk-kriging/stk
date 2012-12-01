@@ -1,4 +1,19 @@
-% STK_DISP_EXAMPLEWELCOME
+% STK_TESTFUN_BRANINHOO computes the Branin-Hoo function.
+%
+% The Branin-Hoo function (Branin and Hoo, 1972) is a classical test function
+% for global optimization algorithms, which belongs to the well-known
+% Dixon-Szego test set (Dixon and Szego, 1978). It is usually minimized over
+% [-5; 10] x [10; 15].
+%
+%
+% REFERENCES
+%
+% Branin, F. H. and Hoo, S. K. (1972), A Method for Finding Multiple Extrema
+% of a Function of n Variables, in Numerical methods of Nonlinear Optimization
+% (F. A. Lootsma, editor, Academic Press, London), 231-237.
+%
+% Dixon L.C.W., Szego G.P., Towards Global Optimization 2, North-Holland,
+% Amsterdam, The Netherlands (1978)
 
 % Copyright Notice
 %
@@ -26,15 +41,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_examplewelcome()
+function y = stk_testfun_braninhoo(x)
 
-stack = dbstack();
+if isstruct(x), x = x.a; end
 
-if length(stack) < 2,
-    errmsg = 'stk_disp_examplewelcome() is meant to be used in example scripts.';
-    stk_error(errmsg, 'WhatTheFuck');
-end
+x1 = x(:, 1);
+x2 = x(:, 2);
 
-stk_disp_framedtext(stack(2).name);
+a = 5.1 / (4 * pi * pi);
+b = 5 / pi;
+c = 10 * (1 - 1/(8*pi));
 
-end % function stk_disp_examplewelcome
+y = (x2 - a*x1.*x1 + b*x1 - 6).^2 + c*cos(x1) + 10;
+
+end % stk_testfun_braninhoo

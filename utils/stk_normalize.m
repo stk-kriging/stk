@@ -1,4 +1,4 @@
-% STK_DISP_EXAMPLEWELCOME
+% STK_NORMALIZE normalizes a dataset to [0; 1]^DIM.
 
 % Copyright Notice
 %
@@ -26,15 +26,33 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_examplewelcome()
+function y = stk_normalize(x, box)
 
-stack = dbstack();
+stk_narginchk(1, 2);
 
-if length(stack) < 2,
-    errmsg = 'stk_disp_examplewelcome() is meant to be used in example scripts.';
-    stk_error(errmsg, 'WhatTheFuck');
+y = stk_datastruct(x);
+n = size(y.a, 1);
+
+if nargin < 2,
+    xmin = min(y.a, [], 1);
+    xmax = max(y.a, [], 1);
+else
+    xmin = box(1, :);
+    xmax = box(2, :);
 end
 
-stk_disp_framedtext(stack(2).name);
+y.a = (y.a - repmat(xmin, n, 1)) ./ repmat(xmax - xmin, n, 1);
 
-end % function stk_disp_examplewelcome
+end % function stk_normalize
+
+
+%!shared x box y1 y2 y3 y4
+%!  n = 5; box = [2; 3]; x = box(1) + diff(box) * rand(n, 1);
+
+%!error  y1 = stk_normalize();
+%!test   y2 = stk_normalize(x);
+%!test   y3 = stk_normalize(x, box);
+%!error  y4 = stk_normalize(x, box, log(2));
+
+%!test assert(~any((y2.a < 0) | (y2.a > 1)));
+%!test assert(~any((y3.a < 0) | (y3.a > 1)));

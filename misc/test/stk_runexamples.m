@@ -2,10 +2,9 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2012 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 %
 % Copying Permission Statement
 %
@@ -71,7 +70,7 @@ for i = 1:length(s),
     else
         if ~isempty(regexp(s(i).name, '^stk_example.*.m$'))
             scriptname{end+1} = s(i).name(1:end-2);
-            err{i} = stk_runscript(fullfile(example_dir, scriptname{end}));
+            err{end+1} = stk_runscript(fullfile(example_dir, scriptname{end}));
             drawnow; pause(1.0); close all;
         end
     end

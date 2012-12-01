@@ -4,9 +4,8 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright (C) 2011, 2012 SUPELEC                                       *
- *    Authors:   Julien Bect        <julien.bect@supelec.fr>                 *
- *               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>            *
+ *    Copyright  (C) 2012 SUPELEC                                            *
+ *    Author:    Julien Bect <julien.bect@supelec.fr>                        *
  *    URL:       http://sourceforge.net/projects/kriging/                    *
  *                                                                           *
  * Copying Permission Statement                                              *
@@ -32,74 +31,84 @@
 #include <math.h>
 #include "mex.h"
 
-#define X_IN   prhs[0]  /* input argument  */
-#define H_OUT  plhs[0]  /* output argument */
+#define X_IN           prhs[0]     /* input argument #1  */
+#define Y_IN           prhs[1]     /* input argument #2  */
+#define FILLDIST_OUT   plhs[0]     /* output argument #1 */
+#define ARGMAX_OUT     plhs[1]     /* output argument #2 */
 
-static double compute_mindist(double* x, int nx, int dim)
+static double compute_filldist
+(
+ double* x, unsigned int nx, 
+ double* y, unsigned int ny,
+ unsigned int dim, 
+ unsigned int* argmax
+ )
 {
-  int i, j, k1, k2;
-  double diff, dist_squared, mindist_squared;
+  unsigned int i, j, k1, k2, j_max;
+  double diff, sqdist_max, sqdist_j, sqdist_ij;
 
-  mindist_squared = -1;
+  for (j = 0; j < ny; j++) {
 
-  for (i = 0; i < nx; i++) {
-    for (j = i+1; j < nx; j++) {
-
-      /* compute distance between x[i,:] and x[j,:] */
-      dist_squared = 0.0;
-      for (k1 = i, k2 = j; k1 < dim * nx; k1 += nx, k2 += nx) {
-        diff = x[k1] - x[k2];
-        dist_squared += diff * diff;
+    /* Compute the sqdist from y(j, :) to the set x */    
+    for (i = 0; i < nx; i++) {
+      /* Compute the sqdist from y(j, :) to x(i, :) */
+      sqdist_ij = 0.0;
+      for (k1 = i, k2 = j; k1 < dim * nx; k1 += nx, k2 += ny) {
+        diff = x[k1] - y[k2];
+        sqdist_ij += diff * diff;
       }
-
-      /* update mindist_squared */
-      if ((dist_squared < mindist_squared) || (mindist_squared < 0))
-	mindist_squared = dist_squared;
+      /* Update sqdist_j */
+      if ((i == 0) || (sqdist_ij < sqdist_j))
+	sqdist_j = sqdist_ij;
     }
+    
+    /* Update sqdist_max */
+    if ((j == 0) || (sqdist_j > sqdist_max)) {
+      j_max = j;
+      sqdist_max = sqdist_j;
+    }
+
   }
-
-  return sqrt(mindist_squared);
+  
+  *argmax = j_max;
+  return sqrt(sqdist_max);
 }
-
 
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 {
-  unsigned int dim, mx;
+  unsigned int mx, my, dim, argmax;
+  double filldist, *px, *py;
 
-  if (nlhs > 1)
+  if (nlhs > 2)
       mexErrMsgTxt("Too many output arguments.");
 
-  if (nrhs != 1)
-      mexErrMsgTxt("Incorrect number of input arguments (should be 1).");
+  if (nrhs != 2)
+      mexErrMsgTxt("Incorrect number of input arguments (should be 2).");
 
-  if (mxIsComplex(X_IN))
-      mexErrMsgTxt("The input argument cannot be complex.");
+  if (mxIsComplex(X_IN) || mxIsComplex(Y_IN))
+      mexErrMsgTxt("The input arguments cannot be complex.");
 
-  if (!mxIsDouble(X_IN))
+  if ((!mxIsDouble(X_IN)) || (!mxIsDouble(Y_IN)))
       mexErrMsgTxt("The input argument must be of class 'double'.");
 
-  /* Read the size of the input argument */
+  /* Read the size of the input arguments */
   mx = mxGetM(X_IN);
+  my = mxGetM(Y_IN);
   dim = mxGetN(X_IN);
 
-  if (mx < 2)
-    {
-      /* return an empty matrix if the input has less than two lines */
-      H_OUT = mxCreateDoubleMatrix(0, 0, mxREAL);
-    }
-  else
-    {
-      if (dim == 0)
-	{
-	  /* return zero distance if the matrix has no columns */
-	  H_OUT = mxCreateDoubleScalar(0.0);
-	}
-      else
-	{
-	  /* otherwise, do the actual computations in a subroutine */
-	  H_OUT = mxCreateDoubleScalar(compute_mindist(mxGetPr(X_IN), mx, dim));
-	}
-    }
+  if ((mx == 0) || (my == 0) || (dim == 0))
+    mexErrMsgTxt("The input arguments should not be empty.");
 
+  if (mxGetN(Y_IN) != dim)
+    mexErrMsgTxt("The input arguments must have the same number of columns.");
+
+  /* Do the actual computations in a subroutine */
+  px = mxGetPr(X_IN);  py = mxGetPr(Y_IN);
+  filldist = compute_filldist(px, mx, py, my, dim, &argmax);
+
+  /* Return the results as Matlab objects */
+  FILLDIST_OUT = mxCreateDoubleScalar(filldist);
+  if (nlhs == 2)
+    ARGMAX_OUT = mxCreateDoubleScalar(((double)argmax) + 1);
 }

@@ -38,10 +38,10 @@ stk_disp_examplewelcome();
 
 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space
-box = [-1.0; 1.0];                              % factor space
+BOX = [-1.0; 1.0];                              % factor space
 
 NT = 400; % nb of points in the grid
-xt = stk_sampling_regulargrid(NT, DIM, box);
+xt = stk_sampling_regulargrid(NT, DIM, BOX);
 zt = stk_feval(f, xt);
 
 
@@ -57,7 +57,7 @@ zt = stk_feval(f, xt);
 NOISEVARIANCE = 0.05;
 
 NI = 30;                                    % nb of evaluations that will be used
-xi = stk_sampling_randunif(NI, DIM, box);   % evaluation points
+xi = stk_sampling_randunif(NI, DIM, BOX);   % evaluation points
 zi = stk_feval(f, xi);                      % evaluation results
 
 zi.a = zi.a + sqrt(NOISEVARIANCE) * randn(NI,1);
@@ -108,4 +108,4 @@ model.noise.cov.variance = exp(paramlnv);
 zp = stk_predict(model, xt);
 
 stk_plot1d(obs, stk_makedata(xt, zt), stk_makedata(xt, zp))
-model %#ok<NOPTS>
+

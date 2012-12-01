@@ -1,10 +1,11 @@
-% STK_DISP_EXAMPLEWELCOME
+% STK_PLOT_SHADEDCI represents pointwise confidence itervals using a shaded area
 
 % Copyright Notice
 %
 %    Copyright (C) 2012 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 %
 % Copying Permission Statement
 %
@@ -26,15 +27,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_examplewelcome()
+function stk_plot_shadedci(x, zp)
 
-stack = dbstack();
+delta = 1.96 * sqrt(abs(zp.v));
+h = area(x.a, [zp.a - delta, 2 * delta]);
+set(h(1), 'FaceColor', 'none');
+set(h(2), 'FaceColor', [0.8 0.8 0.8]);
+set(h, 'LineStyle', '-', 'LineWidth', 1, 'EdgeColor', 'none');
 
-if length(stack) < 2,
-    errmsg = 'stk_disp_examplewelcome() is meant to be used in example scripts.';
-    stk_error(errmsg, 'WhatTheFuck');
-end
-
-stk_disp_framedtext(stack(2).name);
-
-end % function stk_disp_examplewelcome
+end % stk_plot_shadedci

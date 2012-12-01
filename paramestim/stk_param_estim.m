@@ -14,7 +14,7 @@
 %
 % NOTE: the first form can be used with noisy observations, in which case the
 % variance of the observation noise is assumed to be known (and given by
-% exp(MODEL.noise.lognoisevariance).
+% MODEL.noise.cov.variance).
 %
 % EXAMPLES: see example02.m, example03.m, example08.m
 
@@ -46,9 +46,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [paramopt, paramlnvopt] = stk_param_estim (model, cparam0, param0lnv)
-
 stk_narginchk(1, 3);
-
 
 % TODO: think of a better way to tell we want to estimate the noise variance
 NOISEESTIM = (nargin == 3);
@@ -101,7 +99,7 @@ end
 switch stk_select_optimizer(bounds_available)
     
     case 1, % Octave / sqp
-        w0 = sqp(w0,{f,nablaf},[],[],w_lb,w_ub,[],1e-5);
+        w0 = sqp(w0, {f, nablaf}, [], [], w_lb, w_ub, [], 1e-5);
         
     case 2, % Matlab / fminsearch (Nelder-Mead)
         options = optimset( 'Display', 'iter',                ...

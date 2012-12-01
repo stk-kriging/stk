@@ -51,42 +51,44 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function xz = stk_makedata(x, z, noisevariance)
+function S = stk_makedata(x, z, noisevariance)
 
-if isstruct(x),
-    xz.x = x;
-    if isfield(x, 'v'),
-       stk_error('.v fields are not supported anymore.', 'ObsoleteFeature');
-    end
-else  % we assume that the input x is a matrix here
-    xz.x.a = x;
+x = stk_datastruct(x);
+z = stk_datastruct(z);
+n = size(x.a, 1);
+
+% Sanity check #1
+if isfield(x, 'v'),
+    stk_error('This kind of .v field is not supported anymore.', 'ObsoleteFeature');
+end
+    
+% Sanity check #2
+if size(z.a, 1) ~= n,
+    errmsg = 'x.a and z.a should have the same number of lines.';
+    stk_error(errmsg, 'IncorrectArgument');
 end
 
-if isstruct(z),
-    xz.z = z;
-    if isfield(x, 'v'),
-       stk_error('.v fields are not supported anymore.', 'ObsoleteFeature');
-    end    
-else % we assume that the input z is a matrix here
-    xz.z.a = z;
-end 
-xz.n = size(xz.x.a, 1);
+% Sanity check #3
+if size(z.a, 2) ~= 1,
+    errmsg = 'z.a should be a column vector.';
+    stk_error(errmsg, 'IncorrectArgument');
+end
 
-% sanity check
-assert(xz.n == size(xz.z.a, 1));
+% Create the output structure
+S = struct('x', x, 'z', z, 'n', n );
 
 if nargin == 3,
     if noisevariance > 0,
         % the observations are assumed to be noisy
-        xz.noisy_obs = 'Y';
-        xz.noise_variance = noisevariance;
+        S.noisy_obs = 'Y';
+        S.noise_variance = noisevariance;
     else
         % the observations are assumed to be noiseless
-        xz.noisy_obs = 'N';
+        S.noisy_obs = 'N';
     end
 else
     % we don't known if the observations must be assumed to be noisy
-    xz.noisy_obs = '?';
+    S.noisy_obs = '?';
 end
 
 end

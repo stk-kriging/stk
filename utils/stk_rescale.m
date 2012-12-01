@@ -1,4 +1,4 @@
-% STK_DISP_EXAMPLEWELCOME
+% STK_RESCALE rescales a dataset from one box to another
 
 % Copyright Notice
 %
@@ -26,15 +26,53 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_examplewelcome()
+function y = stk_rescale(x, box1, box2)
+stk_narginchk(3, 3);
 
-stack = dbstack();
+% read argument x
+if isstruct(x), 
+    xx = x.a;
+else
+    xx = x;
+end
+[n, d] = size(xx);
 
-if length(stack) < 2,
-    errmsg = 'stk_disp_examplewelcome() is meant to be used in example scripts.';
-    stk_error(errmsg, 'WhatTheFuck');
+% read box1
+if ~isempty(box1),
+    stk_assert_box(box1, d);
 end
 
-stk_disp_framedtext(stack(2).name);
+% read box2
+if ~isempty(box2),
+    stk_assert_box(box2, d);
+end
 
-end % function stk_disp_examplewelcome
+% scale to [0; 1] (xx --> zz)
+if ~isempty(box1),
+    xmin = box1(1, :);
+    xmax = box1(2, :);
+    delta = xmax - xmin;   
+    zz = (xx - repmat(xmin, n, 1)) ./ repmat(1./delta, n, 1);
+else
+    zz = xx;
+end
+
+% scale to box2 (zz --> yy)
+if ~isempty(box2),
+    zmin = box2(1, :);
+    zmax = box2(2, :);
+    delta = zmax - zmin;   
+    yy = repmat(zmin, n, 1) + zz .* repmat(delta, n, 1);
+else
+    yy = zz;
+end
+
+% output
+if isstruct(x),
+    y = x;
+    y.a = yy;
+else
+    y = yy;
+end
+
+end % function stk_rescale
