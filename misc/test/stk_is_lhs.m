@@ -16,7 +16,7 @@
 %    tests if X is a Latin Hypercube Sample (LHS). Both the size N and the 
 %    number DIM of factors are inferred from X.
 %
-% All three calling syntaxes accepts both matrix-type inputs or data structures
+% All three calling syntaxes accept both matrix-type inputs or data structures
 % (with an 'a' field) for X.
   
 % Copyright Notice

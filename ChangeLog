@@ -1,5 +1,9 @@
 2012-12-01  Julien Bect  <julien.bect@supelec.fr>
 
+	Fixed a typo in the documentation of stk_is_lhs().
+
+	* misc/test/stk_is_lhs.m: modified
+
 	Fixed a bug in stk_runexamples().
 
 	* misc/test/stk_runexamples.m: modified
