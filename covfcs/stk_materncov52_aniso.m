@@ -85,7 +85,7 @@ if isempty(x0) || isempty(y0) || isempty(param0) || ...
         ~isequal({x, y, param}, {x0, y0, param0})
     % compute the distance matrix
     xs = x * invRho; ys = y * invRho;
-    D = stk_distance_matrix(xs, ys);
+    D = stk_dist(xs, ys);
     % save arguments for the next call
     x0 = x; y0 = y; param0 = param;
     % recomputation of Kx_cache is required

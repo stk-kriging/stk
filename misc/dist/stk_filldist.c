@@ -6,12 +6,13 @@
  *                                                                           *
  *    Copyright  (C) 2012 SUPELEC                                            *
  *    Author:    Julien Bect <julien.bect@supelec.fr>                        *
- *    URL:       http://sourceforge.net/projects/kriging/                    *
  *                                                                           *
  * Copying Permission Statement                                              *
  *                                                                           *
- *    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for   *
- *    Kriging.                                                               *
+ *    This file is part of                                                   *
+ *                                                                           *
+ *            STK: a Small (Matlab/Octave) Toolbox for Kriging               *
+ *               (http://sourceforge.net/projects/kriging)                   *
  *                                                                           *
  *    STK is free software: you can redistribute it and/or modify it under   *
  *    the terms of the GNU General Public License as published by the Free   *
@@ -28,8 +29,7 @@
  *                                                                           *
  ****************************************************************************/
 
-#include <math.h>
-#include "mex.h"
+#include "stk_mex.h"
 
 #define X_IN           prhs[0]     /* input argument #1  */
 #define Y_IN           prhs[1]     /* input argument #2  */

@@ -4,8 +4,10 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright  (C) 2012 SUPELEC                                            *
- *    Author:    Julien Bect <julien.bect@supelec.fr>                        *
+ *    Copyright (C) 2011, 2012 SUPELEC                                       *
+ *    Authors:   Julien Bect        <julien.bect@supelec.fr>                 *
+ *               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>            *
+ *    URL:       http://sourceforge.net/projects/kriging/                    *
  *                                                                           *
  * Copying Permission Statement                                              *
  *                                                                           *
@@ -31,74 +33,64 @@
 
 #include "stk_mex.h"
 
-#define X_IN   prhs[0]  /* input argument  */
-#define H_OUT  plhs[0]  /* output argument */
-
-static double compute_mindist(double* x, int nx, int dim)
+static void distance1(double* x, double* h, int nx, int dim)
 {
   int i, j, k1, k2;
-  double diff, dist_squared, mindist_squared;
-
-  mindist_squared = -1;
+  double diff, lambda;
 
   for (i = 0; i < nx; i++) {
+
+    /* put a zero on the diagonal */
+    h[i*(nx+1)] = 0.0;
+
     for (j = i+1; j < nx; j++) {
 
       /* compute distance between x[i,:] and x[j,:] */
-      dist_squared = 0.0;
-      for (k1 = i, k2 = j; k1 < dim * nx; k1 += nx, k2 += nx) {
+      lambda = 0.0;
+      for (k1 = i, k2 = j; k1 < dim * nx; k1 += nx, k2 += nx)
+      {
         diff = x[k1] - x[k2];
-        dist_squared += diff * diff;
+        lambda += diff * diff;
       }
 
-      /* update mindist_squared */
-      if ((dist_squared < mindist_squared) || (mindist_squared < 0))
-	mindist_squared = dist_squared;
+      /* store the result in h, twice for symmetry */
+      h[i+nx*j] = sqrt(lambda);
+      h[j+nx*i] = h[i+nx*j];
+
     }
   }
-
-  return sqrt(mindist_squared);
 }
 
+
+mxArray* compute_distance_xx(const mxArray* x)
+{
+  unsigned int d, n;
+  mxArray* h;
+
+  if(!stk_is_realmatrix(x))
+    mexErrMsgTxt("The input should be a real-valued double-precision array.");
+
+  /* Read the size of the input argument */
+  n = mxGetM(x);
+  d = mxGetN(x);
+
+  /* Create a matrix for the return argument */
+  h = mxCreateDoubleMatrix(n, n, mxREAL);
+
+  /* Do the actual computations in a subroutine */
+  distance1(mxGetPr(x), mxGetPr(h), n, d);
+
+  return h;
+}
 
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 {
-  unsigned int dim, mx;
-
-  if (nlhs > 1)
+  if (nlhs > 1)   /* Check number of output arguments */
       mexErrMsgTxt("Too many output arguments.");
 
-  if (nrhs != 1)
-      mexErrMsgTxt("Incorrect number of input arguments (should be 1).");
-
-  if (mxIsComplex(X_IN))
-      mexErrMsgTxt("The input argument cannot be complex.");
-
-  if (!mxIsDouble(X_IN))
-      mexErrMsgTxt("The input argument must be of class 'double'.");
-
-  /* Read the size of the input argument */
-  mx = mxGetM(X_IN);
-  dim = mxGetN(X_IN);
-
-  if (mx < 2)
-    {
-      /* return an empty matrix if the input has less than two lines */
-      H_OUT = mxCreateDoubleMatrix(0, 0, mxREAL);
-    }
-  else
-    {
-      if (dim == 0)
-	{
-	  /* return zero distance if the matrix has no columns */
-	  H_OUT = mxCreateDoubleScalar(0.0);
-	}
-      else
-	{
-	  /* otherwise, do the actual computations in a subroutine */
-	  H_OUT = mxCreateDoubleScalar(compute_mindist(mxGetPr(X_IN), mx, dim));
-	}
-    }
-
+  if (nrhs != 1)  /* Check number of input arguments */
+      mexErrMsgTxt("Incorrect number of input arguments.");
+      
+  plhs[0] = compute_distance_xx(prhs[0]);  
 }
