@@ -55,14 +55,17 @@ stk_narginchk(3, 4);
 % default: compute the value (not a derivative)
 if (nargin<4), diff = -1; end
 
+if isstruct(x), x = x.a; end
+if isstruct(y), y = y.a; end
+
 % check consistency for the number of factors
-dim = size(x.a, 2);
-if (size(y.a, 2) ~= dim),
-    stk_error('xi.a and yi.a have incompatible sizes.', 'InvalidArgument');
+dim = size(x, 2);
+if (size(y, 2) ~= dim),
+    stk_error('xi and yi have incompatible sizes.', 'InvalidArgument');
 end
 nb_params = dim + 1;
 if (numel(param) ~= nb_params)
-    stk_error('xi.a and param have incompatible sizes.', 'InvalidArgument');
+    stk_error('xi and param have incompatible sizes.', 'InvalidArgument');
 end
 
 % extract parameters from the "param" vector
@@ -79,9 +82,9 @@ invRho = diag(invRho);
 % check if all input arguments are the same as before
 % (or if this is the first call to the function)
 if isempty(x0) || isempty(y0) || isempty(param0) || ...
-        ~isequal({x.a,y.a,param},{x0.a,y0.a,param0})
+        ~isequal({x, y, param}, {x0, y0, param0})
     % compute the distance matrix
-    xs = x.a * invRho; ys = y.a * invRho;
+    xs = x * invRho; ys = y * invRho;
     D = stk_distance_matrix(xs, ys);
     % save arguments for the next call
     x0 = x; y0 = y; param0 = param;
@@ -102,7 +105,7 @@ elseif (diff >= 2) && (diff <= nb_params),
         Kx_cache  = 1./(D+eps) .* (Sigma2 * stk_sf_matern32(D, 1));
         compute_Kx_cache = false;
     end
-    nx = size(x.a,1); ny = size(y.a,1);
+    nx = size(x,1); ny = size(y,1);
     k = (repmat(xs(:,ind),1,ny) - repmat(ys(:,ind)',nx,1)).^2 .* Kx_cache;
 else
     stk_error('Incorrect value for the ''diff'' parameter.', 'InvalidArgument');
