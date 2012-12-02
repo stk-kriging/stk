@@ -1,3 +1,15 @@
+2012-12-02  Julien Bect  <julien.bect@supelec.fr>
+
+	All stk_materncov* functions now also accepts simple matrix-type
+	arguments.
+
+	* covfcs/stk_materncov_aniso.m: modified
+	* covfcs/stk_materncov_iso.m: modified
+	* covfcs/stk_materncov32_aniso.m: modified
+	* covfcs/stk_materncov32_iso.m: modified
+	* covfcs/stk_materncov52_aniso.m: modified
+	* covfcs/stk_materncov52_iso.m: modified
+
 2012-12-01  Julien Bect  <julien.bect@supelec.fr>
 
 	Fixed a typo in the documentation of stk_is_lhs().
