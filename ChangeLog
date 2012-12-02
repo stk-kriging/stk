@@ -1,14 +1,27 @@
 2012-12-02  Julien Bect  <julien.bect@supelec.fr>
 
+	Added a new MEX-file to compute distances "pairwise" (i.e.,
+	compute only the diagonal of the full distance matrix).
+
+	* misc/dist/stk_distance_matrix.c: deleted
+	* misc/dist/stk_mex.h: new C header
+	* misc/dist/stk_dist_matrixx.c: new MEX-file
+	* misc/dist/stk_dist_matrixy.c: new MEX-file
+	* misc/dist/stk_dist_pairwise.c: new MEX-file
+	* misc/config/stk_compile_all.m: modified
+	* misc/dist/stk_mindist.c: modified
+	* misc/dist/stk_filldist.c: modified
+
+	Renamed stk_distancematrix() to stk_dist().
+
+	* misc/dist/stk_distance_matrix.m: renamed
+	* misc/dist/stk_filldist.m: modified
+	* covfcs/stk_materncov*.m: modified
+
 	All stk_materncov* functions now also accepts simple matrix-type
 	arguments.
 
-	* covfcs/stk_materncov_aniso.m: modified
-	* covfcs/stk_materncov_iso.m: modified
-	* covfcs/stk_materncov32_aniso.m: modified
-	* covfcs/stk_materncov32_iso.m: modified
-	* covfcs/stk_materncov52_aniso.m: modified
-	* covfcs/stk_materncov52_iso.m: modified
+	* covfcs/stk_materncov*.m: modified
 
 2012-12-01  Julien Bect  <julien.bect@supelec.fr>
 

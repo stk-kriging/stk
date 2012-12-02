@@ -39,19 +39,62 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
+function D = stk_dist(x, y, pairwise)
+stk_narginchk(1, 3);
+
+% read argument #1
+if isstruct(x),
+    x = x.a;
+end
+
+% read argument #2
+if nargin < 2,
+    y = [];
+else
+    if isstruct(x),
+        y = y.a;
+    end
+end
+
+% read argument #3
+if nargin < 3,
+    pairwise = false;
+else
+    if ~islogical(pairwise)
+        errmsg = 'Argument ''pairwise'' should be either true or false.';
+        stk_error(errmsg, 'TypeMismatch');
+    end
+end
+
+if pairwise,
+    if isempty(y),
+        D = stk_dist_pairwise(x, x);
+    else
+        D = stk_dist_pairwise(x, y);
+    end
+else
+    if isempty(y),
+        D = stk_dist_matrixx(x);
+    else
+        D = stk_dist_matrixy(x, y);
+    end
+end
+
+end % function stk_dist
+
 %%
 % Check that an error is raised in nargin is not either 1 or 2
 
-%!error stk_distance_matrix();
-%!error stk_distance_matrix(0, 0, 0);
-%!error stk_distance_matrix(0, 0, 0, 0);
+%!error stk_dist();
+%!error stk_dist(0, 0, 0);
+%!error stk_dist(0, 0, 0, 0);
 
 %%
 % Check that an error is raised when the number of columns differs
 
-%!error stk_distance_matrix(0, ones(1, 2));
-%!error stk_distance_matrix(eye(3), ones(1, 2));
-%!error stk_distance_matrix(ones(2, 1), zeros(2));
+%!error stk_dist(0, ones(1, 2));
+%!error stk_dist(eye(3), ones(1, 2));
+%!error stk_dist(ones(2, 1), zeros(2));
 
 %%
 % Test with some simple matrices
@@ -62,21 +105,29 @@
 %! z = ones(7, 5);
 
 %!test
-%! Dx = stk_distance_matrix(x);
+%! Dx = stk_dist(x);
 %! assert(isequal(Dx, zeros(11)));
 
 %!test
-%! Dxx = stk_distance_matrix(x, x);
+%! Dxx = stk_dist(x, x);
 %! assert(isequal(Dxx, zeros(11)));
 
 %!test
-%! Dxy = stk_distance_matrix(x, y);
+%! Dxy = stk_dist(x, y);
 %! assert(isequal(Dxy, zeros(11, 13)));
 
 %!test
-%! Dzz = stk_distance_matrix(z, z);
+%! Dzz = stk_dist(z, z);
 %! assert(isequal(Dzz, zeros(7)));
 
 %!test
-%! Dxz = stk_distance_matrix(x, z);
-%! assert(isequal(Dxz, sqrt(5)*ones(11, 7)));
+%! Dxz = stk_dist(x, z);
+%! assert(stk_isequal_tolabs(Dxz, sqrt(5)*ones(11, 7)));
+
+%!test
+%! x = randn(5,3);
+%! y = randn(5,3);
+%! D1 = stk_dist_pairwise(x, y);
+%! D2 = stk_dist_matrixy(x, y);
+%! assert(stk_isequal_tolabs(D1, diag(D2)));
+ 

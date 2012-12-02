@@ -72,7 +72,7 @@ end
 if isempty(x0) || isempty(y0) || isempty(param0) || ...
         ~isequal({x, y, param}, {x0, y0, param0})
     % compute the distance matrix
-    D  = invRho * stk_distance_matrix(x, y);
+    D  = invRho * stk_dist(x, y);
     % save arguments for the nex call
     x0 = x; y0 = y; param0 = param;
 end
