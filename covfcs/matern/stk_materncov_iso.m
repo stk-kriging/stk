@@ -3,7 +3,7 @@
 % CALL: [k]=stk_materncov_iso(param, x, y, diff)
 %   param  = vector of parameters of size 3
 %   x      = structure whose field 'a' contains the observed points.
-%            x is a matrix of size n x d, where n is the number of
+%            x.a  is a matrix of size n x d, where n is the number of
 %            points and d is the dimension of the
 %            factor space
 %   y      = same as x
@@ -75,7 +75,7 @@ end
 if isempty(x0) || isempty(y0) || isempty(param0) || ...
         ~isequal({x, y, param}, {x0, y0, param0})
     % compute the distance matrix
-    D  = invRho * stk_distance_matrix(x, y);
+    D  = invRho * stk_dist(x, y);
     % save arguments for the nex call
     x0 = x; y0 = y; param0 = param;
 end

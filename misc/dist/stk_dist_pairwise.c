@@ -31,74 +31,62 @@
 
 #include "stk_mex.h"
 
-#define X_IN   prhs[0]  /* input argument  */
-#define H_OUT  plhs[0]  /* output argument */
 
-static double compute_mindist(double* x, int nx, int dim)
+static void distance3(double* x, double* y, double* h, int n, int dim)
 {
-  int i, j, k1, k2;
-  double diff, dist_squared, mindist_squared;
+  int i, j, k;
+  double diff, lambda;
 
-  mindist_squared = -1;
+  for (i = 0; i < n; i++) {
 
-  for (i = 0; i < nx; i++) {
-    for (j = i+1; j < nx; j++) {
-
-      /* compute distance between x[i,:] and x[j,:] */
-      dist_squared = 0.0;
-      for (k1 = i, k2 = j; k1 < dim * nx; k1 += nx, k2 += nx) {
-        diff = x[k1] - x[k2];
-        dist_squared += diff * diff;
+    /* compute distance between x[i,:] and y[j,:] */
+    lambda = 0.0;
+    for (k = i; k < dim * n; k += n)
+      {
+        diff = x[k] - y[k];
+        lambda += diff * diff;
       }
-
-      /* update mindist_squared */
-      if ((dist_squared < mindist_squared) || (mindist_squared < 0))
-	mindist_squared = dist_squared;
-    }
+    
+    /* store the result in h */
+    h[i] = sqrt(lambda);
+    
   }
-
-  return sqrt(mindist_squared);
 }
 
+
+mxArray* compute_distance_xy_pairwise(const mxArray* x, const mxArray* y)
+{
+  unsigned int d, n;
+  mxArray* h;
+
+  if((!stk_is_realmatrix(x)) || (!stk_is_realmatrix(y)))
+    mexErrMsgTxt("Input arguments should be real-valued double-precision array.");
+
+  /* Check that the input arguments have the same number of columns */
+  if (mxGetN(y) != (d = mxGetN(x)))
+    mexErrMsgTxt("Both input arguments should have the same number of columns.");
+
+  /* Check that the input arguments have the same number of rows */
+  if (mxGetM(y) != (n = mxGetM(x)))
+    mexErrMsgTxt("Both input arguments should have the same number of rows.");
+
+  /* Create a matrix for the return argument */
+  h = mxCreateDoubleMatrix(n, 1, mxREAL);
+
+  /* Do the actual computations in a subroutine */
+  distance3(mxGetPr(x), mxGetPr(y), mxGetPr(h), n, d);
+
+  return h;
+}
 
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 {
-  unsigned int dim, mx;
-
-  if (nlhs > 1)
-      mexErrMsgTxt("Too many output arguments.");
-
-  if (nrhs != 1)
-      mexErrMsgTxt("Incorrect number of input arguments (should be 1).");
-
-  if (mxIsComplex(X_IN))
-      mexErrMsgTxt("The input argument cannot be complex.");
-
-  if (!mxIsDouble(X_IN))
-      mexErrMsgTxt("The input argument must be of class 'double'.");
-
-  /* Read the size of the input argument */
-  mx = mxGetM(X_IN);
-  dim = mxGetN(X_IN);
-
-  if (mx < 2)
-    {
-      /* return an empty matrix if the input has less than two lines */
-      H_OUT = mxCreateDoubleMatrix(0, 0, mxREAL);
-    }
-  else
-    {
-      if (dim == 0)
-	{
-	  /* return zero distance if the matrix has no columns */
-	  H_OUT = mxCreateDoubleScalar(0.0);
-	}
-      else
-	{
-	  /* otherwise, do the actual computations in a subroutine */
-	  H_OUT = mxCreateDoubleScalar(compute_mindist(mxGetPr(X_IN), mx, dim));
-	}
-    }
-
+  if (nlhs > 1)  /* Check number of output arguments */
+    mexErrMsgTxt("Too many output arguments.");
+  
+  if (nrhs != 2)  /* Check number of input arguments */
+    mexErrMsgTxt("Incorrect number of input arguments.");
+      
+  plhs[0] = compute_distance_xy_pairwise(prhs[0], prhs[1]); 
 }

@@ -3,7 +3,7 @@
 % CALL: k = stk_materncov52_aniso(param, x, y, diff)
 %   param  = vector of parameters of size 1+d
 %   x      = structure whose field 'a' contains the observed points.
-%            x is a matrix of size n x d, where n is the number of
+%            x.a  is a matrix of size n x d, where n is the number of
 %            points and d is the dimension of the factor space
 %   y      = same as x
 %   diff   = differentiation parameter
@@ -82,10 +82,10 @@ invRho = diag(invRho);
 % check if all input arguments are the same as before
 % (or if this is the first call to the function)
 if isempty(x0) || isempty(y0) || isempty(param0) || ...
-        ~isequal({x, y, param},{x0, y0, param0})
+        ~isequal({x, y, param}, {x0, y0, param0})
     % compute the distance matrix
     xs = x * invRho; ys = y * invRho;
-    D = stk_distance_matrix(xs, ys);
+    D = stk_dist(xs, ys);
     % save arguments for the next call
     x0 = x; y0 = y; param0 = param;
     % recomputation of Kx_cache is required
@@ -105,7 +105,7 @@ elseif (diff >= 2) && (diff <= nb_params),
         Kx_cache  = 1./(D+eps) .* (Sigma2 * stk_sf_matern52(D, 1));
         compute_Kx_cache = false;
     end
-    nx = size(x,1); ny = size(y,1);
+    nx = size(x, 1); ny = size(y, 1);
     k = (repmat(xs(:,ind),1,ny) - repmat(ys(:,ind)',nx,1)).^2 .* Kx_cache;
 else
     stk_error('Incorrect value for the ''diff'' parameter.', 'InvalidArgument');

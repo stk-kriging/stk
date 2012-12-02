@@ -83,5 +83,5 @@
 %!     x = zeros(n, dim);
 %!     y = rand(1, dim);
 %!     fd = stk_filldist(x, y);
-%!     assert(stk_isequal_tolabs(fd, max(stk_distance_matrix(x, y))));
+%!     assert(stk_isequal_tolabs(fd, max(stk_dist(x, y))));
 %! end

@@ -3,7 +3,7 @@
 % CALL: k = stk_materncov32_aniso(param, x, y, diff)
 %   param  = vector of parameters of size 1+d
 %   x      = structure whose field 'a' contains the observed points.
-%            x is a matrix of size n x d, where n is the number of
+%            x.a  is a matrix of size n x d, where n is the number of
 %            points and d is the dimension of the factor space
 %   y      = same as x
 %   diff   = differentiation parameter
@@ -65,8 +65,7 @@ if (size(y, 2) ~= dim),
 end
 nb_params = dim + 1;
 if (numel(param) ~= nb_params)
-    errmsg = 'x and param have incompatible sizes.';
-    stk_error(errmsg, 'InvalidArgument');
+    stk_error('x and param have incompatible sizes.', 'InvalidArgument');
 end
 
 % extract parameters from the "param" vector
@@ -86,7 +85,7 @@ if isempty(x0) || isempty(y0) || isempty(param0) || ...
         ~isequal({x, y, param}, {x0, y0, param0})
     % compute the distance matrix
     xs = x * invRho; ys = y * invRho;
-    D = stk_distance_matrix(xs, ys);
+    D = stk_dist(xs, ys);
     % save arguments for the next call
     x0 = x; y0 = y; param0 = param;
     % recomputation of Kx_cache is required
