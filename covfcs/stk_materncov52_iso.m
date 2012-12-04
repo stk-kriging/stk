@@ -46,17 +46,16 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function k = stk_materncov52_iso(param, x, y, diff)
+function k = stk_materncov52_iso(param, x, y, diff, pairwise)
+stk_narginchk(3, 5);
 
-persistent x0 y0 param0 D
+persistent x0 y0 param0 pairwise0 D
 
-stk_narginchk(3, 4);
-
-% default: compute the value (not a derivative)
-if (nargin<4), diff = -1; end
-
+% process input arguments
 if isstruct(x), x = x.a; end
 if isstruct(y), y = y.a; end
+if nargin < 4, diff = -1; end
+if nargin < 5, pairwise = false; end
 
 % extract parameters from the "param" vector
 Sigma2 = exp(param(1));
@@ -70,11 +69,11 @@ end
 % check if all input arguments are the same as before
 % (or if this is the first call to the function)
 if isempty(x0) || isempty(y0) || isempty(param0) || ...
-        ~isequal({x, y, param}, {x0, y0, param0})
+        ~isequal({x, y, param}, {x0, y0, param0}) || ~isequal(pairwise, pairwise0)
     % compute the distance matrix
-    D  = invRho * stk_dist(x, y);
+    D  = invRho * stk_dist(x, y, pairwise);
     % save arguments for the nex call
-    x0 = x; y0 = y; param0 = param;
+    x0 = x; y0 = y; param0 = param; pairwise0 = pairwise;
 end
 
 if diff == -1,
@@ -112,7 +111,8 @@ end % function
 %!error stk_materncov52_iso(param, x);
 %!test  stk_materncov52_iso(param, x, y);
 %!test  stk_materncov52_iso(param, x, y, -1);
-%!error stk_materncov52_iso(param, x, y, -1, pi^2);
+%!test  stk_materncov52_iso(param, x, y, -1, false);
+%!error stk_materncov52_iso(param, x, y, -1, false, pi^2);
 
 %!error stk_materncov52_iso(param, x, y, -2);
 %!test  stk_materncov52_iso(param, x, y, -1);
@@ -126,7 +126,7 @@ end % function
 %%
 % 3D, 4x10
 
-%!shared param x y nx ny
+%!shared dim param x y nx ny
 %!  dim = 3;
 %!  model = stk_model('stk_materncov52_iso', dim);
 %!  param = model.param;
@@ -145,3 +145,20 @@ end % function
 %!    dK = stk_materncov52_iso(param, x, y,  i);
 %!    assert(isequal(size(dK), [nx ny]));
 %!  end
+
+%!test
+%! n = 7;
+%! x = stk_sampling_randunif(n, dim);
+%! y = stk_sampling_randunif(n, dim);
+%! 
+%! K1 = stk_materncov52_iso(param, x, y);
+%! K2 = stk_materncov52_iso(param, x, y, -1, true);
+%! assert(isequal(size(K1), [n n]));
+%! assert(stk_isequal_tolabs(K2, diag(K1)));
+%! 
+%! for i = 1:2,
+%!     dK1 = stk_materncov52_iso(param, x, y,  i);
+%!     dK2 = stk_materncov52_iso(param, x, y,  i, true);
+%!     assert(isequal(size(dK1), [n n]));
+%!     assert(stk_isequal_tolabs(dK2, diag(dK1)));    
+%! end
