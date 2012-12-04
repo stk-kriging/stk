@@ -1,3 +1,9 @@
+2012-12-04  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a "pairwise" option to all covariance functions.
+
+	* covfcs/stk_materncov*.m: modified
+
 2012-12-02  Julien Bect  <julien.bect@supelec.fr>
 
 	Added a new MEX-file to compute distances "pairwise" (i.e.,
