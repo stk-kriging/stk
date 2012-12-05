@@ -1,3 +1,14 @@
+2012-12-05  Julien Bect  <julien.bect@supelec.fr>
+
+	Modified stk_predict() to make it work with non-stationary
+	covariance functions.
+
+	* core/stk_predict.m: modified
+
+	Added a "pairwise" option to stk_make_matcov().
+
+	* core/stk_make_matcov.m: modified
+
 2012-12-04  Julien Bect  <julien.bect@supelec.fr>
 
 	Added a "pairwise" option to all covariance functions.

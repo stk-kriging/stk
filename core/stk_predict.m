@@ -144,15 +144,18 @@ return_lm = (nargout > 2); % return Lagrange multipliers ?
 if return_lm, mu = zeros(size(Pi, 2), nt); end
 
 return_K = (nargout > 3); % return posterior covariance matrix ?
-
+                          
 %=== choose nb_blocks & block_size
 
-if isempty(block_size)
+% note: only one block if return_K == true
+%       (we need the full set of lambda's and mu's to compute K)
+
+if (~return_K) && isempty(block_size)
     MAX_RS_SIZE = 5e6; SIZE_OF_DOUBLE = 8; % in bytes
     block_size = ceil(MAX_RS_SIZE / (ni * SIZE_OF_DOUBLE));
 end
 
-if block_size == inf, 
+if return_K || (block_size == inf), 
     % biggest possible block size    
     nb_blocks = 1;
 else
@@ -165,7 +168,6 @@ block_size = ceil(nt / nb_blocks);
 %=== MAIN LOOP (over blocks)
 
 linsolve_opt = struct('UT', true);
-if return_K, RS = zeros(size(LS, 1), nt); end
 
 for block_num = 1:nb_blocks
     
@@ -180,17 +182,14 @@ for block_num = 1:nb_blocks
     
     % right-hand side of the kriging equation
     [Kti, Pt] = stk_make_matcov(model, xt_block, xi);
-    RS_block = [Kti Pt]';
-    
-    % the full RHS will be required if the posterior covariance matrix is requested
-    if return_K, RS(:, idx) = RS_block; end
-    
+    RS = [Kti Pt]';
+        
     % solve the upper-triangular system to get the extended
     % kriging weights vector (weights + Lagrange multipliers)
     if stk_is_octave_in_use(),
-        lambda_mu = LS_R \ (LS_Q' * RS_block); % linsolve is missing in Octave
+        lambda_mu = LS_R \ (LS_Q' * RS); % linsolve is missing in Octave
     else        
-        lambda_mu = linsolve(LS_R, LS_Q' * RS_block, linsolve_opt);
+        lambda_mu = linsolve(LS_R, LS_Q' * RS, linsolve_opt);
     end
     
     if return_weights, % extract weights
@@ -202,10 +201,13 @@ for block_num = 1:nb_blocks
     if compute_prediction, % compute the kriging mean
         zp.a(idx) = lambda_mu(1:ni, :)' * zi.a; end
     
-    % compute kriging variances (STATIONARITY ASSUMED)
-    % FIXME: remove STATIONARITY ASSUMPTION !!!
-    zp.v(idx) = LS(1,1) - dot(lambda_mu, RS_block)';
+    % compute kriging variances (this does NOT include the noise variance)
+    zp.v(idx) = stk_make_matcov(model, xt, xt, true) - dot(lambda_mu, RS)';
 
+    % note: the following modification computes prediction variances for noisy
+    % variance, i.e., including the noise variance also
+    % zp.v(idx) = stk_make_matcov(model, xt, [], true) - dot(lambda_mu, RS)';
+    
     b = (zp.v < 0);
     if any(b),        
         zp.v(b) = 0.0;
@@ -221,9 +223,10 @@ end
 
 % compute posterior covariance matrix (if requested)
 if return_K,
+    assert(nb_blocks == 1); % sanity check
     K0 = stk_make_matcov(model, xt);
-    K = K0 - [lambda; mu]' * RS_block;
-    K = 0.5 * (K + K');
+    K = K0 - [lambda; mu]' * RS;
+    K = 0.5 * (K + K'); % enforce symmetry
 end
         
 if display_waitbar, close(hwb); end
