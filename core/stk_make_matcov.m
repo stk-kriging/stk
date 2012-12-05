@@ -51,28 +51,44 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [K, P] = stk_make_matcov(model, x0, x1)
-
-stk_narginchk(2, 3);
+function [K, P] = stk_make_matcov(model, x0, x1, pairwise)
+stk_narginchk(2, 4);
 
 %=== guess which syntax has been used based on the second input arg
 
 switch nargin
+    
     case 2, % stk_make_matcov(model, x0)
         make_matcov_auto = true;
+        pairwise = false;
+        
     case 3, % stk_make_matcov(model, x0, x1)
         make_matcov_auto = false;
+        pairwise = false;
+        
+    case 4, % stk_make_matcov(model, x0, ?, pairwise)
+        make_matcov_auto = isempty(x1);
+        
     otherwise
         error('Incorrect number of input arguments.');
 end
 
-if isfield(model, 'Kx_cache'),
+if isfield(model, 'Kx_cache'), % handle the case where 'Kx_cache' is present    
     
-    % handle the case where a 'Kx_cache' field is present    
-    if make_matcov_auto,
-        K = model.Kx_cache(x0, x0);
+    if ~pairwise,
+        if make_matcov_auto,
+            K = model.Kx_cache(x0, x0);
+        else
+            K = model.Kx_cache(x0, x1);
+        end
     else
-        K = model.Kx_cache(x0, x1);
+        if make_matcov_auto,
+            idx = sub2ind(size(model.Kx_cache), x0, x0);
+            K = model.Kx_cache(idx);
+        else
+            idx = sub2ind(size(model.Kx_cache), x0, x1);
+            K = model.Kx_cache(idx);
+        end        
     end
     
 else % handle the case where the covariance matrix must be computed
@@ -87,38 +103,61 @@ else % handle the case where the covariance matrix must be computed
     % in such a way that blocks smaller than MIN_BLOCK_SIZE are never used
     MIN_BLOCK_SIZE = 100^2;
     
-    %=== decide whether parallel computing should be used or not
+    %=== number of covariance values to be computed ?
     
-    if isfield(model, 'Kx_cache'), % SYNTAX: model, x(indices)
-        ncores = 1; % avoids a call to matlabpool() which is slow
-    else
-        N = size(x0.a, 1);
-        if make_matcov_auto, N = N * N; else N = N * size(x1.a, 1); end
-        if (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
-            ncores = 1; % do not use parallel computing
+    N0 = size(x0.a, 1);
+    
+    if make_matcov_auto,
+        if ~pairwise,
+            N = N0 * N0;
         else
-            ncores = max(1, matlabpool('size'));
-            % note: matlabpool('size') returns 0 if the PCT is not started
+            N = N0;
         end
+    else
+        N1 = size(x1.a, 1);
+        if ~pairwise
+            N = N0 * N1;
+        else
+            if N1 ~= N0,
+                errmsg = 'x0 and x1 should have the same number of lines.';
+                stk_error(errmsg, 'InconsistentDimensions');
+            end
+            N = N0;
+        end
+    end
+    
+    %=== decide whether parallel computing should be used or not
+        
+    % note: parallelization is not implemented in the "pairwise" case
+    
+    if pairwise || (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
+        ncores = 1; % do not use parallel computing
+    else
+        ncores = max(1, matlabpool('size'));
+        % note: matlabpool('size') returns 0 if the PCT is not started
     end
     
     %=== call the subfunction that does the actual computations
     
     if make_matcov_auto,
-        %
+
         % FIXME: avoid computing twice each off-diagonal term
-        %
         if ncores == 1, % shortcut when parallelization is not used
-            K = feval(model.covariance_type, model.param, x0, x0);
+            K = feval(model.covariance_type, model.param, x0, x0, -1, pairwise);
         else
             K = stk_make_matcov_auto_parfor(model, x0, ncores, MIN_BLOCK_SIZE);
         end
-        if isfield( model, 'lognoisevariance' ),
-            K = K + stk_noisecov(size(K,1), model.lognoisevariance);
+        
+        if isfield(model, 'lognoisevariance'),            
+            if ~pairwise,
+                K = K + stk_noisecov(size(K,1), model.lognoisevariance);
+            else
+                stk_error('Not implemented yet.', 'NotImplementedYet');
+            end
         end
     else
         if ncores == 1, % shortcut when parallelization is not used
-            K = feval(model.covariance_type, model.param, x0, x1);
+            K = feval(model.covariance_type, model.param, x0, x1, -1, pairwise);
         else
             K = stk_make_matcov_inter_parfor(model, x0, x1, ncores, MIN_BLOCK_SIZE);
         end
