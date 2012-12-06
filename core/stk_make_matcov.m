@@ -54,6 +54,9 @@
 function [K, P] = stk_make_matcov(model, x0, x1, pairwise)
 stk_narginchk(2, 4);
 
+if isstruct(x0), x0 = x0.a; end
+if (nargin > 2) && isstruct(x1), x1 = x1.a; end
+
 %=== guess which syntax has been used based on the second input arg
 
 switch nargin
@@ -105,7 +108,7 @@ else % handle the case where the covariance matrix must be computed
     
     %=== number of covariance values to be computed ?
     
-    N0 = size(x0.a, 1);
+    N0 = size(x0, 1);
     
     if make_matcov_auto,
         if ~pairwise,
@@ -114,7 +117,7 @@ else % handle the case where the covariance matrix must be computed
             N = N0;
         end
     else
-        N1 = size(x1.a, 1);
+        N1 = size(x1, 1);
         if ~pairwise
             N = N0 * N1;
         else
@@ -208,3 +211,22 @@ end
 %!% The second output depends on x0 only => should be the same for (1)--(3)
 %!test  assert(isequal(Pa, Pb));
 %!test  assert(isequal(Pa, Pc));
+
+%!test %% use of Kx_cache, with .a fields
+%! model2 = model;
+%! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
+%! idx = [1 4 9];
+%! [K1, P1] = stk_make_matcov(model,  struct('a', x0.a(idx, :)));
+%! [K2, P2] = stk_make_matcov(model2, struct('a', idx'));
+%! assert(stk_isequal_tolrel(K1, K2));
+%! assert(stk_isequal_tolrel(P1, P2));
+
+%!test %% use of Kx_cache, with matrices
+%! x0 = x0.a;
+%! model2 = model;
+%! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
+%! idx = [1 4 9];
+%! [K1, P1] = stk_make_matcov(model,  x0(idx, :));
+%! [K2, P2] = stk_make_matcov(model2, idx');
+%! assert(stk_isequal_tolrel(K1, K2));
+%! assert(stk_isequal_tolrel(P1, P2));
