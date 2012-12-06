@@ -51,8 +51,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function P = stk_ortho_func(model, x)
-
 stk_narginchk(2, 2);
+
+if isstruct(x), x = x.a; end
 
 if ~isfield(model, 'Kx_cache'), % SYNTAX: x(factors), model
     
@@ -76,7 +77,7 @@ end
 
 function P = stk_ortho_func_(order, x)
 
-[n,d] = size(x.a);
+[n,d] = size(x);
 
 switch order
     
@@ -87,14 +88,14 @@ switch order
         P = ones(n, 1);
         
     case 1, % linear trend
-        P = [ones(n, 1) x.a];
+        P = [ones(n, 1) x];
         
     case 2, % quadratic trend
-        P = [ones(n, 1) x.a zeros(n, d*(d+1)/2)];
+        P = [ones(n, 1) x zeros(n, d*(d+1)/2)];
         k = d + 2;
         for i = 1:d
             for j = i:d
-                P(:,k) = x.a(:, i) .* x.a(:, j);
+                P(:,k) = x(:, i) .* x(:, j);
                 k = k + 1;
             end
         end
