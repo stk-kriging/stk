@@ -36,7 +36,8 @@ example_dir = fullfile(stk_get_root(), 'examples');
 stk_disp_framedtext('stk_runexamples summary');
 
 for i = 1:length(scriptname)
-    fprintf('%s %s ', scriptname{i}, repmat('.', 1, 30 - length(scriptname{i})));
+    fprintf('[%02d] %s %s ', i, scriptname{i}, ...
+        repmat('.', 1, 30 - length(scriptname{i})));
     if isempty(err{i})
         fprintf('OK\n');
     else
@@ -48,6 +49,8 @@ for i = 1:length(scriptname)
         end
     end
 end
+
+assignin('base', 'stkRunExamplesErrors', err);
 
 fprintf('\n');
 
