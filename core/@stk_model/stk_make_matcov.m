@@ -51,40 +51,93 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [K, P] = stk_make_matcov(model, x0, x1)
-stk_narginchk(2, 3);
+function [K, P] = stk_make_matcov(model, x0, x1, pairwise)
+stk_narginchk(2, 4);
 
-% stk_make_matcov(model, x0) or stk_make_matcov(model, x0, x1) ?
-make_matcov_auto = (nargin == 2);
+if isstruct(x0), x0 = x0.a; end
+if (nargin > 2) && isstruct(x1), x1 = x1.a; end
 
-n0 = size(x0.a, 1);
+%=== guess which syntax has been used based on the second input arg
 
-% Blocking parameters for parallel computing
-% a) If the size of the covariance matrix to be computed is smaller than
-%    MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.
-% b) If it is decided to use parfor, the number of blocks will be chosen
-%    in such a way that blocks smaller than MIN_BLOCK_SIZE are never used
-MIN_SIZE_FOR_BLOCKING = 500^2;
-MIN_BLOCK_SIZE = 100^2;
+switch nargin
+    
+    case 2, % stk_make_matcov(model, x0)
+        make_matcov_auto = true;
+        pairwise = false;
+        
+    case 3, % stk_make_matcov(model, x0, x1)
+        make_matcov_auto = false;
+        pairwise = false;
+        
+    case 4, % stk_make_matcov(model, x0, ?, pairwise)
+        make_matcov_auto = isempty(x1);
+        
+    otherwise
+        error('Incorrect number of input arguments.');
+end
 
 switch  model.domain.type
+
     case 'discrete',
+
         switch model.private.config.use_cache
+
             case true,  % handle the case where a 'Kx_cache' field is present
                         % NB: this feature only works with a discrete domain
-                if make_matcov_auto,
-                    K = model.private.Kx_cache(x0.a, x0.a);
-                else
-                    K = model.private.Kx_cache(x0.a, x1.a);
-                end
+			    if ~pairwise,
+			        if make_matcov_auto,
+            			K = model.private.Kx_cache(x0, x0);
+			        else
+        			    K = model.private.Kx_cache(x0, x1);
+					end
+			    else
+			        if make_matcov_auto,
+			            idx = sub2ind(size(model.Kx_cache), x0, x0);
+			            K = model.private.Kx_cache(idx);
+			        else
+			            idx = sub2ind(size(model.Kx_cache), x0, x1);
+			            K = model.private.Kx_cache(idx);
+			        end        
+			    end
+
             case false, % handle the case where the covariance matrix must be computed
                 error('feature not implemented yet'); % FIXME
         end
         
     case 'continuous'
-        % Decide whether parallel computing should be used
-        if make_matcov_auto, N=n0*n0; else N=n0*size(x1.a,1); end
-        if (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
+
+		% Blocking parameters for parallel computing
+		% a) If the size of the covariance matrix to be computed is smaller than
+		%    MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.
+		% b) If it is decided to use parfor, the number of blocks will be chosen
+		%    in such a way that blocks smaller than MIN_BLOCK_SIZE are never used
+		MIN_SIZE_FOR_BLOCKING = 500^2;
+		MIN_BLOCK_SIZE = 100^2;
+    
+	    % Number of covariance values to be computed ?	    
+	    N0 = size(x0, 1);
+        if make_matcov_auto,
+    	    if ~pairwise,
+    	        N = N0 * N0;
+    	    else
+    	        N = N0;
+    	    end
+    	else
+    	    N1 = size(x1, 1);
+    	    if ~pairwise
+    	        N = N0 * N1;
+    	    else
+    	        if N1 ~= N0,
+    	            errmsg = 'x0 and x1 should have the same number of lines.';
+    	            stk_error(errmsg, 'InconsistentDimensions');
+    	        end
+    	        N = N0;
+    	    end
+    	end
+
+        % Decide whether parallel computing should be used     
+    	% note: parallelization is not implemented in the "pairwise" case
+    		if pairwise || (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
             ncores = 1; % do not use parallel computing
         else
             ncores = max(1, matlabpool('size'));
@@ -99,18 +152,18 @@ switch  model.domain.type
             
             % FIXME: avoid computing twice each off-diagonal term
             if ncores == 1, % parallelization is not used
-                K = feval(cov, x0, x0);
+	            K = feval(cov, x0, x0, -1, pairwise);
             else
                 K = stk_make_matcov_auto_parfor(cov, x0, ncores, MIN_BLOCK_SIZE);
             end
             
             % add noise
-            K = K + feval(model.noise.cov, x0);
+            K = K + feval(model.noise.cov, x0, x0, -1, pairwise);
             
         else
             
             if ncores == 1, % parallelization is not used
-                K = feval(cov, x0, x1);
+	            K = feval(cov, x0, x1, -1, pairwise);
             else
                 K = stk_make_matcov_inter_parfor(cov, x0, x1, ncores, MIN_BLOCK_SIZE);
             end
@@ -161,3 +214,22 @@ end
 %!% The second output depends on x0 only => should be the same for (1)--(3)
 %!test  assert(isequal(Pa, Pb));
 %!test  assert(isequal(Pa, Pc));
+
+%!test %% use of Kx_cache, with .a fields
+%! model2 = model;
+%! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
+%! idx = [1 4 9];
+%! [K1, P1] = stk_make_matcov(model,  struct('a', x0.a(idx, :)));
+%! [K2, P2] = stk_make_matcov(model2, struct('a', idx'));
+%! assert(stk_isequal_tolrel(K1, K2));
+%! assert(stk_isequal_tolrel(P1, P2));
+
+%!test %% use of Kx_cache, with matrices
+%! x0 = x0.a;
+%! model2 = model;
+%! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
+%! idx = [1 4 9];
+%! [K1, P1] = stk_make_matcov(model,  x0(idx, :));
+%! [K2, P2] = stk_make_matcov(model2, idx');
+%! assert(stk_isequal_tolrel(K1, K2));
+%! assert(stk_isequal_tolrel(P1, P2));
