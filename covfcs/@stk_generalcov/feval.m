@@ -25,24 +25,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = feval(cov, x, y, diff)
-stk_narginchk(2, 4);
+function K = feval(cov, varargin)
+[x, y, diff, pairwise] = process_feval_inputs(cov, varargin{:});
 
-% extract data matrices from structures, if appropriate
-if isstruct(x), x = x.a; end
-if (nargin > 2) && isstruct(y), y = y.a; end
-
-% no special case for cov(x, x)
-if (nargin < 3) || isempty(y),
-    y = x;
-end
-
-% default: compute the value (not a derivative)
-if nargin < 4,
-    diff = -1;
-end
-
-K = feval(cov.prop.handlers.fun, cov.prop.param, x, y, diff);
+K = feval(cov.prop.handlers.fun, cov.prop.param, x, y, diff, pairwise);
 
 end % function feval
-

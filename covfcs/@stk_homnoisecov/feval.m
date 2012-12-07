@@ -25,32 +25,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = feval(cov, x, y, diff)
-stk_narginchk(2, 4);
+function K = feval(cov, varargin)
+[x, y, diff, pairwise] = process_feval_inputs(cov, varargin{:});
 
-% x
-if isstruct(x), x = x.a; end
+% only cov(x, x) is supported for this class of covariance objects !
+if ~isempty(y) && ~isequal(x, y)
+    stk_error('cov(x, y) is not implemented yet.', 'NotImplementedYet');
+end
+
 nx = size(x, 1);
-
-% y
-if nargin > 2
-    if isstruct(y), y = y.a; end
-    % only cov(x, x) is supported for this class of covariance objects !
-    if ~isempty(y) && ~isequal(x, y)
-        stk_error('cov(x, y) is not implemented yet.', 'NotImplementedYet');
-    end
-end
-        
-% default: compute the value (not a derivative)
-if nargin < 4,
-    diff = -1;
-end
 
 switch diff,
     
     case {-1, 1}, % value or derivative wrt logvariance
-        K = cov.prop.variance * speye(nx, nx);
-
+        
+        if pairwise,
+            K = cov.prop.variance * ones(nx, 1);
+        else
+            K = cov.prop.variance * speye(nx, nx);
+        end
+        
     otherwise
         stk_error('Incorrect diff argument.', 'IncorrectArgument');
 

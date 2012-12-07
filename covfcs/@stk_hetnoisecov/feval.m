@@ -25,20 +25,16 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = feval(cov, x, y, diff)
-stk_narginchk(2, 4);
-
-% extract data matrices, if appropriate
-if isstruct(x), x = x.a; end
-if (nargin > 2) && isstruct(y), y = y.a; end
+function K = feval(cov, varargin)
+[x, y, diff, pairwise] = process_feval_inputs(cov, varargin{:});
 
 % only cov(x, x) is supported for this class of covariance objects !
-if (nargin > 2) && ~isequal(x, y)
+if ~isequal(x, y)
     stk_error('cov(x, y) is not implemented yet.', 'NotImplementedYet');
 end
         
-% default: compute the value (not a derivative)
-if (nargin > 3) && (diff ~= -1),
+% compute the value (not a derivative)
+if diff ~= -1,
     stk_error('Incorrect vaue for the diff parameter.', 'IncorrectArgument');
 end
 
@@ -47,11 +43,19 @@ nx = size(x, 1);
 if ~isempty(cov.prop.varfun),
     % in this case we have a function that gives the value of the variance at any point
     v = feval(cov.prop.varfun, x);
-    K = spdiags(v(:), 0, nx, nx);
+    if pairwise
+        K = v(:);
+    else
+        K = spdiags(v(:), 0, nx, nx);
+    end
 else
     % otherwise cov.variance is a vector of variances corresponding to the locations cov.x
     if isequal(cov.prop.x, x),
-        K = spdiags(cov.prop.v(:), 0, nx, nx);
+        if pairwise
+            K = cov.prop.v(:);
+        else
+            K = spdiags(cov.prop.v(:), 0, nx, nx);
+        end
     else
         stk_error('Improper use of this kind of covariance object.', 'IncorrectArgument');
     end
