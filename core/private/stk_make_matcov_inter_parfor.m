@@ -6,7 +6,8 @@
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+%               Benoit Jan        <benoit.jan@supelec.fr>
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -27,11 +28,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = stk_make_matcov_inter_parfor( model, x0, x1, ncores, min_block_size )
+function K = stk_make_matcov_inter_parfor(model, x0, x1, ncores, min_block_size)
+
+if isstruct(x0), x0 = x0.a; end
+if isstruct(x1), x1 = x1.a; end
 
 %=== choose the actual block size & number of blocks
-B0 = 1; n0 = size(x0.a,1); dB0 = 0;
-B1 = 1; n1 = size(x1.a,1); dB1 = 0;
+B0 = 1; n0 = size(x0, 1); dB0 = 0;
+B1 = 1; n1 = size(x1, 1); dB1 = 0;
 while 1, bs0 = n0/B0; bs1 = n1/B1;
     % stop if the blocks are becoming too small
     if bs0*bs1 < min_block_size, B0=B0-dB0; B1=B1-dB1; break; end
@@ -54,8 +58,8 @@ blocks = struct( 'i',cell(1,nb_blocks), 'j',[], 'xi',[], 'xcoj',[], 'K',[] );
 for i = 1:B0,
     for j = 1:B1,
         b = i + (j-1)*B0; % block number
-        blocks(b).i = i; blocks(b).xi = struct( 'a', x0.a(ind1(i,1):ind1(i,2),:) );
-        blocks(b).j = j; blocks(b).xcoj = struct( 'a', x1.a(ind2(j,1):ind2(j,2),:) );
+        blocks(b).i = i; blocks(b).xi = x0(ind1(i,1):ind1(i,2), :);
+        blocks(b).j = j; blocks(b).xcoj = x1(ind2(j,1):ind2(j,2), :);
     end
 end
 
