@@ -59,7 +59,7 @@ if NOISEESTIM,
         case 'stk_homnoisecov'
             % ok, we can handle it
         otherwise
-            errmsg = 'Parameter estimation for general noise models is not supported.'
+            errmsg = 'Parameter estimation for general noise models is not supported.';
             stk_error(errmsg, 'IncorrectArgument');
     end
 end
@@ -187,6 +187,7 @@ end
 %! f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );
 %! DIM = 1; NI = 20; box = [-1.0; 1.0];
 %! xi = stk_sampling_regulargrid(NI, DIM, box);
+%! zi = stk_feval(f, xi);
 %!
 %! SIGMA2 = 1.0;  % variance parameter
 %! NU     = 4.0;  % regularity parameter
@@ -196,20 +197,22 @@ end
 %! model = stk_model('stk_materncov_iso');
 
 %!test  % noiseless
-%! zi = stk_feval(f, xi);
-%! param = stk_param_estim(model, xi, zi, param0);
+%! model = stk_setobs(model, xi, zi);
+%! param = stk_param_estim(model, param0);
+
+%!test  % noiseless
+%! model = stk_setobs(model, xi, stk_feval(f, xi));
+%! model.randomprocess.priorcov.param = param0;
+%! param = stk_param_estim(model);
 
 %!test  % noisy
 %! NOISE_STD_TRUE = 0.1;
 %! NOISE_STD_INIT = 1e-5;
 %! zi.a = zi.a + NOISE_STD_TRUE * randn(NI, 1);
-%! model.lognoisevariance = 2 * log(NOISE_STD_INIT);
-%! [param, lnv] = stk_param_estim ...
-%!    (model, xi, zi, param0, model.lognoisevariance);
+%! model = stk_setobs(model, xi, zi);
+%! model.noise.cov = stk_homnoisecov(NOISE_STD_INIT^2);
+%! [param, lnv] = stk_param_estim(model, param0, 2 * log(NOISE_STD_INIT));
 
 %!% incorrect number of input arguments
 %!error param = stk_param_estim()
-%!error param = stk_param_estim(model);
-%!error param = stk_param_estim(model, xi);
-%!error param = stk_param_estim(model, xi, zi);
-%!error param = stk_param_estim(model, xi, zi, param0, log(eps), pi);
+%!error param = stk_param_estim(model, param0, log(eps), pi);

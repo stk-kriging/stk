@@ -3,6 +3,7 @@
 	Fixed tests.
 
 	* paramestim/stk_reml.m: modified
+	* paramestim/stk_param_estim.m: modified
 
 	Added a second syntax to stk_setobs().
 
