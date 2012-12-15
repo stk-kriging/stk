@@ -1,3 +1,9 @@
+2012-12-15  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a second syntax to stk_setobs().
+
+	* core/@stk_model/stk_setobs.m: modified
+
 2012-12-14  Benoit Jan  <benoit.jan@supelec.fr>
 
 	Fixed a bug in stk_make_matcov's "parfor" private functions.
