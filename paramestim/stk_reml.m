@@ -1,6 +1,6 @@
 % STK_REMLQRG computes the restricted likelihood of a model given data.
 %
-% CALL: [ARL, dARL_dtheta, dARL_dLNV] = stk_remlqrg(MODEL)
+% CALL: [ARL, dARL_dtheta, dARL_dLNV] = stk_reml(MODEL)
 %
 %   computes the opposite of the restricted likelihood (denoted by ARL for
 %   Anti-Restricted Likelihood) of MODEL given the data. The function also
@@ -38,8 +38,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [rl, drl_param, drl_lnv] = stk_reml(model)
-
-stk_narginchk(1, 1);
 
 NOISYOBS   = ~isa(model.noise.cov, 'stk_nullcov');
 PARAMPRIOR = isa(model.randomprocess.priorcov, 'stk_bayescov');
@@ -143,11 +141,9 @@ end
 %! RHO1   = 0.4;  % scale (range) parameter
 %!
 %! model = stk_model('stk_materncov_aniso');
-%! model.param = log([SIGMA2; NU; 1/RHO1 * ones(DIM, 1)]);
+%! model = stk_setobs(model, xi, zi);
+%! model.randomprocess.priorcov.param = log([SIGMA2; NU; 1/RHO1 * ones(DIM, 1)]);
 
-%!error [J, dJ1, dJ2] = stk_remlqrg();
-%!error [J, dJ1, dJ2] = stk_remlqrg(model);
-%!error [J, dJ1, dJ2] = stk_remlqrg(model, xi);
-%!test  [J, dJ1, dJ2] = stk_remlqrg(model, xi, zi);
-%!error [J, dJ1, dJ2] = stk_remlqrg(model, xi, zi, pi);
-
+%!error [J, dJ1, dJ2] = stk_reml();
+%!test  [J, dJ1, dJ2] = stk_reml(model);
+%!error [J, dJ1, dJ2] = stk_reml(model, sqrt(pi));

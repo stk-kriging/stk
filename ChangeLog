@@ -1,5 +1,9 @@
 2012-12-15  Julien Bect  <julien.bect@supelec.fr>
 
+	Fixed tests.
+
+	* paramestim/stk_reml.m: modified
+
 	Added a second syntax to stk_setobs().
 
 	* core/@stk_model/stk_setobs.m: modified
