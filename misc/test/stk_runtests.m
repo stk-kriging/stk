@@ -7,15 +7,14 @@
 %
 %    Copyright (C) 2012 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 %
 %    This file has been adapted from runtests.m in Octave 3.6.2 (which is
-%    distributed under the GNU General Public Licence version 3 (GPLv3).
+%    distributed under the GNU General Public Licence version 3 (GPLv3)).
 %    The original copyright notice was as follows:
 %
 %        Copyright (C) 2010-2012 John W. Eaton
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -56,8 +55,10 @@ else
     if ~exist(directory, 'dir')
         error('Directory not found.');
     end
-    
-    dirs = {directory};
+    here = pwd();
+    cd(directory);
+    dirs = {pwd()}; % get absolute path
+    cd(here);
 end
 
 % number of directories to be explored
@@ -66,7 +67,7 @@ nb_dirs = numel(dirs);
 % run tests all available tests in each directory
 n_total = 0; n_pass = 0; n_files = 0; n_notest = 0;
 for i = 1:nb_dirs
-    [n_pass_, n_total_, n_notest_, n_files_] = run_all_tests(dirs{i});
+    [n_pass_, n_total_, n_notest_, n_files_] = run_all_tests(dirs{i}, dirs{i});
     n_total  = n_total + n_total_;
     n_pass   = n_pass + n_pass_;
     n_files  = n_files + n_files_;
@@ -86,44 +87,71 @@ end
 % run_all_tests %
 %%%%%%%%%%%%%%%%%
 
-function [n_pass, n_total, n_notest, n_files] = run_all_tests(directory)
+function [n_pass, n_total, n_notest, n_files] = run_all_tests(testdir, basedir)
 
 % list directory content
-dirinfo = dir(directory);
+dirinfo = dir(testdir);
 flist = {dirinfo.name};
 
-here = pwd(); cd(directory);
+here = pwd(); cd(basedir);
 
-fprintf ('Processing files in %s:\n\n', directory);
+fprintf ('Processing files in %s:\n\n', testdir);
 fflush (stdout);
 
-n_total = 0;
-n_pass = 0;
-n_files = 0;
+% init counters
+n_total  = 0;
+n_pass   = 0;
+n_files  = 0;
 n_notest = 0;
+
+% list of subdirectories to be processed
+subdirs_class = {};
+subdirs_private = {};
+
 for i = 1:numel (flist)
     f = flist{i};
-    if (length (f) > 2 && strcmp (f((end-1):end), '.m'))
+    ff = fullfile(testdir, f);    
+    if (length (f) > 2) && strcmp (f((end-1):end), '.m')
         n_files = n_files + 1;
         print_test_file_name (f);
-        if has_tests(f)
+        if has_tests(ff)
             [p, n] = stk_test (f, 'quiet', stdout);
             % Note: the presence of the third argument (fid=stdout) forces
             % stk_test in batch mode, which means that it doesn't stop at
             % the first failed test.
-            print_pass_fail (n, p);
-            fflush (stdout);
+            print_pass_fail(n, p);
             n_total = n_total + n;
-            n_pass = n_pass + p;
+            n_pass  = n_pass  + p;
         else
             n_notest = n_notest + 1;
             fprintf(' NO TESTS\n');
         end
+        fflush(stdout);
+    elseif dirinfo(i).isdir && (f(1) == '@')
+        subdirs_class{end+1} = ff; %#ok<AGROW>
+    elseif dirinfo(i).isdir && strcmp(f, 'private')
+        subdirs_private{end+1} = ff; %#ok<AGROW>
     end
 end
 fprintf('   --> passed %d/%d tests\n', n_pass, n_total);
 fprintf('   --> %d/%d files had no tests\n', n_notest, n_files);
 fprintf('\n');
+
+for i = 1:length(subdirs_class)
+    [p, n, nnt, nf] = run_all_tests(subdirs_class{i}, pwd());
+    n_total  = n_total  + n;
+    n_pass   = n_pass   + p;
+    n_files  = n_files  + nf;
+    n_notest = n_notest + nnt;
+end
+
+for i = 1:length(subdirs_private)
+    [p, n, nnt, nf] = run_all_tests(subdirs_private{i}, subdirs_private{i});
+    n_total  = n_total  + n;
+    n_pass   = n_pass   + p;
+    n_files  = n_files  + nf;
+    n_notest = n_notest + nnt;
+end
 
 cd(here);
 
@@ -140,7 +168,7 @@ fid = fopen (f);
 if (fid >= 0)
     str = fread (fid, '*char')';
     fclose (fid);
-    retval =~isempty (regexp (str, '^%!(test|assert|error|warning)', 'lineanchors'));
+    retval = ~isempty (regexp (str, '^%!(test|assert|error|warning)', 'lineanchors'));
 else
     error ('runtests: fopen failed: %s', f);
 end

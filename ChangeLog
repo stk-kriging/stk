@@ -1,5 +1,10 @@
 2012-12-16  Julien Bect  <julien.bect@supelec.fr>
 
+	Modified stk_runtests() to browse through private folders and
+	class(@) folders.
+
+	* misc/test/stk_runtests.m: modified
+
 	Fixed a typo.
 
 	* misc/test/stk_runtests.m: modified
