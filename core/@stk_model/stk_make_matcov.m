@@ -183,8 +183,10 @@ end
 
 %!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
 %! n0 = 20; n1 = 10; d = 4;
-%! model = stk_model('stk_materncov_aniso', d); model.order = 1;
-%! model2 = model; model2.lognoisevariance = log(0.01);
+%! model = stk_model('stk_materncov_aniso', d); 
+%! model.randomprocess.priormean.param = 1; % linear trend
+%! model2 = model;
+%! model2.noise.cov = stk_homnoisecov(0.1^2); % std 0.1
 %! x0 = stk_sampling_randunif(n0, d);
 %! x1 = stk_sampling_randunif(n1, d);
 

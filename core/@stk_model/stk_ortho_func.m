@@ -8,7 +8,7 @@
 %    x DIM matrix, where N is the number of evaluation points and and DIM the
 %    dimension of the space of factors. A matrix P of size N x L is returned,
 %    where L is the number of regression functions in the linear part of the
-%    model; e.g., L = 1 if MODEL.order is zero (ordinary kriging).
+%    model; e.g., L = 1 for a constant mean (ordinary kriging).
 %
 % SPECIAL CASE:
 %
@@ -118,21 +118,26 @@ end
 %!error P = stk_ortho_func(model, x, pi);
 
 %!test
-%! model.order = -1; P = stk_ortho_func(model, x);
+%! model.randomprocess.priormean.param = -1; 
+%! P = stk_ortho_func(model, x);
 %! assert(isequal(size(P), [n, 0]));
 
 %!test
-%! model.order =  0; P = stk_ortho_func(model, x);
+%! model.randomprocess.priormean.param =  0;
+%! P = stk_ortho_func(model, x);
 %! assert(isequal(size(P), [n, 1]));
 
 %!test
-%! model.order =  1; P = stk_ortho_func(model, x);
+%! model.randomprocess.priormean.param =  1;
+%! P = stk_ortho_func(model, x);
 %! assert(isequal(size(P), [n, d + 1]));
 
 %!test
-%! model.order =  2; P = stk_ortho_func(model, x);
+%! model.randomprocess.priormean.param =  2;
+%! P = stk_ortho_func(model, x);
 %! assert(isequal(size(P), [n, 1 + d * (d + 3) / 2]));
 
 %!error 
-%! model.order =  3; P = stk_ortho_func(model, x);
-%! % model.order > 2 is not allowed
+%! model.randomprocess.priormean.param =  3;
+%! P = stk_ortho_func(model, x);
+%! % polynomials of degree > 2 are not supported yet
