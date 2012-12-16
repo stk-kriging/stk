@@ -52,7 +52,7 @@ if nargin == 0
     % scan all STK directories if no input argument is provided
     dirs = stk_path();
 else
-    % otherwise, directory is expected to be a valid direcoty name
+    % otherwise, directory is expected to be a valid directory name
     if ~exist(directory, 'dir')
         error('Directory not found.');
     end
