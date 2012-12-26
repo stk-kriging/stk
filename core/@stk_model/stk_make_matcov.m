@@ -217,21 +217,24 @@ end
 %!test  assert(isequal(Pa, Pb));
 %!test  assert(isequal(Pa, Pc));
 
-%!test %% use of Kx_cache, with .a fields
-%! model2 = model;
-%! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
-%! idx = [1 4 9];
-%! [K1, P1] = stk_make_matcov(model,  struct('a', x0.a(idx, :)));
-%! [K2, P2] = stk_make_matcov(model2, struct('a', idx'));
-%! assert(stk_isequal_tolrel(K1, K2));
-%! assert(stk_isequal_tolrel(P1, P2));
 
-%!test %% use of Kx_cache, with matrices
-%! x0 = x0.a;
-%! model2 = model;
-%! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
-%! idx = [1 4 9];
-%! [K1, P1] = stk_make_matcov(model,  x0(idx, :));
-%! [K2, P2] = stk_make_matcov(model2, idx');
-%! assert(stk_isequal_tolrel(K1, K2));
-%! assert(stk_isequal_tolrel(P1, P2));
+% FIXME: outdated tests related to Kx_cache/Px_cache
+
+% %!test %% use of Kx_cache, with .a fields
+% %! model2 = model;
+% %! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
+% %! idx = [1 4 9];
+% %! [K1, P1] = stk_make_matcov(model,  struct('a', x0.a(idx, :)));
+% %! [K2, P2] = stk_make_matcov(model2, struct('a', idx'));
+% %! assert(stk_isequal_tolrel(K1, K2));
+% %! assert(stk_isequal_tolrel(P1, P2));
+
+% %!test %% use of Kx_cache, with matrices
+% %! x0 = x0.a;
+% %! model2 = model;
+% %! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
+% %! idx = [1 4 9];
+% %! [K1, P1] = stk_make_matcov(model,  x0(idx, :));
+% %! [K2, P2] = stk_make_matcov(model2, idx');
+% %! assert(stk_isequal_tolrel(K1, K2));
+% %! assert(stk_isequal_tolrel(P1, P2));

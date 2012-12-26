@@ -10,12 +10,6 @@
 %    where L is the number of regression functions in the linear part of the
 %    model; e.g., L = 1 for a constant mean (ordinary kriging).
 %
-% SPECIAL CASE:
-%
-%    If MODEL has a field 'Kx_cache', X is expected to be a vector of integer
-%    indices (instead of structures with an 'a' field). This feature is not
-%    fully documented as of today...
-%
 % NOTE:
 %
 %    At the present time, stk_ortho_func() only handles polynomial regressions,
