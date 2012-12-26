@@ -52,15 +52,19 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [K, P] = stk_make_matcov(model, x0, x1, pairwise)
-stk_narginchk(2, 4);
 
-if isstruct(x0), x0 = x0.a; end
+if (nargin > 1) && isstruct(x0), x0 = x0.a; end
 if (nargin > 2) && isstruct(x1), x1 = x1.a; end
 
 %=== guess which syntax has been used based on the second input arg
 
 switch nargin
-    
+
+    case 1, % stk_make_matcov(model)
+        make_matcov_auto = true;
+        pairwise = false;
+        x0 = model.observations.x;
+
     case 2, % stk_make_matcov(model, x0)
         make_matcov_auto = true;
         pairwise = false;
@@ -137,7 +141,7 @@ switch  model.domain.type
 
         % Decide whether parallel computing should be used     
     	% note: parallelization is not implemented in the "pairwise" case
-    		if pairwise || (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
+        if pairwise || (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
             ncores = 1; % do not use parallel computing
         else
             ncores = max(1, matlabpool('size'));
@@ -216,7 +220,6 @@ end
 %!% The second output depends on x0 only => should be the same for (1)--(3)
 %!test  assert(isequal(Pa, Pb));
 %!test  assert(isequal(Pa, Pc));
-
 
 % FIXME: outdated tests related to Kx_cache/Px_cache
 

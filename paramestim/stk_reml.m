@@ -62,11 +62,11 @@ n = model.observations.n;
 
 %% compute rl
 
-[K, P] = stk_make_matcov(model, model.observations.x);
-q = size(P,2);
+[K, P] = stk_make_matcov(model);
+q = size(P, 2);
 
 [Q, R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
-W = Q(:,(q+1):n);
+W = Q(:, (q+1):n);
 Wz = W' * model.observations.z.a;
 
 G = W' * (K * W);
