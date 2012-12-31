@@ -484,7 +484,7 @@ for i = 1:length(x__list_shared),
     if strcmp(x__list_shared{i}, 'x__list_shared'),
         error('x__list_shared cannot be used as a shared variable');
     elseif strcmp(x__list_shared{i}, 'x__i'),
-        error('x__list_shared cannot be used as a shared variable');
+        error('x__i cannot be used as a shared variable');
     end
 end
 

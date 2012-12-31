@@ -115,7 +115,7 @@ for i = 1:numel (flist)
         n_files = n_files + 1;
         print_test_file_name (f);
         if has_tests(ff)
-            [p, n] = stk_test (f, 'quiet', stdout);
+            [p, n] = stk_test (ff, 'quiet', stdout);
             % Note: the presence of the third argument (fid=stdout) forces
             % stk_test in batch mode, which means that it doesn't stop at
             % the first failed test.
