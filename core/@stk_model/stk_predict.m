@@ -235,7 +235,8 @@ end
 %! x_prd = struct('a', x0.a(idx_prd));
 %! 
 %! model = stk_model('stk_materncov32_iso');
-%! model.order = 0; % this is currently the default, but better safe than sorry
+%! model.randomprocess.priormean = stk_lm('constant');
+%! % this is currently the default, but better safe than sorry
 
 %!error y_prd1 = stk_predict();
 %!error y_prd1 = stk_predict(model);

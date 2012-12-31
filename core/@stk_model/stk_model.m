@@ -7,6 +7,7 @@
 %   constant but unknown mean ("ordinary" kriging), and the user-supplied
 %   COVARIANCE_TYPE covariance function.
 %
+%   [FIXME: obsolete doc, model is now an OBJECT !]
 %   In STK, a Gaussian process model is described by a 'model' structure
 %   with the following fields
 %
@@ -24,7 +25,7 @@
 %
 %    * randomprocess: [1x1 struct]
 %                         type: 'GP'
-%                    priormean: [1x1 struct]
+%                    priormean: [object of class stk_lm]
 %                     priorcov: [1x1 struct]
 %    * noise: [1x1 struct]
 %                         type: 'none', 'swn'
@@ -96,11 +97,8 @@ domain        = struct('type', 'continuous',      ...
                        'nt',    0,                ...
                        'indicatorfunction', []    );
 
-priormean     = struct('type', 'polynomial',      ...
-                       'param', 0                 );
-
-randomprocess = struct('type', 'GP',              ...
-                       'priormean', priormean,    ...
+randomprocess = struct('type',     'GP',          ...
+                       'priormean', [],           ...
                        'priorcov',  []            );
 
 noise         = struct('cov', stk_nullcov());
@@ -129,14 +127,9 @@ if nargin < 1,
     covariance_type = 'stk_materncov_iso';
 end
 
-%%% model.randomprocess.priormean
+%%% mean and covarance functions
 
-% use ordinary kriging as a default choice
-model.randomprocess.priormean.type  = 'polynomial';
-model.randomprocess.priormean.param = 0;
-
-%%% model.param
-
+model.randomprocess.priormean = stk_lm('constant'); % default: ordinary kriging
 model.randomprocess.priorcov = stk_cov(covariance_type, 'dim', dim);
 
 model = class(model, 'stk_model');

@@ -8,7 +8,7 @@
 %    an N x DIM matrix. As a result, a matrix K of size N x N and a matrix P of
 %    size N x L are obtained, where L is the number of regression functions in
 %    the linear part of the model; e.g., L = 1 if MODEL.randomprocess.priormean.param
-%    is zero (ordinary kriging).
+%    is zero (ordinary kriging). [FIXME: obsolete doc]
 %
 % CALL: K = stk_make_matcov(MODEL, X0, X1)
 %
@@ -177,7 +177,7 @@ switch  model.domain.type
 end % switch model.domain.type
 
 % Compute the regression functions
-if nargout > 1, P = stk_ortho_func(model, x0); end
+if nargout > 1, P = feval(model.randomprocess.priormean, x0); end
 
 end
 
@@ -188,7 +188,7 @@ end
 %!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
 %! n0 = 20; n1 = 10; d = 4;
 %! model = stk_model('stk_materncov_aniso', d); 
-%! model.randomprocess.priormean.param = 1; % linear trend
+%! model.randomprocess.priormean = stk_lm('affine');
 %! model2 = model;
 %! model2.noise.cov = stk_homnoisecov(0.1^2); % std 0.1
 %! x0 = stk_sampling_randunif(n0, d);

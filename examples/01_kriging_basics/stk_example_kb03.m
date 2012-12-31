@@ -81,8 +81,8 @@ axis(BOX(:)); title('function to be approximated');
 model = stk_model('stk_materncov_aniso', DIM);
 
 % As a default choice, a constant (but unknown) mean is used.
-% model.randomprocess.priormean.param = 1;  %%% UNCOMMENT TO USE A LINEAR TREND %%%
-% model.randomprocess.priormean.param = 2;  %%% UNCOMMENT TO USE A "FULL QUADRATIC" TREND %%%
+% model.randomprocess.priormean = stk_lm('affine');    % UNCOMMENT: AFFINE TREND
+% model.randomprocess.priormean = stk_lm('quadratic'); % UNCOMMENT: "FULL QUADRATIC" TREND
 
 % Good practice: add a small "regularization noise" (nugget)
 MODEL_NOISE_STD = 1e-5;

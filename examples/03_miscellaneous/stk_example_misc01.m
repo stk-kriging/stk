@@ -65,7 +65,7 @@ model{1}.randomprocess.priorcov.cparam = log([SIGMA2; NU; 1/RHO1]);
 model{1}.noise.cov = stk_homnoisecov(NOISE_VARIANCE);
 % 2) kriging with affine mean function
 model{2} = model{1};
-model{2}.randomprocess.priormean.param = 1; % order
+model{2}.randomprocess.priormean = stk_lm('affine');
 
 % Two other Matern models with regularity parameter fixed to 3/2
 % 3) kriging with constant mean function ("ordinary kriging)
@@ -74,7 +74,7 @@ model{3}.randomprocess.priorcov.cparam = log([SIGMA2; log(1/RHO1)]);
 model{3}.noise.cov = stk_homnoisecov(NOISE_VARIANCE);
 % 4) kriging with affine mean function
 model{4} = model{3};
-model{4}.randomprocess.priormean.param = 1; % order
+model{4}.randomprocess.priormean = stk_lm('affine');
 
 % And two other Matern models with regularity parameter fixed to 5/2
 % 5) kriging with constant mean function ("ordinary kriging)
@@ -83,7 +83,7 @@ model{5}.randomprocess.priorcov.cparam = log([SIGMA2; 1/RHO1]);
 model{5}.noise.cov = stk_homnoisecov(NOISE_VARIANCE);
 % 6) kriging with affine mean function
 model{6} = model{5};
-model{6}.randomprocess.priormean.param = 1; % order
+model{6}.randomprocess.priormean = stk_lm('affine');
 
 
 %% PARAMETER ESTIMATION AND PREDICTION FOR EACH MODEL
@@ -103,15 +103,21 @@ for j = 1:NB_MODELS,
     h_axis = subplot(nr, nc, j);
     stk_plot1d(obs, stk_makedata(xt, zt), stk_makedata(xt, zp{j}), h_axis);
     % Title
-    order = model{j}.randomprocess.priormean.param;
+    s = [];
     switch model{j}.randomprocess.priorcov.name,
         case 'stk_materncov32_iso',
-            title(sprintf('Matern 3/2, order=%d', order));
+            s = 'Matern 3/2, ';
         case 'stk_materncov52_iso',
-            title(sprintf('Matern 5/2, order=%d', order));
+            s = 'Matern 5/2, ';
         case 'stk_materncov_iso',
             nu = model{j}.randomprocess.priorcov.nu;
             %%% so ugly... the estimated parameter "nu" is stored in "prior"...
-            title(sprintf('Matern, estimated nu=%.2f, order=%d', nu, order));
+            s = sprintf('Matern, estimated nu=%.2f, ', nu);
     end
+    if mod(j, 2) == 0,
+        s = [s 'affine trend'];
+    else
+        s = [s 'constant trend'];
+    end
+    title(s);
 end
