@@ -235,6 +235,7 @@ end
 %! x_prd = struct('a', x0.a(idx_prd));
 %! 
 %! model = stk_model('stk_materncov32_iso');
+%! model = stk_setobs(model, x_obs, z_obs);
 %! model.randomprocess.priormean = stk_lm('constant');
 %! % this is currently the default, but better safe than sorry
 
@@ -244,18 +245,17 @@ end
 %!error y_prd1 = stk_predict(model, x_prd, 0);
 
 %!test
-%!
-%! [y_prd1, lambda, mu, K] = stk_predict(model, x_obs, z_obs, x_prd); 
+%! [y_prd1, lambda, mu, K] = stk_predict(model, x_prd); 
 %! assert(isequal(size(lambda), [n m]));
 %! assert(isequal(size(mu), [1 m]));  % ordinary kriging
 %! assert(isequal(size(K), [m m]));
 
-%!test
-%!
-%! %% use of Kx_cache
-%! model = stk_model('stk_materncov32_iso');
-%! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
-%! y_prd2 = stk_predict(model, idx_obs, z_obs, idx_prd);
-%! 
-%! %% check that both methods give the same result
-%! assert(stk_isequal_tolrel(y_prd1, y_prd2));
+% FIXME: outdated test related to Kx_cache/Px_cache
+
+% %!test
+% %! %% use of Kx_cache
+% %! model = stk_model('stk_materncov32_iso');
+% %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
+% %! y_prd2 = stk_predict(model, idx_obs, z_obs, idx_prd);
+% %! %% check that both methods give the same result
+% %! assert(stk_isequal_tolrel(y_prd1, y_prd2));

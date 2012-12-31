@@ -195,7 +195,7 @@ end
 %! x1 = stk_sampling_randunif(n1, d);
 
 %!error [KK, PP] = stk_make_matcov();
-%!error [KK, PP] = stk_make_matcov(model);
+%!test  [KK, PP] = stk_make_matcov(model);
 %!test  [Ka, Pa] = stk_make_matcov(model, x0);           % (1)
 %!test  [Kb, Pb] = stk_make_matcov(model, x0, x0);       % (2)
 %!test  [Kc, Pc] = stk_make_matcov(model, x0, x1);       % (3)
