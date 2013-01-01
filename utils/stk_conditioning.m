@@ -31,11 +31,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -126,8 +126,9 @@ end
 %! zi = struct('a', (1:NI)');
 %!
 %! % Carry out the kriging prediction at points xt
-%! model = stk_model('stk_materncov_iso');
-%! [ignore_zp, lambda] = stk_predict(model, xi, [], xt);
+%! model = stk_model('stk_materncov_iso', DIM);
+%! model = stk_setobs(model, xi, []);
+%! [ignore_zp, lambda] = stk_predict(model, xt);
 %!
 %! % Generate (unconditional) sample paths according to the model
 %! NB_PATHS = 10;

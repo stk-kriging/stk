@@ -26,11 +26,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -61,17 +61,25 @@ n = size(x.a, 1);
 if isfield(x, 'v'),
     stk_error('This kind of .v field is not supported anymore.', 'ObsoleteFeature');
 end
-    
-% Sanity check #2
-if size(z.a, 1) ~= n,
-    errmsg = 'x.a and z.a should have the same number of lines.';
-    stk_error(errmsg, 'IncorrectArgument');
-end
 
-% Sanity check #3
-if size(z.a, 2) ~= 1,
-    errmsg = 'z.a should be a column vector.';
-    stk_error(errmsg, 'IncorrectArgument');
+if isempty(z.a),
+    
+    z = [];
+    
+else    
+    
+    % Sanity check #2
+    if size(z.a, 1) ~= n,
+        errmsg = 'x.a and z.a should have the same number of lines.';
+        stk_error(errmsg, 'IncorrectArgument');
+    end
+    
+    % Sanity check #3
+    if size(z.a, 2) ~= 1,
+        errmsg = 'z.a should be a column vector.';
+        stk_error(errmsg, 'IncorrectArgument');
+    end
+
 end
 
 % Create the output structure
