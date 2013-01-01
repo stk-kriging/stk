@@ -21,11 +21,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -102,7 +102,7 @@ end % function
 %!shared param x y
 %!  dim = 1;
 %!  model = stk_model('stk_materncov32_iso', dim);
-%!  param = model.param;
+%!  param = model.randomprocess.priorcov.param;
 %!  x = stk_sampling_randunif(5, dim);
 %!  y = stk_sampling_randunif(5, dim);
 
@@ -129,7 +129,7 @@ end % function
 %!shared dim param x y nx ny
 %!  dim = 3;
 %!  model = stk_model('stk_materncov32_iso', dim);
-%!  param = model.param;
+%!  param = model.randomprocess.priorcov.param;
 %!  nx = 4; ny = 10;
 %!  x = stk_sampling_randunif(nx,  dim);
 %!  y = stk_sampling_randunif(ny, dim);
