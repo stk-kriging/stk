@@ -1,5 +1,9 @@
 2013-01-02  Julien Bect  <julien.bect@supelec.fr>
 
+	Fixed a bug in M2HTML (affecting option 'ignoredDir').
+
+	* misc/m2html/m2html.m: modified
+
 	Added M2HTML version 1.5 (by Guillaume Flandin).
 
 	* misc/m2html: new
