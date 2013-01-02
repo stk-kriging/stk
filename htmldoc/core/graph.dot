@@ -1,9 +1,0 @@
-/* Created by mdot for Matlab */
-digraph m2html {
-  stk_make_matcov -> stk_ortho_func;
-  stk_predict -> stk_make_matcov;
-
-  stk_make_matcov [URL="stk_make_matcov.html"];
-  stk_ortho_func [URL="stk_ortho_func.html"];
-  stk_predict [URL="stk_predict.html"];
-}

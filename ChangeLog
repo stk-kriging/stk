@@ -1,3 +1,10 @@
+2013-01-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Removing folder ./htmldoc (to be generated when creating the
+	maintenance branch for a new release).
+
+	* htmldoc: removed
+
 2012-12-31  Julien Bect  <julien.bect@supelec.fr>
 
 	Fixing bugs in stk_test() and stk_runtests().
