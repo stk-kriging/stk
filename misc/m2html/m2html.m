@@ -305,9 +305,9 @@ for i=1:2:length(paramlist)
 			end
 		case 'ignoreddir'
             if iscellstr(pvalue)
-				options.language = pvalue;
+				options.ignoredDir = pvalue;
 			elseif ischar(pvalue)
-				options.language = cellstr(pvalue);
+				options.ignoredDir = cellstr(pvalue);
 			else
 				error(sprintf(msgInvalidPair,pname));
 			end
