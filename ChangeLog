@@ -1,5 +1,9 @@
 2013-01-02  Julien Bect  <julien.bect@supelec.fr>
 
+	Added a script to generate the HTML documentation.
+
+	* stk_makedoc.m: new script
+
 	Fixed a bug in M2HTML (affecting option 'ignoredDir').
 
 	* misc/m2html/m2html.m: modified
