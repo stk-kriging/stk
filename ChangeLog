@@ -1,5 +1,9 @@
 2013-01-02  Julien Bect  <julien.bect@supelec.fr>
 
+	Added M2HTML version 1.5 (by Guillaume Flandin).
+
+	* misc/m2html: new
+
 	Removing folder ./htmldoc (to be generated when creating the
 	maintenance branch for a new release).
 
