@@ -45,4 +45,4 @@ DOC_FOLDER = fullfile(STK_ROOT, 'htmldoc');
    
 % Generate HTML documentation
 m2html('htmlDir', DOC_FOLDER, 'recursive', 'on', 'graph', 'on', ...
-       'ignoredDir', {'htmldoc', 'm2html'});
+       'ignoredDir', {'htmldoc', 'm2html', 'matlab'});
