@@ -38,6 +38,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [rl, drl_param, drl_lnv] = stk_reml(model)
+stk_narginchk(1, 1);
 
 NOISYOBS   = ~isa(model.noise.cov, 'stk_nullcov');
 PARAMPRIOR = isa(model.randomprocess.priorcov, 'stk_bayescov');
@@ -146,3 +147,4 @@ end
 
 %!error [J, dJ1, dJ2] = stk_reml();
 %!test  [J, dJ1, dJ2] = stk_reml(model);
+%!error [J, dJ1, dJ2] = stk_reml(model, pi^2);
