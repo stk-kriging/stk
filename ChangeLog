@@ -1,5 +1,9 @@
 2013-01-03  Julien Bect  <julien.bect@supelec.fr>
 
+	Added the text of the GPLv3 license.
+
+	* LICENSE: new
+
 	Removed the NEWS file (to be written after creating the
 	maintenance branch for a new release).
 
