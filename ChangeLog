@@ -1,5 +1,10 @@
 2013-01-03  Julien Bect  <julien.bect@supelec.fr>
 
+	Modified stk_makedoc to exclude misc/matlab from the generated
+	HTML documentation.
+
+	* stk_makedoc.m: modified
+
 	Made stk_narginchk() slightly more efficient.
 
 	* misc/error/stk_narginchk.m: modified
