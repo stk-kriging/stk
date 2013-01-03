@@ -27,7 +27,7 @@
 %        Depends: octave (>= 2.9.7), io (>= 1.0.0)
 %        License: GPL version 2 or later
 %        Url: http://octave.sf.net
-%
+
 % Copying Permission Statement
 %
 %    This file is part of

@@ -2,7 +2,7 @@
 %
 % CALL: D = stk_mindist(X)
 %
-%    computes the separation distance D of X. More precisely, if X is an 
+%    computes the separation distance D of X. More precisely, if X is an
 %    n x d matrix, then
 %
 %       D = min_{1 <= i < j <= n} norm(X(i,:) - X(j,:)),
@@ -17,7 +17,7 @@
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of

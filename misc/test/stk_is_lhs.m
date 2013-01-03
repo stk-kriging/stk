@@ -13,18 +13,18 @@
 %
 % CALL: OK = stk_is_lhs(X)
 %
-%    tests if X is a Latin Hypercube Sample (LHS). Both the size N and the 
+%    tests if X is a Latin Hypercube Sample (LHS). Both the size N and the
 %    number DIM of factors are inferred from X.
 %
 % All three calling syntaxes accept both matrix-type inputs or data structures
 % (with an 'a' field) for X.
-  
+
 % Copyright Notice
 %
 %    Copyright (C) 2012 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of

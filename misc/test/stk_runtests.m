@@ -110,7 +110,7 @@ subdirs_private = {};
 
 for i = 1:numel (flist)
     f = flist{i};
-    ff = fullfile(testdir, f);    
+    ff = fullfile(testdir, f);
     if (length (f) > 2) && strcmp (f((end-1):end), '.m')
         n_files = n_files + 1;
         print_test_file_name (f);

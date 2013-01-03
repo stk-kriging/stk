@@ -26,7 +26,7 @@
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -181,15 +181,15 @@ end % function
 %! n = 7;
 %! x = stk_sampling_randunif(n, dim);
 %! y = stk_sampling_randunif(n, dim);
-%! 
+%!
 %! K1 = stk_materncov_aniso(param, x, y);
 %! K2 = stk_materncov_aniso(param, x, y, -1, true);
 %! assert(isequal(size(K1), [n n]));
 %! assert(stk_isequal_tolabs(K2, diag(K1)));
-%! 
+%!
 %! for i = 1:(dim+2),
 %!     dK1 = stk_materncov_aniso(param, x, y,  i);
 %!     dK2 = stk_materncov_aniso(param, x, y,  i, true);
 %!     assert(isequal(size(dK1), [n n]));
-%!     assert(stk_isequal_tolabs(dK2, diag(dK1)));    
+%!     assert(stk_isequal_tolabs(dK2, diag(dK1)));
 %! end
