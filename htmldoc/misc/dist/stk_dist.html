@@ -1,0 +1,191 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_dist</title>
+  <meta name="keywords" content="stk_dist">
+  <meta name="description" content="STK_DISTANCE_MATRIX computes a matrix of (Euclidean) distances">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">dist</a> &gt; stk_dist.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/dist&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_dist
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_DISTANCE_MATRIX computes a matrix of (Euclidean) distances</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function D = stk_dist(x, y, pairwise) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_DISTANCE_MATRIX computes a matrix of (Euclidean) distances
+
+ CALL: D = stk_distance_matrix(X, Y)
+
+    computes the matrix of distances between X and Y. More precisely, if
+    X is an nX x d matrix, and Y an nY x d matrix, the D is an nX x nY
+    matrix with
+
+       D_{i,j} = norm(X(i,:) - Y(j,:)),
+
+    where norm(.) denotes the Euclidean norm in R^d.
+
+ See also: <a href="stk_mindist.html" class="code" title="">stk_mindist</a>, norm</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_DISTANCE_MATRIX computes a matrix of (Euclidean) distances</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: D = stk_distance_matrix(X, Y)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    computes the matrix of distances between X and Y. More precisely, if</span>
+0006 <span class="comment">%    X is an nX x d matrix, and Y an nY x d matrix, the D is an nX x nY</span>
+0007 <span class="comment">%    matrix with</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%       D_{i,j} = norm(X(i,:) - Y(j,:)),</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    where norm(.) denotes the Euclidean norm in R^d.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% See also: stk_mindist, norm</span>
+0014 
+0015 <span class="comment">% Copyright Notice</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%    Copyright (C) 2012 SUPELEC</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
+0020 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0021 
+0022 <span class="comment">% Copying Permission Statement</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%    This file is part of</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0027 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0030 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0031 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0032 <span class="comment">%    option) any later version.</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0035 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0036 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0037 <span class="comment">%    License for more details.</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0040 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0041 
+0042 <a name="_sub0" href="#_subfunctions" class="code">function D = stk_dist(x, y, pairwise)</a>
+0043 stk_narginchk(1, 3);
+0044 
+0045 <span class="comment">% read argument #1</span>
+0046 <span class="keyword">if</span> isstruct(x),
+0047     x = x.a;
+0048 <span class="keyword">end</span>
+0049 
+0050 <span class="comment">% read argument #2</span>
+0051 <span class="keyword">if</span> nargin &lt; 2,
+0052     y = [];
+0053 <span class="keyword">else</span>
+0054     <span class="keyword">if</span> isstruct(x),
+0055         y = y.a;
+0056     <span class="keyword">end</span>
+0057 <span class="keyword">end</span>
+0058 
+0059 <span class="comment">% read argument #3</span>
+0060 <span class="keyword">if</span> nargin &lt; 3,
+0061     pairwise = false;
+0062 <span class="keyword">else</span>
+0063     <span class="keyword">if</span> ~islogical(pairwise)
+0064         errmsg = <span class="string">'Argument ''pairwise'' should be either true or false.'</span>;
+0065         stk_error(errmsg, <span class="string">'TypeMismatch'</span>);
+0066     <span class="keyword">end</span>
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="keyword">if</span> pairwise,
+0070     <span class="keyword">if</span> isempty(y),
+0071         D = stk_dist_pairwise(x, x);
+0072     <span class="keyword">else</span>
+0073         D = stk_dist_pairwise(x, y);
+0074     <span class="keyword">end</span>
+0075 <span class="keyword">else</span>
+0076     <span class="keyword">if</span> isempty(y),
+0077         D = stk_dist_matrixx(x);
+0078     <span class="keyword">else</span>
+0079         D = stk_dist_matrixy(x, y);
+0080     <span class="keyword">end</span>
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="keyword">end</span> <span class="comment">% function stk_dist</span>
+0084 
+0085 <span class="comment">%%</span>
+0086 <span class="comment">% Check that an error is raised in nargin is not either 1 or 2</span>
+0087 
+0088 <span class="comment">%!error stk_dist();</span>
+0089 <span class="comment">%!error stk_dist(0, 0, 0);</span>
+0090 <span class="comment">%!error stk_dist(0, 0, 0, 0);</span>
+0091 
+0092 <span class="comment">%%</span>
+0093 <span class="comment">% Check that an error is raised when the number of columns differs</span>
+0094 
+0095 <span class="comment">%!error stk_dist(0, ones(1, 2));</span>
+0096 <span class="comment">%!error stk_dist(eye(3), ones(1, 2));</span>
+0097 <span class="comment">%!error stk_dist(ones(2, 1), zeros(2));</span>
+0098 
+0099 <span class="comment">%%</span>
+0100 <span class="comment">% Test with some simple matrices</span>
+0101 
+0102 <span class="comment">%!shared x, y, z</span>
+0103 <span class="comment">%! x = zeros(11, 5);</span>
+0104 <span class="comment">%! y = zeros(13, 5);</span>
+0105 <span class="comment">%! z = ones(7, 5);</span>
+0106 
+0107 <span class="comment">%!test</span>
+0108 <span class="comment">%! Dx = stk_dist(x);</span>
+0109 <span class="comment">%! assert(isequal(Dx, zeros(11)));</span>
+0110 
+0111 <span class="comment">%!test</span>
+0112 <span class="comment">%! Dxx = stk_dist(x, x);</span>
+0113 <span class="comment">%! assert(isequal(Dxx, zeros(11)));</span>
+0114 
+0115 <span class="comment">%!test</span>
+0116 <span class="comment">%! Dxy = stk_dist(x, y);</span>
+0117 <span class="comment">%! assert(isequal(Dxy, zeros(11, 13)));</span>
+0118 
+0119 <span class="comment">%!test</span>
+0120 <span class="comment">%! Dzz = stk_dist(z, z);</span>
+0121 <span class="comment">%! assert(isequal(Dzz, zeros(7)));</span>
+0122 
+0123 <span class="comment">%!test</span>
+0124 <span class="comment">%! Dxz = stk_dist(x, z);</span>
+0125 <span class="comment">%! assert(stk_isequal_tolabs(Dxz, sqrt(5)*ones(11, 7)));</span>
+0126 
+0127 <span class="comment">%!test</span>
+0128 <span class="comment">%! x = randn(5,3);</span>
+0129 <span class="comment">%! y = randn(5,3);</span>
+0130 <span class="comment">%! D1 = stk_dist_pairwise(x, y);</span>
+0131 <span class="comment">%! D2 = stk_dist_matrixy(x, y);</span>
+0132 <span class="comment">%! assert(stk_isequal_tolabs(D1, diag(D2)));</span></pre></div>
+<hr><address>Generated on Thu 03-Jan-2013 16:25:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

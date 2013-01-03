@@ -1,0 +1,12 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  stk_normalize -> stk_datastruct;
+
+  stk_conditioning [URL="stk_conditioning.html"];
+  stk_datastruct [URL="stk_datastruct.html"];
+  stk_feval [URL="stk_feval.html"];
+  stk_generate_samplepaths [URL="stk_generate_samplepaths.html"];
+  stk_model [URL="stk_model.html"];
+  stk_normalize [URL="stk_normalize.html"];
+  stk_rescale [URL="stk_rescale.html"];
+}

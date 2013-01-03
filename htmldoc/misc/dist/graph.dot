@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  stk_dist [URL="stk_dist.html"];
+  stk_filldist [URL="stk_filldist.html"];
+  stk_mindist [URL="stk_mindist.html"];
+}

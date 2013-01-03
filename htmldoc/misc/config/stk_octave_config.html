@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_octave_config</title>
+  <meta name="keywords" content="stk_octave_config">
+  <meta name="description" content="STK_OCTAVECONFIG_CHECKGLPK checks that the GLPK library is installed.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">config</a> &gt; stk_octave_config.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/config&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_octave_config
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_OCTAVECONFIG_CHECKGLPK checks that the GLPK library is installed.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function stk_octave_config() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_OCTAVECONFIG_CHECKGLPK checks that the GLPK library is installed.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function stk_test_glpk_()</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_OCTAVECONFIG_CHECKGLPK checks that the GLPK library is installed.</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 
+0009 <span class="comment">% Copying Permission Statement</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    This file is part of</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0014 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0017 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0018 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0019 <span class="comment">%    option) any later version.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0022 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0023 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0024 <span class="comment">%    License for more details.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0027 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0028 
+0029 <a name="_sub0" href="#_subfunctions" class="code">function stk_octave_config()</a>
+0030 
+0031 <span class="comment">% We need to check that the GLPK library is installed. This is the case</span>
+0032 <span class="comment">% in most recent releases of Octave, but some older releases do not contain</span>
+0033 <span class="comment">% GLPK.</span>
+0034 <span class="keyword">try</span>
+0035     <a href="#_sub1" class="code" title="subfunction stk_test_glpk_()">stk_test_glpk_</a>();
+0036 <span class="keyword">catch</span> <span class="comment">%#ok&lt;CTCH&gt;</span>
+0037     error(<span class="string">'The GLPK library does not seem to be properly installed'</span>);
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="comment">% Note: simply checking that __glpk__.oct is present is not good enough,</span>
+0041 <span class="comment">% since some distribution include (or so it seems) a fake __glpk__.oct</span>
+0042 <span class="comment">% package, which is in charge of issuing an error message...</span>
+0043 
+0044 <span class="comment">% Suppress additional help information in Octave</span>
+0045 suppress_verbose_help_message(true);
+0046 
+0047 <span class="comment">% Perhaps to early to use FLTK as a default choice</span>
+0048 <span class="comment">% if ismember('fltk', available_graphics_toolkits())</span>
+0049 <span class="comment">%    graphics_toolkit('fltk');</span>
+0050 <span class="comment">% end</span>
+0051 
+0052 <span class="comment">% So, we keep gnuplot as a graphical backend</span>
+0053 <span class="comment">% but use GNUTERM=wxt for prettier and faster plots!</span>
+0054 setenv(<span class="string">'GNUTERM'</span>, <span class="string">'wxt'</span>)
+0055 
+0056 fprintf(<span class="string">'Graphics toolkit: %s\n'</span>, graphics_toolkit());
+0057 
+0058 <span class="keyword">end</span>
+0059 
+0060 
+0061 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%</span>
+0062 <span class="comment">%%% stk_test_glpk_ %%%</span>
+0063 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%</span>
+0064 
+0065 <a name="_sub1" href="#_subfunctions" class="code">function stk_test_glpk_()</a>
+0066 
+0067 <span class="comment">% minimize c*x</span>
+0068 <span class="comment">% under a*x = b, x &gt;= 0</span>
+0069 a = 1;
+0070 b = 1;
+0071 c = 1;
+0072 
+0073 <span class="comment">% solve this difficult problem using GLPK ;-)</span>
+0074 x = glpk (c, a, b);
+0075 assert(x == 1);
+0076 
+0077 <span class="keyword">end</span></pre></div>
+<hr><address>Generated on Thu 03-Jan-2013 16:25:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

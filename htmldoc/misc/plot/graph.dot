@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  stk_plot1d -> stk_plot_shadedci;
+
+  stk_plot1d [URL="stk_plot1d.html"];
+  stk_plot1dsim [URL="stk_plot1dsim.html"];
+  stk_plot2d [URL="stk_plot2d.html"];
+  stk_plot_shadedci [URL="stk_plot_shadedci.html"];
+}

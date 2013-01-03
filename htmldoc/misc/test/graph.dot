@@ -1,0 +1,15 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  stk_isequal_tolabs -> stk_isequal_tolabs;
+  stk_isequal_tolrel -> stk_isequal_tolrel;
+  stk_runexamples -> stk_runscript;
+  stk_runtests -> stk_test;
+
+  stk_is_lhs [URL="stk_is_lhs.html"];
+  stk_isequal_tolabs [URL="stk_isequal_tolabs.html"];
+  stk_isequal_tolrel [URL="stk_isequal_tolrel.html"];
+  stk_runexamples [URL="stk_runexamples.html"];
+  stk_runscript [URL="stk_runscript.html"];
+  stk_runtests [URL="stk_runtests.html"];
+  stk_test [URL="stk_test.html"];
+}

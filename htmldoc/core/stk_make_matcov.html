@@ -1,0 +1,303 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_make_matcov</title>
+  <meta name="keywords" content="stk_make_matcov">
+  <meta name="description" content="STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">core</a> &gt; stk_make_matcov.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for core&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_make_matcov
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [K, P] = stk_make_matcov(model, x0, x1, pairwise) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).
+
+ CALL: [K, P] = stk_make_matcov(MODEL, X0)
+
+    computes the covariance matrix K and the design matrix P for the model
+    MODEL at the set of points X0. For a set of N points on a DIM-dimensional
+    space of factors, X0 is expected to be a structure whose field 'a' contains
+    an N x DIM matrix. As a result, a matrix K of size N x N and a matrix P of
+    size N x L are obtained, where L is the number of regression functions in
+    the linear part of the model; e.g., L = 1 if MODEL.order is zero (ordinary
+    kriging).
+
+ CALL: K = stk_make_matcov(MODEL, X0, X1)
+
+    computes the covariance matrix K for the model MODEL between the sets of
+    points X0 and X1. Both X0 and X1 are expected to be structures with an 'a'
+    field, containing the actual numerical data. The resulting K matrix is of
+    size N0 x N1, where N0 is the number of rows of XO.a and N1 the number of
+    rows of X1.a.
+
+ BE CAREFUL: 
+    
+    stk_make_matcov(MODEL, X0) and stk_makematcov(MODEL, X0, X0) are NOT 
+    equivalent if model.lognoisevariance exists (in the first case, the
+    noise variance is added on the diagonal of the covariance matrix).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="stk_ortho_func.html" class="code" title="function P = stk_ortho_func(model, x)">stk_ortho_func</a>	STK_ORTHO_FUNC computes the design matrix for the linear part of a model.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="stk_predict.html" class="code" title="function [zp, lambda, mu, K] = stk_predict(model, xi, zi, xt)">stk_predict</a>	STK_PREDICT performs a kriging prediction from data</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: [K, P] = stk_make_matcov(MODEL, X0)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    computes the covariance matrix K and the design matrix P for the model</span>
+0006 <span class="comment">%    MODEL at the set of points X0. For a set of N points on a DIM-dimensional</span>
+0007 <span class="comment">%    space of factors, X0 is expected to be a structure whose field 'a' contains</span>
+0008 <span class="comment">%    an N x DIM matrix. As a result, a matrix K of size N x N and a matrix P of</span>
+0009 <span class="comment">%    size N x L are obtained, where L is the number of regression functions in</span>
+0010 <span class="comment">%    the linear part of the model; e.g., L = 1 if MODEL.order is zero (ordinary</span>
+0011 <span class="comment">%    kriging).</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% CALL: K = stk_make_matcov(MODEL, X0, X1)</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%    computes the covariance matrix K for the model MODEL between the sets of</span>
+0016 <span class="comment">%    points X0 and X1. Both X0 and X1 are expected to be structures with an 'a'</span>
+0017 <span class="comment">%    field, containing the actual numerical data. The resulting K matrix is of</span>
+0018 <span class="comment">%    size N0 x N1, where N0 is the number of rows of XO.a and N1 the number of</span>
+0019 <span class="comment">%    rows of X1.a.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% BE CAREFUL:</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%    stk_make_matcov(MODEL, X0) and stk_makematcov(MODEL, X0, X0) are NOT</span>
+0024 <span class="comment">%    equivalent if model.lognoisevariance exists (in the first case, the</span>
+0025 <span class="comment">%    noise variance is added on the diagonal of the covariance matrix).</span>
+0026 
+0027 <span class="comment">% Copyright Notice</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0032 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0033 
+0034 <span class="comment">% Copying Permission Statement</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%    This file is part of</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0039 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0042 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0043 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0044 <span class="comment">%    option) any later version.</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0047 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0048 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0049 <span class="comment">%    License for more details.</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0052 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0053 
+0054 <a name="_sub0" href="#_subfunctions" class="code">function [K, P] = stk_make_matcov(model, x0, x1, pairwise)</a>
+0055 stk_narginchk(2, 4);
+0056 
+0057 <span class="keyword">if</span> isstruct(x0), x0 = x0.a; <span class="keyword">end</span>
+0058 <span class="keyword">if</span> (nargin &gt; 2) &amp;&amp; isstruct(x1), x1 = x1.a; <span class="keyword">end</span>
+0059 
+0060 <span class="comment">%=== guess which syntax has been used based on the second input arg</span>
+0061 
+0062 <span class="keyword">switch</span> nargin
+0063     
+0064     <span class="keyword">case</span> 2, <span class="comment">% stk_make_matcov(model, x0)</span>
+0065         make_matcov_auto = true;
+0066         pairwise = false;
+0067         
+0068     <span class="keyword">case</span> 3, <span class="comment">% stk_make_matcov(model, x0, x1)</span>
+0069         make_matcov_auto = false;
+0070         pairwise = false;
+0071         
+0072     <span class="keyword">case</span> 4, <span class="comment">% stk_make_matcov(model, x0, ?, pairwise)</span>
+0073         make_matcov_auto = isempty(x1);
+0074         
+0075     <span class="keyword">otherwise</span>
+0076         error(<span class="string">'Incorrect number of input arguments.'</span>);
+0077 <span class="keyword">end</span>
+0078 
+0079 <span class="keyword">if</span> isfield(model, <span class="string">'Kx_cache'</span>), <span class="comment">% handle the case where 'Kx_cache' is present</span>
+0080     
+0081     <span class="keyword">if</span> ~pairwise,
+0082         <span class="keyword">if</span> make_matcov_auto,
+0083             K = model.Kx_cache(x0, x0);
+0084         <span class="keyword">else</span>
+0085             K = model.Kx_cache(x0, x1);
+0086         <span class="keyword">end</span>
+0087     <span class="keyword">else</span>
+0088         <span class="keyword">if</span> make_matcov_auto,
+0089             idx = sub2ind(size(model.Kx_cache), x0, x0);
+0090             K = model.Kx_cache(idx);
+0091         <span class="keyword">else</span>
+0092             idx = sub2ind(size(model.Kx_cache), x0, x1);
+0093             K = model.Kx_cache(idx);
+0094         <span class="keyword">end</span>        
+0095     <span class="keyword">end</span>
+0096     
+0097 <span class="keyword">else</span> <span class="comment">% handle the case where the covariance matrix must be computed</span>
+0098     
+0099     <span class="comment">%=== blocking parameters for parallel computing</span>
+0100     
+0101     <span class="comment">% If the size of the covariance matrix to be computed is smaller than</span>
+0102     <span class="comment">% MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.</span>
+0103     MIN_SIZE_FOR_BLOCKING = 500^2;
+0104     
+0105     <span class="comment">% If it is decided to use parfor, the number of blocks will be chosen</span>
+0106     <span class="comment">% in such a way that blocks smaller than MIN_BLOCK_SIZE are never used</span>
+0107     MIN_BLOCK_SIZE = 100^2;
+0108     
+0109     <span class="comment">%=== number of covariance values to be computed ?</span>
+0110     
+0111     N0 = size(x0, 1);
+0112     
+0113     <span class="keyword">if</span> make_matcov_auto,
+0114         <span class="keyword">if</span> ~pairwise,
+0115             N = N0 * N0;
+0116         <span class="keyword">else</span>
+0117             N = N0;
+0118         <span class="keyword">end</span>
+0119     <span class="keyword">else</span>
+0120         N1 = size(x1, 1);
+0121         <span class="keyword">if</span> ~pairwise
+0122             N = N0 * N1;
+0123         <span class="keyword">else</span>
+0124             <span class="keyword">if</span> N1 ~= N0,
+0125                 errmsg = <span class="string">'x0 and x1 should have the same number of lines.'</span>;
+0126                 stk_error(errmsg, <span class="string">'InconsistentDimensions'</span>);
+0127             <span class="keyword">end</span>
+0128             N = N0;
+0129         <span class="keyword">end</span>
+0130     <span class="keyword">end</span>
+0131     
+0132     <span class="comment">%=== decide whether parallel computing should be used or not</span>
+0133         
+0134     <span class="comment">% note: parallelization is not implemented in the &quot;pairwise&quot; case</span>
+0135     
+0136     <span class="keyword">if</span> pairwise || (N &lt; MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
+0137         ncores = 1; <span class="comment">% do not use parallel computing</span>
+0138     <span class="keyword">else</span>
+0139         ncores = max(1, matlabpool(<span class="string">'size'</span>));
+0140         <span class="comment">% note: matlabpool('size') returns 0 if the PCT is not started</span>
+0141     <span class="keyword">end</span>
+0142     
+0143     <span class="comment">%=== call the subfunction that does the actual computations</span>
+0144     
+0145     <span class="keyword">if</span> make_matcov_auto,
+0146 
+0147         <span class="comment">% FIXME: avoid computing twice each off-diagonal term</span>
+0148         <span class="keyword">if</span> ncores == 1, <span class="comment">% shortcut when parallelization is not used</span>
+0149             K = feval(model.covariance_type, model.param, x0, x0, -1, pairwise);
+0150         <span class="keyword">else</span>
+0151             K = stk_make_matcov_auto_parfor(model, x0, ncores, MIN_BLOCK_SIZE);
+0152         <span class="keyword">end</span>
+0153         
+0154         <span class="keyword">if</span> isfield(model, <span class="string">'lognoisevariance'</span>),            
+0155             <span class="keyword">if</span> ~pairwise,
+0156                 K = K + stk_noisecov(size(K,1), model.lognoisevariance);
+0157             <span class="keyword">else</span>
+0158                 stk_error(<span class="string">'Not implemented yet.'</span>, <span class="string">'NotImplementedYet'</span>);
+0159             <span class="keyword">end</span>
+0160         <span class="keyword">end</span>
+0161     <span class="keyword">else</span>
+0162         <span class="keyword">if</span> ncores == 1, <span class="comment">% shortcut when parallelization is not used</span>
+0163             K = feval(model.covariance_type, model.param, x0, x1, -1, pairwise);
+0164         <span class="keyword">else</span>
+0165             K = stk_make_matcov_inter_parfor(model, x0, x1, ncores, MIN_BLOCK_SIZE);
+0166         <span class="keyword">end</span>
+0167     <span class="keyword">end</span>
+0168     
+0169 <span class="keyword">end</span>
+0170 
+0171 <span class="comment">%=== compute the regression functions</span>
+0172 
+0173 <span class="keyword">if</span> nargout &gt; 1, P = <a href="stk_ortho_func.html" class="code" title="function P = stk_ortho_func(model, x)">stk_ortho_func</a>(model, x0); <span class="keyword">end</span>
+0174 
+0175 <span class="keyword">end</span>
+0176 
+0177 <span class="comment">%%%%%%%%%%%%%</span>
+0178 <span class="comment">%%% tests %%%</span>
+0179 <span class="comment">%%%%%%%%%%%%%</span>
+0180 
+0181 <span class="comment">%!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc</span>
+0182 <span class="comment">%! n0 = 20; n1 = 10; d = 4;</span>
+0183 <span class="comment">%! model = stk_model('stk_materncov_aniso', d); model.order = 1;</span>
+0184 <span class="comment">%! model2 = model; model2.lognoisevariance = log(0.01);</span>
+0185 <span class="comment">%! x0 = stk_sampling_randunif(n0, d);</span>
+0186 <span class="comment">%! x1 = stk_sampling_randunif(n1, d);</span>
+0187 
+0188 <span class="comment">%!error [KK, PP] = stk_make_matcov();</span>
+0189 <span class="comment">%!error [KK, PP] = stk_make_matcov(model);</span>
+0190 <span class="comment">%!test  [Ka, Pa] = stk_make_matcov(model, x0);           % (1)</span>
+0191 <span class="comment">%!test  [Kb, Pb] = stk_make_matcov(model, x0, x0);       % (2)</span>
+0192 <span class="comment">%!test  [Kc, Pc] = stk_make_matcov(model, x0, x1);       % (3)</span>
+0193 <span class="comment">%!error [KK, PP] = stk_make_matcov(model, x0, x1, pi);</span>
+0194 
+0195 <span class="comment">%!test  assert(isequal(size(Ka), [n0 n0]));</span>
+0196 <span class="comment">%!test  assert(isequal(size(Kb), [n0 n0]));</span>
+0197 <span class="comment">%!test  assert(isequal(size(Kc), [n0 n1]));</span>
+0198 
+0199 <span class="comment">%!test  assert(isequal(size(Pa), [n0 d + 1]));</span>
+0200 <span class="comment">%!test  assert(isequal(size(Pb), [n0 d + 1]));</span>
+0201 <span class="comment">%!test  assert(isequal(size(Pc), [n0 d + 1]));</span>
+0202 
+0203 <span class="comment">%!% In the noiseless case, (1) and (2) should give the same results</span>
+0204 <span class="comment">%!test  assert(isequal(Kb, Ka));</span>
+0205 
+0206 <span class="comment">%!% In the noisy case, however...</span>
+0207 <span class="comment">%!test  [Ka, Pa] = stk_make_matcov(model2, x0);           % (1')</span>
+0208 <span class="comment">%!test  [Kb, Pb] = stk_make_matcov(model2, x0, x0);       % (2')</span>
+0209 <span class="comment">%!error assert(isequal(Kb, Ka));</span>
+0210 
+0211 <span class="comment">%!% The second output depends on x0 only =&gt; should be the same for (1)--(3)</span>
+0212 <span class="comment">%!test  assert(isequal(Pa, Pb));</span>
+0213 <span class="comment">%!test  assert(isequal(Pa, Pc));</span>
+0214 
+0215 <span class="comment">%!test %% use of Kx_cache, with .a fields</span>
+0216 <span class="comment">%! model2 = model;</span>
+0217 <span class="comment">%! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);</span>
+0218 <span class="comment">%! idx = [1 4 9];</span>
+0219 <span class="comment">%! [K1, P1] = stk_make_matcov(model,  struct('a', x0.a(idx, :)));</span>
+0220 <span class="comment">%! [K2, P2] = stk_make_matcov(model2, struct('a', idx'));</span>
+0221 <span class="comment">%! assert(stk_isequal_tolrel(K1, K2));</span>
+0222 <span class="comment">%! assert(stk_isequal_tolrel(P1, P2));</span>
+0223 
+0224 <span class="comment">%!test %% use of Kx_cache, with matrices</span>
+0225 <span class="comment">%! x0 = x0.a;</span>
+0226 <span class="comment">%! model2 = model;</span>
+0227 <span class="comment">%! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);</span>
+0228 <span class="comment">%! idx = [1 4 9];</span>
+0229 <span class="comment">%! [K1, P1] = stk_make_matcov(model,  x0(idx, :));</span>
+0230 <span class="comment">%! [K2, P2] = stk_make_matcov(model2, idx');</span>
+0231 <span class="comment">%! assert(stk_isequal_tolrel(K1, K2));</span>
+0232 <span class="comment">%! assert(stk_isequal_tolrel(P1, P2));</span></pre></div>
+<hr><address>Generated on Thu 03-Jan-2013 16:25:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

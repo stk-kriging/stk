@@ -1,0 +1,160 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_example_misc03</title>
+  <meta name="keywords" content="stk_example_misc03">
+  <meta name="description" content="STK_EXAMPLE_MISC03 ... [FIXME: missing documentation]">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; <a href="index.html">03_miscellaneous</a> &gt; stk_example_misc03.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for examples/03_miscellaneous&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_example_misc03
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_EXAMPLE_MISC03 ... [FIXME: missing documentation]</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_EXAMPLE_MISC03 ... [FIXME: missing documentation]</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_EXAMPLE_MISC03 ... [FIXME: missing documentation]</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2012 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 
+0009 <span class="comment">% Copying Permission Statement</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    This file is part of</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0014 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0017 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0018 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0019 <span class="comment">%    option) any later version.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0022 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0023 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0024 <span class="comment">%    License for more details.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0027 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0028 
+0029 stk_disp_examplewelcome();
+0030 
+0031 
+0032 <span class="comment">%% DEFINE AN ARTIFICIAL ONE-DIMENSIONAL DATASET</span>
+0033 
+0034 DIM = 1;            <span class="comment">% dimension of the factor space</span>
+0035 BOX = [0.0; 1.0];   <span class="comment">% factor space</span>
+0036 
+0037 xi = struct(<span class="string">'a'</span>, [0.25; 0.26; 0.50; 0.60]);
+0038 zi = struct(<span class="string">'a'</span>, [1.00; 1.10; 0.20; 0.35]);
+0039 
+0040 
+0041 <span class="comment">%% SPECIFICATION OF THE MODEL &amp; REML ESTIMATION</span>
+0042 
+0043 model = stk_model(<span class="string">'stk_materncov_iso'</span>);
+0044 
+0045 <span class="comment">% small &quot;regularization noise&quot;.</span>
+0046 model.lognoisevariance = 2 * log(1e-6);
+0047 
+0048 <span class="comment">% Mode of the prior on the parameters of the Matern covariance</span>
+0049 <span class="comment">% (also serves as an initial guess for the optimization)</span>
+0050 SIGMA2 = 1.0;  <span class="comment">% variance parameter</span>
+0051 NU     = 2.0;  <span class="comment">% regularity parameter</span>
+0052 RHO1   = 0.4;  <span class="comment">% scale (range) parameter</span>
+0053 param0 = log([SIGMA2; NU; 1/RHO1]);
+0054 
+0055 <span class="comment">% Estimate covariance parameters (without prior)</span>
+0056 model.param = stk_param_estim(model, xi, zi, param0);
+0057 param_opt_reml = model.param;
+0058 
+0059 
+0060 <span class="comment">%% EXPERIMENT WITH SEVERAL VALUES FOR PRIOR VARIANCES</span>
+0061 
+0062 std_list = [10 1 0.2 0.01];
+0063 
+0064 NT = 400; <span class="comment">% nb of points in the grid</span>
+0065 xt = stk_sampling_regulargrid(NT, DIM, BOX);
+0066 
+0067 figure(<span class="string">'InvertHardcopy'</span>, <span class="string">'off'</span>, <span class="string">'Color'</span>, [1 1 1]);
+0068 
+0069 param_opt = zeros(length(param0), length(std_list));
+0070 <span class="keyword">for</span> k = 1:length(std_list),
+0071     
+0072     <span class="comment">% Prior on the parameters of the Matern covariance</span>
+0073     model.prior.mean = param0;
+0074     model.prior.invcov = eye(length(param0)) ./ (std_list(k)^2);
+0075     
+0076     <span class="comment">% Estimate covariance parameters (with a prior)</span>
+0077     model.param = stk_param_estim(model, xi, zi, param0);
+0078     param_opt(:, k) = model.param;
+0079     
+0080     <span class="comment">% Carry out kriging prediction</span>
+0081     zp = stk_predict(model, xi, zi, xt);
+0082     
+0083     <span class="comment">% Plot predicted values and pointwise confidences intervals</span>
+0084     haxis = subplot(2, 2, k); stk_plot1d(xi, zi, xt, [], zp, haxis);
+0085     xlabel(<span class="string">'input x'</span>); ylabel(<span class="string">'predicted output z'</span>);
+0086     h = title(sprintf(<span class="string">'prior std = %.2f'</span>, std_list(k)));
+0087     set(h, <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+0088 <span class="keyword">end</span>
+0089 
+0090 
+0091 <span class="comment">%% FIGURE: ESTIMATED PARAMETER VERSUS PRIOR STD</span>
+0092 
+0093 figure;
+0094 param_name = {<span class="string">'SIGMA2'</span>, <span class="string">'NU'</span>, <span class="string">'1/RHO'</span>};
+0095 <span class="keyword">for</span> j = 1:3,
+0096     subplot(2, 2, j);
+0097     <span class="comment">% estimated parameter versus prior std</span>
+0098     h = semilogx(std_list, exp(param_opt(j, :)), <span class="string">'ko-'</span>);
+0099     set(h, <span class="string">'LineWidth'</span>, 2, <span class="string">'MarkerFaceColor'</span>, <span class="string">'y'</span>);
+0100     xlabel(<span class="string">'prior std'</span>); ylabel(param_name{j});
+0101     <span class="comment">% add an horizontal line showing the value of REML estimation</span>
+0102     hold on; semilogx(xlim, exp(param_opt_reml(j))*[1 1], <span class="string">'r--'</span>);
+0103     <span class="comment">% add a second horizontal line showing the mode of the prior</span>
+0104     hold on; semilogx(xlim, exp(param0(j))*[1 1], <span class="string">'b--'</span>);
+0105     <span class="comment">% adjust ylim</span>
+0106     yy = exp([param_opt(j, :) param_opt_reml(j) param0(j)]);
+0107     ylim_min = min(yy); ylim_max = max(yy); delta = ylim_max - ylim_min;
+0108     ylim([ylim_min - 0.05*delta ylim_max + 0.05*delta]);
+0109 <span class="keyword">end</span>
+0110 
+0111 h1 = legend(<span class="string">'MAP estimates'</span>, <span class="string">'REML estimate'</span>, <span class="string">'mode of the prior'</span>);
+0112 h2 = subplot(2, 2, 4); axis off;
+0113 set(h1, <span class="string">'Position'</span>, get(h2, <span class="string">'Position'</span>));</pre></div>
+<hr><address>Generated on Thu 03-Jan-2013 16:25:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

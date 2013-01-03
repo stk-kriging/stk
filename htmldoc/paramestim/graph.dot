@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  stk_param_estim -> stk_remlqrg;
+  stk_param_init -> stk_remlqrg;
+
+  stk_param_estim [URL="stk_param_estim.html"];
+  stk_param_init [URL="stk_param_init.html"];
+  stk_remlqrg [URL="stk_remlqrg.html"];
+}

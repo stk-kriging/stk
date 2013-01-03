@@ -1,0 +1,257 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_runtests</title>
+  <meta name="keywords" content="stk_runtests">
+  <meta name="description" content="STK_RUNTESTS runs all tests in a given directory (or in STK's searchpath).">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">test</a> &gt; stk_runtests.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/test&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_runtests
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_RUNTESTS runs all tests in a given directory (or in STK's searchpath).</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function stk_runtests(directory) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_RUNTESTS runs all tests in a given directory (or in STK's searchpath).
+
+ FIXME: missing doc</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="stk_test.html" class="code" title="function [x__ret1, x__ret2, x__ret3] = stk_test (x__name, x__flag, x__fid)">stk_test</a>	STK_TEST performs tests for a given M-file.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [n_pass, n_total, n_notest, n_files] = run_all_tests(testdir, basedir)</a></li><li><a href="#_sub2" class="code">function retval = has_tests (f)</a></li><li><a href="#_sub3" class="code">function print_pass_fail (n, p)</a></li><li><a href="#_sub4" class="code">function print_test_file_name (nm)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_RUNTESTS runs all tests in a given directory (or in STK's searchpath).</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% FIXME: missing doc</span>
+0004 <span class="comment">%</span>
+0005 
+0006 <span class="comment">% Copyright Notice</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%    Copyright (C) 2012 SUPELEC</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    This file has been adapted from runtests.m in Octave 3.6.2 (which is</span>
+0013 <span class="comment">%    distributed under the GNU General Public Licence version 3 (GPLv3)).</span>
+0014 <span class="comment">%    The original copyright notice was as follows:</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%        Copyright (C) 2010-2012 John W. Eaton</span>
+0017 
+0018 <span class="comment">% Copying Permission Statement</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%    This file is part of</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0023 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0026 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0027 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0028 <span class="comment">%    option) any later version.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0031 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0032 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0033 <span class="comment">%    License for more details.</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0036 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0037 
+0038 <span class="comment">%% Original Octave doc, to be adapted</span>
+0039 <span class="comment">% -*- texinfo -*-</span>
+0040 <span class="comment">% @deftypefn  {Function File} {} runtests ()</span>
+0041 <span class="comment">% @deftypefnx {Function File} {} runtests (@var{directory})</span>
+0042 <span class="comment">% Execute built-in tests for all function files in the specified directory.</span>
+0043 <span class="comment">% If no directory is specified, operate on all directories in Octave's</span>
+0044 <span class="comment">% search path for functions.</span>
+0045 <span class="comment">% @seealso{rundemos, path}</span>
+0046 <span class="comment">% @end deftypefn</span>
+0047 
+0048 <a name="_sub0" href="#_subfunctions" class="code">function stk_runtests(directory)</a>
+0049 
+0050 <span class="keyword">if</span> nargin == 0
+0051     <span class="comment">% scan all STK directories if no input argument is provided</span>
+0052     dirs = stk_path();
+0053 <span class="keyword">else</span>
+0054     <span class="comment">% otherwise, directory is expected to be a valid directory name</span>
+0055     <span class="keyword">if</span> ~exist(directory, <span class="string">'dir'</span>)
+0056         error(<span class="string">'Directory not found.'</span>);
+0057     <span class="keyword">end</span>
+0058     here = pwd();
+0059     cd(directory);
+0060     dirs = {pwd()}; <span class="comment">% get absolute path</span>
+0061     cd(here);
+0062 <span class="keyword">end</span>
+0063 
+0064 <span class="comment">% number of directories to be explored</span>
+0065 nb_dirs = numel(dirs);
+0066 
+0067 <span class="comment">% run tests all available tests in each directory</span>
+0068 n_total = 0; n_pass = 0; n_files = 0; n_notest = 0;
+0069 <span class="keyword">for</span> i = 1:nb_dirs
+0070     [n_pass_, n_total_, n_notest_, n_files_] = <a href="#_sub1" class="code" title="subfunction [n_pass, n_total, n_notest, n_files] = run_all_tests(testdir, basedir)">run_all_tests</a>(dirs{i}, dirs{i});
+0071     n_total  = n_total + n_total_;
+0072     n_pass   = n_pass + n_pass_;
+0073     n_files  = n_files + n_files_;
+0074     n_notest = n_notest + n_notest_;
+0075 <span class="keyword">end</span>
+0076 
+0077 <span class="keyword">if</span> nb_dirs &gt; 1,
+0078     fprintf(<span class="string">'Summary for all %d directories:\n'</span>, nb_dirs);
+0079     fprintf(<span class="string">' --&gt; passed %d/%d tests\n'</span>, n_pass, n_total);
+0080     fprintf(<span class="string">' --&gt; %d/%d files had no tests\n'</span>, n_notest, n_files);
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="keyword">end</span>
+0084 
+0085 
+0086 <span class="comment">%%%%%%%%%%%%%%%%%</span>
+0087 <span class="comment">% run_all_tests %</span>
+0088 <span class="comment">%%%%%%%%%%%%%%%%%</span>
+0089 
+0090 <a name="_sub1" href="#_subfunctions" class="code">function [n_pass, n_total, n_notest, n_files] = run_all_tests(testdir, basedir)</a>
+0091 
+0092 <span class="comment">% list directory content</span>
+0093 dirinfo = dir(testdir);
+0094 flist = {dirinfo.name};
+0095 
+0096 here = pwd(); cd(basedir);
+0097 
+0098 fprintf (<span class="string">'Processing files in %s:\n\n'</span>, testdir);
+0099 fflush (stdout);
+0100 
+0101 <span class="comment">% init counters</span>
+0102 n_total  = 0;
+0103 n_pass   = 0;
+0104 n_files  = 0;
+0105 n_notest = 0;
+0106 
+0107 <span class="comment">% list of subdirectories to be processed</span>
+0108 subdirs_class = {};
+0109 subdirs_private = {};
+0110 
+0111 <span class="keyword">for</span> i = 1:numel (flist)
+0112     f = flist{i};
+0113     ff = fullfile(testdir, f);
+0114     <span class="keyword">if</span> (length (f) &gt; 2) &amp;&amp; strcmp (f((end-1):end), <span class="string">'.m'</span>)
+0115         n_files = n_files + 1;
+0116         <a href="#_sub4" class="code" title="subfunction print_test_file_name (nm)">print_test_file_name</a> (f);
+0117         <span class="keyword">if</span> <a href="#_sub2" class="code" title="subfunction retval = has_tests (f)">has_tests</a>(ff)
+0118             [p, n] = <a href="stk_test.html" class="code" title="function [x__ret1, x__ret2, x__ret3] = stk_test (x__name, x__flag, x__fid)">stk_test</a> (ff, <span class="string">'quiet'</span>, stdout);
+0119             <span class="comment">% Note: the presence of the third argument (fid=stdout) forces</span>
+0120             <span class="comment">% stk_test in batch mode, which means that it doesn't stop at</span>
+0121             <span class="comment">% the first failed test.</span>
+0122             <a href="#_sub3" class="code" title="subfunction print_pass_fail (n, p)">print_pass_fail</a>(n, p);
+0123             n_total = n_total + n;
+0124             n_pass  = n_pass  + p;
+0125         <span class="keyword">else</span>
+0126             n_notest = n_notest + 1;
+0127             fprintf(<span class="string">' NO TESTS\n'</span>);
+0128         <span class="keyword">end</span>
+0129         fflush(stdout);
+0130     <span class="keyword">elseif</span> dirinfo(i).isdir &amp;&amp; (f(1) == <span class="string">'@'</span>)
+0131         subdirs_class{end+1} = ff; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0132     <span class="keyword">elseif</span> dirinfo(i).isdir &amp;&amp; strcmp(f, <span class="string">'private'</span>)
+0133         subdirs_private{end+1} = ff; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0134     <span class="keyword">end</span>
+0135 <span class="keyword">end</span>
+0136 fprintf(<span class="string">'   --&gt; passed %d/%d tests\n'</span>, n_pass, n_total);
+0137 fprintf(<span class="string">'   --&gt; %d/%d files had no tests\n'</span>, n_notest, n_files);
+0138 fprintf(<span class="string">'\n'</span>);
+0139 
+0140 <span class="keyword">for</span> i = 1:length(subdirs_class)
+0141     [p, n, nnt, nf] = <a href="#_sub1" class="code" title="subfunction [n_pass, n_total, n_notest, n_files] = run_all_tests(testdir, basedir)">run_all_tests</a>(subdirs_class{i}, pwd());
+0142     n_total  = n_total  + n;
+0143     n_pass   = n_pass   + p;
+0144     n_files  = n_files  + nf;
+0145     n_notest = n_notest + nnt;
+0146 <span class="keyword">end</span>
+0147 
+0148 <span class="keyword">for</span> i = 1:length(subdirs_private)
+0149     [p, n, nnt, nf] = <a href="#_sub1" class="code" title="subfunction [n_pass, n_total, n_notest, n_files] = run_all_tests(testdir, basedir)">run_all_tests</a>(subdirs_private{i}, subdirs_private{i});
+0150     n_total  = n_total  + n;
+0151     n_pass   = n_pass   + p;
+0152     n_files  = n_files  + nf;
+0153     n_notest = n_notest + nnt;
+0154 <span class="keyword">end</span>
+0155 
+0156 cd(here);
+0157 
+0158 <span class="keyword">end</span> <span class="comment">% run_all_tests</span>
+0159 
+0160 
+0161 <span class="comment">%%%%%%%%%%%%%</span>
+0162 <span class="comment">% has_tests %</span>
+0163 <span class="comment">%%%%%%%%%%%%%</span>
+0164 
+0165 <a name="_sub2" href="#_subfunctions" class="code">function retval = has_tests (f)</a>
+0166 
+0167 fid = fopen (f);
+0168 <span class="keyword">if</span> (fid &gt;= 0)
+0169     str = fread (fid, <span class="string">'*char'</span>)';
+0170     fclose (fid);
+0171     retval = ~isempty (regexp (str, <span class="string">'^%!(test|assert|error|warning)'</span>, <span class="string">'lineanchors'</span>));
+0172 <span class="keyword">else</span>
+0173     error (<span class="string">'runtests: fopen failed: %s'</span>, f);
+0174 <span class="keyword">end</span>
+0175 
+0176 <span class="keyword">end</span> <span class="comment">% has_tests</span>
+0177 
+0178 
+0179 <span class="comment">%%%%%%%%%%%%%%%%%%%</span>
+0180 <span class="comment">% print_pass_fail %</span>
+0181 <span class="comment">%%%%%%%%%%%%%%%%%%%</span>
+0182 
+0183 <a name="_sub3" href="#_subfunctions" class="code">function print_pass_fail (n, p)</a>
+0184 
+0185 <span class="keyword">if</span> (n &gt; 0)
+0186     fprintf (<span class="string">' PASS %2d/%-2d'</span>, p, n);
+0187     nfail = n - p;
+0188     <span class="keyword">if</span> (nfail &gt; 0)
+0189         fprintf (<span class="string">' FAIL %d'</span>, nfail);
+0190     <span class="keyword">end</span>
+0191 <span class="keyword">end</span>
+0192 fprintf(<span class="string">'\n'</span>);
+0193 
+0194 <span class="keyword">end</span> <span class="comment">% print_pass_fail</span>
+0195 
+0196 
+0197 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0198 <span class="comment">% print_test_file_name %</span>
+0199 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0200 
+0201 <a name="_sub4" href="#_subfunctions" class="code">function print_test_file_name (nm)</a>
+0202 
+0203 filler = repmat(<span class="string">'.'</span>, 1, 50 - length(nm));
+0204 fprintf(<span class="string">'  %s %s'</span>, nm, filler);
+0205 
+0206 <span class="keyword">end</span> <span class="comment">% print_test_file_name</span></pre></div>
+<hr><address>Generated on Thu 03-Jan-2013 16:25:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

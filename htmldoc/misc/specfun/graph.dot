@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  stk_sf_matern [URL="stk_sf_matern.html"];
+  stk_sf_matern32 [URL="stk_sf_matern32.html"];
+  stk_sf_matern52 [URL="stk_sf_matern52.html"];
+}
