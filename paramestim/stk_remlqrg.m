@@ -38,7 +38,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [rl, drl_param, drl_lnv] = stk_remlqrg(model, xi, yi)
-
 stk_narginchk(3, 3);
 
 PARAMPRIOR = isfield( model, 'prior' );
@@ -152,4 +151,3 @@ end
 %!error [J, dJ1, dJ2] = stk_remlqrg(model, xi);
 %!test  [J, dJ1, dJ2] = stk_remlqrg(model, xi, zi);
 %!error [J, dJ1, dJ2] = stk_remlqrg(model, xi, zi, pi);
-

@@ -48,39 +48,32 @@
 
 function [err_msg, err_mnemonic] = stk_narginchk(n_low, n_high)
 
-NOT_ENOUGH_MSG = 'Not enough input arguments.';
-NOT_ENOUGH_MNEMONIC = 'NotEnoughInputArgs';
-
-TOO_MANY_MSG = 'Too many input arguments.';
-TOO_MANY_MNEMONIC = 'TooManyInputArgs';
-
 % Such a funny mistake to do, when calling stk_narginchk()...
 if nargin < 2,
-    stk_error(NOT_ENOUGH_MSG, NOT_ENOUGH_MNEMONIC);
+    stk_error('Not enough input arguments.', 'NotEnoughInputArgs');
 elseif nargin > 2,
-    stk_error(TOO_MANY_MSG, TOO_MANY_MNEMONIC);
-end
-
-% Check that stk_narginchk has been called from a function.
-stack = dbstack();
-if length(stack) == 1,
-    err_msg = 'stk_narginchk() must be called from a function';
-    stk_error(err_msg, 'MustBeCalledFromAFunction');
+    stk_error('Too many input arguments.', TOO_MANY_MNEMONIC);
 end
 
 n_argin = evalin('caller', 'nargin');
 err_msg = [];
 if n_argin < n_low,
-    err_msg = NOT_ENOUGH_MSG;
-    err_mnemonic = NOT_ENOUGH_MNEMONIC;
+    err_msg = 'Not enough input arguments.';
+    err_mnemonic = 'NotEnoughInputArgs';
 elseif n_argin > n_high,
-    err_msg = TOO_MANY_MSG;
-    err_mnemonic = TOO_MANY_MNEMONIC;
+    err_msg = 'Too many input arguments.';
+    err_mnemonic = 'TooManyInputArgs';
 end
 
 % If one of the conditions is violated AND no output argument is requested,
 % then we throw an error
 if (nargout == 0) && ~isempty(err_msg),
+    stack = dbstack();
+    % Check that stk_narginchk has been called from a function.    
+    if length(stack) == 1,
+        err_msg = 'stk_narginchk() must be called from a function';
+        stk_error(err_msg, 'MustBeCalledFromAFunction');
+    end    
     % Pretend that the error has been thrown by the caller
     stack = stack(2:end);
     % And now we proceed to throw the exception.

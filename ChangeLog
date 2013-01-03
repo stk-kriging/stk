@@ -1,5 +1,9 @@
 2013-01-03  Julien Bect  <julien.bect@supelec.fr>
 
+	Made stk_narginchk() slightly more efficient.
+
+	* misc/error/stk_narginchk.m: modified
+
 	Added the text of the GPLv3 license.
 
 	* LICENSE: new
