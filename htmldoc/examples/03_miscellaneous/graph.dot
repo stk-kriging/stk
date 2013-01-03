@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+
+  stk_example_misc01 [URL="stk_example_misc01.html"];
+  stk_example_misc02 [URL="stk_example_misc02.html"];
+  stk_example_misc03 [URL="stk_example_misc03.html"];
+}

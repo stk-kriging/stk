@@ -1,0 +1,156 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_generate_samplepaths</title>
+  <meta name="keywords" content="stk_generate_samplepaths">
+  <meta name="description" content="STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">utils</a> &gt; stk_generate_samplepaths.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for utils&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_generate_samplepaths
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function zsim = stk_generate_samplepaths(model, xt, nb_paths) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process.
+
+ CALL: ZSIM = stk_generate_samplepaths(MODEL, XT)
+
+    generates one sample path ZSIM, using the kriging model MODEL and the
+    evaluation points XT. Both XT and ZSIM are structures, whose field 'a'
+    contains the actual numerical values.
+
+ CALL: ZSIM = stk_generate_samplepaths(MODEL, XT, NB_PATHS)
+
+    generates NB_PATHS sample paths at once.
+
+ NOTE:
+
+    This function generates (discretized) sample paths using a Cholesky
+    factorization of the covariance matrix, and is therefore restricted to
+    moderate values of the number of evaluation points.
+
+ EXAMPLE: see STK/examples/example05.m
+
+ See also <a href="stk_conditioning.html" class="code" title="function zsimc = stk_conditioning(lambda, zi, zsim, xi_ind)">stk_conditioning</a>, chol</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: ZSIM = stk_generate_samplepaths(MODEL, XT)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    generates one sample path ZSIM, using the kriging model MODEL and the</span>
+0006 <span class="comment">%    evaluation points XT. Both XT and ZSIM are structures, whose field 'a'</span>
+0007 <span class="comment">%    contains the actual numerical values.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% CALL: ZSIM = stk_generate_samplepaths(MODEL, XT, NB_PATHS)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    generates NB_PATHS sample paths at once.</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% NOTE:</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%    This function generates (discretized) sample paths using a Cholesky</span>
+0016 <span class="comment">%    factorization of the covariance matrix, and is therefore restricted to</span>
+0017 <span class="comment">%    moderate values of the number of evaluation points.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% EXAMPLE: see STK/examples/example05.m</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% See also stk_conditioning, chol</span>
+0022 
+0023 <span class="comment">% Copyright Notice</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0028 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0029 
+0030 <span class="comment">% Copying Permission Statement</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%    This file is part of</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0035 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0038 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0039 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0040 <span class="comment">%    option) any later version.</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0043 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0044 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0045 <span class="comment">%    License for more details.</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0048 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0049 
+0050 <a name="_sub0" href="#_subfunctions" class="code">function zsim = stk_generate_samplepaths(model, xt, nb_paths)</a>
+0051 
+0052 stk_narginchk(2, 3);
+0053 
+0054 <span class="keyword">if</span> nargin &lt; 3, nb_paths = 1; <span class="keyword">end</span>
+0055 
+0056 <span class="comment">% covariance matrix</span>
+0057 K = stk_make_matcov(model, xt);
+0058 
+0059 <span class="comment">% Cholesky factorization, once and for all</span>
+0060 V = chol(K);
+0061 
+0062 <span class="comment">% generates samplepaths</span>
+0063 zsim.a = V' * randn(size(K,1), nb_paths);
+0064 
+0065 <span class="keyword">end</span> <span class="comment">% function stk_generate_samplepaths</span>
+0066 
+0067 
+0068 <span class="comment">%%%%%%%%%%%%%</span>
+0069 <span class="comment">%%% tests %%%</span>
+0070 <span class="comment">%%%%%%%%%%%%%</span>
+0071 
+0072 <span class="comment">%!shared model xt n nb_paths</span>
+0073 <span class="comment">%!  dim = 1; n = 400; nb_paths = 5;</span>
+0074 <span class="comment">%!  model = stk_model('stk_materncov32_iso', dim);</span>
+0075 <span class="comment">%!  xt = stk_sampling_regulargrid(n, dim, [-1.0; 1.0]);</span>
+0076 
+0077 <span class="comment">%!error  zsim = stk_generate_samplepaths();</span>
+0078 <span class="comment">%!error  zsim = stk_generate_samplepaths(model);</span>
+0079 <span class="comment">%!test   zsim = stk_generate_samplepaths(model, xt);</span>
+0080 <span class="comment">%!test   zsim = stk_generate_samplepaths(model, xt, nb_paths);</span>
+0081 <span class="comment">%!error  zsim = stk_generate_samplepaths(model, xt, nb_paths, log(2));</span>
+0082 
+0083 <span class="comment">%!test</span>
+0084 <span class="comment">%!  zsim = stk_generate_samplepaths(model, xt);</span>
+0085 <span class="comment">%!  assert(isequal(size(zsim.a), [n, 1]));</span>
+0086 
+0087 <span class="comment">%!test</span>
+0088 <span class="comment">%!  zsim = stk_generate_samplepaths(model, xt, nb_paths);</span>
+0089 <span class="comment">%!  assert(isequal(size(zsim.a), [n, nb_paths]));</span></pre></div>
+<hr><address>Generated on Thu 03-Jan-2013 16:25:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

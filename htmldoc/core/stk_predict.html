@@ -1,0 +1,386 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_predict</title>
+  <meta name="keywords" content="stk_predict">
+  <meta name="description" content="STK_PREDICT performs a kriging prediction from data">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">core</a> &gt; stk_predict.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for core&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_predict
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_PREDICT performs a kriging prediction from data</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [zp, lambda, mu, K] = stk_predict(model, xi, zi, xt) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_PREDICT performs a kriging prediction from data 
+
+ CALL: ZP = stk_predict(MODEL, XI, ZI, XP)
+
+    computes the kriging predictor ZP at the points XP, given the observations
+    (XI, ZI) and the prior MODEL. In general (see special cases below), XI, ZI,
+    XP and ZP are structures whose field 'a' contains the actual numerical
+    data. More precisely, on a DIM-dimensional factor space,
+
+     * XI.a must be a NI x DIM matrix, where NI is the number of observations,
+     * ZI.a must be a column vector of length NI,
+     * XP.a must be a NP x DIM matrix, where NP is the number of prediction
+       points,
+     * ZP.a is a column vector of length NP.
+
+    Additionally to the predicted values ZP.a, stk_predict() returns the
+    kriging variances ZP.v at the same points. ZP.v is a column vector of
+    length NP.
+
+ CALL: [ZP, LAMBDA, MU] = stk_predict(MODEL, XI, ZI, XP)
+
+    also returns the matrix of kriging weights LAMBDA and the matrix of
+    Lagrange multipliers MU.
+
+ CALL: [ZP, LAMBDA, MU, K] = stk_predict(MODEL, XI, ZI, XP)
+
+    also returns the posterior covariance matrix K at the locations XP (this is
+    an NP x NP covariance matrix). From a frequentist point of view, K can be
+    seen as the covariance matrix of the prediction errors.
+
+ SPECIAL CASE #1
+
+    If MODEL has a field 'Kx_cache', XI and XP are expected to be vectors of
+    integer indices (instead of structures with an 'a' field). This feature is
+    not fully documented as of today... If XT is empty, it is assumed that
+    predictions must be computed at all points of the underlying discrete
+    space.
+
+ SPECIAL CASE #2
+
+    If ZI is empty, everything but ZP.a is computed. Indeed, neither the
+    kriging variance ZP.v nor the matrices LAMBDA and MU actually depend on the
+    observed values.
+ 
+ EXAMPLE: see examples/example01.m</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov(model, x0, x1, pairwise)">stk_make_matcov</a>	STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function v = ensure_column_vector_(u, uname)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_PREDICT performs a kriging prediction from data</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: ZP = stk_predict(MODEL, XI, ZI, XP)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    computes the kriging predictor ZP at the points XP, given the observations</span>
+0006 <span class="comment">%    (XI, ZI) and the prior MODEL. In general (see special cases below), XI, ZI,</span>
+0007 <span class="comment">%    XP and ZP are structures whose field 'a' contains the actual numerical</span>
+0008 <span class="comment">%    data. More precisely, on a DIM-dimensional factor space,</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%     * XI.a must be a NI x DIM matrix, where NI is the number of observations,</span>
+0011 <span class="comment">%     * ZI.a must be a column vector of length NI,</span>
+0012 <span class="comment">%     * XP.a must be a NP x DIM matrix, where NP is the number of prediction</span>
+0013 <span class="comment">%       points,</span>
+0014 <span class="comment">%     * ZP.a is a column vector of length NP.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    Additionally to the predicted values ZP.a, stk_predict() returns the</span>
+0017 <span class="comment">%    kriging variances ZP.v at the same points. ZP.v is a column vector of</span>
+0018 <span class="comment">%    length NP.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% CALL: [ZP, LAMBDA, MU] = stk_predict(MODEL, XI, ZI, XP)</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    also returns the matrix of kriging weights LAMBDA and the matrix of</span>
+0023 <span class="comment">%    Lagrange multipliers MU.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">% CALL: [ZP, LAMBDA, MU, K] = stk_predict(MODEL, XI, ZI, XP)</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    also returns the posterior covariance matrix K at the locations XP (this is</span>
+0028 <span class="comment">%    an NP x NP covariance matrix). From a frequentist point of view, K can be</span>
+0029 <span class="comment">%    seen as the covariance matrix of the prediction errors.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">% SPECIAL CASE #1</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%    If MODEL has a field 'Kx_cache', XI and XP are expected to be vectors of</span>
+0034 <span class="comment">%    integer indices (instead of structures with an 'a' field). This feature is</span>
+0035 <span class="comment">%    not fully documented as of today... If XT is empty, it is assumed that</span>
+0036 <span class="comment">%    predictions must be computed at all points of the underlying discrete</span>
+0037 <span class="comment">%    space.</span>
+0038 <span class="comment">%</span>
+0039 <span class="comment">% SPECIAL CASE #2</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%    If ZI is empty, everything but ZP.a is computed. Indeed, neither the</span>
+0042 <span class="comment">%    kriging variance ZP.v nor the matrices LAMBDA and MU actually depend on the</span>
+0043 <span class="comment">%    observed values.</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">% EXAMPLE: see examples/example01.m</span>
+0046 
+0047 <span class="comment">% Copyright Notice</span>
+0048 <span class="comment">%</span>
+0049 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0052 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0053 
+0054 <span class="comment">% Copying Permission Statement</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">%    This file is part of</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0059 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0062 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0063 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0064 <span class="comment">%    option) any later version.</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0067 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0068 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0069 <span class="comment">%    License for more details.</span>
+0070 <span class="comment">%</span>
+0071 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0072 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0073 
+0074 <a name="_sub0" href="#_subfunctions" class="code">function [zp, lambda, mu, K] = stk_predict(model, xi, zi, xt)</a>
+0075 stk_narginchk(4, 4);
+0076 
+0077 xi = stk_datastruct(xi);
+0078 zi = stk_datastruct(zi);
+0079 xt = stk_datastruct(xt);
+0080 
+0081 <span class="comment">%=== use indices or matrices for xi &amp; xt ?</span>
+0082 
+0083 use_indices = isfield(model,<span class="string">'Kx_cache'</span>);
+0084 
+0085 <span class="keyword">if</span> use_indices
+0086     <span class="keyword">if</span> isempty(xt.a)
+0087         xt.a = 1:size(model.Kx_cache, 1);
+0088     <span class="keyword">end</span>
+0089     xi.a = <a href="#_sub1" class="code" title="subfunction v = ensure_column_vector_(u, uname)">ensure_column_vector_</a>(xi.a, <span class="string">'xi.a'</span>);
+0090     xt.a = <a href="#_sub1" class="code" title="subfunction v = ensure_column_vector_(u, uname)">ensure_column_vector_</a>(xt.a, <span class="string">'xt.a'</span>);
+0091 <span class="keyword">end</span>
+0092 
+0093 ni = size(xi.a, 1); <span class="comment">% number of observations</span>
+0094 nt = size(xt.a, 1); <span class="comment">% number of test points</span>
+0095 assert(nt &gt; 0);
+0096 
+0097 <span class="keyword">if</span> use_indices
+0098     xi = xi.a(:);
+0099     xt = xt.a(:);
+0100 <span class="keyword">end</span>
+0101 
+0102 assert(isempty(zi.a) || (size(zi.a,1) == ni));
+0103 
+0104 <span class="comment">%=== handle other optional arguments</span>
+0105 
+0106 <span class="comment">% parser = inputParser; % parse optional arguments</span>
+0107 <span class="comment">% parser.addOptional( 'BlockSize', [] );</span>
+0108 <span class="comment">% parser.addOptional( 'DisplayWaitBar', false );</span>
+0109 <span class="comment">% parser.parse( varargin{:} );</span>
+0110 <span class="comment">%</span>
+0111 <span class="comment">% display_waitbar = parser.Results.DisplayWaitBar;</span>
+0112 <span class="comment">% if display_waitbar,</span>
+0113 <span class="comment">%     hwb = waitbar(0,'In stk\_predict(). Please wait...');</span>
+0114 <span class="comment">%     set( hwb, 'Name', 'stk_predict' );</span>
+0115 <span class="comment">% end</span>
+0116 <span class="comment">%</span>
+0117 <span class="comment">% block_size = parser.Results.BlockSize;</span>
+0118 
+0119 display_waitbar = false;
+0120 block_size = [];
+0121 
+0122 <span class="comment">%=== prepare lefthand side of the kriging equation</span>
+0123 
+0124 [Kii,Pi] = <a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov(model, x0, x1, pairwise)">stk_make_matcov</a>(model,  xi);
+0125 
+0126 LS = [[ Kii, Pi                ]; <span class="keyword">...</span>
+0127       [ Pi', zeros(size(Pi,2)) ]];
+0128 
+0129 [LS_Q, LS_R] = qr(LS); <span class="comment">% orthogonal-triangular decomposition</span>
+0130 
+0131 <span class="comment">%=== prepare the output arguments</span>
+0132 
+0133 zp = struct(<span class="string">'v'</span>,zeros(nt,1));
+0134 compute_prediction = ~isempty(zi.a);
+0135 
+0136 <span class="comment">% compute the kriging prediction, or just the variances ?</span>
+0137 <span class="keyword">if</span> compute_prediction, zp.a = zeros(nt, 1); 
+0138 <span class="keyword">else</span> zp.a = zeros(nt, 0); <span class="keyword">end</span>
+0139 
+0140 return_weights = (nargout &gt; 1); <span class="comment">% return kriging weights ?</span>
+0141 <span class="keyword">if</span> return_weights, lambda = zeros(ni, nt); <span class="keyword">end</span>
+0142 
+0143 return_lm = (nargout &gt; 2); <span class="comment">% return Lagrange multipliers ?</span>
+0144 <span class="keyword">if</span> return_lm, mu = zeros(size(Pi, 2), nt); <span class="keyword">end</span>
+0145 
+0146 return_K = (nargout &gt; 3); <span class="comment">% return posterior covariance matrix ?</span>
+0147                           
+0148 <span class="comment">%=== choose nb_blocks &amp; block_size</span>
+0149 
+0150 <span class="comment">% note: only one block if return_K == true</span>
+0151 <span class="comment">%       (we need the full set of lambda's and mu's to compute K)</span>
+0152 
+0153 <span class="keyword">if</span> (~return_K) &amp;&amp; isempty(block_size)
+0154     MAX_RS_SIZE = 5e6; SIZE_OF_DOUBLE = 8; <span class="comment">% in bytes</span>
+0155     block_size = ceil(MAX_RS_SIZE / (ni * SIZE_OF_DOUBLE));
+0156 <span class="keyword">end</span>
+0157 
+0158 <span class="keyword">if</span> return_K || (block_size == inf), 
+0159     <span class="comment">% biggest possible block size</span>
+0160     nb_blocks = 1;
+0161 <span class="keyword">else</span>
+0162     <span class="comment">% blocks of size approx. block_size</span>
+0163     nb_blocks = ceil(nt / block_size);
+0164 <span class="keyword">end</span>
+0165 
+0166 block_size = ceil(nt / nb_blocks);
+0167 
+0168 <span class="comment">%=== MAIN LOOP (over blocks)</span>
+0169 
+0170 linsolve_opt = struct(<span class="string">'UT'</span>, true);
+0171 
+0172 <span class="keyword">for</span> block_num = 1:nb_blocks
+0173     
+0174     <span class="comment">% compute the indices for the current block</span>
+0175     idx_beg = 1 + block_size * (block_num - 1);
+0176     idx_end = min(nt, idx_beg + block_size - 1);
+0177     idx = idx_beg:idx_end;
+0178     
+0179     <span class="comment">% extract the block of prediction locations</span>
+0180     <span class="keyword">if</span> use_indices, xt_block = xt(idx);
+0181     <span class="keyword">else</span> xt_block = struct(<span class="string">'a'</span>, xt.a(idx,:)); <span class="keyword">end</span>
+0182     
+0183     <span class="comment">% right-hand side of the kriging equation</span>
+0184     [Kti, Pt] = <a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov(model, x0, x1, pairwise)">stk_make_matcov</a>(model, xt_block, xi);
+0185     RS = [Kti Pt]';
+0186         
+0187     <span class="comment">% solve the upper-triangular system to get the extended</span>
+0188     <span class="comment">% kriging weights vector (weights + Lagrange multipliers)</span>
+0189     <span class="keyword">if</span> stk_is_octave_in_use(),
+0190         lambda_mu = LS_R \ (LS_Q' * RS); <span class="comment">% linsolve is missing in Octave</span>
+0191     <span class="keyword">else</span>        
+0192         lambda_mu = linsolve(LS_R, LS_Q' * RS, linsolve_opt);
+0193     <span class="keyword">end</span>
+0194     
+0195     <span class="keyword">if</span> return_weights, <span class="comment">% extract weights</span>
+0196         lambda(:, idx) = lambda_mu(1:ni, :); <span class="keyword">end</span>
+0197     
+0198     <span class="keyword">if</span> return_lm, <span class="comment">% extracts Lagrange multipliers</span>
+0199         mu(:, idx) = lambda_mu((ni+1):<span class="keyword">end</span>, :); <span class="keyword">end</span>
+0200     
+0201     <span class="keyword">if</span> compute_prediction, <span class="comment">% compute the kriging mean</span>
+0202         zp.a(idx) = lambda_mu(1:ni, :)' * zi.a; <span class="keyword">end</span>
+0203     
+0204     <span class="comment">% compute kriging variances (this does NOT include the noise variance)</span>
+0205     zp.v(idx) = <a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov(model, x0, x1, pairwise)">stk_make_matcov</a>(model, xt_block, xt_block, true) - dot(lambda_mu, RS)';
+0206 
+0207     <span class="comment">% note: the following modification computes prediction variances for noisy</span>
+0208     <span class="comment">% variance, i.e., including the noise variance also</span>
+0209     <span class="comment">% zp.v(idx) = stk_make_matcov(model, xt, [], true) - dot(lambda_mu, RS)';</span>
+0210     
+0211     b = (zp.v &lt; 0);
+0212     <span class="keyword">if</span> any(b),        
+0213         zp.v(b) = 0.0;
+0214         warning(sprintf([<span class="string">'Correcting numerical inaccuracies in kriging variance.\n'</span> <span class="keyword">...</span>
+0215             <span class="string">'(%d negative variances have been set to zero)'</span>], sum(b)));
+0216     <span class="keyword">end</span>
+0217     
+0218     <span class="keyword">if</span> display_waitbar,
+0219         waitbar( idx_end/nt, hwb, sprintf( <span class="keyword">...</span>
+0220             <span class="string">'In stk\\_predict(): %d/%d predictions completed'</span>,idx_end,nt) );
+0221     <span class="keyword">end</span>
+0222 <span class="keyword">end</span>
+0223 
+0224 <span class="comment">% compute posterior covariance matrix (if requested)</span>
+0225 <span class="keyword">if</span> return_K,
+0226     assert(nb_blocks == 1); <span class="comment">% sanity check</span>
+0227     K0 = <a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov(model, x0, x1, pairwise)">stk_make_matcov</a>(model, xt);
+0228     K = K0 - [lambda; mu]' * RS;
+0229     K = 0.5 * (K + K'); <span class="comment">% enforce symmetry</span>
+0230 <span class="keyword">end</span>
+0231         
+0232 <span class="keyword">if</span> display_waitbar, close(hwb); <span class="keyword">end</span>
+0233 
+0234 <span class="keyword">end</span>
+0235 
+0236 
+0237 <a name="_sub1" href="#_subfunctions" class="code">function v = ensure_column_vector_(u, uname)</a>
+0238 <span class="keyword">if</span> size(u, 2) ~= 1,
+0239     <span class="keyword">if</span> size(u, 1) == 1,
+0240         v = u';
+0241     <span class="keyword">else</span>
+0242         errmsg = sprintf(<span class="string">'%s should be a vector of indices'</span>, uname);
+0243         stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
+0244     <span class="keyword">end</span>
+0245 <span class="keyword">end</span>
+0246 <span class="keyword">end</span>
+0247 
+0248 
+0249 <span class="comment">%%%%%%%%%%%%%</span>
+0250 <span class="comment">%%% tests %%%</span>
+0251 <span class="comment">%%%%%%%%%%%%%</span>
+0252 
+0253 <span class="comment">%!shared n, m, model, x0, x_obs, z_obs, x_prd, y_prd1, idx_obs, idx_prd</span>
+0254 <span class="comment">%!</span>
+0255 <span class="comment">%! n = 10;     % number of observations</span>
+0256 <span class="comment">%! m = n + 1;  % number of predictions</span>
+0257 <span class="comment">%! d = 1;      % dimension of the input space</span>
+0258 <span class="comment">%!</span>
+0259 <span class="comment">%! x0 = stk_sampling_regulargrid(n+m, d, [0; pi]);</span>
+0260 <span class="comment">%!</span>
+0261 <span class="comment">%! idx_obs = 2:2:(n+m-1);</span>
+0262 <span class="comment">%! idx_prd = 1:2:(n+m);</span>
+0263 <span class="comment">%!</span>
+0264 <span class="comment">%! x_obs = struct('a', x0.a(idx_obs));</span>
+0265 <span class="comment">%! z_obs = stk_feval(@sin, x_obs);</span>
+0266 <span class="comment">%! x_prd = struct('a', x0.a(idx_prd));</span>
+0267 <span class="comment">%!</span>
+0268 <span class="comment">%! model = stk_model('stk_materncov32_iso');</span>
+0269 <span class="comment">%! model.order = 0; % this is currently the default, but better safe than sorry</span>
+0270 
+0271 <span class="comment">%!error y_prd1 = stk_predict();</span>
+0272 <span class="comment">%!error y_prd1 = stk_predict(model);</span>
+0273 <span class="comment">%!error y_prd1 = stk_predict(model, x_obs);</span>
+0274 <span class="comment">%!error y_prd1 = stk_predict(model, x_obs, z_obs);</span>
+0275 <span class="comment">%!test  y_prd1 = stk_predict(model, x_obs, z_obs, x_prd);</span>
+0276 <span class="comment">%!error y_prd1 = stk_predict(model, x_obs, z_obs, x_prd, 0);</span>
+0277 
+0278 <span class="comment">%!test</span>
+0279 <span class="comment">%!</span>
+0280 <span class="comment">%! [y_prd1, lambda, mu, K] = stk_predict(model, x_obs, z_obs, x_prd);</span>
+0281 <span class="comment">%! assert(isequal(size(lambda), [n m]));</span>
+0282 <span class="comment">%! assert(isequal(size(mu), [1 m]));  % ordinary kriging</span>
+0283 <span class="comment">%! assert(isequal(size(K), [m m]));</span>
+0284 
+0285 <span class="comment">%!test</span>
+0286 <span class="comment">%!</span>
+0287 <span class="comment">%! %% use of Kx_cache</span>
+0288 <span class="comment">%! model = stk_model('stk_materncov32_iso');</span>
+0289 <span class="comment">%! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);</span>
+0290 <span class="comment">%! y_prd2 = stk_predict(model, idx_obs, z_obs, idx_prd);</span>
+0291 <span class="comment">%!</span>
+0292 <span class="comment">%! %% check that both methods give the same result</span>
+0293 <span class="comment">%! assert(stk_isequal_tolrel(y_prd1, y_prd2));</span></pre></div>
+<hr><address>Generated on Thu 03-Jan-2013 16:25:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

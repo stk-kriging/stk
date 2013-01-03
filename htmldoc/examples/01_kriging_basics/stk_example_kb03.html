@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_example_kb03</title>
+  <meta name="keywords" content="stk_example_kb03">
+  <meta name="description" content="Example 03 constructs a kriging approximation in 2D">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; <a href="index.html">01_kriging_basics</a> &gt; stk_example_kb03.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for examples/01_kriging_basics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_example_kb03
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Example 03 constructs a kriging approximation in 2D</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Example 03 constructs a kriging approximation in 2D
+ ==================================================
+    Construct a kriging approximation in 2D. In this example, the model is
+    estimated from data.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Example 03 constructs a kriging approximation in 2D</span>
+0002 <span class="comment">% ==================================================</span>
+0003 <span class="comment">%    Construct a kriging approximation in 2D. In this example, the model is</span>
+0004 <span class="comment">%    estimated from data.</span>
+0005 
+0006 <span class="comment">% Copyright Notice</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0011 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0012 
+0013 <span class="comment">% Copying Permission Statement</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%    This file is part of</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0018 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0021 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0022 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0023 <span class="comment">%    option) any later version.</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0026 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0027 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0028 <span class="comment">%    License for more details.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0031 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0032 
+0033 stk_disp_examplewelcome();
+0034 
+0035 CONTOUR_LINES = 40; <span class="comment">% number of levels in contour plots</span>
+0036 DOT_STYLE = {<span class="string">'ro'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'r'</span>, <span class="string">'MarkerSize'</span>, 4};
+0037 
+0038 
+0039 <span class="comment">%% CHOICE OF A TWO-DIMENSIONAL TEST FUNCTION</span>
+0040 
+0041 CASENUM = 1;
+0042 
+0043 <span class="keyword">switch</span> CASENUM
+0044     
+0045     <span class="keyword">case</span> 1,  <span class="comment">% the classical BRANIN-HOO test function</span>
+0046         f = @stk_testfun_braninhoo;
+0047         DIM = 2;
+0048         BOX = [[-5; 10], [0; 15]];
+0049         NI = 20;
+0050         
+0051     <span class="keyword">case</span> 2,  <span class="comment">% another test function</span>
+0052         f_ = inline([<span class="string">'exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2'</span> <span class="keyword">...</span>
+0053             <span class="string">'+ 3*sin(4*pi*x1)'</span>], <span class="string">'x1'</span>, <span class="string">'x2'</span>);
+0054         f  = @(x)(f_(x(:,1), x(:,2)));
+0055         DIM = 2;
+0056         BOX = [[-1; 1], [-1; 1]];
+0057         NI = 40; <span class="comment">% this second function is much harder to approximate</span>
+0058         
+0059 <span class="keyword">end</span>
+0060 
+0061 
+0062 <span class="comment">%% COMPUTE AND VISUALIZE THE FUNCTION ON A 80 x 80 REGULAR GRID</span>
+0063 
+0064 <span class="comment">% Size of the regular grid</span>
+0065 NT = 80^2;
+0066 
+0067 <span class="comment">% The function stk_sampling_regulargrid() does the job of creating the grid</span>
+0068 xt = stk_sampling_regulargrid(NT, DIM, BOX);
+0069 
+0070 <span class="comment">% Compute the corresponding responses (stored in zt.a)</span>
+0071 zt = struct(<span class="string">'a'</span>, f(xt.a));
+0072 
+0073 <span class="comment">% Since xt is a regular grid, we can do a contour plot</span>
+0074 figure; h1 = subplot(2, 2, 1); stk_plot2d(@contour, xt, f, CONTOUR_LINES);
+0075 axis(BOX(:)); title(<span class="string">'function to be approximated'</span>);
+0076 
+0077 
+0078 <span class="comment">%% CHOOSE A KRIGING (GAUSSIAN PROCESS) MODEL</span>
+0079 
+0080 <span class="comment">% We start with a generic (anisotropic) Matern covariance function.</span>
+0081 model = stk_model(<span class="string">'stk_materncov_aniso'</span>, DIM);
+0082 
+0083 <span class="comment">% As a default choice, a constant (but unknown) mean is used, i.e.,  model.order = 0.</span>
+0084 <span class="comment">% model.order = 1;  %%% UNCOMMENT TO USE A LINEAR TREND %%%</span>
+0085 <span class="comment">% model.order = 2;  %%% UNCOMMENT TO USE A &quot;FULL QUADRATIC&quot; TREND %%%</span>
+0086 
+0087 <span class="comment">% Good practice: add a small &quot;regularization noise&quot; (nugget)</span>
+0088 MODEL_NOISE_STD = 1e-5;
+0089 model.lognoisevariance = 2 * log(MODEL_NOISE_STD);
+0090 
+0091 
+0092 <span class="comment">%% EVALUATE THE FUNCTION ON A &quot;MAXIMIN LHS&quot; DESIGN</span>
+0093 
+0094 xi = stk_sampling_maximinlhs(NI, DIM, BOX);
+0095 zi = stk_feval(f, xi);
+0096 
+0097 <span class="comment">% Simulate noisy evaluations (optional)</span>
+0098 TRUE_NOISE_STD = 0;
+0099 <span class="keyword">if</span> TRUE_NOISE_STD &gt; 0
+0100     zi.a = zi.a + randn(size(zi.a)) * TRUE_NOISE_STD;
+0101 <span class="keyword">end</span>
+0102 
+0103 <span class="comment">% Add the design points to the first plot</span>
+0104 hold on; plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
+0105 
+0106 
+0107 <span class="comment">%% ESTIMATE THE PARAMETERS OF THE COVARIANCE FUNCTION</span>
+0108 
+0109 <span class="comment">% Initial guess for the parameters of the Matern covariance</span>
+0110 param0 = stk_param_init(model, xi, zi, BOX);
+0111 
+0112 <span class="comment">% % Alternative: user-defined initial guess for the parameters of the Matern covariance</span>
+0113 <span class="comment">% % (see &quot;help stk_materncov_aniso&quot; for more information)</span>
+0114 <span class="comment">% SIGMA2 = var(zi.a);</span>
+0115 <span class="comment">% NU     = 2;</span>
+0116 <span class="comment">% RHO1   = (BOX(2,1) - BOX(1,1)) / 10;</span>
+0117 <span class="comment">% RHO2   = (BOX(2,2) - BOX(1,2)) / 10;</span>
+0118 <span class="comment">% param0 = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);</span>
+0119 
+0120 model.param = stk_param_estim(model, xi, zi, param0);
+0121 
+0122 
+0123 <span class="comment">%% CARRY OUT KRIGING PREDICITION AND VISUALIZE</span>
+0124 
+0125 <span class="comment">% Here, we compute the kriging prediction on each point of the grid</span>
+0126 zp = stk_predict(model, xi, zi, xt);
+0127 
+0128 <span class="comment">% Display the result using a contour plot, to be compared with the contour</span>
+0129 <span class="comment">% lines of the true function</span>
+0130 h2 = subplot(2, 2, 2); stk_plot2d(@contour, xt, zp, CONTOUR_LINES);
+0131 tsc = sprintf(<span class="string">'approximation from %d points'</span>, NI); hold on;
+0132 plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
+0133 hold off; axis(BOX(:)); title(tsc);
+0134 
+0135 
+0136 <span class="comment">%% VISUALIZE THE ACTUAL PREDICTION ERROR AND THE KRIGING STANDARD DEVIATION</span>
+0137 
+0138 h3 = subplot(2, 2, 3); stk_plot2d(@pcolor, xt, log(abs(zp.a - zt.a)));
+0139 hold on; plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
+0140 hold off; axis(BOX(:)); title(<span class="string">'true approx error (log)'</span>);
+0141 
+0142 h4 = subplot(2, 2, 4); stk_plot2d(@pcolor, xt, 0.5 * log(zp.v));
+0143 hold on; plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
+0144 hold off; axis(BOX(:)); title(<span class="string">'kriging std (log)'</span>);</pre></div>
+<hr><address>Generated on Thu 03-Jan-2013 16:25:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

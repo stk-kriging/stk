@@ -1,0 +1,7 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  stk_disp_examplewelcome -> stk_disp_framedtext;
+
+  stk_disp_examplewelcome [URL="stk_disp_examplewelcome.html"];
+  stk_disp_framedtext [URL="stk_disp_framedtext.html"];
+}

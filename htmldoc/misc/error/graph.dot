@@ -1,0 +1,9 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  stk_assert_box -> stk_error;
+  stk_narginchk -> stk_error;
+
+  stk_assert_box [URL="stk_assert_box.html"];
+  stk_error [URL="stk_error.html"];
+  stk_narginchk [URL="stk_narginchk.html"];
+}

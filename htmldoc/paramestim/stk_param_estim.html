@@ -1,0 +1,327 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_param_estim</title>
+  <meta name="keywords" content="stk_param_estim">
+  <meta name="description" content="STK_PARAM_ESTIM estimates the parameters of a covariance function.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">paramestim</a> &gt; stk_param_estim.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for paramestim&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_param_estim
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_PARAM_ESTIM estimates the parameters of a covariance function.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [paramopt, paramlnvopt] = stk_param_estim(model, xi, yi, param0, param0lnv) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_PARAM_ESTIM estimates the parameters of a covariance function.
+
+ CALL: PARAM = stk_param_estim(MODEL, XI, YI, PARAM0)
+
+   estimates the parameters PARAM of the covariance function in MODEL from the
+   data (XI, YI) using the rectricted maximum likelihood (ReML) method. A
+   starting point PARAM0 has to be provided.
+
+ CALL: [PARAM, LNV] = stk_param_estim(MODEL, XI, YI, PARAM0, LNV0)
+
+   also estimate the (logarithm of the) noise variance. This form only applies
+   to the case where the observations are assumed noisy. A starting point
+   (PARAM0, LNV0) has to be provided.
+
+ NOTE: the first form can be used with noisy observations, in which case the
+ variance of the observation noise is assumed to be known (and given by
+ exp(MODEL.lognoisevariance).
+
+ EXAMPLES: see example02.m, example03.m, example08.m</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="stk_remlqrg.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_remlqrg(model, xi, yi)">stk_remlqrg</a>	STK_REMLQRG computes the restricted likelihood of a model given data.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../matlabicon.gif)">
+<li><a href="#_sub1" class="code">function [l,dl] = f_(model, param, xi, yi)</a></li><li><a href="#_sub2" class="code">function dl = nablaf_(model, param, xi, yi)</a></li><li><a href="#_sub3" class="code">function [l,dl] = f_with_noise_(model, param, xi, yi)</a></li><li><a href="#_sub4" class="code">function dl = nablaf_with_noise_(model, param, xi, yi)</a></li><li><a href="#_sub5" class="code">function [lb,ub] = get_default_bounds(model, param0, xi, yi)</a></li><li><a href="#_sub6" class="code">function [lblnv,ublnv] = get_default_bounds_lnv</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_PARAM_ESTIM estimates the parameters of a covariance function.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: PARAM = stk_param_estim(MODEL, XI, YI, PARAM0)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   estimates the parameters PARAM of the covariance function in MODEL from the</span>
+0006 <span class="comment">%   data (XI, YI) using the rectricted maximum likelihood (ReML) method. A</span>
+0007 <span class="comment">%   starting point PARAM0 has to be provided.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% CALL: [PARAM, LNV] = stk_param_estim(MODEL, XI, YI, PARAM0, LNV0)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%   also estimate the (logarithm of the) noise variance. This form only applies</span>
+0012 <span class="comment">%   to the case where the observations are assumed noisy. A starting point</span>
+0013 <span class="comment">%   (PARAM0, LNV0) has to be provided.</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% NOTE: the first form can be used with noisy observations, in which case the</span>
+0016 <span class="comment">% variance of the observation noise is assumed to be known (and given by</span>
+0017 <span class="comment">% exp(MODEL.lognoisevariance).</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% EXAMPLES: see example02.m, example03.m, example08.m</span>
+0020 
+0021 <span class="comment">% Copyright Notice</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
+0026 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0027 
+0028 <span class="comment">% Copying Permission Statement</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%    This file is part of</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0033 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0036 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0037 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0038 <span class="comment">%    option) any later version.</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0041 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0042 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0043 <span class="comment">%    License for more details.</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0046 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0047 
+0048 <a name="_sub0" href="#_subfunctions" class="code">function [paramopt, paramlnvopt] = stk_param_estim </a><span class="keyword">...</span>
+0049     (model, xi, yi, param0, param0lnv)
+0050 
+0051 stk_narginchk(4, 5);
+0052 
+0053 xi = stk_datastruct(xi);
+0054 yi = stk_datastruct(yi);
+0055 
+0056 <span class="comment">% size checking: xi, yi</span>
+0057 <span class="keyword">if</span> size(yi.a, 1) ~= size(xi.a, 1),
+0058     errmsg = <span class="string">'xi.a and yi.a should have the same number of lines.'</span>;
+0059     stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
+0060 <span class="keyword">end</span>
+0061 <span class="keyword">if</span> size(yi.a, 2) ~= 1,
+0062     errmsg = <span class="string">'yi.a should be a column vector.'</span>;
+0063     stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
+0064 <span class="keyword">end</span>
+0065 
+0066 <span class="comment">% TODO: turn param0 into an optional argument</span>
+0067 <span class="comment">%       =&gt; provide a reasonable default choice</span>
+0068 
+0069 <span class="comment">% TODO: think of a better way to tell we want to estimate the noise variance</span>
+0070 NOISEESTIM = (nargin == 5);
+0071 
+0072 <span class="keyword">if</span> NOISEESTIM &amp;&amp; ~isfield(model, <span class="string">'lognoisevariance'</span>)
+0073     model.lognoisevariance = param0lnv;
+0074 <span class="keyword">end</span>
+0075 
+0076 <span class="comment">% TODO: allow user-defined bounds</span>
+0077 [lb, ub] = <a href="#_sub5" class="code" title="subfunction [lb,ub] = get_default_bounds(model, param0, xi, yi)">get_default_bounds</a>(model, param0, xi, yi);
+0078 
+0079 <span class="keyword">if</span> NOISEESTIM
+0080     [lblnv, ublnv] = <a href="#_sub6" class="code" title="subfunction [lblnv,ublnv] = get_default_bounds_lnv ">get_default_bounds_lnv</a>(model, param0lnv, xi, yi);
+0081     lb = [lb ; lblnv];
+0082     ub = [ub ; ublnv];
+0083     param0 = [param0; param0lnv];
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="keyword">switch</span> NOISEESTIM
+0087     <span class="keyword">case</span> false,
+0088         f = @(param)(<a href="#_sub1" class="code" title="subfunction [l,dl] = f_(model, param, xi, yi)">f_</a>(model, param, xi, yi));
+0089         nablaf = @(param)(<a href="#_sub2" class="code" title="subfunction dl = nablaf_(model, param, xi, yi)">nablaf_</a> (model, param, xi, yi));
+0090         <span class="comment">% note: currently, nablaf is only used with sqp in Octave</span>
+0091     <span class="keyword">case</span> true,
+0092         f = @(param)(<a href="#_sub3" class="code" title="subfunction [l,dl] = f_with_noise_(model, param, xi, yi)">f_with_noise_</a>(model, param, xi, yi));
+0093         nablaf = @(param)(<a href="#_sub4" class="code" title="subfunction dl = nablaf_with_noise_(model, param, xi, yi)">nablaf_with_noise_</a> (model, param, xi, yi));
+0094 <span class="keyword">end</span>
+0095 
+0096 bounds_available = ~isempty(lb) &amp;&amp; ~isempty(ub);
+0097 
+0098 <span class="comment">% switch according to preferred optimizer</span>
+0099 <span class="keyword">switch</span> stk_select_optimizer(bounds_available)
+0100     
+0101     <span class="keyword">case</span> 1, <span class="comment">% Octave / sqp</span>
+0102         paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);
+0103         
+0104     <span class="keyword">case</span> 2, <span class="comment">% Matlab / fminsearch (Nelder-Mead)</span>
+0105         options = optimset( <span class="string">'Display'</span>, <span class="string">'iter'</span>,                <span class="keyword">...</span>
+0106             <span class="string">'MaxFunEvals'</span>, 300, <span class="string">'TolFun'</span>, 1e-5, <span class="string">'TolX'</span>, 1e-6  );
+0107         paramopt = fminsearch(f,param0,options);
+0108         
+0109     <span class="keyword">case</span> 3, <span class="comment">% Matlab / fmincon</span>
+0110         <span class="keyword">try</span>
+0111             <span class="comment">% We first try to use the interior-point algorithm, which has</span>
+0112             <span class="comment">% been found to provide satisfactory results in many cases</span>
+0113             options = optimset(<span class="string">'Display'</span>, <span class="string">'iter'</span>, <span class="keyword">...</span>
+0114                 <span class="string">'Algorithm'</span>, <span class="string">'interior-point'</span>, <span class="string">'GradObj'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0115                 <span class="string">'MaxFunEvals'</span>, 300, <span class="string">'TolFun'</span>, 1e-5, <span class="string">'TolX'</span>, 1e-6);
+0116         <span class="keyword">catch</span>
+0117             <span class="comment">% The 'Algorithm' option does not exist in some old versions of</span>
+0118             <span class="comment">% Matlab (e.g., version 3.1.1 provided with R2007a)...</span>
+0119             err = lasterror();
+0120             <span class="keyword">if</span> strcmp(err.identifier, <span class="string">'MATLAB:optimset:InvalidParamName'</span>)
+0121                 options = optimset(<span class="string">'Display'</span>, <span class="string">'iter'</span>, <span class="string">'GradObj'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0122                     <span class="string">'MaxFunEvals'</span>, 300, <span class="string">'TolFun'</span>, 1e-5, <span class="string">'TolX'</span>, 1e-6);
+0123             <span class="keyword">else</span>
+0124                 rethrow(err);
+0125             <span class="keyword">end</span>
+0126         <span class="keyword">end</span>
+0127         paramopt = fmincon(f, param0, [], [], [], [], lb, ub, [], options);
+0128         
+0129     <span class="keyword">otherwise</span>
+0130         error(<span class="string">'Unexpected value returned by stk_select_optimizer.'</span>);
+0131         
+0132 <span class="keyword">end</span>
+0133 
+0134 <span class="keyword">if</span> NOISEESTIM
+0135     paramlnvopt = paramopt(end);
+0136     paramopt(end) = [];
+0137 <span class="keyword">end</span>
+0138 
+0139 <span class="keyword">end</span>
+0140 
+0141 <a name="_sub1" href="#_subfunctions" class="code">function [l,dl] = f_(model, param, xi, yi)</a>
+0142 model.param = param;
+0143 [l, dl] = <a href="stk_remlqrg.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_remlqrg(model, xi, yi)">stk_remlqrg</a>(model, xi, yi);
+0144 <span class="keyword">end</span>
+0145 
+0146 <a name="_sub2" href="#_subfunctions" class="code">function dl = nablaf_(model, param, xi, yi)</a>
+0147 model.param = param;
+0148 [l_ignored, dl] = <a href="stk_remlqrg.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_remlqrg(model, xi, yi)">stk_remlqrg</a>(model, xi, yi); <span class="comment">%#ok&lt;ASGLU&gt;</span>
+0149 <span class="keyword">end</span>
+0150 
+0151 <a name="_sub3" href="#_subfunctions" class="code">function [l,dl] = f_with_noise_(model, param, xi, yi)</a>
+0152 model.param = param(1:end-1);
+0153 model.lognoisevariance  = param(end);
+0154 [l, dl, dln] = <a href="stk_remlqrg.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_remlqrg(model, xi, yi)">stk_remlqrg</a>(model, xi, yi);
+0155 dl = [dl; dln];
+0156 <span class="keyword">end</span>
+0157 
+0158 <a name="_sub4" href="#_subfunctions" class="code">function dl = nablaf_with_noise_(model, param, xi, yi)</a>
+0159 model.param = param(1:end-1);
+0160 model.lognoisevariance  = param(end);
+0161 [l_ignored, dl, dln] = <a href="stk_remlqrg.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_remlqrg(model, xi, yi)">stk_remlqrg</a>(model, xi, yi); <span class="comment">%#ok&lt;ASGLU&gt;</span>
+0162 dl = [dl; dln];
+0163 <span class="keyword">end</span>
+0164 
+0165 <a name="_sub5" href="#_subfunctions" class="code">function [lb,ub] = get_default_bounds(model, param0, xi, yi)</a>
+0166 
+0167 <span class="comment">% constants</span>
+0168 TOLVAR = 5.0;
+0169 TOLSCALE = 5.0;
+0170 
+0171 <span class="comment">% bounds for the variance parameter</span>
+0172 empirical_variance = var(yi.a);
+0173 logvar_lb = min(log(empirical_variance), param0(1)) - TOLVAR;
+0174 logvar_ub = max(log(empirical_variance), param0(1)) + TOLVAR;
+0175 
+0176 dim = size(xi.a, 2);
+0177 
+0178 <span class="keyword">switch</span> model.covariance_type,
+0179     
+0180     <span class="keyword">case</span> {<span class="string">'stk_materncov_aniso'</span>, <span class="string">'stk_materncov_iso'</span>}
+0181         
+0182         nu_lb = min(log(0.5), param0(2));
+0183         nu_ub = max(log(min(50, 10*dim)), param0(2));
+0184         
+0185         range_mid = param0(3:end);
+0186         range_lb  = range_mid(:) - TOLSCALE;
+0187         range_ub  = range_mid(:) + TOLSCALE;
+0188         
+0189         lb = [logvar_lb; nu_lb; range_lb];
+0190         ub = [logvar_ub; nu_ub; range_ub];
+0191         
+0192     <span class="keyword">case</span> {<span class="string">'stk_materncov32_aniso'</span>, <span class="string">'stk_materncov32_iso'</span>, <span class="keyword">...</span>
+0193             <span class="string">'stk_materncov52_aniso'</span>, <span class="string">'stk_materncov52_iso'</span>}
+0194         
+0195         range_mid = param0(2:end);
+0196         range_lb  = range_mid(:) - TOLSCALE;
+0197         range_ub  = range_mid(:) + TOLSCALE;
+0198         
+0199         lb = [logvar_lb; range_lb];
+0200         ub = [logvar_ub; range_ub];
+0201         
+0202     <span class="keyword">otherwise</span>
+0203         
+0204         lb = [];
+0205         ub = [];
+0206         
+0207 <span class="keyword">end</span>
+0208 
+0209 <span class="keyword">end</span>
+0210 
+0211 <a name="_sub6" href="#_subfunctions" class="code">function [lblnv,ublnv] = get_default_bounds_lnv </a><span class="keyword">...</span>
+0212     (model, param0lnv, xi, yi) <span class="comment">%#ok&lt;INUSL&gt;</span>
+0213 
+0214 <span class="comment">% assume NOISEESTIM</span>
+0215 <span class="comment">% constants</span>
+0216 TOLVAR = 0.5;
+0217 
+0218 <span class="comment">% bounds for the variance parameter</span>
+0219 empirical_variance = var(yi.a);
+0220 lblnv = log(eps);
+0221 ublnv = log(empirical_variance) + TOLVAR;
+0222 
+0223 <span class="keyword">end</span>
+0224 
+0225 
+0226 <span class="comment">%%%%%%%%%%%%%</span>
+0227 <span class="comment">%%% tests %%%</span>
+0228 <span class="comment">%%%%%%%%%%%%%</span>
+0229 
+0230 <span class="comment">%!shared f, xi, zi, NI, param0, model</span>
+0231 <span class="comment">%!</span>
+0232 <span class="comment">%! f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );</span>
+0233 <span class="comment">%! DIM = 1; NI = 20; box = [-1.0; 1.0];</span>
+0234 <span class="comment">%! xi = stk_sampling_regulargrid(NI, DIM, box);</span>
+0235 <span class="comment">%!</span>
+0236 <span class="comment">%! SIGMA2 = 1.0;  % variance parameter</span>
+0237 <span class="comment">%! NU     = 4.0;  % regularity parameter</span>
+0238 <span class="comment">%! RHO1   = 0.4;  % scale (range) parameter</span>
+0239 <span class="comment">%! param0 = log([SIGMA2; NU; 1/RHO1]);</span>
+0240 <span class="comment">%!</span>
+0241 <span class="comment">%! model = stk_model('stk_materncov_iso');</span>
+0242 
+0243 <span class="comment">%!test  % noiseless</span>
+0244 <span class="comment">%! zi = stk_feval(f, xi);</span>
+0245 <span class="comment">%! param = stk_param_estim(model, xi, zi, param0);</span>
+0246 
+0247 <span class="comment">%!test  % noisy</span>
+0248 <span class="comment">%! NOISE_STD_TRUE = 0.1;</span>
+0249 <span class="comment">%! NOISE_STD_INIT = 1e-5;</span>
+0250 <span class="comment">%! zi.a = zi.a + NOISE_STD_TRUE * randn(NI, 1);</span>
+0251 <span class="comment">%! model.lognoisevariance = 2 * log(NOISE_STD_INIT);</span>
+0252 <span class="comment">%! [param, lnv] = stk_param_estim ...</span>
+0253 <span class="comment">%!    (model, xi, zi, param0, model.lognoisevariance);</span>
+0254 
+0255 <span class="comment">%!% incorrect number of input arguments</span>
+0256 <span class="comment">%!error param = stk_param_estim()</span>
+0257 <span class="comment">%!error param = stk_param_estim(model);</span>
+0258 <span class="comment">%!error param = stk_param_estim(model, xi);</span>
+0259 <span class="comment">%!error param = stk_param_estim(model, xi, zi);</span>
+0260 <span class="comment">%!error param = stk_param_estim(model, xi, zi, param0, log(eps), pi);</span></pre></div>
+<hr><address>Generated on Thu 03-Jan-2013 16:25:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

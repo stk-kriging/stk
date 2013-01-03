@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_conditioning</title>
+  <meta name="keywords" content="stk_conditioning">
+  <meta name="description" content="STK_CONDITIONING produces conditioned sample paths.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">utils</a> &gt; stk_conditioning.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for utils&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_conditioning
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_CONDITIONING produces conditioned sample paths.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function zsimc = stk_conditioning(lambda, zi, zsim, xi_ind) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_CONDITIONING produces conditioned sample paths.
+
+ CALL: ZSIMC = stk_conditioning(LAMBDA, ZI, ZSIM, XI_IND)
+
+    produces conditioned sample paths ZSMIC from the unconditioned sample paths
+    ZSIM, using the matrix of kriging weights LAMBDA. Conditioning is done with
+    respect to a finite number NI of observations, located at the indices given
+    in XI_IND (vector of length NI), with corresponding observed values ZI.
+
+    The matrix LAMBDA must be of size NI x N, where N is the number of
+    evaluation points for the sample paths; such a matrix is typically provided
+    by stk_predict().
+
+    ZI, ZSIM and ZSIMC are, as usual in STK, structures with an 'a' field that
+    contains the actual values. The input matrix ZSIM.a and the output matrix
+    ZSIMC.a both have size N x NB_PATHS, where NB_PATH is the number sample
+    paths to be dealt with. ZI.a is a column vector of length NI.
+
+ CALL: ZSIMC = stk_conditioning(LAMBDA, ZI, ZSIM)
+
+    assumes that the oberved values ZI correspond to the first NI evaluation
+    points.
+
+ NOTE: stk_conditioning() uses the technique called &quot;conditioning by kriging&quot;
+    (see, e.g., Chiles and Delfiner, Geostatistics: Modeling Spatial
+    Uncertainty, Wiley, 1999)
+
+ EXAMPLE: see STK/examples/example05.m
+
+ See also <a href="stk_generate_samplepaths.html" class="code" title="function zsim = stk_generate_samplepaths(model, xt, nb_paths)">stk_generate_samplepaths</a>, stk_predict</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../matlabicon.gif)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_CONDITIONING produces conditioned sample paths.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: ZSIMC = stk_conditioning(LAMBDA, ZI, ZSIM, XI_IND)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    produces conditioned sample paths ZSMIC from the unconditioned sample paths</span>
+0006 <span class="comment">%    ZSIM, using the matrix of kriging weights LAMBDA. Conditioning is done with</span>
+0007 <span class="comment">%    respect to a finite number NI of observations, located at the indices given</span>
+0008 <span class="comment">%    in XI_IND (vector of length NI), with corresponding observed values ZI.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    The matrix LAMBDA must be of size NI x N, where N is the number of</span>
+0011 <span class="comment">%    evaluation points for the sample paths; such a matrix is typically provided</span>
+0012 <span class="comment">%    by stk_predict().</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%    ZI, ZSIM and ZSIMC are, as usual in STK, structures with an 'a' field that</span>
+0015 <span class="comment">%    contains the actual values. The input matrix ZSIM.a and the output matrix</span>
+0016 <span class="comment">%    ZSIMC.a both have size N x NB_PATHS, where NB_PATH is the number sample</span>
+0017 <span class="comment">%    paths to be dealt with. ZI.a is a column vector of length NI.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">% CALL: ZSIMC = stk_conditioning(LAMBDA, ZI, ZSIM)</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    assumes that the oberved values ZI correspond to the first NI evaluation</span>
+0022 <span class="comment">%    points.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">% NOTE: stk_conditioning() uses the technique called &quot;conditioning by kriging&quot;</span>
+0025 <span class="comment">%    (see, e.g., Chiles and Delfiner, Geostatistics: Modeling Spatial</span>
+0026 <span class="comment">%    Uncertainty, Wiley, 1999)</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">% EXAMPLE: see STK/examples/example05.m</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% See also stk_generate_samplepaths, stk_predict</span>
+0031 
+0032 <span class="comment">% Copyright Notice</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0037 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0038 
+0039 <span class="comment">% Copying Permission Statement</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%    This file is part of</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0044 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0047 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0048 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0049 <span class="comment">%    option) any later version.</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0052 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0053 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0054 <span class="comment">%    License for more details.</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0057 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0058 
+0059 <a name="_sub0" href="#_subfunctions" class="code">function zsimc = stk_conditioning(lambda, zi, zsim, xi_ind)</a>
+0060 
+0061 stk_narginchk(3, 4);
+0062 
+0063 [ni, n] = size(lambda);
+0064 m = size(zsim.a, 2);
+0065 
+0066 <span class="keyword">if</span> nargin &lt; 4,
+0067     xi_ind = (1:ni)';
+0068 <span class="keyword">else</span>
+0069     xi_ind = xi_ind(:);
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="keyword">if</span> ~isequal(size(zi.a), [ni 1])
+0073     stk_error(<span class="string">'lambda and zi have incompatible sizes.'</span>, <span class="string">'InvalidArgument'</span>);
+0074 <span class="keyword">end</span>
+0075 
+0076 <span class="keyword">if</span> ~isequal(size(zsim.a), [n m])
+0077     stk_error(<span class="string">'lambda and zsim have incompatible sizes.'</span>, <span class="string">'InvalidArgument'</span>);
+0078 <span class="keyword">end</span>
+0079 
+0080 <span class="keyword">if</span> ~isequal(size(xi_ind), [ni 1])
+0081     stk_error(<span class="string">'lambda and xi_ind have incompatible sizes.'</span>, <span class="string">'InvalidArgument'</span>);
+0082 <span class="keyword">end</span>
+0083 
+0084 delta = repmat(zi.a, 1, m) - zsim.a(xi_ind, :);
+0085 zsimc.a = zsim.a + lambda' * delta;
+0086 
+0087 <span class="keyword">end</span>
+0088 
+0089 
+0090 <span class="comment">%%%%%%%%%%%%%</span>
+0091 <span class="comment">%%% tests %%%</span>
+0092 <span class="comment">%%%%%%%%%%%%%</span>
+0093 
+0094 <span class="comment">%!shared n m ni xi_ind lambda zsim zi</span>
+0095 <span class="comment">%!</span>
+0096 <span class="comment">%! n = 50; m = 5; ni = 10; xi_ind = 1:ni;</span>
+0097 <span class="comment">%! lambda = 1/ni * ones(ni, n);                % prediction == averaging</span>
+0098 <span class="comment">%! zsim = struct('a', ones(n, m));             % const unconditioned samplepaths</span>
+0099 <span class="comment">%! zi = struct('a', zeros(ni, 1));             % conditioning by zeros</span>
+0100 
+0101 <span class="comment">%!error  zsimc = stk_conditioning();</span>
+0102 <span class="comment">%!error  zsimc = stk_conditioning(lambda);</span>
+0103 <span class="comment">%!error  zsimc = stk_conditioning(lambda, zi);</span>
+0104 <span class="comment">%!test   zsimc = stk_conditioning(lambda, zi, zsim);</span>
+0105 <span class="comment">%!test   zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);</span>
+0106 <span class="comment">%!error  zsimc = stk_conditioning(lambda, zi, zsim, xi_ind, pi^2);</span>
+0107 
+0108 <span class="comment">%!test</span>
+0109 <span class="comment">%!</span>
+0110 <span class="comment">%! zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);</span>
+0111 <span class="comment">%! assert(stk_isequal_tolabs(zsimc, struct('a', zeros(n, m))));</span>
+0112 
+0113 <span class="comment">%!test</span>
+0114 <span class="comment">%!</span>
+0115 <span class="comment">%! zi = struct('a', 2 * ones(ni, 1));          % conditioning by twos</span>
+0116 <span class="comment">%! zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);</span>
+0117 <span class="comment">%! assert(stk_isequal_tolabs(zsimc, struct('a', 2 * ones(n, m))));</span>
+0118 
+0119 <span class="comment">%!test</span>
+0120 <span class="comment">%!</span>
+0121 <span class="comment">%! DIM = 1; nt = 400;</span>
+0122 <span class="comment">%! xt = stk_sampling_regulargrid(nt, DIM, [-1.0; 1.0]);</span>
+0123 <span class="comment">%!</span>
+0124 <span class="comment">%! NI = 6; xi_ind  = [1 20 90 200 300 350];</span>
+0125 <span class="comment">%! xi = struct('a', xt.a(xi_ind, 1));</span>
+0126 <span class="comment">%! zi = struct('a', (1:NI)');</span>
+0127 <span class="comment">%!</span>
+0128 <span class="comment">%! % Carry out the kriging prediction at points xt</span>
+0129 <span class="comment">%! model = stk_model('stk_materncov_iso');</span>
+0130 <span class="comment">%! [ignore_zp, lambda] = stk_predict(model, xi, [], xt);</span>
+0131 <span class="comment">%!</span>
+0132 <span class="comment">%! % Generate (unconditional) sample paths according to the model</span>
+0133 <span class="comment">%! NB_PATHS = 10;</span>
+0134 <span class="comment">%! zsim = stk_generate_samplepaths(model, xt, NB_PATHS);</span>
+0135 <span class="comment">%! zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);</span></pre></div>
+<hr><address>Generated on Thu 03-Jan-2013 16:25:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+</body>
+</html>

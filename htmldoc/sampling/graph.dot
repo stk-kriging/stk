@@ -1,0 +1,10 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  stk_sampling_randomlhs -> stk_sampling_maximinlhs;
+
+  stk_sampling_maximinlhs [URL="stk_sampling_maximinlhs.html"];
+  stk_sampling_olhs [URL="stk_sampling_olhs.html"];
+  stk_sampling_randomlhs [URL="stk_sampling_randomlhs.html"];
+  stk_sampling_randunif [URL="stk_sampling_randunif.html"];
+  stk_sampling_regulargrid [URL="stk_sampling_regulargrid.html"];
+}

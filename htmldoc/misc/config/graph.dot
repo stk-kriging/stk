@@ -1,0 +1,20 @@
+/* Created by mdot for Matlab */
+digraph m2html {
+  stk_compile_all -> stk_get_root;
+  stk_get_root -> stk_set_root;
+  stk_path -> stk_get_root;
+  stk_path -> stk_is_octave_in_use;
+  stk_select_optimizer -> stk_is_fmincon_available;
+  stk_select_optimizer -> stk_is_octave_in_use;
+  stk_set_root -> stk_path;
+
+  stk_compile_all [URL="stk_compile_all.html"];
+  stk_get_root [URL="stk_get_root.html"];
+  stk_is_fmincon_available [URL="stk_is_fmincon_available.html"];
+  stk_is_octave_in_use [URL="stk_is_octave_in_use.html"];
+  stk_is_pct_installed [URL="stk_is_pct_installed.html"];
+  stk_octave_config [URL="stk_octave_config.html"];
+  stk_path [URL="stk_path.html"];
+  stk_select_optimizer [URL="stk_select_optimizer.html"];
+  stk_set_root [URL="stk_set_root.html"];
+}
