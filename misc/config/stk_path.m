@@ -7,9 +7,8 @@
 %
 %    Copyright (C) 2012 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -53,7 +52,7 @@ path = { ...
     fullfile(root, 'misc', 'plot'    ) ...
     fullfile(root, 'misc', 'specfun' ) ...
     fullfile(root, 'misc', 'test'    ) };
-    
+
 % folders that contain examples
 path = { path{:} ...
     fullfile(root, 'examples', '01_kriging_basics'       ) ...

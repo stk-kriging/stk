@@ -4,7 +4,7 @@
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -31,7 +31,7 @@ switch idx(1).type
     
     case {'()', '{}'}
         stk_error('Syntax error', 'SyntaxError');
-                
+        
     case '.'
         t = subsref_(model, idx(1).subs, idx(2:end));
         

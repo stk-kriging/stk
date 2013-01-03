@@ -5,7 +5,7 @@
 %   computes the opposite of the restricted likelihood (denoted by ARL for
 %   Anti-Restricted Likelihood) of MODEL given the data. The function also
 %   returns the gradient dARL_dtheta of ARL with respect to the parameters
-%   of the covariance function and the derivative dARL_dLNV of ARL with 
+%   of the covariance function and the derivative dARL_dLNV of ARL with
 %   respect to the logarithm of the noise variance.
 %
 % EXAMPLE: see paramestim/stk_param_estim.m
@@ -16,7 +16,7 @@
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -46,12 +46,12 @@ NOISEPRIOR = isa(model.noise.cov, 'stk_bayescov');
 if NOISYOBS,
     if (nargout == 3) && ~isa(model.noise.cov, 'stk_homnoisecov')
         error(['In order to estimate the variance of the observation noise' ...
-               'please set model.noise.cov to an object of class stk_homnoisecov.']);
+            'please set model.noise.cov to an object of class stk_homnoisecov.']);
     end
 else
     if NOISEPRIOR,
         error(['Do not set a prior on the noise variance when there is' ...
-               'no observation noise']);
+            'no observation noise']);
     end
     % adding a small observation noise helps
     NOISYOBS = true;
@@ -102,7 +102,7 @@ if nargout >= 2
     
     if PARAMPRIOR
         drl_param = drl_param - priorcov.logpdfgrad;
-    end 
+    end
     
     if nargout >= 3,
         if NOISYOBS,
@@ -146,4 +146,3 @@ end
 
 %!error [J, dJ1, dJ2] = stk_reml();
 %!test  [J, dJ1, dJ2] = stk_reml(model);
-%!error [J, dJ1, dJ2] = stk_reml(model, sqrt(pi));

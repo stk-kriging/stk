@@ -24,7 +24,7 @@
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -67,7 +67,7 @@ end
 if (nargin < 2) || isempty(cparam0),
     cparam0 = model.randomprocess.priorcov.cparam;
 end
-    
+
 % TODO: allow user-defined bounds
 [lb, ub] = stk_get_defaultbounds( ...
     model.randomprocess.priorcov, cparam0, model.observations.z);

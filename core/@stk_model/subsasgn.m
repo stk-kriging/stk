@@ -4,7 +4,7 @@
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -59,7 +59,7 @@ switch field,
             
             if ~strcmp(idx(1).type, '.')
                 stk_error('Illegal subscripting.', 'SyntaxError');
-            end            
+            end
             
             subfield = idx(1).subs;
             if ~isfield(model.(field), subfield)
@@ -75,12 +75,12 @@ switch field,
             else
                 model.(field).(subfield) = subsasgn(model.(field).(subfield), idx, rhs);
             end
-              
+            
         else
             
             msg = 'Direct assignment to randomprocess is not allowed (currently).';
             stk_error(msg, 'DirectAssignmentNotAllowed');
-
+            
         end
         
     otherwise

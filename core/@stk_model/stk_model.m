@@ -43,7 +43,7 @@
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -81,7 +81,7 @@ if nargin < 2,
 end
 
 %=== set default values
-                   
+
 config        = struct('use_cache',       false,  ...
                        'parallel_comput', false,  ...
                        'guess_params',    true    );

@@ -14,7 +14,7 @@
 %    copyright notice was as follows:
 %
 %        Copyright (C) 2005-2012 Paul Kienzle
-%
+
 % Copying Permission Statement
 %
 %    This file is part of

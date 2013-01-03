@@ -17,11 +17,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -109,14 +109,20 @@ end % function stk_sampling_regulargrid
 %%
 % Check error for incorrect number of input arguments
 
-%!shared n, dim, box
+%!shared x, n, dim, box
 %! n = 9; dim = 2; box = [0, 0; 1, 1];
 
-%!error stk_sampling_regulargrid();
-%!error stk_sampling_regulargrid(n);
-%!test  stk_sampling_regulargrid(n, dim);
-%!test  stk_sampling_regulargrid(n, dim, box);
-%!error stk_sampling_regulargrid(n, dim, box, pi);
+%!error x = stk_sampling_regulargrid();
+%!error x = stk_sampling_regulargrid(n);
+%!test  x = stk_sampling_regulargrid(n, dim);
+%!test  x = stk_sampling_regulargrid(n, dim, box);
+%!error x = stk_sampling_regulargrid(n, dim, box, pi);
+
+%% 
+% Check that the output is a struct with a numeric '.a' field
+% (all stk_sampling_* functions should behave similarly in this respect)
+
+%!test assert(isstruct(x) && isnumeric(x.a));
 
 %%
 % Check output argument
@@ -125,7 +131,6 @@ end % function stk_sampling_regulargrid
 %! for dim = 1:3,
 %!   n = 3^dim;
 %!   x = stk_sampling_regulargrid(n, dim);
-%!   assert(isstruct(x) && isnumeric(x.a));
 %!   assert(isequal(size(x.a), [n dim]));
 %!   u = x.a(:);
 %!   assert(~any(isnan(u) | isinf(u)));
@@ -136,7 +141,6 @@ end % function stk_sampling_regulargrid
 %! nn = [3 4 5];
 %! for dim = 1:3,
 %!   x = stk_sampling_regulargrid(nn(1:dim), dim);
-%!   assert(isstruct(x) && isnumeric(x.a));
 %!   assert(isequal(size(x.a), [prod(nn(1:dim)) dim]));
 %!   u = x.a(:);
 %!   assert(~any(isnan(u) | isinf(u)));

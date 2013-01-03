@@ -42,10 +42,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -170,7 +170,7 @@ x = x + q + 1;
 x = (2*x - 1) / (2*n);
 
 % And, finally, convert to box
-x = stk_rescale(x, [], box);
+x = struct('a', stk_rescale(x, [], box));
     
 end % function stk_sampling_olhs
 
@@ -183,15 +183,21 @@ end % function stk_sampling_olhs
 %%
 % Check error for incorrect number of input arguments
 
-%!shared n, d, box, permut
+%!shared x, n, d, box, permut
 %! n = 5; d = 2; box = [0 0; 1, 1]; permut = 1:2;
 
-%!error stk_sampling_olhs();
-%!test  stk_sampling_olhs(n);
-%!test  stk_sampling_olhs(n, d);
-%!test  stk_sampling_olhs(n, d, box);
-%!test  stk_sampling_olhs(n, d, box, permut);
-%!error stk_sampling_olhs(n, d, box, permut, pi);
+%!error x = stk_sampling_olhs();
+%!test  x = stk_sampling_olhs(n);
+%!test  x = stk_sampling_olhs(n, d);
+%!test  x = stk_sampling_olhs(n, d, box);
+%!test  x = stk_sampling_olhs(n, d, box, permut);
+%!error x = stk_sampling_olhs(n, d, box, permut, pi);
+
+%% 
+% Check that the output is a struct with a numeric '.a' field
+% (all stk_sampling_* functions should behave similarly in this respect)
+
+%!test assert(isstruct(x) && isnumeric(x.a));
 
 %%
 % Check output argument
@@ -202,12 +208,12 @@ end % function stk_sampling_olhs
 %!   n = 2^(r+1) + 1; d = 2*r;
 %!   x = stk_sampling_olhs(n, d);
 %!
-%!   assert(isequal(size(x), [n d]));
+%!   assert(isequal(size(x.a), [n d]));
 %!
 %!   box = repmat([-1; 1], 1, d);
 %!   assert(stk_is_lhs(x, n, d, box));
 %!
-%!   w = x' * x;
+%!   w = (x.a)' * x.a;
 %!   assert(stk_isequal_tolabs(w/w(1,1), eye(d)));
 %!
 %! end

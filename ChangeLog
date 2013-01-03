@@ -1,3 +1,38 @@
+2013-01-03  Julien Bect  <julien.bect@supelec.fr>
+
+	Removed the NEWS file (to be written after creating the
+	maintenance branch for a new release).
+
+	* NEWS: removed
+
+	Restored '.a' outputs for all stk_sampling_* functions and
+	streamlined unit tests for that.
+
+	* sampling/stk_sampling_olhs.m: modified
+	* sampling/stk_sampling_randunif.m: modified
+	* sampling/stk_sampling_regulargrid.m: modified
+	* sampling/stk_sampling_randomlhs.m: modified
+	* sampling/stk_sampling_maximinlhs.m: modified
+
+2013-01-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a script to generate the HTML documentation.
+
+	* stk_makedoc.m: new script
+
+	Fixed a bug in M2HTML (affecting option 'ignoredDir').
+
+	* misc/m2html/m2html.m: modified
+
+	Added M2HTML version 1.5 (by Guillaume Flandin).
+
+	* misc/m2html: new
+
+	Removing folder ./htmldoc (to be generated after creating the
+	maintenance branch for a new release).
+
+	* htmldoc: removed
+
 2012-12-31  Julien Bect  <julien.bect@supelec.fr>
 
 	Fixing bugs in stk_test() and stk_runtests().

@@ -9,7 +9,7 @@
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -47,10 +47,9 @@ switch CASENUM
         DIM = 2;
         BOX = [[-5; 10], [0; 15]];
         NI = 20;
-
+        
     case 2,  % another test function
-        f_ = inline(['exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2' ...
-		      '+ 3*sin(4*pi*x1)'], 'x1', 'x2');
+        f_ = inline(['exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2 + 3*sin(4*pi*x1)'], 'x1', 'x2');
         f  = @(x)(f_(x(:,1), x(:,2)));
         DIM = 2;
         BOX = [[-1; 1], [-1; 1]];

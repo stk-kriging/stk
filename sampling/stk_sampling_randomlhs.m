@@ -16,11 +16,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -65,14 +65,20 @@ end % function stk_sampling_randomlhs
 %%
 % Check error for incorrect number of input arguments
 
-%!shared n, dim, box
+%!shared x, n, dim, box
 %! n = 10; dim = 2; box = [0, 0; 1, 1];
 
-%!error stk_sampling_randomlhs();
-%!error stk_sampling_randomlhs(n);
-%!test  stk_sampling_randomlhs(n, dim);
-%!test  stk_sampling_randomlhs(n, dim, box);
-%!error stk_sampling_randomlhs(n, dim, box, pi);
+%!error x = stk_sampling_randomlhs();
+%!error x = stk_sampling_randomlhs(n);
+%!test  x = stk_sampling_randomlhs(n, dim);
+%!test  x = stk_sampling_randomlhs(n, dim, box);
+%!error x = stk_sampling_randomlhs(n, dim, box, pi);
+
+%% 
+% Check that the output is a struct with a numeric '.a' field
+% (all stk_sampling_* functions should behave similarly in this respect)
+
+%!test assert(isstruct(x) && isnumeric(x.a));
 
 %%
 % Check output argument
@@ -80,7 +86,6 @@ end % function stk_sampling_randomlhs
 %!test
 %! for dim = 1:5,
 %!   x = stk_sampling_randomlhs(n, dim);
-%!   assert(isstruct(x) && isnumeric(x.a));
 %!   assert(isequal(size(x.a), [n dim]));
 %!   u = x.a(:);
 %!   assert(~any(isnan(u) | isinf(u)));

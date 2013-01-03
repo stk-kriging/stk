@@ -21,7 +21,7 @@
 % BE CAREFUL:
 %
 %    stk_make_matcov(MODEL, X0) and stk_makematcov(MODEL, X0, X0) are NOT
-%    equivalent, unless model.noise is an stk_nullcov (the noise variance is 
+%    equivalent, unless model.noise is an stk_nullcov (the noise variance is
 %    added on the diagonal of the covariance matrix).
 
 % Copyright Notice
@@ -30,7 +30,7 @@
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -59,12 +59,12 @@ if (nargin > 2) && isstruct(x1), x1 = x1.a; end
 %=== guess which syntax has been used based on the second input arg
 
 switch nargin
-
+    
     case 1, % stk_make_matcov(model)
         make_matcov_auto = true;
         pairwise = false;
         x0 = model.observations.x;
-
+        
     case 2, % stk_make_matcov(model, x0)
         make_matcov_auto = true;
         pairwise = false;
@@ -81,66 +81,66 @@ switch nargin
 end
 
 switch  model.domain.type
-
+    
     case 'discrete',
-
+        
         switch model.private.config.use_cache
-
+            
             case true,  % handle the case where a 'Kx_cache' field is present
-                        % NB: this feature only works with a discrete domain
-			    if ~pairwise,
-			        if make_matcov_auto,
-            			K = model.private.Kx_cache(x0, x0);
-			        else
-        			    K = model.private.Kx_cache(x0, x1);
-					end
-			    else
-			        if make_matcov_auto,
-			            idx = sub2ind(size(model.Kx_cache), x0, x0);
-			            K = model.private.Kx_cache(idx);
-			        else
-			            idx = sub2ind(size(model.Kx_cache), x0, x1);
-			            K = model.private.Kx_cache(idx);
-			        end        
-			    end
-
+                % NB: this feature only works with a discrete domain
+                if ~pairwise,
+                    if make_matcov_auto,
+                        K = model.private.Kx_cache(x0, x0);
+                    else
+                        K = model.private.Kx_cache(x0, x1);
+                    end
+                else
+                    if make_matcov_auto,
+                        idx = sub2ind(size(model.Kx_cache), x0, x0);
+                        K = model.private.Kx_cache(idx);
+                    else
+                        idx = sub2ind(size(model.Kx_cache), x0, x1);
+                        K = model.private.Kx_cache(idx);
+                    end
+                end
+                
             case false, % handle the case where the covariance matrix must be computed
                 error('feature not implemented yet'); % FIXME
         end
         
     case 'continuous'
-
-		% Blocking parameters for parallel computing
-		% a) If the size of the covariance matrix to be computed is smaller than
-		%    MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.
-		% b) If it is decided to use parfor, the number of blocks will be chosen
-		%    in such a way that blocks smaller than MIN_BLOCK_SIZE are never used
-		MIN_SIZE_FOR_BLOCKING = 500^2;
-		MIN_BLOCK_SIZE = 100^2;
-    
-	    % Number of covariance values to be computed ?	    
-	    N0 = size(x0, 1);
+        
+        % Blocking parameters for parallel computing
+        % a) If the size of the covariance matrix to be computed is smaller than
+        %    MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.
+        % b) If it is decided to use parfor, the number of blocks will be chosen
+        %    in such a way that blocks smaller than MIN_BLOCK_SIZE are never used
+        MIN_SIZE_FOR_BLOCKING = 500^2;
+        MIN_BLOCK_SIZE = 100^2;
+        
+        % Number of covariance values to be computed ?
+        N0 = size(x0, 1);
         if make_matcov_auto,
-    	    if ~pairwise,
-    	        N = N0 * N0;
-    	    else
-    	        N = N0;
-    	    end
-    	else
-    	    N1 = size(x1, 1);
-    	    if ~pairwise
-    	        N = N0 * N1;
-    	    else
-    	        if N1 ~= N0,
-    	            errmsg = 'x0 and x1 should have the same number of lines.';
-    	            stk_error(errmsg, 'InconsistentDimensions');
-    	        end
-    	        N = N0;
-    	    end
-    	end
-
-        % Decide whether parallel computing should be used     
-    	% note: parallelization is not implemented in the "pairwise" case
+            if ~pairwise,
+                N = N0 * N0;
+            else
+                N = N0;
+            end
+        else
+            N1 = size(x1, 1);
+            if ~pairwise
+                N = N0 * N1;
+            else
+                if N1 ~= N0,
+                    errmsg = 'x0 and x1 should have the same number of lines.';
+                    stk_error(errmsg, 'InconsistentDimensions');
+                end
+                N = N0;
+            end
+        end
+        
+        % Decide whether parallel computing should be used
+        % note: parallelization is not implemented in the "pairwise" case
         if pairwise || (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
             ncores = 1; % do not use parallel computing
         else
@@ -156,7 +156,7 @@ switch  model.domain.type
             
             % FIXME: avoid computing twice each off-diagonal term
             if ncores == 1, % parallelization is not used
-	            K = feval(cov, x0, x0, -1, pairwise);
+                K = feval(cov, x0, x0, -1, pairwise);
             else
                 K = stk_make_matcov_auto_parfor(cov, x0, ncores, MIN_BLOCK_SIZE);
             end
@@ -167,7 +167,7 @@ switch  model.domain.type
         else
             
             if ncores == 1, % parallelization is not used
-	            K = feval(cov, x0, x1, -1, pairwise);
+                K = feval(cov, x0, x1, -1, pairwise);
             else
                 K = stk_make_matcov_inter_parfor(cov, x0, x1, ncores, MIN_BLOCK_SIZE);
             end
@@ -187,7 +187,7 @@ end
 
 %!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
 %! n0 = 20; n1 = 10; d = 4;
-%! model = stk_model('stk_materncov_aniso', d); 
+%! model = stk_model('stk_materncov_aniso', d);
 %! model.randomprocess.priormean = stk_lm('affine');
 %! model2 = model;
 %! model2.noise.cov = stk_homnoisecov(0.1^2); % std 0.1
@@ -212,7 +212,7 @@ end
 %!% In the noiseless case, (1) and (2) should give the same results
 %!test  assert(isequal(Kb, Ka));
 
-%!% In the noisy case, however... 
+%!% In the noisy case, however...
 %!test  [Ka, Pa] = stk_make_matcov(model2, x0);           % (1')
 %!test  [Kb, Pb] = stk_make_matcov(model2, x0, x0);       % (2')
 %!error assert(isequal(Kb, Ka));

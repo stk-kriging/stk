@@ -5,7 +5,7 @@
 %    Copyright (C) 2012 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -46,7 +46,7 @@ end
 err = [];
 
 try
-    run(scriptname);    
+    run(scriptname);
 catch %#ok<CTCH>
     err = lasterror(); %#ok<LERR>
 end

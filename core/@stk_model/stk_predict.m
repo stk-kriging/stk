@@ -1,10 +1,10 @@
-% STK_PREDICT performs a kriging prediction from data 
+% STK_PREDICT performs a kriging prediction from data
 %
 % CALL: ZP = stk_predict(MODEL, XP)
 %
 %    computes the kriging predictor ZP at the points XP, using the kriging model
 %    MODEL. In general (see special cases below), XP and ZP are structures whose
-%    field 'a' contains the actual numerical data. More precisely, on a 
+%    field 'a' contains the actual numerical data. More precisely, on a
 %    DIM-dimensional factor space,
 %
 %     * XP.a must be a NP x DIM matrix, where NP is the number of prediction
@@ -30,15 +30,15 @@
 %
 %    If MODEL.domain.type is discrete, MODEL.observations.x.a and XP.a are expected
 %    to be vectors of integer indices. This feature is not fully documented
-%    as of today... If XP is empty, it is assumed that predictions must be 
+%    as of today... If XP is empty, it is assumed that predictions must be
 %    computed at all points of the underlying discrete space.
 %
 % SPECIAL CASE #2
 %
-%    If MODEL.observations.z is empty, everything but ZP.a is computed. 
+%    If MODEL.observations.z is empty, everything but ZP.a is computed.
 %    Indeed, neither the kriging variance ZP.v nor the matrices LAMBDA and
 %    MU actually depend on the observed values.
-% 
+%
 % EXAMPLE: see examples/example01.m
 
 % Copyright Notice
@@ -47,7 +47,7 @@
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -87,7 +87,7 @@ switch model.domain.type
             end
         end
         
-    case 'continuous',        
+    case 'continuous',
         assert(~isempty(xt.a));
     otherwise
         error('model.domain.type should be either "continuous" or "discrete"');
@@ -117,7 +117,7 @@ zp = struct('v', zeros(nt, 1));
 compute_prediction = ~isempty(model.observations.z);
 
 % compute the kriging prediction, or just the variances ?
-if compute_prediction, zp.a = zeros(nt, 1); 
+if compute_prediction, zp.a = zeros(nt, 1);
 else zp.a = zeros(nt, 0); end
 
 return_weights = (nargout > 1); % return kriging weights ?
@@ -138,8 +138,8 @@ if (~return_K) && isempty(block_size)
     block_size = ceil(MAX_RS_SIZE / (ni * SIZE_OF_DOUBLE));
 end
 
-if return_K || (block_size == inf), 
-    % biggest possible block size    
+if return_K || (block_size == inf),
+    % biggest possible block size
     nb_blocks = 1;
 else
     % blocks of size approx. block_size
@@ -165,12 +165,12 @@ for block_num = 1:nb_blocks
     % right-hand side of the kriging equation
     [Kti, Pt] = stk_make_matcov(model, xt_block, model.observations.x);
     RS = [Kti Pt]';
-        
+    
     % solve the upper-triangular system to get the extended
     % kriging weights vector (weights + Lagrange multipliers)
     if stk_is_octave_in_use(),
         lambda_mu = LS_R \ (LS_Q' * RS); % linsolve is missing in Octave
-    else        
+    else
         lambda_mu = linsolve(LS_R, LS_Q' * RS, linsolve_opt);
     end
     
@@ -185,13 +185,13 @@ for block_num = 1:nb_blocks
     
     % compute kriging variances (this does NOT include the noise variance)
     zp.v(idx) = stk_make_matcov(model, xt_block, xt_block, true) - dot(lambda_mu, RS)';
-
+    
     % note: the following modification computes prediction variances for (future)
-	% noisy observations, i.e., including the noise variance also
+    % noisy observations, i.e., including the noise variance also
     % zp.v(idx) = stk_make_matcov(model, xt, [], true) - dot(lambda_mu, RS)';
     
     b = (zp.v < 0);
-    if any(b),        
+    if any(b),
         zp.v(b) = 0.0;
         warning(sprintf(['Correcting numerical inaccuracies in kriging variance.\n' ...
             '(%d negative variances have been set to zero)'], sum(b)));
@@ -210,7 +210,7 @@ if return_K,
     K = K0 - [lambda; mu]' * RS;
     K = 0.5 * (K + K'); % enforce symmetry
 end
-        
+
 if display_waitbar, close(hwb); end
 
 end
@@ -233,7 +233,7 @@ end
 %! x_obs = struct('a', x0.a(idx_obs));
 %! z_obs = stk_feval(@sin, x_obs);
 %! x_prd = struct('a', x0.a(idx_prd));
-%! 
+%!
 %! model = stk_model('stk_materncov32_iso');
 %! model = stk_setobs(model, x_obs, z_obs);
 %! model.randomprocess.priormean = stk_lm('constant');
@@ -245,7 +245,7 @@ end
 %!error y_prd1 = stk_predict(model, x_prd, 0);
 
 %!test
-%! [y_prd1, lambda, mu, K] = stk_predict(model, x_prd); 
+%! [y_prd1, lambda, mu, K] = stk_predict(model, x_prd);
 %! assert(isequal(size(lambda), [n m]));
 %! assert(isequal(size(mu), [1 m]));  % ordinary kriging
 %! assert(isequal(size(K), [m m]));
