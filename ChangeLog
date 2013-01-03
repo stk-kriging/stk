@@ -1,5 +1,10 @@
 2013-01-03  Julien Bect  <julien.bect@supelec.fr>
 
+	Removed the NEWS file (to be written after creating the
+	maintenance branch for a new release).
+
+	* NEWS: removed
+
 	Restored '.a' outputs for all stk_sampling_* functions and
 	streamlined unit tests for that.
 
@@ -23,7 +28,7 @@
 
 	* misc/m2html: new
 
-	Removing folder ./htmldoc (to be generated when creating the
+	Removing folder ./htmldoc (to be generated after creating the
 	maintenance branch for a new release).
 
 	* htmldoc: removed
