@@ -32,7 +32,7 @@
 %
 %        Author: Kurt Hornik <Kurt.Hornik@wu-wien.ac.at>
 %        Adapted-By: jwe
-%
+
 % Copying Permission Statement
 %
 %    This file is part of

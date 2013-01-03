@@ -24,7 +24,7 @@
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -52,7 +52,7 @@ stk_narginchk(4, 5);
 
 xi = stk_datastruct(xi);
 yi = stk_datastruct(yi);
-    
+
 % size checking: xi, yi
 if size(yi.a, 1) ~= size(xi.a, 1),
     errmsg = 'xi.a and yi.a should have the same number of lines.';
@@ -190,7 +190,7 @@ switch model.covariance_type,
         ub = [logvar_ub; nu_ub; range_ub];
         
     case {'stk_materncov32_aniso', 'stk_materncov32_iso', ...
-          'stk_materncov52_aniso', 'stk_materncov52_iso'}
+            'stk_materncov52_aniso', 'stk_materncov52_iso'}
         
         range_mid = param0(2:end);
         range_lb  = range_mid(:) - TOLSCALE;

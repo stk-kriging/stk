@@ -42,10 +42,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of

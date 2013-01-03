@@ -2,7 +2,7 @@
 %
 % CALL: D = stk_filldist(X, Y)
 %
-%    computes the fill distance D of X using the "test set" Y. More 
+%    computes the fill distance D of X using the "test set" Y. More
 %    precisely, if X is an n x d matrix and Y an m x d matrix, then
 %
 %       D = max_{1 <= j <= m} min_{1 <= i <= n} norm(X(i,:) - Y(j,:)),
@@ -13,7 +13,7 @@
 % CALL: [D, ARGMAX] = stk_filldist(X, Y)
 %
 %    also returns the value ARGMAX of the index j for which the maximum
-%    is obtained. (If the maximum is obtained for several values of j, 
+%    is obtained. (If the maximum is obtained for several values of j,
 %    the smallest is returned.)
 %
 % See also: stk_distance_matrix, stk_mindist
@@ -23,7 +23,7 @@
 %    Copyright (C) 2012 SUPELEC
 %
 %    Author: Julien Bect <julien.bect@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -47,7 +47,7 @@
 %%
 % Two non-empty matrices are expected as input arguments
 
-%!error stk_filldist(0.0)            % incorrect nb of arguments  
+%!error stk_filldist(0.0)            % incorrect nb of arguments
 %!error stk_filldist(0.0, 0.0, pi)   % incorrect nb of arguments
 %!error stk_filldist(0.0, [])        % second arg is empty
 %!error stk_filldist([], 0.0)        % first arg is empty

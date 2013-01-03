@@ -18,7 +18,7 @@
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -130,4 +130,3 @@ end % function stk_dist
 %! D1 = stk_dist_pairwise(x, y);
 %! D2 = stk_dist_matrixy(x, y);
 %! assert(stk_isequal_tolabs(D1, diag(D2)));
- 

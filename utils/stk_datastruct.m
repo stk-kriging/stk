@@ -5,7 +5,7 @@
 %    Copyright (C) 2012 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -43,7 +43,7 @@ if isempty(x)
 end
 
 xname = inputname();
-if isempty(xname), 
+if isempty(xname),
     errmsg = 'x must be a matrix or a structure with an ''a'' field.';
     stk_error(errmsg, 'IncorrectArgument');
 else

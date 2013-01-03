@@ -5,7 +5,7 @@
 %    Copyright (C) 2012 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -30,7 +30,7 @@ function y = stk_rescale(x, box1, box2)
 stk_narginchk(3, 3);
 
 % read argument x
-if isstruct(x), 
+if isstruct(x),
     xx = x.a;
 else
     xx = x;
@@ -51,7 +51,7 @@ end
 if ~isempty(box1),
     xmin = box1(1, :);
     xmax = box1(2, :);
-    delta = xmax - xmin;   
+    delta = xmax - xmin;
     zz = (xx - repmat(xmin, n, 1)) ./ repmat(1./delta, n, 1);
 else
     zz = xx;
@@ -61,7 +61,7 @@ end
 if ~isempty(box2),
     zmin = box2(1, :);
     zmax = box2(2, :);
-    delta = zmax - zmin;   
+    delta = zmax - zmin;
     yy = repmat(zmin, n, 1) + zz .* repmat(delta, n, 1);
 else
     yy = zz;

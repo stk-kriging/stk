@@ -1,9 +1,11 @@
+% STK_EXAMPLE_MISC03 ... [FIXME: missing documentation]
+
 % Copyright Notice
 %
 %    Copyright (C) 2012 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -70,8 +72,8 @@ for k = 1:length(std_list),
     % Prior on the parameters of the Matern covariance
     model.prior.mean = param0;
     model.prior.invcov = eye(length(param0)) ./ (std_list(k)^2);
-
-    % Estimate covariance parameters (with a prior)    
+    
+    % Estimate covariance parameters (with a prior)
     model.param = stk_param_estim(model, xi, zi, param0);
     param_opt(:, k) = model.param;
     
@@ -79,7 +81,7 @@ for k = 1:length(std_list),
     zp = stk_predict(model, xi, zi, xt);
     
     % Plot predicted values and pointwise confidences intervals
-    haxis = subplot(2, 2, k); stk_plot1d(xi, zi, xt, [], zp, haxis);    
+    haxis = subplot(2, 2, k); stk_plot1d(xi, zi, xt, [], zp, haxis);
     xlabel('input x'); ylabel('predicted output z');
     h = title(sprintf('prior std = %.2f', std_list(k)));
     set(h, 'FontWeight', 'bold');

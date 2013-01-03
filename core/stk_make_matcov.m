@@ -30,7 +30,7 @@
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%
+
 % Copying Permission Statement
 %
 %    This file is part of
