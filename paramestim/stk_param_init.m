@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -27,16 +27,12 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [param, lnv] = stk_param_init(model, xi, yi, box, noisy)
-
 stk_narginchk(3, 5);
-
-xi = stk_datastruct(xi);
-yi = stk_datastruct(yi);
 
 %%% first, default values for arguments 'box' and 'noisy'
 
 if (nargin < 4) || isempty(box),
-    box = [min(xi.a); max(xi.a)];
+    box = [min(xi); max(xi)];
 end
 
 if nargin < 5,
@@ -48,11 +44,11 @@ end
 switch model.covariance_type
     
     case 'stk_materncov_iso'
-        nu = 5/2 * size(xi.a, 2);
+        nu = 5/2 * size(xi, 2);
         [param, lnv] = paraminit_(xi, yi, box, nu, model.order, noisy);
         
     case 'stk_materncov_aniso'
-        nu = 5/2 * size(xi.a, 2);
+        nu = 5/2 * size(xi, 2);
         xi = stk_normalize(xi, box);
         [param, lnv] = paraminit_(xi, yi, box, nu, model.order, noisy);
         param = [param(1:2); param(3) - log(diff(box, [], 1))'];
@@ -112,9 +108,10 @@ for eta = eta_list
         [K, P] = stk_make_matcov(model, xi);
         % estimate sigma2
         % (TODO: use Cholesky ?)
-        beta = (P' * (K \ P)) \ (P' * yi.a);
-        zi = yi.a - P * beta;
-        sigma2 = 1 / (size(xi.a, 1) - length(beta)) * zi' * (K \ zi);
+        yi_ = double(yi);
+        beta = (P' * (K \ P)) \ (P' * yi_);
+        zi = yi_ - P * beta;
+        sigma2 = 1 / (size(xi, 1) - length(beta)) * zi' * (K \ zi);
         % now compute the antilog-likelihood
         if sigma2 > 0
             model.param(1) = log(sigma2);

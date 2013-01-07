@@ -66,7 +66,7 @@ else % at least one input point
     xdata = stk_rescale(xx, [], box);    
 end
 
-x = struct('a', xdata);
+x = stk_dataframe(xdata);
 
 end
 
@@ -127,10 +127,10 @@ end
 %!error x = stk_sampling_maximinlhs(n, dim, box, niter, pi);
 
 %% 
-% Check that the output is a struct with a numeric '.a' field
+% Check that the output is a dataframe
 % (all stk_sampling_* functions should behave similarly in this respect)
 
-%!test assert(isstruct(x) && isnumeric(x.a));
+%!test assert(isa(x, 'stk_dataframe'));
 
 %%
 % Check output argument
@@ -138,8 +138,8 @@ end
 %!test
 %! for dim = 1:5,
 %!   x = stk_sampling_randomlhs(n, dim);
-%!   assert(isequal(size(x.a), [n dim]));
-%!   u = x.a(:);
+%!   assert(isequal(size(x), [n dim]));
+%!   u = double(x); u = u(:);
 %!   assert(~any(isnan(u) | isinf(u)));
 %!   assert((min(u) >= 0) && (max(u) <= 1));
 %!   assert(stk_is_lhs(x, n, dim));

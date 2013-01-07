@@ -22,7 +22,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -60,7 +60,11 @@ K = stk_make_matcov(model, xt);
 V = chol(K);
 
 % generates samplepaths
-zsim.a = V' * randn(size(K,1), nb_paths);
+zsim_data = V' * randn(size(K,1), nb_paths);
+
+% store the result in a dataframe
+zsim_varnames = arrayfun(@(i)(sprintf('z%d', nb_paths)), 1:10, 'UniformOutput', false);
+zsim = stk_dataframe(zsim_data, zsim_varnames);
 
 end % function stk_generate_samplepaths
 
@@ -82,8 +86,8 @@ end % function stk_generate_samplepaths
 
 %!test
 %!  zsim = stk_generate_samplepaths(model, xt);
-%!  assert(isequal(size(zsim.a), [n, 1]));
+%!  assert(isequal(size(zsim), [n, 1]));
 
 %!test
 %!  zsim = stk_generate_samplepaths(model, xt, nb_paths);
-%!  assert(isequal(size(zsim.a), [n, nb_paths]));
+%!  assert(isequal(size(zsim), [n, nb_paths]));

@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -30,18 +30,17 @@ function y = stk_normalize(x, box)
 
 stk_narginchk(1, 2);
 
-y = stk_datastruct(x);
-n = size(y.a, 1);
+n = size(x, 1);
 
 if nargin < 2,
-    xmin = min(y.a, [], 1);
-    xmax = max(y.a, [], 1);
+    xmin = min(x, [], 1);
+    xmax = max(x, [], 1);
 else
     xmin = box(1, :);
     xmax = box(2, :);
 end
 
-y.a = (y.a - repmat(xmin, n, 1)) ./ repmat(xmax - xmin, n, 1);
+y = (x - repmat(xmin, n, 1)) ./ repmat(xmax - xmin, n, 1);
 
 end % function stk_normalize
 
@@ -54,5 +53,5 @@ end % function stk_normalize
 %!test   y3 = stk_normalize(x, box);
 %!error  y4 = stk_normalize(x, box, log(2));
 
-%!test assert(~any((y2.a < 0) | (y2.a > 1)));
-%!test assert(~any((y3.a < 0) | (y3.a > 1)));
+%!test assert(~any((y2 < 0) | (y2 > 1)));
+%!test assert(~any((y3 < 0) | (y3 > 1)));

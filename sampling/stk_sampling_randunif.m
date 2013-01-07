@@ -59,7 +59,7 @@ else % at least one input point
     xdata = stk_rescale(rand(n, dim), [], box);
 end
 
-x = struct('a', xdata);
+x = stk_dataframe(xdata);
 
 end % function stk_sampling_randunif
 
@@ -81,10 +81,10 @@ end % function stk_sampling_randunif
 %!error x = stk_sampling_randunif(n, dim, box, pi);
 
 %% 
-% Check that the output is a struct with a numeric '.a' field
+% Check that the output is a dataframe
 % (all stk_sampling_* functions should behave similarly in this respect)
 
-%!test assert(isstruct(x) && isnumeric(x.a));
+%!test assert(isa(x, 'stk_dataframe'));
 
 %%
 % Check output argument
@@ -92,8 +92,8 @@ end % function stk_sampling_randunif
 %!test
 %! for dim = 1:5,
 %!   x = stk_sampling_randunif(n, dim);
-%!   assert(isequal(size(x.a), [n dim]));
-%!   u = x.a(:);
+%!   assert(isequal(size(x), [n dim]));
+%!   u = double(x); u = u(:);
 %!   assert(~any(isnan(u) | isinf(u)));
 %!   assert((min(u) >= 0) && (max(u) <= 1));
 %! end

@@ -1,20 +1,19 @@
-% STK_PREDICT performs a kriging prediction from data 
+% STK_PREDICT performs a kriging prediction from data
 %
 % CALL: ZP = stk_predict(MODEL, XI, ZI, XP)
 %
 %    computes the kriging predictor ZP at the points XP, given the observations
-%    (XI, ZI) and the prior MODEL. In general (see special cases below), XI, ZI,
-%    XP and ZP are structures whose field 'a' contains the actual numerical
-%    data. More precisely, on a DIM-dimensional factor space,
+%    (XI, ZI) and the prior MODEL. In general, XI, ZI, XP and ZP are either 
+%    numerical matrices or dataframes. More precisely, on a DIM-dimensional 
+%    factor space,
 %
-%     * XI.a must be a NI x DIM matrix, where NI is the number of observations,
-%     * ZI.a must be a column vector of length NI,
-%     * XP.a must be a NP x DIM matrix, where NP is the number of prediction
-%       points,
-%     * ZP.a is a column vector of length NP.
+%     * XI must have size NI x DIM, where NI is the number of observations,
+%     * ZI must be a column of length NI,
+%     * XP must have size NP x DIM, where NP is the number of prediction points,
+%     * ZP is a column of length NP.
 %
-%    Additionally to the predicted values ZP.a, stk_predict() returns the
-%    kriging variances ZP.v at the same points. ZP.v is a column vector of
+%    Additionally to the predicted values ZP.mean, stk_predict() returns the
+%    kriging variances ZP.var at the same points. ZP.var is a column vector of
 %    length NP.
 %
 % CALL: [ZP, LAMBDA, MU] = stk_predict(MODEL, XI, ZI, XP)
@@ -31,22 +30,21 @@
 % SPECIAL CASE #1
 %
 %    If MODEL has a field 'Kx_cache', XI and XP are expected to be vectors of
-%    integer indices (instead of structures with an 'a' field). This feature is
-%    not fully documented as of today... If XT is empty, it is assumed that
-%    predictions must be computed at all points of the underlying discrete
-%    space.
+%    integer indices. This feature is not fully documented as of today... If 
+%    XT is empty, it is assumed that predictions must be computed at all points
+%    of the underlying discrete space.
 %
 % SPECIAL CASE #2
 %
-%    If ZI is empty, everything but ZP.a is computed. Indeed, neither the
-%    kriging variance ZP.v nor the matrices LAMBDA and MU actually depend on the
+%    If ZI is empty, everything but ZP.mean is computed. Indeed, neither the
+%    kriging variance ZP.var nor the matrices LAMBDA and MU actually depend on the
 %    observed values.
-% 
+%
 % EXAMPLE: see examples/example01.m
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -74,47 +72,27 @@
 function [zp, lambda, mu, K] = stk_predict(model, xi, zi, xt)
 stk_narginchk(4, 4);
 
-xi = stk_datastruct(xi);
-zi = stk_datastruct(zi);
-xt = stk_datastruct(xt);
-
 %=== use indices or matrices for xi & xt ?
 
-use_indices = isfield(model,'Kx_cache');
+use_indices = isfield(model, 'Kx_cache');
 
 if use_indices
-    if isempty(xt.a)
-        xt.a = 1:size(model.Kx_cache, 1);
+    if isempty(xt)
+        xt = (1:size(model.Kx_cache, 1))';
     end
-    xi.a = ensure_column_vector_(xi.a, 'xi.a');
-    xt.a = ensure_column_vector_(xt.a, 'xt.a');
+    if ~(iscolumn(xi) && iscolumn(xt))
+        errmsg = 'Both xi and xt must be columns.';
+        stk_error(errmsg, 'IncorrectSize');
+    end
 end
 
-ni = size(xi.a, 1); % number of observations
-nt = size(xt.a, 1); % number of test points
+ni = size(xi, 1); % number of observations
+nt = size(xt, 1); % number of test points
 assert(nt > 0);
 
-if use_indices
-    xi = xi.a(:);
-    xt = xt.a(:);
-end
-
-assert(isempty(zi.a) || (size(zi.a,1) == ni));
+assert(isempty(zi) || (size(zi, 1) == ni));
 
 %=== handle other optional arguments
-
-% parser = inputParser; % parse optional arguments
-% parser.addOptional( 'BlockSize', [] );
-% parser.addOptional( 'DisplayWaitBar', false );
-% parser.parse( varargin{:} );
-% 
-% display_waitbar = parser.Results.DisplayWaitBar;
-% if display_waitbar,
-%     hwb = waitbar(0,'In stk\_predict(). Please wait...');
-%     set( hwb, 'Name', 'stk_predict' );
-% end
-% 
-% block_size = parser.Results.BlockSize;
 
 display_waitbar = false;
 block_size = [];
@@ -130,12 +108,15 @@ LS = [[ Kii, Pi                ]; ...
 
 %=== prepare the output arguments
 
-zp = struct('v',zeros(nt,1));
-compute_prediction = ~isempty(zi.a);
+zp_v = zeros(nt, 1);
+compute_prediction = ~isempty(zi);
 
 % compute the kriging prediction, or just the variances ?
-if compute_prediction, zp.a = zeros(nt, 1); 
-else zp.a = zeros(nt, 0); end
+if compute_prediction,
+    zp_a = zeros(nt, 1);
+else
+    zp_a = nan(nt, 1);
+end
 
 return_weights = (nargout > 1); % return kriging weights ?
 if return_weights, lambda = zeros(ni, nt); end
@@ -144,7 +125,7 @@ return_lm = (nargout > 2); % return Lagrange multipliers ?
 if return_lm, mu = zeros(size(Pi, 2), nt); end
 
 return_K = (nargout > 3); % return posterior covariance matrix ?
-                          
+
 %=== choose nb_blocks & block_size
 
 % note: only one block if return_K == true
@@ -155,8 +136,8 @@ if (~return_K) && isempty(block_size)
     block_size = ceil(MAX_RS_SIZE / (ni * SIZE_OF_DOUBLE));
 end
 
-if return_K || (block_size == inf), 
-    % biggest possible block size    
+if return_K || (block_size == inf),
+    % biggest possible block size
     nb_blocks = 1;
 else
     % blocks of size approx. block_size
@@ -178,17 +159,17 @@ for block_num = 1:nb_blocks
     
     % extract the block of prediction locations
     if use_indices, xt_block = xt(idx);
-    else xt_block = struct('a', xt.a(idx,:)); end
+    else xt_block = xt(idx,:); end
     
     % right-hand side of the kriging equation
     [Kti, Pt] = stk_make_matcov(model, xt_block, xi);
     RS = [Kti Pt]';
-        
+    
     % solve the upper-triangular system to get the extended
     % kriging weights vector (weights + Lagrange multipliers)
     if stk_is_octave_in_use(),
         lambda_mu = LS_R \ (LS_Q' * RS); % linsolve is missing in Octave
-    else        
+    else
         lambda_mu = linsolve(LS_R, LS_Q' * RS, linsolve_opt);
     end
     
@@ -199,18 +180,18 @@ for block_num = 1:nb_blocks
         mu(:, idx) = lambda_mu((ni+1):end, :); end
     
     if compute_prediction, % compute the kriging mean
-        zp.a(idx) = lambda_mu(1:ni, :)' * zi.a; end
+        zp_a(idx) = lambda_mu(1:ni, :)' * double(zi); end
     
     % compute kriging variances (this does NOT include the noise variance)
-    zp.v(idx) = stk_make_matcov(model, xt_block, xt_block, true) - dot(lambda_mu, RS)';
-
+    zp_v(idx) = stk_make_matcov(model, xt, xt, true) - dot(lambda_mu, RS)';
+    
     % note: the following modification computes prediction variances for noisy
     % variance, i.e., including the noise variance also
-    % zp.v(idx) = stk_make_matcov(model, xt, [], true) - dot(lambda_mu, RS)';
+    % zp_v(idx) = stk_make_matcov(model, xt, [], true) - dot(lambda_mu, RS)';
     
-    b = (zp.v < 0);
-    if any(b),        
-        zp.v(b) = 0.0;
+    b = (zp_v < 0);
+    if any(b),
+        zp_v(b) = 0.0;
         warning(sprintf(['Correcting numerical inaccuracies in kriging variance.\n' ...
             '(%d negative variances have been set to zero)'], sum(b)));
     end
@@ -228,21 +209,11 @@ if return_K,
     K = K0 - [lambda; mu]' * RS;
     K = 0.5 * (K + K'); % enforce symmetry
 end
-        
+
 if display_waitbar, close(hwb); end
 
-end
+zp = stk_dataframe([zp_a zp_v], {'mean' 'var'});
 
-
-function v = ensure_column_vector_(u, uname)
-if size(u, 2) ~= 1,
-    if size(u, 1) == 1,
-        v = u';
-    else
-        errmsg = sprintf('%s should be a vector of indices', uname);
-        stk_error(errmsg, 'IncorrectArgument');
-    end
-end
 end
 
 
@@ -258,13 +229,13 @@ end
 %!
 %! x0 = stk_sampling_regulargrid(n+m, d, [0; pi]);
 %!
-%! idx_obs = 2:2:(n+m-1);
-%! idx_prd = 1:2:(n+m);
+%! idx_obs = (2:2:(n+m-1))';
+%! idx_prd = (1:2:(n+m))';
 %!
-%! x_obs = struct('a', x0.a(idx_obs));
+%! x_obs = x0(idx_obs);
 %! z_obs = stk_feval(@sin, x_obs);
-%! x_prd = struct('a', x0.a(idx_prd));
-%! 
+%! x_prd = x0(idx_prd);
+%!
 %! model = stk_model('stk_materncov32_iso');
 %! model.order = 0; % this is currently the default, but better safe than sorry
 
@@ -277,7 +248,7 @@ end
 
 %!test
 %!
-%! [y_prd1, lambda, mu, K] = stk_predict(model, x_obs, z_obs, x_prd); 
+%! [y_prd1, lambda, mu, K] = stk_predict(model, x_obs, z_obs, x_prd);
 %! assert(isequal(size(lambda), [n m]));
 %! assert(isequal(size(mu), [1 m]));  % ordinary kriging
 %! assert(isequal(size(K), [m m]));
@@ -288,6 +259,6 @@ end
 %! model = stk_model('stk_materncov32_iso');
 %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
 %! y_prd2 = stk_predict(model, idx_obs, z_obs, idx_prd);
-%! 
+%!
 %! %% check that both methods give the same result
-%! assert(stk_isequal_tolrel(y_prd1, y_prd2));
+%! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd2)));

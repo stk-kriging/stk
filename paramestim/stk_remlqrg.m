@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -37,12 +37,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [rl, drl_param, drl_lnv] = stk_remlqrg(model, xi, yi)
+function [rl, drl_param, drl_lnv] = stk_remlqrg(model, x, y)
 stk_narginchk(3, 3);
 
-PARAMPRIOR = isfield( model, 'prior' );
-NOISYOBS   = isfield( model, 'lognoisevariance' );
-NOISEPRIOR = isfield( model, 'noiseprior' );
+PARAMPRIOR = isfield(model, 'prior');
+NOISYOBS   = isfield(model, 'lognoisevariance');
+NOISEPRIOR = isfield(model, 'noiseprior');
 
 if ~NOISYOBS,
     if NOISEPRIOR,
@@ -55,16 +55,16 @@ if ~NOISYOBS,
     end
 end
 
-n = size(xi.a,1);
+n = size(x, 1);
 
 %% compute rl
 
-[K,P] = stk_make_matcov( model, xi );
+[K,P] = stk_make_matcov(model, x);
 q = size(P,2);
 
 [Q,R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
 W = Q(:,(q+1):n);
-Wyi = W'*yi.a;
+Wyi = W' * double(y);
 
 G = W'*(K*W);
 
@@ -72,9 +72,9 @@ Ginv = inv(G);
 WKWinv_Wyi = Ginv*Wyi; %#ok<MINV>
 
 [C,p]=chol(G); %#ok<NASGU>
-ldetWKW= 2*sum(log(diag(C))); % log(det(G));
+ldetWKW = 2*sum(log(diag(C))); % log(det(G));
 
-attache= Wyi'*WKWinv_Wyi;
+attache = Wyi' * WKWinv_Wyi;
 
 if PARAMPRIOR
     prior = (model.param - model.prior.mean)'*model.prior.invcov*(model.param - model.prior.mean);
@@ -98,7 +98,7 @@ if nargout >= 2
     drl_param = zeros( nbparam, 1 );
     
     for paramdiff = 1:nbparam,
-        V = feval(model.covariance_type, model.param, xi, xi, paramdiff);
+        V = feval(model.covariance_type, model.param, x, x, paramdiff);
         WVW = W'*V*W;
         drl_param(paramdiff) = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wyi'*WVW*WKWinv_Wyi);
     end
@@ -151,3 +151,4 @@ end
 %!error [J, dJ1, dJ2] = stk_remlqrg(model, xi);
 %!test  [J, dJ1, dJ2] = stk_remlqrg(model, xi, zi);
 %!error [J, dJ1, dJ2] = stk_remlqrg(model, xi, zi, pi);
+

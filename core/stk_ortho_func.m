@@ -25,7 +25,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -53,7 +53,7 @@
 function P = stk_ortho_func(model, x)
 stk_narginchk(2, 2);
 
-if isstruct(x), x = x.a; end
+x = double(x);
 
 if ~isfield(model, 'Kx_cache'), % SYNTAX: x(factors), model
     

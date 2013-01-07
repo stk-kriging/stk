@@ -20,7 +20,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -50,16 +50,13 @@ function [paramopt, paramlnvopt] = stk_param_estim ...
 
 stk_narginchk(4, 5);
 
-xi = stk_datastruct(xi);
-yi = stk_datastruct(yi);
-
 % size checking: xi, yi
-if size(yi.a, 1) ~= size(xi.a, 1),
-    errmsg = 'xi.a and yi.a should have the same number of lines.';
+if size(yi, 1) ~= size(xi, 1),
+    errmsg = 'xi and yi should have the same number of rows.';
     stk_error(errmsg, 'IncorrectArgument');
 end
-if size(yi.a, 2) ~= 1,
-    errmsg = 'yi.a should be a column vector.';
+if size(yi, 2) ~= 1,
+    errmsg = 'yi should be a column vector.';
     stk_error(errmsg, 'IncorrectArgument');
 end
 
@@ -169,11 +166,11 @@ TOLVAR = 5.0;
 TOLSCALE = 5.0;
 
 % bounds for the variance parameter
-empirical_variance = var(yi.a);
+empirical_variance = var(yi);
 logvar_lb = min(log(empirical_variance), param0(1)) - TOLVAR;
 logvar_ub = max(log(empirical_variance), param0(1)) + TOLVAR;
 
-dim = size(xi.a, 2);
+dim = size(xi, 2);
 
 switch model.covariance_type,
     
@@ -190,7 +187,7 @@ switch model.covariance_type,
         ub = [logvar_ub; nu_ub; range_ub];
         
     case {'stk_materncov32_aniso', 'stk_materncov32_iso', ...
-            'stk_materncov52_aniso', 'stk_materncov52_iso'}
+          'stk_materncov52_aniso', 'stk_materncov52_iso'}
         
         range_mid = param0(2:end);
         range_lb  = range_mid(:) - TOLSCALE;
@@ -216,7 +213,7 @@ function [lblnv,ublnv] = get_default_bounds_lnv ...
 TOLVAR = 0.5;
 
 % bounds for the variance parameter
-empirical_variance = var(yi.a);
+empirical_variance = var(yi);
 lblnv = log(eps);
 ublnv = log(empirical_variance) + TOLVAR;
 
@@ -247,7 +244,7 @@ end
 %!test  % noisy
 %! NOISE_STD_TRUE = 0.1;
 %! NOISE_STD_INIT = 1e-5;
-%! zi.a = zi.a + NOISE_STD_TRUE * randn(NI, 1);
+%! zi = zi + NOISE_STD_TRUE * randn(NI, 1);
 %! model.lognoisevariance = 2 * log(NOISE_STD_INIT);
 %! [param, lnv] = stk_param_estim ...
 %!    (model, xi, zi, param0, model.lognoisevariance);

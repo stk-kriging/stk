@@ -14,7 +14,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -43,17 +43,13 @@ function D = stk_dist(x, y, pairwise)
 stk_narginchk(1, 3);
 
 % read argument #1
-if isstruct(x),
-    x = x.a;
-end
+x = double(x);
 
 % read argument #2
 if nargin < 2,
     y = [];
 else
-    if isstruct(x),
-        y = y.a;
-    end
+    y = double(y);
 end
 
 % read argument #3
@@ -130,3 +126,4 @@ end % function stk_dist
 %! D1 = stk_dist_pairwise(x, y);
 %! D2 = stk_dist_matrixy(x, y);
 %! assert(stk_isequal_tolabs(D1, diag(D2)));
+ 

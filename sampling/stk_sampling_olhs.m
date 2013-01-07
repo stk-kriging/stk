@@ -170,7 +170,7 @@ x = x + q + 1;
 x = (2*x - 1) / (2*n);
 
 % And, finally, convert to box
-x = struct('a', stk_rescale(x, [], box));
+x = stk_rescale(x, [], box);
     
 end % function stk_sampling_olhs
 
@@ -194,10 +194,10 @@ end % function stk_sampling_olhs
 %!error x = stk_sampling_olhs(n, d, box, permut, pi);
 
 %% 
-% Check that the output is a struct with a numeric '.a' field
+% Check that the output is a dataframe
 % (all stk_sampling_* functions should behave similarly in this respect)
 
-%!test assert(isstruct(x) && isnumeric(x.a));
+%!test isa(x, 'stk_dataframe');
 
 %%
 % Check output argument
@@ -208,12 +208,12 @@ end % function stk_sampling_olhs
 %!   n = 2^(r+1) + 1; d = 2*r;
 %!   x = stk_sampling_olhs(n, d);
 %!
-%!   assert(isequal(size(x.a), [n d]));
+%!   assert(isequal(size(x), [n d]));
 %!
 %!   box = repmat([-1; 1], 1, d);
 %!   assert(stk_is_lhs(x, n, d, box));
 %!
-%!   w = (x.a)' * x.a;
+%!   w = x' * x;
 %!   assert(stk_isequal_tolabs(w/w(1,1), eye(d)));
 %!
 %! end

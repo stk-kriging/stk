@@ -16,13 +16,13 @@
 %       f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );
 %       xt = stk_sampling_regulargrid(100, 1, [0; 1]);
 %       yt = stk_feval( f, xt );
-%       plot(xt.a, yt.a);
+%       plot(xt, yt);
 %
 % See also feval
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -51,10 +51,21 @@ function z = stk_feval(f, x, progress_msg)
 
 stk_narginchk(2, 3);
 
-if isstruct(x), xdata = x.a; else xdata = x; end
-if nargin < 3, progress_msg = false; end
+if ~(ischar(f) || isa(f, 'function_handle'))
+    errmsg = 'Incorrect type for argument ''f''.';
+    stk_error(errmsg, 'IncorrectType');
+end
+    
+if nargin < 3,
+    progress_msg = false;
+else
+    if ~islogical(progress_msg),
+        errmsg = 'Incorrect type for argument ''progress_msg''.';
+        stk_error(errmsg, 'IncorrectType');
+    end
+end
 
-[n,d] = size(xdata);
+[n, d] = size(x);
 if d == 0,
     error('zero-dimensional inputs are not allowed.');
 end
@@ -68,13 +79,13 @@ else % at least one input point
     zdata = zeros(n, 1);
     for i = 1:n,
         if progress_msg, fprintf('feval %d/%d... ', i, n); end
-        zdata(i) = feval(f, xdata(i,:));
+        zdata(i) = feval(f, x(i,:));
         if progress_msg, fprintf('done.\n'); end
     end
     
 end
 
-z = struct('a', zdata);
+z = stk_dataframe(zdata, {'z'});
 
 end % function stk_feval
 
@@ -97,4 +108,4 @@ end % function stk_feval
 %!  N = 15;
 %!  xt = stk_sampling_regulargrid(N, 1, [0; 1]);
 %!  yt = stk_feval(f, xt);
-%!  assert(isstruct(yt) && isfield(yt, 'a') && isequal(size(yt.a), [N 1]));
+%!  assert(isequal(size(yt), [N 1]));

@@ -75,10 +75,10 @@ end % function stk_sampling_randomlhs
 %!error x = stk_sampling_randomlhs(n, dim, box, pi);
 
 %% 
-% Check that the output is a struct with a numeric '.a' field
+% Check that the output is a dataframe
 % (all stk_sampling_* functions should behave similarly in this respect)
 
-%!test assert(isstruct(x) && isnumeric(x.a));
+%!test assert(isa(x, 'stk_dataframe'));
 
 %%
 % Check output argument
@@ -86,8 +86,8 @@ end % function stk_sampling_randomlhs
 %!test
 %! for dim = 1:5,
 %!   x = stk_sampling_randomlhs(n, dim);
-%!   assert(isequal(size(x.a), [n dim]));
-%!   u = x.a(:);
+%!   assert(isequal(size(x), [n dim]));
+%!   u = double(x); u = u(:);
 %!   assert(~any(isnan(u) | isinf(u)));
 %!   assert((min(u) >= 0) && (max(u) <= 1));
 %!   assert(stk_is_lhs(x, n, dim));
