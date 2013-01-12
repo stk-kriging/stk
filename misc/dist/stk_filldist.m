@@ -1,26 +1,15 @@
-% STK_FILLDIST computes the (discrete) fill distance of a set of points
+% STK_FILLDIST computes the fill distance of a set of points
 %
-% CALL: D = stk_filldist(X, Y)
+% CALL: FD = stk_filldist(X)
+% CALL: FD = stk_filldist(X, BOX)
+% CALL: FD = stk_filldist(X, Y)
+% CALL: [FD, YMAX] = stk_filldist(...)
 %
-%    computes the fill distance D of X using the "test set" Y. More
-%    precisely, if X is an n x d matrix and Y an m x d matrix, then
-%
-%       D = max_{1 <= j <= m} min_{1 <= i <= n} norm(X(i,:) - Y(j,:)),
-%
-%    where norm(.) denotes the Euclidean norm in R^d. The fill distance
-%    is also known as the "maximin" distance.
-%
-% CALL: [D, ARGMAX] = stk_filldist(X, Y)
-%
-%    also returns the value ARGMAX of the index j for which the maximum
-%    is obtained. (If the maximum is obtained for several values of j,
-%    the smallest is returned.)
-%
-% See also: stk_distance_matrix, stk_mindist
+% See also: stk_dist, stk_mindist
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
 %    Author: Julien Bect <julien.bect@supelec.fr>
 
@@ -44,19 +33,48 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%%
-% Two non-empty matrices are expected as input arguments
+function [fd, ymax] = stk_filldist(x, arg2)
 
-%!error stk_filldist(0.0)            % incorrect nb of arguments
-%!error stk_filldist(0.0, 0.0, pi)   % incorrect nb of arguments
-%!error stk_filldist(0.0, [])        % second arg is empty
-%!error stk_filldist([], 0.0)        % first arg is empty
+stk_narginchk(1, 2);
+
+if isstruct(x), x = x.a; end
+
+if nargin == 1, % defaults: "exact" over [0; 1]^d
+    
+    default_box = repmat([0; 1], 1, size(x, 2));
+    fd = stk_filldist_exact(x, default_box);
+    
+else
+
+    if isstruct(arg2), arg2 = arg2.a; end
+    
+    ny = size(arg2, 1);
+    
+    if ny == 2, % arg2 is interpreted as a box
+        
+        [fd, ymax] = stk_filldist_exact(x, arg2);
+        
+    elseif ny > 2, % arg2 is interpreted a discrete test set
+        
+        [fd, ymax] = stk_filldist_discretized(x, arg2);
+        
+    else
+        
+        errmsg = 'Incorrect size for argument #2: nb rows > 1 expected.';
+        stk_error(errmsg, 'InvalidArgument');
+        
+    end
+            
+end % if
+
+end % function stk_filldist
+
 
 %%
-% Filldist = 0 if X = Y
+% fd = 0 if X = Y (discretized filldist)
 
 %!test
-%! n = 5;
+%! n = 5; % must be bigger than 2
 %! for dim = 1:10,
 %!     x = rand(n, dim);
 %!     fd = stk_filldist(x, x);
@@ -64,24 +82,30 @@
 %! end
 
 %%
-% Filldist = norm if nx = ny = 1
+% One point in the middle of [0; 1]^d (exact & discretized filldist)
 
-%!test
-%! for dim = 1:10,
-%!     x = rand(1, dim);
-%!     y = rand(1, dim);
+%!test %%% exact
+%! for dim = 1:6,
+%!     x = 0.5 * ones(1, dim);
+%!     fd = stk_filldist(x); % [0; 1]^d is the default box
+%!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));
+%! end
+
+%!test %%% discretized
+%! for dim = 1:6,
+%!     x  = 0.5 * ones(1, dim);
+%!     y  = stk_sampling_regulargrid(2^dim, dim);  % [0; 1]^d is the default box
 %!     fd = stk_filldist(x, y);
-%!     assert(stk_isequal_tolabs(fd, norm(x - y)));
+%!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));
 %! end
 
 %%
-% Filldist = max(dist) if ny = 1
+% One point in the middle of [1; 2]^d (exact filldist)
 
 %!test
-%! n = 4;
-%! for dim = 2:10,
-%!     x = zeros(n, dim);
-%!     y = rand(1, dim);
-%!     fd = stk_filldist(x, y);
-%!     assert(stk_isequal_tolabs(fd, max(stk_dist(x, y))));
+%! for dim = [1 3 7],
+%!     box = repmat([1; 2], 1, dim);
+%!     x = 1 + 0.5 * ones(1, dim);
+%!     fd = stk_filldist(x, box);
+%!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));
 %! end
