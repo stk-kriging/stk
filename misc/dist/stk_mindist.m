@@ -9,11 +9,11 @@
 %
 %    where norm(.) denotes the Euclidean norm in R^d.
 %
-% See also: stk_distance_matrix, stk_filldist
+% See also: stk_dist, stk_filldist
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>

@@ -1,3 +1,28 @@
+2013-01-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a function to compute the exact fill distance, based on a
+	paper by Luc Pronzato and Werner G. Müller (Statistics and
+	Computing, 2011).
+
+	* misc/dist/stk_filldist.m: replaced
+	* misc/dist/stk_filldist_discretized.c: formerly stk_filldist.c
+	* misc/dist/stk_filldist_discretized.m: formerly stk_filldist.m
+	* misc/dist/stk_filldist_exact.m: new
+	* misc/dist/stk_filldist.c: renamed
+	* misc/config/stk_compile_all.m: modified
+
+=====================
+===  Release 1.2  ===
+=====================
+
+2013-01-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixed documentation.
+
+	* misc/dist/stk_dist.m: modified
+	* misc/dist/stk_mindist.m: modified
+	* misc/dist/stk_filldist.m: modified
+
 2013-01-03  Julien Bect  <julien.bect@supelec.fr>
 
 	Modified stk_makedoc to exclude misc/matlab from the generated
