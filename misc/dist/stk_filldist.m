@@ -16,11 +16,11 @@
 %    is obtained. (If the maximum is obtained for several values of j,
 %    the smallest is returned.)
 %
-% See also: stk_distance_matrix, stk_mindist
+% See also: stk_dist, stk_mindist
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author: Julien Bect <julien.bect@supelec.fr>
 
