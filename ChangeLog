@@ -1,3 +1,15 @@
+=====================
+===  Release 1.2  ===
+=====================
+
+2013-01-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixed documentation.
+
+	* misc/dist/stk_dist.m: modified
+	* misc/dist/stk_mindist.m: modified
+	* misc/dist/stk_filldist.m: modified
+
 2013-01-03  Julien Bect  <julien.bect@supelec.fr>
 
 	Modified stk_makedoc to exclude misc/matlab from the generated
