@@ -2,6 +2,12 @@
 ===  Release 1.2  ===
 =====================
 
+2013-01-13  Julien Bect  <julien.bect@supelec.fr>
+
+	Minor change in stk_dist (pairwise case).
+
+	* misc/dist/stk_dist.m: modified
+
 2013-01-12  Julien Bect  <julien.bect@supelec.fr>
 
 	Fixed documentation.
