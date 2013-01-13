@@ -47,7 +47,9 @@ d = size(x, 2);
 
 if nargin == 1,
     box = repmat([0; 1], 1, d);
-end
+elseif isstruct(box),
+    box = box.a;
+end    
 
 %--- Construct a triangulation that covers [0; 1]^d -------------------------------------
 
@@ -102,6 +104,15 @@ end
 
 end % function add_symm -----------------------------------------------------------------
 
+
+%%
+% Check that ".a" structures are accepted
+
+%!test
+%! d = 3; x = rand(7, d); box = repmat([0; 1], 1, d);
+%! fd1 = stk_filldist_exact(x, box);
+%! fd2 = stk_filldist_exact(struct('a', x), struct('a', box));
+%! assert(stk_isequal_tolabs(fd1, fd2));
 
 %%
 % One point in the middle of [0; 1]^d

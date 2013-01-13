@@ -38,6 +38,27 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
+function md = stk_mindist(x)
+
+stk_narginchk(1, 1);
+
+if isstruct(x), x = x.a; end
+
+% call MEX-file
+md = stk_mindist_mex(x);
+
+end % function stk_mindist
+
+
+%%
+% Check that ".a" structures are accepted
+
+%!test
+%! d = 3; x = rand(7, d);
+%! md1 = stk_mindist(x);
+%! md2 = stk_mindist(struct('a', x));
+%! assert(stk_isequal_tolabs(md1, md2));
+
 %%
 % Check that sk_mindist(x) is empty when x has zero lines
 

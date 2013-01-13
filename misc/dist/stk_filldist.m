@@ -56,7 +56,7 @@ else
         
     elseif ny > 2, % arg2 is interpreted a discrete test set
         
-        [fd, ymax] = stk_filldist_discretized(x, arg2);
+        [fd, ymax] = stk_filldist_discr_mex(x, arg2);
         
     else
         
@@ -69,6 +69,21 @@ end % if
 
 end % function stk_filldist
 
+
+%%
+% Check that ".a" structures are accepted
+
+%!test %%% exact
+%! d = 3; x = rand(7, d); box = repmat([0; 1], 1, d);
+%! fd1 = stk_filldist(x, box);
+%! fd2 = stk_filldist(struct('a', x), struct('a', box));
+%! assert(stk_isequal_tolabs(fd1, fd2));
+
+%!test %%% discretized
+%! d = 3; x = rand(7, d); y = rand(20, d);
+%! fd1 = stk_filldist(x, y);
+%! fd2 = stk_filldist(struct('a', x), struct('a', y));
+%! assert(stk_isequal_tolabs(fd1, fd2));
 
 %%
 % fd = 0 if X = Y (discretized filldist)
