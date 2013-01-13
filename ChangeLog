@@ -1,3 +1,30 @@
+2013-01-13  Julien Bect  <julien.bect@supelec.fr>
+
+	Ensured that all misc/dist functions accept ".a" structures.
+
+	* misc/dist/stk_dist.m: modified
+	* misc/dist/stk_mindist.m: modified
+	* misc/dist/stk_filldist.m: modified
+	* misc/dist/stk_filldist_discretized.m: modified
+	* misc/dist/private/stk_mindist.c: renamed
+	* misc/dist/private/stk_filldist_discretized.c: renamed
+
+	Moved misc/dist MEX-files into a private folder.
+
+	* misc/dist/private: new folder
+	* misc/dist/stk_dist_pairwise.c: moved to misc/dist/private
+	* misc/dist/stk_dist_matrixx.c: idem
+	* misc/dist/stk_dist_matrixy.c: idem
+	* misc/dist/stk_filldist_discretized.c: idem
+	* misc/dist/stk_mindist.c: idem
+	* misc/dist/stk_mex.h: idem
+	* misc/config/stk_path.m: modified
+	* misc/config/stk_compile_all.m: modified
+
+	Minor change in stk_dist (pairwise case).
+
+	* misc/dist/stk_dist.m: modified
+
 2013-01-12  Julien Bect  <julien.bect@supelec.fr>
 
 	Added a function to compute the exact fill distance, based on a
@@ -11,9 +38,9 @@
 	* misc/dist/stk_filldist.c: renamed
 	* misc/config/stk_compile_all.m: modified
 
-=====================
-===  Release 1.2  ===
-=====================
+===============================================
+===  Maintenance branch 1.2.x created here  ===
+===============================================
 
 2013-01-12  Julien Bect  <julien.bect@supelec.fr>
 
