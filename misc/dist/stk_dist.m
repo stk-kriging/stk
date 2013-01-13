@@ -68,7 +68,7 @@ end
 
 if pairwise,
     if isempty(y),
-        D = stk_dist_pairwise(x, x);
+        D = zeros(size(x, 1), 1);
     else
         D = stk_dist_pairwise(x, y);
     end
@@ -127,6 +127,13 @@ end % function stk_dist
 %!test
 %! x = randn(5,3);
 %! y = randn(5,3);
-%! D1 = stk_dist_pairwise(x, y);
-%! D2 = stk_dist_matrixy(x, y);
+%! D1 = stk_dist(x, y, true); % pairwise
+%! D2 = stk_dist(x, y);
 %! assert(stk_isequal_tolabs(D1, diag(D2)));
+
+%!test
+%! x = randn(5,3);
+%! D1 = stk_dist(x, [], true); % pairwise
+%! assert(stk_isequal_tolabs(D1, zeros(5, 1)));
+%! D1 = stk_dist(x, x, true); % pairwise
+%! assert(stk_isequal_tolabs(D1, zeros(5, 1)));
