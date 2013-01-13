@@ -54,7 +54,7 @@ if isstruct(y), y = y.a; end
 % call MEX-file
 fd = stk_filldist_mex(x, y);
 
-end % function stk_mindist
+end % function stk_filldist
 
 %%
 % Two non-empty matrices are expected as input arguments
