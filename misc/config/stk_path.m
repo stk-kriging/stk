@@ -59,7 +59,13 @@ path = { path{:} ...
     fullfile(root, 'examples', 'test_functions'          ) };
 
 if ~stk_is_octave_in_use(),
+    % MATLAB-specific
     path = [path {fullfile(root, 'misc', 'matlab')}];
+else
+    % Octave-specific
+    if exist('stk_dist_matrixx') == 0, %#ok<EXIST>
+        path = [path {fullfile(root, 'misc', 'dist', 'private')}];
+    end
 end
 
 end % stk_path

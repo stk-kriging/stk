@@ -44,6 +44,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
+function fd = stk_filldist(x, y)
+
+stk_narginchk(2, 2);
+
+if isstruct(x), x = x.a; end
+if isstruct(y), y = y.a; end
+
+% call MEX-file
+fd = stk_filldist_mex(x, y);
+
+end % function stk_mindist
+
 %%
 % Two non-empty matrices are expected as input arguments
 
@@ -51,6 +63,15 @@
 %!error stk_filldist(0.0, 0.0, pi)   % incorrect nb of arguments
 %!error stk_filldist(0.0, [])        % second arg is empty
 %!error stk_filldist([], 0.0)        % first arg is empty
+
+%%
+% Check that ".a" structures are accepted
+
+%!test
+%! d = 3; x = rand(7, d); y = rand(20, d);
+%! fd1 = stk_filldist(x, y);
+%! fd2 = stk_filldist(struct('a', x), struct('a', y));
+%! assert(stk_isequal_tolabs(fd1, fd2));
 
 %%
 % Filldist = 0 if X = Y

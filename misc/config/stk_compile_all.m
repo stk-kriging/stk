@@ -33,12 +33,12 @@ here = pwd();
 
 force_recompile = ~((nargin == 0) || ~force_recompile);
 
-d = fullfile(root, 'misc', 'dist');
+d = fullfile(root, 'misc', 'dist', 'private');
 stk_compile(d, 'stk_dist_matrixx',  force_recompile);
 stk_compile(d, 'stk_dist_matrixy',  force_recompile);
 stk_compile(d, 'stk_dist_pairwise', force_recompile);
-stk_compile(d, 'stk_mindist',       force_recompile);
-stk_compile(d, 'stk_filldist',      force_recompile);
+stk_compile(d, 'stk_filldist_mex',  force_recompile);
+stk_compile(d, 'stk_mindist_mex',   force_recompile);
 
 % add other MEX-files to be compiled here
 
