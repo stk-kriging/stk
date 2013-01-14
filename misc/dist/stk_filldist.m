@@ -8,7 +8,7 @@
 %       D = max_{1 <= j <= m} min_{1 <= i <= n} norm(X(i,:) - Y(j,:)),
 %
 %    where norm(.) denotes the Euclidean norm in R^d. The fill distance
-%    is also known as the "maximin" distance.
+%    is also known as the "minimax" criterion.
 %
 % CALL: [D, ARGMAX] = stk_filldist(X, Y)
 %
