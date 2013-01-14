@@ -124,3 +124,15 @@ end % function stk_filldist
 %!     fd = stk_filldist(x, box);
 %!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));
 %! end
+
+%%
+% 20 points in [-1; 1]^3
+
+%!test
+%! dim = 3;
+%! box = repmat([-1; 1], 1, dim);
+%! x   = stk_sampling_randunif(20, dim, box);
+%! y   = stk_sampling_regulargrid(3^dim, dim, box);
+%! fd1 = stk_filldist(x, box);
+%! fd2 = stk_filldist(x, y);
+%! assert(fd1 >= fd2);
