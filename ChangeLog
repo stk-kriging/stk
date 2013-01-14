@@ -1,8 +1,12 @@
 2013-01-14  Julien Bect  <julien.bect@supelec.fr>
 
+	Completed the documentation of stk_filldist_exact.
+
+	* stk_filldist_exact.m: modified (documentation)
+
 	Added a test in stk_filldist.
 
-	* stk_filldist.m: modified
+	* stk_filldist.m: modified (tests)
 
 2013-01-13  Julien Bect  <julien.bect@supelec.fr>
 

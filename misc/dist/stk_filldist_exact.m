@@ -1,6 +1,36 @@
-% STK_FILLDIST_EXACT computes the (exact) fill distance of a set of points
+% STK_FILLDIST_EXACT computes the (exact) fill distance of a set of points.
 %
-% CALL: ... [FIXME: docomentation]
+% CALL: FD = stk_filldist_exact(X, BOX)
+%
+%    computes the fill distance FD of the dataset X in the hyper-rectangle
+%    BOX, using the computational-geometric algorithm of L. Pronzato and 
+%    W. G. Muller [1]. Recall that
+%
+%       D = max_{Y in BOX} min_{1 <= i <= n} norm(X(i,:) - Y),         (1)
+%
+%    where norm(.) denotes the Euclidean norm in R^d. Optimal designs with
+%    respect to the fill distance are sometimes called "minimax" designs
+%    (see, e.g., [2]).
+%
+% CALL: FD = stk_filldist_exact(X)
+%
+%    assumes that the fill distance is to be computed with respect to the
+%    hyperrectangle BOX = [0; 1]^d.
+%
+% CALL: [FD, YMAX] = stk_filldist_exact(...)
+%
+%    also returns the point YMAX where the maximal distance is attained,
+%    i.e., the argmax in equation (1).
+%
+% REFERENCES:
+%
+%   [1] Luc Pronzato and Werner G. Müller, "Design of computer 
+%       experiments: space filling and beyond", Statistics and Computing,
+%       22(3):681-701, 2012.
+%
+%   [2] Mark E. Johnson, Leslie M. Moore and Donald Ylvisaker, "Minimax
+%       and maximin distance designs", Journal of Statistical Planning
+%       and Inference, 26(2):131-148, 1990.
 %
 % See also: stk_filldist, stk_filldist_discretized, stk_dist, stk_mindist
 
@@ -39,7 +69,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [fd, ymax] = stk_filldist_exact(x, box)
+function [fd, ymax] = stk_filldist_exact(x, box) %---------------------------------------
 
 stk_narginchk(1, 2);
 if isstruct(x), x = x.a; end
