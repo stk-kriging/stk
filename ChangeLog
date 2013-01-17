@@ -1,3 +1,11 @@
+2013-01-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Completed the documentation of stk_fill_dist and
+	stk_filldist_discretized.
+
+	* misc/dist/stk_filldist.m: modified (doc)
+	* misc/dist/stk_filldist_discretized.m: modified (doc)
+
 2013-01-14  Julien Bect  <julien.bect@supelec.fr>
 
 	Completed the documentation of stk_filldist_exact.
