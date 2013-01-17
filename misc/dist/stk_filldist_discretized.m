@@ -1,22 +1,29 @@
-% STK_FILLDIST_DISCRETIZED computes the (discrete) fill distance of a set of points
+% STK_FILLDIST_DISCRETIZED computes the (discrete) fill distance of a set of points.
 %
-% CALL: D = stk_filldist_discretized(X, Y)
+% CALL: FD = stk_filldist_discretized(X, Y)
 %
-%    computes the fill distance D of X using the "test set" Y. More
-%    precisely, if X is an n x d matrix and Y an m x d matrix, then
+%    computes the fill distance FD of X using the "test set" Y. More precisely, if 
+%    X and Y are respectively n x d and m x d, then
 %
-%       D = max_{1 <= j <= m} min_{1 <= i <= n} norm(X(i,:) - Y(j,:)),
+%       FD = max_{1 <= j <= m} min_{1 <= i <= n} norm(X(i,:) - Y(j,:)),
 %
-%    where norm(.) denotes the Euclidean norm in R^d. The fill distance
-%    is also known as the "maximin" distance.
+%    where norm(.) denotes the Euclidean norm in R^d. If Y is dense enough in some
+%    subset BOX of R^d, then FD should be close to the actual fill distance of X in
+%    BOX (see: stk_filldist_exact). Optimal designs with respect to the fill distance
+%    are sometimes called "minimax" designs (see, e.g., [1]).
 %
 % CALL: [D, ARGMAX] = stk_filldist_discretized(X, Y)
 %
-%    also returns the value ARGMAX of the index j for which the maximum
-%    is obtained. (If the maximum is obtained for several values of j,
-%    the smallest is returned.)
+%    also returns the value ARGMAX of the index j for which the maximum is attained.
+%    (If the maximum is obtained for several values of j, the smallest is returned.)
 %
-% See also: stk_dist, stk_mindist
+% REFERENCE:
+%
+%   [1] Mark E. Johnson, Leslie M. Moore and Donald Ylvisaker, "Minimax
+%       and maximin distance designs", Journal of Statistical Planning
+%       and Inference, 26(2):131-148, 1990.
+%
+% See also: stk_filldist, stk_filldist_exact, stk_dist, stk_mindist
 
 % Copyright Notice
 %

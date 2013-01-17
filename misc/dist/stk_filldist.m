@@ -1,11 +1,54 @@
-% STK_FILLDIST computes the fill distance of a set of points
+% STK_FILLDIST computes the fill distance of a set of points.
+%
+% CALL: FD = stk_filldist(X, BOX)
+%
+%    computes the fill distance FD of the dataset X in the hyper-rectangle
+%    BOX, using the computational-geometric algorithm of L. Pronzato and 
+%    W. G. Muller [1]. Recall that
+%
+%       D = max_{Y in BOX} min_{1 <= i <= n} norm(X(i,:) - Y),         (1)
+%
+%    where norm(.) denotes the Euclidean norm in R^d. Optimal designs with
+%    respect to the fill distance are sometimes called "minimax" designs
+%    (see, e.g., [2]).
 %
 % CALL: FD = stk_filldist(X)
-% CALL: FD = stk_filldist(X, BOX)
+%
+%    assumes that the fill distance is to be computed with respect to the
+%    hyperrectangle BOX = [0; 1]^d.
+%
 % CALL: FD = stk_filldist(X, Y)
+%
+%    computes the fill distance FD of X using the "test set" Y. More preci-
+%    sely, if X and Y are respectively n x d and m x d, then
+%
+%       FD = max_{1 <= j <= m} min_{1 <= i <= n} norm(X(i,:) - Y(j,:)),
+%
+%    If Y is dense enough in some subset BOX of R^d, then FD should be close
+%    to the actual fill distance of X in BOX.
+%
 % CALL: [FD, YMAX] = stk_filldist(...)
 %
-% See also: stk_dist, stk_mindist
+%    also returns the point YMAX where the maximal distance is attained.
+%
+% NOTE:
+%
+%    stk_filldist is actually a wrapper around stk_filldist_discretized and
+%    stk_filldist_exact. Which function to call is guessed based on the number
+%    of rows of the second argument. Because of that, the test set Y is required
+%    to have at least 3 rows.
+%
+% REFERENCES:
+%
+%   [1] Luc Pronzato and Werner G. Müller, "Design of computer 
+%       experiments: space filling and beyond", Statistics and Computing,
+%       22(3):681-701, 2012.
+%
+%   [2] Mark E. Johnson, Leslie M. Moore and Donald Ylvisaker, "Minimax
+%       and maximin distance designs", Journal of Statistical Planning
+%       and Inference, 26(2):131-148, 1990.
+%
+% See also: stk_dist, stk_mindist, stk_filldist_exact, stk_filldist_discretized
 
 % Copyright Notice
 %
