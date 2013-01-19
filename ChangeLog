@@ -1,5 +1,11 @@
 2013-01-19  Julien Bect  <julien.bect@supelec.fr>
 
+	Fixed a numerical issue in stk_filldist_exact().
+
+	* misc/dist/stk_filldist_exact.m: modified. Because of possible
+	numerical inaccuracies, centers that are slightly outside the box
+	must also be considered as candidates for being ymax.
+
 	Fixed a bug in stk_filldist().
 
 	* misc/dist/stk_filldist.m: modified. Fixed a bug in the
