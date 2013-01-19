@@ -164,3 +164,14 @@ end % function add_symm --------------------------------------------------------
 %!     fd = stk_filldist_exact(x, box);
 %!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));
 %! end
+
+%%
+% One point at the origin, BOX = [0; 1]^d
+
+%!test
+%! for dim = [1 3 7],
+%!     x = zeros(1, dim);
+%!     [fd, ymax] = stk_filldist_exact(x);
+%!     assert(stk_isequal_tolabs(fd, sqrt(dim)));
+%!     assert(stk_isequal_tolabs(ymax, ones(1, dim)));
+%! end

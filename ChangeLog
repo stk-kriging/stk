@@ -1,5 +1,17 @@
 2013-01-19  Julien Bect  <julien.bect@supelec.fr>
 
+	Fixed a bug in stk_filldist().
+
+	* misc/dist/stk_filldist.m: modified. Fixed a bug in the
+	discretized case (the second output argument was the index of ymax
+	instead of ymax itself, as advertised by the documentation).
+
+	Added tests to all fill distance-related functions.
+
+	* misc/dist/stk_filldist_exact.m: added tests.
+	* misc/dist/stk_filldist_discretized.m: added tests.
+	* misc/dist/stk_filldist.m: added tests.
+
 	Added a second output argument to stk_filldist_discretized().
 
 	* misc/dist/stk_filldist_discretized.m: modified. The function now

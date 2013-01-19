@@ -120,11 +120,22 @@ end % function stk_filldist_discretized
 %%
 % One point in the middle of [0; 1]^d
 
-% %!test
-% %! for dim = [1 3 6],
-% %!     x  = 0.5 * ones(1, dim);
-% %!     y  = stk_sampling_regulargrid(2^dim, dim);  % [0; 1]^d is the default box
-% %!     fd = stk_filldist_discretized(x, y);
-% %!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));
-% %! end
+%!test
+%! for dim = [1 3 6],
+%!     x  = 0.5 * ones(1, dim);
+%!     y  = stk_sampling_regulargrid(2^dim, dim);  % [0; 1]^d is the default box
+%!     fd = stk_filldist_discretized(x, y);
+%!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));
+%! end
 
+%%
+% One point at the origin, BOX = [0; 1]^d
+
+%!test
+%! for dim = [1 3 7],
+%!     x = zeros(1, dim);
+%!     y = stk_sampling_regulargrid(3^dim, dim);
+%!     [fd, ymax] = stk_filldist_discretized(x, y);
+%!     assert(stk_isequal_tolabs(fd, sqrt(dim)));
+%!     assert(stk_isequal_tolabs(ymax, ones(1, dim)));
+%! end
