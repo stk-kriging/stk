@@ -73,7 +73,7 @@ function [fd, ymax] = stk_filldist_exact(x, box) %------------------------------
 
 stk_narginchk(1, 2);
 if isstruct(x), x = x.a; end
-d = size(x, 2);
+[n, d] = size(x);
 
 if nargin == 1,
     box = repmat([0; 1], 1, d);
@@ -83,36 +83,75 @@ end
 
 %--- Construct a triangulation that covers [0; 1]^d -------------------------------------
 
-x  = add_symm(x, box);   % extend using symmetries with respect to the faces
-x  = unique(x, 'rows');  % remove duplicates
-dt = delaunayn(x);       % Delaunay trianulation
-nt = length(dt(:,1));    % number of triangles
+x  = add_symm(x, box);             % extend using symmetries with respect to the faces
+x  = unique(x, 'rows', 'stable');  % remove duplicates
+dt = delaunayn(x);                 % Delaunay trianulation
+nt = length(dt(:, 1));             % number of triangles
 
 %--- Compute centers and radiuses -------------------------------------------------------
 
-center = zeros(nt, d);  % prepare for computing the centers
-radius = zeros(nt, 1);  % prepare for computing the radiuses
+center   = zeros(nt, d);  % prepare for computing the centers
+rsquared = zeros(nt, 1);  % prepare for computing the (squared) radiuses
 
 for i = 1:nt,
-    Z = x(dt(i, :), :);
-    W = sum(Z.^2, 2);
+    Z = x(dt(i, :), :);  % vertices of the simplex
+    W = sum(Z.^2, 2);    % squared norms
     C = repmat(Z(1, :), d, 1) - Z(2:end, :);
     B = (W(1) - W(2:end))/2;
     center(i, :) = transpose(C\B);
-    radius(i, 1) = sqrt(sum(center(i,:).^2) + W(1) - 2 * Z(1, :) * center(i, :)');
+    rsquared(i, 1) = sum(center(i,:).^2) + W(1) - 2 * Z(1, :) * center(i, :)';
 end
 
-%--- Find the simplices for which the center is inside [0; 1]^d -------------------------
+%--- Find the simplices for which the center is (almost) inside the box -----------------
+
+% enlarge box for numerical tolerance
+TOLERANCE = 1e-10;
+bbox = box + TOLERANCE * [-1; 1] * diff(box);
 
 inside = true(size(center, 1), 1);
 for j = 1:d,
-    inside = inside & (center(:, j) >= box(1, j)) ...
-                    & (center(:, j) <= box(2, j)) ;
+    inside = inside & (center(:, j) >= bbox(1, j)) ...
+                    & (center(:, j) <= bbox(2, j)) ;
 end
 
-[fd, imax] = max(radius .* double(inside));
+%--- Just being cautious ----------------------------------------------------------------
 
-ymax = center(imax, :);
+% maximal radius for centers that are almost inside the box
+r2max = max(rsquared .* double(inside));
+
+% all centers with a radius close to rmax are candidates for being ymax 
+idx_candi = find((rsquared > 0.99999 * r2max) & inside);
+
+% project on the box and recompute radiuses
+fd2 = 0;
+ymax = nan(1, d);
+for k = 1:length(idx_candi),
+    i = idx_candi(k);
+    % project onto the box
+    c = max(min(center(i, :), box(2, :)),  box(1, :));
+    % compute the (squared) distance to the vertices of the simplex,
+    % considering only the vertices that were in the original dataset
+    r2 = +inf;
+    for j = 1:size(dt, 2),
+        ii = dt(i, j);
+        if ii <= n, % this is one of the original points
+            r2 = min(r2, sum((c - x(ii, :)).^2));
+        end
+    end
+    % and save the result if this is the best point found so far...
+    if ~isinf(r2) && (r2 > fd2),
+        fd2 = r2;
+        ymax = c;
+    end
+end
+
+fd = sqrt(fd2);
+
+% safety net
+if isinf(fd) || any(isnan(ymax)),
+    errmsg = 'This is surprising... How did I get here ???';
+    stk_error(errmsg, 'AlgorithmFailure');
+end
 
 end % function stk_filldist_exact -------------------------------------------------------
 
