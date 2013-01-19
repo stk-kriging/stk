@@ -99,7 +99,8 @@ else
         
     elseif ny > 2, % arg2 is interpreted a discrete test set
         
-        [fd, ymax] = stk_filldist_discr_mex(x, arg2);
+        [fd, idx_max] = stk_filldist_discr_mex(x, arg2);
+        ymax = arg2(idx_max, :);
         
     else
         
@@ -179,3 +180,23 @@ end % function stk_filldist
 %! fd1 = stk_filldist(x, box);
 %! fd2 = stk_filldist(x, y);
 %! assert(fd1 >= fd2);
+
+%%
+% One point at the origin, BOX = [0; 1]^d
+
+%!test %%% exact
+%! for dim = [1 3 7],
+%!     x = zeros(1, dim);
+%!     [fd, ymax] = stk_filldist_exact(x);
+%!     assert(stk_isequal_tolabs(fd, sqrt(dim)));
+%!     assert(stk_isequal_tolabs(ymax, ones(1, dim)));
+%! end
+
+%!test %%% discretized
+%! for dim = [1 3 7],
+%!     x = zeros(1, dim);
+%!     y = stk_sampling_regulargrid(3^dim, dim);
+%!     [fd, ymax] = stk_filldist(x, y);
+%!     assert(stk_isequal_tolabs(fd, sqrt(dim)));
+%!     assert(stk_isequal_tolabs(ymax, ones(1, dim)));
+%! end
