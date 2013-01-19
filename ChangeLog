@@ -1,5 +1,10 @@
 2013-01-19  Julien Bect  <julien.bect@supelec.fr>
 
+	Added a DoE example (sequential space-filling).
+
+	* examples/02_design_of_experiments/stk_example_doe02.m: new
+	script.
+
 	Fixed a numerical issue in stk_filldist_exact().
 
 	* misc/dist/stk_filldist_exact.m: modified. Because of possible
