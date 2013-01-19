@@ -51,7 +51,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function fd = stk_filldist_discretized(x, y)
+function [fd, ymax] = stk_filldist_discretized(x, y)
 
 stk_narginchk(2, 2);
 
@@ -59,7 +59,8 @@ if isstruct(x), x = x.a; end
 if isstruct(y), y = y.a; end
 
 % call MEX-file
-fd = stk_filldist_discr_mex(x, y);
+[fd, idx_max] = stk_filldist_discr_mex(x, y);
+ymax = y(idx_max, :);
 
 end % function stk_filldist_discretized
 
@@ -119,8 +120,6 @@ end % function stk_filldist_discretized
 %%
 % One point in the middle of [0; 1]^d
 
-% FIXME: stk_filldist_discretized() does not accept .a structure right now
-
 % %!test
 % %! for dim = [1 3 6],
 % %!     x  = 0.5 * ones(1, dim);
@@ -128,3 +127,4 @@ end % function stk_filldist_discretized
 % %!     fd = stk_filldist_discretized(x, y);
 % %!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));
 % %! end
+
