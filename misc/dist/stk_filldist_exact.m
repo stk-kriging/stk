@@ -114,38 +114,16 @@ for j = 1:d,
                     & (center(:, j) <= bbox(2, j)) ;
 end
 
-%--- Just being cautious ----------------------------------------------------------------
+%--- Grand finale -----------------------------------------------------------------------
 
 % maximal radius for centers that are almost inside the box
-r2max = max(rsquared .* double(inside));
+[rsquared_max, idx_max] = max(rsquared .* double(inside));
 
-% all centers with a radius close to rmax are candidates for being ymax 
-idx_candi = find((rsquared > 0.99999 * r2max) & inside);
+% project on the box
+ymax = max(min(center(idx_max, :), box(2, :)),  box(1, :));
 
-% project on the box and recompute radiuses
-fd2 = 0;
-ymax = nan(1, d);
-for k = 1:length(idx_candi),
-    i = idx_candi(k);
-    % project onto the box
-    c = max(min(center(i, :), box(2, :)),  box(1, :));
-    % compute the (squared) distance to the vertices of the simplex,
-    % considering only the vertices that were in the original dataset
-    r2 = +inf;
-    for j = 1:size(dt, 2),
-        ii = dt(i, j);
-        if ii <= n, % this is one of the original points
-            r2 = min(r2, sum((c - x(ii, :)).^2));
-        end
-    end
-    % and save the result if this is the best point found so far...
-    if ~isinf(r2) && (r2 > fd2),
-        fd2 = r2;
-        ymax = c;
-    end
-end
-
-fd = sqrt(fd2);
+% fill distance
+fd = sqrt(rsquared_max);
 
 % safety net
 if isinf(fd) || any(isnan(ymax)),
