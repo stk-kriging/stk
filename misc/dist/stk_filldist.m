@@ -179,7 +179,7 @@ end % function stk_filldist
 %! y   = stk_sampling_regulargrid(3^dim, dim, box);
 %! fd1 = stk_filldist(x, box);
 %! fd2 = stk_filldist(x, y);
-%! assert(fd1 >= fd2);
+%! assert(fd1 >= fd2 - 10 * eps);
 
 %%
 % One point at the origin, BOX = [0; 1]^d
