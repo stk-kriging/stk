@@ -1,3 +1,104 @@
+2013-01-19  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a DoE example (sequential space-filling).
+
+	* examples/02_design_of_experiments/stk_example_doe02.m: new
+	script.
+
+	Fixed a numerical issue in stk_filldist_exact().
+
+	* misc/dist/stk_filldist_exact.m: modified. Because of possible
+	numerical inaccuracies, centers that are slightly outside the box
+	must also be considered as candidates for being ymax.
+
+	Fixed a bug in stk_filldist().
+
+	* misc/dist/stk_filldist.m: modified. Fixed a bug in the
+	discretized case (the second output argument was the index of ymax
+	instead of ymax itself, as advertised by the documentation).
+
+	Added tests to all fill distance-related functions.
+
+	* misc/dist/stk_filldist_exact.m: added tests.
+	* misc/dist/stk_filldist_discretized.m: added tests.
+	* misc/dist/stk_filldist.m: added tests.
+
+	Added a second output argument to stk_filldist_discretized().
+
+	* misc/dist/stk_filldist_discretized.m: modified. The function now
+	returns, as a second output argument, the point where the maximum
+	distance is attained, as expected by stk_filldist().
+
+2013-01-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Completed the documentation of stk_fill_dist and
+	stk_filldist_discretized.
+
+	* misc/dist/stk_filldist.m: modified (doc)
+	* misc/dist/stk_filldist_discretized.m: modified (doc)
+
+2013-01-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Completed the documentation of stk_filldist_exact.
+
+	* stk_filldist_exact.m: modified (documentation)
+
+	Added a test in stk_filldist.
+
+	* stk_filldist.m: modified (tests)
+
+2013-01-13  Julien Bect  <julien.bect@supelec.fr>
+
+	Ensured that all misc/dist functions accept ".a" structures.
+
+	* misc/dist/stk_dist.m: modified
+	* misc/dist/stk_mindist.m: modified
+	* misc/dist/stk_filldist.m: modified
+	* misc/dist/stk_filldist_discretized.m: modified
+	* misc/dist/private/stk_mindist.c: renamed
+	* misc/dist/private/stk_filldist_discretized.c: renamed
+
+	Moved misc/dist MEX-files into a private folder.
+
+	* misc/dist/private: new folder
+	* misc/dist/stk_dist_pairwise.c: moved to misc/dist/private
+	* misc/dist/stk_dist_matrixx.c: idem
+	* misc/dist/stk_dist_matrixy.c: idem
+	* misc/dist/stk_filldist_discretized.c: idem
+	* misc/dist/stk_mindist.c: idem
+	* misc/dist/stk_mex.h: idem
+	* misc/config/stk_path.m: modified
+	* misc/config/stk_compile_all.m: modified
+
+	Minor change in stk_dist (pairwise case).
+
+	* misc/dist/stk_dist.m: modified
+
+2013-01-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a function to compute the exact fill distance, based on a
+	paper by Luc Pronzato and Werner G. Müller (Statistics and
+	Computing, 2011).
+
+	* misc/dist/stk_filldist.m: replaced
+	* misc/dist/stk_filldist_discretized.c: formerly stk_filldist.c
+	* misc/dist/stk_filldist_discretized.m: formerly stk_filldist.m
+	* misc/dist/stk_filldist_exact.m: new
+	* misc/dist/stk_filldist.c: renamed
+	* misc/config/stk_compile_all.m: modified
+
+===============================================
+===  Maintenance branch 1.2.x created here  ===
+===============================================
+
+2013-01-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixed documentation.
+
+	* misc/dist/stk_dist.m: modified
+	* misc/dist/stk_mindist.m: modified
+	* misc/dist/stk_filldist.m: modified
+
 2013-01-03  Julien Bect  <julien.bect@supelec.fr>
 
 	Modified stk_makedoc to exclude misc/matlab from the generated

@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -33,12 +33,12 @@ here = pwd();
 
 force_recompile = ~((nargin == 0) || ~force_recompile);
 
-d = fullfile(root, 'misc', 'dist');
-stk_compile(d, 'stk_dist_matrixx',  force_recompile);
-stk_compile(d, 'stk_dist_matrixy',  force_recompile);
-stk_compile(d, 'stk_dist_pairwise', force_recompile);
-stk_compile(d, 'stk_mindist',       force_recompile);
-stk_compile(d, 'stk_filldist',      force_recompile);
+d = fullfile(root, 'misc', 'dist', 'private');
+stk_compile(d, 'stk_dist_matrixx',        force_recompile);
+stk_compile(d, 'stk_dist_matrixy',        force_recompile);
+stk_compile(d, 'stk_dist_pairwise',       force_recompile);
+stk_compile(d, 'stk_filldist_discr_mex',  force_recompile);
+stk_compile(d, 'stk_mindist_mex',         force_recompile);
 
 % add other MEX-files to be compiled here
 

@@ -1,6 +1,6 @@
-% STK_DISTANCE_MATRIX computes a matrix of (Euclidean) distances
+% STK_DIST computes a matrix of (Euclidean) distances
 %
-% CALL: D = stk_distance_matrix(X, Y)
+% CALL: D = stk_dist(X, Y)
 %
 %    computes the matrix of distances between X and Y. More precisely, if
 %    X is an nX x d matrix, and Y an nY x d matrix, the D is an nX x nY
@@ -64,7 +64,7 @@ end
 
 if pairwise,
     if isempty(y),
-        D = stk_dist_pairwise(x, x);
+        D = zeros(size(x, 1), 1);
     else
         D = stk_dist_pairwise(x, y);
     end
@@ -79,7 +79,7 @@ end
 end % function stk_dist
 
 %%
-% Check that an error is raised in nargin is not either 1 or 2
+% Check that an error is raised in nargin is neither 1 nor 2
 
 %!error stk_dist();
 %!error stk_dist(0, 0, 0);
@@ -123,7 +123,13 @@ end % function stk_dist
 %!test
 %! x = randn(5,3);
 %! y = randn(5,3);
-%! D1 = stk_dist_pairwise(x, y);
-%! D2 = stk_dist_matrixy(x, y);
+%! D1 = stk_dist(x, y, true); % pairwise
+%! D2 = stk_dist(x, y);
 %! assert(stk_isequal_tolabs(D1, diag(D2)));
- 
+
+%!test
+%! x = randn(5,3);
+%! D1 = stk_dist(x, [], true); % pairwise
+%! assert(stk_isequal_tolabs(D1, zeros(5, 1)));
+%! D1 = stk_dist(x, x, true); % pairwise
+%! assert(stk_isequal_tolabs(D1, zeros(5, 1)));

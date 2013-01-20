@@ -9,11 +9,11 @@
 %
 %    where norm(.) denotes the Euclidean norm in R^d.
 %
-% See also: stk_distance_matrix, stk_filldist
+% See also: stk_dist, stk_filldist
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -37,6 +37,25 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
+
+function md = stk_mindist(x)
+
+stk_narginchk(1, 1);
+
+% call MEX-file
+md = stk_mindist_mex(double(x));
+
+end % function stk_mindist
+
+
+%%
+% Check that both double-precision matrices and stk_dataframe objects are accepted
+
+%!test
+%! d = 3; x = rand(7, d);
+%! md1 = stk_mindist(x);
+%! md2 = stk_mindist(stk_dataframe(x));
+%! assert(stk_isequal_tolabs(md1, md2));
 
 %%
 % Check that sk_mindist(x) is empty when x has zero lines
