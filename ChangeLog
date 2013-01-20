@@ -1,3 +1,11 @@
+2013-01-20  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixed a test in stk_filldist().
+
+	* misc/dist/stk_filldist.m: modified test. Added a tolerance in a
+	comparison; otherwise the test was failing from time to time
+	because of numerical errors.
+
 2013-01-19  Julien Bect  <julien.bect@supelec.fr>
 
 	Added a DoE example (sequential space-filling).
