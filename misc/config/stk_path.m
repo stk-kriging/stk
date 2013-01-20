@@ -5,7 +5,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -61,7 +61,13 @@ path = { path{:} ...
     fullfile(root, 'examples', 'test_functions'          ) };
 
 if ~stk_is_octave_in_use(),
+    % MATLAB-specific
     path = [path {fullfile(root, 'misc', 'matlab')}];
+else
+    % Octave-specific
+    if exist('stk_dist_matrixx') == 0, %#ok<EXIST>
+        path = [path {fullfile(root, 'misc', 'dist', 'private')}];
+    end
 end
 
 end % stk_path
