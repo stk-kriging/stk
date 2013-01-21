@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -29,38 +29,30 @@
 
 function out = stk_set_root(root)
 
-persistent root_folder
+current_root = find_stk_root();
 
 if nargin > 0,
-    
-    first_time = isempty(root_folder);
-    
-    if ~first_time
-        if ~strcmp(root, root_folder),
-            % changing STK's root folder: we remove
-            % the previous one from the path
-            stk_rmpath(root_folder);
-        end
+        
+    while ~isempty(current_root) && ~strcmp(current_root, root)                
+        warning(sprintf(['Removing another copy of STK from the ' ...
+            'search path.\n    (%s)\n'], current_root)); %#ok<SPWRN>
+        stk_rmpath(current_root);
+        current_root = find_stk_root();
     end
     
-    % NOTE: calling stk_rmpath when root and root_folder are identical
+    % NOTE: calling stk_rmpath when root and stkRootFolder are identical
     % is harmless in recent versions of Matlab and Octave, but has been
     % found to cause a bug in Octave 3.0.2 when calling stk_init twice
     % in a row.
     
-    root_folder = root;
-    if first_time,
-        % lock this M-file into memory to prevent clear
-        % all from erasing the persistent variable
-        mlock();
-    end
+    current_root = root;
     
     % finally, add STK folders to the path
-    stk_addpath(root_folder);
+    stk_addpath(current_root);
     
 end
 
-out = root_folder;
+out = current_root;
 
 end % stk_set_root
 
@@ -96,3 +88,22 @@ for i = 1:length(path),
 end
 
 end % stk_addpath
+
+
+%%%%%%%%%%%%%%%%%%%%%
+%%% find_stk_root %%%
+%%%%%%%%%%%%%%%%%%%%%
+
+function root = find_stk_root()
+
+try
+    % This will raise an error if STK is not in the search path
+    s = which('stk_test');
+    % Extract root folder
+    n = length(s) - 1 - length(fullfile('misc', 'test', 'stk_test.m'));
+    root = s(1:n);
+catch
+    root = [];
+end
+
+end % function find_stk_root
