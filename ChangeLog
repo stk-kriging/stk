@@ -1,3 +1,11 @@
+2013-01-21  Julien Bect  <julien.bect@supelec.fr>
+
+	Modified stk_set_root() to avoid the use of a persistent variable.
+	
+	* misc/config/stk_set_root.m: modified. The use of a persistent	variable
+	was failing to play its intended role when switching from one version of
+	STK to another. The root folder is now detected using which('stk_test').
+
 2013-01-20  Julien Bect  <julien.bect@supelec.fr>
 
 	Fixed a test in stk_filldist().
