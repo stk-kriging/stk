@@ -66,8 +66,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_sampling_olhs(n, d, box, permut)
-stk_narginchk(1, 4);
+function [x, aux] = stk_sampling_olhs(n, d, box, permut, extended)
+stk_narginchk(1, 5);
+
+if nargin < 5, extended = false; end
 
 %%% PROCESS INPUT ARGUMENTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -80,15 +82,28 @@ if (r == 0) || (abs(n - n_) > eps),
 end
 n = n_;
 
-% check that d has the correct value for a "full" Ye98-OLHS
-% (other values of d can be reached by removing columns from a full OLHS)
-if (nargin > 1) && ~isempty(d),
-    if d ~= 2 * r,
-        errmsg = 'Incorrect value of d, please read the documentation...';
-        stk_error(errmsg, 'IncorrectArgument');
+if ~extended
+    % check that d has the correct value for a "full" Ye98-OLHS
+    % (other values of d can be reached by removing columns from a full OLHS)
+    if (nargin > 1) && ~isempty(d),
+        if d ~= 2 * r,
+            errmsg = 'Incorrect value of d, please read the documentation...';
+            stk_error(errmsg, 'IncorrectArgument');
+        end
+    else
+        d = 2 * r;
     end
 else
-    d = 2 * r;
+    % check that d has the correct value for a "full" Cioppa-Lucas(2007) NOLHS
+    % (other values of d can be reached by removing columns from a full NOLHS)
+    if (nargin > 1) && ~isempty(d),
+        if d ~= r + 1 + nchoosek(r, 2),
+            errmsg = 'Incorrect value of d, please read the documentation...';
+            stk_error(errmsg, 'IncorrectArgument');
+        end
+    else
+        d = r + 1 + nchoosek(r, 2);
+    end
 end
 
 % number of "positive levels"
@@ -102,7 +117,7 @@ else
 end
 
 % permutation
-if nargin < 4,
+if (nargin < 4) || isempty(permut),
     permut = randperm(q)';
 else
     permut = permut(:);
@@ -134,10 +149,20 @@ M = [permut zeros(q, 2*r-1)];
 for j = 1:r, % from column 2 to column r+1
     M(:, j+1) = A{j} * permut;
 end
-for j = 1:(r-1), % from column r+2 to column 2*r
-    M(:, j+r+1) = A{j} * A{r} * permut;
-end
-
+if ~extended, % OLHS / Ye (1998)
+    for j = 1:(r-1), % from column r+2 to column 2*r
+        M(:, j+r+1) = A{j} * A{r} * permut;
+    end
+else % NOLHS / Cioppa & Lucas(2007)
+    col = r + 2;
+    for j = 1:(r-1),
+        for k = (j + 1):r,
+            M(:, col) = A{j} * A{k} * permut;
+            col = col + 1;
+        end
+    end
+end    
+    
 % Construct the matrix S
 S = ones(q, 2*r);
 for j = 1:r, % from column 2 to column r+1
@@ -151,27 +176,46 @@ for j = 1:r, % from column 2 to column r+1
     end
     S(:, j+1) = aj;
 end
-for j = 2:r, % from column r+2 to column 2*r
-    S(:, r+j) = S(:, 2) .* S(:, j+1);
+if ~extended, % OLHS / Ye (1998)
+    for j = 1:(r-1), % from column r+2 to column 2*r
+        S(:, r+1+j) = S(:, 2) .* S(:, j+2);
+    end
+else % NOLHS / Cioppa & Lucas(2007)
+    col = r + 2;
+    for j = 1:(r - 1),
+        for k = (j + 1):r,
+            S(:, col) = S(:, j+1) .* S(:, k+1);
+            col = col + 1;
+        end
+    end
 end
 
 % Construct the matrix T
 T = M .* S;
 
 % Construct the OLHS X (with integer levels -q, ..., 0, ... +q)
-x = [T; zeros(1, 2*r); -T];
+x_integer_levels = [T; zeros(1, d); -T];
 
 %%% CONVERT TO THE REQUESTED BOX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Convert to positive integer levels (1 ... n)
-x = x + q + 1;
+x = x_integer_levels + q + 1;
 
 % Convert to [0; 1]-valued levels
 x = (2*x - 1) / (2*n);
 
 % And, finally, convert to box
 x = struct('a', stk_rescale(x, [], box));
-    
+
+% Note: the results reported in Cioppa & Lucas correspond to the scaling
+%   x = struct('a', stk_rescale(x, [min(x); max(x)], box));
+
+%%% OUTPUT SOME AUXILIARY DATA IF REQUESTED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+if nargout > 1,
+    aux = struct('M', M, 'S', S, 'X', x_integer_levels);
+end
+
 end % function stk_sampling_olhs
 
 
