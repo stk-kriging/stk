@@ -48,7 +48,7 @@ if ~isempty(box1),
     xmin = box1(1, :);
     xmax = box1(2, :);
     delta = xmax - xmin;
-    z = (x - repmat(xmin, n, 1)) ./ repmat(1./delta, n, 1);
+    z = (x - repmat(xmin, n, 1)) .* repmat(1./delta, n, 1);
 else
     z = x;
 end
@@ -57,10 +57,34 @@ end
 if ~isempty(box2),
     zmin = box2(1, :);
     zmax = box2(2, :);
-    delta = zmax - zmin;   
+    delta = zmax - zmin;
     y = repmat(zmin, n, 1) + z .* repmat(delta, n, 1);
 else
     y = z;
 end
 
 end % function stk_rescale
+
+%!shared x
+%!  x = rand(10, 4);
+%!test
+%!  y = stk_rescale(x, [], []);
+%!  assert(stk_isequal_tolabs(x, y));
+%!test
+%!  xx = stk_dataframe(x);
+%!  y = stk_rescale(xx, [], []);
+%!  assert(stk_isequal_tolabs(x, y));
+
+%!test
+%!  y = stk_rescale(0.5, [], [0; 2]);
+%!  assert(stk_isequal_tolabs(y, 1.0));
+%!test
+%!  y = stk_rescale(0.5, [0; 1], [0; 2]);
+%!  assert(stk_isequal_tolabs(y, 1.0));
+
+%!test
+%!  y = stk_rescale(0.5, [0; 2], []);
+%!  assert(stk_isequal_tolabs(y, 0.25));
+%!test
+%!  y = stk_rescale(0.5, [0; 2], [0; 1]);
+%!  assert(stk_isequal_tolabs(y, 0.25));
