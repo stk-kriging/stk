@@ -1,5 +1,11 @@
 2013-02-04  Julien Bect  <julien.bect@supelec.fr>
 
+	Implement the NOLHS construction of Cioppa & Luca (2007).
+
+	* sampling/stk_sampling_olhs.m: The function now has an additional
+	hidden option to trigger the construction of an extended (N)OLHS
+	following the paper by Cioppa & Lucs (Technometrics, 2007).
+
 	Fixed a bug in stk_rescale() and added regression tests.
 
 	* utils/stk_rescale.m: Fixed a bug in the first part of the
