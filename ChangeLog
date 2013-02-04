@@ -2,10 +2,18 @@
 ===  Release 1.2  ===
 =====================
 
+2013-02-04  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixed a bug in stk_rescale() and added regression tests.
+
+	* utils/stk_rescale.m: Fixed a bug in the first part of the
+	function (i.e., the part where the data is scaled from its
+	original box to [0; 1]^d). Added some regression tests.
+
 2013-01-21  Julien Bect  <julien.bect@supelec.fr>
 
 	Modified stk_set_root() to avoid the use of a persistent variable.
-	
+
 	* misc/config/stk_set_root.m: modified. The use of a persistent	variable
 	was failing to play its intended role when switching from one version of
 	STK to another. The root folder is now detected using which('stk_test').
