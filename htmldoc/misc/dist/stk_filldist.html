@@ -24,7 +24,7 @@
 <div class="box"><strong>STK_FILLDIST computes the (discrete) fill distance of a set of points</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>This is a script file. </strong></div>
+<div class="box"><strong>function fd = stk_filldist(x, y) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> STK_FILLDIST computes the (discrete) fill distance of a set of points
@@ -37,7 +37,7 @@
        D = max_{1 &lt;= j &lt;= m} min_{1 &lt;= i &lt;= n} norm(X(i,:) - Y(j,:)),
 
     where norm(.) denotes the Euclidean norm in R^d. The fill distance
-    is also known as the &quot;maximin&quot; distance.
+    is also known as the &quot;minimax&quot; criterion.
 
  CALL: [D, ARGMAX] = stk_filldist(X, Y)
 
@@ -45,7 +45,7 @@
     is obtained. (If the maximum is obtained for several values of j,
     the smallest is returned.)
 
- See also: stk_distance_matrix, <a href="stk_mindist.html" class="code" title="">stk_mindist</a></pre></div>
+ See also: <a href="stk_dist.html" class="code" title="function D = stk_dist(x, y, pairwise)">stk_dist</a>, <a href="stk_mindist.html" class="code" title="function md = stk_mindist(x)">stk_mindist</a></pre></div>
 
 <!-- crossreference -->
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
@@ -70,7 +70,7 @@ This function is called by:
 0008 <span class="comment">%       D = max_{1 &lt;= j &lt;= m} min_{1 &lt;= i &lt;= n} norm(X(i,:) - Y(j,:)),</span>
 0009 <span class="comment">%</span>
 0010 <span class="comment">%    where norm(.) denotes the Euclidean norm in R^d. The fill distance</span>
-0011 <span class="comment">%    is also known as the &quot;maximin&quot; distance.</span>
+0011 <span class="comment">%    is also known as the &quot;minimax&quot; criterion.</span>
 0012 <span class="comment">%</span>
 0013 <span class="comment">% CALL: [D, ARGMAX] = stk_filldist(X, Y)</span>
 0014 <span class="comment">%</span>
@@ -78,11 +78,11 @@ This function is called by:
 0016 <span class="comment">%    is obtained. (If the maximum is obtained for several values of j,</span>
 0017 <span class="comment">%    the smallest is returned.)</span>
 0018 <span class="comment">%</span>
-0019 <span class="comment">% See also: stk_distance_matrix, stk_mindist</span>
+0019 <span class="comment">% See also: stk_dist, stk_mindist</span>
 0020 
 0021 <span class="comment">% Copyright Notice</span>
 0022 <span class="comment">%</span>
-0023 <span class="comment">%    Copyright (C) 2012 SUPELEC</span>
+0023 <span class="comment">%    Copyright (C) 2012, 2013 SUPELEC</span>
 0024 <span class="comment">%</span>
 0025 <span class="comment">%    Author: Julien Bect &lt;julien.bect@supelec.fr&gt;</span>
 0026 
@@ -106,47 +106,68 @@ This function is called by:
 0044 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
 0045 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 0046 
-0047 <span class="comment">%%</span>
-0048 <span class="comment">% Two non-empty matrices are expected as input arguments</span>
-0049 
-0050 <span class="comment">%!error stk_filldist(0.0)            % incorrect nb of arguments</span>
-0051 <span class="comment">%!error stk_filldist(0.0, 0.0, pi)   % incorrect nb of arguments</span>
-0052 <span class="comment">%!error stk_filldist(0.0, [])        % second arg is empty</span>
-0053 <span class="comment">%!error stk_filldist([], 0.0)        % first arg is empty</span>
-0054 
-0055 <span class="comment">%%</span>
-0056 <span class="comment">% Filldist = 0 if X = Y</span>
-0057 
-0058 <span class="comment">%!test</span>
-0059 <span class="comment">%! n = 5;</span>
-0060 <span class="comment">%! for dim = 1:10,</span>
-0061 <span class="comment">%!     x = rand(n, dim);</span>
-0062 <span class="comment">%!     fd = stk_filldist(x, x);</span>
-0063 <span class="comment">%!     assert(stk_isequal_tolabs(fd, 0.0));</span>
-0064 <span class="comment">%! end</span>
-0065 
-0066 <span class="comment">%%</span>
-0067 <span class="comment">% Filldist = norm if nx = ny = 1</span>
-0068 
-0069 <span class="comment">%!test</span>
-0070 <span class="comment">%! for dim = 1:10,</span>
-0071 <span class="comment">%!     x = rand(1, dim);</span>
-0072 <span class="comment">%!     y = rand(1, dim);</span>
-0073 <span class="comment">%!     fd = stk_filldist(x, y);</span>
-0074 <span class="comment">%!     assert(stk_isequal_tolabs(fd, norm(x - y)));</span>
-0075 <span class="comment">%! end</span>
-0076 
-0077 <span class="comment">%%</span>
-0078 <span class="comment">% Filldist = max(dist) if ny = 1</span>
-0079 
-0080 <span class="comment">%!test</span>
-0081 <span class="comment">%! n = 4;</span>
-0082 <span class="comment">%! for dim = 2:10,</span>
-0083 <span class="comment">%!     x = zeros(n, dim);</span>
-0084 <span class="comment">%!     y = rand(1, dim);</span>
-0085 <span class="comment">%!     fd = stk_filldist(x, y);</span>
-0086 <span class="comment">%!     assert(stk_isequal_tolabs(fd, max(stk_dist(x, y))));</span>
-0087 <span class="comment">%! end</span></pre></div>
-<hr><address>Generated on Thu 03-Jan-2013 16:25:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+0047 <a name="_sub0" href="#_subfunctions" class="code">function fd = stk_filldist(x, y)</a>
+0048 
+0049 stk_narginchk(2, 2);
+0050 
+0051 <span class="keyword">if</span> isstruct(x), x = x.a; <span class="keyword">end</span>
+0052 <span class="keyword">if</span> isstruct(y), y = y.a; <span class="keyword">end</span>
+0053 
+0054 <span class="comment">% call MEX-file</span>
+0055 fd = stk_filldist_mex(x, y);
+0056 
+0057 <span class="keyword">end</span> <span class="comment">% function stk_filldist</span>
+0058 
+0059 <span class="comment">%%</span>
+0060 <span class="comment">% Two non-empty matrices are expected as input arguments</span>
+0061 
+0062 <span class="comment">%!error stk_filldist(0.0)            % incorrect nb of arguments</span>
+0063 <span class="comment">%!error stk_filldist(0.0, 0.0, pi)   % incorrect nb of arguments</span>
+0064 <span class="comment">%!error stk_filldist(0.0, [])        % second arg is empty</span>
+0065 <span class="comment">%!error stk_filldist([], 0.0)        % first arg is empty</span>
+0066 
+0067 <span class="comment">%%</span>
+0068 <span class="comment">% Check that &quot;.a&quot; structures are accepted</span>
+0069 
+0070 <span class="comment">%!test</span>
+0071 <span class="comment">%! d = 3; x = rand(7, d); y = rand(20, d);</span>
+0072 <span class="comment">%! fd1 = stk_filldist(x, y);</span>
+0073 <span class="comment">%! fd2 = stk_filldist(struct('a', x), struct('a', y));</span>
+0074 <span class="comment">%! assert(stk_isequal_tolabs(fd1, fd2));</span>
+0075 
+0076 <span class="comment">%%</span>
+0077 <span class="comment">% Filldist = 0 if X = Y</span>
+0078 
+0079 <span class="comment">%!test</span>
+0080 <span class="comment">%! n = 5;</span>
+0081 <span class="comment">%! for dim = 1:10,</span>
+0082 <span class="comment">%!     x = rand(n, dim);</span>
+0083 <span class="comment">%!     fd = stk_filldist(x, x);</span>
+0084 <span class="comment">%!     assert(stk_isequal_tolabs(fd, 0.0));</span>
+0085 <span class="comment">%! end</span>
+0086 
+0087 <span class="comment">%%</span>
+0088 <span class="comment">% Filldist = norm if nx = ny = 1</span>
+0089 
+0090 <span class="comment">%!test</span>
+0091 <span class="comment">%! for dim = 1:10,</span>
+0092 <span class="comment">%!     x = rand(1, dim);</span>
+0093 <span class="comment">%!     y = rand(1, dim);</span>
+0094 <span class="comment">%!     fd = stk_filldist(x, y);</span>
+0095 <span class="comment">%!     assert(stk_isequal_tolabs(fd, norm(x - y)));</span>
+0096 <span class="comment">%! end</span>
+0097 
+0098 <span class="comment">%%</span>
+0099 <span class="comment">% Filldist = max(dist) if ny = 1</span>
+0100 
+0101 <span class="comment">%!test</span>
+0102 <span class="comment">%! n = 4;</span>
+0103 <span class="comment">%! for dim = 2:10,</span>
+0104 <span class="comment">%!     x = zeros(n, dim);</span>
+0105 <span class="comment">%!     y = rand(1, dim);</span>
+0106 <span class="comment">%!     fd = stk_filldist(x, y);</span>
+0107 <span class="comment">%!     assert(stk_isequal_tolabs(fd, max(stk_dist(x, y))));</span>
+0108 <span class="comment">%! end</span></pre></div>
+<hr><address>Generated on Mon 04-Feb-2013 16:49:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>

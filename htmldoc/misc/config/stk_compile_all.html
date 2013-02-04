@@ -48,7 +48,7 @@ This function is called by:
 0002 
 0003 <span class="comment">% Copyright Notice</span>
 0004 <span class="comment">%</span>
-0005 <span class="comment">%    Copyright (C) 2011, 2012 SUPELEC</span>
+0005 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
 0006 <span class="comment">%</span>
 0007 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
 0008 
@@ -79,12 +79,12 @@ This function is called by:
 0033 
 0034 force_recompile = ~((nargin == 0) || ~force_recompile);
 0035 
-0036 d = fullfile(root, <span class="string">'misc'</span>, <span class="string">'dist'</span>);
+0036 d = fullfile(root, <span class="string">'misc'</span>, <span class="string">'dist'</span>, <span class="string">'private'</span>);
 0037 <a href="#_sub1" class="code" title="subfunction stk_compile(folder, mexname, force_recompile, varargin)">stk_compile</a>(d, <span class="string">'stk_dist_matrixx'</span>,  force_recompile);
 0038 <a href="#_sub1" class="code" title="subfunction stk_compile(folder, mexname, force_recompile, varargin)">stk_compile</a>(d, <span class="string">'stk_dist_matrixy'</span>,  force_recompile);
 0039 <a href="#_sub1" class="code" title="subfunction stk_compile(folder, mexname, force_recompile, varargin)">stk_compile</a>(d, <span class="string">'stk_dist_pairwise'</span>, force_recompile);
-0040 <a href="#_sub1" class="code" title="subfunction stk_compile(folder, mexname, force_recompile, varargin)">stk_compile</a>(d, <span class="string">'stk_mindist'</span>,       force_recompile);
-0041 <a href="#_sub1" class="code" title="subfunction stk_compile(folder, mexname, force_recompile, varargin)">stk_compile</a>(d, <span class="string">'stk_filldist'</span>,      force_recompile);
+0040 <a href="#_sub1" class="code" title="subfunction stk_compile(folder, mexname, force_recompile, varargin)">stk_compile</a>(d, <span class="string">'stk_filldist_mex'</span>,  force_recompile);
+0041 <a href="#_sub1" class="code" title="subfunction stk_compile(folder, mexname, force_recompile, varargin)">stk_compile</a>(d, <span class="string">'stk_mindist_mex'</span>,   force_recompile);
 0042 
 0043 <span class="comment">% add other MEX-files to be compiled here</span>
 0044 
@@ -113,6 +113,6 @@ This function is called by:
 0067 <span class="keyword">end</span>
 0068 
 0069 <span class="keyword">end</span></pre></div>
-<hr><address>Generated on Thu 03-Jan-2013 16:25:06 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
+<hr><address>Generated on Mon 04-Feb-2013 16:49:22 by <strong><a href="http://www.artefact.tk/software/matlab/m2html/" title="Matlab Documentation in HTML">m2html</a></strong> &copy; 2005</address>
 </body>
 </html>
