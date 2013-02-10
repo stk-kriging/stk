@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -27,29 +27,49 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function y = stk_datastruct(x)
+stk_narginchk(0, 1);
 
+if (nargin == 0) || isempty(x)
+    y = struct('a', []);
+    return;
+end
+    
 if isstruct(x) && isfield(x, 'a')
     y = x;
     return;
 end
 
-if isa(x, 'double')
-    y = struct('a', x);
-    return;
-end
-
-if isempty(x)
-    y = struct('a', []);
-end
-
-xname = inputname();
-if isempty(xname),
-    errmsg = 'x must be a matrix or a structure with an ''a'' field.';
-    stk_error(errmsg, 'IncorrectArgument');
-else
-    stack = dbstack();
-    errmsg = sprintf('%s must be a matrix or a structure with an ''a'' field.', xname);
-    stk_error(errmsg, 'IncorrectArgument', stack(2:end));
+try
+    y = struct('a', double(x));
+catch
+    xname = inputname(1);
+    if isempty(xname),
+        errmsg = 'x must be a matrix or a structure with an ''a'' field.';
+        stk_error(errmsg, 'IncorrectArgument');
+    else
+        stack = dbstack();
+        errmsg = sprintf('%s must be a matrix or a structure with an ''a'' field.', xname);
+        stk_error(errmsg, 'IncorrectArgument', stack(2:end));
+    end
 end
 
 end % function stk_datastruct
+
+
+%%
+% Tests
+
+% Incorrect number of input arguments
+%!error y = stk_datastruct(23, 47);
+
+% Empty datastruct
+%!shared y1, y2
+%!test y1 = stk_datastruct();
+%!test y2 = stk_datastruct([]);
+%!assert (isequal (y1, y2));
+
+% Ones
+%!shared y1, y2
+%!test y1 = stk_datastruct(ones(3));
+%!test y2 = stk_datastruct(true(3));
+%!assert (isequal (y1, y2));

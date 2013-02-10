@@ -2,6 +2,14 @@
 ===  Release 1.2  ===
 =====================
 
+2013-02-10  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix and improve stk_datastruct().
+
+	* utils/stk_datastruct.m: Call inputname correctly, with an input
+	argument. Return an empty data structure when nargin == 0. Add
+	some tests.
+
 2013-02-04  Julien Bect  <julien.bect@supelec.fr>
 
 	Fixed a bug in stk_rescale() and added regression tests.
