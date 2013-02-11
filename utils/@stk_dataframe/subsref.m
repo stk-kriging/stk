@@ -38,7 +38,7 @@ switch idx(1).type
         stk_error(errmsg, 'IllegalIndexing');
         
     case '.'
-        b = strcmp(idx(1).subs, x.varnames);
+        b = strcmp(idx(1).subs, x.vnames);
         switch sum(b),
             case 0
                 errmsg = sprintf('There is no variable named %s.', idx(1).subs);

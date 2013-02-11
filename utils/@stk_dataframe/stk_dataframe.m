@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_dataframe(x0, varnames)
+function x = stk_dataframe(x0, vnames)
 
 stk_narginchk(1, 2);
 
@@ -42,21 +42,21 @@ else
     x.data = x0;
     
     if nargin > 1,
-        if ischar(varnames)
-            x.varnames = {varnames};
-        elseif iscell(varnames)
-            x.varnames = varnames;
+        if ischar(vnames)
+            x.vnames = {vnames};
+        elseif iscell(vnames)
+            x.vnames = vnames;
         else
             errmsg = 'Incorrect type for argument ''varnames''.';
             stk_error(errmsg, 'IncorrectType');
         end
     else
         if d == 1,
-            x.varnames = {'x'};
+            x.vnames = {'x'};
         else
-            x.varnames = cell(1, d);
+            x.vnames = cell(1, d);
             for j = 1:d,
-                x.varnames{j} = sprintf('x%d', j);
+                x.vnames{j} = sprintf('x%d', j);
             end
         end
     end

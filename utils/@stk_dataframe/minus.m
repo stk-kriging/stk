@@ -32,7 +32,7 @@ ydata = double(x1) - double(x2);
 
 % choose if the output type
 if isa(x1, 'stk_dataframe'),
-    if isa(x2, 'stk_dataframe') && ~isequal(x2.varnames, vn),
+    if isa(x2, 'stk_dataframe') && ~isequal(x2.vnames, vn),
         warning('Substracting stk_dataframes with different variable names.');
         output_df = false;
     else
@@ -46,7 +46,7 @@ end
 
 if output_df,
     % output of type 'stk_dataframe'
-    y = stk_dataframe(ydata, x1.varnames);
+    y = stk_dataframe(ydata, x1.vnames);
 else
     % output of type 'double'
     y = ydata;

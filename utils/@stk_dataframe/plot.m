@@ -32,7 +32,7 @@ stk_narginchk(2, inf);
 
 if isa(x, 'stk_dataframe')
     xx = double(x);
-    xvarnames = x.varnames;
+    xvarnames = x.vnames;
 else
     xx = x;
     xvarnames = {'x'};
@@ -44,7 +44,7 @@ end
 
 if isa(z, 'stk_dataframe')
     zz = double(z);
-    zvarnames = z.varnames;
+    zvarnames = z.vnames;
 else
     zz = z;
     nb_responses = size(z, 2);

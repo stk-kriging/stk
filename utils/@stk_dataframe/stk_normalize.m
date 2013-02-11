@@ -30,6 +30,6 @@ function y = stk_normalize(x, varargin)
 
 ydata = stk_normalize(x.data, varargin{:});
 
-y = stk_dataframe(ydata, x.varnames);
+y = stk_dataframe(ydata, x.vnames);
 
 end % function stk_normalize
