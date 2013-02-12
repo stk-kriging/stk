@@ -1,4 +1,4 @@
-% VAR [FIXME: missing doc...]
+% VAR computes the variance of the elements along a given dimension.
 
 % Copyright Notice
 %
@@ -26,13 +26,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = var(x, varargin)
+function z = var(x, flag, dim)
 
-if (nargin == 3) && (varargin{2} ~= 1)
-    errmsg = 'var() always acts columnwise on stk_dataframe objects.';
-    stk_error(errmsg, 'IncorrectArgument');
-end
-
-v = var(x.data, varargin{:});
+if nargin < 2, flag = 0; end % default: normalize by N-1
+if nargin < 3, dim = 1; end % default: act along columns
+    
+z = apply(x, dim, @var, flag);
 
 end % function var

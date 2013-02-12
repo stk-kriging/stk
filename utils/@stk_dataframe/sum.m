@@ -1,4 +1,4 @@
-% SUM [FIXME: missing doc...]
+% SUM computes the sum of the elements along a given dimension.
 
 % Copyright Notice
 %
@@ -26,13 +26,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function S = sum(x, dim)
+function z = sum(x, dim)
 
-if (nargin == 2) && (dim ~= 1)
-    errmsg = 'Summation on stk_dataframe objects is ALWAYS columnwise.';
-    stk_error(errmsg, 'IncorrectArgument');
-end
+if nargin < 2, dim = 1; end
 
-S = sum(x.data);
+z = apply(x, dim, @sum);
 
 end % function sum
