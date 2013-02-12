@@ -33,3 +33,11 @@ if nargin < 2, dim = 1; end
 z = apply(x, dim, @mode);
 
 end % function mode
+
+
+%!shared x1 df1
+%! x1 = floor(3 * rand(9, 3));
+%! df1 = stk_dataframe(x1, {'a', 'b', 'c'});
+%!assert (isequal (mode(df1),    mode(x1)))
+%!assert (isequal (mode(df1, 1), mode(x1)))
+%!assert (isequal (mode(df1, 2), mode(x1, 2)))

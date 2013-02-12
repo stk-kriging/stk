@@ -33,3 +33,11 @@ if nargin < 2, dim = 1; end
 z = apply(x, dim, @mean);
 
 end % function mean
+
+
+%!shared x1 df1
+%! x1 = rand(9, 3);
+%! df1 = stk_dataframe(x1, {'a', 'b', 'c'});
+%!assert (isequal (mean(df1),    mean(x1)))
+%!assert (isequal (mean(df1, 1), mean(x1)))
+%!assert (isequal (mean(df1, 2), mean(x1, 2)))

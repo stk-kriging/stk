@@ -33,3 +33,11 @@ if nargin < 2, dim = 1; end
 z = apply(x, dim, @prod);
 
 end % function prod
+
+
+%!shared x1 df1
+%! x1 = rand(9, 3);
+%! df1 = stk_dataframe(x1, {'a', 'b', 'c'});
+%!assert (isequal (prod(df1),    prod(x1)))
+%!assert (isequal (prod(df1, 1), prod(x1)))
+%!assert (isequal (prod(df1, 2), prod(x1, 2)))

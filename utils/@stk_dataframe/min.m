@@ -58,12 +58,16 @@ end % function min
 %!shared x1 df1 x2 df2 z
 %! x1 = rand(10, 3);  df1 = stk_dataframe(x1, {'a', 'b', 'c'});
 %! x2 = rand(10, 3);  df2 = stk_dataframe(x2, {'f', 'g', 'h'});
-
 %!test z = min(df1, df2);
 %!assert (isa(z, 'stk_dataframe') && isequal(double(z), min(x1, x2)));
-
 %!test z = min(df1, x2);
 %!assert (isa(z, 'stk_dataframe') && isequal(double(z), min(x1, x2)));
-
 %!test z = min(x1, df2);
 %!assert (isa(z, 'stk_dataframe') && isequal(double(z), min(x1, x2)));
+
+%!shared x1 df1
+%! x1 = rand(9, 3);
+%! df1 = stk_dataframe(x1, {'a', 'b', 'c'});
+%!assert (isequal (min(df1),        min(x1)))
+%!assert (isequal (min(df1, [], 1), min(x1)))
+%!assert (isequal (min(df1, [], 2), min(x1, [], 2)))

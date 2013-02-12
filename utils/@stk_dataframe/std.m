@@ -34,3 +34,14 @@ if nargin < 3, dim = 1; end % default: act along columns
 z = apply(x, dim, @std, flag);
 
 end % function std
+
+
+%!shared x1 df1
+%! x1 = rand(9, 3);
+%! df1 = stk_dataframe(x1, {'a', 'b', 'c'});
+%!assert (isequal (std(df1),       std(x1)))
+%!assert (isequal (std(df1, 0, 1), std(x1)))
+%!assert (isequal (std(df1, 0, 2), std(x1, 0, 2)))
+%!assert (isequal (std(df1, 1),    std(x1, 1)))
+%!assert (isequal (std(df1, 1, 1), std(x1, 1)))
+%!assert (isequal (std(df1, 1, 2), std(x1, 1, 2)))
