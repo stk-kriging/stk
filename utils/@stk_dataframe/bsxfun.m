@@ -1,0 +1,40 @@
+% BSXFUN applies a binary function to a pair of dataframes, elementwise.
+
+% Copyright Notice
+%
+%    Copyright (C) 2013 SUPELEC
+%
+%    Author: Julien Bect  <julien.bect@supelec.fr>
+
+% Copying Permission Statement
+%
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
+%
+%    STK is free software: you can redistribute it and/or modify it under
+%    the terms of the GNU General Public License as published by the Free
+%    Software Foundation,  either version 3  of the License, or  (at your
+%    option) any later version.
+%
+%    STK is distributed  in the hope that it will  be useful, but WITHOUT
+%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY
+%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public
+%    License for more details.
+%
+%    You should  have received a copy  of the GNU  General Public License
+%    along with STK.  If not, see <http://www.gnu.org/licenses/>.
+
+function y = bsxfun(F, x1, x2)
+
+ydata = bsxfun(F, double(x1), double(x2));
+
+% choose if the output type
+if isa(x1, 'stk_dataframe'),
+    y = stk_dataframe(ydata, x1.vnames);
+else
+    y = ydata;
+end
+
+end % function bsxfun
