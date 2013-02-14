@@ -1,4 +1,4 @@
-% MTIMES [FIXME: missing doc...]
+% MTIMES multplies dataframes elementwise.
 
 % Copyright Notice
 %
@@ -26,8 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function z = mtimes(x, y)
+function y = mtimes(x1, x2)
 
-z = double(x) * double(y);
+y = bsxfun(@mtimes, x1, x2);
 
 end % function mtimes
