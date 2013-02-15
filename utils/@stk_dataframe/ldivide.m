@@ -31,3 +31,7 @@ function y = ldivide(x1, x2)
 y = bsxfun(@ldivide, x1, x2);
 
 end % function ldivide
+
+%!test  stk_test_dfbinaryop(@ldivide, 1 + rand(7, 2), rand(7, 2));
+%!test  stk_test_dfbinaryop(@ldivide, 1 + rand(7, 2), pi);
+%!error stk_test_dfbinaryop(@ldivide, 1 + rand(7, 2), rand(7, 3));

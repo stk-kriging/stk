@@ -31,3 +31,8 @@ function y = plus(x1, x2)
 y = bsxfun(@plus, x1, x2);
 
 end % function plus
+
+%!test  stk_test_dfbinaryop(@plus, rand(7, 2), rand(7, 2));
+%!test  stk_test_dfbinaryop(@plus, rand(7, 2), pi);
+%!error stk_test_dfbinaryop(@plus, rand(7, 2), rand(7, 3));
+
