@@ -1,8 +1,8 @@
-% STK_DISP_FRAMEDTEXT displays some text within a box.
+% STK_SPRINTF_FRAMED writes formatted text into a frame.
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,13 +26,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_framedtext(s)
+function s = stk_sprintf_framed(fmt, varargin)
 
-a = sprintf('    %s    ', s);
+a = sprintf(['    ' fmt '    '], varargin{:});
 b = repmat('=', 1, length(a));
+s = sprintf('#%s#\n#%s#\n#%s#\n', b, a, b);
 
-fprintf('\n#%s#\n', b);
-fprintf('#%s#\n',   a);
-fprintf('#%s#\n\n', b);
-
-end % function stk_disp_framedtext
+end % function stk_sprintf_framed

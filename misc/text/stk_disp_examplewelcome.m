@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -35,6 +35,6 @@ if length(stack) < 2,
     stk_error(errmsg, 'WhatTheFuck');
 end
 
-stk_disp_framedtext(stack(2).name);
+fprintf('%s\n', stk_sprintf_framed(stack(2).name));
 
 end % function stk_disp_examplewelcome
