@@ -45,7 +45,7 @@ any_negative = any(x < 0);
 
 % Start without decimal part
 ax = abs(x);
-n1 = floor(log10(max(ax))) + 1;
+n1 = max(1, floor(log10(max(ax))) + 1);
 n2 = 0;
 n3 = any_negative;
 
@@ -111,3 +111,16 @@ end % function stk_sprintf_colvect_fixedpoint
 %!assert (isequal(s, [' 1.20'; '-3.48']))
 %!test s = stk_sprintf_colvect_fixedpoint(x, 6);
 %!assert (isequal(s, [' 1.20'; '-3.48']))
+
+%!shared x s
+%! x = [0.2; 0.48];
+%!test s = stk_sprintf_colvect_fixedpoint(x, 1);
+%!assert (isequal(s, ['0'; '0']))
+%!test s = stk_sprintf_colvect_fixedpoint(x, 2);
+%!assert (isequal(s, ['0'; '0']))
+%!test s = stk_sprintf_colvect_fixedpoint(x, 3);
+%!assert (isequal(s, ['0.2'; '0.5']))
+%!test s = stk_sprintf_colvect_fixedpoint(x, 4);
+%!assert (isequal(s, ['0.20'; '0.48']))
+%!test s = stk_sprintf_colvect_fixedpoint(x, 5);
+%!assert (isequal(s, ['0.20'; '0.48']))
