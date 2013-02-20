@@ -48,8 +48,8 @@ exponent(~b) = floor(log10(ax(~b)));
 % compute mantissae
 mantissa = x .* 10.^(-exponent);
 
-% maximal exponent
-maxexp = max(exponent);
+% maximal absolute exponent
+maxexp = max(abs(exponent));
 
 % is there any negative element ?
 any_negative = any(x < 0);
@@ -132,3 +132,8 @@ end % function stk_sprintf_colvect_scientific
 %!assert (isequal(s, [' 1.2000e+00'; '-3.4567e+04']))
 %!test s = stk_sprintf_colvect_scientific(x, 12);
 %!assert (isequal(s, [' 1.2000e+00'; '-3.4567e+04']))
+
+%!test
+%! x = [1e6; -1e10; 1e-221];
+%! s = stk_sprintf_colvect_scientific(x, 10);
+%! assert(isequal(s, [' 1e+006'; '-1e+010'; ' 1e-221']));
