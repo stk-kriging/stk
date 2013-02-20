@@ -35,7 +35,7 @@ end
 % Try fixed-point notation first.
 [str, err_fp] = stk_sprintf_colvect_fixedpoint(x, max_width);
 
-if err_fp > eps,
+if err_fp > 0,
     % Accept fixed-point notation if the error is zero,
     % try scientific notation otherwise.
     [str_sc, err_sc] = stk_sprintf_colvect_scientific(x, max_width);
