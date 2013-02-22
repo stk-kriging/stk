@@ -42,28 +42,16 @@ else %--- apply 'min' elementwise ----------------------------------------------
         stk_error(errmsg, 'TooManyInputArgs');
     end
 
-    zdata = min(double(x), double(y));
-    
-    if isa(x, 'stk_dataframe')
-        z = stk_dataframe(zdata, x.vnames);
-    else
-        z = stk_dataframe(zdata, y.vnames);
-    end
+    z = bsxfun(@min, x, y);
     
 end %--- that's all, folks --------------------------------------------------------------
 
 end % function min
 
 
-%!shared x1 df1 x2 df2 z
-%! x1 = rand(10, 3);  df1 = stk_dataframe(x1, {'a', 'b', 'c'});
-%! x2 = rand(10, 3);  df2 = stk_dataframe(x2, {'f', 'g', 'h'});
-%!test z = min(df1, df2);
-%!assert (isa(z, 'stk_dataframe') && isequal(double(z), min(x1, x2)));
-%!test z = min(df1, x2);
-%!assert (isa(z, 'stk_dataframe') && isequal(double(z), min(x1, x2)));
-%!test z = min(x1, df2);
-%!assert (isa(z, 'stk_dataframe') && isequal(double(z), min(x1, x2)));
+%!test  stk_test_dfbinaryop(@min, rand(7, 2), rand(7, 2));
+%!test  stk_test_dfbinaryop(@min, rand(7, 2), pi);
+%!error stk_test_dfbinaryop(@min, rand(7, 2), rand(7, 3));
 
 %!shared x1 df1
 %! x1 = rand(9, 3);
