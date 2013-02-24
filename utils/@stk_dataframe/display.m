@@ -33,6 +33,22 @@
 
 function display(x, max_width)
 
+[n, d] = size(x.data);
+
+if n == 0,
+    if d == 1,
+        fprintf('\nEmpty stk_dataframe with 1 variable: ');
+        fprintf('%s\n\n', x.vnames{1});
+    else
+        fprintf('\nEmpty stk_dataframe with %d variables: ', d);
+        for j = 1:(d-1),
+            fprintf('%s, ', x.vnames{j});
+        end
+        fprintf('%s\n\n', x.vnames{end});
+    end
+    return
+end
+
 if nargin < 2,
     switch get(0, 'Format')
         case 'short'
@@ -47,8 +63,6 @@ end
 
 nb_spaces_before = 1;
 nb_spaces_colsep = 2;
-
-[n, d] = size(x.data);
 
 str = repmat(' ', n + 1,  nb_spaces_before); %#ok<*AGROW>
 
