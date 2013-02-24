@@ -28,7 +28,7 @@
 
 function x = stk_dataframe(x0, vnames)
 
-stk_narginchk(0, 2);
+stk_narginchk(0, 3);
 
 if nargin == 0,
     x0 = zeros(0, 1);
@@ -64,6 +64,8 @@ else
             end
         end
     end
+    
+    x.rnames = {}; % default rownames will be displayed: 1, 2, ...
     
     x = class(x, 'stk_dataframe');
     

@@ -66,6 +66,17 @@ nb_spaces_colsep = 2;
 
 str = repmat(' ', n + 1,  nb_spaces_before); %#ok<*AGROW>
 
+% first columns: row names
+if isempty(x.rnames)
+    xx = stk_sprintf_colvect(1:n);    
+else
+    xx = char(x.rnames{:});
+end
+str = [str [repmat(' ', 1, size(xx, 2)); xx]];
+
+% column separator
+str = [str repmat(' ', n + 1,  nb_spaces_colsep)];
+
 for j = 1:d,
     
     vn = x.vnames{j};
@@ -78,6 +89,7 @@ for j = 1:d,
         repmat(' ', n, L - Lxx) xx]];    % formatted data
     
     if j < d,
+        % column separator
         str = [str repmat(' ', n + 1,  nb_spaces_colsep)];
     end
     
