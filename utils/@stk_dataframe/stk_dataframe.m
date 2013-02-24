@@ -28,7 +28,11 @@
 
 function x = stk_dataframe(x0, vnames)
 
-stk_narginchk(1, 2);
+stk_narginchk(0, 2);
+
+if nargin == 0,
+    x0 = zeros(0, 1);
+end
 
 if isa(x0, 'stk_dataframe'),
  
@@ -66,3 +70,5 @@ else
 end
 
 end % function stk_dataframe
+
+%!test x = stk_dataframe();
