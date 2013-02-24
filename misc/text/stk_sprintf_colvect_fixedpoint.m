@@ -28,6 +28,12 @@
 
 function [str, err] = stk_sprintf_colvect_fixedpoint(x, max_width)
 
+if isempty(x),
+    str = '';
+    err = 0;
+    return;
+end
+
 if nargin < 2,
     max_width = 10;
 end
