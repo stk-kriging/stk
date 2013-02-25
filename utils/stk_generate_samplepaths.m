@@ -63,7 +63,7 @@ V = chol(K);
 zsim_data = V' * randn(size(K,1), nb_paths);
 
 % store the result in a dataframe
-zsim_varnames = arrayfun(@(i)(sprintf('z%d', nb_paths)), 1:10, 'UniformOutput', false);
+zsim_varnames = arrayfun(@(i)(sprintf('z%d', i)), 1:nb_paths, 'UniformOutput', false);
 zsim = stk_dataframe(zsim_data, zsim_varnames);
 
 end % function stk_generate_samplepaths
