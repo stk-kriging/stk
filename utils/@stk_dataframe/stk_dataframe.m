@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_dataframe(x0, vnames)
+function x = stk_dataframe(x0, colnames)
 
 stk_narginchk(0, 3);
 
@@ -46,12 +46,15 @@ else
     x.data = x0;
     
     if nargin > 1,
-        if ischar(vnames)
-            x.vnames = {vnames};
-        elseif iscell(vnames)
-            x.vnames = vnames;
+        if iscell(colnames)
+            if (length(colnames) == d) && (numel(colnames) == d)
+                x.vnames = colnames(:)';
+            else
+                errmsg = 'Incorrect size for argument ''colnames''.';
+                stk_error(errmsg, 'IncorrectSize');
+            end
         else
-            errmsg = 'Incorrect type for argument ''varnames''.';
+            errmsg = 'Incorrect type for argument ''colnames'' (should be a cell).';
             stk_error(errmsg, 'IncorrectType');
         end
     else
