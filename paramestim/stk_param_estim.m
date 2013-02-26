@@ -20,7 +20,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -46,6 +46,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [paramopt, paramlnvopt] = stk_param_estim (model, cparam0, param0lnv)
+
 stk_narginchk(1, 3);
 
 % TODO: think of a better way to tell we want to estimate the noise variance
@@ -59,7 +60,8 @@ if NOISEESTIM,
         case 'stk_homnoisecov'
             % ok, we can handle it
         otherwise
-            errmsg = 'Parameter estimation for general noise models is not supported.';
+            errmsg = ['Parameter estimation for general noise models ' ...
+                'is not supported.'];
             stk_error(errmsg, 'IncorrectArgument');
     end
 end
@@ -74,37 +76,37 @@ end
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
 
-if NOISEESTIM % optize wrt to an "extended" vector of parameters
+if NOISEESTIM % optimize wrt to an "extended" vector of parameters
     [lblnv, ublnv] = get_defaultbounds_lnv(model, param0lnv);
     w_lb = [lb; lblnv];
     w_ub = [ub; ublnv];
-    w0 = [cparam0; param0lnv];
+    w0 = [cparam0(:); param0lnv];
 else % optimize with respect to cparam
     w_lb = lb;
-    w_ub = ub;
-    w0 = cparam0;
+    w_ub = ub
+    w0 = cparam0(:);
 end
 
 switch NOISEESTIM
     case false,
-        f = @(param)(f_(model, param));
-        nablaf = @(param)(nablaf_ (model, param));
+        f = @(w)(f_(model, w));
+        nablaf = @(w)(nablaf_ (model, w));
         % note: currently, nablaf is only used with sqp in Octave
     case true,
-        f = @(param)(f_with_noise_(model, param));
-        nablaf = @(param)(nablaf_with_noise_ (model, param));
+        f = @(w)(f_with_noise_(model, w));
+        nablaf = @(w)(nablaf_with_noise_ (model, w));
 end
 
 % switch according to preferred optimizer
 switch stk_select_optimizer(bounds_available)
     
     case 1, % Octave / sqp
-        w0 = sqp(w0, {f, nablaf}, [], [], w_lb, w_ub, [], 1e-5);
+        w_opt = sqp(w0, {f, nablaf}, [], [], w_lb, w_ub, [], 1e-5);
         
     case 2, % Matlab / fminsearch (Nelder-Mead)
         options = optimset( 'Display', 'iter',                ...
             'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
-        w0 = fminsearch(f,w0,options);
+        w_opt = fminsearch(f, w0, options);
         
     case 3, % Matlab / fmincon
         try
@@ -124,48 +126,65 @@ switch stk_select_optimizer(bounds_available)
                 rethrow(err);
             end
         end
-        w0 = fmincon(f, w0, [], [], [], [], w_lb, w_ub, [], options);
+        w_opt = fmincon(f, w0, [], [], [], [], w_lb, w_ub, [], options);
         
     otherwise
         error('Unexpected value returned by stk_select_optimizer.');
         
-end
+end % switch
 
 if NOISEESTIM
-    paramlnvopt = w0(end);
-    paramopt = w0(1:end-1);
+    paramlnvopt = w_opt(end);
+    w_opt = w_opt(1:end-1);
+end
+
+if isfloat(cparam0)
+    % if a floating-point array was provided, return one also
+    paramopt = w_opt;
 else
-    paramopt = w0;
-end
+    % if an object of some user-defined class was provided, try to return an
+    % object of the same class
+    try
+        paramopt = cparam0;
+        paramopt(:) = w_opt;
+    catch %#ok<CTCH>
+        paramopt = w_opt;
+    end
+end % if
 
-end
+end % function stk_param_estim ------------------------------------------------
 
-function [l,dl] = f_(model, u)
-model.randomprocess.priorcov.cparam = u;
+
+%--- The objective function and its gradient ----------------------------------
+
+function [l, dl] = f_(model, w)
+model.randomprocess.priorcov.cparam = w;
 [l, dl] = stk_reml(model);
 end
 
-function dl = nablaf_(model, u)
-model.randomprocess.priorcov.cparam = u;
+function dl = nablaf_(model, w)
+model.randomprocess.priorcov.cparam = w;
 [l_ignored, dl] = stk_reml(model); %#ok<ASGLU>
 end
 
-function [l,dl] = f_with_noise_(model, u)
-model.randomprocess.priorcov.cparam = u(1:end-1);
-model.noise.cov.variance = exp(u(end));
+function [l, dl] = f_with_noise_(model, w)
+model.randomprocess.priorcov.cparam = w(1:end-1);
+model.noise.cov.variance = exp(w(end));
 [l, dl, dln] = stk_reml(model);
 dl = [dl; dln];
 end
 
-function dl = nablaf_with_noise_(model, u)
-model.randomprocess.priorcov.cparam = u(1:end-1);
-model.noise.cov.variance = exp(u(end));
+function dl = nablaf_with_noise_(model, w)
+model.randomprocess.priorcov.cparam = w(1:end-1);
+model.noise.cov.variance = exp(w(end));
 [l_ignored, dl, dln] = stk_reml(model); %#ok<ASGLU>
 dl = [dl; dln];
 end
 
 
-function [lblnv, ublnv] = get_defaultbounds_lnv (model, param0lnv) %#ok<INUSD>
+function [lblnv, ublnv] = get_defaultbounds_lnv ... %--------------------------
+    (model, param0lnv) %#ok<INUSD>
+
 % assume NOISEESTIM
 % constants
 TOLVAR = 0.5;
@@ -175,7 +194,7 @@ empirical_variance = var(model.observations.z.a);
 lblnv = log(eps);
 ublnv = log(empirical_variance) + TOLVAR;
 
-end
+end % function get_default_bounds_lnv -----------------------------------------
 
 
 %%%%%%%%%%%%%

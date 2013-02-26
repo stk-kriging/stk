@@ -1,4 +1,26 @@
+2013-02-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Prepare stk_param_estim for parameter objects (instead of vectors).
+
+	* paramestim/stk_param_estim.m: Prepare for parameter objects. Rename
+  	  the optimized vector for 'param' to 'u' for clarity (since it is
+	  sometimes an extended parameter vector).
+
+2013-02-10  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix and improve stk_datastruct().
+
+	* utils/stk_datastruct.m: Call inputname correctly, with an input
+	argument. Return an empty data structure when nargin == 0. Add
+	some tests.
+
 2013-02-04  Julien Bect  <julien.bect@supelec.fr>
+
+	Implement the NOLHS construction of Cioppa & Luca (2007).
+
+	* sampling/stk_sampling_olhs.m: The function now has an additional
+	hidden option to trigger the construction of an extended (N)OLHS
+	following the paper by Cioppa & Lucas (Technometrics, 2007).
 
 	Fixed a bug in stk_rescale() and added regression tests.
 
