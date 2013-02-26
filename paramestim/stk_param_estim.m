@@ -20,7 +20,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -80,17 +80,19 @@ if NOISEESTIM
     [lblnv, ublnv] = get_default_bounds_lnv(model, param0lnv, xi, yi);
     lb = [lb ; lblnv];
     ub = [ub ; ublnv];
-    param0 = [param0; param0lnv];
+    u0 = [param0(:); param0lnv];
+else
+    u0 = param0(:);
 end
 
 switch NOISEESTIM
     case false,
-        f = @(param)(f_(model, param, xi, yi));
-        nablaf = @(param)(nablaf_ (model, param, xi, yi));
+        f = @(u)(f_(model, u, xi, yi));
+        nablaf = @(u)(nablaf_ (model, u, xi, yi));
         % note: currently, nablaf is only used with sqp in Octave
     case true,
-        f = @(param)(f_with_noise_(model, param, xi, yi));
-        nablaf = @(param)(nablaf_with_noise_ (model, param, xi, yi));
+        f = @(u)(f_with_noise_(model, u, xi, yi));
+        nablaf = @(u)(nablaf_with_noise_ (model, u, xi, yi));
 end
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
@@ -99,12 +101,12 @@ bounds_available = ~isempty(lb) && ~isempty(ub);
 switch stk_select_optimizer(bounds_available)
     
     case 1, % Octave / sqp
-        paramopt = sqp(param0,{f,nablaf},[],[],lb,ub,[],1e-5);
+        u_opt = sqp(u0, {f,nablaf}, [], [], lb, ub, [], 1e-5);
         
     case 2, % Matlab / fminsearch (Nelder-Mead)
         options = optimset( 'Display', 'iter',                ...
             'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
-        paramopt = fminsearch(f,param0,options);
+        u_opt = fminsearch(f, u0, options);
         
     case 3, % Matlab / fmincon
         try
@@ -124,91 +126,124 @@ switch stk_select_optimizer(bounds_available)
                 rethrow(err);
             end
         end
-        paramopt = fmincon(f, param0, [], [], [], [], lb, ub, [], options);
+        u_opt = fmincon(f, u0, [], [], [], [], lb, ub, [], options);
         
     otherwise
         error('Unexpected value returned by stk_select_optimizer.');
         
-end
+end % switch
 
 if NOISEESTIM
-    paramlnvopt = paramopt(end);
-    paramopt(end) = [];
+    paramlnvopt = u_opt(end);
+    u_opt(end) = [];
 end
 
-end
+if isfloat(param0)
+    % if a floating-point array was provided, return one also
+    paramopt = u_opt;
+else
+    % if an object of some user-defined class was provided, try to return an
+    % object of the same class
+    try
+        paramopt = param0;
+        paramopt(:) = u_opt;
+    catch
+        paramopt = u_opt;
+    end
+end % if
 
-function [l,dl] = f_(model, param, xi, yi)
-model.param = param;
+end % function stk_param_estim ------------------------------------------------
+
+
+%--- The objective function and its gradient ----------------------------------
+
+function [l,dl] = f_(model, u, xi, yi)
+model.param(:) = u;
 [l, dl] = stk_remlqrg(model, xi, yi);
 end
 
-function dl = nablaf_(model, param, xi, yi)
-model.param = param;
+function dl = nablaf_(model, u, xi, yi)
+model.param(:) = u;
 [l_ignored, dl] = stk_remlqrg(model, xi, yi); %#ok<ASGLU>
 end
 
-function [l,dl] = f_with_noise_(model, param, xi, yi)
-model.param = param(1:end-1);
-model.lognoisevariance  = param(end);
+function [l,dl] = f_with_noise_(model, u, xi, yi)
+model.param(:) = u(1:end-1);
+model.lognoisevariance  = u(end);
 [l, dl, dln] = stk_remlqrg(model, xi, yi);
 dl = [dl; dln];
 end
 
-function dl = nablaf_with_noise_(model, param, xi, yi)
-model.param = param(1:end-1);
-model.lognoisevariance  = param(end);
+function dl = nablaf_with_noise_(model, u, xi, yi)
+model.param(:) = u(1:end-1);
+model.lognoisevariance  = u(end);
 [l_ignored, dl, dln] = stk_remlqrg(model, xi, yi); %#ok<ASGLU>
 dl = [dl; dln];
 end
 
-function [lb,ub] = get_default_bounds(model, param0, xi, yi)
 
-% constants
-TOLVAR = 5.0;
-TOLSCALE = 5.0;
+function [lb,ub] = get_default_bounds ... %------------------------------------
+    (model, param0, xi, yi)
 
-% bounds for the variance parameter
-empirical_variance = var(yi.a);
-logvar_lb = min(log(empirical_variance), param0(1)) - TOLVAR;
-logvar_ub = max(log(empirical_variance), param0(1)) + TOLVAR;
-
-dim = size(xi.a, 2);
-
-switch model.covariance_type,
+if isfloat(model.param)
     
-    case {'stk_materncov_aniso', 'stk_materncov_iso'}
+    % constants
+    TOLVAR = 5.0;
+    TOLSCALE = 5.0;
+    
+    % bounds for the variance parameter
+    empirical_variance = var(yi.a);
+    logvar_lb = min(log(empirical_variance), param0(1)) - TOLVAR;
+    logvar_ub = max(log(empirical_variance), param0(1)) + TOLVAR;
+    
+    dim = size(xi.a, 2);
+    
+    switch model.covariance_type,
         
-        nu_lb = min(log(0.5), param0(2));
-        nu_ub = max(log(min(50, 10*dim)), param0(2));
-        
-        range_mid = param0(3:end);
-        range_lb  = range_mid(:) - TOLSCALE;
-        range_ub  = range_mid(:) + TOLSCALE;
-        
-        lb = [logvar_lb; nu_lb; range_lb];
-        ub = [logvar_ub; nu_ub; range_ub];
-        
-    case {'stk_materncov32_aniso', 'stk_materncov32_iso', ...
-            'stk_materncov52_aniso', 'stk_materncov52_iso'}
-        
-        range_mid = param0(2:end);
-        range_lb  = range_mid(:) - TOLSCALE;
-        range_ub  = range_mid(:) + TOLSCALE;
-        
-        lb = [logvar_lb; range_lb];
-        ub = [logvar_ub; range_ub];
-        
-    otherwise
-        
-        lb = [];
-        ub = [];
-        
-end
+        case {'stk_materncov_aniso', 'stk_materncov_iso'}
+            
+            nu_lb = min(log(0.5), param0(2));
+            nu_ub = max(log(min(50, 10*dim)), param0(2));
+            
+            range_mid = param0(3:end);
+            range_lb  = range_mid(:) - TOLSCALE;
+            range_ub  = range_mid(:) + TOLSCALE;
+            
+            lb = [logvar_lb; nu_lb; range_lb];
+            ub = [logvar_ub; nu_ub; range_ub];
+            
+        case {'stk_materncov32_aniso', 'stk_materncov32_iso', ...
+                'stk_materncov52_aniso', 'stk_materncov52_iso'}
+            
+            range_mid = param0(2:end);
+            range_lb  = range_mid(:) - TOLSCALE;
+            range_ub  = range_mid(:) + TOLSCALE;
+            
+            lb = [logvar_lb; range_lb];
+            ub = [logvar_ub; range_ub];
+            
+        otherwise
+            
+            lb = [];
+            ub = [];
+            
+    end % switch
 
-end
+elseif ismethod(model.param, 'get_default_bounds')
+    
+    [lb, ub] = get_default_bounds(model.param, param0, xi, yi);
+    
+else
+    
+    lb = [];
+    ub = [];
+    
+end % if
 
-function [lblnv,ublnv] = get_default_bounds_lnv ...
+end % function get_default_bounds ---------------------------------------------
+
+
+function [lblnv,ublnv] = get_default_bounds_lnv ... % -------------------------
     (model, param0lnv, xi, yi) %#ok<INUSL>
 
 % assume NOISEESTIM
@@ -220,7 +255,7 @@ empirical_variance = var(yi.a);
 lblnv = log(eps);
 ublnv = log(empirical_variance) + TOLVAR;
 
-end
+end % function get_default_bounds_lnv -----------------------------------------
 
 
 %%%%%%%%%%%%%
