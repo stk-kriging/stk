@@ -1,3 +1,18 @@
+2013-02-27  Julien Bect  <julien.bect@supelec.fr>
+
+	Add function stk_gpquadform() to compute Gibbs-Paciorek quadratic
+	forms.
+
+	* misc/dist/stk_gpquadform.m: New function to compute
+	Gibbs-Paciorek quadratic forms.
+
+	* misc/dist/private/stk_gpquadform_pairwise.c,
+	misc/dist/private/stk_gpquadform_matrixx.c,
+	misc/dist/private/stk_gpquadform_matrixy.c: C sources for the fast
+	computation of stk_quadform() in several special cases.
+
+	* misc/config/stk_compile_all.m: Compile the new MEX-files.
+
 2013-02-26  Julien Bect  <julien.bect@supelec.fr>
 
 	Prepare stk_param_estim for parameter objects (instead of vectors).
