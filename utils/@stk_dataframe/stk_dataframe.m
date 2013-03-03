@@ -68,7 +68,7 @@ else
         end
     end
     
-    x.rnames = {}; % default rownames will be displayed: 1, 2, ...
+    x.rownames = {}; % default rownames will be displayed: 1, 2, ...
     
     x = class(x, 'stk_dataframe');
     
