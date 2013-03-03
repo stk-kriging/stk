@@ -28,34 +28,61 @@
 
 function x = subsasgn(x, idx, val)
 
-val = double(val);
-
 switch idx(1).type
     
     case '()'
-        x.data = subsasgn(x.data, idx, val);
+        x.data = subsasgn(x.data, idx, double(val));
 
     case '{}'
         errmsg = 'Indexing with curly braces is not allowed.';
         stk_error(errmsg, 'IllegalIndexing');
         
     case '.'
-        b = strcmp(idx(1).subs, x.vnames);
-        switch sum(b),
-            case 0
-                errmsg = sprintf('There is no variable named %s.', idx(1).subs);
-                stk_error(errmsg, 'UnknownVariable');
-            case 1
-                if length(idx) > 1,
-                    x.data(:, b) = subsasgn(x.data(:, b), idx(2:end), val);
-                else
-                    x.data(:, b) = val;
+        
+        switch idx(1).subs,
+            
+            case 'rownames',
+                if length(idx) > 1
+                    val = subsasgn(stk_get_rownames(x), idx(2:end), val);
                 end
-            otherwise
-                errmsg = 'This should NEVER happen (corrupted stk_dataframe).';
-                stk_error(errmsg, 'CorruptedObject');
-        end
+                x = stk_set_rownames(x, val);
+                
+            case 'colnames',
+                if length(idx) > 1
+                    val = subsasgn(stk_get_colnames(x), idx(2:end), val);
+                end
+                x = stk_set_colnames(x, val);
+                
+            otherwise,
+                b = strcmp(idx(1).subs, x.vnames);
+                switch sum(b),
+                    case 0
+                        errmsg = sprintf('There is no variable named %s.', idx(1).subs);
+                        stk_error(errmsg, 'UnknownVariable');
+                    case 1
+                        val = double(val);
+                        if length(idx) > 1,
+                            x.data(:, b) = subsasgn(x.data(:, b), idx(2:end), val);
+                        else
+                            x.data(:, b) = val;
+                        end
+                    otherwise
+                        errmsg = 'This should NEVER happen (corrupted stk_dataframe).';
+                        stk_error(errmsg, 'CorruptedObject');
+                end % switch
+        
+        end % switch
         
 end
 
 end % function subsasgn
+
+%!shared x s t
+%! x = stk_dataframe(rand(3, 2));
+%! s = {'a'; 'b'; 'c'};
+%! t = {'xx'; 'yy'};
+%!test x.rownames = s;
+%!assert (isequal(stk_get_rownames(x), s))
+%!test x.colnames = t;
+%!assert (isequal(stk_get_rownames(x), s))
+%!assert (isequal(stk_get_colnames(x), t))
