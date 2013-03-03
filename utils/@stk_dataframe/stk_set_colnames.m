@@ -44,14 +44,14 @@ if numel(colnames) ~= d
 end 
 
 % FIXME: check uniqueness; check for reserved names; ...
-x.vnames = colnames(:);
+x.vnames = reshape(colnames, 1, d);
 
 end % function stk_set_colnames
 
 
 %!shared x s t
 %! x = stk_dataframe(rand(3, 2));
-%! s = {'xx'; 'yy'};
+%! s = {'xx' 'yy'};
 %!test x = stk_set_colnames(x, s);
 %!assert (isequal(stk_get_colnames(x), s))
 

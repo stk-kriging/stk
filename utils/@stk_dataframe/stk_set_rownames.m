@@ -43,7 +43,7 @@ if numel(rownames) ~= n
     stk_error(errmsg, 'IncorrectSize');
 end 
     
-x.rownames = rownames(:);
+x.rownames = reshape(rownames, n, 1);
 
 end % function stk_set_rownames
 

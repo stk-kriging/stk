@@ -80,9 +80,15 @@ end % function subsasgn
 %!shared x s t
 %! x = stk_dataframe(rand(3, 2));
 %! s = {'a'; 'b'; 'c'};
-%! t = {'xx'; 'yy'};
+%! t = {'xx' 'yy'};
 %!test x.rownames = s;
 %!assert (isequal(stk_get_rownames(x), s))
 %!test x.colnames = t;
 %!assert (isequal(stk_get_rownames(x), s))
 %!assert (isequal(stk_get_colnames(x), t))
+%!test x.rownames{2} = 'dudule';
+%!assert (isequal(stk_get_rownames(x), {'a'; 'dudule'; 'c'}))
+%!assert (isequal(stk_get_colnames(x), t))
+%!test x.colnames{1} = 'martha';
+%!assert (isequal(stk_get_rownames(x), {'a'; 'dudule'; 'c'}))
+%!assert (isequal(stk_get_colnames(x), {'martha' 'yy'}))
