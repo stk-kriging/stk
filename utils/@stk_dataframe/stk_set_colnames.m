@@ -37,14 +37,23 @@ d = size(x.data, 2);
 if length(colnames) ~= d
     errmsg = sprintf('colnames is expected to have length d=%d.', d);
     stk_error(errmsg, 'IncorrectSize');
-end 
+end
 if numel(colnames) ~= d
     errmsg = sprintf('colnames is expected to have d=%d elements.', d);
     stk_error(errmsg, 'IncorrectSize');
-end 
+end
 
-% FIXME: check uniqueness; check for reserved names; ...
-x.vnames = reshape(colnames, 1, d);
+colnames = reshape(colnames, 1, d);
+
+% check for duplicated column names
+tmp = unique(colnames);
+if length(tmp) < d,
+    errmsg = 'column names must be unique !';
+    stk_error(errmsg, 'IncorrectArgument');
+end
+
+% FIXME: check for reserved names; ...
+x.vnames = colnames;
 
 end % function stk_set_colnames
 
@@ -54,4 +63,4 @@ end % function stk_set_colnames
 %! s = {'xx' 'yy'};
 %!test x = stk_set_colnames(x, s);
 %!assert (isequal(stk_get_colnames(x), s))
-
+%!error x = stk_set_colnames({'x1' 'x1'})

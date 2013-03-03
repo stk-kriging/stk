@@ -37,13 +37,21 @@ n = size(x.data, 1);
 if length(rownames) ~= n
     errmsg = sprintf('rownames is expected to have length n=%d.', n);
     stk_error(errmsg, 'IncorrectSize');
-end 
+end
 if numel(rownames) ~= n
     errmsg = sprintf('rownames is expected to have n=%d elements.', n);
     stk_error(errmsg, 'IncorrectSize');
-end 
-    
-x.rownames = reshape(rownames, n, 1);
+end
+
+rownames = reshape(rownames, n, 1);
+
+% check for duplicated row names
+tmp = unique(rownames);
+if length(tmp) < n,
+    warning('Row names are not unique.');
+end
+
+x.rownames = rownames;
 
 end % function stk_set_rownames
 
