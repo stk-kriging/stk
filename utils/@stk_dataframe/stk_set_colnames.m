@@ -48,8 +48,7 @@ colnames = reshape(colnames, 1, d);
 % check for duplicated column names
 tmp = unique(colnames);
 if length(tmp) < d,
-    errmsg = 'column names must be unique !';
-    stk_error(errmsg, 'IncorrectArgument');
+    stk_error('Column names must be unique !', 'IncorrectArgument');
 end
 
 % FIXME: check for reserved names; ...

@@ -48,7 +48,7 @@ rownames = reshape(rownames, n, 1);
 % check for duplicated row names
 tmp = unique(rownames);
 if length(tmp) < n,
-    warning('Row names are not unique.');
+    stk_error('Row names must be unique !', 'IncorrectArgument');
 end
 
 x.rownames = rownames;
@@ -61,4 +61,4 @@ end % function stk_set_rownames
 %! s = {'a'; 'b'; 'c'};
 %!test x = stk_set_rownames(x, s);
 %!assert (isequal(stk_get_rownames(x), s))
-
+%!error x = stk_set_rownames({'a' 'b' 'a'})
