@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_dataframe(x0, colnames)
+function x = stk_dataframe(x0, colnames, rownames)
 
 stk_narginchk(0, 3);
 
@@ -40,40 +40,22 @@ if isa(x0, 'stk_dataframe'),
 
 else
     
-    x = struct();
-    d = size(x0, 2);
-    
-    x.data = x0;
-    
-    if nargin > 1,
-        if iscell(colnames)
-            if (length(colnames) == d) && (numel(colnames) == d)
-                x.vnames = colnames(:)';
-            else
-                errmsg = 'Incorrect size for argument ''colnames''.';
-                stk_error(errmsg, 'IncorrectSize');
-            end
-        else
-            errmsg = 'Incorrect type for argument ''colnames'' (should be a cell).';
-            stk_error(errmsg, 'IncorrectType');
-        end
-    else
-        if d == 1,
-            x.vnames = {'x'};
-        else
-            x.vnames = cell(1, d);
-            for j = 1:d,
-                x.vnames{j} = sprintf('x%d', j);
-            end
-        end
-    end
-    
-    x.rownames = {}; % default rownames will be displayed: 1, 2, ...
-    
+    x = struct('data', x0, 'vnames', {{}}, 'rownames', {{}});
     x = class(x, 'stk_dataframe');
-    
+
+    if nargin < 2,
+        x = stk_set_colnames(x, {});
+    else
+        x = stk_set_colnames(x, colnames);
+    end    
+        
+    if nargin > 2,
+        x = stk_set_rownames(x, rownames);
+    end
+
 end
 
 end % function stk_dataframe
 
+   
 %!test x = stk_dataframe();

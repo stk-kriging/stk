@@ -28,19 +28,35 @@
 
 function x = stk_set_colnames(x, colnames)
 
+d = size(x.data, 2);
+
 if ~iscell(colnames)
-    errmsg = 'colnames is expected to be a cell-array of strings.';
-    stk_error(errmsg, 'TypeMismatch');
+    if (d == 1) && ischar(colnames)
+        colnames = {colnames};
+    else
+        errmsg = 'colnames is expected to be a string or a cell-array of strings.';
+        stk_error(errmsg, 'TypeMismatch');
+    end
 end
 
-d = size(x.data, 2);
-if length(colnames) ~= d
-    errmsg = sprintf('colnames is expected to have length d=%d.', d);
-    stk_error(errmsg, 'IncorrectSize');
-end
-if numel(colnames) ~= d
-    errmsg = sprintf('colnames is expected to have d=%d elements.', d);
-    stk_error(errmsg, 'IncorrectSize');
+if isempty(colnames)
+    if d == 1,
+        colnames = {'x'};
+    else
+        colnames = cell(1, d);
+        for j = 1:d,
+            colnames{j} = sprintf('x%d', j);
+        end
+    end
+else
+    if length(colnames) ~= d
+        errmsg = sprintf('colnames is expected to have length d=%d.', d);
+        stk_error(errmsg, 'IncorrectSize');
+    end
+    if numel(colnames) ~= d
+        errmsg = sprintf('colnames is expected to have d=%d elements.', d);
+        stk_error(errmsg, 'IncorrectSize');
+    end
 end
 
 colnames = reshape(colnames, 1, d);
