@@ -82,20 +82,40 @@ end % function subsasgn
 %! s = {'a'; 'b'; 'c'};
 %! t = {'xx' 'yy'};
 
-%!test x.rownames = s;
-%!assert (isequal(stk_get_rownames(x), s))
+%!test
+%! x.rownames = s;
+%! assert (stk_isvalid (x))
+%! assert (isequal(stk_get_rownames(x), s))
 
-%!test x.colnames = t;
-%!assert (isequal(stk_get_rownames(x), s))
-%!assert (isequal(stk_get_colnames(x), t))
+%!test
+%! x.colnames = t;
+%! assert (stk_isvalid (x))
+%! assert (isequal(stk_get_rownames(x), s))
+%! assert (isequal(stk_get_colnames(x), t))
 
-%!test x.rownames{2} = 'dudule';
-%!assert (isequal(stk_get_rownames(x), {'a'; 'dudule'; 'c'}))
-%!assert (isequal(stk_get_colnames(x), t))
+%!test
+%! x.rownames{2} = 'dudule';
+%! assert (stk_isvalid (x))
+%! assert (isequal(stk_get_rownames(x), {'a'; 'dudule'; 'c'}))
+%! assert (isequal(stk_get_colnames(x), t))
 
-%!test x.colnames{1} = 'martha';
-%!assert (isequal(stk_get_rownames(x), {'a'; 'dudule'; 'c'}))
-%!assert (isequal(stk_get_colnames(x), {'martha' 'yy'}))
+%!test
+%! x.colnames{1} = 'martha';
+%! assert (stk_isvalid (x))
+%! assert (isequal(stk_get_rownames(x), {'a'; 'dudule'; 'c'}))
+%! assert (isequal(stk_get_colnames(x), {'martha' 'yy'}))
 
 %!error x.colnames{1} = 'yy'
 %!error x.colnames = {'xx' 'xx'}
+
+%!test
+%! x = stk_dataframe(rand(3, 2));
+%! x(:, 2) = [];
+%! assert (stk_isvalid (x))
+%! assert (isequal(size(x), [3 1]))
+
+%!test
+%! x = stk_dataframe(rand(3, 2));
+%! x(2, :) = [];
+%! assert (stk_isvalid (x))
+%! assert (isequal(size(x), [2 2]))
