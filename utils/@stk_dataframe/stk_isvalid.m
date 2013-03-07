@@ -34,7 +34,7 @@ try
     
     [n, d] = size(x);
     
-    if ~iscell(x.rownames) || ~iscell(x.colnames)
+    if ~iscell(x.rownames) || ~iscell(x.vnames)
         b = false; return;
     end
     
@@ -42,7 +42,7 @@ try
         b = false; return;
     end
     
-    if ~isequal(size(x.colnames), [1 d])
+    if ~isequal(size(x.vnames), [1 d])
         b = false; return;
     end
 
