@@ -44,6 +44,7 @@ end % function size
 %!assert (isequal (size(x), [3 2]))
 %!assert (numel(x) == 1)
 %!assert (ndims(x) == 2)
+%!test size(x); % force exploration of branch nargout == 0
 
 % Note: numel MUST return 1 and not prod(size(x))
 % http://www.mathworks.fr/support/solutions/en/data/1-19EZ0/?1-19EZ0

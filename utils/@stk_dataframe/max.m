@@ -59,3 +59,4 @@ end % function max
 %!assert (isequal (max(df1),        max(x1)))
 %!assert (isequal (max(df1, [], 1), max(x1)))
 %!assert (isequal (max(df1, [], 2), max(x1, [], 2)))
+%!error (max(df1, df1, 2))

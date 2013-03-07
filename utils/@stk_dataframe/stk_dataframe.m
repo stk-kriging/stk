@@ -57,5 +57,13 @@ end
 
 end % function stk_dataframe
 
-   
-%!test x = stk_dataframe();
+%!shared x y
+%!test x = stk_dataframe();   % default constructor
+%!test y = stk_dataframe(x);  % copy constructor
+%!test y = stk_dataframe(rand(3, 2));
+%!assert (isa (y, 'stk_dataframe') && isequal(size(y), [3 2]))
+%!test y = stk_dataframe(rand(3, 2), {'x', 'y'});
+%!assert (isa (y, 'stk_dataframe') && isequal(size(y), [3 2]))
+%!test y = stk_dataframe(rand(3, 2), {'x', 'y'}, {'a', 'b', 'c'});
+%!assert (isa (y, 'stk_dataframe') && isequal(size(y), [3 2]))
+

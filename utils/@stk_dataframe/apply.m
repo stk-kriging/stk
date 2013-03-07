@@ -44,3 +44,20 @@ switch dim
 end
 
 end % function apply
+
+%!shared x t u
+%! t = rand(3, 2);
+%! x = stk_dataframe(t);
+
+%!test u = apply(x, 1, @sum);
+%!assert (isequal(u, sum(t, 1)))
+%!test u = apply(x, 2, @sum);
+%!assert (isequal(u, sum(t, 2)))
+%!error u = apply(x, 3, @sum);
+
+%!test u = apply(x, 1, @min, []);
+%!assert (isequal(u, min(t, [], 1)))
+%!test u = apply(x, 2, @min, []);
+%!assert (isequal(u, min(t, [], 2)))
+%!error u = apply(x, 3, @min, []);
+

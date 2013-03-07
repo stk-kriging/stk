@@ -59,3 +59,4 @@ end % function min
 %!assert (isequal (min(df1),        min(x1)))
 %!assert (isequal (min(df1, [], 1), min(x1)))
 %!assert (isequal (min(df1, [], 2), min(x1, [], 2)))
+%!error (min(df1, df1, 2))
