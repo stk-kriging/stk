@@ -48,15 +48,11 @@ switch idx(1).type
                 
             otherwise,
                 b = strcmp(idx(1).subs, x.vnames);
-                switch sum(b),
-                    case 0
-                        errmsg = sprintf('There is no variable named %s.', idx(1).subs);
-                        stk_error(errmsg, 'UnknownVariable');
-                    case 1
-                        t = x.data(:, b);
-                    otherwise
-                        errmsg = 'This should NEVER happen (corrupted stk_dataframe).';
-                        stk_error(errmsg, 'CorruptedObject');
+                if ~any(b)
+                    errmsg = sprintf('There is no variable named %s.', idx(1).subs);
+                    stk_error(errmsg, 'UnknownVariable');
+                else                    
+                    t = x.data(:, b);
                 end
                 
         end % switch
