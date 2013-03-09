@@ -31,8 +31,36 @@ function x = subsasgn(x, idx, val)
 switch idx(1).type
     
     case '()'
-        x.data = subsasgn(x.data, idx, double(val));
-
+        if length(idx) == 1
+            if length(idx(1).subs) == 2                
+                val = double(val);
+                if ~isempty(val)
+                    x.data = subsasgn(x.data, idx, val);
+                else
+                    if strcmp(idx(1).subs{1}, ':')
+                        % remove columns
+                        ii = idx(1).subs{2};
+                        x.data(:, ii) = [];
+                        x.vnames(ii) = [];
+                    elseif strcmp(idx(1).subs{2}, ':')
+                        % remove rows
+                        ii = idx(1).subs{1};
+                        x.data(ii, :) = [];
+                        if ~isempty(x.rownames),
+                            x.rownames(ii) = []; 
+                        end
+                    else
+                        stk_error('Illegal indexing.', 'IllegalIndexing');
+                    end
+                end                
+            else
+                errmsg = 'stk_dataframe objects only support matrix-type indexing.';
+                stk_error(errmsg, 'IllegalIndexing');
+            end
+        else
+            stk_error('Illegal indexing.', 'IllegalIndexing');
+        end
+        
     case '{}'
         errmsg = 'Indexing with curly braces is not allowed.';
         stk_error(errmsg, 'IllegalIndexing');
