@@ -73,10 +73,16 @@ end % function subsref
 %! x = stk_dataframe(rand(3, 2));
 %! s = {'a'; 'b'; 'c'};
 %! t = {'xx' 'yy'};
-%!test x = stk_set_rownames(x, s);
-%!assert (isequal(x.rownames, s))
-%!assert (isequal(x.rownames{2}, 'b'))
-%!test x = stk_set_colnames(x, t);
-%!assert (isequal(x.rownames, s))
-%!assert (isequal(x.colnames, t))
-%!assert (isequal(x.colnames{2}, 'yy'))
+
+%!test
+%! x = stk_set_rownames(x, s);
+%! assert (isequal(x.rownames, s))
+%! assert (isequal(x.rownames{2}, 'b'))
+
+%!test
+%! x = stk_set_colnames(x, t);
+%! assert (isequal(x.rownames, s))
+%! assert (isequal(x.colnames, t))
+%! assert (isequal(x.colnames{2}, 'yy'))
+
+%!error x{1}

@@ -38,3 +38,20 @@ else
 end
 
 end % function bsxfun
+
+%!shared x1 x2 data1 data2
+%! x1 = rand(3, 2);  data1 = stk_dataframe(x1);
+%! x2 = rand(3, 2);  data2 = stk_dataframe(x2);
+
+%!test
+%! z = bsxfun(@plus, data1, x2);
+%! assert( isa(z, 'stk_dataframe') && stk_isvalid(z) && isequal(double(z), x1 + x2))
+
+%!test
+%! z = bsxfun(@plus, x1, data2);
+%! assert( isa(z, 'double') && isequal(z, x1 + x2))
+
+%!test
+%! z = bsxfun(@plus, data1, data2);
+%! assert( isa(z, 'stk_dataframe') && stk_isvalid(z) && isequal(double(z), x1 + x2))
+

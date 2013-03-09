@@ -61,4 +61,7 @@ end % function stk_set_rownames
 %! s = {'a'; 'b'; 'c'};
 %!test x = stk_set_rownames(x, s);
 %!assert (isequal(stk_get_rownames(x), s))
-%!error x = stk_set_rownames({'a' 'b' 'a'})
+%!error x = stk_set_rownames(x, {'a' 'b' 'a'})
+%!error x = stk_set_rownames(x, [1 2 3])
+%!error x = stk_set_rownames(x, {'a' 'b'})
+%!error x = stk_set_rownames(x, {'a' 'b' 'c'; 'd' 'e' 'f'})

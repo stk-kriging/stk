@@ -77,7 +77,7 @@ end
 
 end % function subsasgn
 
-%!shared x s t
+%!shared x s t data
 %! x = stk_dataframe(rand(3, 2));
 %! s = {'a'; 'b'; 'c'};
 %! t = {'xx' 'yy'};
@@ -109,6 +109,20 @@ end % function subsasgn
 %!error x.colnames = {'xx' 'xx'}
 
 %!test
+%! data = stk_dataframe(zeros(3, 2));
+%! u = rand(3, 1); data.x2 = u;
+%! assert (stk_isvalid (data))
+%! assert (isequal(double(data), [zeros(3, 1) u]))
+
+%!test
+%! data = stk_dataframe(zeros(3, 2));
+%! data.x2(3) = 27;
+%! assert (stk_isvalid (data))
+%! assert (isequal(double(data), [0 0; 0 0; 0 27]))
+
+%!error data.toto = rand(3, 1);
+
+%!test
 %! x = stk_dataframe(rand(3, 2));
 %! x(:, 2) = [];
 %! assert (stk_isvalid (x))
@@ -119,3 +133,5 @@ end % function subsasgn
 %! x(2, :) = [];
 %! assert (stk_isvalid (x))
 %! assert (isequal(size(x), [2 2]))
+
+%!error x{1} = 2;
