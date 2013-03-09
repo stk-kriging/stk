@@ -78,4 +78,7 @@ end % function stk_set_colnames
 %! s = {'xx' 'yy'};
 %!test x = stk_set_colnames(x, s);
 %!assert (isequal(stk_get_colnames(x), s))
-%!error x = stk_set_colnames({'x1' 'x1'})
+%!error x = stk_set_colnames(x, {'x1' 'x1'})
+%!error x = stk_set_colnames(x, [1 2])
+%!error x = stk_set_colnames(x, {'xx' 'yy' 'zz'})
+%!error x = stk_set_colnames(x, {'x1' 'x2'; 'x3' 'x4'})
