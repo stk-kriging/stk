@@ -1,4 +1,4 @@
-% VERTICAL CONCATENATION [FIXME: missing doc...]
+% VERTCAT concantenates one or several dataframes vertically
 
 % Copyright Notice
 %
@@ -26,28 +26,57 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = vertcat(x, y, varargin)
-
-stk_narginchk(2, inf);
+function z = vertcat(x, y, varargin)
 
 if isa(x, 'stk_dataframe')
+    
+    % In this case, [x; y] will be an stk_dataframe also.
+    
+    data = [x.data; double(y)];
+    
     if isa(y, 'stk_dataframe')
-        % FIXME: check that variable names are identical !
-        x.data = [x.data; y.data];
-    else
-        x.data = [x.data; y];
-    end
-else
-    if isa(y, 'stk_dataframe')
-        y.data = [x; y.data];
-        x = y;
-    else
-        x = [x; y];
-    end
+        
+        if all(strcmp(x.vnames, y.vnames))
+            colnames = x.vnames;
+        else
+            errmsg = 'Cannot concatenate because of incompatible column names.';
+            stk_error(errmsg, 'IncompatibleColNames');
+        end
+        
+        bx = isempty(x.rownames);
+        by = isempty(y.rownames);
+        if bx && by
+            rownames = {};
+        elseif ~bx && ~by
+            rownames = [x.rownames; y.names];
+        else
+            errmsg = 'This kind of vertical concatenation is not implemented yet.';
+            stk_error(errmsg, 'NotImplementedYet');
+        end
+        
+    else % y is a matrix
+        
+        colnames = x.vnames;
+        
+        if isempty(x.rownames)
+            rownames = {};
+        else
+            errmsg = 'This kind of vertical concatenation is not implemented yet.';
+            stk_error(errmsg, 'NotImplementedYet');
+        end
+        
+    end % if
+    
+    z = stk_dataframe(data, colnames, rownames);
+    
+else  % In this case, z will be a matrix.
+    
+    z = [double(x); double(y)];
+    
 end
 
 if ~isempty(varargin),
-    x = vertcat(x, varargin{:});
+    z = vertcat(z, varargin{:});
 end
 
 end % function subsref
