@@ -33,25 +33,33 @@ if ~iscell(rownames)
     stk_error(errmsg, 'TypeMismatch');
 end
 
-n = size(x.data, 1);
-if length(rownames) ~= n
-    errmsg = sprintf('rownames is expected to have length n=%d.', n);
-    stk_error(errmsg, 'IncorrectSize');
-end
-if numel(rownames) ~= n
-    errmsg = sprintf('rownames is expected to have n=%d elements.', n);
-    stk_error(errmsg, 'IncorrectSize');
-end
+if isempty(rownames),
+    
+    x.rownames = {};
+    
+else
+    
+    n = size(x.data, 1);
+    if length(rownames) ~= n
+        errmsg = sprintf('rownames is expected to have length n=%d.', n);
+        stk_error(errmsg, 'IncorrectSize');
+    end
+    if numel(rownames) ~= n
+        errmsg = sprintf('rownames is expected to have n=%d elements.', n);
+        stk_error(errmsg, 'IncorrectSize');
+    end
+    
+    rownames = reshape(rownames, n, 1);
+    
+    % check for duplicated row names
+    tmp = unique(rownames);
+    if length(tmp) < n,
+        stk_error('Row names must be unique !', 'IncorrectArgument');
+    end
+    
+    x.rownames = rownames;
 
-rownames = reshape(rownames, n, 1);
-
-% check for duplicated row names
-tmp = unique(rownames);
-if length(tmp) < n,
-    stk_error('Row names must be unique !', 'IncorrectArgument');
 end
-
-x.rownames = rownames;
 
 end % function stk_set_rownames
 
