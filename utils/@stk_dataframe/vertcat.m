@@ -36,11 +36,11 @@ if isa(x, 'stk_dataframe')
     
     if isa(y, 'stk_dataframe')
         
-        if all(strcmp(x.vnames, y.vnames))
-            colnames = x.vnames;
-        else
+        if ~all(strcmp(x.vnames, y.vnames))
             errmsg = 'Cannot concatenate because of incompatible column names.';
             stk_error(errmsg, 'IncompatibleColNames');
+        else
+            colnames = x.vnames;
         end
         
         bx = isempty(x.rownames);
@@ -48,22 +48,22 @@ if isa(x, 'stk_dataframe')
         if bx && by
             rownames = {};
         elseif ~bx && ~by
-            rownames = [x.rownames; y.names];
+            rownames = [x.rownames; y.rownames];
         else
-            errmsg = 'This kind of vertical concatenation is not implemented yet.';
-            stk_error(errmsg, 'NotImplementedYet');
+            warning(sprintf(['One of the dataframes has no row names.\n' ...
+                '  => Ignoring row names from the other one.'])); %#ok<WNTAG,SPWRN>
+            rownames = {};
         end
         
     else % y is a matrix
         
         colnames = x.vnames;
         
-        if isempty(x.rownames)
-            rownames = {};
-        else
-            errmsg = 'This kind of vertical concatenation is not implemented yet.';
-            stk_error(errmsg, 'NotImplementedYet');
+        if ~isempty(x.rownames)
+            warning(sprintf(['One of the dataframes has no row names.\n' ...
+                '  => Ignoring row names from the other one.'])); %#ok<WNTAG,SPWRN>
         end
+        rownames = {};
         
     end % if
     
@@ -80,3 +80,71 @@ if ~isempty(varargin),
 end
 
 end % function subsref
+
+
+%!shared u v
+%! u = rand(3, 2);
+%! v = rand(3, 2);
+
+%%
+% Vertical concatenation of two dataframes
+
+%!test
+%! x = stk_dataframe(u);
+%! y = stk_dataframe(v);
+%! z = [x; y];
+%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
+%! assert(isequal(double(z), [u; v]));
+
+%!test % the same, with row names this time
+%! x = stk_dataframe(u, {}, {'a'; 'b'; 'c'});
+%! y = stk_dataframe(v, {}, {'d'; 'e'; 'f'});
+%! z = [x; y];
+%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
+%! assert(isequal(double(z), [u; v]));
+%! assert(all(strcmp(z.rownames, {'a'; 'b'; 'c'; 'd'; 'e'; 'f'})));
+
+%!test % the same, with row names only for the first argument
+%! x = stk_dataframe(u, {}, {'a'; 'b'; 'c'});
+%! y = stk_dataframe(v);
+%! z = [x; y];
+%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
+%! assert(isequal(double(z), [u; v]));
+
+%!error % incompatible variable names
+%! u = rand(3, 1);  x = stk_dataframe(u, {'x'});
+%! v = rand(3, 1);  y = stk_dataframe(v, {'y'});
+%! z = [x; y];
+
+%%
+% Vertical concatenation [dataframe; matrix]
+
+%!test
+%! x = stk_dataframe(u);
+%! z = [x; v];
+%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
+%! assert(isequal(double(z), [u; v]));
+
+%!test % the same, with row names for the first argument
+%! x = stk_dataframe(u, {}, {'a'; 'b'; 'c'});
+%! z = [x; v];
+%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
+%! assert(isequal(double(z), [u; v]));
+
+%%
+% Vertical concatenation [matrix; dataframe]
+
+%!test
+%! y = stk_dataframe(v);
+%! z = [u; y];
+%! assert(isa(z, 'double') && (isequal(z, [u; v])));
+
+%%
+% Vertical concatenation of more than two elements
+
+%!test
+%! x = stk_dataframe(u);
+%! y = stk_dataframe(v);
+%! z = [x; y; u; v];
+%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
+%! assert(isequal(double(z), [u; v; u; v]));
