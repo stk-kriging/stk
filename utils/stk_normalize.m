@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -31,14 +31,19 @@ function y = stk_normalize(x, box)
 stk_narginchk(1, 2);
 
 y = stk_datastruct(x);
-n = size(y.a, 1);
+[n d] = size(y.a);
 
 if nargin < 2,
     xmin = min(y.a, [], 1);
     xmax = max(y.a, [], 1);
 else
-    xmin = box(1, :);
-    xmax = box(2, :);
+    if ~isequal(size(box), [2 d])
+        errmsg = sprintf('box should have size [2 d], with d=%d.', d);
+        stk_error(errmsg, 'IncorrectSize');
+    else
+        xmin = box(1, :);
+        xmax = box(2, :);
+    end
 end
 
 y.a = (y.a - repmat(xmin, n, 1)) ./ repmat(xmax - xmin, n, 1);
