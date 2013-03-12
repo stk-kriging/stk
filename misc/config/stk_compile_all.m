@@ -39,6 +39,9 @@ stk_compile(d, 'stk_dist_matrixy',        force_recompile);
 stk_compile(d, 'stk_dist_pairwise',       force_recompile);
 stk_compile(d, 'stk_filldist_discr_mex',  force_recompile);
 stk_compile(d, 'stk_mindist_mex',         force_recompile);
+stk_compile(d, 'stk_gpquadform_matrixy',  force_recompile);
+stk_compile(d, 'stk_gpquadform_matrixx',  force_recompile);
+stk_compile(d, 'stk_gpquadform_pairwise', force_recompile);
 
 % add other MEX-files to be compiled here
 
