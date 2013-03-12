@@ -30,14 +30,19 @@ function y = stk_normalize(x, box)
 
 stk_narginchk(1, 2);
 
-n = size(x, 1);
+[n d] = size(x);
 
 if nargin < 2,
     xmin = min(x, [], 1);
     xmax = max(x, [], 1);
 else
-    xmin = box(1, :);
-    xmax = box(2, :);
+    if ~isequal(size(box), [2 d])
+        errmsg = sprintf('box should have size [2 d], with d=%d.', d);
+        stk_error(errmsg, 'IncorrectSize');
+    else
+        xmin = box(1, :);
+        xmax = box(2, :);
+    end
 end
 
 y = (x - repmat(xmin, n, 1)) ./ repmat(xmax - xmin, n, 1);
