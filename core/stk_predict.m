@@ -183,7 +183,7 @@ for block_num = 1:nb_blocks
         zp_a(idx) = lambda_mu(1:ni, :)' * double(zi); end
     
     % compute kriging variances (this does NOT include the noise variance)
-    zp_v(idx) = stk_make_matcov(model, xt, xt, true) - dot(lambda_mu, RS)';
+    zp_v(idx) = stk_make_matcov(model, xt_block, xt_block, true) - dot(lambda_mu, RS)';
     
     % note: the following modification computes prediction variances for noisy
     % variance, i.e., including the noise variance also
