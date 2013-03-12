@@ -1,5 +1,10 @@
 2013-02-12  Julien Bect  <julien.bect@supelec.fr>
 
+	Check the size of 'box' in stk_normalize.
+
+	* utils/stk_normalize.m: Check the size of 'box' before using
+	it. Raise an error if it's not [2 d].
+
 	Return empty from stk_param_estim when lnv is not estimated.
 
 	* paramestim/stk_param_estim.m: Return empty for the second output
