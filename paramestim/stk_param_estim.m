@@ -136,6 +136,8 @@ end % switch
 if NOISEESTIM
     paramlnvopt = u_opt(end);
     u_opt(end) = [];
+else
+    paramlnvopt = [];
 end
 
 if isfloat(param0)

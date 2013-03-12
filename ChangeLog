@@ -1,3 +1,11 @@
+2013-02-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Return empty from stk_param_estim when lnv is not estimated.
+
+	* paramestim/stk_param_estim.m: Return empty for the second output
+	argument when lognoisevariance is not estimated (to avoid warnings
+	about output arguments not being assigned).
+
 2013-02-27  Julien Bect  <julien.bect@supelec.fr>
 
 	Add function stk_gpquadform() to compute Gibbs-Paciorek quadratic
