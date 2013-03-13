@@ -61,6 +61,7 @@ switch model.covariance_type
         
     case 'stk_materncov32_iso'
         [param, lnv] = paraminit_(xi, zi, box, 3/2, model.order, noisy);
+        param = [param(1); param(3)];
         
     case 'stk_materncov32_aniso'
         xi = stk_normalize(xi, box);
@@ -69,6 +70,7 @@ switch model.covariance_type
         
     case 'stk_materncov52_iso'
         [param, lnv] = paraminit_(xi, zi, box, 5/2, model.order, noisy);
+        param = [param(1); param(3)];
         
     case 'stk_materncov52_aniso'
         xi = stk_normalize(xi, box);

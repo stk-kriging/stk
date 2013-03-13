@@ -1,5 +1,11 @@
 2013-03-13  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a bug in stk_param_init().
+
+	* paramestim/stk_param_init.m: Remove the value of the regularity
+	parameter from param for stk_matercov32_iso and
+	stk_materncov52_iso covariance functions.
+
 	Avoid the use of 'stable' with unique().
 
 	* misc/dist/stk_filldist_exact.m: Avoid the use of 'stable' with
