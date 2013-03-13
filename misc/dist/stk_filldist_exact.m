@@ -83,10 +83,16 @@ end
 
 %--- Construct a triangulation that covers [0; 1]^d -------------------------------------
 
-x  = add_symm(x, box);             % extend using symmetries with respect to the faces
-x  = unique(x, 'rows', 'stable');  % remove duplicates
-dt = delaunayn(x);                 % Delaunay trianulation
-nt = length(dt(:, 1));             % number of triangles
+x  = add_symm(x, box); % extend using symmetries with respect to the faces
+
+% 2013/03/13: at the present time, Octave doesn't have the 'stable' option
+% (but, fortunately, we don't really care about doing a STABLE sort here...)
+
+% remove duplicates to avoid a a warning in delaunayn()
+x = unique(x, 'rows');
+
+dt = delaunayn(x);     % Delaunay trianulation
+nt = length(dt(:, 1)); % number of triangles
 
 %--- Compute centers and radiuses -------------------------------------------------------
 
