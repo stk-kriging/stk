@@ -1,4 +1,12 @@
-2013-02-12  Julien Bect  <julien.bect@supelec.fr>
+2013-03-13  Julien Bect  <julien.bect@supelec.fr>
+
+	Avoid the use of 'stable' with unique().
+
+	* misc/dist/stk_filldist_exact.m: Avoid the use of 'stable' with
+	unique() since Octave doesn't currently support it (and we don't
+	really need it, anyway, or so it seems).
+
+2013-03-12  Julien Bect  <julien.bect@supelec.fr>
 
 	Check the size of 'box' in stk_normalize.
 
