@@ -36,3 +36,12 @@ else
 end
 
 end % function stk_get_rownames
+
+
+%!test
+%! x = stk_dataframe(rand(2, 1));
+%! assert(isequal(stk_get_rownames(x), {'1'; '2'}));
+
+%!test
+%! x = stk_dataframe(rand(2, 1), {}, {'a'; 'b'});
+%! assert(isequal(stk_get_rownames(x), {'a'; 'b'}));

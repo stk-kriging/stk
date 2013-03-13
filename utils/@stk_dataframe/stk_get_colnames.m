@@ -31,3 +31,12 @@ function colnames = stk_get_colnames(x)
 colnames = x.vnames;
 
 end % function stk_get_colnames
+
+
+%!test
+%! x = stk_dataframe(rand(3, 2));
+%! assert(isequal(stk_get_colnames(x), {'x1' 'x2'}));
+
+%!test
+%! x = stk_dataframe(rand(3, 2), {'u' 'v'});
+%! assert(isequal(stk_get_colnames(x), {'u' 'v'}));
