@@ -31,3 +31,7 @@ function fn = fieldnames(x)
 fn = [x.vnames reserved_field_names()];
 
 end % function fieldnames
+
+%!test
+%! x = stk_dataframe(rand(3, 2), {'u' 'v'});
+%! assert(all(strcmp(sort(fieldnames(x)), {'colnames' 'rownames' 'u' 'v'})));

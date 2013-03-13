@@ -34,3 +34,15 @@ cn = stk_get_colnames(x);
 y = stk_dataframe(ctranspose(x.data), rn, cn);
 
 end % function ctranspose
+
+% note: complex-valued dataframes are supported but, currently,
+%       not properly displayed
+
+%!test
+%! u = rand(3, 2) + 1i * rand(3, 2);
+%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});
+%! data = data';
+%! assert(isa(data, 'stk_dataframe') && stk_isvalid(data));
+%! assert(isequal(double(data), u'));
+%! assert(isequal(data.rownames, {'x'; 'y'}));
+%! assert(isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));
