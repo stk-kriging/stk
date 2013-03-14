@@ -1,9 +1,11 @@
 2013-03-14  Julien Bect  <julien.bect@supelec.fr>
 
-	Fix another bug in stk_param_init().
+	Fix other bugs in stk_param_init().
 
 	* paramestim/stk_param_init.m: Remove the second normalization
-	that was performed in the internal function paraminit_().
+	that was performed in the internal function paraminit_(). Use the
+	correct box diameter to choose the list of range values for
+	isotropic covariance functions.
 
 2013-03-13  Julien Bect  <julien.bect@supelec.fr>
 
