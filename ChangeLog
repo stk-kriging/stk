@@ -1,3 +1,10 @@
+2013-03-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix another bug in stk_param_init().
+
+	* paramestim/stk_param_init.m: Remove the second normalization
+	that was performed in the internal function paraminit_().
+
 2013-03-13  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a bug in stk_param_init().
