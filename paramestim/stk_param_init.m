@@ -88,7 +88,7 @@ end % function stk_param_init
 
 function [param, lnv] = paraminit_(xi, yi, box, nu, order, noisy)
 
-[ni d] = size(xi.a);
+[ni d] = size(xi);
 
 model = stk_model('stk_materncov_iso');
 model.order = order;
