@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -87,9 +87,6 @@ function [param, lnv] = paraminit_(xi, yi, box, nu, order, noisy)
 
 model = stk_model('stk_materncov_iso');
 model.order = order;
-
-% normalized factors
-xi = stk_normalize(xi, box);
 
 % list of possible values for the ratio eta = sigma2_noise / sigma2
 if noisy,
