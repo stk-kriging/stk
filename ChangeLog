@@ -1,5 +1,10 @@
 2013-03-14  Julien Bect  <julien.bect@supelec.fr>
 
+	Add a warning in stk_param_init() when lognoisevariance is defined.
+
+	* paramestim/stk_param_init.m: Issue a warning if there is a
+	non-empty lognoisevariance field, since its value won't be used.
+
 	Fix other bugs in stk_param_init().
 
 	* paramestim/stk_param_init.m: Remove the second normalization

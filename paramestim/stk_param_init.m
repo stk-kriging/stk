@@ -33,7 +33,7 @@ stk_narginchk(3, 5);
 xi = stk_datastruct(xi);
 yi = stk_datastruct(yi);
 
-%%% first, default values for arguments 'box' and 'noisy'
+%--- first, default values for arguments 'box' and 'noisy' ------------------------------
 
 if (nargin < 4) || isempty(box),
     box = [min(xi.a); max(xi.a)];
@@ -43,7 +43,14 @@ if nargin < 5,
     noisy = false;
 end
 
-%%% then, each type of covariance is dealt with specifically
+%--- lognoisevariance ? -----------------------------------------------------------------
+
+if isfield(model, 'lognoisevariance') && ~isempty(model.lognoisevariance)
+    warning(sprintf('Ignoring current value of lognoisevariance (%.3e)', ...
+        model.lognoisevariance), 'IgnoringLogNoiseVariance');
+end
+
+%--- then, each type of covariance is dealt with specifically ---------------------------
 
 switch model.covariance_type
     
