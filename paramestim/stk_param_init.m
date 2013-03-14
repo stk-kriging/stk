@@ -29,7 +29,7 @@
 function [param, lnv] = stk_param_init(model, xi, yi, box, noisy)
 stk_narginchk(3, 5);
 
-%%% first, default values for arguments 'box' and 'noisy'
+%--- first, default values for arguments 'box' and 'noisy' ------------------------------
 
 if (nargin < 4) || isempty(box),
     box = [min(xi); max(xi)];
@@ -39,7 +39,14 @@ if nargin < 5,
     noisy = false;
 end
 
-%%% then, each type of covariance is dealt with specifically
+%--- lognoisevariance ? -----------------------------------------------------------------
+
+if isfield(model, 'lognoisevariance') && ~isempty(model.lognoisevariance)
+    warning(sprintf('Ignoring current value of lognoisevariance (%.3e)', ...
+        model.lognoisevariance), 'IgnoringLogNoiseVariance');
+end
+
+%--- then, each type of covariance is dealt with specifically ---------------------------
 
 switch model.covariance_type
     
@@ -50,7 +57,7 @@ switch model.covariance_type
     case 'stk_materncov_aniso'
         nu = 5/2 * size(xi, 2);
         xi = stk_normalize(xi, box);
-        [param, lnv] = paraminit_(xi, yi, box, nu, model.order, noisy);
+        [param, lnv] = paraminit_(xi, yi, [], nu, model.order, noisy);
         param = [param(1:2); param(3) - log(diff(box, [], 1))'];
         
     case 'stk_materncov32_iso'
@@ -59,7 +66,7 @@ switch model.covariance_type
         
     case 'stk_materncov32_aniso'
         xi = stk_normalize(xi, box);
-        [param, lnv] = paraminit_(xi, yi, box, 3/2, model.order, noisy);
+        [param, lnv] = paraminit_(xi, yi, [], 3/2, model.order, noisy);
         param = [param(1); param(3) - log(diff(box, [], 1))'];
         
     case 'stk_materncov52_iso'
@@ -68,7 +75,7 @@ switch model.covariance_type
         
     case 'stk_materncov52_aniso'
         xi = stk_normalize(xi, box);
-        [param, lnv] = paraminit_(xi, yi, box, 5/2, model.order, noisy);
+        [param, lnv] = paraminit_(xi, yi, [], 5/2, model.order, noisy);
         param = [param(1); param(3) - log(diff(box, [], 1))'];
         
     otherwise
@@ -81,11 +88,10 @@ end % function stk_param_init
 
 function [param, lnv] = paraminit_(xi, yi, box, nu, order, noisy)
 
+[ni d] = size(xi.a);
+
 model = stk_model('stk_materncov_iso');
 model.order = order;
-
-% normalized factors
-xi = stk_normalize(xi, box);
 
 % list of possible values for the ratio eta = sigma2_noise / sigma2
 if noisy,
@@ -95,7 +101,15 @@ else
 end
 
 % list of possible values for the range parameter
-rho_list = sqrt(size(box, 2)) * 10 .^ (-2:.5:0);
+if isempty(box)
+    % assume box = repmat([0; 1], 1, d)
+    box_diameter = sqrt(d);
+else
+    box_diameter = sqrt(sum(diff(box) .^ 2));
+end
+rho_max  = 2 * box_diameter;
+rho_min  = box_diameter / 50;
+rho_list = logspace(rho_min, rho_max, 5);
 
 % try all possible combinations
 eta_best    = NaN;
@@ -104,6 +118,7 @@ sigma2_best = NaN;
 aLL_best    = +Inf;
 for eta = eta_list
     for rho = rho_list
+        fprintf('[stk_param_init] eta = %.3e, rho = %.3e...\n', eta, rho);
         % first use sigma2 = 1
         model.param = log([1.0; nu; 1/rho]);
         model.lognoisevariance = log(eta);
@@ -113,7 +128,7 @@ for eta = eta_list
         yi_ = double(yi);
         beta = (P' * (K \ P)) \ (P' * yi_);
         zi = yi_ - P * beta;
-        sigma2 = 1 / (size(xi, 1) - length(beta)) * zi' * (K \ zi);
+        sigma2 = 1 / (ni - length(beta)) * zi' * (K \ zi);
         % now compute the antilog-likelihood
         if sigma2 > 0
             model.param(1) = log(sigma2);
