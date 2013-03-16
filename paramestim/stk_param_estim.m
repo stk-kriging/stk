@@ -159,9 +159,13 @@ end % function stk_param_estim ------------------------------------------------
 
 %--- The objective function and its gradient ----------------------------------
 
-function [l,dl] = f_(model, u, xi, yi)
+function [l, dl] = f_(model, u, xi, yi)
 model.param(:) = u;
-[l, dl] = stk_remlqrg(model, xi, yi);
+if nargout == 1,
+    l = stk_remlqrg(model, xi, yi);
+else
+    [l, dl] = stk_remlqrg(model, xi, yi);
+end
 end
 
 function dl = nablaf_(model, u, xi, yi)
@@ -169,11 +173,15 @@ model.param(:) = u;
 [l_ignored, dl] = stk_remlqrg(model, xi, yi); %#ok<ASGLU>
 end
 
-function [l,dl] = f_with_noise_(model, u, xi, yi)
+function [l, dl] = f_with_noise_(model, u, xi, yi)
 model.param(:) = u(1:end-1);
 model.lognoisevariance  = u(end);
-[l, dl, dln] = stk_remlqrg(model, xi, yi);
-dl = [dl; dln];
+if nargin == 1,
+    l = stk_remlqrg(model, xi, yi);
+else
+    [l, dl, dln] = stk_remlqrg(model, xi, yi);
+    dl = [dl; dln];
+end
 end
 
 function dl = nablaf_with_noise_(model, u, xi, yi)
