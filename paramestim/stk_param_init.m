@@ -113,7 +113,7 @@ else
 end
 rho_max  = 2 * box_diameter;
 rho_min  = box_diameter / 50;
-rho_list = logspace(rho_min, rho_max, 5);
+rho_list = logspace(log10(rho_min), log10(rho_max), 5);
 
 % try all possible combinations
 eta_best    = NaN;
@@ -157,3 +157,12 @@ param = log([sigma2_best; nu; 1/rho_best]);
 lnv = log(eta_best * sigma2_best);
 
 end % function paraminit_
+
+
+%!test
+%! xi = (1:10)'; zi = sin(xi);
+%! model = stk_model('stk_materncov52_iso');
+%! model.param = stk_param_init(model, xi, zi, [1; 10], false);
+%! xt = (1:9)' + 0.5; zt = sin(xt);
+%! zp = stk_predict(model, xi, zi, xt);
+%! assert(sum((zt - zp.a).^2) < 1e-3);
