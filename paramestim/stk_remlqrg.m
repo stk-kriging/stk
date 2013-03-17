@@ -44,14 +44,13 @@ stk_narginchk(3, 3);
 % an object, this is actually a call to subsasgn() in disguise).
 param = model.param(:);
 
-PARAMPRIOR = isfield( model, 'prior' );
-NOISYOBS   = isfield( model, 'lognoisevariance' );
-NOISEPRIOR = isfield( model, 'noiseprior' );
+PARAMPRIOR = isfield(model, 'prior');
+NOISYOBS   = isfield(model, 'lognoisevariance');
+NOISEPRIOR = isfield(model, 'noiseprior');
 
 if ~NOISYOBS,
     if NOISEPRIOR,
-        error([...
-            'Having a prior on the noise variance when there is' ...
+        error(['Having a prior on the noise variance when there is' ...
             'no observation noise doesn''t make sense...']);
     else
         % log(eps) is harmless
@@ -59,26 +58,26 @@ if ~NOISYOBS,
     end
 end
 
-n = size(xi.a,1);
+n = size(xi.a, 1);
 
 %% compute rl
 
-[K,P] = stk_make_matcov( model, xi );
-q = size(P,2);
+[K, P] = stk_make_matcov(model, xi);
+q = size(P, 2);
 
-[Q,R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
-W = Q(:,(q+1):n);
-Wyi = W'*yi.a;
+[Q, R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
+W = Q(:, (q+1):n);
+Wyi = W' * yi.a;
 
-G = W'*(K*W);
+G = W' * (K * W);
 
 Ginv = inv(G);
-WKWinv_Wyi = Ginv*Wyi; %#ok<MINV>
+WKWinv_Wyi = Ginv * Wyi; %#ok<MINV>
 
-[C,p]=chol(G); %#ok<NASGU>
-ldetWKW= 2*sum(log(diag(C))); % log(det(G));
+[C, p] = chol(G); %#ok<NASGU>
+ldetWKW = 2*sum(log(diag(C))); % log(det(G));
 
-attache= Wyi'*WKWinv_Wyi;
+attache = Wyi' * WKWinv_Wyi;
 
 if PARAMPRIOR
     delta_p = param - model.prior.mean;
@@ -94,19 +93,19 @@ else
     noiseprior = 0;
 end
 
-rl = 1/2*((n-q)*log(2*pi) + ldetWKW + attache + prior + noiseprior);
+rl = 1/2 * ((n-q) * log(2*pi) + ldetWKW + attache + prior + noiseprior);
 
 %% compute gradient
 
 if nargout >= 2
     
     nbparam = length(param);
-    drl_param = zeros( nbparam, 1 );
+    drl_param = zeros(nbparam, 1);
     
-    for paramdiff = 1:nbparam,
-        V = feval(model.covariance_type, model.param, xi, xi, paramdiff);
-        WVW = W'*V*W;
-        drl_param(paramdiff) = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wyi'*WVW*WKWinv_Wyi);
+    for diff = 1:nbparam,
+        V = feval(model.covariance_type, model.param, xi, xi, diff);
+        WVW = W' * V * W;
+        drl_param(diff) = 1/2 * (sum(sum(Ginv .* WVW)) - WKWinv_Wyi' * WVW * WKWinv_Wyi);
     end
     
     if PARAMPRIOR
@@ -117,8 +116,8 @@ if nargout >= 2
         if NOISYOBS,
             diff = 1;
             V = stk_noisecov(n, model.lognoisevariance, diff);
-            WVW = W'*V*W;
-            drl_lnv = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wyi'*WVW*WKWinv_Wyi);
+            WVW = W' * V * W;
+            drl_lnv = 1/2 * (sum(sum(Ginv .* WVW)) - WKWinv_Wyi' * WVW * WKWinv_Wyi);
             if NOISEPRIOR
                 drl_lnv = drl_lnv + delta_lnv / model.noiseprior.var;
             end
