@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -39,6 +39,10 @@
 
 function [rl, drl_param, drl_lnv] = stk_remlqrg(model, xi, yi)
 stk_narginchk(3, 3);
+
+% Ensure that param is a column vector (note: in the case where model.param is 
+% an object, this is actually a call to subsasgn() in disguise).
+param = model.param(:);
 
 PARAMPRIOR = isfield( model, 'prior' );
 NOISYOBS   = isfield( model, 'lognoisevariance' );
@@ -77,7 +81,7 @@ ldetWKW= 2*sum(log(diag(C))); % log(det(G));
 attache= Wyi'*WKWinv_Wyi;
 
 if PARAMPRIOR
-    prior = (model.param - model.prior.mean)'*model.prior.invcov*(model.param - model.prior.mean);
+    prior = (param - model.prior.mean)'*model.prior.invcov*(param - model.prior.mean);
 else
     prior = 0;
 end
@@ -94,7 +98,7 @@ rl = 1/2*((n-q)*log(2*pi) + ldetWKW + attache + prior + noiseprior);
 
 if nargout >= 2
     
-    nbparam = length(model.param);
+    nbparam = length(param);
     drl_param = zeros( nbparam, 1 );
     
     for paramdiff = 1:nbparam,
@@ -104,7 +108,7 @@ if nargout >= 2
     end
     
     if PARAMPRIOR
-        drl_param = drl_param + model.prior.invcov*(model.param - model.prior.mean);
+        drl_param = drl_param + model.prior.invcov*(param - model.prior.mean);
     end
     
     if nargout >= 3,
@@ -151,3 +155,4 @@ end
 %!error [J, dJ1, dJ2] = stk_remlqrg(model, xi);
 %!test  [J, dJ1, dJ2] = stk_remlqrg(model, xi, zi);
 %!error [J, dJ1, dJ2] = stk_remlqrg(model, xi, zi, pi);
+
