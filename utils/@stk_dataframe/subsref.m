@@ -47,13 +47,8 @@ switch idx(1).type
                 t = stk_get_colnames(x);
                 
             otherwise,
-                b = strcmp(idx(1).subs, x.vnames);
-                if ~any(b)
-                    errmsg = sprintf('There is no variable named %s.', idx(1).subs);
-                    stk_error(errmsg, 'UnknownVariable');
-                else                    
-                    t = x.data(:, b);
-                end
+                b = get_column_indicator(x, idx(1).subs);
+                t = x.data(:, b);                
                 
         end % switch
 end
