@@ -1,3 +1,11 @@
+2013-03-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Modify stk_remlqrg() to support objects in model.param.
+
+	* paramestim/stk_remlqrg.m: Ensure that param is a column vector;
+	in the case where model.param is an object, this is actually a
+	call to subsasgn() in disguise.
+
 2013-03-16  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a (recently introduced...) bug in stk_param_init().
