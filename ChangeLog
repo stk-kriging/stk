@@ -1,5 +1,10 @@
 2013-03-17  Julien Bect  <julien.bect@supelec.fr>
 
+	Add local variables delta_p and delta_lnv in stk_remlqrg().
+
+	* paramestim/stk_remlqrg.m: Add local variables for (slightly)
+	improved readability and efficiency.
+
 	Modify stk_remlqrg() to support objects in model.param.
 
 	* paramestim/stk_remlqrg.m: Ensure that param is a column vector;

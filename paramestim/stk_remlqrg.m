@@ -81,13 +81,15 @@ ldetWKW= 2*sum(log(diag(C))); % log(det(G));
 attache= Wyi'*WKWinv_Wyi;
 
 if PARAMPRIOR
-    prior = (param - model.prior.mean)'*model.prior.invcov*(param - model.prior.mean);
+    delta_p = param - model.prior.mean;
+    prior = delta_p' * model.prior.invcov * delta_p;
 else
     prior = 0;
 end
 
 if NOISEPRIOR
-    noiseprior = (model.lognoisevariance - model.noiseprior.mean)^2/model.noiseprior.var;
+    delta_lnv = model.lognoisevariance - model.noiseprior.mean;
+    noiseprior = delta_lnv^2 / model.noiseprior.var;
 else
     noiseprior = 0;
 end
@@ -108,7 +110,7 @@ if nargout >= 2
     end
     
     if PARAMPRIOR
-        drl_param = drl_param + model.prior.invcov*(param - model.prior.mean);
+        drl_param = drl_param + model.prior.invcov * delta_p;
     end
     
     if nargout >= 3,
@@ -118,7 +120,7 @@ if nargout >= 2
             WVW = W'*V*W;
             drl_lnv = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wyi'*WVW*WKWinv_Wyi);
             if NOISEPRIOR
-                drl_lnv = drl_lnv + (model.lognoisevariance - model.noiseprior.mean)/model.noiseprior.var;
+                drl_lnv = drl_lnv + delta_lnv / model.noiseprior.var;
             end
         else
             % returns NaN for the derivative with respect to the noise
