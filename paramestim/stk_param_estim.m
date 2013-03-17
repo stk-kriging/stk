@@ -89,7 +89,7 @@ else
 end
 
 % TODO: allow user-defined bounds
-[lb, ub] = get_default_bounds(model, param0, xi, yi);
+[lb, ub] = stk_param_getdefaultbounds(model.covariance_type, param0, xi, yi);
 
 if NOISEESTIM
     [lblnv, ublnv] = get_default_bounds_lnv(model, param0lnv, xi, yi);
@@ -205,68 +205,6 @@ model.lognoisevariance  = u(end);
 [l_ignored, dl, dln] = stk_remlqrg(model, xi, yi); %#ok<ASGLU>
 dl = [dl; dln];
 end
-
-
-function [lb,ub] = get_default_bounds ... %------------------------------------
-    (model, param0, xi, yi)
-
-if isfloat(param0)
-    
-    % constants
-    TOLVAR = 5.0;
-    TOLSCALE = 5.0;
-    
-    % bounds for the variance parameter
-    empirical_variance = var(yi.a);
-    logvar_lb = min(log(empirical_variance), param0(1)) - TOLVAR;
-    logvar_ub = max(log(empirical_variance), param0(1)) + TOLVAR;
-    
-    dim = size(xi.a, 2);
-    
-    switch model.covariance_type,
-        
-        case {'stk_materncov_aniso', 'stk_materncov_iso'}
-            
-            nu_lb = min(log(0.5), param0(2));
-            nu_ub = max(log(min(50, 10*dim)), param0(2));
-            
-            range_mid = param0(3:end);
-            range_lb  = range_mid(:) - TOLSCALE;
-            range_ub  = range_mid(:) + TOLSCALE;
-            
-            lb = [logvar_lb; nu_lb; range_lb];
-            ub = [logvar_ub; nu_ub; range_ub];
-            
-        case {'stk_materncov32_aniso', 'stk_materncov32_iso', ...
-                'stk_materncov52_aniso', 'stk_materncov52_iso'}
-            
-            range_mid = param0(2:end);
-            range_lb  = range_mid(:) - TOLSCALE;
-            range_ub  = range_mid(:) + TOLSCALE;
-            
-            lb = [logvar_lb; range_lb];
-            ub = [logvar_ub; range_ub];
-            
-        otherwise
-            
-            lb = [];
-            ub = [];
-            
-    end % switch
-
-elseif ismethod(param0, 'get_default_bounds')
-    
-    [lb, ub] = get_default_bounds(model.param, param0, xi, yi);
-    
-else
-    
-    lb = [];
-    ub = [];
-    
-end % if
-
-end % function get_default_bounds ---------------------------------------------
-
 
 function [lblnv,ublnv] = get_default_bounds_lnv ... % -------------------------
     (model, param0lnv, xi, yi) %#ok<INUSL>

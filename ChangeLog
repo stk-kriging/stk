@@ -1,5 +1,15 @@
 2013-03-17  Julien Bect  <julien.bect@supelec.fr>
 
+	New function stk_param_getdefaultbounds().
+
+	* paramestim/stk_param_estim.m: Remove internal function
+	get_default_bounds() and call stk_param_getdefaultbounds()
+	instead.
+	* paramestim/stk_param_getdefaultbounds.m: New function to be used
+	instead of the internal function get_default_bounds() in
+	stk_param_estim.m. This function can be overloaded for parameters
+	objects.
+
 	In stk_param_estim(), cast param0 to the appropriate type.
 
 	* paramestim/stk_param_estim.m: Cast param0 into an object of the
