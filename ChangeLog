@@ -1,5 +1,10 @@
 2013-03-17  Julien Bect  <julien.bect@supelec.fr>
 
+	In stk_param_estim(), cast param0 to the appropriate type.
+
+	* paramestim/stk_param_estim.m: Cast param0 into an object of the
+	appropriate type and size and set model.param to the same value.
+
 	Add local variables delta_p and delta_lnv in stk_remlqrg().
 
 	* paramestim/stk_remlqrg.m: Add local variables for (slightly)

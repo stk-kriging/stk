@@ -73,6 +73,21 @@ if NOISEESTIM && ~isfield(model, 'lognoisevariance')
     model.lognoisevariance = param0lnv;
 end
 
+% Cast param0 into an object of the appropriate type and size
+% and set model.param to the same value
+if isfloat(param0)
+    % Note: if model.param is an object, this is actually a call to subsasgn() in
+    % disguise => parameter classes *must* support this form of indexing.
+    model.param(:) = param0;
+    param0 = model.param;
+else
+    if ~strcmp(class(param0), class(model.param))
+        stk_error('Incorrect type for param0.', 'TypeMismatch');
+    else
+        model.param = param0;
+    end
+end
+
 % TODO: allow user-defined bounds
 [lb, ub] = get_default_bounds(model, param0, xi, yi);
 
@@ -195,7 +210,7 @@ end
 function [lb,ub] = get_default_bounds ... %------------------------------------
     (model, param0, xi, yi)
 
-if isfloat(model.param)
+if isfloat(param0)
     
     % constants
     TOLVAR = 5.0;
@@ -239,7 +254,7 @@ if isfloat(model.param)
             
     end % switch
 
-elseif ismethod(model.param, 'get_default_bounds')
+elseif ismethod(param0, 'get_default_bounds')
     
     [lb, ub] = get_default_bounds(model.param, param0, xi, yi);
     
