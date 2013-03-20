@@ -1,3 +1,11 @@
+2013-03-20  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve stk_runtests().
+
+	* misc/test/stk_runtests.m: Include class directories and private
+	directories in the total number of directories. Silence warnings
+	and display something if there were warnings during the tests.
+
 2013-03-17  Julien Bect  <julien.bect@supelec.fr>
 
 	New function stk_param_getdefaultbounds().

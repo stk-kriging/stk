@@ -62,20 +62,21 @@ else
 end
 
 % number of directories to be explored
-nb_dirs = numel(dirs);
+nb_topdirs = numel(dirs);
 
 % run tests all available tests in each directory
-n_total = 0; n_pass = 0; n_files = 0; n_notest = 0;
-for i = 1:nb_dirs
-    [n_pass_, n_total_, n_notest_, n_files_] = run_all_tests(dirs{i}, dirs{i});
-    n_total  = n_total + n_total_;
-    n_pass   = n_pass + n_pass_;
-    n_files  = n_files + n_files_;
-    n_notest = n_notest + n_notest_;
+n_total = 0; n_pass = 0; n_files = 0; n_notest = 0; n_dirs = 0;
+for i = 1:nb_topdirs
+    [np, nt, nn, nf, nd] = run_all_tests(dirs{i}, dirs{i});
+    n_total  = n_total  + nt;
+    n_pass   = n_pass   + np;
+    n_files  = n_files  + nf;
+    n_notest = n_notest + nn;
+    n_dirs   = n_dirs   + nd;
 end
 
-if nb_dirs > 1,
-    fprintf('Summary for all %d directories:\n', nb_dirs);
+if n_dirs > 1,
+    fprintf('Summary for all %d directories:\n', n_dirs);
     fprintf(' --> passed %d/%d tests\n', n_pass, n_total);
     fprintf(' --> %d/%d files had no tests\n', n_notest, n_files);
 end
@@ -87,7 +88,7 @@ end
 % run_all_tests %
 %%%%%%%%%%%%%%%%%
 
-function [n_pass, n_total, n_notest, n_files] = run_all_tests(testdir, basedir)
+function [n_pass, n_total, n_notest, n_files, n_dirs] = run_all_tests(testdir, basedir)
 
 % list directory content
 dirinfo = dir(testdir);
@@ -103,6 +104,7 @@ n_total  = 0;
 n_pass   = 0;
 n_files  = 0;
 n_notest = 0;
+n_dirs   = 1;
 
 % list of subdirectories to be processed
 subdirs_class = {};
@@ -115,6 +117,9 @@ for i = 1:numel (flist)
         n_files = n_files + 1;
         print_test_file_name (f);
         if has_tests(ff)
+            % Silence all warnings & prepare for warning detection.
+            s = warning('off', 'all'); lastwarn('');
+            % Do the actual tests.
             [p, n] = stk_test (ff, 'quiet', stdout);
             % Note: the presence of the third argument (fid=stdout) forces
             % stk_test in batch mode, which means that it doesn't stop at
@@ -122,15 +127,21 @@ for i = 1:numel (flist)
             print_pass_fail(n, p);
             n_total = n_total + n;
             n_pass  = n_pass  + p;
+            % deal with warnings
+            if ~isempty(lastwarn()), fprintf(' (warnings)'); end
+            warning(s);
         else
             n_notest = n_notest + 1;
-            fprintf(' NO TESTS\n');
+            fprintf(' NO TESTS');
         end
+        fprintf('\n');
         fflush(stdout);
     elseif dirinfo(i).isdir && (f(1) == '@')
         subdirs_class{end+1} = ff; %#ok<AGROW>
+        n_dirs = n_dirs + 1;
     elseif dirinfo(i).isdir && strcmp(f, 'private')
         subdirs_private{end+1} = ff; %#ok<AGROW>
+        n_dirs = n_dirs + 1;
     end
 end
 fprintf('   --> passed %d/%d tests\n', n_pass, n_total);
@@ -189,7 +200,6 @@ if (n > 0)
         fprintf (' FAIL %d', nfail);
     end
 end
-fprintf('\n');
 
 end % print_pass_fail
 
