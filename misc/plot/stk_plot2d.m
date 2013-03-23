@@ -8,7 +8,8 @@
 %
 %    Copyright (C) 2012, 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect           <julien.bect@supelec.fr>
+%              Valentin Resseguier   <valentin.resseguier@gmail.com>
 
 % Copying Permission Statement
 %
@@ -48,14 +49,6 @@ if dim ~= 2,
 end
 
 
-%%% Extract ndgrid-style coordinate matrices
-
-[xx1, xx2] = ndgrid(x);
-xx1 = xx1'; xx2 = xx2'; % ndgrid -> meshgrid (=> x1 on the horizontal axis)
-
-[n1, n2] = size(xx1);
-
-
 %%% Deal with various possible types for the 'z' argument
 
 if ischar(arg3) || isa(arg3, 'function_handle')
@@ -67,7 +60,9 @@ end
 
 %%% Do the actual plotting job
 
-plotfun(xx1, xx2, reshape(z, n1, n2), varargin{:});
+[xx1, xx2] = ndgrid(x);
+
+plotfun(xx1, xx2, reshape(z, size(xx1)), varargin{:});
 
 xlabel('x_1', 'FontWeight', 'bold');
 ylabel('x_2', 'FontWeight', 'bold');
