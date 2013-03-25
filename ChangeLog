@@ -1,3 +1,11 @@
+2013-03-25  Julien Bect  <julien.bect@supelec.fr>
+
+	Make stk_test() silent as a grave.
+
+	* misc/test/stk_test.m: Use evalc() instead of eval() to make
+	stk_test() silent as a grave. Only works in Matlab for the time
+	being, since evalc() is still unimplemented in Octave.
+
 2013-03-20  Julien Bect  <julien.bect@supelec.fr>
 
 	Improve stk_runtests().
