@@ -42,3 +42,6 @@ end
 disp(x);
 
 end % function display
+
+
+%!test display(stk_dataframe(rand(3, 2)));

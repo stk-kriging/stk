@@ -76,3 +76,20 @@ x = struct('coord', {coord});
 x = class(x, 'stk_factorialdesign', df);
 
 end % function stk_factorialdesign
+
+
+%--- disp & display -----------------------------------------------------------
+
+%!shared x fmt
+%! fmt = get(0, 'Format');
+%! x = stk_sampling_regulargrid(3^2, 2);
+
+%!test set(0, 'Format', 'short');     disp(x);
+%!test set(0, 'Format', 'long');      disp(x);
+%!test set(0, 'Format', 'rational');  disp(x);
+%!test set(0, 'Format', fmt);
+
+%!test disp(stk_sampling_regulargrid(0^1, 1));
+%!test disp(stk_sampling_regulargrid(0^2, 2));
+
+%!test display(x);
