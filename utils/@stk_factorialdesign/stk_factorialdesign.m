@@ -93,3 +93,33 @@ end % function stk_factorialdesign
 %!test disp(stk_sampling_regulargrid(0^2, 2));
 
 %!test display(x);
+
+%--- cat, vertcat, horzcat ----------------------------------------------------
+
+% Note: the output is a plain stk_dataframe
+
+%!shared x y
+%! x = stk_sampling_regulargrid(3^2, 2);
+%! y = x;
+
+%!test %%%% vercat
+%! z = vertcat(x, y);
+%! assert(strcmp(class(z), 'stk_dataframe') && stk_isvalid(z));
+%! assert(isequal(double(z), [double(x); double(y)]));
+
+%!test %%%% same thing, using cat(1, ...)
+%! z = cat(1, x, y);
+%! assert(strcmp(class(z), 'stk_dataframe') && stk_isvalid(z));
+%! assert(isequal(double(z), [double(x); double(y)]));
+
+%!test %%%% horzcat
+%! y.colnames = {'y1' 'y2'}; z = horzcat(x, y);
+%! assert(strcmp(class(z), 'stk_dataframe') && stk_isvalid(z));
+%! assert(isequal(double(z), [double(x) double(y)]));
+%! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
+
+%!test %%%% same thing, using cat(2, ...)
+%! z = cat(2, x, y);
+%! assert(strcmp(class(z), 'stk_dataframe') && stk_isvalid(z));
+%! assert(isequal(double(z), [double(x) double(y)]));
+%! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
