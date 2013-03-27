@@ -40,9 +40,9 @@ else %--- apply 'max' elementwise ----------------------------------------------
     if nargin > 2,
         errmsg = 'Too many input arguments (elementwise max assumed)';
         stk_error(errmsg, 'TooManyInputArgs');
+    else
+        z = bsxfun(@max, x, y);
     end
-
-    z = bsxfun(@max, x, y);
     
 end %--- that's all, folks --------------------------------------------------------------
 

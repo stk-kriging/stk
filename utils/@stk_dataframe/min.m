@@ -40,9 +40,9 @@ else %--- apply 'min' elementwise ----------------------------------------------
     if nargin > 2,
         errmsg = 'Too many input arguments (elementwise min assumed)';
         stk_error(errmsg, 'TooManyInputArgs');
+    else
+        z = bsxfun(@min, x, y);
     end
-
-    z = bsxfun(@min, x, y);
     
 end %--- that's all, folks --------------------------------------------------------------
 
