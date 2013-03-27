@@ -123,3 +123,27 @@ end % function stk_factorialdesign
 %! assert(strcmp(class(z), 'stk_dataframe') && stk_isvalid(z));
 %! assert(isequal(double(z), [double(x) double(y)]));
 %! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
+
+%--- apply & related functions ------------------------------------------------
+
+%!shared x t
+%! x = stk_sampling_regulargrid(3^2, 2);
+%! t = double(x);
+
+%!assert (isequal(apply(x, 1, @sum), sum(t, 1)))
+%!assert (isequal(apply(x, 2, @sum), sum(t, 2)))
+%!error u = apply(x, 3, @sum);
+
+%!assert (isequal(apply(x, 1, @min, []), min(t, [], 1)))
+%!assert (isequal(apply(x, 2, @min, []), min(t, [], 2)))
+%!error u = apply(x, 3, @min, []);
+
+%!assert (isequal(min(x), min(t)))
+%!assert (isequal(max(x), max(t)))
+%!assert (isequal(std(x), std(t)))
+%!assert (isequal(var(x), var(t)))
+%!assert (isequal(sum(x), sum(t)))
+%!assert (isequal(mean(x), mean(t)))
+%!assert (isequal(mode(x), mode(t)))
+%!assert (isequal(prod(x), prod(t)))
+%!assert (isequal(median(x), median(t)))
