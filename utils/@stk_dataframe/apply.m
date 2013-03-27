@@ -34,13 +34,16 @@ else
     uu = {};
 end
 
-switch dim
-    case 1 % act along columns
-        z = F(x.data, uu{:}, 1);
-    case 2, % act along rows (less usual)
-        z = F(x.data, uu{:}, 2);
-    otherwise
+if dim == 1
+    % act along columns
+    z = F(x.data, uu{:}, 1);
+else
+    if dim ~= 2,
         stk_error('Incorrect dimension specifier', 'IncorrectDimSpec');
+    else
+        % act along rows (less usual)
+        z = F(x.data, uu{:}, 2);
+    end
 end
 
 end % function apply
