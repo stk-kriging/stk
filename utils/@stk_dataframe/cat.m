@@ -28,19 +28,18 @@
 
 function z = cat(dim, varargin)
 
-switch dim,
-    
-    case 1
-        z = vertcat(varargin{:});
-        
-    case 2
-        z = horzcat(varargin{:});
-        
-    otherwise
+if dim == 1
+    % concatenate along dimension 1, i.e., vertically
+    z = vertcat(varargin{:});
+else
+    if dim ~= 2
         errmsg = 'Dataframes can only be concatenated along dimension 1 or 2.';
         stk_error(errmsg, 'IncorrectArgument');
-        
-end % switch
+    else
+        % concatenate along dimension 2, i.e., horizontally
+        z = horzcat(varargin{:});
+    end
+end % if
 
 end % function cat
 
