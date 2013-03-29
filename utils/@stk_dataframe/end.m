@@ -28,22 +28,18 @@
 
 function idx = end(x, k, nb_indices)
 
-if nb_indices == 2,
-    
-    % using two indices
-    idx = size(x.data, k);
-    
-elseif nb_indices == 1,
-    
-    % using linear indexing
-    idx = numel(x.data);
-    
-else
-    
-    errmsg = 'stk_dataframe objects only support linear or matrix-type indexing.';
-    stk_error(errmsg, 'IllegalIndexing');
-
-end % if
+if nb_indices == 2,    
+    % using two indices (matrix-style indexing)
+    idx = size(x.data, k);    
+else    
+    if nb_indices ~= 1,
+        errmsg = 'stk_dataframe objects only support linear or matrix-style indexing.';
+        stk_error(errmsg, 'IllegalIndexing');
+    else
+        % using linear indexing
+        idx = numel(x.data);
+    end
+end
 
 end % function
 
@@ -54,3 +50,4 @@ end % function
 %!assert (isequal (x(2, 1:end), x(2, :)))
 %!assert (isequal (x(2:end, 2:end), x(2:3, 2)))
 %!assert (isequal (x(1:end), x(1:6)))
+%!error x(1:end, 1:end, 1:end)
