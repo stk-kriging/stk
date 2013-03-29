@@ -31,34 +31,53 @@ function x = subsasgn(x, idx, val)
 switch idx(1).type
     
     case '()'
-        if length(idx) == 1
-            if length(idx(1).subs) == 2                
-                val = double(val);
-                if ~isempty(val)
-                    x.data = subsasgn(x.data, idx, val);
-                else
-                    if strcmp(idx(1).subs{1}, ':')
-                        % remove columns
-                        ii = idx(1).subs{2};
-                        x.data(:, ii) = [];
-                        x.vnames(ii) = [];
-                    elseif strcmp(idx(1).subs{2}, ':')
-                        % remove rows
-                        ii = idx(1).subs{1};
-                        x.data(ii, :) = [];
-                        if ~isempty(x.rownames),
-                            x.rownames(ii) = []; 
-                        end
-                    else
-                        stk_error('Illegal indexing.', 'IllegalIndexing');
-                    end
-                end                
-            else
-                errmsg = 'stk_dataframe objects only support matrix-type indexing.';
-                stk_error(errmsg, 'IllegalIndexing');
-            end
-        else
+        
+        if length(idx) ~= 1
+            
             stk_error('Illegal indexing.', 'IllegalIndexing');
+            
+        else % ok, only one level of indexing
+            
+            if length(idx(1).subs) ~= 2
+                
+                errmsg = 'stk_dataframe objects only support matrix-style indexing.';
+                stk_error(errmsg, 'IllegalIndexing');
+
+            else % ok, matrix-style indexing
+                
+                val = double(val);
+                
+                if ~isempty(val)
+                    
+                    x.data = subsasgn(x.data, idx, val);
+                    
+                else % assignment rhs is empty
+                    
+                    idx_row = idx(1).subs{1};
+                    remove_columns = strcmp(idx_row, ':');
+                    
+                    idx_col = idx(1).subs{2};
+                    remove_rows = strcmp(idx_col, ':');
+                    
+                    if ~xor(remove_columns, remove_rows)
+                        
+                        stk_error('Illegal indexing.', 'IllegalIndexing');
+                        
+                    elseif remove_columns
+                        
+                        x.data(:, idx_col) = [];
+                        x.vnames(idx_col) = [];
+                        
+                    else % remove_rows
+                        
+                        x.data(idx_row, :) = [];
+                        if ~isempty(x.rownames),
+                            x.rownames(idx_row) = [];
+                        end
+                        
+                    end
+                end
+            end            
         end
         
     case '{}'
@@ -89,7 +108,7 @@ switch idx(1).type
                 else
                     x.data(:, b) = val;
                 end
-        
+                
         end % switch
         
 end
@@ -141,16 +160,37 @@ end % function subsasgn
 
 %!error data.toto = rand(3, 1);
 
-%!test
-%! x = stk_dataframe(rand(3, 2));
-%! x(:, 2) = [];
-%! assert (stk_isvalid (x))
-%! assert (isequal(size(x), [3 1]))
+%!shared x
+%! x = stk_dataframe(reshape(1:12, 4, 3));
 
 %!test
-%! x = stk_dataframe(rand(3, 2));
+%! x(:, 2) = [];
+%! assert (stk_isvalid (x))
+%! assert (isequal(size(x), [4 2]))
+%! assert (isequal(double(x), [1 9; 2 10; 3 11; 4 12]))
+
+%!test
+%! x(2, :) = [];
+%! assert (stk_isvalid (x))
+%! assert (isequal(size(x), [3 2]))
+%! assert (isequal(double(x), [1 9; 3 11; 4 12]))
+
+%!test
+%! x.rownames = {'a'; 'b'; 'c'};
 %! x(2, :) = [];
 %! assert (stk_isvalid (x))
 %! assert (isequal(size(x), [2 2]))
+%! assert (isequal(double(x), [1 9; 4 12]))
+%! assert (isequal(x.rownames, {'a'; 'c'}))
+
+%!test
+%! x(1, 2) = 11;
+%! assert (stk_isvalid (x))
+%! assert (isequal(size(x), [2 2]))
+%! assert (isequal(double(x), [1 11; 4 12]))
 
 %!error x{1} = 2;
+%!error x(1, 2) = [];
+%!error x(:, :) = [];
+%!error x(1, 2).a = 3;
+%!error x(3) = 2;
