@@ -147,3 +147,46 @@ end % function stk_factorialdesign
 %!assert (isequal(mode(x), mode(t)))
 %!assert (isequal(prod(x), prod(t)))
 %!assert (isequal(median(x), median(t)))
+
+%--- bsxfun & related functions -----------------------------------------------
+
+%!shared x1 x2 x3 u1 u2 u3
+%! x1 = stk_sampling_regulargrid([4 3], 2);  u1 = double(x1);
+%! x2 = stk_sampling_regulargrid([3 4], 2);  u2 = double(x2);
+%! x3 = x1 + 1;                              u3 = u1 + 1;
+
+%!test
+%! z = bsxfun(@plus, x1, u2);
+%! assert(isa(z, 'stk_dataframe') && isequal(double(z), u1 + u2))
+
+%!test
+%! z = bsxfun(@plus, u1, x2);
+%! assert(isa(z, 'double') && isequal(z, u1 + u2))
+
+%!test
+%! z = bsxfun(@plus, x1, x2);
+%! assert(isa(z, 'stk_dataframe') && isequal(double(z), u1 + u2))
+
+%!test  z = min(x1, x2);     assert(isequal(double(z), min(u1, u2)));
+%!test  z = max(x1, x2);     assert(isequal(double(z), max(u1, u2)));
+%!error z = min(x1, x2, 1);
+%!error z = max(x1, x2, 1);
+
+%!test  z = x1 + x2;           assert(isequal(double(z), u1 + u2));
+%!test  z = x1 - x2;           assert(isequal(double(z), u1 - u2));
+%!test  z = x1 .* x2;          assert(isequal(double(z), u1 .* u2));
+%!test  z = x3 .\ x2;          assert(isequal(double(z), u3 .\ u2));
+%!test  z = x2 ./ x3;          assert(isequal(double(z), u2 ./ u3));
+%!test  z = x3 .^ x2;          assert(isequal(double(z), u3 .^ u2));
+%!test  z = realpow(x3, x2);   assert(isequal(double(z), realpow(u3, u2)));
+
+%!test  z = (x1 == x2);        assert(isequal(double(z), (u1 == u2)));
+%!test  z = (x1 ~= x2);        assert(isequal(double(z), (u1 ~= u2)));
+%!test  z = (x1 <= x2);        assert(isequal(double(z), (u1 <= u2)));
+%!test  z = (x1 >= x2);        assert(isequal(double(z), (u1 >= u2)));
+%!test  z = (x1 < x2);         assert(isequal(double(z), (u1 < u2)));
+%!test  z = (x1 > x2);         assert(isequal(double(z), (u1 > u2)));
+
+%!test  z = x1 & x2;           assert(isequal(double(z), u1 & u2));
+%!test  z = x1 | x2;           assert(isequal(double(z), u1 | u2));
+%!test  z = xor(x1, x2);       assert(isequal(double(z), xor(u1, u2)));
