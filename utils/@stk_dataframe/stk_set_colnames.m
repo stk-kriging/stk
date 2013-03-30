@@ -31,11 +31,15 @@ function x = stk_set_colnames(x, colnames)
 d = size(x.data, 2);
 
 if ~iscell(colnames)
-    if (d == 1) && ischar(colnames)
-        colnames = {colnames};
-    else
+    if ~((d == 1) && ischar(colnames))
+
         errmsg = 'colnames is expected to be a string or a cell-array of strings.';
         stk_error(errmsg, 'TypeMismatch');
+
+    else % ok, we have a single column and a string for its name
+        
+        colnames = {colnames};
+
     end
 end
 
@@ -50,25 +54,32 @@ if isempty(colnames)
     end
 else
     if length(colnames) ~= d
+        
         errmsg = sprintf('colnames is expected to have length d=%d.', d);
         stk_error(errmsg, 'IncorrectSize');
-    end
-    if numel(colnames) ~= d
+        
+    elseif numel(colnames) ~= d
+        
         errmsg = sprintf('colnames is expected to have d=%d elements.', d);
         stk_error(errmsg, 'IncorrectSize');
+        
+    else % ok, colnames has an appropriate size
+        
+        colnames = reshape(colnames, 1, d);
+        
     end
 end
 
-colnames = reshape(colnames, 1, d);
+if length(unique(colnames)) < d, % check for duplicated column names
 
-% check for duplicated column names
-tmp = unique(colnames);
-if length(tmp) < d,
     stk_error('Column names must be unique !', 'IncorrectArgument');
-end
 
-% FIXME: check for reserved names; ...
-x.vnames = colnames;
+else
+    
+    % FIXME: check for reserved names; ...
+    x.vnames = colnames;
+
+end
 
 end % function stk_set_colnames
 
@@ -76,9 +87,17 @@ end % function stk_set_colnames
 %!shared x s t
 %! x = stk_dataframe(rand(3, 2));
 %! s = {'xx' 'yy'};
-%!test x = stk_set_colnames(x, s);
-%!assert (isequal(stk_get_colnames(x), s))
+
+%!test
+%! x = stk_set_colnames(x, s);
+%! assert (isequal(stk_get_colnames(x), s))
+
 %!error x = stk_set_colnames(x, {'x1' 'x1'})
 %!error x = stk_set_colnames(x, [1 2])
 %!error x = stk_set_colnames(x, {'xx' 'yy' 'zz'})
 %!error x = stk_set_colnames(x, {'x1' 'x2'; 'x3' 'x4'})
+
+%!test
+%! x = stk_dataframe(rand(3, 1));
+%! x = stk_set_colnames(x, 'xxx');
+%! assert (isequal(stk_get_colnames(x), {'xxx'}))
