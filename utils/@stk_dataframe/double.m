@@ -28,6 +28,24 @@
 
 function xdata = double(x)
 
-xdata = x.data;
+xdata = double(x.data);
 
 end % function double
+
+%!test
+%! u = rand(4, 3);
+%! x = stk_dataframe(u);
+%! v = double(x);
+%! assert (strcmp(class(v), 'double') && isequal(v, u))
+
+%!test
+%! u = (rand(4, 3) < 0.5);
+%! x = stk_dataframe(u);
+%! v = double(x);
+%! assert (strcmp(class(v), 'double') && isequal(v, double(u)))
+
+%!test
+%! u = uint8(rand(4, 3) * 5)
+%! x = stk_dataframe(u);
+%! v = double(x);
+%! assert (strcmp(class(v), 'double') && isequal(v, double(u)))
