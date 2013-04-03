@@ -94,6 +94,10 @@ end % function stk_factorialdesign
 
 %!test display(x);
 
+%--- size, length, ... --------------------------------------------------------
+
+%!error length(stk_sampling_regulargrid(7^2, 2))  % not defined
+
 %--- cat, vertcat, horzcat ----------------------------------------------------
 
 % Note: the output is a plain stk_dataframe

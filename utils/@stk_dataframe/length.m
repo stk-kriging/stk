@@ -27,10 +27,11 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 
-function N = length(x)
+function N = length(x) %#ok<STOUT>
 
-N = length(x.data);
+errmsg = ['length() is not defined for objects of class ' class(x)];
+stk_error(errmsg, 'MethodNotDefined');
 
-end % function length
+% endfunction length
 
-%!assert (isequal (length(stk_dataframe([1 2; 3 4; 5 6])), 3))
+%!error length(stk_dataframe([1 2; 3 4; 5 6]))
