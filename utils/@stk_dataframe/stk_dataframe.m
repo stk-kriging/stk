@@ -30,7 +30,7 @@ function x = stk_dataframe(x0, colnames, rownames)
 
 stk_narginchk(0, 3);
 
-if nargin == 0,
+if nargin == 0, % default constructor
     x0 = zeros(0, 1);
 end
 
