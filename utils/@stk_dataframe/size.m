@@ -28,14 +28,8 @@
 
 function varargout = size(x, varargin)
 
-if nargout > 0,
-    s = cell(1, nargout);
-    [s{:}] = size(x.data, varargin{:});
-    varargout = s;
-else
-    s = size(x.data, varargin{:});
-    varargout = {s};
-end
+varargout = cell(1, max(nargout, 1));
+[varargout{:}] = size(x.data, varargin{:});
 
 end % function size
 
