@@ -38,13 +38,21 @@ switch idx(1).type
             
         else % ok, only one level of indexing
             
-            if length(idx(1).subs) ~= 2
+            [n, d] = size(x);
+            L = length(idx(1).subs);
+            
+            if (d == 1) && ~((L == 1) || (L == 2))
                 
-                errmsg = 'stk_dataframe objects only support matrix-style indexing.';
-                stk_error(errmsg, 'IllegalIndexing');
-
-            else % ok, matrix-style indexing
+                stk_error(['Illegal indexing for a univariate stk_dataframe' ...
+                    'object.'], 'IllegalIndexing');
                 
+            elseif (d > 1) && (L ~= 2)
+                
+                stk_error(['multivariate stk_dataframe objects only support ' ...
+                    'matrix-style indexing.'], 'IllegalIndexing');
+                
+            else % ok, legal indexing
+                            
                 val = double(val);
                 
                 if ~isempty(val)
@@ -53,11 +61,18 @@ switch idx(1).type
                     
                 else % assignment rhs is empty
                     
-                    idx_row = idx(1).subs{1};
-                    remove_columns = strcmp(idx_row, ':');
+                    idx_row = idx(1).subs{1};                    
                     
-                    idx_col = idx(1).subs{2};
-                    remove_rows = strcmp(idx_col, ':');
+                    if L > 1
+                        idx_col = idx(1).subs{2};
+                    else
+                        idx_col = 1;
+                    end
+                    
+                    remove_columns = (strcmp(idx_row, ':') ...
+                        || ((n == 1) && isequal(idx_row, 1)));
+                    remove_rows = (strcmp(idx_col, ':') ...
+                        || ((d == 1) && isequal(idx_col, 1)));
                     
                     if ~xor(remove_columns, remove_rows)
                         
@@ -194,3 +209,19 @@ end % function subsasgn
 %!error x(:, :) = [];
 %!error x(1, 2).a = 3;
 %!error x(3) = 2;
+
+%--- tests with a univariate dataframe ----------------------------------------
+
+%!shared x
+%! x = stk_dataframe((1:5)');
+
+% linear indexing is allowed for univariate dataframes
+%!test x(2) = 0;   assert (isequal(double(x), [1; 0; 3; 4; 5]));
+%!test x(3) = [];  assert (isequal(double(x), [1; 0; 4; 5]));
+
+% matrix-style indexing also
+%!test x(3, 1) = 0;  assert (isequal(double(x), [1; 0; 0; 5]));
+
+% three indices is not allowed (even if the third is one...)
+%!error x(3, 1, 1) = 297;
+

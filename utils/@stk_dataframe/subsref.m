@@ -31,13 +31,41 @@ function t = subsref(x, idx)
 switch idx(1).type
     
     case '()'
-        t = subsref(x.data, idx);
+        
+        if length(idx) ~= 1
+            
+            stk_error('Illegal indexing.', 'IllegalIndexing');
+            
+        else % ok, only one level of indexing
+            
+            d = size(x, 2);
+            L = length(idx(1).subs);
+            
+            if (d == 1) && ~((L == 1) || (L == 2))
+                
+                stk_error(['Illegal indexing for a univariate stk_dataframe' ...
+                    'object.'], 'IllegalIndexing');
+                
+            elseif (d > 1) && (L ~= 2)
+                
+                stk_error(['multivariate stk_dataframe objects only support ' ...
+                    'matrix-style indexing.'], 'IllegalIndexing');
+                
+            else % ok, legal indexing
+                
+                t = subsref(x.data, idx);
+                
+            end
+            
+        end
         
     case '{}'
+        
         errmsg = 'Indexing with curly braces is not allowed.';
         stk_error(errmsg, 'IllegalIndexing');
         
     case '.'
+        
         switch idx(1).subs
             
             case 'rownames',
@@ -48,13 +76,14 @@ switch idx(1).type
                 
             otherwise,
                 b = get_column_indicator(x, idx(1).subs);
-                t = x.data(:, b);                
+                t = x.data(:, b);
                 
         end % switch
-end
-
-if length(idx) > 1,
-    t = subsref(t, idx(2:end));
+        
+        if length(idx) > 1,
+            t = subsref(t, idx(2:end));
+        end
+        
 end
 
 end % function subsref
@@ -76,14 +105,23 @@ end % function subsref
 %! assert (isequal (x.colnames, t))
 %! assert (isequal (x.colnames{2}, 'yy'))
 
-%!test
+%!shared u data
 %! u = rand(3, 2); data = stk_dataframe(u);
-%! assert (isequal (data.x2, u(:, 2)))
 
-%!test
-%! u = rand(3, 2); data = stk_dataframe(u);
-%! assert (data.x2(3) == u(3, 2))
+%!assert (isequal (data.x2, u(:, 2)))
+%!assert (data.x2(3) == u(3, 2))
+%!error t = data.toto;
+%!error t = data(1, 1).a;
+%!error t = data(1, 1, 1);    % too many indices
+%!error t = data{1};          % curly braces not allowed
 
-%!error u = data.toto;
+%--- tests with a univariate dataframe ----------------------------------------
 
-%!error x{1}
+%!shared u data
+%! u = rand(3, 1); data = stk_dataframe(u);
+
+%!assert (isequal (data.x, u))
+%!assert (isequal (double(data), u))
+%!assert (isequal (data(2), u(2)))
+%!assert (isequal (data(3, 1), u(3)))
+%!error t = data(1, 1, 1);    % too many indices
