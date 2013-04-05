@@ -226,3 +226,13 @@ end % function stk_factorialdesign
 %!test  z = x1 & x2;           assert(isequal(double(z), u1 & u2));
 %!test  z = x1 | x2;           assert(isequal(double(z), u1 | u2));
 %!test  z = xor(x1, x2);       assert(isequal(double(z), xor(u1, u2)));
+
+%--- transpose, ctranspose ----------------------------------------------------
+
+% Transposing a dataframe that represents a factorial design results in a
+% dataframe that does NOT represent a factorial design
+
+%!shared x
+%! x = stk_factorialdesign({[0 1], [0 1 2]});
+%!assert (strcmp (class(x'), 'stk_dataframe'))
+%!assert (strcmp (class(x.'), 'stk_dataframe'))
