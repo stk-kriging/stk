@@ -30,40 +30,39 @@ function x = stk_dataframe(x0, colnames, rownames)
 
 stk_narginchk(0, 3);
 
-if nargin == 0, % default constructor
-    x0 = zeros(0, 1);
+if nargin == 0  % default constructor
+    x = struct('data', zeros(0, 1), 'vnames', {{}}, 'rownames', {{}});    
+else    
+    x = struct('data', x0, 'vnames', {{}}, 'rownames', {{}});
+end   
+
+x = class(x, 'stk_dataframe');
+
+if nargin < 2,
+    x = stk_set_colnames(x, {});
+else
+    x = stk_set_colnames(x, colnames);
 end
 
-if isa(x0, 'stk_dataframe'),
- 
-    x = x0;
-
-else
-    
-    x = struct('data', x0, 'vnames', {{}}, 'rownames', {{}});
-    x = class(x, 'stk_dataframe');
-
-    if nargin < 2,
-        x = stk_set_colnames(x, {});
-    else
-        x = stk_set_colnames(x, colnames);
-    end    
-        
-    if nargin > 2,
-        x = stk_set_rownames(x, rownames);
-    end
-
+if nargin > 2,
+    x = stk_set_rownames(x, rownames);
 end
 
 end % function stk_dataframe
 
 %!shared x y
-%!test x = stk_dataframe();   % default constructor
-%!test y = stk_dataframe(x);  % copy constructor
-%!test y = stk_dataframe(rand(3, 2));
-%!assert (isa (y, 'stk_dataframe') && isequal(size(y), [3 2]))
-%!test y = stk_dataframe(rand(3, 2), {'x', 'y'});
-%!assert (isa (y, 'stk_dataframe') && isequal(size(y), [3 2]))
-%!test y = stk_dataframe(rand(3, 2), {'x', 'y'}, {'a', 'b', 'c'});
-%!assert (isa (y, 'stk_dataframe') && isequal(size(y), [3 2]))
 
+%!test % default constructor
+%! x = stk_dataframe();   
+
+%!test
+%! y = stk_dataframe(rand(3, 2));
+%! assert (isa (y, 'stk_dataframe') && isequal(size(y), [3 2]))
+
+%!test
+%! y = stk_dataframe(rand(3, 2), {'x', 'y'});
+%! assert (isa (y, 'stk_dataframe') && isequal(size(y), [3 2]))
+
+%!test
+%! y = stk_dataframe(rand(3, 2), {'x', 'y'}, {'a', 'b', 'c'});
+%! assert (isa (y, 'stk_dataframe') && isequal(size(y), [3 2]))
