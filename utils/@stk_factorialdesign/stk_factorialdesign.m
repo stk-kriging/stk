@@ -119,9 +119,16 @@ end % function stk_factorialdesign
 
 %!test display(x);
 
-%--- size, length, ... --------------------------------------------------------
+%--- size, length, end --------------------------------------------------------
 
 %!error length(stk_sampling_regulargrid(7^2, 2))  % not defined
+
+%!shared x
+%! x = stk_factorialdesign({[0 1], [0 1]});
+%!assert (isequal (x(2:end, :), x(2:4, :)))
+%!assert (isequal (x(2, 1:end), x(2, :)))
+%!assert (isequal (x(2:end, 2:end), x(2:4, 2)))
+%!error x(1:end, 1:end, 1:end)
 
 %--- cat, vertcat, horzcat ----------------------------------------------------
 
