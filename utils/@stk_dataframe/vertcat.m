@@ -93,23 +93,20 @@ end % function subsref
 %! x = stk_dataframe(u);
 %! y = stk_dataframe(v);
 %! z = [x; y];
-%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
-%! assert(isequal(double(z), [u; v]));
+%! assert (isa(z, 'stk_dataframe') && isequal(double(z), [u; v]));
 
 %!test % the same, with row names this time
 %! x = stk_dataframe(u, {}, {'a'; 'b'; 'c'});
 %! y = stk_dataframe(v, {}, {'d'; 'e'; 'f'});
 %! z = [x; y];
-%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
-%! assert(isequal(double(z), [u; v]));
-%! assert(all(strcmp(z.rownames, {'a'; 'b'; 'c'; 'd'; 'e'; 'f'})));
+%! assert (isa(z, 'stk_dataframe') && isequal(double(z), [u; v]));
+%! assert (all(strcmp(z.rownames, {'a'; 'b'; 'c'; 'd'; 'e'; 'f'})));
 
 %!test % the same, with row names only for the first argument
 %! x = stk_dataframe(u, {}, {'a'; 'b'; 'c'});
 %! y = stk_dataframe(v);
 %! z = [x; y];
-%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
-%! assert(isequal(double(z), [u; v]));
+%! assert (isa(z, 'stk_dataframe') && isequal(double(z), [u; v]));
 
 %!error % incompatible variable names
 %! u = rand(3, 1);  x = stk_dataframe(u, {'x'});
@@ -122,14 +119,12 @@ end % function subsref
 %!test
 %! x = stk_dataframe(u);
 %! z = [x; v];
-%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
-%! assert(isequal(double(z), [u; v]));
+%! assert (isa(z, 'stk_dataframe') && isequal(double(z), [u; v]));
 
 %!test % the same, with row names for the first argument
 %! x = stk_dataframe(u, {}, {'a'; 'b'; 'c'});
 %! z = [x; v];
-%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
-%! assert(isequal(double(z), [u; v]));
+%! assert (isa(z, 'stk_dataframe') && isequal(double(z), [u; v]));
 
 %%
 % Vertical concatenation [matrix; dataframe]
@@ -146,5 +141,4 @@ end % function subsref
 %! x = stk_dataframe(u);
 %! y = stk_dataframe(v);
 %! z = [x; y; u; v];
-%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
-%! assert(isequal(double(z), [u; v; u; v]));
+%! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u; v; u; v]));

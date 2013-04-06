@@ -45,7 +45,7 @@ end % function bsxfun
 
 %!test
 %! z = bsxfun(@plus, data1, x2);
-%! assert( isa(z, 'stk_dataframe') && stk_isvalid(z) && isequal(double(z), x1 + x2))
+%! assert( isa(z, 'stk_dataframe') && isequal(double(z), x1 + x2))
 
 %!test
 %! z = bsxfun(@plus, x1, data2);
@@ -53,5 +53,5 @@ end % function bsxfun
 
 %!test
 %! z = bsxfun(@plus, data1, data2);
-%! assert( isa(z, 'stk_dataframe') && stk_isvalid(z) && isequal(double(z), x1 + x2))
+%! assert( isa(z, 'stk_dataframe') && isequal(double(z), x1 + x2))
 

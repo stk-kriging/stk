@@ -70,16 +70,14 @@ end % function horzcat
 %! x = stk_dataframe(u, {'x1' 'x2'});
 %! y = stk_dataframe(v, {'y1' 'y2'});
 %! z = [x y];
-%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
-%! assert(isequal(double(z), [u v]));
+%! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u v]));
 %! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
 
 %!test
 %! x = stk_dataframe(u, {'x1' 'x2'}, {'a'; 'b'; 'c'});
 %! y = stk_dataframe(v, {'y1' 'y2'});
 %! z = [x y];
-%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
-%! assert(isequal(double(z), [u v]));
+%! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u v]));
 %! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
 %! assert(all(strcmp(z.rownames, {'a'; 'b'; 'c'})));
 
@@ -87,8 +85,7 @@ end % function horzcat
 %! x = stk_dataframe(u, {'x1' 'x2'});
 %! y = stk_dataframe(v, {'y1' 'y2'}, {'a'; 'b'; 'c'});
 %! z = [x y];
-%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
-%! assert(isequal(double(z), [u v]));
+%! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u v]));
 %! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
 %! assert(all(strcmp(z.rownames, {'a'; 'b'; 'c'})));
 

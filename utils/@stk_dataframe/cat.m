@@ -52,7 +52,7 @@ end % function cat
 
 %!test % vertical
 %! z = cat(1, x, y);
-%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
+%! assert(isa(z, 'stk_dataframe'));
 %! assert(isequal(double(z), [u; v]));
 
 %!error z = cat(3, x, y);
@@ -60,6 +60,6 @@ end % function cat
 %!test % horizontal
 %! y = stk_dataframe(v, {'y1' 'y2'});
 %! z = cat(2, x, y);
-%! assert(isa(z, 'stk_dataframe') && stk_isvalid(z));
+%! assert(isa(z, 'stk_dataframe'));
 %! assert(isequal(double(z), [u v]));
 %! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));

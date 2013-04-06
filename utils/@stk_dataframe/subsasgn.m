@@ -137,24 +137,20 @@ end % function subsasgn
 
 %!test
 %! x.rownames = s;
-%! assert (stk_isvalid (x))
 %! assert (isequal(stk_get_rownames(x), s))
 
 %!test
 %! x.colnames = t;
-%! assert (stk_isvalid (x))
 %! assert (isequal(stk_get_rownames(x), s))
 %! assert (isequal(stk_get_colnames(x), t))
 
 %!test
 %! x.rownames{2} = 'dudule';
-%! assert (stk_isvalid (x))
 %! assert (isequal(stk_get_rownames(x), {'a'; 'dudule'; 'c'}))
 %! assert (isequal(stk_get_colnames(x), t))
 
 %!test
 %! x.colnames{1} = 'martha';
-%! assert (stk_isvalid (x))
 %! assert (isequal(stk_get_rownames(x), {'a'; 'dudule'; 'c'}))
 %! assert (isequal(stk_get_colnames(x), {'martha' 'yy'}))
 
@@ -164,13 +160,11 @@ end % function subsasgn
 %!test
 %! data = stk_dataframe(zeros(3, 2));
 %! u = rand(3, 1); data.x2 = u;
-%! assert (stk_isvalid (data))
 %! assert (isequal(double(data), [zeros(3, 1) u]))
 
 %!test
 %! data = stk_dataframe(zeros(3, 2));
 %! data.x2(3) = 27;
-%! assert (stk_isvalid (data))
 %! assert (isequal(double(data), [0 0; 0 0; 0 27]))
 
 %!error data.toto = rand(3, 1);
@@ -180,27 +174,23 @@ end % function subsasgn
 
 %!test
 %! x(:, 2) = [];
-%! assert (stk_isvalid (x))
 %! assert (isequal(size(x), [4 2]))
 %! assert (isequal(double(x), [1 9; 2 10; 3 11; 4 12]))
 
 %!test
 %! x(2, :) = [];
-%! assert (stk_isvalid (x))
 %! assert (isequal(size(x), [3 2]))
 %! assert (isequal(double(x), [1 9; 3 11; 4 12]))
 
 %!test
 %! x.rownames = {'a'; 'b'; 'c'};
 %! x(2, :) = [];
-%! assert (stk_isvalid (x))
 %! assert (isequal(size(x), [2 2]))
 %! assert (isequal(double(x), [1 9; 4 12]))
 %! assert (isequal(x.rownames, {'a'; 'c'}))
 
 %!test
 %! x(1, 2) = 11;
-%! assert (stk_isvalid (x))
 %! assert (isequal(size(x), [2 2]))
 %! assert (isequal(double(x), [1 11; 4 12]))
 
