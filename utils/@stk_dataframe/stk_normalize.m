@@ -33,3 +33,9 @@ ydata = stk_normalize(x.data, varargin{:});
 y = stk_dataframe(ydata, x.vnames);
 
 end % function stk_normalize
+
+%!test
+%! u = rand(6, 2) * 2;
+%! x = stk_dataframe(u);
+%! y = stk_normalize(x);
+%! assert (isa (y, 'stk_dataframe') && isequal(double(y), stk_normalize(u)))
