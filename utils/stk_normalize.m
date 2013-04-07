@@ -30,6 +30,8 @@ function y = stk_normalize(x, box)
 
 stk_narginchk(1, 2);
 
+% read argument x
+x = double(x);
 [n d] = size(x);
 
 if nargin < 2,
