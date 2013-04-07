@@ -27,6 +27,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function y = stk_rescale(x, box1, box2)
+
 stk_narginchk(3, 3);
 
 % read argument x
@@ -67,12 +68,7 @@ end % function stk_rescale
 
 %!shared x
 %!  x = rand(10, 4);
-%!test
 %!  y = stk_rescale(x, [], []);
-%!  assert(stk_isequal_tolabs(x, y));
-%!test
-%!  xx = stk_dataframe(x);
-%!  y = stk_rescale(xx, [], []);
 %!  assert(stk_isequal_tolabs(x, y));
 
 %!test
