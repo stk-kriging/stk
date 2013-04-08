@@ -28,12 +28,10 @@
 
 function x = stk_factorialdesign(levels, varargin)
 
-stk_narginchk(0, 2);
-
 if nargin == 0  % default constructor
     levels = {[]};
 end
-    
+
 % number of factors
 d = length(levels);
 
@@ -44,47 +42,44 @@ if ~iscell(levels) || (numel(levels) ~= d)
     
 else
     
-    % number of levels per factor
-    nlevels = zeros(1, d);
-    
-    for j = 1:d,
-        if ~isnumeric(levels{j}),
-            
-            errmsg = 'Only numeric factors are currently supported.';
-            stk_error(errmsg, 'TypeMismatch');
+    if ~all(cellfun(@isnumeric, levels))
         
-        else % ok, numeric levels, we know how to handle that
+        errmsg = 'Only numeric factors are currently supported.';
+        stk_error(errmsg, 'TypeMismatch');
+        
+    else % ok, numeric levels, we know how to handle that
+        
+        if (d == 0) || any(cellfun(@isempty, levels))
             
-            levels{j} = levels{j}(:);
-            nlevels(j) = numel(levels{j});
+            xdata = zeros(0, d);
+            
+        elseif d == 1
+            
+            xdata = levels{1}(:);
+            
+        else
+            
+            % coordinate arrays
+            coord = cell(1, d);
+            [coord{:}] = ndgrid(levels{:});
+            
+            % design matrix
+            xdata = zeros(numel(coord{1}), d);
+            for j = 1:d,
+                xdata(:, j) = coord{j}(:);
+            end
             
         end
-    end
+        
+        % base dataframe
+        df = stk_dataframe(xdata, varargin{:});
+        
+        % "factorial design" object
+        x = struct('levels', {levels});
+        x = class(x, 'stk_factorialdesign', df);
+        
+    end % if
     
-    % number of points
-    n = prod(nlevels);
-    
-    % coordinate arrays
-    if d == 1,
-        coord = levels;
-    else
-        coord = cell(1, d);
-        [coord{:}] = ndgrid(levels{:});
-    end
-    
-    % design matrix
-    xdata = zeros(n, d);
-    for j = 1:d,
-        xdata(:, j) = coord{j}(:);
-    end
-    
-    % base dataframe
-    df = stk_dataframe(xdata, varargin{:});
-    
-    % "factorial design" object
-    x = struct('coord', {coord});
-    x = class(x, 'stk_factorialdesign', df);
-
 end % if
 
 end % function stk_factorialdesign
@@ -100,7 +95,7 @@ end % function stk_factorialdesign
 %!error stk_factorialdesign('bouh');
 %!error stk_factorialdesign(repmat({[0 1]}, 2, 2));
 
-% categorical variable not supported yet 
+% categorical variable not supported yet
 %!error stk_factorialdesign({{'a' 'b'}});
 
 %--- disp & display -----------------------------------------------------------

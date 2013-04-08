@@ -28,11 +28,15 @@
 
 function varargout = ndgrid(x)
 
-if nargout > length(x.coord),
-    errmsg = 'Too many output arguments.';
-    stk_error(errmsg, 'TooManyOutputArgs');
+if nargout > length(x.levels)
+    
+    stk_error('Too many output arguments.', 'TooManyOutputArgs');
+    
+else
+    
+    varargout = cell(1, nargout);
+    [varargout{:}] = ndgrid(x.levels{:});
+    
 end
-
-varargout = x.coord(1:nargout);
 
 end % function ndgrid
