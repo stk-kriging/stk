@@ -28,14 +28,28 @@
 
 function varargout = ndgrid(x)
 
-if nargout > length(x.levels)
+d = length(x.levels);
+
+if nargout > d
     
     stk_error('Too many output arguments.', 'TooManyOutputArgs');
     
 else
     
-    varargout = cell(1, nargout);
-    [varargout{:}] = ndgrid(x.levels{:});
+    if (d == 0) || any(cellfun(@isempty, x.levels))
+        
+        varargout = repmat({zeros(0, d)}, 1, nargout);
+        
+    elseif d == 1
+        
+        varargout = {x.levels{1}(:)};
+        
+    else
+        
+        varargout = cell(1, nargout);
+        [varargout{:}] = ndgrid(x.levels{:});
+        
+    end
     
 end
 
