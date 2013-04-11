@@ -30,33 +30,49 @@ function plot(x, z, varargin)
 
 stk_narginchk(2, inf);
 
-if isa(x, 'stk_dataframe')
-    xx = double(x);
-    xvarnames = x.vnames;
-else
-    xx = x;
-    xvarnames = {'x'};
-end
+xx = double(x);
+zz = double(z);
 
 if size(xx, 2) > 1,
+    
     stk_error('Incorrect size for argument x.', 'IncorrectSize');
-end
-
-if isa(z, 'stk_dataframe')
-    zz = double(z);
-    zvarnames = z.vnames;
-else
-    zz = z;
-    nb_responses = size(z, 2);
-    zvarnames = cell(1, nb_responses);
-    for j = 1:nb_responses,
-        zvarnames{j} = sprintf('z%d', j);
+    
+else % ok, the first argument has one (and only one) column
+    
+    plot(xx, zz, varargin{:});
+    
+    if isa(x, 'stk_dataframe')
+        xlabel(x.vnames{1}, 'FontWeight', 'bold');
     end
-end
-
-plot(xx, zz, varargin{:});
-
-xlabel(xvarnames{1}, 'FontWeight', 'bold');
-ylabel(zvarnames{1}, 'FontWeight', 'bold');
+    
+    if isa(z, 'stk_dataframe')
+        if size(zz, 2) == 1,
+            ylabel(z.vnames{1}, 'FontWeight', 'bold');
+        else
+            legend(z.vnames);
+        end
+    end
+    
+end % if
 
 end % function plot
+
+%!test % plot with x as a vector and z as a (univariate) dataframe
+%! x = linspace(0, 2*pi, 30)';
+%! z = stk_dataframe(sin(x));
+%! figure; plot(x, z); close(gcf);
+
+%!test % plot with x as a vector and z as a (multivariate) dataframe
+%! x = linspace(0, 2*pi, 30)';
+%! z = stk_dataframe([sin(x) cos(x)], {'sin' 'cos'});
+%! figure; plot(x, z); close(gcf);
+
+%!test % plot with x as a dataframe and z as a vector
+%! x = stk_dataframe(linspace(0, 2*pi, 30)');
+%! z = sin(double(x));
+%! figure; plot(x, z); close(gcf);
+
+%!error % the first argument should have one and only one column
+%! x = stk_dataframe(rand(10, 2));
+%! z = stk_dataframe(rand(10, 1));
+%! plot(x, z);
