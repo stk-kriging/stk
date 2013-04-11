@@ -91,6 +91,11 @@ end % function stk_factorialdesign
 %! x = stk_factorialdesign();
 %! assert(strcmp(class(x), 'stk_factorialdesign'));
 
+%!test % constructor with two factors + column names
+%! x = stk_factorialdesign({[0 1], [1 2 3]}, {'a', 'b'})
+%! assert( isequal(x.colnames, {'a', 'b'}) );
+%! assert( isequal(stk_get_colnames(x), {'a', 'b'}) );
+
 % tests some incorrect values for 'levels'
 %!error stk_factorialdesign('bouh');
 %!error stk_factorialdesign(repmat({[0 1]}, 2, 2));
@@ -154,6 +159,8 @@ end % function stk_factorialdesign
 %! assert (strcmp(class(z), 'stk_dataframe'));
 %! assert (isequal(double(z), [double(x) double(y)]));
 %! assert (all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
+
+%!error cat(3, x, y)
 
 %--- apply & related functions ------------------------------------------------
 
