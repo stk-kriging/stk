@@ -1,4 +1,4 @@
-% MIN computes the minimum of each variable in a dataframe
+% MIN [overloaded base function]
 
 % Copyright Notice
 %

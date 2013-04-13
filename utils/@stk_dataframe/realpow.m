@@ -1,4 +1,4 @@
-% REALPOW applies the real-valued elementwise power operator.
+% REALPOW [overloaded base function]
 
 % Copyright Notice
 %

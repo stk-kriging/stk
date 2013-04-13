@@ -1,4 +1,4 @@
-% STK_RESCALE rescales a dataset from one box to another
+% STK_RESCALE [overloaded STK function]
 
 % Copyright Notice
 %

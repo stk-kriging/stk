@@ -1,4 +1,4 @@
-% POWER applies the complex-valued elementwise power operator.
+% POWER [overloaded base function]
 
 % Copyright Notice
 %

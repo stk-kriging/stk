@@ -1,4 +1,4 @@
-% ...
+% NE [overloaded base function]
 
 % Copyright Notice
 %

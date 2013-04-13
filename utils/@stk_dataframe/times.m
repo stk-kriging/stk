@@ -1,4 +1,4 @@
-% TIMES multplies dataframes elementwise.
+% TIMES [overloaded base function]
 
 % Copyright Notice
 %

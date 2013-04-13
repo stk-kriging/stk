@@ -1,4 +1,4 @@
-% DISP displays the content of a dataframe.
+% DISP [overloaded base function]
 %
 % Example:
 %    format short

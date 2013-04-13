@@ -1,4 +1,4 @@
-% PLOT [FIXME: missing doc...]
+% PLOT [overloaded base function]
 
 % Copyright Notice
 %

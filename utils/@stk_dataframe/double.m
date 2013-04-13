@@ -1,4 +1,4 @@
-% DOUBLE [FIXME: missing doc...]
+% DOUBLE [overloaded base function]
 
 % Copyright Notice
 %

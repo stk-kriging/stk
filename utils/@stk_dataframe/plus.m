@@ -1,4 +1,4 @@
-% PLUS adds two dataframes.
+% PLUS [overloaded base function]
 
 % Copyright Notice
 %

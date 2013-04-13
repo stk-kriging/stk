@@ -1,4 +1,4 @@
-% LDIVIDE divides a dataframe by another one (left division).
+% LDIVIDE [overloaded base function]
 
 % Copyright Notice
 %

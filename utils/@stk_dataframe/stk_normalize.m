@@ -1,4 +1,4 @@
-% STK_NORMALIZE normalizes a dataset to [0; 1]^DIM.
+% STK_NORMALIZE [overloaded STK function]
 
 % Copyright Notice
 %

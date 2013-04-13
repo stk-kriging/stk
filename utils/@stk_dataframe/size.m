@@ -1,4 +1,4 @@
-% SIZE [FIXME: missing doc...]
+% SIZE [overloaded base function]
 
 % Copyright Notice
 %

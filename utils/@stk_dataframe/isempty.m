@@ -1,4 +1,4 @@
-% ISEMPTY [FIXME: missing doc...]
+% ISEMPTY [overloaded base function]
 
 % Copyright Notice
 %

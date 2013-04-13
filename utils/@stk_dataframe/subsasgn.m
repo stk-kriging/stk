@@ -1,4 +1,4 @@
-% SUBSASGN [FIXME: missing doc...]
+% SUBSASGN [overloaded base function]
 
 % Copyright Notice
 %

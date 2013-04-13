@@ -1,4 +1,4 @@
-% MEAN computes the mean of the elements along a given dimension.
+% MEAN [overloaded base function]
 
 % Copyright Notice
 %

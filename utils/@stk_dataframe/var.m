@@ -1,4 +1,4 @@
-% VAR computes the variance of the elements along a given dimension.
+% VAR [overloaded base function]
 
 % Copyright Notice
 %

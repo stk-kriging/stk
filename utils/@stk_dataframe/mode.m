@@ -1,4 +1,4 @@
-% MODE computes the mode of the elements along a given dimension.
+% MODE [overloaded base function]
 
 % Copyright Notice
 %

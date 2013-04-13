@@ -1,4 +1,4 @@
-% VERTCAT concantenates one or several dataframes vertically
+% VERTCAT [overloaded base function]
 
 % Copyright Notice
 %

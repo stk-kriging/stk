@@ -1,4 +1,4 @@
-% STK_DATAFRAME [FIXME: missing doc...]
+% STK_DATAFRAME constructs a dataframe
 
 % Copyright Notice
 %

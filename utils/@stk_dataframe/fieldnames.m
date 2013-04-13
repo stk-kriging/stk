@@ -1,4 +1,4 @@
-% FIELDNAMES...
+% FIELDNAMES [overloaded base function]
 
 % Copyright Notice
 %

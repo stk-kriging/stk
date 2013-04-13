@@ -1,4 +1,4 @@
-% MAX computes the maximum of each variable in a dataframe
+% MAX [overloaded base function]
 
 % Copyright Notice
 %

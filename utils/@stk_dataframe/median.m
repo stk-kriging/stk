@@ -1,4 +1,4 @@
-% MEDIAN computes the median of the elements along a given dimension.
+% MEDIAN [overloaded base function]
 
 % Copyright Notice
 %

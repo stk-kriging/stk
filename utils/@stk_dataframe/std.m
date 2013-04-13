@@ -1,4 +1,4 @@
-% STD computes the standard deviation of the elements along a given dimension.
+% STD [overloaded base function]
 
 % Copyright Notice
 %

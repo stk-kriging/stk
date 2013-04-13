@@ -1,4 +1,4 @@
-% RESERVED_FIELD_NAMES (STK internal)
+% RESERVED_FIELD_NAMES [STK internal]
 
 % Copyright Notice
 %

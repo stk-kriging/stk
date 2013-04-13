@@ -1,4 +1,4 @@
-% CAT concantenates one or several dataframes
+% CAT [overloaded base function]
 
 % Copyright Notice
 %

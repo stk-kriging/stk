@@ -1,4 +1,4 @@
-% RDIVIDE divides a dataframe by another one (right division).
+% RDIVIDE [overloaded base function]
 
 % Copyright Notice
 %

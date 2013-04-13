@@ -1,4 +1,4 @@
-% SUBSREF [FIXME: missing doc...]
+% SUBSREF [overloaded base function]
 
 % Copyright Notice
 %

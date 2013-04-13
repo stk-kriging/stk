@@ -1,4 +1,4 @@
-% TRANSPOSE ...
+% TRANSPOSE [overloaded base function]
 
 % Copyright Notice
 %

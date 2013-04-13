@@ -1,4 +1,4 @@
-% STK_FACTORIALDESIGN [FIXME: missing doc...]
+% STK_FACTORIALDESIGN constructs a factorial design
 
 % Copyright Notice
 %

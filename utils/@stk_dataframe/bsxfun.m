@@ -1,4 +1,4 @@
-% BSXFUN applies a binary function to a pair of dataframes, elementwise.
+% BSXFUN [overloaded base function]
 
 % Copyright Notice
 %

@@ -1,4 +1,4 @@
-% DISPLAY displays the content of a dataframe.
+% DISPLAY [overloaded base function]
 %
 % Example:
 %    format short

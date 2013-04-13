@@ -1,4 +1,4 @@
-% NDGRID [FIXME: missing doc...]
+% NDGRID [overloaded base function]
 
 % Copyright Notice
 %

@@ -1,4 +1,4 @@
-% ...
+% GT [overloaded base function]
 
 % Copyright Notice
 %

@@ -1,4 +1,4 @@
-% HORZCAT concantenates one or several dataframes horizontally
+% HORZCAT [overloaded base function]
 
 % Copyright Notice
 %

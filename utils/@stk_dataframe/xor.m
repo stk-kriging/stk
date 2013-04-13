@@ -1,4 +1,4 @@
-% ...
+% XOR [overloaded base function]
 
 % Copyright Notice
 %

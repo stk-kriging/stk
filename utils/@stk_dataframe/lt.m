@@ -1,4 +1,4 @@
-% ...
+% LT [overloaded base function]
 
 % Copyright Notice
 %

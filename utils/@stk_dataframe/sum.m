@@ -1,4 +1,4 @@
-% SUM computes the sum of the elements along a given dimension.
+% SUM [overloaded base function]
 
 % Copyright Notice
 %

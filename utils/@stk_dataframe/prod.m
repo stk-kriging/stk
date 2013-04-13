@@ -1,4 +1,4 @@
-% PROD computes the product of the elements along a given dimension.
+% PROD [overloaded base function]
 
 % Copyright Notice
 %

@@ -1,4 +1,4 @@
-% MINUS substracts a dataframe from another.
+% MINUS [overloaded base function]
 
 % Copyright Notice
 %
