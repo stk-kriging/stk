@@ -38,7 +38,7 @@ switch idx(1).type
             
         else % ok, only one level of indexing
             
-            [n, d] = size(x);
+            [n, d] = size(x.data);
             L = length(idx(1).subs);
             
             if (d == 1) && ~((L == 1) || (L == 2))
@@ -56,8 +56,16 @@ switch idx(1).type
                 val = double(val);
                 
                 if ~isempty(val)
-                    
+
                     x.data = subsasgn(x.data, idx, val);
+                    
+                    [n1, d1] = size(x.data);
+                    if (n1 > n) && ~isempty(x.rownames) 
+                        x.rownames = vertcat(x.rownames, repmat({''}, n1 - n, 1));
+                    end
+                    if (d1 > d) && ~isempty(x.vnames)
+                        x.vnames = horzcat(x.vnames, repmat({''}, 1, d1 - d));
+                    end
                     
                 else % assignment rhs is empty
                     
@@ -215,3 +223,6 @@ end % function subsasgn
 % three indices is not allowed (even if the third is one...)
 %!error x(3, 1, 1) = 297;
 
+%!test % create a new row and a new column through subsasgn()
+%! x = stk_dataframe(rand(5, 2)); x(6, 3) = 7; disp(x)
+%! assert(isequal(size(x), [6, 3]));
