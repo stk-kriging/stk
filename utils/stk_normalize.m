@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = stk_normalize(x, box)
+function [y, a, b] = stk_normalize(x, box)
 
 stk_narginchk(1, 2);
 
@@ -47,7 +47,10 @@ else
     end
 end
 
-y = (x - repmat(xmin, n, 1)) ./ repmat(xmax - xmin, n, 1);
+b = 1 ./ (xmax - xmin);
+a = - xmin .* b;
+
+y = repmat(a, n, 1) + x * diag(b);
 
 end % function stk_normalize
 

@@ -26,11 +26,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = stk_normalize(x, varargin)
+function [x, a, b] = stk_normalize(x, varargin)
 
-ydata = stk_normalize(x.data, varargin{:});
-
-y = stk_dataframe(ydata, x.vnames);
+[x.data, a, b] = stk_normalize(x.data, varargin{:});
 
 end % function stk_normalize
 
