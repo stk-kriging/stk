@@ -32,18 +32,19 @@ d = size(x.data, 2);
 
 if ~iscell(colnames)
     if ~((d == 1) && ischar(colnames))
-
+        
         errmsg = 'colnames is expected to be a string or a cell-array of strings.';
         stk_error(errmsg, 'TypeMismatch');
-
+        
     else % ok, we have a single column and a string for its name
         
         colnames = {colnames};
-
+        
     end
 end
 
-if isempty(colnames)
+if isempty(colnames) % default column names
+    
     if d == 1,
         colnames = {'x'};
     else
@@ -52,7 +53,9 @@ if isempty(colnames)
             colnames{j} = sprintf('x%d', j);
         end
     end
-else
+    
+else % colnames has been specified, let's try to use it
+    
     if length(colnames) ~= d
         
         errmsg = sprintf('colnames is expected to have length d=%d.', d);
@@ -68,17 +71,30 @@ else
         colnames = reshape(colnames, 1, d);
         
     end
-end
+    
+end % if
 
 if length(unique(colnames)) < d, % check for duplicated column names
-
+    
     stk_error('Column names must be unique !', 'IncorrectArgument');
-
+    
 else
     
-    % FIXME: check for reserved names; ...
+    % Warn if some column are reserved names
+    reserved = reserved_field_names();
+    for i = 1:length(colnames)
+        if any(strcmp(colnames{i}, reserved))
+            warning(sprintf(['Column name #%d: %s is a reserved ' ...
+                'field name.'], i, colnames{i})); %#ok<WNTAG,SPWRN>
+        end
+    end
+    
+    % Note: we can afford to generate a warning and not an error, since the consequences
+    % of having a reserved names for one of the columns are not catastrophic. Simply, the
+    % column will not be reachable using the struct-like syntax.
+    
     x.vnames = colnames;
-
+    
 end
 
 end % function stk_set_colnames
