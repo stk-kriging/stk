@@ -26,11 +26,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = stk_rescale(x, varargin)
+function [x, a, b] = stk_rescale(x, varargin)
 
-ydata = stk_rescale(x.data, varargin{:});
-
-y = stk_dataframe(ydata, x.vnames);
+[x.data, a, b] = stk_rescale(x.data, varargin{:});
 
 end % function stk_rescale
 

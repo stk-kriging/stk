@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = stk_rescale(x, box1, box2)
+function [y, a, b] = stk_rescale(x, box1, box2)
 
 stk_narginchk(3, 3);
 
@@ -48,21 +48,27 @@ end
 if ~isempty(box1),
     xmin = box1(1, :);
     xmax = box1(2, :);
-    delta = xmax - xmin;
-    z = (x - repmat(xmin, n, 1)) .* repmat(1./delta, n, 1);
+    b1 = 1 ./ (xmax - xmin);
+    a1 = - xmin .* b1;
 else
-    z = x;
+    b1 = ones(1, d);
+    a1 = zeros(1, d);
 end
 
 % scale to box2 (zz --> yy)
 if ~isempty(box2),
     zmin = box2(1, :);
     zmax = box2(2, :);
-    delta = zmax - zmin;
-    y = repmat(zmin, n, 1) + z .* repmat(delta, n, 1);
+    b2 = zmax - zmin;
+    a2 = zmin;
 else
-    y = z;
+    b2 = ones(1, d);
+    a2 = zeros(1, d);    
 end
+
+b = b2 .* b1;
+a = a2 + a1 .* b2;
+y = repmat(a, n, 1) + x * diag(b);
 
 end % function stk_rescale
 
