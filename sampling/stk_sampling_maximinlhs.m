@@ -130,7 +130,7 @@ end
 % Check that the output is a dataframe
 % (all stk_sampling_* functions should behave similarly in this respect)
 
-%!test assert(isa(x, 'stk_dataframe'));
+%!assert (isa(x, 'stk_dataframe'));
 
 %%
 % Check output argument

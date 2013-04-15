@@ -205,7 +205,7 @@ x = x_integer_levels + q + 1;
 x = (2*x - 1) / (2*n);
 
 % And, finally, convert to box
-x = stk_rescale(x, [], box);
+x = stk_dataframe(stk_rescale(x, [], box));
 
 % Note: the results reported in Cioppa & Lucas correspond to the scaling
 %   x = struct('a', stk_rescale(x, [min(x); max(x)], box));
@@ -241,7 +241,7 @@ end % function stk_sampling_olhs
 % Check that the output is a dataframe
 % (all stk_sampling_* functions should behave similarly in this respect)
 
-%!test isa(x, 'stk_dataframe');
+%!assert (isa(x, 'stk_dataframe'));
 
 %%
 % Check output argument
@@ -257,7 +257,7 @@ end % function stk_sampling_olhs
 %!   box = repmat([-1; 1], 1, d);
 %!   assert(stk_is_lhs(x, n, d, box));
 %!
-%!   w = x' * x;
+%!   w = double(x)' * double(x);
 %!   assert(stk_isequal_tolabs(w/w(1,1), eye(d)));
 %!
 %! end

@@ -97,7 +97,7 @@ end % function stk_sampling_regulargrid
 % Check that the output is an stk_factorialdesign (special king of dataframe)
 % (all stk_sampling_* functions should behave similarly in this respect)
 
-%!test assert(isa(x, 'stk_factorialdesign'));
+%!assert (isa(x, 'stk_factorialdesign'));
 
 %%
 % Check output argument
