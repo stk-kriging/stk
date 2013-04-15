@@ -34,7 +34,7 @@ stk_disp_examplewelcome();
 DIM = 2; BOX = repmat([0; 1], 1, DIM);
 
 % start from, e. g., a random/maximin LHS
-N0 = 10; x = stk_sampling_maximinlhs(N0, DIM, BOX); x = x.a;
+N0 = 10; x = stk_sampling_maximinlhs(N0, DIM, BOX);
 
 % final size of the desired DoE
 NB_ITER = 10;
@@ -58,5 +58,5 @@ for i = 1:NB_ITER,
     title(sprintf('n = %d,  fd = %.2e\n', size(x, 1), fd));
     drawnow; pause(0.5);
     % enrich the DoE
-    x = [x; next_x];
+    x = vertcat(x, next_x);
 end

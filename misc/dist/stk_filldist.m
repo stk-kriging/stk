@@ -80,7 +80,7 @@ function [fd, ymax] = stk_filldist(x, arg2)
 
 stk_narginchk(1, 2);
 
-if isstruct(x), x = x.a; end
+x = double(x);
 
 if nargin == 1, % defaults: "exact" over [0; 1]^d
     
@@ -89,7 +89,7 @@ if nargin == 1, % defaults: "exact" over [0; 1]^d
     
 else
 
-    if isstruct(arg2), arg2 = arg2.a; end
+    arg2 = double(arg2);
     
     ny = size(arg2, 1);
     
@@ -115,18 +115,18 @@ end % function stk_filldist
 
 
 %%
-% Check that ".a" structures are accepted
+% Check that both double-precision matrices and stk_dataframe objects are accepted
 
 %!test %%% exact
 %! d = 3; x = rand(7, d); box = repmat([0; 1], 1, d);
 %! fd1 = stk_filldist(x, box);
-%! fd2 = stk_filldist(struct('a', x), struct('a', box));
+%! fd2 = stk_filldist(stk_dataframe(x), stk_dataframe(box));
 %! assert(stk_isequal_tolabs(fd1, fd2));
 
 %!test %%% discretized
 %! d = 3; x = rand(7, d); y = rand(20, d);
 %! fd1 = stk_filldist(x, y);
-%! fd2 = stk_filldist(struct('a', x), struct('a', y));
+%! fd2 = stk_filldist(stk_dataframe(x), stk_dataframe(y));
 %! assert(stk_isequal_tolabs(fd1, fd2));
 
 %%

@@ -66,38 +66,13 @@ else
     end
 end
 
-coord = cell(1, dim);
-
-if any(n==0), % empty grid
-    
-    xdata = zeros(0,dim);
-    
-else % at least one input point
-    
-    if dim == 1, % univariate inputs
-        
-        xdata = linspace(box(1), box(2), n)';
-        coord = {xdata};
-        
-    else % multivariate inputs
-        
-        vect = cell(1, dim);
-        for j = 1:dim,
-            vect{j} = linspace(box(1, j), box(2, j), n(j));
-        end
-        
-        [coord{:}] = ndgrid(vect{:});
-        
-        xdata = zeros(prod(n), dim);
-        for j = 1:dim,
-            xdata(:,j) = coord{j}(:);
-        end
-        
-    end % if d == 1
-    
+% levels
+levels = cell(1, dim);
+for j = 1:dim,
+    levels{j} = linspace(box(1, j), box(2, j), n(j));
 end
 
-x = struct('a', xdata, 'coord', {coord});
+x = stk_factorialdesign(levels);
 
 end % function stk_sampling_regulargrid
 
@@ -119,10 +94,10 @@ end % function stk_sampling_regulargrid
 %!error x = stk_sampling_regulargrid(n, dim, box, pi);
 
 %% 
-% Check that the output is a struct with a numeric '.a' field
+% Check that the output is an stk_factorialdesign (special king of dataframe)
 % (all stk_sampling_* functions should behave similarly in this respect)
 
-%!test assert(isstruct(x) && isnumeric(x.a));
+%!assert (isa(x, 'stk_factorialdesign'));
 
 %%
 % Check output argument
@@ -131,8 +106,8 @@ end % function stk_sampling_regulargrid
 %! for dim = 1:3,
 %!   n = 3^dim;
 %!   x = stk_sampling_regulargrid(n, dim);
-%!   assert(isequal(size(x.a), [n dim]));
-%!   u = x.a(:);
+%!   assert(isequal(size(x), [n dim]));
+%!   u = double(x); u = u(:);
 %!   assert(~any(isnan(u) | isinf(u)));
 %!   assert((min(u) >= 0) && (max(u) <= 1));
 %! end
@@ -141,8 +116,8 @@ end % function stk_sampling_regulargrid
 %! nn = [3 4 5];
 %! for dim = 1:3,
 %!   x = stk_sampling_regulargrid(nn(1:dim), dim);
-%!   assert(isequal(size(x.a), [prod(nn(1:dim)) dim]));
-%!   u = x.a(:);
+%!   assert(isequal(size(x), [prod(nn(1:dim)) dim]));
+%!   u = double(x); u = u(:);
 %!   assert(~any(isnan(u) | isinf(u)));
 %!   assert((min(u) >= 0) && (max(u) <= 1));
 %! end

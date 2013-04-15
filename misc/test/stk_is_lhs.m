@@ -21,7 +21,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -48,7 +48,7 @@
 function b = stk_is_lhs(x, n, dim, box)
 stk_narginchk(1, 4);
 
-if isstruct(x), x = x.a; end
+x = double(x);
 
 if nargin == 1,
     [n dim] = size(x);

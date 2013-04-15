@@ -72,13 +72,13 @@
 function [fd, ymax] = stk_filldist_exact(x, box) %---------------------------------------
 
 stk_narginchk(1, 2);
-if isstruct(x), x = x.a; end
+x = double(x);
 [n, d] = size(x);
 
 if nargin == 1,
     box = repmat([0; 1], 1, d);
-elseif isstruct(box),
-    box = box.a;
+else
+    box = double(box);
 end    
 
 %--- Construct a triangulation that covers [0; 1]^d -------------------------------------
@@ -159,12 +159,12 @@ end % function add_symm --------------------------------------------------------
 
 
 %%
-% Check that ".a" structures are accepted
+% Check that both double-precision matrices and stk_dataframe objects are accepted
 
 %!test
 %! d = 3; x = rand(7, d); box = repmat([0; 1], 1, d);
 %! fd1 = stk_filldist_exact(x, box);
-%! fd2 = stk_filldist_exact(struct('a', x), struct('a', box));
+%! fd2 = stk_filldist_exact(stk_dataframe(x), stk_dataframe(box));
 %! assert(stk_isequal_tolabs(fd1, fd2));
 
 %%

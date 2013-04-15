@@ -3,7 +3,7 @@
 % CALL: k = stk_materncov52_aniso(param, x, y, diff)
 %   param  = vector of parameters of size 1+d
 %   x      = structure whose field 'a' contains the observed points.
-%            x.a  is a matrix of size n x d, where n is the number of
+%            x is a matrix of size n x d, where n is the number of
 %            points and d is the dimension of the factor space
 %   y      = same as x
 %   diff   = differentiation parameter
@@ -21,7 +21,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -52,8 +52,8 @@ stk_narginchk(3, 5);
 persistent x0 y0 xs ys param0  pairwise0 D Kx_cache compute_Kx_cache
 
 % process input arguments
-if isstruct(x), x = x.a; end
-if isstruct(y), y = y.a; end
+x = double(x);
+y = double(y);
 if nargin < 4, diff = -1; end
 if nargin < 5, pairwise = false; end
 
@@ -176,12 +176,12 @@ end % function
 %! n = 7;
 %! x = stk_sampling_randunif(n, dim);
 %! y = stk_sampling_randunif(n, dim);
-%!
+%! 
 %! K1 = stk_materncov52_aniso(param, x, y);
 %! K2 = stk_materncov52_aniso(param, x, y, -1, true);
 %! assert(isequal(size(K1), [n n]));
 %! assert(stk_isequal_tolabs(K2, diag(K1)));
-%!
+%! 
 %! for i = 1:(dim+1),
 %!     dK1 = stk_materncov52_aniso(param, x, y,  i);
 %!     dK2 = stk_materncov52_aniso(param, x, y,  i, true);

@@ -26,16 +26,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = stk_normalize(x, box)
+function [y, a, b] = stk_normalize(x, box)
 
 stk_narginchk(1, 2);
 
-y = stk_datastruct(x);
-[n d] = size(y.a);
+% read argument x
+x = double(x);
+[n d] = size(x);
 
 if nargin < 2,
-    xmin = min(y.a, [], 1);
-    xmax = max(y.a, [], 1);
+    xmin = min(x, [], 1);
+    xmax = max(x, [], 1);
 else
     if ~isequal(size(box), [2 d])
         errmsg = sprintf('box should have size [2 d], with d=%d.', d);
@@ -46,7 +47,10 @@ else
     end
 end
 
-y.a = (y.a - repmat(xmin, n, 1)) ./ repmat(xmax - xmin, n, 1);
+b = 1 ./ (xmax - xmin);
+a = - xmin .* b;
+
+y = repmat(a, n, 1) + x * diag(b);
 
 end % function stk_normalize
 
@@ -59,5 +63,5 @@ end % function stk_normalize
 %!test   y3 = stk_normalize(x, box);
 %!error  y4 = stk_normalize(x, box, log(2));
 
-%!test assert(~any((y2.a < 0) | (y2.a > 1)));
-%!test assert(~any((y3.a < 0) | (y3.a > 1)));
+%!test assert(~any((y2 < -10 * eps) | (y2 > 1 + 10 * eps)));
+%!test assert(~any((y3 < -10 * eps) | (y3 > 1 + 10 * eps)));
