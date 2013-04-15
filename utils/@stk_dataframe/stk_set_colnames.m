@@ -45,14 +45,8 @@ end
 
 if isempty(colnames) % default column names
     
-    if d == 1,
-        colnames = {'x'};
-    else
-        colnames = cell(1, d);
-        for j = 1:d,
-            colnames{j} = sprintf('x%d', j);
-        end
-    end
+    x.vnames = {};
+    return;
     
 else % colnames has been specified, let's try to use it
     
@@ -74,7 +68,10 @@ else % colnames has been specified, let's try to use it
     
 end % if
 
-if length(unique(colnames)) < d, % check for duplicated column names
+colnames_ = colnames(~cellfun(@isempty, colnames));
+
+% check for duplicated column names
+if length(unique(colnames_)) < length(colnames_)
     
     stk_error('Column names must be unique !', 'IncorrectArgument');
     

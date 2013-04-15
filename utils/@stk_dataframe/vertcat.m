@@ -32,40 +32,59 @@ if isa(x, 'stk_dataframe')
     
     % In this case, [x; y] will be an stk_dataframe also.
     
-    data = [x.data; double(y)];
+    y_data = double(y);
+    data = [x.data; y_data];
     
     if isa(y, 'stk_dataframe')
+        y_colnames = y.vnames;
+        y_rownames = y.rownames;
+    else
+        y_colnames = {};
+        y_rownames = {};
+    end
+    
+    %--- COLUMN NAMES -----------------------------------------------------
+    
+    if isempty(x.vnames)
         
-        if ~all(strcmp(x.vnames, y.vnames))
-            errmsg = 'Cannot concatenate because of incompatible column names.';
-            stk_error(errmsg, 'IncompatibleColNames');
-        else
-            colnames = x.vnames;
-        end
+        colnames = y_colnames;
         
-        bx = isempty(x.rownames);
-        by = isempty(y.rownames);
-        if bx && by
-            rownames = {};
-        elseif ~bx && ~by
-            rownames = [x.rownames; y.rownames];
-        else
-            warning(sprintf(['One of the dataframes has no row names.\n' ...
-                '  => Ignoring row names from the other one.'])); %#ok<WNTAG,SPWRN>
-            rownames = {};
-        end
+    elseif ~isempty(y_colnames) && ~all(strcmp(x.vnames, y_colnames))
         
-    else % y is a matrix
+        stk_error(['Cannot concatenate because of incompatible column ' ...
+            'names.'], 'IncompatibleColNames');
+        
+    else % ok, we can use x's column names
         
         colnames = x.vnames;
         
-        if ~isempty(x.rownames)
-            warning(sprintf(['One of the dataframes has no row names.\n' ...
-                '  => Ignoring row names from the other one.'])); %#ok<WNTAG,SPWRN>
-        end
+    end
+    
+    %--- ROW NAMES --------------------------------------------------------
+    
+    bx = isempty(x.rownames);
+    by = isempty(y_rownames);
+    
+    if bx && by, % none of the argument has row names
+        
         rownames = {};
         
-    end % if
+    else % at least of one the arguments has row names
+        
+        if bx
+            x_rownames = repmat({''}, size(x.data, 1), 1);
+        else
+            x_rownames = x.rownames;
+            
+        end
+        
+        if by
+            y_rownames = repmat({''}, size(y_data, 1), 1);
+        end
+        
+        rownames = [x_rownames; y_rownames];
+        
+    end
     
     z = stk_dataframe(data, colnames, rownames);
     

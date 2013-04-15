@@ -111,4 +111,6 @@ zp = stk_predict(model, xi, zi, xt);
 %% display results
 
 stk_plot1d(xi,zi,xt,zt,zp)
+xlabel('x'); ylabel('z');
+
 model %#ok<NOPTS>

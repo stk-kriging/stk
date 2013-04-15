@@ -85,7 +85,7 @@ else % at least one input point
     
 end
 
-z = stk_dataframe(zdata, {'z'});
+z = stk_dataframe(zdata);
 
 end % function stk_feval
 

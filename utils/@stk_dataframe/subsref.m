@@ -106,7 +106,7 @@ end % function subsref
 %! assert (isequal (x.colnames{2}, 'yy'))
 
 %!shared u data
-%! u = rand(3, 2); data = stk_dataframe(u);
+%! u = rand(3, 2); data = stk_dataframe(u, {'x1', 'x2'});
 
 %!assert (isequal (data.x2, u(:, 2)))
 %!assert (data.x2(3) == u(3, 2))
@@ -118,7 +118,7 @@ end % function subsref
 %--- tests with a univariate dataframe ----------------------------------------
 
 %!shared u data
-%! u = rand(3, 1); data = stk_dataframe(u);
+%! u = rand(3, 1); data = stk_dataframe(u, 'x');
 
 %!assert (isequal (data.x, u))
 %!assert (isequal (double(data), u))

@@ -37,15 +37,27 @@ function disp(x, max_width)
 
 if n == 0,
     
-    if d == 1,
-        fprintf('Empty stk_dataframe with 1 variable: ');
-        fprintf('%s\n\n', x.vnames{1});
-    else
-        fprintf('Empty stk_dataframe with %d variables: ', d);
-        for j = 1:(d-1),
-            fprintf('%s, ', x.vnames{j});
+    if isempty(x.vnames)
+        
+        if d == 1,
+            fprintf('Empty stk_dataframe with 1 variable.\n');
+        else
+            fprintf('Empty stk_dataframe with %d variables.\n', d);
         end
-        fprintf('%s\n\n', x.vnames{end});
+
+    else
+        
+        if d == 1,
+            fprintf('Empty stk_dataframe with 1 variable: ');
+            fprintf('%s\n\n', x.vnames{1});
+        else
+            fprintf('Empty stk_dataframe with %d variables: ', d);
+            for j = 1:(d-1),
+                fprintf('%s, ', x.vnames{j});
+            end
+            fprintf('%s\n\n', x.vnames{end});
+        end
+        
     end
     
 else
@@ -65,35 +77,56 @@ else
     nb_spaces_before = 1;
     nb_spaces_colsep = 2;
     
-    str = repmat(' ', n + 1,  nb_spaces_before); %#ok<*AGROW>
+    has_colnames = ~isempty(x.vnames);
+    nb_rows = n + has_colnames;
+    
+    str = repmat(' ', nb_rows, nb_spaces_before); %#ok<*AGROW>
     
     % first columns: row names
-    rownames = char(stk_get_rownames(x));
-    str = [str [repmat(' ', 1, size(rownames, 2)); rownames]];
+    if isempty(x.rownames)
+        rownames = stk_sprintf_colvect(1:n);
+    else
+        rownames = char(x.rownames);
+    end
     
-    % column separator
-    str = [str repmat(' ', n + 1,  nb_spaces_colsep)];
+    if has_colnames
+        str = [str [repmat(' ', 1, size(rownames, 2)); rownames]];
+    else
+        str = [str rownames];
+    end
+    
+    % column separator between row names and the first data column
+    str = [str repmat(' :', nb_rows,  1) ...
+        repmat(' ', nb_rows,  nb_spaces_colsep)];
     
     for j = 1:d,
         
-        vn = x.vnames{j};
-        xx = stk_sprintf_colvect(x.data(:, j), max_width);
+        xx  = stk_sprintf_colvect(x.data(:, j), max_width);
         
-        Lxx = size(xx, 2);
-        L = max(length(vn), Lxx);
         
-        str = [str [sprintf('% *s', L, vn);  % variable name
-            repmat(' ', n, L - Lxx) xx]];    % formatted data
+        if ~has_colnames % no need for a header row in this case
+            
+            str = [str xx];
+            
+        else
+            
+            vn = x.vnames{j};
+            Lxx = size(xx, 2);
+            L = max(length(vn), Lxx);
+            str = [str [sprintf('% *s', L, vn);  % variable name
+                repmat(' ', n, L - Lxx) xx]];    % formatted data
+            
+        end
         
         if j < d,
             % column separator
-            str = [str repmat(' ', n + 1,  nb_spaces_colsep)];
+            str = [str repmat(' ', nb_rows,  nb_spaces_colsep)];
         end
         
     end % for
     
     disp(str); fprintf('\n');
-
+    
 end % if
 
 end % function disp

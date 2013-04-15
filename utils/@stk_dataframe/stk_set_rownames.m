@@ -54,8 +54,10 @@ else
     else
         
         rownames = reshape(rownames, n, 1);
+        colnames_ = rownames(~cellfun(@isempty, rownames));
         
-        if length(unique(rownames)) < n  % check for duplicated row names
+        % check for duplicated row names
+        if length(unique(colnames_)) < length(colnames_)
        
             stk_error('Row names must be unique !', 'IncorrectArgument');
         

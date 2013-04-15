@@ -89,7 +89,9 @@ switch idx(1).type
                     elseif remove_columns
                         
                         x.data(:, idx_col) = [];
-                        x.vnames(idx_col) = [];
+                        if ~isempty(x.vnames)
+                            x.vnames(idx_col) = [];
+                        end
                         
                     else % remove_rows
                         
@@ -166,12 +168,12 @@ end % function subsasgn
 %!error x.colnames = {'xx' 'xx'}
 
 %!test
-%! data = stk_dataframe(zeros(3, 2));
+%! data = stk_dataframe(zeros(3, 2), {'x1' 'x2'});
 %! u = rand(3, 1); data.x2 = u;
 %! assert (isequal(double(data), [zeros(3, 1) u]))
 
 %!test
-%! data = stk_dataframe(zeros(3, 2));
+%! data = stk_dataframe(zeros(3, 2), {'x1' 'x2'});
 %! data.x2(3) = 27;
 %! assert (isequal(double(data), [0 0; 0 0; 0 27]))
 

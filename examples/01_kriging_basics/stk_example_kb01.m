@@ -47,7 +47,7 @@ zt = stk_feval(f, xt);
 
 figure(1);
 set(gcf, 'Name', 'Plot of the function to be approximated');
-plot(xt, zt);
+plot(xt, zt); xlabel('x'); ylabel('z');
 
 
 %% Generate a space-filling design

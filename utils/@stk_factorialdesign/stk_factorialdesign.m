@@ -152,13 +152,11 @@ end % function stk_factorialdesign
 %! y.colnames = {'y1' 'y2'}; z = horzcat(x, y);
 %! assert (strcmp(class(z), 'stk_dataframe'));
 %! assert (isequal(double(z), [double(x) double(y)]));
-%! assert (all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
 
 %!test %%%% same thing, using cat(2, ...)
 %! z = cat(2, x, y);
 %! assert (strcmp(class(z), 'stk_dataframe'));
 %! assert (isequal(double(z), [double(x) double(y)]));
-%! assert (all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
 
 %!error cat(3, x, y)
 

@@ -41,11 +41,11 @@ else % ok, the first argument has one (and only one) column
     
     plot(xx, zz, varargin{:});
     
-    if isa(x, 'stk_dataframe')
+    if isa(x, 'stk_dataframe') && ~isempty(x.vnames)
         xlabel(x.vnames{1}, 'FontWeight', 'bold');
     end
     
-    if isa(z, 'stk_dataframe')
+    if isa(z, 'stk_dataframe') && ~isempty(z.vnames)
         if size(zz, 2) == 1,
             ylabel(z.vnames{1}, 'FontWeight', 'bold');
         else

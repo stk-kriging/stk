@@ -29,9 +29,12 @@
 function z = cat(dim, varargin)
 
 if dim == 1
+    
     % concatenate along dimension 1, i.e., vertically
     z = vertcat(varargin{:});
+    
 else
+    
     if dim ~= 2
         errmsg = 'Dataframes can only be concatenated along dimension 1 or 2.';
         stk_error(errmsg, 'IncorrectArgument');
@@ -39,6 +42,7 @@ else
         % concatenate along dimension 2, i.e., horizontally
         z = horzcat(varargin{:});
     end
+    
 end % if
 
 end % function cat
@@ -62,4 +66,4 @@ end % function cat
 %! z = cat(2, x, y);
 %! assert(isa(z, 'stk_dataframe'));
 %! assert(isequal(double(z), [u v]));
-%! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
+%! assert(all(strcmp(z.colnames, {'' '' 'y1' 'y2'})));

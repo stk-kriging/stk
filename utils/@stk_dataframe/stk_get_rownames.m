@@ -28,19 +28,14 @@
 
 function rownames = stk_get_rownames(x)
 
-if isempty(x.rownames)
-    n = size(x.data, 1);
-    rownames = arrayfun(@num2str, 1:n, 'UniformOutput', false)';
-else
-    rownames = x.rownames;
-end
+rownames = x.rownames;
 
 end % function stk_get_rownames
 
 
 %!test
 %! x = stk_dataframe(rand(2, 1));
-%! assert(isequal(stk_get_rownames(x), {'1'; '2'}));
+%! assert(isequal(stk_get_rownames(x), {}));
 
 %!test
 %! x = stk_dataframe(rand(2, 1), {}, {'a'; 'b'});

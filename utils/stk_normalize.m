@@ -63,5 +63,5 @@ end % function stk_normalize
 %!test   y3 = stk_normalize(x, box);
 %!error  y4 = stk_normalize(x, box, log(2));
 
-%!test assert(~any((y2 < 0) | (y2 > 1)));
-%!test assert(~any((y3 < 0) | (y3 > 1)));
+%!test assert(~any((y2 < -10 * eps) | (y2 > 1 + 10 * eps)));
+%!test assert(~any((y3 < -10 * eps) | (y3 > 1 + 10 * eps)));

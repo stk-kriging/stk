@@ -38,13 +38,11 @@ end
 
 x = class(x, 'stk_dataframe');
 
-if nargin < 2,
-    x = stk_set_colnames(x, {});
-else
+if nargin >= 2,
     x = stk_set_colnames(x, colnames);
 end
 
-if nargin > 2,
+if nargin >= 3,
     x = stk_set_rownames(x, rownames);
 end
 

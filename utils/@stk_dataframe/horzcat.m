@@ -28,22 +28,63 @@
 
 function z = horzcat(x, y, varargin)
 
-if isa(x, 'stk_dataframe') && isa(y, 'stk_dataframe')
+if isa(x, 'stk_dataframe')
     
     % In this case, [x y] will be an stk_dataframe also.
     
-    data = [x.data y.data];
-    colnames = [x.vnames y.vnames];
-    if isempty(x.rownames),
-        rownames = y.rownames;
+    y_data = double(y);
+    data = [x.data y_data];
+    
+    if isa(y, 'stk_dataframe')
+        y_colnames = y.vnames;
+        y_rownames = y.rownames;
     else
-        if ~isempty(y.rownames) && ~all(strcmp(x.rownames, y.rownames))
-            errmsg = 'Cannot concatenate because of incompatible row names.';
-            stk_error(errmsg, 'IncompatibleRowNames');
-        else            
-            rownames = x.rownames;
-        end
+        y_colnames = {};
+        y_rownames = {};
     end
+    
+    %--- ROW NAMES --------------------------------------------------------
+
+    if isempty(x.rownames)
+        
+        rownames = y_rownames;
+        
+    elseif ~isempty(y_rownames) && ~all(strcmp(x.rownames, y_rownames))
+        
+        stk_error(['Cannot concatenate because of incompatible row ' ...
+            'names.'], 'IncompatibleRowColNames');
+        
+    else % ok, we can use x's column names
+        
+        rownames = x.rownames;
+        
+    end
+    
+    %--- COLUMN NAMES -----------------------------------------------------
+
+    bx = isempty(x.vnames);
+    by = isempty(y_colnames);
+    
+    if bx && by % none of the argument has row names
+        
+        colnames = {};
+        
+    else % at least of one the arguments has column names
+       
+        if bx
+            x_colnames = repmat({''}, 1, size(x.data, 2));
+        else
+            x_colnames = x.vnames;
+        end
+        
+        if by
+            y_colnames = repmat({''}, 1, size(y_data, 2));
+        end
+        
+        colnames = [x_colnames y_colnames];
+        
+    end
+    
     z = stk_dataframe(data, colnames, rownames);
     
 else % In this case, z will be a matrix.
@@ -100,7 +141,7 @@ end % function horzcat
 %!test
 %! x = stk_dataframe(u);
 %! z = [x v];
-%! assert(isa(z, 'double') && isequal(z, [u v]));
+%! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u v]));
 
 %!test
 %! y = stk_dataframe(v);
@@ -114,4 +155,4 @@ end % function horzcat
 %! x = stk_dataframe(u, {'x1' 'x2'});
 %! y = stk_dataframe(v, {'y1' 'y2'});
 %! z = [x y u v];
-%! assert(isa(z, 'double') && isequal(z, [u v u v]));
+%! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u v u v]));
