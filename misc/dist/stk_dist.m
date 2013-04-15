@@ -43,17 +43,13 @@ function D = stk_dist(x, y, pairwise)
 stk_narginchk(1, 3);
 
 % read argument #1
-if isstruct(x),
-    x = x.a;
-end
+x = double(x);
 
 % read argument #2
 if nargin < 2,
     y = [];
 else
-    if isstruct(y),
-        y = y.a;
-    end
+    y = double(y);
 end
 
 % read argument #3
@@ -95,15 +91,6 @@ end % function stk_dist
 %!error stk_dist(0, ones(1, 2));
 %!error stk_dist(eye(3), ones(1, 2));
 %!error stk_dist(ones(2, 1), zeros(2));
-
-%%
-% Check that ".a" structures are accepted
-
-%!test
-%! d = 3; x = rand(7, d); y = rand(4, d);
-%! Dxy1 = stk_dist(x, y);
-%! Dxy2 = stk_dist(struct('a', x), struct('a', y));
-%! assert(stk_isequal_tolabs(Dxy1, Dxy2));
 
 %%
 % Test with some simple matrices

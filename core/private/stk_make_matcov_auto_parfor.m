@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -30,7 +30,7 @@
 
 function K = stk_make_matcov_auto_parfor(model, x, ncores, min_block_size)
 
-if isstruct(x0), x0 = x0.a; end
+x = double(x);
 
 %=== choose the actual block size & number of blocks
 B = 0; % number of blocks of x_i's

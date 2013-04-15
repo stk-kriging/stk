@@ -4,7 +4,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -47,12 +47,12 @@ zt = stk_feval(f, xt);
 %
 % The objective is to construct an approximation of f and to simulate
 % conditioned sample paths from NI observations. The observation locations
-% are chosen as a subset of xt.a.
+% are chosen as a subset of xt.
 %
 
 NI = 6;                               % nb of evaluations that will be used
 xi_ind  = [1 20 90 200 300 350];      %
-xi.a = xt.a(xi_ind, 1);
+xi = xt(xi_ind, 1);
 zi = stk_feval(f, xi);                % evaluation results
 
 
@@ -79,7 +79,7 @@ model.param = log([SIGMA2; NU; 1/RHO1]);
 %% Carry out the kriging prediction and generate conditional sample paths
 %
 
-% Carry out the kriging prediction at points xt.a
+% Carry out the kriging prediction at points xt
 [zp, lambda] = stk_predict(model, xi, zi, xt);
 
 % Generate (unconditional) sample paths according to the model

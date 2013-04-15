@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -60,7 +60,8 @@ NI = 30;                                    % nb of evaluations that will be use
 xi = stk_sampling_randunif(NI, DIM, BOX);   % evaluation points
 zi = stk_feval(f, xi);                      % evaluation results
 
-zi.a = zi.a + sqrt(NOISEVARIANCE) * randn(NI,1);
+zi = zi + sqrt(NOISEVARIANCE) * randn(NI,1);
+
 
 %% Specification of the model
 %
@@ -94,7 +95,7 @@ RHO1   = 0.4;  % scale (range) parameter
 param0 = log([SIGMA2; NU; 1/RHO1]);
 
 % Initial guess for the (log of the) noise variance
-lnv0 = 2 * log(std(zi.a) / 100);
+lnv0 = 2 * log(std(zi) / 100);
 
 [param, paramlnv] = stk_param_estim(model, xi, zi, param0, lnv0);
 
@@ -110,4 +111,6 @@ zp = stk_predict(model, xi, zi, xt);
 %% display results
 
 stk_plot1d(xi,zi,xt,zt,zp)
+xlabel('x'); ylabel('z');
+
 model %#ok<NOPTS>

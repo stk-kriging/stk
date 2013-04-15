@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -30,8 +30,8 @@
 
 function K = stk_make_matcov_inter_parfor(model, x0, x1, ncores, min_block_size)
 
-if isstruct(x0), x0 = x0.a; end
-if isstruct(x1), x1 = x1.a; end
+x0 = double(x0);
+x1 = double(x1);
 
 %=== choose the actual block size & number of blocks
 B0 = 1; n0 = size(x0, 1); dB0 = 0;

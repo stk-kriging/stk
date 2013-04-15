@@ -6,9 +6,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect           <julien.bect@supelec.fr>
+%              Valentin Resseguier   <valentin.resseguier@gmail.com>
 
 % Copying Permission Statement
 %
@@ -35,33 +36,15 @@ function stk_plot2d(plotfun, x, arg3, varargin)
 
 %%% Check input arguments
 
-if ~isstruct(x) || ~isfield(x, 'coord') || ~isfield(x, 'a')
-    errmsg = 'x should be a structure with fields ''a'' and ''coord''.';
+if ~isa(x, 'stk_factorialdesign')
+    errmsg = 'x should be an stk_factorialdesign object.';
     stk_error(errmsg, 'IncorrectArgument');
 end
 
-dim = size(x.a, 2);
+dim = size(x, 2);
 
 if dim ~= 2,
     errmsg = 'stk_plot2d only works for two-dimensional factor spaces.';
-    stk_error(errmsg, 'IncorrectArgument');
-end
-
-if ~iscell(x.coord) || ~isequal(size(x.coord), [1 dim])
-    errmsg = 'Field ''coord'' seems corrupted...';
-    stk_error(errmsg, 'IncorrectArgument');
-end
-
-
-%%% Extract ndgrid-style coordinate matrices
-
-xx1 = x.coord{1};
-xx2 = x.coord{2};
-
-[n1, n2] = size(xx1);
-
-if ~isequal(size(xx2), [n1 n2])
-    errmsg = 'Field ''coord'' seems corrupted...';
     stk_error(errmsg, 'IncorrectArgument');
 end
 
@@ -69,20 +52,17 @@ end
 %%% Deal with various possible types for the 'z' argument
 
 if ischar(arg3) || isa(arg3, 'function_handle')
-    z = stk_feval(arg3, x);
-    z = z.a;
-elseif isstruct(arg3),
-    z = arg3.a;
-elseif isa(arg3, 'double')
-    z = arg3;
+    z = double(stk_feval(arg3, x));
 else
-    stk_error('Unsupported type for the third argument', 'IncorrectArgument');
+    z = double(arg3);
 end
 
 
 %%% Do the actual plotting job
 
-plotfun(xx1, xx2, reshape(z, n1, n2), varargin{:});
+[xx1, xx2] = ndgrid(x);
+
+plotfun(xx1, xx2, reshape(z, size(xx1)), varargin{:});
 
 xlabel('x_1', 'FontWeight', 'bold');
 ylabel('x_2', 'FontWeight', 'bold');
