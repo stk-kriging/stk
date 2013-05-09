@@ -1,3 +1,11 @@
+2013-05-09  Julien Bect  <julien.bect@supelec.fr>
+
+	Ensure that .a structures are still accepted.
+
+	* utils/@struct/double.m: new overloaded function that returns the
+	.a field of a structure, assuming it exists.
+	* covfcs/stk_materncov32_aniso.m: add tests.
+
 2013-04-14  Julien Bect  <julien.bect@supelec.fr>
 
 	Add two new classes: stk_dataframe, stk_factorialdesign
