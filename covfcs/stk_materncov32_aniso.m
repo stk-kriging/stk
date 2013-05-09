@@ -124,20 +124,30 @@ end % function
 %%
 % 1D, 5x5
 
-%!shared param x y
+%!shared param x y K1 K2 K3
 %!  dim = 1;
 %!  model = stk_model('stk_materncov32_aniso', dim);
 %!  param = model.param;
 %!  x = stk_sampling_randunif(5, dim);
-%!  y = stk_sampling_randunif(5, dim);
+%!  y = stk_sampling_randunif(6, dim);
 
-%!error stk_materncov32_aniso();
-%!error stk_materncov32_aniso(param);
-%!error stk_materncov32_aniso(param, x);
-%!test  stk_materncov32_aniso(param, x, y);
-%!test  stk_materncov32_aniso(param, x, y, -1);
-%!test  stk_materncov32_aniso(param, x, y, -1, false);
-%!error stk_materncov32_aniso(param, x, y, -1, false, pi^2);
+%!error K0 = stk_materncov32_aniso();
+%!error K0 = stk_materncov32_aniso(param);
+%!error K0 = stk_materncov32_aniso(param, x);
+%!test  K1 = stk_materncov32_aniso(param, x, y);
+%!test  K2 = stk_materncov32_aniso(param, x, y, -1);
+%!test  K3 = stk_materncov32_aniso(param, x, y, -1, false);
+%!error K0 = stk_materncov32_aniso(param, x, y, -1, false, pi^2);
+%!assert (isequal(K1, K2));
+%!assert (isequal(K1, K3));
+
+%!test % various types of input arguments
+%! u = double(x); v = double(y);
+%! K1 = stk_materncov32_aniso(param, u, v, -1);
+%! K2 = stk_materncov32_aniso(param, struct('a', u), struct('a', v), -1);
+%! K3 = stk_materncov32_aniso(param, stk_dataframe(u), stk_dataframe(v), -1);
+%! assert(isequal(K1, K2));
+%! assert(isequal(K1, K3));
 
 %!error stk_materncov32_aniso(param, x, y, -2);
 %!test  stk_materncov32_aniso(param, x, y, -1);
