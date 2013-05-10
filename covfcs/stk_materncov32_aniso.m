@@ -1,11 +1,11 @@
 % STK_MATERNCOV32_ANISO computes the anisotropic Matern covariance with nu=5/2
 %
-% CALL: k = stk_materncov52_aniso(param, x, y, diff)
-%   param  = vector of parameters of size 1+d
+% CALL: k = stk_materncov52_aniso(x, y, param, diff)
 %   x      = structure whose field 'a' contains the observed points.
 %            x.a  is a matrix of size n x d, where n is the number of
 %            points and d is the dimension of the factor space
 %   y      = same as x
+%   param  = vector of parameters of size 1+d
 %   diff   = differentiation parameter
 %
 % STK_MATERNCOV32_ANISO computes a Matern covariance between two random vectors
@@ -47,7 +47,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function k = stk_materncov32_aniso(param, x, y, diff)
+function k = stk_materncov32_aniso(x, y, param, diff)
 
 persistent x0 y0 xs ys param0 D Kx_cache compute_Kx_cache
 

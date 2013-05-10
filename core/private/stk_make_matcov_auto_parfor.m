@@ -29,7 +29,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
 
-function K = stk_make_matcov_auto_parfor( model, x, ncores, min_block_size )
+function K = stk_make_matcov_auto_parfor( x, model, ncores, min_block_size )
 
 %=== choose the actual block size & number of blocks
 B = 0; % number of blocks of x_i's
@@ -58,7 +58,7 @@ end
 %=== process blocks
 name = model.covariance_type; param = model.param; % avoids a "parfor" warning
 parfor b = 1:nb_blocks,
-    blocks(b).K = feval( name, param, blocks(b).xi, blocks(b).xj );
+    blocks(b).K = feval( name, blocks(b).xi, blocks(b).xj, param );
     % FIXME: avoid computing each term in the covariance matrix twice
     % on the diagonal blocks !
 end

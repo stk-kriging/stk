@@ -1,9 +1,9 @@
 % STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process
 %
-% CALL: zsim = stk_generate_samplepaths(model, xt, nb_paths)
-%       model    = kriging model
+% CALL: zsim = stk_generate_samplepaths(xt, model, nb_paths)
 %       xt       = structure that contains the points at which one wants to 
-%                  generate sample paths 
+%              generate sample paths 
+%       model    = kriging model
 %       nb_paths = number of sample paths
 %       zsim     = structure that contains unconditioned sample paths
 %
@@ -41,12 +41,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function zsim = stk_generate_samplepaths(model, xt, nb_paths)
+function zsim = stk_generate_samplepaths(xt, model, nb_paths)
 
 if nargin < 3, nb_paths = 1; end
 
 % covariance matrix
-K = stk_make_matcov( model, xt );
+K = stk_make_matcov( xt, model );
 
 % Cholesky factorization, once and for all
 V = chol(K);

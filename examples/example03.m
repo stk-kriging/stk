@@ -128,12 +128,12 @@ end
 
 %% estimate the parameters of the covariance
 
-model.param = stk_param_estim(model, xi, zi, PARAM0);
+model.param = stk_param_estim(PARAM0, xi, zi, model);
 
 
 %% carry out kriging prediction
 
-zp = stk_predict(model, xi, zi, xt);
+zp = stk_predict(xi, zi, xt, model);
 
 
 %% display results

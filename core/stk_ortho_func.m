@@ -1,6 +1,6 @@
 % STK_ORTHO_FUNC basis functions for the mean
 %
-% CALL: P = stk_ortho_func( model, x )
+% CALL: P = stk_ortho_func( x, model )
 %
 % STK_ORTHO_FUNC computes basis functions to deal with the mean of the
 % random process
@@ -37,10 +37,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function P = stk_ortho_func( model, x )
+function P = stk_ortho_func( x, model )
 
 if ~isfield(model,'Kx_cache'), % SYNTAX: x(factors), model            
-    P = stk_ortho_func_( model.order, x );
+    P = stk_ortho_func_( x, model.order );
         
 else % SYNTAX: x(indices), model    
     if ~isfield(model,'Px_cache'),
@@ -57,7 +57,7 @@ end
 %%% stk_ortho_func_ %%%
 %%%%%%%%%%%%%%%%%%%%%%%
 
-function P = stk_ortho_func_( order, x )
+function P = stk_ortho_func_( x, order )
 
 [n,d] = size( x.a );
 

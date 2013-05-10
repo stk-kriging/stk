@@ -104,7 +104,7 @@ model.param = log([SIGMA2; NU; 1/RHO1]);
 %
 
 % Carry out the kriging prediction at points xt.a
-zp = stk_predict( model, xi, zi, xt );
+zp = stk_predict( xi, zi, xt, model );
 
 % Display the result
 stk_plot1d( xi, zi, xt, zt, zp );
@@ -126,7 +126,7 @@ model_n = model;
 model_n.lognoisevariance = log(NOISEVARIANCE);
 
 % Carry out the kriging prediction at locations xt.a
-zp_n = stk_predict( model_n, xi, zi_n, xt );
+zp_n = stk_predict( xi, zi_n, xt, model_n );
 
 % Display the result
 stk_plot1d( xi, zi_n, xt, zt, zp_n );

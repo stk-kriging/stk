@@ -88,11 +88,11 @@ model.param = log([SIGMA2; NU; 1/RHO1]);
 %
 
 % Carry out the kriging prediction at points xt.a
-[zp, lambda] = stk_predict( model, xi, zi, xt );
+[zp, lambda] = stk_predict( xi, zi, xt, model );
 
 % Generate (unconditional) sample paths according to the model
 NB_PATHS = 10;
-zsim = stk_generate_samplepaths( model, xt, NB_PATHS );
+zsim = stk_generate_samplepaths( xt, model, NB_PATHS );
 
 % Condition sample paths on the observations
 zsimc = stk_conditionning( lambda, zi, zsim, xi_ind );
