@@ -1,24 +1,37 @@
-% STK_SAMPLING_MAXIMINLHS builds a maximin LHS design
+% STK_SAMPLING_MAXIMINLHS generates a "maximin" LHS design.
 %
-% CALL: x = stk_sampling_maximinlhs(n, d, box, niter)
+% CALL: X = stk_sampling_maximinlhs(N, DIM)
 %
-% FIXME: documentation incomplete
+%   generates a "maximin" Latin Hypercube Sample of size N in the
+%   DIM-dimensional hypercube [0; 1]^DIM. More precisely, NITER = 1000
+%   independent random LHS are generated, and the one with the biggest
+%   separation distance is returned.
+%
+% CALL: X = stk_sampling_maximinlhs(N, DIM, BOX)
+%
+%   does the same thing in the DIM-dimensional hyperrectangle specified by the
+%   argument BOX, which is a 2 x DIM matrix where BOX(1, j) and BOX(2, j) are
+%   the lower- and upper-bound of the interval on the j^th coordinate.
+%
+% CALL: X = stk_sampling_maximinlhs(N, DIM, BOX, NITER)
+%
+%   allows to change the number of independent random LHS that are used.
+%
+% See also: stk_mindist, stk_sampling_randomlhs
 
-%          STK : a Small (Matlab/Octave) Toolbox for Kriging
-%          =================================================
-%
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
+%    Copyright (C) 2011-2013 SUPELEC
+%
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging
-%
+
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -32,40 +45,28 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
+
 function x = stk_sampling_maximinlhs(n, d, box, niter)
+stk_narginchk(2, 4);
 
 if (nargin < 3) || isempty(box)
-    xmin = zeros(1, d);
-    xmax = ones(1, d);
+    box = repmat([0; 1], 1, d);
 else
-    if ~isequal(size(box), [2, d]),
-        error('box should be a 2xd array');
-    end
-    xmin = box(1,:);
-    xmax = box(2,:);
+    stk_assert_box(box);
 end
 
 if nargin < 4,
     niter = 1000;
 end
 
-if n == 0, % no input => no output
-    
-    xdata = zeros(0, d);
-    
+if n == 0, % no input => no output    
+    xdata = zeros(0, d);    
 else % at least one input point
-    
-    xmin  = reshape(xmin, 1, d); % make sure we work we row vectors
-    delta = reshape(xmax, 1, d) - xmin;   assert(all(delta > 0));
-    
     xx = lhsdesign_(n, d, niter);
-    
-    xdata = ones(n, 1) * xmin + xx * diag(delta);
-    
+    xdata = stk_rescale(xx, [], box);    
 end
 
-x = struct( 'a', xdata );
+x = stk_dataframe(xdata);
 
 end
 
@@ -80,8 +81,8 @@ bestscore = 0;
 x = [];
 
 for j = 1:niter
-    y = generatedesign_(n, d);    
-    score = stk_mindist(y);    
+    y = generatedesign_(n, d);
+    score = stk_mindist(y);
     if isempty(x) || (score > bestscore)
         x = y;
         bestscore = score;
@@ -106,3 +107,40 @@ end
 x = (x - rand(size(x))) / n;
 
 end
+
+
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+%%
+% Check error for incorrect number of input arguments
+
+%!shared x, n, dim, box, niter
+%! n = 20; dim = 2; box = [0, 0; 1, 1]; niter = 1;
+
+%!error x = stk_sampling_maximinlhs();
+%!error x = stk_sampling_maximinlhs(n);
+%!test  x = stk_sampling_maximinlhs(n, dim);
+%!test  x = stk_sampling_maximinlhs(n, dim, box);
+%!test  x = stk_sampling_maximinlhs(n, dim, box, niter);
+%!error x = stk_sampling_maximinlhs(n, dim, box, niter, pi);
+
+%% 
+% Check that the output is a dataframe
+% (all stk_sampling_* functions should behave similarly in this respect)
+
+%!assert (isa(x, 'stk_dataframe'));
+
+%%
+% Check output argument
+
+%!test
+%! for dim = 1:5,
+%!   x = stk_sampling_randomlhs(n, dim);
+%!   assert(isequal(size(x), [n dim]));
+%!   u = double(x); u = u(:);
+%!   assert(~any(isnan(u) | isinf(u)));
+%!   assert((min(u) >= 0) && (max(u) <= 1));
+%!   assert(stk_is_lhs(x, n, dim));
+%! end

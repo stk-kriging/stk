@@ -1,3 +1,910 @@
+2013-05-09  Julien Bect  <julien.bect@supelec.fr>
+
+	Ensure that .a structures are still accepted.
+
+	* utils/@struct/double.m: new overloaded function that returns the
+	.a field of a structure, assuming it exists.
+	* covfcs/stk_materncov32_aniso.m: add tests.
+
+2013-04-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Add two new classes: stk_dataframe, stk_factorialdesign
+
+	* utils/@stk_dataframe: new class
+	* utils/@stk_factorialdesign: new class
+	* utils/stk_datastruct.m: removed (use overloaded double()
+	instead)
+	* misc/test/stk_test_dfbinaryop.m: new function to test binary
+	operations on stk_dataframes objects
+	* stk_sampling_regulargrid.m: modified to return an
+	stk_factorialdesign
+	* *.m: remove all occurences of .a, stk_datastruct, and use the
+	new possibilities provided by the two added classes
+
+	Return additional arguments from stk_rescale and stk_normalize.
+
+	* utils/stk_rescale.m, utils/stk_normalize.m: modified to return
+	additional output arguments a and b, such that y = a + b*x
+
+	Reorganize exisiting text functions and add some new ones.
+
+	* misc/disp/stk_disp_framedtext.m: removed, superseded by
+	the new function stk_sprintf_framed()
+	* misc/disp/stk_disp_examplewelcome.m: moved to misc/text
+	* misc/text/stk_sprintf_colvect.m,
+	stk_sprintf_colvect_fixedpoint.m,
+	stk_sprintf_colvect_scientific.m: new functions
+	* misc/test/stk_runexamples.m: modified
+	* misc/config/stk_path.m: modified
+
+2013-03-25  Julien Bect  <julien.bect@supelec.fr>
+
+	Make stk_test() silent as a grave.
+
+	* misc/test/stk_test.m: Use evalc() instead of eval() to make
+	stk_test() silent as a grave. Only works in Matlab for the time
+	being, since evalc() is still unimplemented in Octave.
+
+2013-03-20  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve stk_runtests().
+
+	* misc/test/stk_runtests.m: Include class directories and private
+	directories in the total number of directories. Silence warnings
+	and display something if there were warnings during the tests.
+
+2013-03-17  Julien Bect  <julien.bect@supelec.fr>
+
+	New function stk_param_getdefaultbounds().
+
+	* paramestim/stk_param_estim.m: Remove internal function
+	get_default_bounds() and call stk_param_getdefaultbounds()
+	instead.
+	* paramestim/stk_param_getdefaultbounds.m: New function to be used
+	instead of the internal function get_default_bounds() in
+	stk_param_estim.m. This function can be overloaded for parameters
+	objects.
+
+	In stk_param_estim(), cast param0 to the appropriate type.
+
+	* paramestim/stk_param_estim.m: Cast param0 into an object of the
+	appropriate type and size and set model.param to the same value.
+
+	Add local variables delta_p and delta_lnv in stk_remlqrg().
+
+	* paramestim/stk_remlqrg.m: Add local variables for (slightly)
+	improved readability and efficiency.
+
+	Modify stk_remlqrg() to support objects in model.param.
+
+	* paramestim/stk_remlqrg.m: Ensure that param is a column vector;
+	in the case where model.param is an object, this is actually a
+	call to subsasgn() in disguise.
+
+2013-03-16  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a (recently introduced...) bug in stk_param_init().
+
+	* paramestim/stk_param_init.m: Use log10() when calling
+	logspace(). Add a non-regression test.
+
+	Avoid unnecessary gradient computation in stk_param_estim().
+
+	* paramestim/stk_param_estim.m: Compute the gradient only when it
+	is explicitely requested, both in f_() and in f_with_noise_().
+
+2013-03-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Add a warning in stk_param_init() when lognoisevariance is defined.
+
+	* paramestim/stk_param_init.m: Issue a warning if there is a
+	non-empty lognoisevariance field, since its value won't be used.
+
+	Fix other bugs in stk_param_init().
+
+	* paramestim/stk_param_init.m: Remove the second normalization
+	that was performed in the internal function paraminit_(). Use the
+	correct box diameter to choose the list of range values for
+	isotropic covariance functions.
+
+2013-03-13  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a bug in stk_param_init().
+
+	* paramestim/stk_param_init.m: Remove the value of the regularity
+	parameter from param for stk_matercov32_iso and
+	stk_materncov52_iso covariance functions.
+
+	Avoid the use of 'stable' with unique().
+
+	* misc/dist/stk_filldist_exact.m: Avoid the use of 'stable' with
+	unique() since Octave doesn't currently support it (and we don't
+	really need it, anyway, or so it seems).
+
+2013-03-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Check the size of 'box' in stk_normalize.
+
+	* utils/stk_normalize.m: Check the size of 'box' before using
+	it. Raise an error if it's not [2 d].
+
+	Return empty from stk_param_estim when lnv is not estimated.
+
+	* paramestim/stk_param_estim.m: Return empty for the second output
+	argument when lognoisevariance is not estimated (to avoid warnings
+	about output arguments not being assigned).
+
+2013-02-27  Julien Bect  <julien.bect@supelec.fr>
+
+	Add function stk_gpquadform() to compute Gibbs-Paciorek quadratic
+	forms.
+
+	* misc/dist/stk_gpquadform.m: New function to compute
+	Gibbs-Paciorek quadratic forms.
+
+	* misc/dist/private/stk_gpquadform_pairwise.c,
+	misc/dist/private/stk_gpquadform_matrixx.c,
+	misc/dist/private/stk_gpquadform_matrixy.c: C sources for the fast
+	computation of stk_quadform() in several special cases.
+
+	* misc/config/stk_compile_all.m: Compile the new MEX-files.
+
+2013-02-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Prepare stk_param_estim for parameter objects (instead of vectors).
+
+	* paramestim/stk_param_estim.m: Prepare for parameter objects. Rename
+  	  the optimized vector for 'param' to 'u' for clarity (since it is
+	  sometimes an extended parameter vector).
+
+2013-02-10  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix and improve stk_datastruct().
+
+	* utils/stk_datastruct.m: Call inputname correctly, with an input
+	argument. Return an empty data structure when nargin == 0. Add
+	some tests.
+
+2013-02-04  Julien Bect  <julien.bect@supelec.fr>
+
+	Implement the NOLHS construction of Cioppa & Luca (2007).
+
+	* sampling/stk_sampling_olhs.m: The function now has an additional
+	hidden option to trigger the construction of an extended (N)OLHS
+	following the paper by Cioppa & Lucs (Technometrics, 2007).
+
+	Fixed a bug in stk_rescale() and added regression tests.
+
+	* utils/stk_rescale.m: Fixed a bug in the first part of the
+	function (i.e., the part where the data is scaled from its
+	original box to [0; 1]^d). Added some regression tests.
+
+2013-01-21  Julien Bect  <julien.bect@supelec.fr>
+
+	Modified stk_set_root() to avoid the use of a persistent variable.
+
+	* misc/config/stk_set_root.m: modified. The use of a persistent	variable
+	was failing to play its intended role when switching from one version of
+	STK to another. The root folder is now detected using which('stk_test').
+
+2013-01-20  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixed a test in stk_filldist().
+
+	* misc/dist/stk_filldist.m: modified test. Added a tolerance in a
+	comparison; otherwise the test was failing from time to time
+	because of numerical errors.
+
+2013-01-19  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a DoE example (sequential space-filling).
+
+	* examples/02_design_of_experiments/stk_example_doe02.m: new
+	script.
+
+	Fixed a numerical issue in stk_filldist_exact().
+
+	* misc/dist/stk_filldist_exact.m: modified. Because of possible
+	numerical inaccuracies, centers that are slightly outside the box
+	must also be considered as candidates for being ymax.
+
+	Fixed a bug in stk_filldist().
+
+	* misc/dist/stk_filldist.m: modified. Fixed a bug in the
+	discretized case (the second output argument was the index of ymax
+	instead of ymax itself, as advertised by the documentation).
+
+	Added tests to all fill distance-related functions.
+
+	* misc/dist/stk_filldist_exact.m: added tests.
+	* misc/dist/stk_filldist_discretized.m: added tests.
+	* misc/dist/stk_filldist.m: added tests.
+
+	Added a second output argument to stk_filldist_discretized().
+
+	* misc/dist/stk_filldist_discretized.m: modified. The function now
+	returns, as a second output argument, the point where the maximum
+	distance is attained, as expected by stk_filldist().
+
+2013-01-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Completed the documentation of stk_fill_dist and
+	stk_filldist_discretized.
+
+	* misc/dist/stk_filldist.m: modified (doc)
+	* misc/dist/stk_filldist_discretized.m: modified (doc)
+
+2013-01-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Completed the documentation of stk_filldist_exact.
+
+	* stk_filldist_exact.m: modified (documentation)
+
+	Added a test in stk_filldist.
+
+	* stk_filldist.m: modified (tests)
+
+2013-01-13  Julien Bect  <julien.bect@supelec.fr>
+
+	Ensured that all misc/dist functions accept ".a" structures.
+
+	* misc/dist/stk_dist.m: modified
+	* misc/dist/stk_mindist.m: modified
+	* misc/dist/stk_filldist.m: modified
+	* misc/dist/stk_filldist_discretized.m: modified
+	* misc/dist/private/stk_mindist.c: renamed
+	* misc/dist/private/stk_filldist_discretized.c: renamed
+
+	Moved misc/dist MEX-files into a private folder.
+
+	* misc/dist/private: new folder
+	* misc/dist/stk_dist_pairwise.c: moved to misc/dist/private
+	* misc/dist/stk_dist_matrixx.c: idem
+	* misc/dist/stk_dist_matrixy.c: idem
+	* misc/dist/stk_filldist_discretized.c: idem
+	* misc/dist/stk_mindist.c: idem
+	* misc/dist/stk_mex.h: idem
+	* misc/config/stk_path.m: modified
+	* misc/config/stk_compile_all.m: modified
+
+	Minor change in stk_dist (pairwise case).
+
+	* misc/dist/stk_dist.m: modified
+
+2013-01-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a function to compute the exact fill distance, based on a
+	paper by Luc Pronzato and Werner G. Müller (Statistics and
+	Computing, 2011).
+
+	* misc/dist/stk_filldist.m: replaced
+	* misc/dist/stk_filldist_discretized.c: formerly stk_filldist.c
+	* misc/dist/stk_filldist_discretized.m: formerly stk_filldist.m
+	* misc/dist/stk_filldist_exact.m: new
+	* misc/dist/stk_filldist.c: renamed
+	* misc/config/stk_compile_all.m: modified
+
+===============================================
+===  Maintenance branch 1.2.x created here  ===
+===============================================
+
+2013-01-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixed documentation.
+
+	* misc/dist/stk_dist.m: modified
+	* misc/dist/stk_mindist.m: modified
+	* misc/dist/stk_filldist.m: modified
+
+2013-01-03  Julien Bect  <julien.bect@supelec.fr>
+
+	Modified stk_makedoc to exclude misc/matlab from the generated
+	HTML documentation.
+
+	* stk_makedoc.m: modified
+
+	Made stk_narginchk() slightly more efficient.
+
+	* misc/error/stk_narginchk.m: modified
+
+	Added the text of the GPLv3 license.
+
+	* LICENSE: new
+
+	Removed the NEWS file (to be written after creating the
+	maintenance branch for a new release).
+
+	* NEWS: removed
+
+	Restored '.a' outputs for all stk_sampling_* functions and
+	streamlined unit tests for that.
+
+	* sampling/stk_sampling_olhs.m: modified
+	* sampling/stk_sampling_randunif.m: modified
+	* sampling/stk_sampling_regulargrid.m: modified
+	* sampling/stk_sampling_randomlhs.m: modified
+	* sampling/stk_sampling_maximinlhs.m: modified
+
+2013-01-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a script to generate the HTML documentation.
+
+	* stk_makedoc.m: new script
+
+	Fixed a bug in M2HTML (affecting option 'ignoredDir').
+
+	* misc/m2html/m2html.m: modified
+
+	Added M2HTML version 1.5 (by Guillaume Flandin).
+
+	* misc/m2html: new
+
+	Removing folder ./htmldoc (to be generated after creating the
+	maintenance branch for a new release).
+
+	* htmldoc: removed
+
+2012-12-31  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixing bugs in stk_test() and stk_runtests().
+
+	* misc/test/stk_runtests.m: modified
+	* misc/test/stk_test.m: modified
+
+2012-12-16  Julien Bect  <julien.bect@supelec.fr>
+
+	Modified stk_runtests() to browse through private folders and
+	class(@) folders.
+
+	* misc/test/stk_runtests.m: modified
+
+	Fixed a typo.
+
+	* misc/test/stk_runtests.m: modified
+
+2012-12-14  Benoit Jan  <benoit.jan@supelec.fr>
+
+	Fixed a bug in stk_make_matcov's "parfor" private functions.
+
+	* core/private/stk_make_matcov_inter_parfor.m: modified
+	* core/private/stk_make_matcov_auto_parfor.m: modified
+
+2012-12-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixing a bug affecting stk_predict() in the 'blocked' case.
+
+	* core/stk_predict.m: modified
+
+2012-12-07  Julien Bect  <julien.bect@supelec.fr>
+
+	Minor improvement in stk_runexamples.
+
+	* misc/test/stk_runexamples.m: modified
+
+2012-12-06  Julien Bect  <julien.bect@supelec.fr>
+
+	Removed some internal ".a" fields.
+
+	* core/stk_ortho_func.m: modified
+	* core/stk_make_matcov.m: modified
+
+2012-12-05  Julien Bect  <julien.bect@supelec.fr>
+
+	Modified stk_predict() to make it work with non-stationary
+	covariance functions.
+
+	* core/stk_predict.m: modified
+
+	Added a "pairwise" option to stk_make_matcov().
+
+	* core/stk_make_matcov.m: modified
+
+2012-12-04  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a "pairwise" option to all covariance functions.
+
+	* covfcs/stk_materncov*.m: modified
+
+2012-12-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a new MEX-file to compute distances "pairwise" (i.e.,
+	compute only the diagonal of the full distance matrix).
+
+	* misc/dist/stk_distance_matrix.c: deleted
+	* misc/dist/stk_mex.h: new C header
+	* misc/dist/stk_dist_matrixx.c: new MEX-file
+	* misc/dist/stk_dist_matrixy.c: new MEX-file
+	* misc/dist/stk_dist_pairwise.c: new MEX-file
+	* misc/config/stk_compile_all.m: modified
+	* misc/dist/stk_mindist.c: modified
+	* misc/dist/stk_filldist.c: modified
+
+	Renamed stk_distancematrix() to stk_dist().
+
+	* misc/dist/stk_distance_matrix.m: renamed
+	* misc/dist/stk_filldist.m: modified
+	* covfcs/stk_materncov*.m: modified
+
+	All stk_materncov* functions now also accepts simple matrix-type
+	arguments.
+
+	* covfcs/stk_materncov*.m: modified
+
+2012-12-01  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixed a typo in the documentation of stk_is_lhs().
+
+	* misc/test/stk_is_lhs.m: modified
+
+	Fixed a bug in stk_runexamples().
+
+	* misc/test/stk_runexamples.m: modified
+
+2012-11-29  Julien Bect  <julien.bect@supelec.fr>
+
+	Modified stk_predict() to return the posterior covariance matrix
+	as a fourth output argument.
+
+	* core/stk_predict.m: modified
+
+2012-11-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Modified all stk_sampling* functions to use stk_rescale()
+	and stk_assert_box().
+
+	* sampling/stk_sampling_olhs.m: modified
+	* sampling/stk_sampling_randunif.m: modified
+	* sampling/stk_sampling_regulargrid.m: modified
+	* sampling/stk_sampling_randomlhs.m: modified
+	* sampling/stk_sampling_maximinlhs.m: modified
+
+	Minor improvements in stk_is_lhs().
+
+	* misc/test/stk_is_lhs.m: modified
+
+	Added a new function to rescale data from one box to another.
+
+	* utils/stk_rescale.m: new function
+	* utils/stk_normalize.m: (slightly) modified
+
+	Added a new function to check "box" arguments.
+
+	* misc/error/stk_assert_box.m: new function
+
+2012-11-25  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a new function to generate OLHSs, following Ye (1998).
+
+	* sampling/stk_sampling_olhs.m: new function
+
+2012-11-21  Julien Bect  <julien.bect@supelec.fr>
+
+	Added default values for some input arguments of stk_is_lhs(),
+	and stricter dimension checking.
+
+	* misc/test/stk_is_lhs.m: modified
+
+2012-11-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Changed the upper bound on nu in stk_param_estim().
+
+	* paramestim/stk_param_estim.m: modified
+
+	Fixed a bug in stk_param_init().
+
+	* paramestim/stk_param_init.m: modified
+
+	Added a new MEX-file to compute a discretized fill distance.
+
+	* misc/dist/stk_filldist.c: new MEX-file (source)
+	* misc/dist/stk_filldist.m: new MEX-file (doc + tests)
+	* misc/dist/stk_mindist.m: modified
+	* misc/config/stk_compile_all.m: modified
+
+	Added a new function to help initialize stk_param_estim().
+
+	* paramestim/stk_param_init.m: new function
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+	* examples/01_kriging_basics/stk_example_kb03.m: modified
+
+	Added a new function: stk_normalize().
+
+	* utils/stk_normalize.m: new function
+
+	Renamed some internal variables in stk_param_estim().
+
+	* paramestim/stk_param_estim.m: modified
+
+2012-11-06  Julien Bect  <julien.bect@supelec.fr>
+
+	Improved the flexibility of stk_predict() and stk_param_estim(),
+	which are now accepting both matrices and "data structures" (with
+	an 'a' field) as input arguments.
+
+	* utils/stk_datastruct.m: new function
+	* core/stk_predict.m: modified
+	* paramestim/stk_param_estim.m: modified
+
+2012-11-04  Julien Bect  <julien.bect@supelec.fr>
+
+	Improved graphical outputs in stk_example_kb03.
+
+	* examples/01_kriging_basics/stk_example_kb03.m: modified
+
+	Added a new function stk_plot2d() that serves has a wrapper around
+	{surf|contour|mesh|pcolor}-type functions, to plot data defined
+	over a two-dimensional regular grid.
+
+	* misc/plot/stk_plot2d.m: new function
+
+	Modified stk_predict() to avoid returning negative variances. When
+	negative variances are encountered, they are set to zero and a
+	warning is issued.
+
+	* core/stk_predict.m: modified
+
+	Modified stk_sampling_regulargrid() to return 'ndgrid-style'
+	coordinate matrices stored in new .coord field.
+
+	* sampling/stk_sampling_regulargrid.m: modified
+
+	Improved Octave-specific configuration (GNUTERM=wxt).
+
+	* misc/config/stk_octave_config.m: modified
+
+2012-11-01  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a new folder for test functions.
+
+	* examples/test_functions: new folder
+	* examples/test_functions/stk_testfun_braninhoo.m: new function
+	* misc/config/stk_path.m: modified
+
+2012-10-28  Julien Bect  <julien.bect@supelec.fr>
+
+	Improved Octave-specific configuration.
+
+	* stk_init.m: modified
+	* misc/config/stk_octave_config.m: new function
+	* misc/config/stk_check_octave_packages.m: removed
+	* README: modified
+
+2012-10-24  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a new example to demonstrate the effect of adding a prior on
+	the covariance parameters.
+
+	* examples/03_miscellaneous/stk_example_misc03.m: new script
+
+	Added a new function to draw shaded area representing pointwise
+	confidence intervals.
+
+	* misc/plot/stk_plot_shadedci.m: new function
+	* misc/plot/stk_plot1d.m: modified
+
+	Added size checking and changed the upper bound for nu in
+	stk_param_estim.
+
+	* paramestim/stk_param_estim.m: modified
+
+	Renamed "box" into "BOX" in all example scripts, to
+	avoid conflicts with the box function.
+
+	* 01_kriging_basics/stk_example_kb01.m: modified
+	* 01_kriging_basics/stk_example_kb02.m: modified
+	* 01_kriging_basics/stk_example_kb04.m: modified
+	* 01_kriging_basics/stk_example_kb05.m: modified
+	* 03_miscellaneous/stk_example_misc01.m: modified
+
+2012-10-22  Julien Bect  <julien.bect@supelec.fr>
+
+	Improving welcome messages.
+
+	* misc/disp: new folder
+	* misc/disp/stk_disp_framedtext.m: new function
+	* misc/disp/stk_disp_examplewelcome.m: new function
+	* misc/config/stk_path.m: modified
+	* examples/01_kriging_basics/stk_example_kb*.m: modified
+	* examples/02_design_of_experiments/stk_example_doe01.m: modified
+	* examples/03_miscellaneous/stk_example_misc*.m: modified
+	* misc/test/stk_runexamples.m: modified
+
+	Moving example scripts to subfolders.
+
+	* misc/config/stk_path.m: modified
+	* misc/test/stk_runexamples.m: new function
+	* examples/example*.m: moved to a subfolder
+	* examples/run_all_examples: deleted
+	* examples/01_kriging_basics: new folder
+	* examples/02_design_of_experiments: new folder
+	* examples/03_miscellaneous: new folder
+
+2012-09-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Better initial guess for the log of the noise variance
+	in example08.m (log(eps) wasn't working well with sqp())
+
+	* examples/example08.m: modified
+
+2012-09-16  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixing docs and copyright notices.
+
+	* misc/dist/stk_mindist.m: doc modified
+	* misc/dist/stk_distance_matrix.m: doc modified
+
+	Fixing bugs in stk_runscript.m and run_all_examples.m
+
+	* examples/run_all_examples.m: bugfix
+	* misc/test/stk_runscript.m: bugfix
+
+2012-09-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Adding default bounds for Matern 3/2 covariances.
+
+	* paramestim/stk_param_estim.m: modified
+
+
+=====================
+===  Release 1.1  ===
+=====================
+
+2012-08-28  Emmanuel Vazquez <emmanuel.vazquez@supelec.fr>
+
+	Fixing comments (5/2 -> 3/2).
+
+	* covfcs/stk_materncov32_aniso.m: doc modified
+	* covfcs/stk_materncov32_iso.m: idem
+
+	Updating HTML doc.
+
+	* htmldoc/*: modified
+
+2012-08-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Preparing for release 1.1: updating copyright notices and copying
+	permission statements, removing trailing white spaces, added a
+	user-level log of changes.
+
+	* almost-all-files: doc & code formatting modified
+	* NEWS: new file
+
+	Added a new function (stk_runscript) to solve a problem of
+	inconsistent behaviour of the run function between Matlab and the
+	latest version of Octave (one wants a '.m', the other doesn't).
+
+	* misc/test/stk_runscript.m: new function
+	* examples/run_all_examples.m: modified
+
+	Renamed README.txt to README. Added explicit version requirements
+	for GNU Octave (3.2.0) and Matlab (R2007a).
+
+	* README.txt: renamed and renamed
+
+	Added tests and a little bit of arg checking.
+
+	* covfcs/stk_materncov32_aniso.m: tests + arg checking
+	* covfcs/stk_materncov32_iso.m: idem
+	* covfcs/stk_materncov52_aniso.m: idem
+	* covfcs/stk_materncov52_iso.m: idem
+	* covfcs/stk_noisecov.m: idem
+	* covfcs/stk_materncov_aniso.m: idem
+	* covfcs/stk_materncov_iso.m: idem
+
+2012-08-10  Julien Bect  <julien.bect@supelec.fr>
+
+	Added tests, improved documentation (help, copyright notices,
+	...). Added a little bit of arg checking in stk_conditioning.
+
+	* utils/stk_generate_samplepaths.m: tests + doc
+	* utils/stk_feval.m: tests + doc
+	* utils/stk_model.m: source code formatting only
+	* utils/stk_conditioning.m: tests + doc + arg checking
+	* core/stk_ortho_func.m: doc
+	* core/stk_make_matcov.m: doc
+	* core/stk_predict.m: doc
+	* core/private/stk_make_matcov_inter_parfor.m: doc
+	* core/private/stk_make_matcov_auto_parfor.m: doc
+
+2012-08-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Added a new function for approximate comparisons with an
+	absolute tolerance threshold.
+
+	* misc/test/stk_isequal_tolabs.m: new function
+
+	Fixed a bug in stk_isequal_tolrel (the function wasn't working as
+	expected for non-vector arrays) and improved documentation.
+
+	* misc/test/stk_isequal_tolrel.m: modified
+
+	Renamed stk_conditionning to stk_conditioning.
+
+	* utils/stk_conditionning.m: renamed and modified
+	* examples/example05.m: modified accordingly
+
+2012-08-07  Julien Bect  <julien.bect@supelec.fr>
+
+	Added tests and improved documentation.
+
+	* misc/specfun/stk_sf_matern.m: tests & doc
+	* misc/specfun/stk_sf_matern32.m: idem
+	* misc/specfun/stk_sf_matern52.m: idem
+
+2012-07-15  Julien Bect  <julien.bect@supelec.fr>
+
+	Replaced a call to isrow(), which didn't exist in some recent Matlab
+	versions (e.g., R2010b), by a direct call to size().
+
+	* misc/matlab/index.m: modified
+
+2012-07-10  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixed a warning generated by stk_compile_all under Octave.
+
+	* misc/config/stk_compile_all.m: modified
+
+2012-07-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Added tests and improved documentation.
+
+	* sampling/stk_sampling_randunif.m: tests & doc
+	* sampling/stk_sampling_randomlhs.m: idem
+	* sampling/stk_sampling_regulargrid.m: idem
+	* sampling/stk_sampling_maximinlhs.m: idem
+
+	New function to test the LHS property.
+
+	* misc/test/stk_is_lhs.m: new function
+
+	Renamed stk_sampling_cartesiangrid to stk_sampling_regulargrid,
+	and changed the meaning of the first argument for consistency with
+	other stk_sampling_* functions.
+
+	* sampling/stk_sampling_cartesiangrid.m: renamed and modified
+	* examples/example01.m: modified accordingly
+	* examples/example02.m: idem
+	* examples/example04.m: idem
+	* examples/example05.m: idem
+	* examples/example06.m: idem
+	* examples/example07.m: idem
+	* examples/example08.m: idem
+	* paramestim/stk_param_estim.m: idem
+	* core/stk_predict.m: idem
+
+2012-07-04  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixed a bug in stk_compile_all() under Octave, related to a
+	strange behaviour of exist().
+
+	* misc/config/stk_compile_all.m: bugfix.
+
+	Improved doc and added tests in several functions. Also, fixed a
+	minor bug in stk_model().
+
+	* examples/example07.m: fixed comment
+	* utils/stk_model.m: bugfix + doc + tests
+	* paramestim/stk_remlqrg.m: doc + tests
+	* paramestim/stk_param_estim.m: doc + tests
+
+2012-06-30  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixed a bug in stk_runtests() under Octave. It is now possible to
+	write "stk_runtests core" from the STK's root, for instance.
+
+	* misc/test/stk_runtests.m: bugfix.
+
+	Added a new function for approximate comparisons.
+
+	* misc/test/stk_isequal_tolrel.m: new function.
+	* core/stk_predict.m: modified test.
+
+	Miscellaneous.
+
+	* misc/error/stk_narginchk.m: fixed doc and comments.
+	* core/stk_ortho_func.m: tests.
+	* core/stk_make_matcov.m: idem.
+
+2012-06-29  Julien Bect  <julien.bect@supelec.fr>
+
+	A first series of Octave-style unit tests.
+
+	* core/stk_predict.m: modified
+	* sampling/stk_sampling_maximinlhs.m: modified
+	* misc/dist/stk_distance_matrix.m: new function
+	* misc/dist/stk_mindist.m: new function
+
+	Modified STK's path handling. A separate function stk_path() has
+	been created, since stk_set_root() is no longer the only function
+	that needs it. Also, several new folders have been added to the
+	path.
+
+	* misc/config/stk_set_root.m: modified
+	* misc/config/stk_path.m: new function
+
+	Imported and adapted Octave's unit testing functions.
+
+	* misc/test: new folder
+	* misc/test/stk_test.m: new function
+	* misc/test/stk_runtests.m: new function
+
+	Removed old test scripts (the tests that they contained are now
+	included as Octave-style unit tests in the M-file themselves).
+
+	* tests: deleted
+	* tests/test_distance_matrix.m: idem
+	* tests/test_sampling_maximinlhs.m: idem
+	* tests/test_Kx_cache.m: idem
+	* tests/test_mindist.m: idem
+
+	Added new functions for improved error handling.
+
+	* misc/error: new folder
+	* misc/error/stk_narginchk.m: new function
+	* misc/error/stk_error.m: new function
+
+	Added new functions for improved M/O inter-operability.
+
+	* misc/matlab: new folder
+	* misc/matlab/fflush.m: new function
+	* misc/matlab/file_in_loadpath.m: idem
+	* misc/matlab/file_in_path.m: idem
+	* misc/matlab/index.m: idem
+	* misc/matlab/stdout.m: idem
+
+2012-06-05  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
+	Changed stk_param_estim to make it possible to estimate noise
+	variance.
+
+	* examples/example02.m: Bug fix
+        * examples/example08.m: Example added about noise estimation
+	* paramestim/stk_param_estim.m: Modified
+
+2012-06-05  Julien Bect  <julien.bect@supelec.fr>
+
+	Fixing a bug related to the change of parameter ordering.
+
+	* tests/test_Kx_cache.m: Changed the position of the 'model'
+	parameter in several function calls.
+
+2012-05-31  Julien Bect  <julien.bect@supelec.fr>
+
+	Reorganizing folders.
+
+	* misc/dist: New folder.
+	* misc/dist/stk_mindist.c: Moved from sampling.
+	* misc/dist/stk_distance_matrix.c: Moved from covfcs.
+	* misc/config/stk_set_root.m: Added misc/dist to path.
+	* misc/config/stk_compile_all.m: Changed paths.
+
+2012-05-30  Julien Bect  <julien.bect@supelec.fr>
+
+	Reorganizing folders.
+
+	* paramestim: New folder.
+	* paramestim/stk_param_estim.m: Moved from core.
+	* paramestim/stk_remlqrg.m: idem.
+	* misc: New name of the "old" utils folder.
+	* misc/config/stk_set_root.m: Changed path.
+	* utils: New name of the "old" utils/misc folder.
+	* utils/stk_model.m: Moved to utils.
+        * utils/stk_conditionning.m: idem.
+        * utils/stk_generate_samplepaths.m: idem.
+	* stk_init.m: Changed the location of stk_set_root.
+
+	Miscellaneous changes.
+
+	* sampling/stk_mindist.c: Fixed a comment.
+
+2012-05-30  Emmanuel Vazquez <emmanuel.vazquez@supelec.fr>
+
+	* almost-all-files: Changed the order of the arguments of the
+	functions that use the structure 'model'. Now, 'model' is always
+	the first argument. Because of this change, it seems better to
+	make the argument 'param' in covariance functions coming in first
+	position too.
+
 2012-05-19  Julien Bect  <julien.bect@supelec.fr>
 
 	Preparing headers for release 1.1.
@@ -8,7 +915,7 @@
 
 	* core/stk_feval.m: Added optional argument 'progress_msg'.
 	* utils/config/stk_select_optimizer.m: Minor change to avoid
-	systematic checkinging which optimizer has to be used (as shown by
+	systematic checking of which optimizer has to be used (as shown by
 	the comments, this was a mistake...).
 	* examples/example07.m: Fixed doc.
 

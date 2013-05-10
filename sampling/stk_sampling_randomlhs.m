@@ -1,24 +1,32 @@
-% STK_SAMPLING_RANDOMLHS builds a random LHS design
+% STK_SAMPLING_RANDOMLHS generates a random LHS design.
 %
-% CALL: x = stk_sampling_randomlhs(n, d, box)
+% CALL: X = stk_sampling_randomlhs(N, DIM)
 %
-% FIXME: documentation incomplete
+%   generates a random Latin Hypercube Sample of size N in the DIM-dimensional
+%   hypercube [0; 1]^DIM.
+%
+% CALL: X = stk_sampling_randomlhs(N, DIM, BOX)
+%
+%   generates a random Latin Hypercube Sample of size N in the DIM-dimensional
+%   hyperrectangle specified by the argument BOX, which is a 2 x DIM matrix
+%   where BOX(1, j) and BOX(2, j) are the lower- and upper-bound of the interval
+%   on the j^th coordinate.
+%
+% See also: stk_sampling_maximinlhs, stk_sampling_randunif
 
-%          STK : a Small (Matlab/Octave) Toolbox for Kriging
-%          =================================================
-%
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging
+%    Copyright (C) 2011-2013 SUPELEC
 %
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -32,9 +40,55 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
-function x = stk_sampling_randomlhs(n, d, box)
+
+function x = stk_sampling_randomlhs(n, dim, box)
+stk_narginchk(2, 3);
+
+% read argument box
+if (nargin < 3) || isempty(box)
+    box = repmat([0; 1], 1, dim);
+else
+    stk_assert_box(box);
+end
 
 niter = 1;
 
-x = stk_sampling_maximinlhs(n, d, box, niter);
+x = stk_sampling_maximinlhs(n, dim, box, niter);
+
+end % function stk_sampling_randomlhs
+
+
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+%%
+% Check error for incorrect number of input arguments
+
+%!shared x, n, dim, box
+%! n = 10; dim = 2; box = [0, 0; 1, 1];
+
+%!error x = stk_sampling_randomlhs();
+%!error x = stk_sampling_randomlhs(n);
+%!test  x = stk_sampling_randomlhs(n, dim);
+%!test  x = stk_sampling_randomlhs(n, dim, box);
+%!error x = stk_sampling_randomlhs(n, dim, box, pi);
+
+%% 
+% Check that the output is a dataframe
+% (all stk_sampling_* functions should behave similarly in this respect)
+
+%!assert (isa(x, 'stk_dataframe'));
+
+%%
+% Check output argument
+
+%!test
+%! for dim = 1:5,
+%!   x = stk_sampling_randomlhs(n, dim);
+%!   assert(isequal(size(x), [n dim]));
+%!   u = double(x); u = u(:);
+%!   assert(~any(isnan(u) | isinf(u)));
+%!   assert((min(u) >= 0) && (max(u) <= 1));
+%!   assert(stk_is_lhs(x, n, dim));
+%! end

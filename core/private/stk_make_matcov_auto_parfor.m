@@ -1,19 +1,19 @@
 % STK_MAKE_MATCOV_AUTO_PARFOR [STK internal function]
 
-%                  Small (Matlab/Octave) Toolbox for Kriging
-%
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
+%    Copyright (C) 2011-2013 SUPELEC
+%
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging/
-%
+%               Benoit Jan        <benoit.jan@supelec.fr>
+
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -27,13 +27,14 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
 
-function K = stk_make_matcov_auto_parfor( x, model, ncores, min_block_size )
+function K = stk_make_matcov_auto_parfor(model, x, ncores, min_block_size)
+
+x = double(x);
 
 %=== choose the actual block size & number of blocks
 B = 0; % number of blocks of x_i's
-n = size(x.a,1); n_min = ceil(sqrt(min_block_size));
+n = size(x, 1); n_min = ceil(sqrt(min_block_size));
 while 1, B = B + 1;
     % stop if the blocks are becoming too small
     if n/B < n_min, B = max(1,B-1); break; end
@@ -51,14 +52,14 @@ blocks = struct( 'i',cell(1,nb_blocks), 'j',[], 'xi',[], 'xj',[], 'K',[] );
 i = 1; j = 0;
 for b = 1:nb_blocks;
     j = j+1; if(j>i), i=i+1; j=1; end
-    blocks(b).i = i; blocks(b).xi = struct( 'a', x.a(ind(i,1):ind(i,2),:) );
-    blocks(b).j = j; blocks(b).xj = struct( 'a', x.a(ind(j,1):ind(j,2),:) );
+    blocks(b).i = i; blocks(b).xi = x(ind(i,1):ind(i,2),:);
+    blocks(b).j = j; blocks(b).xj = x(ind(j,1):ind(j,2),:);
 end
 
 %=== process blocks
 name = model.covariance_type; param = model.param; % avoids a "parfor" warning
 parfor b = 1:nb_blocks,
-    blocks(b).K = feval( name, blocks(b).xi, blocks(b).xj, param );
+    blocks(b).K = feval( name, param, blocks(b).xi, blocks(b).xj );
     % FIXME: avoid computing each term in the covariance matrix twice
     % on the diagonal blocks !
 end

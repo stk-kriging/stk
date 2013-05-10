@@ -4,21 +4,19 @@
 %
 % STK_INIT sets paths and environment variables
 
-%          STK : a Small (Matlab/Octave) Toolbox for Kriging
-%          =================================================
-%
 % Copyright Notice
 %
 %    Copyright (C) 2011, 2012 SUPELEC
-%    Version:   1.1
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
-%    URL:       http://sourceforge.net/projects/kriging
 %
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
 % Copying Permission Statement
 %
-%    This  file is  part  of  STK: a  Small  (Matlab/Octave) Toolbox  for
-%    Kriging.
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
@@ -32,7 +30,6 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
 
 %=== Turn output pagination OFF
 
@@ -62,7 +59,7 @@ disp( '                                                                     ' );
 %=== Add STK folders to the path
 
 STK_ROOT = fileparts(mfilename('fullpath'));
-addpath(fullfile(STK_ROOT,'utils','config'));
+addpath(fullfile(STK_ROOT, 'misc', 'config'));
 stk_set_root(STK_ROOT);
 
 %=== Check which of Matlab or Octave is in use
@@ -70,15 +67,10 @@ stk_set_root(STK_ROOT);
 octave_in_use = stk_is_octave_in_use();
 if octave_in_use,
     fprintf('Using Octave %s\n', OCTAVE_VERSION);
-    stk_check_octave_packages();
+    % some Octave-specific configuration
+    stk_octave_config();
 else
     fprintf('Using Matlab %s\n', version());
-end
-
-%=== Suppress additional help information in Octave
-
-if octave_in_use,
-    suppress_verbose_help_message(true);
 end
 
 %=== Check for presence of the Parallel Computing Toolbox
