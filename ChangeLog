@@ -1,3 +1,15 @@
+2013-03-16  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a (recently introduced...) bug in stk_param_init().
+
+	* paramestim/stk_param_init.m: Use log10() when calling
+	logspace(). Add a non-regression test.
+
+	Avoid unnecessary gradient computation in stk_param_estim().
+
+	* paramestim/stk_param_estim.m: Compute the gradient only when it
+	is explicitely requested, both in f_() and in f_with_noise_().
+
 2013-03-14  Julien Bect  <julien.bect@supelec.fr>
 
 	Add a warning in stk_param_init() when lognoisevariance is defined.

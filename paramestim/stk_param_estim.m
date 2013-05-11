@@ -161,7 +161,11 @@ end % function stk_param_estim ------------------------------------------------
 
 function [l, dl] = f_(model, w)
 model.randomprocess.priorcov.cparam = w;
-[l, dl] = stk_reml(model);
+if nargout == 1,
+    l = stk_reml(model);
+else
+	[l, dl] = stk_reml(model);
+end
 end
 
 function dl = nablaf_(model, w)
@@ -172,8 +176,12 @@ end
 function [l, dl] = f_with_noise_(model, w)
 model.randomprocess.priorcov.cparam = w(1:end-1);
 model.noise.cov.variance = exp(w(end));
-[l, dl, dln] = stk_reml(model);
-dl = [dl; dln];
+if nargin == 1,
+    l = stk_reml(model);
+else
+    [l, dl, dln] = stk_reml(model);
+    dl = [dl; dln];
+end
 end
 
 function dl = nablaf_with_noise_(model, w)
