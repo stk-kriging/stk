@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -39,6 +39,10 @@
 
 function [rl, drl_param, drl_lnv] = stk_reml(model)
 stk_narginchk(1, 1);
+
+% % Ensure that param is a column vector (note: in the case where model.param is 
+% % an object, this is actually a call to subsasgn() in disguise).
+% param = model.param(:);
 
 NOISYOBS   = ~isa(model.noise.cov, 'stk_nullcov');
 PARAMPRIOR = isa(model.randomprocess.priorcov, 'stk_bayescov');
@@ -82,7 +86,7 @@ attache = Wz' * WKWinv_Wz;
 
 priorcov = model.randomprocess.priorcov; % GP prior
 
-rl = 0.5*((n-q)*log(2*pi) + ldetWKW + attache);
+rl = 0.5 * ((n-q) * log(2*pi) + ldetWKW + attache);
 
 % regularization (prior) terms
 if PARAMPRIOR, rl = rl - priorcov.logpdf; end
@@ -95,10 +99,10 @@ if nargout >= 2
     
     drl_param = zeros(length(priorcov.cparam), 1);
     
-    for paramdiff = 1:size(drl_param, 1),
-        V = priorcov(model.observations.x, model.observations.x, paramdiff);
+    for diff = 1:size(drl_param, 1),
+        V = priorcov(model.observations.x, model.observations.x, diff);
         WVW = W'*V*W;
-        drl_param(paramdiff) = 1/2*(sum(sum(Ginv .* WVW)) - WKWinv_Wz' * WVW * WKWinv_Wz);
+        drl_param(diff) = 1/2*(sum(sum(Ginv .* WVW)) - WKWinv_Wz' * WVW * WKWinv_Wz);
     end
     
     if PARAMPRIOR

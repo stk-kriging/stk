@@ -494,7 +494,14 @@ for x__i = 1:length(x__list_shared),
 end
 
 % Run the code
-eval(x__code);
+if stk_is_octave_in_use()
+    % Run without output capture (evalc is not implemented yet in Octave)
+    eval(x__code);
+else
+    % Run with output capture
+    % (TODO: compare the output with a reference, if provided)
+    gobble_output = evalc(x__code); %#ok<NASGU>
+end
 
 % Save shared variables
 varargout = cell(1, length(x__list_shared));

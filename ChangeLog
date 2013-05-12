@@ -1,3 +1,47 @@
+2013-03-25  Julien Bect  <julien.bect@supelec.fr>
+
+	Make stk_test() silent as a grave.
+
+	* misc/test/stk_test.m: Use evalc() instead of eval() to make
+	stk_test() silent as a grave. Only works in Matlab for the time
+	being, since evalc() is still unimplemented in Octave.
+
+2013-03-20  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve stk_runtests().
+
+	* misc/test/stk_runtests.m: Include class directories and private
+	directories in the total number of directories. Silence warnings
+	and display something if there were warnings during the tests.
+
+2013-03-17  Julien Bect  <julien.bect@supelec.fr>
+
+	New function stk_param_getdefaultbounds().
+
+	* paramestim/stk_param_estim.m: Remove internal function
+	get_default_bounds() and call stk_param_getdefaultbounds()
+	instead.
+	* paramestim/stk_param_getdefaultbounds.m: New function to be used
+	instead of the internal function get_default_bounds() in
+	stk_param_estim.m. This function can be overloaded for parameters
+	objects.
+
+	In stk_param_estim(), cast param0 to the appropriate type.
+
+	* paramestim/stk_param_estim.m: Cast param0 into an object of the
+	appropriate type and size and set model.param to the same value.
+
+	Add local variables delta_p and delta_lnv in stk_remlqrg().
+
+	* paramestim/stk_remlqrg.m: Add local variables for (slightly)
+	improved readability and efficiency.
+
+	Modify stk_remlqrg() to support objects in model.param.
+
+	* paramestim/stk_remlqrg.m: Ensure that param is a column vector;
+	in the case where model.param is an object, this is actually a
+	call to subsasgn() in disguise.
+
 2013-03-16  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a (recently introduced...) bug in stk_param_init().
