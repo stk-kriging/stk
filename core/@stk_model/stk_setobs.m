@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -48,7 +48,7 @@ else
     stk_err(errmsg, 'IncorrectNbInputArgs');
 end
 
-model.domain.dim   = size(xz.x.a, 2);
+model.domain.dim   = size(xz.x, 2);
 model.observations = xz;
 
 end % function stk_setobs

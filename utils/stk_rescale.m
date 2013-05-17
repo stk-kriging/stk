@@ -26,16 +26,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = stk_rescale(x, box1, box2)
+function [y, a, b] = stk_rescale(x, box1, box2)
+
 stk_narginchk(3, 3);
 
 % read argument x
-if isstruct(x),
-    xx = x.a;
-else
-    xx = x;
-end
-[n, d] = size(xx);
+x = double(x);
+[n, d] = size(x);
 
 % read box1
 if ~isempty(box1),
@@ -51,39 +48,32 @@ end
 if ~isempty(box1),
     xmin = box1(1, :);
     xmax = box1(2, :);
-    delta = xmax - xmin;
-    zz = (xx - repmat(xmin, n, 1)) .* repmat(1./delta, n, 1);
+    b1 = 1 ./ (xmax - xmin);
+    a1 = - xmin .* b1;
 else
-    zz = xx;
+    b1 = ones(1, d);
+    a1 = zeros(1, d);
 end
 
 % scale to box2 (zz --> yy)
 if ~isempty(box2),
     zmin = box2(1, :);
     zmax = box2(2, :);
-    delta = zmax - zmin;
-    yy = repmat(zmin, n, 1) + zz .* repmat(delta, n, 1);
+    b2 = zmax - zmin;
+    a2 = zmin;
 else
-    yy = zz;
+    b2 = ones(1, d);
+    a2 = zeros(1, d);    
 end
 
-% output
-if isstruct(x),
-    y = x;
-    y.a = yy;
-else
-    y = yy;
-end
+b = b2 .* b1;
+a = a2 + a1 .* b2;
+y = repmat(a, n, 1) + x * diag(b);
 
 end % function stk_rescale
 
 %!shared x
 %!  x = rand(10, 4);
-%!test
-%!  y = stk_rescale(x, [], []);
-%!  assert(stk_isequal_tolabs(x, y));
-%!test
-%!  x = struct('a', x);
 %!  y = stk_rescale(x, [], []);
 %!  assert(stk_isequal_tolabs(x, y));
 

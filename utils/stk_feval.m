@@ -17,15 +17,15 @@
 %
 % EXAMPLE:
 %       f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );
-%       xt.a = linspace ( 0, 1, 100 );
-%       zt = stk_feval( f, xt );
-%       plot(xt.a, zt.a);
+%       xt = stk_sampling_regulargrid(100, 1, [0; 1]);
+%       yt = stk_feval( f, xt );
+%       plot(xt, yt);
 %
 % See also feval
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -54,22 +54,61 @@ function z = stk_feval(f, x, progress_msg)
 
 stk_narginchk(2, 3);
 
-if ~isstruct(x), x.a = x; end % we assume that x is a matrix here
-if nargin < 3, progress_msg = false; end
+if ~(ischar(f) || isa(f, 'function_handle'))
+    errmsg = 'Incorrect type for argument ''f''.';
+    stk_error(errmsg, 'IncorrectType');
+end
+    
+if nargin < 3,
+    progress_msg = false;
+else
+    if ~islogical(progress_msg),
+        errmsg = 'Incorrect type for argument ''progress_msg''.';
+        stk_error(errmsg, 'IncorrectType');
+    end
+end
 
-[n, d] = size(x.a);
-
+[n, d] = size(x);
 if d == 0,
     error('zero-dimensional inputs are not allowed.');
 end
 
-if n > 0, % at least one input point
+if n == 0, % no input => no output
     
-    z.a = zeros(n,1);
+    zdata = zeros(0, 1);
+    
+else % at least one input point
+    
+    zdata = zeros(n, 1);
     for i = 1:n,
         if progress_msg, fprintf('feval %d/%d... ', i, n); end
-        z.a(i) = feval( f, x.a(i,:) );
+        zdata(i) = feval(f, x(i, :));
         if progress_msg, fprintf('done.\n'); end
     end
     
 end
+
+z = stk_dataframe(zdata);
+
+end % function stk_feval
+
+
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+%!shared f xt
+%!  f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );
+%!  xt = stk_sampling_regulargrid(20, 1, [0; 1]);
+
+%!error  yt = stk_feval();
+%!error  yt = stk_feval(f);
+%!test   yt = stk_feval(f, xt);
+%!test   yt = stk_feval(f, xt, false);
+%!error  yt = stk_feval(f, xt, false, pi^2);
+
+%!test
+%!  N = 15;
+%!  xt = stk_sampling_regulargrid(N, 1, [0; 1]);
+%!  yt = stk_feval(f, xt);
+%!  assert(isequal(size(yt), [N 1]));

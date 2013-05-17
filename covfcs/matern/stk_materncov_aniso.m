@@ -3,7 +3,7 @@
 % CALL: k = stk_materncov_aniso(param, x, y, diff)
 %   param  = vector of parameters of size 2+d
 %   x      = structure whose field 'a' contains the observed points.
-%            x.a  is a matrix of size n x d, where n is the number of
+%            x is a matrix of size n x d, where n is the number of
 %            points and d is the dimension of the factor space
 %   y      = same as x
 %   diff   = differentiation parameter
@@ -53,8 +53,8 @@ stk_narginchk(3, 5);
 persistent x0 y0 xs ys param0 pairwise0 D Kx_cache compute_Kx_cache
 
 % process input arguments
-if isstruct(x), x = x.a; end
-if isstruct(y), y = y.a; end
+x = double(x);
+y = double(y);
 if nargin < 4, diff = -1; end
 if nargin < 5, pairwise = false; end
 

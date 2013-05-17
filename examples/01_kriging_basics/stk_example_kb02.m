@@ -7,7 +7,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -64,8 +64,7 @@ xi = stk_sampling_maximinlhs(NI, DIM, BOX, NITER);  % Evaluation points
 zi = stk_feval(f, xi);                              % Evaluation results
 
 if NOISY,
-    zi.a = zi.a + NOISESTD * randn(NI, 1);
-    % (don't forget that the data is in the ".a" field!)
+    zi = zi + NOISESTD * randn(NI, 1);
 end
 
 xzi = stk_makedata(xi, zi);
@@ -120,7 +119,8 @@ ot = stk_makedata(xt, zt);
 zp  = stk_predict(model, xt);
 xzp = stk_makedata(xt, zp);
 
-% Display the result
+% Visualisation
 stk_plot1d(xzi, ot, xzp);
 t = sprintf('%s %.3e', 'Kriging prediction with noise std', NOISESTD);
 title(t); set(gcf, 'Name', t);
+xlabel('x'); ylabel('z');

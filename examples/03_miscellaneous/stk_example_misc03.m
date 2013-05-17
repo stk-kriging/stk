@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -35,8 +35,8 @@ stk_error('I am not ready yet...', 'NotReadyYet');
 DIM = 1;            % dimension of the factor space
 BOX = [0.0; 1.0];   % factor space
 
-xi = struct('a', [0.25; 0.26; 0.50; 0.60]);
-zi = struct('a', [1.00; 1.10; 0.20; 0.35]);
+xi = [0.25; 0.26; 0.50; 0.60];
+zi = [1.00; 1.10; 0.20; 0.35];
 
 
 %% SPECIFICATION OF THE MODEL & REML ESTIMATION

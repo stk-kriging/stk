@@ -15,8 +15,8 @@
 %    computes the covariance matrix K for the model MODEL between the sets of
 %    points X0 and X1. Both X0 and X1 are expected to be structures with an 'a'
 %    field, containing the actual numerical data. The resulting K matrix is of
-%    size N0 x N1, where N0 is the number of rows of XO.a and N1 the number of
-%    rows of X1.a.
+%    size N0 x N1, where N0 is the number of rows of XO and N1 the number of
+%    rows of X1.
 %
 % BE CAREFUL:
 %
@@ -26,7 +26,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -53,8 +53,8 @@
 
 function [K, P] = stk_make_matcov(model, x0, x1, pairwise)
 
-if (nargin > 1) && isstruct(x0), x0 = x0.a; end
-if (nargin > 2) && isstruct(x1), x1 = x1.a; end
+if nargin > 1, x0 = double(x0); end
+if nargin > 2, x1 = double(x1); end
 
 %=== guess which syntax has been used based on the second input arg
 
@@ -223,17 +223,7 @@ end
 
 % FIXME: outdated tests related to Kx_cache/Px_cache
 
-% %!test %% use of Kx_cache, with .a fields
-% %! model2 = model;
-% %! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
-% %! idx = [1 4 9];
-% %! [K1, P1] = stk_make_matcov(model,  struct('a', x0.a(idx, :)));
-% %! [K2, P2] = stk_make_matcov(model2, struct('a', idx'));
-% %! assert(stk_isequal_tolrel(K1, K2));
-% %! assert(stk_isequal_tolrel(P1, P2));
-
 % %!test %% use of Kx_cache, with matrices
-% %! x0 = x0.a;
 % %! model2 = model;
 % %! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
 % %! idx = [1 4 9];

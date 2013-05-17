@@ -27,7 +27,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [param, lnv] = stk_param_init(model, box, noisy)
-
 stk_narginchk(1, 3);
 
 errmsg = 'This function must be adapted to the object-oriented approach...';
@@ -39,7 +38,7 @@ yi = model.observations.z;
 %--- first, default values for arguments 'box' and 'noisy' ------------------------------
 
 if (nargin < 2) || isempty(box),
-    box = [min(xi.a); max(xi.a)];
+    box = [min(xi); max(xi)];
 end
 
 if nargin < 3,
@@ -58,11 +57,11 @@ end
 switch model.covariance_type
     
     case 'stk_materncov_iso'
-        nu = 5/2 * size(xi.a, 2);
+        nu = 5/2 * size(xi, 2);
         [param, lnv] = paraminit_(xi, yi, box, nu, model.order, noisy);
         
     case 'stk_materncov_aniso'
-        nu = 5/2 * size(xi.a, 2);
+        nu = 5/2 * size(xi, 2);
         xi = stk_normalize(xi, box);
         [param, lnv] = paraminit_(xi, yi, [], nu, model.order, noisy);
         param = [param(1:2); param(3) - log(diff(box, [], 1))'];
@@ -95,7 +94,7 @@ end % function stk_param_init
 
 function [param, lnv] = paraminit_(xi, yi, box, nu, order, noisy)
 
-[ni d] = size(xi.a);
+[ni d] = size(xi);
 
 model = stk_model('stk_materncov_iso');
 model.order = order;
@@ -132,8 +131,9 @@ for eta = eta_list
         [K, P] = stk_make_matcov(model, xi);
         % estimate sigma2
         % (TODO: use Cholesky ?)
-        beta = (P' * (K \ P)) \ (P' * yi.a);
-        zi = yi.a - P * beta;
+        yi_ = double(yi);
+        beta = (P' * (K \ P)) \ (P' * yi_);
+        zi = yi_ - P * beta;
         sigma2 = 1 / (ni - length(beta)) * zi' * (K \ zi);
         % now compute the antilog-likelihood
         if sigma2 > 0
@@ -168,4 +168,4 @@ end % function paraminit_
 % %! model.param = stk_param_init(model, xi, zi, [1; 10], false);
 % %! xt = (1:9)' + 0.5; zt = sin(xt);
 % %! zp = stk_predict(model, xi, zi, xt);
-% %! assert(sum((zt - zp.a).^2) < 1e-3);
+% %! assert(sum((zt - zp.mean).^2) < 1e-3);

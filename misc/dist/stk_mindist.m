@@ -42,21 +42,19 @@ function md = stk_mindist(x)
 
 stk_narginchk(1, 1);
 
-if isstruct(x), x = x.a; end
-
 % call MEX-file
-md = stk_mindist_mex(x);
+md = stk_mindist_mex(double(x));
 
 end % function stk_mindist
 
 
 %%
-% Check that ".a" structures are accepted
+% Check that both double-precision matrices and stk_dataframe objects are accepted
 
 %!test
 %! d = 3; x = rand(7, d);
 %! md1 = stk_mindist(x);
-%! md2 = stk_mindist(struct('a', x));
+%! md2 = stk_mindist(stk_dataframe(x));
 %! assert(stk_isequal_tolabs(md1, md2));
 
 %%

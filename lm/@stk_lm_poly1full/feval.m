@@ -28,8 +28,7 @@
 
 function z = feval(lm, x) %#ok<INUSL>
 
-if isstruct(x), x = x.a; else x = double(x); end;
-
+x = double(x);
 n = size(x, 1);
 z = [ones(n, 1) x];
 

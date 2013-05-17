@@ -53,37 +53,39 @@
 
 function S = stk_makedata(x, z, noisevariance)
 
-x = stk_datastruct(x);
-z = stk_datastruct(z);
-n = size(x.a, 1);
-
 % Sanity check #1
-if isfield(x, 'v'),
+if isstruct(x) && isfield(x, 'v'),
     stk_error('This kind of .v field is not supported anymore.', 'ObsoleteFeature');
 end
 
-if isempty(z.a),
+% FIXME: keep track of variable names if either x or z is a dataframe
+
+x = double(x);
+z = double(z);
+n = size(x, 1);
+
+if isempty(z),
     
     z = [];
     
 else    
     
     % Sanity check #2
-    if size(z.a, 1) ~= n,
-        errmsg = 'x.a and z.a should have the same number of lines.';
+    if size(z, 1) ~= n,
+        errmsg = 'x and z should have the same number of rows.';
         stk_error(errmsg, 'IncorrectArgument');
     end
     
     % Sanity check #3
-    if size(z.a, 2) ~= 1,
-        errmsg = 'z.a should be a column vector.';
+    if size(z, 2) ~= 1,
+        errmsg = 'z should be a column vector.';
         stk_error(errmsg, 'IncorrectArgument');
     end
 
 end
 
 % Create the output structure
-S = struct('x', x, 'z', z, 'n', n );
+S = struct('x', x, 'z', z, 'n', n);
 
 if nargin == 3,
     if noisevariance > 0,

@@ -4,7 +4,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -44,31 +44,31 @@ nr = 2; nc = 3;
 %% REGULAR GRID ("FULL FACTORIAL" DESIGN)
 
 x = stk_sampling_regulargrid(N1, DIM, BOX);
-subplot(nr, nc, 1); plot(x.a(:,1), x.a(:,2), '*');
+subplot(nr, nc, 1); plot(x(:,1), x(:,2), '*');
 title(sprintf('%d x %d regular grid', N1_(1), N1_(2)));
 
 x = stk_sampling_regulargrid(N2_, DIM, BOX);
-subplot(nr, nc, 4); plot(x.a(:,1), x.a(:,2), '*');
+subplot(nr, nc, 4); plot(x(:,1), x(:,2), '*');
 title(sprintf('%d x %d regular grid', N2_(1), N2_(2)));
 
 
 %% MAXIMIN LHS
 
 x = stk_sampling_maximinlhs(N1, DIM, BOX);
-subplot(nr, nc, 2); plot(x.a(:,1), x.a(:,2), '*');
+subplot(nr, nc, 2); plot(x(:,1), x(:,2), '*');
 title(sprintf('%d-points maximin LHS', N1));
 
 x = stk_sampling_maximinlhs(N2, DIM, BOX);
-subplot(nr, nc, 5); plot(x.a(:,1), x.a(:,2), '*');
+subplot(nr, nc, 5); plot(x(:,1), x(:,2), '*');
 title(sprintf('%d-points maximin LHS', N2));
 
 
 %% RANDOM (UNIFORM) SAMPLING
 
 x = stk_sampling_randunif(N1, DIM, BOX);
-subplot(nr, nc, 3); plot(x.a(:,1), x.a(:,2), '*');
+subplot(nr, nc, 3); plot(x(:,1), x(:,2), '*');
 title(sprintf('%d-points randunif MCS', N1));
 
 x = stk_sampling_randunif(N2, DIM, BOX);
-subplot(nr, nc, 6); plot(x.a(:,1), x.a(:,2), '*');
+subplot(nr, nc, 6); plot(x(:,1), x(:,2), '*');
 title(sprintf('%d-points randunif MCS', N2));

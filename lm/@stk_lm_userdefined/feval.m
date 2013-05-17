@@ -28,8 +28,7 @@
 
 function z = feval(lm, x)
 
-if isstruct(x), x = x.a; else x = double(x); end;
-
+x = double(x);
 z = feval(lm.feval_handler, x);
 
 end % function feval

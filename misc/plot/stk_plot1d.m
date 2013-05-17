@@ -8,7 +8,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -57,24 +57,21 @@ end
 
 % ground truth (if available)
 if plot_obst
-    plot(obst.x.a, obst.z.a, '--', 'LineWidth', 3, 'Color', ...
-         [0.39, 0.47, 0.64]);
+    plot(obst.x, obst.z, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
     hold on
 end
 
 % kriging predictor (posterior mean)
 if plot_pred
-    plot(pred.x.a, pred.z.a, 'LineWidth', 4, 'Color', [0.95 0.25 0.3]);
+    plot(pred.x, pred.z.mean, 'LineWidth', 4, 'Color', [0.95 0.25 0.3]);
 end
 
 % evaluations
 if plot_obsi
-    plot(obsi.x.a, obsi.z.a, 'ks', 'MarkerSize', 10, 'LineWidth', 3, ...
-         'MarkerEdgeColor', [0.95 0.25 0.3], ...
-         'MarkerFaceColor', [0.8  0.8 0.8]);
+    plot(obsi.x, obsi.z, 'ks', 'MarkerSize', 10, 'LineWidth', 3, ...
+         'MarkerEdgeColor', [0.95 0.25 0.3], 'MarkerFaceColor', [0.8 0.8 0.8]);
 end
 
-hold off;
-set(gca, 'Box', 'off');
-xlabel('x');
-ylabel('z');
+hold off; set(h_axis, 'box', 'off');
+
+end % stk_plot1d

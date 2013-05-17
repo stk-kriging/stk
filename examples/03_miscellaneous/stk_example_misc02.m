@@ -3,7 +3,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -48,7 +48,7 @@ NB_COVARIANCE_FUNCTIONS = size(list_cov, 1);
 
 %% VISUALISATION
 
-x1 = struct('a', 0.0);
+x1 = 0.0;
 x2 = stk_sampling_regulargrid(1000, 1, [-5; 5]);
 
 col = {'r', 'b', 'g', 'k'}; figure;
@@ -56,7 +56,7 @@ col = {'r', 'b', 'g', 'k'}; figure;
 for j = 1:NB_COVARIANCE_FUNCTIONS,
     covfun = list_cov{j, 2};
     param = list_cov{j, 3};
-    plot(x2.a, feval(covfun, param, x1, x2 ), 'Color', col{j});
+    plot(x2, feval(covfun, param, x1, x2 ), 'Color', col{j});
     hold on;
 end
 

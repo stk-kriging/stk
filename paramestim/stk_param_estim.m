@@ -215,7 +215,7 @@ function [lblnv, ublnv] = get_defaultbounds_lnv ... %--------------------------
 TOLVAR = 0.5;
 
 % bounds for the variance parameter
-empirical_variance = var(model.observations.z.a);
+empirical_variance = var(model.observations.z);
 lblnv = log(eps);
 ublnv = log(empirical_variance) + TOLVAR;
 
@@ -252,7 +252,7 @@ end % function get_default_bounds_lnv -----------------------------------------
 %!test  % noisy
 %! NOISE_STD_TRUE = 0.1;
 %! NOISE_STD_INIT = 1e-5;
-%! zi.a = zi.a + NOISE_STD_TRUE * randn(NI, 1);
+%! zi = zi + NOISE_STD_TRUE * randn(NI, 1);
 %! model = stk_setobs(model, xi, zi);
 %! model.noise.cov = stk_homnoisecov(NOISE_STD_INIT^2);
 %! [param, lnv] = stk_param_estim(model, param0, 2 * log(NOISE_STD_INIT));

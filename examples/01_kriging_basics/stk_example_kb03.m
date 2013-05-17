@@ -5,7 +5,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -47,9 +47,10 @@ switch CASENUM
         DIM = 2;
         BOX = [[-5; 10], [0; 15]];
         NI = 20;
-        
+
     case 2,  % another test function
-        f_ = inline(['exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2 + 3*sin(4*pi*x1)'], 'x1', 'x2');
+        f_ = inline(['exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2' ...
+		      '+ 3*sin(4*pi*x1)'], 'x1', 'x2');
         f  = @(x)(f_(x(:,1), x(:,2)));
         DIM = 2;
         BOX = [[-1; 1], [-1; 1]];
@@ -66,8 +67,8 @@ NT = 80^2;
 % The function stk_sampling_regulargrid() does the job of creating the grid
 xt = stk_sampling_regulargrid(NT, DIM, BOX);
 
-% Compute the corresponding responses (stored in zt.a)
-zt = struct('a', f(xt.a));
+% Compute the corresponding responses
+zt = stk_feval(f, xt);
 
 % Since xt is a regular grid, we can do a contour plot
 figure; h1 = subplot(2, 2, 1); stk_plot2d(@contour, xt, f, CONTOUR_LINES);
@@ -94,13 +95,13 @@ xi = stk_sampling_maximinlhs(NI, DIM, BOX);
 zi = stk_feval(f, xi);
 
 % Simulate noisy evaluations (optional)
-TRUE_NOISE_STD = 0;
+TRUE_NOISE_STD = 0.0;
 if TRUE_NOISE_STD > 0
-    zi.a = zi.a + randn(size(zi.a)) * TRUE_NOISE_STD;
+    zi = zi + randn(size(zi)) * TRUE_NOISE_STD;
 end
 
 % Add the design points to the first plot
-hold on; plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
+hold on; plot(xi(:,1), xi(:,2), DOT_STYLE{:});
 
 
 %% ESTIMATE THE PARAMETERS OF THE COVARIANCE FUNCTION
@@ -112,7 +113,7 @@ model = stk_setobs(model, stk_makedata(xi, zi));
 
 % Alternative: user-defined initial guess for the parameters of the Matern covariance
 % (see "help stk_materncov_aniso" for more information)
-SIGMA2 = var(zi.a);
+SIGMA2 = var(zi);
 NU     = 2;
 RHO1   = (BOX(2,1) - BOX(1,1)) / 10;
 RHO2   = (BOX(2,2) - BOX(1,2)) / 10;
@@ -128,18 +129,18 @@ zp = stk_predict(model, xt);
 
 % Display the result using a contour plot, to be compared with the contour
 % lines of the true function
-h2 = subplot(2, 2, 2); stk_plot2d(@contour, xt, zp, CONTOUR_LINES);
+h2 = subplot(2, 2, 2); stk_plot2d(@contour, xt, zp.mean, CONTOUR_LINES);
 tsc = sprintf('approximation from %d points', NI); hold on;
-plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
+plot(xi(:,1), xi(:,2), DOT_STYLE{:});
 hold off; axis(BOX(:)); title(tsc);
 
 
 %% VISUALIZE THE ACTUAL PREDICTION ERROR AND THE KRIGING STANDARD DEVIATION
 
-h3 = subplot(2, 2, 3); stk_plot2d(@pcolor, xt, log(abs(zp.a - zt.a)));
-hold on; plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
+h3 = subplot(2, 2, 3); stk_plot2d(@pcolor, xt, log(abs(zp.mean - zt)));
+hold on; plot(xi(:,1), xi(:,2), DOT_STYLE{:});
 hold off; axis(BOX(:)); title('true approx error (log)');
 
-h4 = subplot(2, 2, 4); stk_plot2d(@pcolor, xt, 0.5 * log(zp.v));
-hold on; plot(xi.a(:,1), xi.a(:,2), DOT_STYLE{:});
+h4 = subplot(2, 2, 4); stk_plot2d(@pcolor, xt, 0.5 * log(zp.var));
+hold on; plot(xi(:,1), xi(:,2), DOT_STYLE{:});
 hold off; axis(BOX(:)); title('kriging std (log)');

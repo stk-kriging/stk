@@ -72,7 +72,7 @@ q = size(P, 2);
 
 [Q, R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
 W = Q(:, (q+1):n);
-Wz = W' * model.observations.z.a;
+Wz = W' * double(model.observations.z);
 
 G = W' * (K * W);
 

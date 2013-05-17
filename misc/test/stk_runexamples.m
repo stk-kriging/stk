@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -33,7 +33,7 @@ example_dir = fullfile(stk_get_root(), 'examples');
 [scriptname, err] = stk_runexamples_recurs_(example_dir);
 
 % display a summary
-stk_disp_framedtext('stk_runexamples summary');
+fprintf('%s\n', stk_sprintf_framed('stk_runexamples summary'));
 
 for i = 1:length(scriptname)
     fprintf('[%02d] %s %s ', i, scriptname{i}, ...

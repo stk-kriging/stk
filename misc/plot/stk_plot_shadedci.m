@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -27,10 +27,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_plot_shadedci(x, zp)
+function stk_plot_shadedci(x, z)
 
-delta = 1.96 * sqrt(abs(zp.v));
-h = area(x.a, [zp.a - delta, 2 * delta]);
+x = double(x);
+
+delta = 1.96 * sqrt(abs(z.var));
+h = area(x, [z.mean - delta, 2 * delta]);
 set(h(1), 'FaceColor', 'none');
 set(h(2), 'FaceColor', [0.8 0.8 0.8]);
 set(h, 'LineStyle', '-', 'LineWidth', 1, 'EdgeColor', 'none');

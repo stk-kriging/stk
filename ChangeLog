@@ -1,3 +1,42 @@
+2013-05-09  Julien Bect  <julien.bect@supelec.fr>
+
+	Ensure that .a structures are still accepted.
+
+	* utils/@struct/double.m: new overloaded function that returns the
+	.a field of a structure, assuming it exists.
+	* covfcs/stk_materncov32_aniso.m: add tests.
+
+2013-04-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Add two new classes: stk_dataframe, stk_factorialdesign
+
+	* utils/@stk_dataframe: new class
+	* utils/@stk_factorialdesign: new class
+	* utils/stk_datastruct.m: removed (use overloaded double()
+	instead)
+	* misc/test/stk_test_dfbinaryop.m: new function to test binary
+	operations on stk_dataframes objects
+	* stk_sampling_regulargrid.m: modified to return an
+	stk_factorialdesign
+	* *.m: remove all occurences of .a, stk_datastruct, and use the
+	new possibilities provided by the two added classes
+
+	Return additional arguments from stk_rescale and stk_normalize.
+
+	* utils/stk_rescale.m, utils/stk_normalize.m: modified to return
+	additional output arguments a and b, such that y = a + b*x
+
+	Reorganize exisiting text functions and add some new ones.
+
+	* misc/disp/stk_disp_framedtext.m: removed, superseded by
+	the new function stk_sprintf_framed()
+	* misc/disp/stk_disp_examplewelcome.m: moved to misc/text
+	* misc/text/stk_sprintf_colvect.m,
+	stk_sprintf_colvect_fixedpoint.m,
+	stk_sprintf_colvect_scientific.m: new functions
+	* misc/test/stk_runexamples.m: modified
+	* misc/config/stk_path.m: modified
+
 2013-03-25  Julien Bect  <julien.bect@supelec.fr>
 
 	Make stk_test() silent as a grave.

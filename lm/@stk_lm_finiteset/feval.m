@@ -28,7 +28,7 @@
 
 function z = feval(lm, x)
 
-if isstruct(x), x = x.a; else x = double(x); end;
+x = double(x);
 
 if isempty(lm.data),
     n = size(x, 1);

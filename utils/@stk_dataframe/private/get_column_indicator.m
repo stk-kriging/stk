@@ -1,8 +1,8 @@
-% STK_DISP_FRAMEDTEXT displays some text within a box.
+% GET_COLUMN_INDICATOR [STK internal]
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,13 +26,27 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_framedtext(s)
+function b = get_column_indicator(x, s)
 
-a = sprintf('    %s    ', s);
-b = repmat('=', 1, length(a));
+b = strcmp(s, x.vnames);
 
-fprintf('\n#%s#\n', b);
-fprintf('#%s#\n',   a);
-fprintf('#%s#\n\n', b);
+if ~any(b)
+    if ~strcmp(s, 'a')
+        errmsg = sprintf('There is no variable named %s.', idx(1).subs);
+        stk_error(errmsg, 'UnknownVariable');
+    else
+        b = strcmp('mean', x.vnames);
+        if any(b)
+            warning(sprintf(['There is no variable named ''a''.\n' ...
+                ' => Assuming that you''re an old STK user trying to ' ...
+                'get the kriging mean.'])); %#ok<WNTAG,SPWRN>
+        else
+            warning(sprintf(['There is no variable named ''a''.\n' ...
+                ' => Assuming that you''re an old STK user trying to ' ...
+                'get the entire dataframe.'])); %#ok<WNTAG,SPWRN>
+            b = true(size(b));
+        end
+    end
+end
 
-end % function stk_disp_framedtext
+end % function get_column_indicator

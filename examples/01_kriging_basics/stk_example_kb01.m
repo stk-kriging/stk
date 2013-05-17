@@ -7,7 +7,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -46,6 +46,7 @@ xt = stk_sampling_regulargrid(NT, DIM, BOX);
 zt = stk_feval(f, xt);
 xzt = stk_makedata(xt, zt); % data structure containing (factors, response) pairs
 
+figure(1);
 stk_plot1d([], xzt, []);
 s = 'Plot of the function to be approximated';
 title(s); set(gcf, 'Name', s);
@@ -61,9 +62,9 @@ title(s); set(gcf, 'Name', s);
 % 1d example.
 %
 
-NI = 6;                                         % nb of evaluations that will be used
+NI = 6;                                        % nb of evaluations that will be used
 xi = stk_sampling_regulargrid(NI, DIM, BOX);   % evaluation points
-zi = stk_feval(f, xi);                        % structure of evaluation results
+zi = stk_feval(f, xi);                         % evaluation results
 xzi = stk_makedata(xi, zi);
 
 
@@ -96,12 +97,12 @@ model = stk_setobs(model, xzi);
 
 %% CARRY OUT THE KRIGING PREDICTION AND DISPLAY THE RESULT
 %
-% The result of a kriging predicition is provided by stk_predict() in a
-% structure, called "zp" in this example, which has two fields: "zp.a" (the
-% kriging mean) and "zp.v" (the kriging variance).
+% The result of a kriging predicition is provided by stk_predict() in an object
+% zp of type stk_dataframe, with two columns: "zp.mean" (the kriging mean) and
+% "zp.var" (the kriging variance).
 %
 
-% Carry out the kriging prediction at points xt.a
+% Carry out the kriging prediction at points xt
 zp = stk_predict(model, xt);
 xzp = stk_makedata(xt, zp);
 
@@ -115,12 +116,13 @@ title(s); set(gcf, 'Name', s);
 
 NOISEVARIANCE = (1e-1)^2;
 
-% Make the observations perturbed by an additive Gaussian noise
-noise = sqrt(NOISEVARIANCE) * randn(xzi.n, 1);
+% Now the observations are perturbed by an additive Gaussian noise
+noise = sqrt(NOISEVARIANCE) * randn(NI, 1);
 xzi_noisy = xzi;
-xzi_noisy.z.a = xzi.z.a + noise;
+xzi_noisy.z = xzi.z + noise;
 
 %=== There are two ways for specifying noisy observations in the model
+%
 % (1) information about the noise is included in the observation structure
 %
 %     model_noisy.noise.type = 'wwn';
@@ -131,13 +133,13 @@ xzi_noisy.z.a = xzi.z.a + noise;
 %     model_noisy.noise.type = 'swn';
 %     model_noisy.noise.lognoisevariance = log(NOISEVARIANCE);
 
-model1 = model;
-model1.noise.cov = stk_homnoisecov(NOISEVARIANCE);  % homoscedastic white noise
+model_noisy = model;
+model_noisy.noise.cov = stk_homnoisecov(NOISEVARIANCE); % homoscedastic white noise
 
-% Carry out the kriging prediction at locations xg.a
+% Carry out the kriging prediction at locations xt
 
-model1 = stk_setobs(model1, xzi_noisy);
-zp_noisy = stk_predict(model1, xt);
+model_noisy = stk_setobs(model_noisy, xzi_noisy);
+zp_noisy = stk_predict(model_noisy, xt);
 xzp_noisy = stk_makedata(xt, zp_noisy);
 
 % Display the result

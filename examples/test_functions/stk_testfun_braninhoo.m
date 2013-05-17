@@ -17,7 +17,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -43,7 +43,7 @@
 
 function y = stk_testfun_braninhoo(x)
 
-if isstruct(x), x = x.a; end
+x = double(x);
 
 x1 = x(:, 1);
 x2 = x(:, 2);

@@ -3,7 +3,7 @@
 % CALL: k = stk_materncov32_aniso(param, x, y, diff)
 %   param  = vector of parameters of size 1+d
 %   x      = structure whose field 'a' contains the observed points.
-%            x.a  is a matrix of size n x d, where n is the number of
+%            x is a matrix of size n x d, where n is the number of
 %            points and d is the dimension of the factor space
 %   y      = same as x
 %   diff   = differentiation parameter
@@ -52,8 +52,8 @@ stk_narginchk(3, 5);
 persistent x0 y0 xs ys param0 pairwise0 D Kx_cache compute_Kx_cache
 
 % process input arguments
-if isstruct(x), x = x.a; end
-if isstruct(y), y = y.a; end
+x = double(x);
+y = double(y);
 if nargin < 4, diff = -1; end
 if nargin < 5, pairwise = false; end
 
@@ -124,20 +124,30 @@ end % function
 %%
 % 1D, 5x5
 
-%!shared param x y
+%!shared param x y K1 K2 K3
 %!  dim = 1;
 %!  model = stk_model('stk_materncov32_aniso', dim);
 %!  param = model.randomprocess.priorcov.param;
 %!  x = stk_sampling_randunif(5, dim);
-%!  y = stk_sampling_randunif(5, dim);
+%!  y = stk_sampling_randunif(6, dim);
 
-%!error stk_materncov32_aniso();
-%!error stk_materncov32_aniso(param);
-%!error stk_materncov32_aniso(param, x);
-%!test  stk_materncov32_aniso(param, x, y);
-%!test  stk_materncov32_aniso(param, x, y, -1);
-%!test  stk_materncov32_aniso(param, x, y, -1, false);
-%!error stk_materncov32_aniso(param, x, y, -1, false, pi^2);
+%!error K0 = stk_materncov32_aniso();
+%!error K0 = stk_materncov32_aniso(param);
+%!error K0 = stk_materncov32_aniso(param, x);
+%!test  K1 = stk_materncov32_aniso(param, x, y);
+%!test  K2 = stk_materncov32_aniso(param, x, y, -1);
+%!test  K3 = stk_materncov32_aniso(param, x, y, -1, false);
+%!error K0 = stk_materncov32_aniso(param, x, y, -1, false, pi^2);
+%!assert (isequal(K1, K2));
+%!assert (isequal(K1, K3));
+
+%!test % various types of input arguments
+%! u = double(x); v = double(y);
+%! K1 = stk_materncov32_aniso(param, u, v, -1);
+%! K2 = stk_materncov32_aniso(param, struct('a', u), struct('a', v), -1);
+%! K3 = stk_materncov32_aniso(param, stk_dataframe(u), stk_dataframe(v), -1);
+%! assert(isequal(K1, K2));
+%! assert(isequal(K1, K3));
 
 %!error stk_materncov32_aniso(param, x, y, -2);
 %!test  stk_materncov32_aniso(param, x, y, -1);

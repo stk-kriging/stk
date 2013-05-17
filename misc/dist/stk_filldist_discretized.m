@@ -55,8 +55,8 @@ function [fd, ymax] = stk_filldist_discretized(x, y)
 
 stk_narginchk(2, 2);
 
-if isstruct(x), x = x.a; end
-if isstruct(y), y = y.a; end
+x = double(x);
+y = double(y);
 
 % call MEX-file
 [fd, idx_max] = stk_filldist_discr_mex(x, y);
@@ -73,14 +73,13 @@ end % function stk_filldist_discretized
 %!error stk_filldist_discretized(0.0, [])        % second arg is empty
 %!error stk_filldist_discretized([], 0.0)        % first arg is empty
 
-
 %%
-% Check that ".a" structures are accepted
+% Check that both double-precision matrices and stk_dataframe objects are accepted
 
 %!test
 %! d = 3; x = rand(7, d); y = rand(20, d);
 %! fd1 = stk_filldist_discretized(x, y);
-%! fd2 = stk_filldist_discretized(struct('a', x), struct('a', y));
+%! fd2 = stk_filldist_discretized(stk_dataframe(x), stk_dataframe(y));
 %! assert(stk_isequal_tolabs(fd1, fd2));
 
 %%

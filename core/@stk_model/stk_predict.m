@@ -3,16 +3,13 @@
 % CALL: ZP = stk_predict(MODEL, XP)
 %
 %    computes the kriging predictor ZP at the points XP, using the kriging model
-%    MODEL. In general (see special cases below), XP and ZP are structures whose
-%    field 'a' contains the actual numerical data. More precisely, on a
-%    DIM-dimensional factor space,
+%    MODEL. More precisely, on a DIM-dimensional factor space,
 %
-%     * XP.a must be a NP x DIM matrix, where NP is the number of prediction
-%       points,
-%     * ZP.a is a column vector of length NP.
+%     * XP must have size NP x DIM, where NP is the number of prediction points,
+%     * ZP is a column vector of length NP.
 %
-%    Additionally to the predicted values ZP.a, stk_predict() returns the
-%    kriging variances ZP.v at the same points. ZP.v is a column vector of
+%    Additionally to the predicted values ZP.mean, stk_predict() returns the
+%    kriging variances ZP.var at the same points. ZP.var is a column vector of
 %    length NP.
 %
 % CALL: [ZP, LAMBDA, MU] = stk_predict(MODEL, XP)
@@ -28,22 +25,22 @@
 %
 % SPECIAL CASE #1
 %
-%    If MODEL.domain.type is discrete, MODEL.observations.x.a and XP.a are expected
+%    If MODEL.domain.type is discrete, MODEL.observations.x and XP are expected
 %    to be vectors of integer indices. This feature is not fully documented
 %    as of today... If XP is empty, it is assumed that predictions must be
 %    computed at all points of the underlying discrete space.
 %
 % SPECIAL CASE #2
 %
-%    If MODEL.observations.z is empty, everything but ZP.a is computed.
-%    Indeed, neither the kriging variance ZP.v nor the matrices LAMBDA and
+%    If MODEL.observations.z is empty, everything but ZP.mean is computed.
+%    Indeed, neither the kriging variance ZP.var nor the matrices LAMBDA and
 %    MU actually depend on the observed values.
 %
 % EXAMPLE: see examples/example01.m
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -71,30 +68,30 @@
 function [zp, lambda, mu, K] = stk_predict(model, xt)
 stk_narginchk(2, 2);
 
-xt = stk_datastruct(xt);
-
 %=== process argument xt according to the nature of the domain
 switch model.domain.type
     
     case 'discrete',
-        if isempty(xt.a)
+        if isempty(xt)
             % default: predict the response at all possible locations
-            xt.a = (1:size(model.domain.nt, 1))';
+            xt = (1:size(model.domain.nt, 1))';
         else
-            if size(xt.a, 2) ~= 1,
+            if size(xt, 2) ~= 1,
                 errmsg = 'xt.a should be a column vector of indices.';
                 stk_error(errmsg, 'IncorrectArgument');
             end
         end
         
     case 'continuous',
-        assert(~isempty(xt.a));
+        assert(~isempty(xt));
+        
     otherwise
         error('model.domain.type should be either "continuous" or "discrete"');
+
 end
 
 ni = model.observations.n;   % number of observations
-nt = size(xt.a, 1);          % number of test points
+nt = size(xt, 1);            % number of test points
 assert(nt > 0);
 
 %=== handle other optional arguments
@@ -113,12 +110,15 @@ LS = [[ Kii, Pi                ]; ...
 
 %=== prepare the output arguments
 
-zp = struct('v', zeros(nt, 1));
+zp_v = zeros(nt, 1);
 compute_prediction = ~isempty(model.observations.z);
 
 % compute the kriging prediction, or just the variances ?
-if compute_prediction, zp.a = zeros(nt, 1);
-else zp.a = zeros(nt, 0); end
+if compute_prediction,
+    zp_a = zeros(nt, 1);
+else
+    zp_a = nan(nt, 1);
+end
 
 return_weights = (nargout > 1); % return kriging weights ?
 if return_weights, lambda = zeros(ni, nt); end
@@ -160,7 +160,7 @@ for block_num = 1:nb_blocks
     idx = idx_beg:idx_end;
     
     % extract the block of prediction locations
-    xt_block = struct('a', xt.a(idx,:));
+    xt_block = struct('a', xt(idx,:));
     
     % right-hand side of the kriging equation
     [Kti, Pt] = stk_make_matcov(model, xt_block, model.observations.x);
@@ -181,18 +181,18 @@ for block_num = 1:nb_blocks
         mu(:, idx) = lambda_mu((ni+1):end, :); end
     
     if compute_prediction, % compute the kriging mean
-        zp.a(idx) = lambda_mu(1:ni, :)' * model.observations.z.a; end
+        zp_a(idx) = lambda_mu(1:ni, :)' * double(model.observations.z); end
     
     % compute kriging variances (this does NOT include the noise variance)
-    zp.v(idx) = stk_make_matcov(model, xt_block, xt_block, true) - dot(lambda_mu, RS)';
+    zp_v(idx) = stk_make_matcov(model, xt_block, xt_block, true) - dot(lambda_mu, RS)';
     
     % note: the following modification computes prediction variances for (future)
     % noisy observations, i.e., including the noise variance also
-    % zp.v(idx) = stk_make_matcov(model, xt, [], true) - dot(lambda_mu, RS)';
+    % zp_v(idx) = stk_make_matcov(model, xt, [], true) - dot(lambda_mu, RS)';
     
-    b = (zp.v < 0);
+    b = (zp_v < 0);
     if any(b),
-        zp.v(b) = 0.0;
+        zp_v(b) = 0.0;
         warning(sprintf(['Correcting numerical inaccuracies in kriging variance.\n' ...
             '(%d negative variances have been set to zero)'], sum(b)));
     end
@@ -213,7 +213,10 @@ end
 
 if display_waitbar, close(hwb); end
 
+zp = stk_dataframe([zp_a zp_v], {'mean' 'var'});
+
 end
+
 
 %%%%%%%%%%%%%
 %%% tests %%%
@@ -227,12 +230,12 @@ end
 %!
 %! x0 = stk_sampling_regulargrid(n+m, d, [0; pi]);
 %!
-%! idx_obs = 2:2:(n+m-1);
-%! idx_prd = 1:2:(n+m);
+%! idx_obs = (2:2:(n+m-1))';
+%! idx_prd = (1:2:(n+m))';
 %!
-%! x_obs = struct('a', x0.a(idx_obs));
+%! x_obs = x0(idx_obs);
 %! z_obs = stk_feval(@sin, x_obs);
-%! x_prd = struct('a', x0.a(idx_prd));
+%! x_prd = x0(idx_prd);
 %!
 %! model = stk_model('stk_materncov32_iso');
 %! model = stk_setobs(model, x_obs, z_obs);
@@ -258,4 +261,4 @@ end
 % %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
 % %! y_prd2 = stk_predict(model, idx_obs, z_obs, idx_prd);
 % %! %% check that both methods give the same result
-% %! assert(stk_isequal_tolrel(y_prd1, y_prd2));
+% %! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd2)));
