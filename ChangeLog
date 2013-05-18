@@ -1,5 +1,9 @@
 2013-05-18  Julien Bect  <julien.bect@supelec.fr>
 
+	Use function name as variable name in stk_feval.
+
+	* utils/stk_feval.m: Use function name as variable name.
+
 	Get rid of local variable use_indices in stk_predict.
 
 	* core/stk_predict.m: Get rid of local variable use_indices.
