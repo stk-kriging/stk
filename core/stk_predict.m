@@ -70,13 +70,12 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [zp, lambda, mu, K] = stk_predict(model, xi, zi, xt)
+
 stk_narginchk(4, 4);
 
 %=== use indices or matrices for xi & xt ?
 
-use_indices = isfield(model, 'Kx_cache');
-
-if use_indices
+if isfield(model, 'Kx_cache') % use indices
     if isempty(xt)
         xt = (1:size(model.Kx_cache, 1))';
     end
@@ -158,8 +157,7 @@ for block_num = 1:nb_blocks
     idx = idx_beg:idx_end;
     
     % extract the block of prediction locations
-    if use_indices, xt_block = xt(idx);
-    else xt_block = xt(idx,:); end
+    xt_block = xt(idx, :);
     
     % right-hand side of the kriging equation
     [Kti, Pt] = stk_make_matcov(model, xt_block, xi);

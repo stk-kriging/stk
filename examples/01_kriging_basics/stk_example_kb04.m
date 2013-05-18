@@ -81,7 +81,7 @@ model.lognoisevariance = log(100 * eps);
 % (this is not the true value of the noise variance !)
 
 
-%% Estimation the parameters of the covariance
+%% Estimate the parameters of the covariance function
 %
 % Here, the parameters of the Matern covariance function are estimated by the
 % REML (REstricted Maximum Likelihood) method using stk_param_estim().
@@ -103,12 +103,12 @@ model.param = param;
 model.lognoisevariance = paramlnv;
 
 
-%% carry out kriging prediction
+%% Carry out kriging prediction
 
 zp = stk_predict(model, xi, zi, xt);
 
 
-%% display results
+%% Display results
 
 stk_plot1d(xi,zi,xt,zt,zp)
 xlabel('x'); ylabel('z');
