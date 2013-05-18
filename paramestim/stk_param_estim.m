@@ -3,7 +3,7 @@
 % CALL: PARAM = stk_param_estim(MODEL, XI, YI, PARAM0)
 %
 %   estimates the parameters PARAM of the covariance function in MODEL from the
-%   data (XI, YI) using the rectricted maximum likelihood (ReML) method. A
+%   data (XI, YI) using the restricted maximum likelihood (ReML) method. A
 %   starting point PARAM0 has to be provided.
 %
 % CALL: [PARAM, LNV] = stk_param_estim(MODEL, XI, YI, PARAM0, LNV0)
