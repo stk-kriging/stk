@@ -1,3 +1,9 @@
+2013-05-18  Julien Bect  <julien.bect@supelec.fr>
+
+	Get rid of local variable use_indices in stk_predict.
+
+	* core/stk_predict.m: Get rid of local variable use_indices.
+
 2013-05-09  Julien Bect  <julien.bect@supelec.fr>
 
 	Ensure that .a structures are still accepted.

@@ -81,7 +81,7 @@ model = stk_setobs(model, obs);
 model.noise.cov = stk_homnoisecov();
 
 
-%% ESTIMATION THE PARAMETERS OF THE COVARIANCE
+%% ESTIMATE THE PARAMETERS OF THE COVARIANCE FUNCTION
 %
 % Here, the parameters of the Matern covariance function are estimated by the
 % REML (REstricted Maximum Likelihood) method using stk_param_estim().
