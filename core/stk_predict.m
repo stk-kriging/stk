@@ -3,8 +3,8 @@
 % CALL: ZP = stk_predict(MODEL, XI, ZI, XP)
 %
 %    computes the kriging predictor ZP at the points XP, given the observations
-%    (XI, ZI) and the prior MODEL. In general, XI, ZI, XP and ZP are either 
-%    numerical matrices or dataframes. More precisely, on a DIM-dimensional 
+%    (XI, ZI) and the prior MODEL. In general, XI, ZI, XP and ZP are either
+%    numerical matrices or dataframes. More precisely, on a DIM-dimensional
 %    factor space,
 %
 %     * XI must have size NI x DIM, where NI is the number of observations,
@@ -30,7 +30,7 @@
 % SPECIAL CASE #1
 %
 %    If MODEL has a field 'Kx_cache', XI and XP are expected to be vectors of
-%    integer indices. This feature is not fully documented as of today... If 
+%    integer indices. This feature is not fully documented as of today... If
 %    XT is empty, it is assumed that predictions must be computed at all points
 %    of the underlying discrete space.
 %
@@ -117,11 +117,17 @@ else
     zp_a = nan(nt, 1);
 end
 
-return_weights = (nargout > 1); % return kriging weights ?
-if return_weights, lambda = zeros(ni, nt); end
+% return kriging weights ?
+return_weights = (nargout > 1);
+if return_weights,
+    lambda = zeros(ni, nt);
+end
 
-return_lm = (nargout > 2); % return Lagrange multipliers ?
-if return_lm, mu = zeros(size(Pi, 2), nt); end
+% return Lagrange multipliers ?
+return_lm = (nargout > 2);
+if return_lm,
+    mu = zeros(size(Pi, 2), nt);
+end
 
 return_K = (nargout > 3); % return posterior covariance matrix ?
 
@@ -171,14 +177,20 @@ for block_num = 1:nb_blocks
         lambda_mu = linsolve(LS_R, LS_Q' * RS, linsolve_opt);
     end
     
-    if return_weights, % extract weights
-        lambda(:, idx) = lambda_mu(1:ni, :); end
+    % extract weights
+    if return_weights,
+        lambda(:, idx) = lambda_mu(1:ni, :);
+    end
     
-    if return_lm, % extracts Lagrange multipliers
-        mu(:, idx) = lambda_mu((ni+1):end, :); end
+    % extracts Lagrange multipliers
+    if return_lm,
+        mu(:, idx) = lambda_mu((ni+1):end, :);
+    end
     
-    if compute_prediction, % compute the kriging mean
-        zp_a(idx) = lambda_mu(1:ni, :)' * double(zi); end
+    % compute the kriging mean
+    if compute_prediction,
+        zp_a(idx) = lambda_mu(1:ni, :)' * double(zi);
+    end
     
     % compute kriging variances (this does NOT include the noise variance)
     zp_v(idx) = stk_make_matcov(model, xt_block, xt_block, true) - dot(lambda_mu, RS)';
@@ -190,7 +202,8 @@ for block_num = 1:nb_blocks
     b = (zp_v < 0);
     if any(b),
         zp_v(b) = 0.0;
-        warning(sprintf(['Correcting numerical inaccuracies in kriging variance.\n' ...
+        warning(sprintf( ...
+            ['Correcting numerical inaccuracies in kriging variance.\n' ...
             '(%d negative variances have been set to zero)'], sum(b)));
     end
     
@@ -208,7 +221,9 @@ if return_K,
     K = 0.5 * (K + K'); % enforce symmetry
 end
 
-if display_waitbar, close(hwb); end
+if display_waitbar,
+    close(hwb);
+end
 
 zp = stk_dataframe([zp_a zp_v], {'mean' 'var'});
 
