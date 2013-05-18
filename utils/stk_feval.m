@@ -51,9 +51,15 @@ function z = stk_feval(f, x, progress_msg)
 
 stk_narginchk(2, 3);
 
-if ~(ischar(f) || isa(f, 'function_handle'))
-    errmsg = 'Incorrect type for argument ''f''.';
-    stk_error(errmsg, 'IncorrectType');
+if ischar(f),
+    zname = f;
+else
+    if ~isa(f, 'function_handle')
+        errmsg = 'Incorrect type for argument ''f''.';
+        stk_error(errmsg, 'IncorrectType');
+    else
+        zname = func2str(f);
+    end
 end
     
 if nargin < 3,
@@ -85,7 +91,7 @@ else % at least one input point
     
 end
 
-z = stk_dataframe(zdata);
+z = stk_dataframe(zdata, {zname});
 
 end % function stk_feval
 
