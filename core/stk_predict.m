@@ -2,19 +2,20 @@
 %
 % CALL: ZP = stk_predict(MODEL, XI, ZI, XP)
 %
-%    computes the kriging predictor ZP at the points XP, given the observations
-%    (XI, ZI) and the prior MODEL. In general, XI, ZI, XP and ZP are either
-%    numerical matrices or dataframes. More precisely, on a DIM-dimensional
-%    factor space,
+%    performs a kriging prediction at the points XP, given the observations
+%    (XI, ZI) and the prior MODEL. The input arguments XI, ZI, and XP can be 
+%    either numerical matrices or dataframes. More precisely, on a factor space
+%    of dimension DIM,
 %
-%     * XI must have size NI x DIM, where NI is the number of observations,
-%     * ZI must be a column of length NI,
-%     * XP must have size NP x DIM, where NP is the number of prediction points,
-%     * ZP is a column of length NP.
+%     * XI must have size NI x DIM,
+%     * ZI must have size NI x 1,
+%     * XP must have size NP x DIM,
 %
-%    Additionally to the predicted values ZP.mean, stk_predict() returns the
-%    kriging variances ZP.var at the same points. ZP.var is a column vector of
-%    length NP.
+%    where NI is the number of observations and NP the number of prediction
+%    points. The output ZP is a dataframe of size NP x 2, with:
+%
+%     * the kriging predictor in the first column (ZP.mean), and
+%     * the kriging variance in the second column (ZP.var).
 %
 % CALL: [ZP, LAMBDA, MU] = stk_predict(MODEL, XI, ZI, XP)
 %
@@ -37,8 +38,8 @@
 % SPECIAL CASE #2
 %
 %    If ZI is empty, everything but ZP.mean is computed. Indeed, neither the
-%    kriging variance ZP.var nor the matrices LAMBDA and MU actually depend on the
-%    observed values.
+%    kriging variance ZP.var nor the matrices LAMBDA and MU actually depend on
+%    the observed values.
 %
 % EXAMPLE: see examples/example01.m
 
