@@ -2,10 +2,13 @@
 %
 % CALL: Z = stk_feval(F, X)
 %
-%    evaluates the function F on the evaluation points X. F can be either a
-%    function handle or a function name (string). X can be either a matrix or a
-%    structure whose field 'a' contains the actual values. In both cases, Z will
-%    be a structure whose field 'a' contains the responses.
+%    evaluates the function F on the evaluation points X, where
+%
+%     * F can be either a function handle or a function name (string), and
+%     * X can be either a numerical array or a dataframe.
+%
+%    The output Z is a one-column dataframe, with the same number of rows as X,
+%    and the function name of F as variable name.
 %
 % CALL: Z = stk_feval(F, X, DISPLAY_PROGRESS)
 %
@@ -13,9 +16,9 @@
 %    useful if each evaluation of F requires a significant computation time.
 %
 % EXAMPLE:
-%       f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );
+%       f = @(x)(-(0.7 * x + sin(5 * x + 1) + 0.1 * sin(10 * x)));
 %       xt = stk_sampling_regulargrid(100, 1, [0; 1]);
-%       yt = stk_feval( f, xt );
+%       yt = stk_feval(f, xt);
 %       plot(xt, yt);
 %
 % See also feval
