@@ -58,30 +58,12 @@ if isstruct(x) && isfield(x, 'v'),
     stk_error('This kind of .v field is not supported anymore.', 'ObsoleteFeature');
 end
 
-% FIXME: keep track of variable names if either x or z is a dataframe
-
-x = double(x);
-z = double(z);
 n = size(x, 1);
-
-if isempty(z),
-    
-    z = [];
-    
-else    
-    
-    % Sanity check #2
-    if size(z, 1) ~= n,
-        errmsg = 'x and z should have the same number of rows.';
-        stk_error(errmsg, 'IncorrectArgument');
-    end
-    
-    % Sanity check #3
-    if size(z, 2) ~= 1,
-        errmsg = 'z should be a column vector.';
-        stk_error(errmsg, 'IncorrectArgument');
-    end
-
+   
+% Sanity check #2
+if ~isempty(z) && (size(z, 1) ~= n),
+    errmsg = 'x and z should have the same number of rows.';
+    stk_error(errmsg, 'IncorrectArgument');
 end
 
 % Create the output structure
