@@ -1,4 +1,4 @@
-% STK_BENCHMARK_COV1
+% STK_BENCHMARK_COV2
 
 % Copyright Notice
 %
