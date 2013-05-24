@@ -18,9 +18,9 @@
 %    size N0 x N1, where N0 is the number of rows of XO and N1 the number of
 %    rows of X1.
 %
-% BE CAREFUL: 
-%    
-%    stk_make_matcov(MODEL, X0) and stk_makematcov(MODEL, X0, X0) are NOT 
+% BE CAREFUL:
+%
+%    stk_make_matcov(MODEL, X0) and stk_makematcov(MODEL, X0, X0) are NOT
 %    equivalent if model.lognoisevariance exists (in the first case, the
 %    noise variance is added on the diagonal of the covariance matrix).
 
@@ -52,125 +52,53 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [K, P] = stk_make_matcov(model, x0, x1, pairwise)
+
+%=== process input arguments
+
 stk_narginchk(2, 4);
 
 x0 = double(x0);
-if (nargin > 2), x1 = double(x1); end
 
-%=== guess which syntax has been used based on the second input arg
-
-switch nargin
-    
-    case 2, % stk_make_matcov(model, x0)
-        make_matcov_auto = true;
-        pairwise = false;
-        
-    case 3, % stk_make_matcov(model, x0, x1)
-        make_matcov_auto = false;
-        pairwise = false;
-        
-    case 4, % stk_make_matcov(model, x0, ?, pairwise)
-        make_matcov_auto = isempty(x1);
-        
-    otherwise
-        error('Incorrect number of input arguments.');
+if (nargin > 2) && ~isempty(x1)
+    x1 = double(x1);
+    make_matcov_auto = false;
+else
+    x1 = x0;
+    make_matcov_auto = true;    
 end
 
-if isfield(model, 'Kx_cache'), % handle the case where 'Kx_cache' is present    
+pairwise = (nargin > 3) && pairwise;
+
+%=== compute the covariance matrix
+
+if isfield(model, 'Kx_cache'), % handle the case where 'Kx_cache' is present
     
     if ~pairwise,
-        if make_matcov_auto,
-            K = model.Kx_cache(x0, x0);
-        else
-            K = model.Kx_cache(x0, x1);
-        end
+        K = model.Kx_cache(x0, x1);
     else
-        if make_matcov_auto,
-            idx = sub2ind(size(model.Kx_cache), x0, x0);
-            K = model.Kx_cache(idx);
-        else
-            idx = sub2ind(size(model.Kx_cache), x0, x1);
-            K = model.Kx_cache(idx);
-        end        
+        idx = sub2ind(size(model.Kx_cache), x0, x1);
+        K = model.Kx_cache(idx);
     end
     
 else % handle the case where the covariance matrix must be computed
     
-    %=== blocking parameters for parallel computing
-    
-    % If the size of the covariance matrix to be computed is smaller than
-    % MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.
-    MIN_SIZE_FOR_BLOCKING = 500^2;
-    
-    % If it is decided to use parfor, the number of blocks will be chosen
-    % in such a way that blocks smaller than MIN_BLOCK_SIZE are never used
-    MIN_BLOCK_SIZE = 100^2;
-    
-    %=== number of covariance values to be computed ?
-    
-    N0 = size(x0, 1);
-    
-    if make_matcov_auto,
+    K = feval(model.covariance_type, model.param, x0, x1, -1, pairwise);
+        
+    if make_matcov_auto && isfield(model, 'lognoisevariance'),
         if ~pairwise,
-            N = N0 * N0;
+            K = K + stk_noisecov(size(K,1), model.lognoisevariance);
         else
-            N = N0;
-        end
-    else
-        N1 = size(x1, 1);
-        if ~pairwise
-            N = N0 * N1;
-        else
-            if N1 ~= N0,
-                errmsg = 'x0 and x1 should have the same number of lines.';
-                stk_error(errmsg, 'InconsistentDimensions');
-            end
-            N = N0;
+            stk_error('Not implemented yet.', 'NotImplementedYet');
         end
     end
-    
-    %=== decide whether parallel computing should be used or not
         
-    % note: parallelization is not implemented in the "pairwise" case
-    
-    if pairwise || (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
-        ncores = 1; % do not use parallel computing
-    else
-        ncores = max(1, matlabpool('size'));
-        % note: matlabpool('size') returns 0 if the PCT is not started
-    end
-    
-    %=== call the subfunction that does the actual computations
-    
-    if make_matcov_auto,
-
-        % FIXME: avoid computing twice each off-diagonal term
-        if ncores == 1, % shortcut when parallelization is not used
-            K = feval(model.covariance_type, model.param, x0, x0, -1, pairwise);
-        else
-            K = stk_make_matcov_auto_parfor(model, x0, ncores, MIN_BLOCK_SIZE);
-        end
-        
-        if isfield(model, 'lognoisevariance'),            
-            if ~pairwise,
-                K = K + stk_noisecov(size(K,1), model.lognoisevariance);
-            else
-                stk_error('Not implemented yet.', 'NotImplementedYet');
-            end
-        end
-    else
-        if ncores == 1, % shortcut when parallelization is not used
-            K = feval(model.covariance_type, model.param, x0, x1, -1, pairwise);
-        else
-            K = stk_make_matcov_inter_parfor(model, x0, x1, ncores, MIN_BLOCK_SIZE);
-        end
-    end
-    
 end
 
 %=== compute the regression functions
 
-if nargout > 1, P = stk_ortho_func(model, x0); end
+if nargout > 1,
+    P = stk_ortho_func(model, x0);
+end
 
 end
 
@@ -203,7 +131,7 @@ end
 %!% In the noiseless case, (1) and (2) should give the same results
 %!test  assert(isequal(Kb, Ka));
 
-%!% In the noisy case, however... 
+%!% In the noisy case, however...
 %!test  [Ka, Pa] = stk_make_matcov(model2, x0);           % (1')
 %!test  [Kb, Pb] = stk_make_matcov(model2, x0, x0);       % (2')
 %!error assert(isequal(Kb, Ka));
@@ -212,7 +140,7 @@ end
 %!test  assert(isequal(Pa, Pb));
 %!test  assert(isequal(Pa, Pc));
 
-%!test %% use of Kx_cache, with matrices
+%!test %% use of Kx_cache
 %! model2 = model;
 %! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
 %! idx = [1 4 9];
@@ -220,3 +148,10 @@ end
 %! [K2, P2] = stk_make_matcov(model2, idx');
 %! assert(stk_isequal_tolrel(K1, K2));
 %! assert(stk_isequal_tolrel(P1, P2));
+
+%!test %% use of Kx_cache + pairwise=true
+%! model2 = model;
+%! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
+%! K1 = stk_make_matcov(model,  x0([2 5 6], :), [], true);
+%! K2 = stk_make_matcov(model2, [2 5 6]', [], true);
+%! assert(stk_isequal_tolrel(K1, K2));
