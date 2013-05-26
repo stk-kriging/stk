@@ -95,13 +95,12 @@ end % function
 
 function y = besselk_ (nu, x)
 
-min_size_for_parallelization = 1e3;
+opts = stk_options_get('stk_sf_matern');
 
-if size(x, 1) < min_size_for_parallelization,
+if size(x, 1) < opts.min_size_for_parallelization,
     y = besselk(nu, x);
 else
-    min_block_size = 1e4;
-    y = stk_parfeval(@(t)(besselk(nu, t)), x, true, min_block_size);
+    y = stk_parallel_feval(@(t)(besselk(nu, t)), x, true, opts.min_block_size);
 end
 
 end % function

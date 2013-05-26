@@ -42,48 +42,68 @@ covnames = { ...
 result = struct('covname', [], 't', [], 'n', []);
 
 
-%% Loop over covariance functions
+%% Main loop
 
-for k = 1:length(covnames),
+M = stk_options_get('stk_sf_matern', 'min_size_for_parallelization');
+
+for j = 1:3,
     
-    result(k).covname = covnames{k};
-    model = stk_model(covnames{k}, DIM);
-    
-    REP  = 5000;
-    n    = N_START;
-    
-    while n <= N_MAX
-        
-        n = ceil(n * 1.1);
-        
-        tic;
-        x = stk_sampling_regulargrid(n, DIM);
-        for i = 1:REP,
-            K = [];
-            K = stk_make_matcov(model, x, x);
-        end
-        t = toc / REP;
-        
-        result(k).n(end+1) = n;
-        result(k).t(end+1) = t;
-        
-        figure(1); cla; plot(result(k).n, result(k).t, 'o-'); drawnow;
-        
-        REP = ceil(1/t);
+    switch j
+        case 1
+            try
+                matlabpool close; % FIXME: matlab specific
+            end
+        case 2
+            matlabpool open; % FIXME: matlab specific
+            stk_options_set('stk_sf_matern', 'min_size_for_parallelization', +Inf);
+        case 3
+            stk_options_set('stk_sf_matern', 'min_size_for_parallelization', 1);
     end
     
-    %result(k).t = result(k).t / result(k).t(end);
+    for k = 1:length(covnames), % loop over covariance functions
+        
+        result(j, k).covname = covnames{k};
+        model = stk_model(covnames{k}, DIM);
+        
+        REP = 500;
+        n   = N_START;
+        
+        while n <= N_MAX
+            
+            n = ceil(n * 1.3);
+            
+            tic;
+            x = stk_sampling_regulargrid(n, DIM);
+            for i = 1:REP,
+                K = stk_make_matcov(model, x, x);
+            end
+            t = toc / REP;
+            
+            result(j, k).n(end+1) = n;
+            result(j, k).t(end+1) = t;
+            
+            figure(1); cla;
+            loglog(result(j, k).n, result(j, k).t, 'o-'); drawnow;
+            
+            REP = ceil(1/t);
+        end
+    end
 end
 
+stk_options_set('stk_sf_matern', 'min_size_for_parallelization', M);
+matlabpool close;
 
-%% Final figure
+
+%% Figure
 
 figure(1); cla;
 
-loglog(vertcat(result.n)', vertcat(result.t)', 'o-');
+loglog(vertcat(result(1, :).n)', vertcat(result(1, :).t)', 'x:'); hold on;
+loglog(vertcat(result(2, :).n)', vertcat(result(2, :).t)', 'o-');
+loglog(vertcat(result(3, :).n)', vertcat(result(3, :).t)', 'o--');
 
-h = legend(covnames, 'Location', 'NorthWest');
-set(h, 'Interpreter', 'none')
+h = legend([covnames covnames covnames], 'Location', 'NorthWest');
+set(h, 'Interpreter', 'none');
 
 xlabel('n', 'FontWeight', 'b');
 ylabel('computation time', 'FontWeight', 'b');
