@@ -50,11 +50,9 @@ for j = 1:3,
     
     switch j
         case 1
-            try
-                matlabpool close; % FIXME: matlab specific
-            end
+            stk_parallel_stop();
         case 2
-            matlabpool open; % FIXME: matlab specific
+            stk_parallel_start();
             stk_options_set('stk_sf_matern', 'min_size_for_parallelization', +Inf);
         case 3
             stk_options_set('stk_sf_matern', 'min_size_for_parallelization', 1);
@@ -91,7 +89,6 @@ for j = 1:3,
 end
 
 stk_options_set('stk_sf_matern', 'min_size_for_parallelization', M);
-matlabpool close;
 
 
 %% Figure

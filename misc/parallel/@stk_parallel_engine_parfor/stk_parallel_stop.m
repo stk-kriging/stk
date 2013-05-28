@@ -1,4 +1,4 @@
-% STK_PARALLEL_ENGINE_PARFOR ... (FIXME: missing doc)
+% STK_PARALLEL_STOP ... (FIXME: missing doc)
 
 % Copyright Notice
 %
@@ -26,14 +26,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function pareng = stk_parallel_engine_parfor()
+function stk_parallel_stop(eng) %#ok<INUSD>
 
-if matlabpool('size') > 0,
-    warning('A worker pool is already open.');
+if matlabpool('size') == 0,
+    warning('There was no worker pool open.');
 else
-    matlabpool open;
+    matlabpool close;
 end
 
-pareng = class(struct(), 'stk_parallel_engine_parfor');
-
-end % function stk_parallel_engine_parfor
+stk_parallel_engine_set(stk_parallel_engine_none());
+    
+end % function stk_parallel_stop

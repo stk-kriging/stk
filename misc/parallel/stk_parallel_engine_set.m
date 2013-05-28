@@ -32,13 +32,9 @@ persistent current_pareng
 
 % initialization
 if isempty(current_pareng)
-    
-    % default parallel engine
-    if stk_is_pct_installed(),
-        current_pareng = stk_parallel_engine_parfor();
-    else
-        current_pareng = stk_parallel_engine_none();
-    end
+
+    % no parallel engine, to begin with
+    current_pareng = stk_parallel_engine_none();
     
     % lock the mfile in memory to prevent current_pareng from being cleared
     mlock();

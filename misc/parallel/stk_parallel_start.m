@@ -1,4 +1,4 @@
-% STK_PARALLEL_ENGINE_PARFOR ... (FIXME: missing doc)
+% STK_PARALLEL_START ... (FIXME: missing doc)
 
 % Copyright Notice
 %
@@ -26,14 +26,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function pareng = stk_parallel_engine_parfor()
+function eng = stk_parallel_start()
 
-if matlabpool('size') > 0,
-    warning('A worker pool is already open.');
+eng = stk_parallel_engine_get();
+
+if strcmp(class(eng), 'stk_parallel_engine_none') %#ok<STISA>
+    
+    % use Mathworks' PCT if available
+    if stk_is_pct_installed()        
+        eng = stk_parallel_engine_parfor();
+        stk_parallel_engine_set(eng);
+    end
+    
 else
-    matlabpool open;
+    
+    warning('A parallel computing engine is already started (or so it seems).');
+    
 end
 
-pareng = class(struct(), 'stk_parallel_engine_parfor');
-
-end % function stk_parallel_engine_parfor
+end % function stk_parallel_start
