@@ -31,7 +31,6 @@
 DIM  = 1;
 
 N_START = 50;
-N_STEP  = 50;
 N_MAX   = 2000;
 
 covnames = { ...
@@ -44,18 +43,23 @@ result = struct('covname', [], 't', [], 'n', []);
 
 %% Main loop
 
-M = stk_options_get('stk_sf_matern', 'min_size_for_parallelization');
-
-for j = 1:3,
+for j = 1:4,
     
     switch j
         case 1
+            disp('Using stk_parallel_engine_none...');
             stk_parallel_stop();
         case 2
+            disp('parallelization on (if available) / msfb = Inf');
             stk_parallel_start();
+            M = stk_options_get('stk_sf_matern', 'min_size_for_parallelization');
             stk_options_set('stk_sf_matern', 'min_size_for_parallelization', +Inf);
         case 3
+            disp('parallelization on (if available) / msfb = 1');
             stk_options_set('stk_sf_matern', 'min_size_for_parallelization', 1);
+        case 4
+            fprintf('parallelization on (if available) / msfb = %d (default)', M);
+            stk_options_set('stk_sf_matern', 'min_size_for_parallelization', M);
     end
     
     for k = 1:length(covnames), % loop over covariance functions
@@ -63,13 +67,11 @@ for j = 1:3,
         result(j, k).covname = covnames{k};
         model = stk_model(covnames{k}, DIM);
         
-        REP = 500;
+        REP = 5000;
         n   = N_START;
         
         while n <= N_MAX
-            
-            n = ceil(n * 1.3);
-            
+                       
             tic;
             x = stk_sampling_regulargrid(n, DIM);
             for i = 1:REP,
@@ -83,23 +85,40 @@ for j = 1:3,
             figure(1); cla;
             loglog(result(j, k).n, result(j, k).t, 'o-'); drawnow;
             
+            n = ceil(n * 1.4);
             REP = ceil(1/t);
         end
     end
 end
-
-stk_options_set('stk_sf_matern', 'min_size_for_parallelization', M);
 
 
 %% Figure
 
 figure(1); cla;
 
-loglog(vertcat(result(1, :).n)', vertcat(result(1, :).t)', 'x:'); hold on;
-loglog(vertcat(result(2, :).n)', vertcat(result(2, :).t)', 'o-');
-loglog(vertcat(result(3, :).n)', vertcat(result(3, :).t)', 'o--');
+legtxt = {};
 
-h = legend([covnames covnames covnames], 'Location', 'NorthWest');
+loglog(vertcat(result(1, :).n)', vertcat(result(1, :).t)', 'x:'); hold on;
+for k = 1:length(covnames)
+    legtxt = [legtxt {sprintf('%s (par. off)', covnames{k})}];
+end
+
+loglog(vertcat(result(2, :).n)', vertcat(result(2, :).t)', 'o-');
+for k = 1:length(covnames)
+    legtxt = [legtxt {sprintf('%s (par. on, msfp=+Inf)', covnames{k})}];
+end
+
+loglog(vertcat(result(3, :).n)', vertcat(result(3, :).t)', 's--');
+for k = 1:length(covnames)
+    legtxt = [legtxt {sprintf('%s (par. on, msfp=1)', covnames{k})}];
+end
+
+loglog(vertcat(result(4, :).n)', vertcat(result(4, :).t)', 'd-.');
+for k = 1:length(covnames)
+    legtxt = [legtxt {sprintf('%s (par. on, msfp=%d)', covnames{k}, M)}];
+end
+
+h = legend(legtxt, 'Location', 'NorthWest');
 set(h, 'Interpreter', 'none');
 
 xlabel('n', 'FontWeight', 'b');

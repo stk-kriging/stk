@@ -58,7 +58,7 @@ function opts = init_options()
 
 opts = struct();
 
-opts.stk_sf_matern.min_size_for_parallelization = 1e6;
-opts.stk_sf_matern.min_block_size = 1e4;
+opts.stk_sf_matern.min_size_for_parallelization = 1e5;
+opts.stk_sf_matern.min_block_size = 1e3;
 
 end % function init_options
