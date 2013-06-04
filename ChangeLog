@@ -1,6 +1,6 @@
 2013-06-04  Julien Bect  <julien.bect@supelec.fr>
 
-	Fix a bug in stk_predict (not handler .a structures properly).
+	Fix a bug in stk_predict (not handling .a structures properly).
 
 	* core/stk_predict.m: Filter input arguments through double() to
 	handle legacy .a structures properly. Add tests.
