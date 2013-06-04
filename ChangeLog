@@ -1,9 +1,13 @@
 2013-06-04  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a bug in stk_predict (not handler .a structures properly).
+
+	* core/stk_predict.m: Filter input arguments through double() to
+	handle legacy .a structures properly. Add tests.
+
 	Fix two bugs related to dataframe indexing.
 
-	* utils/@stk_dataframe/private/get_column_indicator.m: Fix two
-	bugs.
+	* utils/@stk_dataframe/private/get_column_indicator.m: Fixed.
 	* utils/@stk_dataframe/subsref.m: Add tests.
 
 2013-05-18  Julien Bect  <julien.bect@supelec.fr>
