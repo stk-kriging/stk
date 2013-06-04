@@ -83,7 +83,7 @@ if ~isequal(size(xi_ind), [ni 1])
 end
 
 delta = repmat(zi, 1, m) - zsim(xi_ind, :);
-zsimc = zsim + lambda' * delta;
+zsimc = stk_dataframe(zsim + lambda' * delta);
 
 end
 
@@ -107,15 +107,13 @@ end
 %!error  zsimc = stk_conditioning(lambda, zi, zsim, xi_ind, pi^2);
 
 %!test
-%!
 %! zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);
-%! assert(stk_isequal_tolabs(zsimc, zeros(n, m)));
+%! assert(stk_isequal_tolabs(double(zsimc), zeros(n, m)));
 
 %!test
-%!
 %! zi = 2 * ones(ni, 1);          % conditioning by twos
 %! zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);
-%! assert(stk_isequal_tolabs(zsimc, 2 * ones(n, m)));
+%! assert(stk_isequal_tolabs(double(zsimc), 2 * ones(n, m)));
 
 %!test
 %!
