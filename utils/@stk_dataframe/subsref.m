@@ -105,15 +105,26 @@ end % function subsref
 %! assert (isequal (x.colnames, t))
 %! assert (isequal (x.colnames{2}, 'yy'))
 
+%--- tests with a bivariate dataframe + column names --------------------------
+
 %!shared u data
-%! u = rand(3, 2); data = stk_dataframe(u, {'x1', 'x2'});
+%! u = rand(3, 2);
+%! data = stk_dataframe(u, {'x1', 'x2'});
 
 %!assert (isequal (data.x2, u(:, 2)))
 %!assert (data.x2(3) == u(3, 2))
 %!error t = data.toto;
-%!error t = data(1, 1).a;
+%!error t = data(1, 1).zzz;   % illegal multilevel indexing
 %!error t = data(1, 1, 1);    % too many indices
 %!error t = data{1};          % curly braces not allowed
+
+%!test % legacy feature: data.a returns the 'mean' column if it exists
+%! data = stk_set_colnames(data, {'mean', 'x2'});
+%! assert(isequal(data.a, u(:, 1)));
+
+%!test % legacy feature: data.a returns the whole dataframe otherwise
+%! data = stk_set_colnames(data, {'x1', 'x2'});
+%! assert(isequal(data.a, u));
 
 %--- tests with a univariate dataframe ----------------------------------------
 
