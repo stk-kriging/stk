@@ -1,5 +1,9 @@
 2013-06-04  Julien Bect  <julien.bect@supelec.fr>
 
+	Return a dataframe from stk_conditioning().
+
+	* utils/stk_conditioning.m: Return a dataframe.
+
 	Fix a bug in stk_predict (not handling .a structures properly).
 
 	* core/stk_predict.m: Filter input arguments through double() to
