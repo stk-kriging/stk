@@ -68,6 +68,8 @@ function [zp, lambda, mu, K] = stk_predict(model, xt)
 
 stk_narginchk(2, 2);
 
+xt = double(xt);
+
 %=== process argument xt according to the nature of the domain
 
 switch model.domain.type
@@ -78,7 +80,7 @@ switch model.domain.type
             xt = (1:size(model.domain.nt, 1))';
         else
             if size(xt, 2) ~= 1,
-                errmsg = 'xt.a should be a column vector of indices.';
+                errmsg = 'xt should be a column vector of indices.';
                 stk_error(errmsg, 'IncorrectArgument');
             end
         end
