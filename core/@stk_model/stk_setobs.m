@@ -40,12 +40,20 @@
 function model = stk_setobs(model, varargin)
 
 if nargin == 2,
+    
+    % Here we assume that the second input argument is already a structure
+    % with the appropriate fields (FIXME: not very robust...)
     xz = varargin{1};
+    
 elseif nargin == 3,
+    
     xz = stk_makedata(varargin{1}, varargin{2});
+    
 else
+    
     errmsg = 'Incorrect number of input arguments';
     stk_err(errmsg, 'IncorrectNbInputArgs');
+    
 end
 
 model.domain.dim   = size(xz.x, 2);

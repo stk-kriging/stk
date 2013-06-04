@@ -53,20 +53,34 @@
 
 function S = stk_makedata(x, z, noisevariance)
 
-% Sanity check #1
-if isstruct(x) && isfield(x, 'v'),
-    stk_error('This kind of .v field is not supported anymore.', 'ObsoleteFeature');
+%--- handle first input argument ----------------------------------------------
+
+if isstruct(x)   
+    if isfield(x, 'v'),
+        stk_error('This kind of .v field is not supported anymore.', ...
+            'ObsoleteFeature');
+    else
+        % (try to) get the data from an old-style STK structure
+        x = x.a;
+    end
 end
 
 n = size(x, 1);
-   
-% Sanity check #2
+
+%--- handle second input argument ---------------------------------------------
+
+if isstruct(z)
+    % (try to) get the data from an old-style STK structure
+    z = z.a;
+end
+
 if ~isempty(z) && (size(z, 1) ~= n),
     errmsg = 'x and z should have the same number of rows.';
     stk_error(errmsg, 'IncorrectArgument');
 end
 
-% Create the output structure
+%--- create the output structure ----------------------------------------------
+
 S = struct('x', x, 'z', z, 'n', n);
 
 if nargin == 3,
