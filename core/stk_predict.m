@@ -74,6 +74,10 @@ function [zp, lambda, mu, K] = stk_predict(model, xi, zi, xt)
 
 stk_narginchk(4, 4);
 
+xi = double(xi);
+zi = double(zi);
+xt = double(xt);
+
 %=== use indices or matrices for xi & xt ?
 
 if isfield(model, 'Kx_cache') % use indices
@@ -261,18 +265,18 @@ end
 %!error y_prd1 = stk_predict(model, x_obs, z_obs, x_prd, 0);
 
 %!test
-%!
 %! [y_prd1, lambda, mu, K] = stk_predict(model, x_obs, z_obs, x_prd);
 %! assert(isequal(size(lambda), [n m]));
 %! assert(isequal(size(mu), [1 m]));  % ordinary kriging
 %! assert(isequal(size(K), [m m]));
 
-%!test
-%!
-%! %% use of Kx_cache
+%!test % use old-style .a structures (legacy)
+%! y_prd2 = stk_predict(model, struct('a', double(x_obs)), ...
+%!                      struct('a', double(z_obs)), struct('a', double(x_prd)));
+%! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd2)));
+
+%!test % use of Kx_cache
 %! model = stk_model('stk_materncov32_iso');
 %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
-%! y_prd2 = stk_predict(model, idx_obs, z_obs, idx_prd);
-%!
-%! %% check that both methods give the same result
-%! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd2)));
+%! y_prd3 = stk_predict(model, idx_obs, z_obs, idx_prd);
+%! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd3)));
