@@ -1,5 +1,11 @@
 2013-06-16  Julien Bect  <julien.bect@supelec.fr>
 
+	Improve backward compatibility.
+
+	* utils/@stk_dataframe/private/get_column_indicator.m: Return the
+	'var' field if it exists when 'v' is asked for, and display a
+	warning.
+
 	Fix a bug in stk_param_getdefaultbounds (not handling .a
 	structures properly).
 
