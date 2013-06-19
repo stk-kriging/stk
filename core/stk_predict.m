@@ -3,7 +3,7 @@
 % CALL: ZP = stk_predict(MODEL, XI, ZI, XP)
 %
 %    performs a kriging prediction at the points XP, given the observations
-%    (XI, ZI) and the prior MODEL. The input arguments XI, ZI, and XP can be 
+%    (XI, ZI) and the prior MODEL. The input arguments XI, ZI, and XP can be
 %    either numerical matrices or dataframes. More precisely, on a factor space
 %    of dimension DIM,
 %
@@ -103,7 +103,7 @@ block_size = [];
 
 %=== prepare lefthand side of the kriging equation
 
-[Kii,Pi] = stk_make_matcov(model,  xi);
+[Kii, Pi] = stk_make_matcov(model, xi);
 
 LS = [[ Kii, Pi                ]; ...
       [ Pi', zeros(size(Pi,2)) ]];
@@ -198,7 +198,8 @@ for block_num = 1:nb_blocks
     end
     
     % compute kriging variances (this does NOT include the noise variance)
-    zp_v(idx) = stk_make_matcov(model, xt_block, xt_block, true) - dot(lambda_mu, RS)';
+    zp_v(idx) = stk_make_matcov(model, xt_block, xt_block, true) ...
+        - dot(lambda_mu, RS)';
     
     % note: the following modification computes prediction variances for noisy
     % variance, i.e., including the noise variance also
@@ -207,7 +208,7 @@ for block_num = 1:nb_blocks
     b = (zp_v < 0);
     if any(b),
         zp_v(b) = 0.0;
-        warning(sprintf( ...
+        warning('STK:stk_predict:NegativeVariancesSetToZero', sprintf( ...
             ['Correcting numerical inaccuracies in kriging variance.\n' ...
             '(%d negative variances have been set to zero)'], sum(b)));
     end
