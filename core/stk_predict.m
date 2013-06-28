@@ -188,7 +188,7 @@ for block_num = 1:nb_blocks
     end
         
     % compute kriging variances (this does NOT include the noise variance)
-    zp_v(idx) = stk_posterior_matcov(kreq, 1:nt, 1:nt, true);
+    zp_v(idx) = stk_posterior_matcov(kreq, 1:length(idx), 1:length(idx), true);
     
     % note: the following modification computes prediction variances for noisy
     % variance, i.e., including the noise variance also
