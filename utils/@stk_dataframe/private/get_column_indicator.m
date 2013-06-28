@@ -36,8 +36,28 @@ if ~any(b)
     
     if ~strcmp(s, 'a') % the special case s == 'a' is dealt with below
         
-        errmsg = sprintf('There is no variable named %s.', s);
-        stk_error(errmsg, 'UnknownVariable');
+        if ~strcmp(s, 'v') % the special case s == 'v' is dealt with below
+            
+            errmsg = sprintf('There is no variable named %s.', s);
+            stk_error(errmsg, 'UnknownVariable');
+        
+        else % special case s == 'v' (legacy feature)
+            
+            b = strcmp('var', x.vnames);
+            
+            if any(b)
+                
+                warning(sprintf(['There is no variable named ''v''.\n' ...
+                    ' => Assuming that you''re an old STK user trying to ' ...
+                    'get the kriging variance.'])); %#ok<WNTAG,SPWRN>
+                
+            else
+                
+                stk_error('There is no variable named v.', 'UnknownVariable');
+                
+            end
+            
+        end
         
     else % special case s == 'a' (legacy feature)
         

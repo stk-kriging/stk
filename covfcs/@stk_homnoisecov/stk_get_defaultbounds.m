@@ -35,8 +35,7 @@ end
 if nargin < 3 || isempty(z)
     empirical_variance = 1.0;
 else
-    if isstruct(z), z = z.a; end
-    empirical_variance = var(z);
+    empirical_variance = var(double(z));
 end
 
 TOLVAR = 5.0;

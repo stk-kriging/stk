@@ -2,7 +2,7 @@
 %
 % CALL: ZP = stk_predict(MODEL, XP)
 %
-%    performs a kriging prediction at the points XP, using the kriging model 
+%    performs a kriging prediction at the points XP, using the kriging model
 %    MODEL. The input argument XP can be either a numerical array or a
 %    dataframe. On a factor space of dimension DIM, XP must have size NP x DIM,
 %    where NP is the number of prediction points. The output ZP is a dataframe
@@ -209,14 +209,14 @@ for block_num = 1:nb_blocks
     b = (zp_v < 0);
     if any(b),
         zp_v(b) = 0.0;
-        warning(sprintf( ...
+        warning('STK:stk_predict:NegativeVariancesSetToZero', sprintf( ...
             ['Correcting numerical inaccuracies in kriging variance.\n' ...
             '(%d negative variances have been set to zero)'], sum(b)));
     end
     
     if display_waitbar,
-        waitbar( idx_end/nt, hwb, sprintf( ...
-            'In stk\\_predict(): %d/%d predictions completed',idx_end,nt) );
+        waitbar(idx_end/nt, hwb, sprintf( ...
+            'In stk\\_predict(): %d/%d predictions completed',idx_end,nt));
     end
 end
 

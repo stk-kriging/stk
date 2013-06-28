@@ -32,8 +32,7 @@ stk_narginchk(1, 2);
 if nargin < 2,
     empirical_variance = 1.0;
 else
-    if isstruct(z), z = z.a; end
-    empirical_variance = var(z);
+    empirical_variance = var(double(z));
 end
 
 % constants
@@ -47,7 +46,7 @@ ubv = max(log(empirical_variance) + TOLVAR, param0(1));
 dim = length(param0) - 2;
 
 lbnu = min(log(0.5), param0(2));
-ubnu = max(log(10*dim), param0(2));
+ubnu = max(log(10 * dim), param0(2));
 
 scale = param0(3:end);
 lba = scale(:) - TOLSCALE;

@@ -1,9 +1,10 @@
+% QUANTILE [overloaded base function]
+
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Author: Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -25,29 +26,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [lb, ub] = stk_materncov32_aniso_defaultbounds(param0, z)
+function z = quantile(x, p, dim)
 
-stk_narginchk(1, 2);
+if nargin < 3, dim = 1; end
 
-if nargin < 2,
-    empirical_variance = 1.0;
-else
-    empirical_variance = var(double(z));
-end
+z = apply(x, dim, @quantile, p);
 
-% constants
-TOLVAR = 5.0;
-TOLSCALE = 5.0;
+end % function quantile
 
-% bounds for the variance parameter
-lbv = min(log(empirical_variance) - TOLVAR, param0(1));
-ubv = max(log(empirical_variance) + TOLVAR, param0(1));
 
-scale = param0(2:end);
-lba = scale(:) - TOLSCALE;
-uba = scale(:) + TOLSCALE;
-
-lb = [lbv; lba];
-ub = [ubv; uba];
-
-end % function stk_materncov32_aniso_defaultbounds
+%!shared x1 df1 p
+%! x1 = rand(9, 3);
+%! df1 = stk_dataframe(x1, {'a', 'b', 'c'});
+%! p = 0.95;
+%!assert (isequal (quantile(df1, p),    quantile(x1, p)))
+%!assert (isequal (quantile(df1, p, 1), quantile(x1, p)))
+%!assert (isequal (quantile(df1, p, 2), quantile(x1, p, 2)))
