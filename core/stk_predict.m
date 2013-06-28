@@ -103,12 +103,7 @@ block_size = [];
 
 %=== prepare lefthand side of the kriging equation
 
-[Kii, Pi] = stk_make_matcov(model, xi);
-
-LS = [[ Kii, Pi                ]; ...
-      [ Pi', zeros(size(Pi,2)) ]];
-
-[LS_Q, LS_R] = qr(LS); % orthogonal-triangular decomposition
+kreq = stk_kriging_equation(model, xi);
 
 %=== prepare the output arguments
 
@@ -131,7 +126,7 @@ end
 % return Lagrange multipliers ?
 return_lm = (nargout > 2);
 if return_lm,
-    mu = zeros(size(Pi, 2), nt);
+    mu = zeros(size(kreq.LS_Q, 1) - ni, nt);
 end
 
 return_K = (nargout > 3); % return posterior covariance matrix ?
@@ -158,8 +153,6 @@ block_size = ceil(nt / nb_blocks);
 
 %=== MAIN LOOP (over blocks)
 
-linsolve_opt = struct('UT', true);
-
 for block_num = 1:nb_blocks
     
     % compute the indices for the current block
@@ -170,40 +163,36 @@ for block_num = 1:nb_blocks
     % extract the block of prediction locations
     xt_block = xt(idx, :);
     
-    % right-hand side of the kriging equation
-    [Kti, Pt] = stk_make_matcov(model, xt_block, xi);
-    RS = [Kti Pt]';
-    
-    % solve the upper-triangular system to get the extended
-    % kriging weights vector (weights + Lagrange multipliers)
-    if stk_is_octave_in_use(),
-        lambda_mu = LS_R \ (LS_Q' * RS); % linsolve is missing in Octave
-    else
-        lambda_mu = linsolve(LS_R, LS_Q' * RS, linsolve_opt);
-    end
-    
+    % solve the kriging equation using xt_block for the right-hand side
+    kreq = linsolve(kreq, xt_block);
+           
     % extract weights
-    if return_weights,
-        lambda(:, idx) = lambda_mu(1:ni, :);
+    if return_weights || compute_prediction
+        
+        lambda = kreq.lambda;
+        
+        if return_weights
+            lambda(:, idx) = lambda;
+        end
+        
+        % compute the kriging mean
+        if compute_prediction,
+            zp_a(idx) = lambda' * zi;
+        end
+
     end
     
     % extracts Lagrange multipliers
     if return_lm,
-        mu(:, idx) = lambda_mu((ni+1):end, :);
+        mu(:, idx) = kreq.mu;
     end
-    
-    % compute the kriging mean
-    if compute_prediction,
-        zp_a(idx) = lambda_mu(1:ni, :)' * double(zi);
-    end
-    
+        
     % compute kriging variances (this does NOT include the noise variance)
-    zp_v(idx) = stk_make_matcov(model, xt_block, xt_block, true) ...
-        - dot(lambda_mu, RS)';
+    zp_v(idx) = stk_posterior_matcov(kreq, 1:nt, 1:nt, true);
     
     % note: the following modification computes prediction variances for noisy
     % variance, i.e., including the noise variance also
-    % zp_v(idx) = stk_make_matcov(model, xt, [], true) - dot(lambda_mu, RS)';
+    % zp_v(idx) = stk_posterior_matcov(kreq, 1:nt, [], true);
     
     b = (zp_v < 0);
     if any(b),
@@ -214,17 +203,15 @@ for block_num = 1:nb_blocks
     end
     
     if display_waitbar,
-        waitbar( idx_end/nt, hwb, sprintf( ...
-            'In stk\\_predict(): %d/%d predictions completed',idx_end,nt) );
+        waitbar(idx_end/nt, hwb, sprintf( ...
+            'In stk\\_predict(): %d/%d predictions completed',idx_end,nt));
     end
 end
 
 % compute posterior covariance matrix (if requested)
 if return_K,
-    assert(nb_blocks == 1); % sanity check
-    K0 = stk_make_matcov(model, xt);
-    K = K0 - [lambda; mu]' * RS;
-    K = 0.5 * (K + K'); % enforce symmetry
+    assert(nb_blocks == 1); % sanity check    
+    K = stk_posterior_matcov(kreq, 1:nt, 1:nt, false);
 end
 
 if display_waitbar,
