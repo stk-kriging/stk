@@ -1,3 +1,29 @@
+2013-06-19  Julien Bect  <julien.bect@supelec.fr>
+
+	Send a warning when negative variances are set to zero.
+
+	* core/stk_predict.m: modified.
+
+2013-06-18  Julien Bect  <julien.bect@supelec.fr>
+
+	Overloaded quantile() function for dataframe objects.
+
+	* utils/@stk_dataframe/quantile.m: New function.
+
+2013-06-16  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve backward compatibility.
+
+	* utils/@stk_dataframe/private/get_column_indicator.m: Return the
+	'var' field if it exists when 'v' is asked for, and display a
+	warning.
+
+	Fix a bug in stk_param_getdefaultbounds (not handling .a
+	structures properly).
+
+	* paramestim/stk_param_getdefaultbounds.m: Cast to double before
+	calling var() to handle legacy .a structure properly.
+
 2013-06-04  Julien Bect  <julien.bect@supelec.fr>
 
 	Return a dataframe from stk_conditioning().

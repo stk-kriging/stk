@@ -40,7 +40,7 @@ else
     TOLSCALE = 5.0;
     
     % bounds for the variance parameter
-    empirical_variance = var(yi);
+    empirical_variance = var(double(yi));
     logvar_lb = min(log(empirical_variance), param0(1)) - TOLVAR;
     logvar_ub = max(log(empirical_variance), param0(1)) + TOLVAR;
     
