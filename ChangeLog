@@ -1,3 +1,14 @@
+2013-07-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Encapsulate kriging equations in a dedicated class (bis).
+
+	* core/stk_predict.m: Move the rhs loop (and a few other things)
+	to @stk_kriging_equation.stk_predict(). Add tests.
+	* core/@stk_kriging_equation/stk_predict.m: New function.
+	* core/@stk_kriging_equation/linsolve.m: Cast xt to double.
+	* core/@stk_kriging_equation/stk_kriging_equation.m: Cast xi to
+	double. Add a third optional argument: 'xt'.
+
 2013-06-28  Julien Bect  <julien.bect@supelec.fr>
 
 	Encapsulate kriging equations in a dedicated class.
