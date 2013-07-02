@@ -27,7 +27,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = stk_kriging_equation(model, xi)
+function kreq = stk_kriging_equation(model, xi, xt)
+
+xi = double(xi);
 
 [Kii, Pi] = stk_make_matcov(model, xi);
 
@@ -43,5 +45,11 @@ kreq = struct(  'model',     model, ...
     'RS',   [], 'lambda_mu', []     );
 
 kreq = class(kreq, 'stk_kriging_equation');
+
+if nargin > 2,
+    
+    kreq = linsolve(kreq, double(xt));
+    
+end
 
 end

@@ -31,7 +31,7 @@ function kreq = linsolve(kreq, xt)
 
 [Kti, Pt] = stk_make_matcov(kreq.model, xt, kreq.xi);
 
-kreq.xt = xt;
+kreq.xt = double(xt);
 kreq.RS = [Kti Pt]';
 
 % solve the upper-triangular system to get the extended
