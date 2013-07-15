@@ -1,10 +1,10 @@
-% STK_GET_COLNAMES returns the column names of a dataframe
+% GET [overloaded base function]
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author: Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,17 +26,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function colnames = stk_get_colnames(x)
+function t = get(x, propname)
 
-colnames = x.vnames;
+if strcmp(propname, 'levels')
+    t = x.levels;
+else
+    t = get(x.stk_dataframe, propname);
+end
 
-end % function stk_get_colnames
-
-
-%!test
-%! x = stk_dataframe(rand(3, 2));
-%! assert(isequal(stk_get_colnames(x), {}));
-
-%!test
-%! x = stk_dataframe(rand(3, 2), {'u' 'v'});
-%! assert(isequal(stk_get_colnames(x), {'u' 'v'}));
+end % function get

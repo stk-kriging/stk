@@ -46,4 +46,21 @@ int stk_is_realmatrix(const mxArray* x)
   return 1;
 }
 
+void mxReplaceField
+(mxArray* S, mwIndex index, const char* fieldname, const mxArray* value)
+{
+  mxArray *tmp, *value_copy;
+
+  tmp = mxGetField(S, index, fieldname);
+  if (tmp != NULL)
+    mxDestroyArray(tmp);
+
+  value_copy = mxDuplicateArray(value);
+  if (value_copy == NULL)
+    mexErrMsgTxt("mxDuplicateArray: not enough free heap "
+		 "space to create the mxArray");
+  
+  mxSetField(S, index, fieldname, value_copy);
+}
+
 #endif

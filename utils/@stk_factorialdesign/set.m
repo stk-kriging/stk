@@ -1,10 +1,10 @@
-% STK_GET_ROWNAMES returns the row names of a dataframe
+% SET [overloaded base function]
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author: Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,17 +26,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function rownames = stk_get_rownames(x)
+function x = set(x, propname, value)
 
-rownames = x.rownames;
+if strcmp(propname, 'levels')
+    x = stk_factorialdesign(value);
+else
+    x.stk_dataframe = set(x.stk_dataframe, propname, value);
+end
 
-end % function stk_get_rownames
-
-
-%!test
-%! x = stk_dataframe(rand(2, 1));
-%! assert(isequal(stk_get_rownames(x), {}));
-
-%!test
-%! x = stk_dataframe(rand(2, 1), {}, {'a'; 'b'});
-%! assert(isequal(stk_get_rownames(x), {'a'; 'b'}));
+end % function set

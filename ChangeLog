@@ -1,3 +1,37 @@
+2013-07-15  Julien Bect  <julien.bect@supelec.fr>
+
+	Recompile a MEX-file if the source is more recent.
+
+	* misc/config/stk_compile_all.m: Modified.
+
+	Add MEX-file for an efficient access to the named properties of an
+	stk_dataframe object.
+
+	* utils/@stk_dataframe/src: New folder for MEX sources.
+	* utils/@stk_dataframe/src/get.c: New method (source).
+	* utils/@stk_dataframe/src/set.c: New method (source).
+	* utils/@stk_dataframe/src/get_column_number.h: New C header.
+	* misc/config/stk_compile_all.m: Compile get and set.
+	* utils/@stk_factorialdesign/get.m: New method.
+	* utils/@stk_factorialdesign/set.m: New method.
+	* utils/@stk_dataframe/subsasgn.m: Use get/set.
+	* utils/@stk_dataframe/subsref.m: Idem.
+	* utils/@stk_dataframe/ctranspose.m: Idem.
+	* utils/@stk_dataframe/transpose.m: Idem.
+	* utils/@stk_factorialdesign/stk_factorialdesign.m: Idem.
+	* utils/@stk_dataframe/stk_dataframe.m: Idem.
+	* utils/@stk_dataframe/stk_get_rownames.m: Removed.
+	* utils/@stk_dataframe/stk_get_colnames.m: Removed.
+	* utils/@stk_dataframe/stk_set_rownames.m: Removed.
+	* utils/@stk_dataframe/stk_get_colnames.m: Removed
+	* utils/@stk_dataframe/private/get_column_indicator.m: Removed.
+
+	Create a folder for common include files (*.h).
+
+	* misc/include: New folder.
+	* misc/include/stk_mex.h: Moved from misc/dist/private/.
+	* misc/config/stk_compile_all.m: Add a -I flag for mex
+
 2013-07-02  Julien Bect  <julien.bect@supelec.fr>
 
 	Encapsulate kriging equations in a dedicated class (bis).
