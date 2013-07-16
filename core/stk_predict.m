@@ -74,164 +74,47 @@ function [zp, lambda, mu, K] = stk_predict(model, xi, zi, xt)
 
 stk_narginchk(4, 4);
 
-xi = double(xi);
-zi = double(zi);
-xt = double(xt);
-
-%=== use indices or matrices for xi & xt ?
-
-if isfield(model, 'Kx_cache') % use indices
-    if isempty(xt)
-        xt = (1:size(model.Kx_cache, 1))';
-    end
-    if ~(iscolumn(xi) && iscolumn(xt))
-        errmsg = 'Both xi and xt must be columns.';
-        stk_error(errmsg, 'IncorrectSize');
-    end
-end
-
-ni = size(xi, 1); % number of observations
-nt = size(xt, 1); % number of test points
-assert(nt > 0);
-
-assert(isempty(zi) || (size(zi, 1) == ni));
-
-%=== handle other optional arguments
+%=== todo: these should become options
 
 display_waitbar = false;
 block_size = [];
+options = {display_waitbar, block_size};
 
 %=== prepare lefthand side of the kriging equation
 
-[Kii, Pi] = stk_make_matcov(model, xi);
+kreq = stk_kriging_equation(model, xi);
 
-LS = [[ Kii, Pi                ]; ...
-      [ Pi', zeros(size(Pi,2)) ]];
+%=== solve the kriging system and extract all requested outputs
 
-[LS_Q, LS_R] = qr(LS); % orthogonal-triangular decomposition
-
-%=== prepare the output arguments
-
-zp_v = zeros(nt, 1);
-compute_prediction = ~isempty(zi);
-
-% compute the kriging prediction, or just the variances ?
-if compute_prediction,
-    zp_a = zeros(nt, 1);
+if nargout == 1,
+    
+    % note: calling @stk_kriging_equation.stk_predict without its second output
+    % argument is more memory-efficient (we don't build full lambda_mu and RS
+    % matrices)
+    
+    zp = stk_predict(kreq, zi, xt, options{:});
+    
 else
-    zp_a = nan(nt, 1);
-end
-
-% return kriging weights ?
-return_weights = (nargout > 1);
-if return_weights,
-    lambda = zeros(ni, nt);
-end
-
-% return Lagrange multipliers ?
-return_lm = (nargout > 2);
-if return_lm,
-    mu = zeros(size(Pi, 2), nt);
-end
-
-return_K = (nargout > 3); % return posterior covariance matrix ?
-
-%=== choose nb_blocks & block_size
-
-% note: only one block if return_K == true
-%       (we need the full set of lambda's and mu's to compute K)
-
-if (~return_K) && isempty(block_size)
-    MAX_RS_SIZE = 5e6; SIZE_OF_DOUBLE = 8; % in bytes
-    block_size = ceil(MAX_RS_SIZE / (ni * SIZE_OF_DOUBLE));
-end
-
-if return_K || (block_size == inf),
-    % biggest possible block size
-    nb_blocks = 1;
-else
-    % blocks of size approx. block_size
-    nb_blocks = ceil(nt / block_size);
-end
-
-block_size = ceil(nt / nb_blocks);
-
-%=== MAIN LOOP (over blocks)
-
-linsolve_opt = struct('UT', true);
-
-for block_num = 1:nb_blocks
     
-    % compute the indices for the current block
-    idx_beg = 1 + block_size * (block_num - 1);
-    idx_end = min(nt, idx_beg + block_size - 1);
-    idx = idx_beg:idx_end;
+    [zp, kreq] = stk_predict(kreq, zi, xt, options{:});
     
-    % extract the block of prediction locations
-    xt_block = xt(idx, :);
-    
-    % right-hand side of the kriging equation
-    [Kti, Pt] = stk_make_matcov(model, xt_block, xi);
-    RS = [Kti Pt]';
-    
-    % solve the upper-triangular system to get the extended
-    % kriging weights vector (weights + Lagrange multipliers)
-    if stk_is_octave_in_use(),
-        lambda_mu = LS_R \ (LS_Q' * RS); % linsolve is missing in Octave
-    else
-        lambda_mu = linsolve(LS_R, LS_Q' * RS, linsolve_opt);
+    % extracts kriging weights (if requested)
+    if nargout > 1,
+        lambda = kreq.lambda;
     end
     
-    % extract weights
-    if return_weights,
-        lambda(:, idx) = lambda_mu(1:ni, :);
+    % extracts Lagrange multipliers (if requested)
+    if nargout > 2,
+        mu = kreq.mu;
     end
     
-    % extracts Lagrange multipliers
-    if return_lm,
-        mu(:, idx) = lambda_mu((ni+1):end, :);
+    % compute posterior covariance matrix (if requested)
+    if nargout > 3,
+        nt = size(xt, 1);
+        K = stk_posterior_matcov(kreq, 1:nt, 1:nt, false);
     end
     
-    % compute the kriging mean
-    if compute_prediction,
-        zp_a(idx) = lambda_mu(1:ni, :)' * double(zi);
-    end
-    
-    % compute kriging variances (this does NOT include the noise variance)
-    zp_v(idx) = stk_make_matcov(model, xt_block, xt_block, true) ...
-        - dot(lambda_mu, RS)';
-    
-    % note: the following modification computes prediction variances for noisy
-    % variance, i.e., including the noise variance also
-    % zp_v(idx) = stk_make_matcov(model, xt, [], true) - dot(lambda_mu, RS)';
-    
-    b = (zp_v < 0);
-    if any(b),
-        zp_v(b) = 0.0;
-        warning('STK:stk_predict:NegativeVariancesSetToZero', sprintf( ...
-            ['Correcting numerical inaccuracies in kriging variance.\n' ...
-            '(%d negative variances have been set to zero)'], sum(b)));
-    end
-    
-    if display_waitbar,
-        waitbar( idx_end/nt, hwb, sprintf( ...
-            'In stk\\_predict(): %d/%d predictions completed',idx_end,nt) );
-    end
 end
-
-% compute posterior covariance matrix (if requested)
-if return_K,
-    assert(nb_blocks == 1); % sanity check
-    K0 = stk_make_matcov(model, xt);
-    K = K0 - [lambda; mu]' * RS;
-    K = 0.5 * (K + K'); % enforce symmetry
-end
-
-if display_waitbar,
-    close(hwb);
-end
-
-zp = stk_dataframe([zp_a zp_v], {'mean' 'var'});
 
 end
 
@@ -276,8 +159,25 @@ end
 %!                      struct('a', double(z_obs)), struct('a', double(x_prd)));
 %! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd2)));
 
-%!test % use of Kx_cache
+%%% test Kx_cache
+
+%!test
 %! model = stk_model('stk_materncov32_iso');
 %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
 %! y_prd3 = stk_predict(model, idx_obs, z_obs, idx_prd);
 %! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd3)));
+
+%!test % same test,with idx_prd as a row vector
+%! model = stk_model('stk_materncov32_iso');
+%! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
+%! y_prd3 = stk_predict(model, idx_obs, z_obs, idx_prd');
+%! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd3)));
+
+%!test
+%! idx_all = (1:(n+m))';
+%! model = stk_model('stk_materncov32_iso');
+%! y_prd4 = stk_predict(model, idx_obs, z_obs, idx_all);
+%! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
+%! y_prd5 = stk_predict(model, idx_obs, z_obs, []);
+%! assert(stk_isequal_tolrel(double(y_prd4), double(y_prd5)));
+

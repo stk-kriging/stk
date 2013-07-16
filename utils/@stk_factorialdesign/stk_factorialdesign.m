@@ -94,7 +94,7 @@ end % function stk_factorialdesign
 %!test % constructor with two factors + column names
 %! x = stk_factorialdesign({[0 1], [1 2 3]}, {'a', 'b'})
 %! assert( isequal(x.colnames, {'a', 'b'}) );
-%! assert( isequal(stk_get_colnames(x), {'a', 'b'}) );
+%! assert( isequal(get(x, 'colnames'), {'a', 'b'}) );
 
 % tests some incorrect values for 'levels'
 %!error stk_factorialdesign('bouh');

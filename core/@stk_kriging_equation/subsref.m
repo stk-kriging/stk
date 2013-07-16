@@ -1,10 +1,10 @@
-% STK_GET_COLNAMES returns the column names of a dataframe
+% SUBSREF [overloaded base function]
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author: Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,17 +26,35 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function colnames = stk_get_colnames(x)
+function t = subsref(kreq, idx)
 
-colnames = x.vnames;
+switch idx(1).type
+    
+    case {'()', '{}'}
+        
+        stk_error('Illegal indexing.', 'IllegalIndexing');        
+        
+    case '.'
+        
+        switch idx(1).subs
+                        
+            case 'lambda',
+                ni = size(kreq.xi, 1);
+                t = kreq.lambda_mu(1:ni, :);
+                
+            case 'mu',
+                ni = size(kreq.xi, 1);
+                t = kreq.lambda_mu((ni + 1):end, :);
+                
+            otherwise,                
+                t = kreq.(idx(1).subs);
+                
+        end % switch
+        
+        if length(idx) > 1,
+            t = subsref(t, idx(2:end));
+        end
+        
+end
 
-end % function stk_get_colnames
-
-
-%!test
-%! x = stk_dataframe(rand(3, 2));
-%! assert(isequal(stk_get_colnames(x), {}));
-
-%!test
-%! x = stk_dataframe(rand(3, 2), {'u' 'v'});
-%! assert(isequal(stk_get_colnames(x), {'u' 'v'}));
+end % function subsref

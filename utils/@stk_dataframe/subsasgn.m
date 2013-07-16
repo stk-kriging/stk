@@ -111,30 +111,10 @@ switch idx(1).type
         
     case '.'
         
-        switch idx(1).subs,
-            
-            case 'rownames',
-                if length(idx) > 1
-                    val = subsasgn(stk_get_rownames(x), idx(2:end), val);
-                end
-                x = stk_set_rownames(x, val);
-                
-            case 'colnames',
-                if length(idx) > 1
-                    val = subsasgn(stk_get_colnames(x), idx(2:end), val);
-                end
-                x = stk_set_colnames(x, val);
-                
-            otherwise,
-                b = get_column_indicator(x, idx(1).subs);
-                val = double(val);
-                if length(idx) > 1,
-                    x.data(:, b) = subsasgn(x.data(:, b), idx(2:end), val);
-                else
-                    x.data(:, b) = val;
-                end
-                
-        end % switch
+        if length(idx) > 1
+            val = subsasgn(get(x, idx(1).subs), idx(2:end), val);
+        end
+        x = set(x, idx(1).subs, val);
         
 end
 
@@ -147,25 +127,25 @@ end % function subsasgn
 
 %!test
 %! x.rownames = s;
-%! assert (isequal(stk_get_rownames(x), s))
+%! assert (isequal(get(x, 'rownames'), s))
 
 %!test
 %! x.colnames = t;
-%! assert (isequal(stk_get_rownames(x), s))
-%! assert (isequal(stk_get_colnames(x), t))
+%! assert (isequal(get(x, 'rownames'), s))
+%! assert (isequal(get(x, 'colnames'), t))
 
 %!test
 %! x.rownames{2} = 'dudule';
-%! assert (isequal(stk_get_rownames(x), {'a'; 'dudule'; 'c'}))
-%! assert (isequal(stk_get_colnames(x), t))
+%! assert (isequal(get(x, 'rownames'), {'a'; 'dudule'; 'c'}))
+%! assert (isequal(get(x, 'colnames'), t))
 
 %!test
 %! x.colnames{1} = 'martha';
-%! assert (isequal(stk_get_rownames(x), {'a'; 'dudule'; 'c'}))
-%! assert (isequal(stk_get_colnames(x), {'martha' 'yy'}))
+%! assert (isequal(get(x, 'rownames'), {'a'; 'dudule'; 'c'}))
+%! assert (isequal(get(x, 'colnames'), {'martha' 'yy'}))
 
-%!error x.colnames{1} = 'yy'
-%!error x.colnames = {'xx' 'xx'}
+% %!error x.colnames{1} = 'yy'
+% %!error x.colnames = {'xx' 'xx'}
 
 %!test
 %! data = stk_dataframe(zeros(3, 2), {'x1' 'x2'});

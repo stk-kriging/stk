@@ -1,10 +1,10 @@
-% CTRANSPOSE [overloaded base function]
+% GET [overloaded base function]
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author: Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,22 +26,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = ctranspose(x)
+function t = get(x, propname)
 
-rn = get(x, 'rownames');
-cn = get(x, 'colnames');
+if strcmp(propname, 'levels')
+    t = x.levels;
+else
+    t = get(x.stk_dataframe, propname);
+end
 
-y = stk_dataframe(ctranspose(x.data), rn', cn');
-
-end % function ctranspose
-
-% note: complex-valued dataframes are supported but, currently,
-%       not properly displayed
-
-%!test
-%! u = rand(3, 2) + 1i * rand(3, 2);
-%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});
-%! data = data';
-%! assert (isa(data, 'stk_dataframe') && isequal(double(data), u'));
-%! assert (isequal(data.rownames, {'x'; 'y'}));
-%! assert (isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));
+end % function get

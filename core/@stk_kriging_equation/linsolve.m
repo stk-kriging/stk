@@ -1,10 +1,11 @@
-% STK_GET_ROWNAMES returns the row names of a dataframe
+% LINSOLVE
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,17 +27,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function rownames = stk_get_rownames(x)
+function kreq = linsolve(kreq, xt) 
 
-rownames = x.rownames;
+[Kti, Pt] = stk_make_matcov(kreq.model, xt, kreq.xi);
 
-end % function stk_get_rownames
+kreq.xt = double(xt);
+kreq.RS = [Kti Pt]';
 
+% solve the upper-triangular system to get the extended
+% kriging weights vector (weights + Lagrange multipliers)
+if stk_is_octave_in_use(),
+    % linsolve is missing in Octave
+    kreq.lambda_mu = kreq.LS_R \ (kreq.LS_Q' * kreq.RS);
+else
+    kreq.lambda_mu = linsolve ...
+        (kreq.LS_R, kreq.LS_Q' * kreq.RS, struct('UT', true));
+end
 
-%!test
-%! x = stk_dataframe(rand(2, 1));
-%! assert(isequal(stk_get_rownames(x), {}));
-
-%!test
-%! x = stk_dataframe(rand(2, 1), {}, {'a'; 'b'});
-%! assert(isequal(stk_get_rownames(x), {'a'; 'b'}));
+end % function linsolve
