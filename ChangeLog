@@ -1,5 +1,9 @@
 2013-07-18  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a minor bug in @stk_dataframe.horzcat.
+
+	* utils/@stk_dataframe/horzcat.m: Modified.
+	
 	Benchmarks for parallelization.
 
 	* misc/benchmarks: New folder.
