@@ -28,6 +28,10 @@
 
 function z = horzcat(x, y, varargin)
 
+if nargin < 2,
+    y = [];
+end
+
 if isa(x, 'stk_dataframe')
     
     % In this case, [x y] will be an stk_dataframe also.
