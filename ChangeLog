@@ -1,3 +1,37 @@
+2013-07-18  Julien Bect  <julien.bect@supelec.fr>
+
+	Benchmarks for parallelization.
+
+	* misc/benchmarks: New folder.
+	* misc/benchmarks/stk_benchmark_cov2.m: New script.
+	* misc/benchmarks/stk_benchmark_cov1.m: New script.
+
+	Rewrite parallelization of covariance evaluation.
+
+	* core/private: Removed.
+	* core/stk_make_matcov.m: Modified (much simpler now !)
+	* misc/specfun/stk_sf_matern.m: Modified (parallelized)
+
+	Add wrapper classes for parallel computation engines.
+
+	* misc/parallel: New folder.
+	* misc/parallel/@stk_parallel_engine_none: New class.
+	* misc/parallel/@stk_parallel_engine_parfor: New class.
+	* misc/parallel/stk_parallel_cutblocks.m: New function.
+	* misc/parallel/stk_parallel_feval.m: New function.
+	* misc/parallel/stk_parallel_start.m: New function.
+	* misc/parallel/stk_parallel_engine_set.m: New function.
+	* misc/parallel/stk_parallel_engine_get.m: New function.
+	* misc/parallel/stk_parallel_stop.m: New function.
+	* misc/config/stk_path.m: Modified.
+
+	A new system for managing options.
+
+	* misc/options: New folder.
+	* misc/options/stk_options_set.m: New function.
+	* misc/options/stk_options_get.m: New function.
+	* misc/config/stk_path.m: Modified.
+
 2013-07-15  Julien Bect  <julien.bect@supelec.fr>
 
 	Recompile a MEX-file if the source is more recent.
