@@ -28,10 +28,10 @@
 
 function y = transpose(x)
 
-rn = stk_get_rownames(x);
-cn = stk_get_colnames(x);
+rn = get(x, 'rownames');
+cn = get(x, 'colnames');
 
-y = stk_dataframe(transpose(x.data), rn, cn);
+y = stk_dataframe(transpose(x.data), rn', cn');
 
 end % function transpose
 

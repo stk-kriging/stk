@@ -1,4 +1,4 @@
-% STK_GET_ROWNAMES returns the row names of a dataframe
+% STK_PARALLEL_ENGINE_PARFOR ... (FIXME: missing doc)
 
 % Copyright Notice
 %
@@ -26,17 +26,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function rownames = stk_get_rownames(x)
+function pareng = stk_parallel_engine_parfor()
 
-rownames = x.rownames;
+if matlabpool('size') > 0,
+    warning('A worker pool is already open.');
+else
+    matlabpool open;
+end
 
-end % function stk_get_rownames
+pareng = class(struct(), 'stk_parallel_engine_parfor');
 
-
-%!test
-%! x = stk_dataframe(rand(2, 1));
-%! assert(isequal(stk_get_rownames(x), {}));
-
-%!test
-%! x = stk_dataframe(rand(2, 1), {}, {'a'; 'b'});
-%! assert(isequal(stk_get_rownames(x), {'a'; 'b'}));
+end % function stk_parallel_engine_parfor

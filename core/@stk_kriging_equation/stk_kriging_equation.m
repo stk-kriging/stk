@@ -1,10 +1,11 @@
-% CTRANSPOSE [overloaded base function]
+% STK_KRIGING_EQUATION...
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,22 +27,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = ctranspose(x)
+function kreq = stk_kriging_equation(model, xi, xt)
 
-rn = get(x, 'rownames');
-cn = get(x, 'colnames');
+xi = double(xi);
 
-y = stk_dataframe(ctranspose(x.data), rn', cn');
+[Kii, Pi] = stk_make_matcov(model, xi);
 
-end % function ctranspose
+LS =                             ...
+    [[ Kii, Pi                ]; ...
+    [  Pi', zeros(size(Pi,2)) ]];
 
-% note: complex-valued dataframes are supported but, currently,
-%       not properly displayed
+[Q, R] = qr(LS); % orthogonal-triangular decomposition
 
-%!test
-%! u = rand(3, 2) + 1i * rand(3, 2);
-%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});
-%! data = data';
-%! assert (isa(data, 'stk_dataframe') && isequal(double(data), u'));
-%! assert (isequal(data.rownames, {'x'; 'y'}));
-%! assert (isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));
+kreq = struct(  'model',     model, ...
+    'xi',   xi, 'xt',        [],    ...
+    'LS_Q', Q,  'LS_R',      R,     ...
+    'RS',   [], 'lambda_mu', []     );
+
+kreq = class(kreq, 'stk_kriging_equation');
+
+if nargin > 2,
+    
+    kreq = linsolve(kreq, double(xt));
+    
+end
+
+end

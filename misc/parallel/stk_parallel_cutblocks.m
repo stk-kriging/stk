@@ -1,4 +1,4 @@
-% CTRANSPOSE [overloaded base function]
+% STK_PARALLEL_CUTBLOCKS ... (FIXME: missing doc)
 
 % Copyright Notice
 %
@@ -26,22 +26,31 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = ctranspose(x)
+function blocks = stk_parallel_cutblocks(x, ncores, min_block_size)
 
-rn = get(x, 'rownames');
-cn = get(x, 'colnames');
+x = double(x);
+n = size(x, 1);
 
-y = stk_dataframe(ctranspose(x.data), rn', cn');
+%--- Choose the actual block size & number of blocks ----------------------------
 
-end % function ctranspose
+nb_blocks = min(ncores, max(1, floor(n / min_block_size)));
 
-% note: complex-valued dataframes are supported but, currently,
-%       not properly displayed
+block_size = ceil(n / nb_blocks);
 
-%!test
-%! u = rand(3, 2) + 1i * rand(3, 2);
-%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});
-%! data = data';
-%! assert (isa(data, 'stk_dataframe') && isequal(double(data), u'));
-%! assert (isequal(data.rownames, {'x'; 'y'}));
-%! assert (isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));
+%--- Cut blocks -----------------------------------------------------------------
+
+ind1 = 1 + ((1:nb_blocks)' - 1) * block_size;
+ind2 = min(n, ind1 + block_size - 1);
+
+% note: the last blocks can be slightly smaller than the others
+
+blocks = struct('i', cell(1, nb_blocks), 'j', [], 'xi', [], 'K', []);
+
+for b = 1:nb_blocks,
+    
+    blocks(b).i  = ind1(b):ind2(b);
+    blocks(b).xi = x(blocks(b).i, :);
+    
+end
+
+end % function stk_parallel_cutblocks

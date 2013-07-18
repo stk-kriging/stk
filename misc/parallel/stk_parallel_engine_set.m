@@ -1,4 +1,4 @@
-% CTRANSPOSE [overloaded base function]
+% STK_PARALLEL_ENGINE_SET ... (FIXME: missing doc)
 
 % Copyright Notice
 %
@@ -26,22 +26,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = ctranspose(x)
+function pareng = stk_parallel_engine_set(new_pareng)
 
-rn = get(x, 'rownames');
-cn = get(x, 'colnames');
+persistent current_pareng
 
-y = stk_dataframe(ctranspose(x.data), rn', cn');
+% initialization
+if isempty(current_pareng)
 
-end % function ctranspose
+    % no parallel engine, to begin with
+    current_pareng = stk_parallel_engine_none();
+    
+    % lock the mfile in memory to prevent current_pareng from being cleared
+    mlock();
+    
+end
 
-% note: complex-valued dataframes are supported but, currently,
-%       not properly displayed
+if nargin > 0,
+    current_pareng = new_pareng;
+end
 
-%!test
-%! u = rand(3, 2) + 1i * rand(3, 2);
-%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});
-%! data = data';
-%! assert (isa(data, 'stk_dataframe') && isequal(double(data), u'));
-%! assert (isequal(data.rownames, {'x'; 'y'}));
-%! assert (isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));
+% Return the current parallel engine
+pareng = current_pareng;
+
+end % function stk_parallel_engine_set

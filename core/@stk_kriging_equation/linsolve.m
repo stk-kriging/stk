@@ -1,10 +1,11 @@
-% CTRANSPOSE [overloaded base function]
+% LINSOLVE
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,22 +27,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = ctranspose(x)
+function kreq = linsolve(kreq, xt) 
 
-rn = get(x, 'rownames');
-cn = get(x, 'colnames');
+[Kti, Pt] = stk_make_matcov(kreq.model, xt, kreq.xi);
 
-y = stk_dataframe(ctranspose(x.data), rn', cn');
+kreq.xt = double(xt);
+kreq.RS = [Kti Pt]';
 
-end % function ctranspose
+% solve the upper-triangular system to get the extended
+% kriging weights vector (weights + Lagrange multipliers)
+if stk_is_octave_in_use(),
+    % linsolve is missing in Octave
+    kreq.lambda_mu = kreq.LS_R \ (kreq.LS_Q' * kreq.RS);
+else
+    kreq.lambda_mu = linsolve ...
+        (kreq.LS_R, kreq.LS_Q' * kreq.RS, struct('UT', true));
+end
 
-% note: complex-valued dataframes are supported but, currently,
-%       not properly displayed
-
-%!test
-%! u = rand(3, 2) + 1i * rand(3, 2);
-%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});
-%! data = data';
-%! assert (isa(data, 'stk_dataframe') && isequal(double(data), u'));
-%! assert (isequal(data.rownames, {'x'; 'y'}));
-%! assert (isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));
+end % function linsolve

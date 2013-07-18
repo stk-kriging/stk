@@ -1,3 +1,96 @@
+2013-07-18  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a minor bug in @stk_dataframe.horzcat.
+
+	* utils/@stk_dataframe/horzcat.m: Modified.
+	
+	Benchmarks for parallelization.
+
+	* misc/benchmarks: New folder.
+	* misc/benchmarks/stk_benchmark_cov2.m: New script.
+	* misc/benchmarks/stk_benchmark_cov1.m: New script.
+
+	Rewrite parallelization of covariance evaluation.
+
+	* core/private: Removed.
+	* core/stk_make_matcov.m: Modified (much simpler now !)
+	* misc/specfun/stk_sf_matern.m: Modified (parallelized)
+
+	Add wrapper classes for parallel computation engines.
+
+	* misc/parallel: New folder.
+	* misc/parallel/@stk_parallel_engine_none: New class.
+	* misc/parallel/@stk_parallel_engine_parfor: New class.
+	* misc/parallel/stk_parallel_cutblocks.m: New function.
+	* misc/parallel/stk_parallel_feval.m: New function.
+	* misc/parallel/stk_parallel_start.m: New function.
+	* misc/parallel/stk_parallel_engine_set.m: New function.
+	* misc/parallel/stk_parallel_engine_get.m: New function.
+	* misc/parallel/stk_parallel_stop.m: New function.
+	* misc/config/stk_path.m: Modified.
+
+	A new system for managing options.
+
+	* misc/options: New folder.
+	* misc/options/stk_options_set.m: New function.
+	* misc/options/stk_options_get.m: New function.
+	* misc/config/stk_path.m: Modified.
+
+2013-07-15  Julien Bect  <julien.bect@supelec.fr>
+
+	Recompile a MEX-file if the source is more recent.
+
+	* misc/config/stk_compile_all.m: Modified.
+
+	Add MEX-file for an efficient access to the named properties of an
+	stk_dataframe object.
+
+	* utils/@stk_dataframe/src: New folder for MEX sources.
+	* utils/@stk_dataframe/src/get.c: New method (source).
+	* utils/@stk_dataframe/src/set.c: New method (source).
+	* utils/@stk_dataframe/src/get_column_number.h: New C header.
+	* misc/config/stk_compile_all.m: Compile get and set.
+	* utils/@stk_factorialdesign/get.m: New method.
+	* utils/@stk_factorialdesign/set.m: New method.
+	* utils/@stk_dataframe/subsasgn.m: Use get/set.
+	* utils/@stk_dataframe/subsref.m: Idem.
+	* utils/@stk_dataframe/ctranspose.m: Idem.
+	* utils/@stk_dataframe/transpose.m: Idem.
+	* utils/@stk_factorialdesign/stk_factorialdesign.m: Idem.
+	* utils/@stk_dataframe/stk_dataframe.m: Idem.
+	* utils/@stk_dataframe/stk_get_rownames.m: Removed.
+	* utils/@stk_dataframe/stk_get_colnames.m: Removed.
+	* utils/@stk_dataframe/stk_set_rownames.m: Removed.
+	* utils/@stk_dataframe/stk_get_colnames.m: Removed
+	* utils/@stk_dataframe/private/get_column_indicator.m: Removed.
+
+	Create a folder for common include files (*.h).
+
+	* misc/include: New folder.
+	* misc/include/stk_mex.h: Moved from misc/dist/private/.
+	* misc/config/stk_compile_all.m: Add a -I flag for mex
+
+2013-07-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Encapsulate kriging equations in a dedicated class (bis).
+
+	* core/stk_predict.m: Move the rhs loop (and a few other things)
+	to @stk_kriging_equation.stk_predict(). Add tests.
+	* core/@stk_kriging_equation/stk_predict.m: New function.
+	* core/@stk_kriging_equation/linsolve.m: Cast xt to double.
+	* core/@stk_kriging_equation/stk_kriging_equation.m: Cast xi to
+	double. Add a third optional argument: 'xt'.
+
+2013-06-28  Julien Bect  <julien.bect@supelec.fr>
+
+	Encapsulate kriging equations in a dedicated class.
+
+	* core/@stk_kriging_equation: A new class that encapsulates the
+	basic linear-algebraic operations related to the kriging
+	equations. Methods: stk_kriging_equation.m, linsolve.m,
+	stk_posterior_matcov.m and subsref.m.
+	* core/stk_predict.m: Use the new class.
+
 2013-06-19  Julien Bect  <julien.bect@supelec.fr>
 
 	Send a warning when negative variances are set to zero.

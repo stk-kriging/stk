@@ -1,4 +1,4 @@
-% CTRANSPOSE [overloaded base function]
+% STK_OPTIONS_SET ... (FIXME: missing doc)
 
 % Copyright Notice
 %
@@ -26,22 +26,39 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = ctranspose(x)
+function opts = stk_options_set(varargin)
 
-rn = get(x, 'rownames');
-cn = get(x, 'colnames');
+persistent options
 
-y = stk_dataframe(ctranspose(x.data), rn', cn');
+if isempty(options)    
+    options = init_options();    
+end
 
-end % function ctranspose
+switch nargin
+    
+    case 0, % nothing to do, just return the output
+        
+    case 2,
+        options.(varargin{1}) = varargin{2};
 
-% note: complex-valued dataframes are supported but, currently,
-%       not properly displayed
+    case 3,
+        options.(varargin{1}).(varargin{2}) = varargin{3};
+        
+    otherwise
+        stk_error('Incorrect number of input arguments.', 'SyntaxError');
+        
+end
 
-%!test
-%! u = rand(3, 2) + 1i * rand(3, 2);
-%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});
-%! data = data';
-%! assert (isa(data, 'stk_dataframe') && isequal(double(data), u'));
-%! assert (isequal(data.rownames, {'x'; 'y'}));
-%! assert (isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));
+opts = options;
+
+end % function stk_options_set
+
+
+function opts = init_options()
+
+opts = struct();
+
+opts.stk_sf_matern.min_size_for_parallelization = 1e5;
+opts.stk_sf_matern.min_block_size = 1e3;
+
+end % function init_options

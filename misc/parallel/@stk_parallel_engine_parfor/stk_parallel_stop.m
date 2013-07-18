@@ -1,4 +1,4 @@
-% CTRANSPOSE [overloaded base function]
+% STK_PARALLEL_STOP ... (FIXME: missing doc)
 
 % Copyright Notice
 %
@@ -26,22 +26,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = ctranspose(x)
+function stk_parallel_stop(eng) %#ok<INUSD>
 
-rn = get(x, 'rownames');
-cn = get(x, 'colnames');
+if matlabpool('size') == 0,
+    warning('There was no worker pool open.');
+else
+    matlabpool close;
+end
 
-y = stk_dataframe(ctranspose(x.data), rn', cn');
-
-end % function ctranspose
-
-% note: complex-valued dataframes are supported but, currently,
-%       not properly displayed
-
-%!test
-%! u = rand(3, 2) + 1i * rand(3, 2);
-%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});
-%! data = data';
-%! assert (isa(data, 'stk_dataframe') && isequal(double(data), u'));
-%! assert (isequal(data.rownames, {'x'; 'y'}));
-%! assert (isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));
+stk_parallel_engine_set(stk_parallel_engine_none());
+    
+end % function stk_parallel_stop

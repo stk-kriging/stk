@@ -1,4 +1,4 @@
-% CTRANSPOSE [overloaded base function]
+% STK_PARALLEL_START ... (FIXME: missing doc)
 
 % Copyright Notice
 %
@@ -26,22 +26,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = ctranspose(x)
+function eng = stk_parallel_start()
 
-rn = get(x, 'rownames');
-cn = get(x, 'colnames');
+eng = stk_parallel_engine_get();
 
-y = stk_dataframe(ctranspose(x.data), rn', cn');
+if strcmp(class(eng), 'stk_parallel_engine_none') %#ok<STISA>
+    
+    % use Mathworks' PCT if available
+    if stk_is_pct_installed()        
+        eng = stk_parallel_engine_parfor();
+        stk_parallel_engine_set(eng);
+    end
+    
+else
+    
+    warning('A parallel computing engine is already started (or so it seems).');
+    
+end
 
-end % function ctranspose
-
-% note: complex-valued dataframes are supported but, currently,
-%       not properly displayed
-
-%!test
-%! u = rand(3, 2) + 1i * rand(3, 2);
-%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});
-%! data = data';
-%! assert (isa(data, 'stk_dataframe') && isequal(double(data), u'));
-%! assert (isequal(data.rownames, {'x'; 'y'}));
-%! assert (isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));
+end % function stk_parallel_start

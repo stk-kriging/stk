@@ -1,4 +1,4 @@
-% CTRANSPOSE [overloaded base function]
+% STK_PARALLEL_FEVAL ... (FIXME: missing doc)
 
 % Copyright Notice
 %
@@ -26,22 +26,35 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = ctranspose(x)
+function z = stk_parallel_feval(eng, f, x, vectorized, min_block_size)
 
-rn = get(x, 'rownames');
-cn = get(x, 'colnames');
+% TODO: remplacer vectorized par max_block_size ?
 
-y = stk_dataframe(ctranspose(x.data), rn', cn');
+if vectorized % STK-style vectorization supported
+    
+    ncores = max(1, matlabpool('size'));
+    
+    blocks = stk_parallel_cutblocks(x, ncores, min_block_size);
+    
+    nb_blocks = length(blocks);
+    
+    z = cell(nb_blocks, 1);
+    
+    parfor b = 1:nb_blocks,
+        z{b} = feval(f, blocks(b).xi);
+    end
+    
+    z = vertcat(z{:});
+    
+else % STK-style vectorization not supported => loop over the rows of x
+    
+    n = size(x, 1);
+    z = zeros(n, 1);
+    
+    parfor i = 1:n,
+        z(i) = feval(f, x(i, :));
+    end
+    
+end
 
-end % function ctranspose
-
-% note: complex-valued dataframes are supported but, currently,
-%       not properly displayed
-
-%!test
-%! u = rand(3, 2) + 1i * rand(3, 2);
-%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});
-%! data = data';
-%! assert (isa(data, 'stk_dataframe') && isequal(double(data), u'));
-%! assert (isequal(data.rownames, {'x'; 'y'}));
-%! assert (isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));
+end % function stk_parallel_feval

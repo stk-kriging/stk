@@ -1,4 +1,4 @@
-% CTRANSPOSE [overloaded base function]
+% STK_BENCHMARK_COV1
 
 % Copyright Notice
 %
@@ -26,22 +26,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = ctranspose(x)
+%% Benchmark parameters
 
-rn = get(x, 'rownames');
-cn = get(x, 'colnames');
+DIM = 1; N = 500; REP = 5;
 
-y = stk_dataframe(ctranspose(x.data), rn', cn');
+covname = 'stk_materncov_iso';
 
-end % function ctranspose
 
-% note: complex-valued dataframes are supported but, currently,
-%       not properly displayed
+%% Evaluate computation time
+    
+model = stk_model(covname, DIM);
 
-%!test
-%! u = rand(3, 2) + 1i * rand(3, 2);
-%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});
-%! data = data';
-%! assert (isa(data, 'stk_dataframe') && isequal(double(data), u'));
-%! assert (isequal(data.rownames, {'x'; 'y'}));
-%! assert (isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));
+tic;
+for i = 1:REP,
+    x = stk_sampling_regulargrid(N, DIM);
+    K = stk_make_matcov(model, x, x);
+end
+t = toc / REP;
+
+fprintf('% 20s: %.3f seconds\n', covname, t);
