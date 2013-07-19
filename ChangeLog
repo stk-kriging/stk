@@ -1,3 +1,24 @@
+2013-07-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Encapsulate kriging equations in a dedicated class (bis).
+
+	* core/stk_predict.m: Move the rhs loop (and a few other things)
+	to @stk_kriging_equation.stk_predict(). Add tests.
+	* core/@stk_kriging_equation/stk_predict.m: New function.
+	* core/@stk_kriging_equation/linsolve.m: Cast xt to double.
+	* core/@stk_kriging_equation/stk_kriging_equation.m: Cast xi to
+	double. Add a third optional argument: 'xt'.
+
+2013-06-28  Julien Bect  <julien.bect@supelec.fr>
+
+	Encapsulate kriging equations in a dedicated class.
+
+	* core/@stk_kriging_equation: A new class that encapsulates the
+	basic linear-algebraic operations related to the kriging
+	equations. Methods: stk_kriging_equation.m, linsolve.m,
+	stk_posterior_matcov.m and subsref.m.
+	* core/stk_predict.m: Use the new class.
+
 2013-06-19  Julien Bect  <julien.bect@supelec.fr>
 
 	Send a warning when negative variances are set to zero.
