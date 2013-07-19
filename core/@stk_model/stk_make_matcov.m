@@ -53,32 +53,25 @@
 
 function [K, P] = stk_make_matcov(model, x0, x1, pairwise)
 
-if nargin > 1, x0 = double(x0); end
-if nargin > 2, x1 = double(x1); end
+%=== process input arguments
 
-%=== guess which syntax has been used based on the second input arg
-
-switch nargin
-    
-    case 1, % stk_make_matcov(model)
-        make_matcov_auto = true;
-        pairwise = false;
-        x0 = model.observations.x;
-        
-    case 2, % stk_make_matcov(model, x0)
-        make_matcov_auto = true;
-        pairwise = false;
-        
-    case 3, % stk_make_matcov(model, x0, x1)
-        make_matcov_auto = false;
-        pairwise = false;
-        
-    case 4, % stk_make_matcov(model, x0, ?, pairwise)
-        make_matcov_auto = isempty(x1);
-        
-    otherwise
-        error('Incorrect number of input arguments.');
+if nargin == 1,
+    x0 = model.observations.x;
 end
+
+x0 = double(x0);
+
+if (nargin > 2) && ~isempty(x1)
+    x1 = double(x1);
+    make_matcov_auto = false;
+else
+    x1 = x0;
+    make_matcov_auto = true;
+end
+
+pairwise = (nargin > 3) && pairwise;
+
+%=== compute the covariance matrix
 
 switch  model.domain.type
     
@@ -89,19 +82,10 @@ switch  model.domain.type
             case true,  % handle the case where a 'Kx_cache' field is present
                 % NB: this feature only works with a discrete domain
                 if ~pairwise,
-                    if make_matcov_auto,
-                        K = model.private.Kx_cache(x0, x0);
-                    else
-                        K = model.private.Kx_cache(x0, x1);
-                    end
+                    K = model.private.Kx_cache(x0, x0);
                 else
-                    if make_matcov_auto,
-                        idx = sub2ind(size(model.Kx_cache), x0, x0);
-                        K = model.private.Kx_cache(idx);
-                    else
-                        idx = sub2ind(size(model.Kx_cache), x0, x1);
-                        K = model.private.Kx_cache(idx);
-                    end
+                    idx = sub2ind(size(model.Kx_cache), x0, x1);
+                    K = model.private.Kx_cache(idx);
                 end
                 
             case false, % handle the case where the covariance matrix must be computed
@@ -110,74 +94,26 @@ switch  model.domain.type
         
     case 'continuous'
         
-        % Blocking parameters for parallel computing
-        % a) If the size of the covariance matrix to be computed is smaller than
-        %    MIN_SIZE_FOR_BLOCKING, we don't even consider using parfor.
-        % b) If it is decided to use parfor, the number of blocks will be chosen
-        %    in such a way that blocks smaller than MIN_BLOCK_SIZE are never used
-        MIN_SIZE_FOR_BLOCKING = 500^2;
-        MIN_BLOCK_SIZE = 100^2;
-        
-        % Number of covariance values to be computed ?
-        N0 = size(x0, 1);
-        if make_matcov_auto,
-            if ~pairwise,
-                N = N0 * N0;
-            else
-                N = N0;
-            end
-        else
-            N1 = size(x1, 1);
-            if ~pairwise
-                N = N0 * N1;
-            else
-                if N1 ~= N0,
-                    errmsg = 'x0 and x1 should have the same number of lines.';
-                    stk_error(errmsg, 'InconsistentDimensions');
-                end
-                N = N0;
-            end
-        end
-        
-        % Decide whether parallel computing should be used
-        % note: parallelization is not implemented in the "pairwise" case
-        if pairwise || (N < MIN_SIZE_FOR_BLOCKING) || ~stk_is_pct_installed(),
-            ncores = 1; % do not use parallel computing
-        else
-            ncores = max(1, matlabpool('size'));
-            % note: matlabpool('size') returns 0 if the PCT is not started
-        end
-        
         % covariance function
         cov = model.randomprocess.priorcov;
         
-        % Call the subfunction that does the actual computation
+        K = feval(cov, x0, x1, -1, pairwise);
+        
         if make_matcov_auto,
-            
-            % FIXME: avoid computing twice each off-diagonal term
-            if ncores == 1, % parallelization is not used
-                K = feval(cov, x0, x0, -1, pairwise);
+            if ~pairwise,
+                K = K + feval(model.noise.cov, x0, x0, -1, pairwise);
             else
-                K = stk_make_matcov_auto_parfor(cov, x0, ncores, MIN_BLOCK_SIZE);
+                stk_error('Not implemented yet.', 'NotImplementedYet');
             end
-            
-            % add noise
-            K = K + feval(model.noise.cov, x0, x0, -1, pairwise);
-            
-        else
-            
-            if ncores == 1, % parallelization is not used
-                K = feval(cov, x0, x1, -1, pairwise);
-            else
-                K = stk_make_matcov_inter_parfor(cov, x0, x1, ncores, MIN_BLOCK_SIZE);
-            end
-            
         end
         
 end % switch model.domain.type
 
-% Compute the regression functions
-if nargout > 1, P = feval(model.randomprocess.priormean, x0); end
+%=== compute the regression functions
+
+if nargout > 1,
+    P = feval(model.randomprocess.priormean, x0);
+end
 
 end
 
