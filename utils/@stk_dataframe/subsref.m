@@ -66,19 +66,7 @@ switch idx(1).type
         
     case '.'
         
-        switch idx(1).subs
-            
-            case 'rownames',
-                t = stk_get_rownames(x);
-                
-            case 'colnames',
-                t = stk_get_colnames(x);
-                
-            otherwise,
-                b = get_column_indicator(x, idx(1).subs);
-                t = x.data(:, b);
-                
-        end % switch
+        t = get(x, idx(1).subs);
         
         if length(idx) > 1,
             t = subsref(t, idx(2:end));
@@ -95,12 +83,12 @@ end % function subsref
 %! t = {'xx' 'yy'};
 
 %!test
-%! x = stk_set_rownames(x, s);
+%! x = set(x, 'rownames', s);
 %! assert (isequal (x.rownames, s))
 %! assert (isequal (x.rownames{2}, 'b'))
 
 %!test
-%! x = stk_set_colnames(x, t);
+%! x = set(x, 'colnames', t);
 %! assert (isequal (x.rownames, s))
 %! assert (isequal (x.colnames, t))
 %! assert (isequal (x.colnames{2}, 'yy'))
@@ -119,17 +107,17 @@ end % function subsref
 %!error t = data{1};          % curly braces not allowed
 
 %!test % legacy feature: data.a returns the 'mean' column if it exists
-%! data = stk_set_colnames(data, {'mean', 'x2'});
+%! data = set(data, 'colnames', {'mean', 'x2'});
 %! assert(isequal(data.a, u(:, 1)));
 
 %!test % legacy feature: data.a returns the whole dataframe otherwise
-%! data = stk_set_colnames(data, {'x1', 'x2'});
+%! data = set(data, 'colnames', {'x1', 'x2'});
 %! assert(isequal(data.a, u));
 
 %--- tests with a univariate dataframe ----------------------------------------
 
 %!shared u data
-%! u = rand(3, 1); data = stk_dataframe(u, 'x');
+%! u = rand(3, 1); data = stk_dataframe(u, {'x'});
 
 %!assert (isequal (data.x, u))
 %!assert (isequal (double(data), u))

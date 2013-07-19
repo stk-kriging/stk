@@ -39,11 +39,11 @@ end
 x = class(x, 'stk_dataframe');
 
 if nargin >= 2,
-    x = stk_set_colnames(x, colnames);
+    x = set(x, 'colnames', colnames);
 end
 
 if nargin >= 3,
-    x = stk_set_rownames(x, rownames);
+    x = set(x, 'rownames', rownames);
 end
 
 end % function stk_dataframe
