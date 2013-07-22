@@ -1,5 +1,9 @@
 2013-07-22  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a test.
+
+	* core/stk_predict.m: Modified.
+
 	Fix bugs in approximate comparison functions.
 
 	* misc/test/stk_isequal_tolabs.m: Modified.

@@ -176,7 +176,7 @@ end
 %!test
 %! idx_all = (1:(n+m))';
 %! model = stk_model('stk_materncov32_iso');
-%! y_prd4 = stk_predict(model, idx_obs, z_obs, idx_all);
+%! y_prd4 = stk_predict(model, x_obs, z_obs, x0);
 %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
 %! y_prd5 = stk_predict(model, idx_obs, z_obs, []);
 %! assert(stk_isequal_tolrel(double(y_prd4), double(y_prd5)));
