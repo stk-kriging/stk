@@ -78,7 +78,7 @@ if isstruct(a) && isstruct(b),
     
 elseif isnumeric(a) && isnumeric(b)
     
-    res = any(abs(b(:) - a(:)) <= tolabs);
+    res = all(abs(b(:) - a(:)) <= tolabs);
     
 else
     
