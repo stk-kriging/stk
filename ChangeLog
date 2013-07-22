@@ -1,5 +1,15 @@
 2013-07-22  Julien Bect  <julien.bect@supelec.fr>
 
+	Add functions to generate RR2-scrambled van der Corput and Halton
+	sequences. Joint work with Alexandra Krauth and Elham Rahali.
+
+	* sampling/stk_sampling_vdc_rr2.c: New MEX-file.
+	* sampling/stk_sampling_vdc_rr2.m: MEX-file doc + tests.
+	* sampling/stk_sampling_halton_rr2.m: New function.
+	* misc/include/primes.h: New header.
+	* misc/include/stk_mex.h: Modified.
+	* misc/config/stk_compile_all.m: Modified.
+
 	Fix a test.
 
 	* core/stk_predict.m: Modified.
