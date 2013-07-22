@@ -41,7 +41,26 @@
 
 /*****************************************************************************
  *                                                                           *
- *  Main function: compute N terms of the j^th RR2-scrambled vdC sequence    *
+ *   Subfunctions                                                            *
+ *                                                                           *
+ ****************************************************************************/
+
+int     vanDerCorput_RR2(unsigned int b, unsigned int n, double *h);
+int     compute_nb_digits(unsigned int n, unsigned int b);
+double  radical_inverse(int *digits, unsigned int nb_digits, unsigned int b);
+int     next_Mersenne_number(unsigned int b);
+int     construct_permutRR(unsigned int b, int* permut);
+int     construct_permutRR_Mersenne(unsigned int b, int* permut);
+
+
+/*****************************************************************************
+ *                                                                           *
+ *  MEX entry point (mexFunction)                                            *
+ *                                                                           *
+ *  STK_SAMPLING_VDC_RR2 computes the first N terms of the J^th              *
+ *  RR2-scrambled van der Corput sequence                                    *
+ *                                                                           *
+ *  CALL: X = stk_sampling_vdc_rr2(N, J)                                     *
  *                                                                           *
  *  Reference:  Ladislav Kocis and William J. Whiten (1997)                  *
  *              Computational investigations of lowdiscrepancy sequences.    *
@@ -49,10 +68,8 @@
  *                                                                           *
  ****************************************************************************/
 
-int vanDerCorput_RR2(unsigned int b, unsigned int n, double *h);
-
 #define  N_IN   prhs[0]
-#define  D_IN   prhs[1]
+#define  J_IN   prhs[1]
 #define  X_OUT  plhs[0]
 
 void mexFunction
@@ -75,7 +92,7 @@ void mexFunction
   
   n = (unsigned int) n_;
 
-  if ((mxReadScalar_int(D_IN, &j_) != 0) || (j_ <= 0))
+  if ((mxReadScalar_int(J_IN, &j_) != 0) || (j_ <= 0))
     mexErrMsgIdAndTxt("STK:stk_sampling_vdc_rr2:IncorrectArgument", 
 		      "Second argument (j) must be a scrictly positive "
 		      "scalar integer.");
@@ -103,19 +120,6 @@ void mexFunction
 		      "mexCallMATLAB() failed with error code %d.", r);
 
 }
-
-
-/*****************************************************************************
- *                                                                           *
- *   Subfunctions                                                            *
- *                                                                           *
- ****************************************************************************/
-
-int     compute_nb_digits(unsigned int n, unsigned int b);
-double  radical_inverse(int *digits, unsigned int nb_digits, unsigned int b);
-int     next_Mersenne_number(unsigned int b);
-int     construct_permutRR(unsigned int b, int* permut);
-int     construct_permutRR_Mersenne(unsigned int b, int* permut);
 
 
 /*****************************************************************************
