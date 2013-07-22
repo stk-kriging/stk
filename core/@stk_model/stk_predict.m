@@ -151,9 +151,21 @@ end
 % FIXME: outdated test related to Kx_cache/Px_cache
 
 % %!test
-% %! %% use of Kx_cache
 % %! model = stk_model('stk_materncov32_iso');
 % %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
-% %! y_prd2 = stk_predict(model, idx_obs, z_obs, idx_prd);
-% %! %% check that both methods give the same result
-% %! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd2)));
+% %! y_prd3 = stk_predict(model, idx_obs, z_obs, idx_prd);
+% %! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd3)));
+% 
+% %!test % same test,with idx_prd as a row vector
+% %! model = stk_model('stk_materncov32_iso');
+% %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
+% %! y_prd3 = stk_predict(model, idx_obs, z_obs, idx_prd');
+% %! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd3)));
+% 
+% %!test
+% %! idx_all = (1:(n+m))';
+% %! model = stk_model('stk_materncov32_iso');
+% %! y_prd4 = stk_predict(model, x_obs, z_obs, x0);
+% %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
+% %! y_prd5 = stk_predict(model, idx_obs, z_obs, []);
+% %! assert(stk_isequal_tolrel(double(y_prd4), double(y_prd5)));
