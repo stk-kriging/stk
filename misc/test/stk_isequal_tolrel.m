@@ -85,7 +85,7 @@ elseif isnumeric(a) && isnumeric(b)
     aa = a(:);
     bb = b(:);
     tolabs = max(abs(aa), abs(bb)) * tolrel;
-    res = any(abs(bb - aa) <= tolabs);
+    res = all(abs(bb - aa) <= tolabs);
     
 else
     
