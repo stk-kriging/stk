@@ -9,7 +9,7 @@
 %
 %    Ladislav Kocis and William J. Whiten, "Computational investigations of low
 %    discrepancy sequences", ACM Transactions on Mathematical Software, 
-%    23(2):266–294, 1997.
+%    23(2):266-294, 1997.
 %    http://dx.doi.org/10.1145/264029.264064
 %
 % SEE ALSO: stk_sampling_halton_rr2

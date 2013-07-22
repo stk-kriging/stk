@@ -45,7 +45,7 @@
  *                                                                           *
  *  Reference:  Ladislav Kocis and William J. Whiten (1997)                  *
  *              Computational investigations of lowdiscrepancy sequences.    *
- *              ACM Transactions on Mathematical Software, 23(2):266–294.    *
+ *              ACM Transactions on Mathematical Software, 23(2):266-294.    *
  *                                                                           *
  ****************************************************************************/
 
