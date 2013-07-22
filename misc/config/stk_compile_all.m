@@ -49,6 +49,10 @@ source_folder = fullfile(output_folder, 'src');
 stk_compile('get');
 stk_compile('set');
 
+source_folder = fullfile(root, 'sampling');
+output_folder = source_folder;
+stk_compile('stk_sampling_vdc_rr2');
+
 % add other MEX-files to be compiled here
 
 cd(here);

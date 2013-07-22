@@ -4,7 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright  (C) 2012 SUPELEC                                            *
+ *    Copyright  (C) 2012, 2013 SUPELEC                                      *
  *    Author:    Julien Bect <julien.bect@supelec.fr>                        *
  *                                                                           *
  * Copying Permission Statement                                              *
@@ -61,6 +61,28 @@ void mxReplaceField
 		 "space to create the mxArray");
   
   mxSetField(S, index, fieldname, value_copy);
+}
+
+#define  STK_OK                0
+#define  STK_ERROR            -1
+#define  STK_ERROR_DOMAIN      1
+#define  STK_ERROR_OOM         2
+#define  STK_ERROR_SANITY      3
+
+int mxReadScalar_int(const mxArray* x, int* n)
+{
+  double t;
+
+  if (mxGetNumberOfElements(x) != 1)
+    return STK_ERROR;
+  
+  if (mxIsComplex(x) || !mxIsDouble(x))
+    return STK_ERROR;
+
+  t = mxGetScalar(x);
+  *n = (int) t;
+
+  return ((((double) *n) == t) ? STK_OK : STK_ERROR);
 }
 
 #endif
