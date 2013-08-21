@@ -59,11 +59,11 @@ nt = size(xt, 1);
 
 %=== optional arguments
 
-if nargin < 5,
+if nargin < 4,
     display_waitbar = false;
 end
 
-if nargin < 6,
+if nargin < 5,
     block_size = [];
 end
 
