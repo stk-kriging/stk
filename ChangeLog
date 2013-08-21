@@ -1,3 +1,9 @@
+2013-08-21  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a bug in @stk_kriging_equation/stk_predict.m (nargin values).
+
+	* core/@stk_kriging_equation/stk_predict.m: modified.
+
 2013-07-22  Julien Bect  <julien.bect@supelec.fr>
 
 	Add functions to generate RR2-scrambled van der Corput and Halton
