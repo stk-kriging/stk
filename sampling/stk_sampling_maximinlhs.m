@@ -47,7 +47,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_maximinlhs(n, d, box, niter)
-stk_narginchk(2, 4);
+if nargin > 4,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 if (nargin < 3) || isempty(box)
     box = repmat([0; 1], 1, d);

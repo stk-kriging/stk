@@ -54,7 +54,9 @@
 
 function model = stk_model(covariance_type, dim)
 
-stk_narginchk(0, 2);
+if nargin > 2,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 model = struct();
 

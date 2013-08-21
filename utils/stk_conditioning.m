@@ -56,7 +56,9 @@
 
 function zsimc = stk_conditioning(lambda, zi, zsim, xi_ind)
 
-stk_narginchk(3, 4);
+if nargin > 4,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 zi = double(zi);
 zsim = double(zsim);

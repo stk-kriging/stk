@@ -28,7 +28,9 @@
 
 function [y, a, b] = stk_normalize(x, box)
 
-stk_narginchk(1, 2);
+if nargin > 2,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 % read argument x
 x = double(x);

@@ -29,7 +29,9 @@
 
 function K = stk_noisecov(ni, lognoisevariance, diff)
 
-stk_narginchk(2, 3);
+if nargin > 3,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 s = size(lognoisevariance);
 n = max(s);

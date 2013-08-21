@@ -43,7 +43,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_regulargrid(n, dim, box)
-stk_narginchk(2, 3);
+if nargin > 3,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 % read argument box
 if (nargin < 3) || isempty(box)

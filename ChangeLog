@@ -1,5 +1,11 @@
 2013-08-21  Julien Bect  <julien.bect@supelec.fr>
 
+	Get rid of stk_narginchk.
+
+	* misc/error/stk_narginchk.m: Removed.
+	Update argument checking in all STK functions accordingly.
+        * etc/CODING_GUIDELINES: Explain the rationale for this change.
+
 	Fix a bug in @stk_kriging_equation/stk_predict.m (nargin values).
 
 	* core/@stk_kriging_equation/stk_predict.m: modified.
