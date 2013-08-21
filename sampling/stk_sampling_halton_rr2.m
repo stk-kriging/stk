@@ -44,6 +44,10 @@
 
 function x = stk_sampling_halton_rr2 (n, d)
 
+if nargin > 2,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
 xdata = zeros (n, d);
 
 for j = 1:d,
