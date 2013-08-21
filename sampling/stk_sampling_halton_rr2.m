@@ -42,15 +42,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_sampling_halton_rr2(n, d)
+function x = stk_sampling_halton_rr2 (n, d)
 
-xdata = zeros(n, d);
+xdata = zeros (n, d);
 
 for j = 1:d,
-    xdata(:, j) = stk_sampling_vdc_rr2(n, j);
+    xdata(:, j) = double (stk_sampling_vdc_rr2 (n, j));
 end
 
-x = stk_dataframe(xdata);
+x = stk_dataframe (xdata);
 
 end % function stk_sampling_halton_rr2
 
