@@ -33,11 +33,12 @@ follows:
 
 --- Nested functions --------------------------------------------------------
 
-Octave 3.6.4 does not support nested functions.
-
-Octave 3.8.x probably won't support them either.
-
-So don't use them.
+Octave 3.6.4 does not support nested functions. Octave 3.8.x probably won't
+support them either. So don't use them.
 
 
------------------------------------------------------------------------------
+--- MEX-file in class directories -------------------------------------------
+
+Octave 3.6.4 does allow to manipulate instances of user-defined classes through
+MEX-files. Octave 3.8.x probably won't. So don't think of it.
+
