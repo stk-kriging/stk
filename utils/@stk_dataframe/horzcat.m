@@ -36,12 +36,12 @@ if isa(x, 'stk_dataframe')
     
     % In this case, [x y] will be an stk_dataframe also.
     
-    y_data = double(y);
-    data = [x.data y_data];
-    
+    x_data = double (x);
+    y_data = double (y);
+        
     if isa(y, 'stk_dataframe')
-        y_colnames = y.vnames;
-        y_rownames = y.rownames;
+        y_colnames = get (y, 'colnames');
+        y_rownames = get (y, 'rownames');
     else
         y_colnames = {};
         y_rownames = {};
@@ -49,24 +49,28 @@ if isa(x, 'stk_dataframe')
     
     %--- ROW NAMES --------------------------------------------------------
 
-    if isempty(x.rownames)
+    x_rownames = get (x, 'rownames');
+    
+    if isempty(x_rownames)
         
         rownames = y_rownames;
         
-    elseif ~isempty(y_rownames) && ~all(strcmp(x.rownames, y_rownames))
+    elseif ~isempty(y_rownames) && ~all(strcmp(x_rownames, y_rownames))
         
         stk_error(['Cannot concatenate because of incompatible row ' ...
             'names.'], 'IncompatibleRowColNames');
         
     else % ok, we can use x's column names
         
-        rownames = x.rownames;
+        rownames = x_rownames;
         
     end
     
     %--- COLUMN NAMES -----------------------------------------------------
 
-    bx = isempty(x.vnames);
+    x_colnames = get (x, 'colnames');
+    
+    bx = isempty(x_colnames);
     by = isempty(y_colnames);
     
     if bx && by % none of the argument has row names
@@ -76,9 +80,7 @@ if isa(x, 'stk_dataframe')
     else % at least of one the arguments has column names
        
         if bx
-            x_colnames = repmat({''}, 1, size(x.data, 2));
-        else
-            x_colnames = x.vnames;
+            x_colnames = repmat({''}, 1, size(x_data, 2));
         end
         
         if by
@@ -89,7 +91,7 @@ if isa(x, 'stk_dataframe')
         
     end
     
-    z = stk_dataframe(data, colnames, rownames);
+    z = stk_dataframe([x_data y_data], colnames, rownames);
     
 else % In this case, z will be a matrix.
     
@@ -103,6 +105,13 @@ end
 
 end % function horzcat
 
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+% IMPORTANT NOTE: [x y ...] fails to give the same result as horzcat(x, y, ...)
+% in some releases of Octave. As a consequence, all tests must be written using
+% horzcat explicitely.
 
 %!shared u v
 %! u = rand(3, 2);
@@ -114,14 +123,14 @@ end % function horzcat
 %!test
 %! x = stk_dataframe(u, {'x1' 'x2'});
 %! y = stk_dataframe(v, {'y1' 'y2'});
-%! z = [x y];
+%! z = horzcat (x, y);
 %! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u v]));
 %! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
 
 %!test
 %! x = stk_dataframe(u, {'x1' 'x2'}, {'a'; 'b'; 'c'});
 %! y = stk_dataframe(v, {'y1' 'y2'});
-%! z = [x y];
+%! z = horzcat (x, y);
 %! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u v]));
 %! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
 %! assert(all(strcmp(z.rownames, {'a'; 'b'; 'c'})));
@@ -129,7 +138,7 @@ end % function horzcat
 %!test
 %! x = stk_dataframe(u, {'x1' 'x2'});
 %! y = stk_dataframe(v, {'y1' 'y2'}, {'a'; 'b'; 'c'});
-%! z = [x y];
+%! z = horzcat (x, y);
 %! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u v]));
 %! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));
 %! assert(all(strcmp(z.rownames, {'a'; 'b'; 'c'})));
@@ -137,19 +146,19 @@ end % function horzcat
 %!error % incompatible row names
 %! x = stk_dataframe(u, {'x1' 'x2'}, {'a'; 'b'; 'c'});
 %! y = stk_dataframe(v, {'y1' 'y2'}, {'a'; 'b'; 'd'});
-%! z = [x y];
+%! z = horzcat (x, y);
 
 %%
 % Horizontal concatenation [dataframe matrix] or [matrix dataframe]
 
 %!test
 %! x = stk_dataframe(u);
-%! z = [x v];
+%! z = horzcat (x, v);
 %! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u v]));
 
 %!test
 %! y = stk_dataframe(v);
-%! z = [u y];
+%! z = horzcat (u, y);
 %! assert(isa(z, 'double') && isequal(z, [u v]));
 
 %%
@@ -158,5 +167,5 @@ end % function horzcat
 %!test
 %! x = stk_dataframe(u, {'x1' 'x2'});
 %! y = stk_dataframe(v, {'y1' 'y2'});
-%! z = [x y u v];
+%! z = horzcat (x, y, u, v);
 %! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u v u v]));
