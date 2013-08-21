@@ -53,7 +53,9 @@
 
 function [fd, ymax] = stk_filldist_discretized(x, y)
 
-stk_narginchk(2, 2);
+if nargin > 2,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 x = double(x);
 y = double(y);

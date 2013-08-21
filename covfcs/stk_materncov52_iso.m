@@ -47,7 +47,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function k = stk_materncov52_iso(param, x, y, diff, pairwise)
-stk_narginchk(3, 5);
+if nargin > 5,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 persistent x0 y0 param0 pairwise0 D
 

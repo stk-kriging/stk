@@ -48,7 +48,9 @@
 function [paramopt, paramlnvopt] = stk_param_estim ...
     (model, xi, yi, param0, param0lnv)
 
-stk_narginchk(4, 5);
+if nargin > 5,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 % size checking: xi, yi
 if size(yi, 1) ~= size(xi, 1),

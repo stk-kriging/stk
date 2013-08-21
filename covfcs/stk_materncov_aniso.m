@@ -48,7 +48,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function k = stk_materncov_aniso(param, x, y, diff, pairwise)
-stk_narginchk(3, 5);
+if nargin > 5,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 persistent x0 y0 xs ys param0 pairwise0 D Kx_cache compute_Kx_cache
 

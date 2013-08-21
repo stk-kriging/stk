@@ -28,7 +28,9 @@
 
 function [y, a, b] = stk_rescale(x, box1, box2)
 
-stk_narginchk(3, 3);
+if nargin > 3,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 % read argument x
 x = double(x);

@@ -40,7 +40,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function D = stk_dist(x, y, pairwise)
-stk_narginchk(1, 3);
+if nargin > 3,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 % read argument #1
 x = double(x);

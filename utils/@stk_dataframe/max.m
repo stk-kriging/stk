@@ -27,7 +27,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function z = max(x, y, dim)
-stk_narginchk(1, 3);
+if nargin > 3,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 if (nargin < 2) || isempty(y), %--- action on rows or columns ---------------------------
    

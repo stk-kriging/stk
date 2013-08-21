@@ -78,7 +78,9 @@
 
 function [fd, ymax] = stk_filldist(x, arg2)
 
-stk_narginchk(1, 2);
+if nargin > 2,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 x = double(x);
 

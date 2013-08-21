@@ -44,7 +44,9 @@
 
 function Q = stk_gpquadform(x, y, rx, ry, pairwise)
 
-stk_narginchk(3, 5);
+if nargin > 5,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 % read argument #1
 if isstruct(x),

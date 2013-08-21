@@ -51,7 +51,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function P = stk_ortho_func(model, x)
-stk_narginchk(2, 2);
+if nargin > 2,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 x = double(x);
 
