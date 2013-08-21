@@ -1,5 +1,9 @@
 2013-08-21  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a bug in get_column_number.h.
+
+	* utils/@stk_dataframe/src/get_column_number.h: modified.
+
 	Get rid of stk_narginchk.
 
 	* misc/error/stk_narginchk.m: Removed.

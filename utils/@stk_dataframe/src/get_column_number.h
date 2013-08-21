@@ -41,7 +41,7 @@ int get_column_number(mxArray* mxColNames, char* s)
 
   if (ncol == 0)
     {
-      mxErrMsgTxt("The dataframe has no column names.");
+      mexErrMsgTxt("The dataframe has no column names.");
     }
   else
     {
