@@ -26,80 +26,78 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_compile_all(force_recompile)
+function stk_compile_all (force_recompile)
 
-root = stk_get_root();
-here = pwd();
+root = stk_get_root ();
+here = pwd ();
 
-force_recompile = ~((nargin == 0) || ~force_recompile);
+opts.force_recompile = ~((nargin == 0) || ~force_recompile);
+opts.include_dir = fullfile(root, 'misc', 'include');
 
-source_folder = fullfile(root, 'misc', 'dist', 'private');
-output_folder = source_folder;
-stk_compile('stk_dist_matrixx');
-stk_compile('stk_dist_matrixy');
-stk_compile('stk_dist_pairwise');
-stk_compile('stk_filldist_discr_mex');
-stk_compile('stk_mindist_mex');
-stk_compile('stk_gpquadform_matrixy');
-stk_compile('stk_gpquadform_matrixx');
-stk_compile('stk_gpquadform_pairwise');
+src_dir = fullfile (root, 'misc', 'dist', 'private');
+dst_dir = src_dir;
+stk_compile (dst_dir, src_dir, opts, 'stk_dist_matrixx');
+stk_compile (dst_dir, src_dir, opts, 'stk_dist_matrixy');
+stk_compile (dst_dir, src_dir, opts, 'stk_dist_pairwise');
+stk_compile (dst_dir, src_dir, opts, 'stk_filldist_discr_mex');
+stk_compile (dst_dir, src_dir, opts, 'stk_mindist_mex');
+stk_compile (dst_dir, src_dir, opts, 'stk_gpquadform_matrixy');
+stk_compile (dst_dir, src_dir, opts, 'stk_gpquadform_matrixx');
+stk_compile (dst_dir, src_dir, opts, 'stk_gpquadform_pairwise');
 
-output_folder = fullfile(root, 'utils', '@stk_dataframe');
-source_folder = fullfile(output_folder, 'src');
-stk_compile('get');
-stk_compile('set');
+dst_dir = fullfile (root, 'utils', '@stk_dataframe');
+src_dir = fullfile (dst_dir, 'src');
+stk_compile (dst_dir, src_dir, opts, 'get');
+stk_compile (dst_dir, src_dir, opts, 'set');
 
-source_folder = fullfile(root, 'sampling');
-output_folder = source_folder;
-stk_compile('stk_sampling_vdc_rr2');
+src_dir = fullfile (root, 'sampling');
+dst_dir = src_dir;
+stk_compile (dst_dir, src_dir, opts, 'stk_sampling_vdc_rr2');
 
 % add other MEX-files to be compiled here
 
-cd(here);
+cd (here);
+
+end % function stk_compile_all
 
 
-    function stk_compile(mexname, varargin)
-        
-        fprintf('MEX-file %s... ', mexname);
-        
-        filename = [mexname '.' mexext];
-        src_file = fullfile(source_folder, sprintf('%s.c', mexname));
-        mex_file = fullfile(output_folder, filename);
-        
-        dir_src = dir(src_file);
-        dir_mex = dir(mex_file);
+function stk_compile (dst_dir, src_dir, opts, mexname, varargin)
 
-        if isempty(dir_src)
-            stk_error(sprintf('File %s not found', src_file), 'FileNotFound');
-        end
-        
-        compile = force_recompile || isempty(dir_mex) ...
-            || (dir_mex.datenum < dir_src.datenum);
-        
-        if compile,
+fprintf ('MEX-file %s... ', mexname);
 
-            cd(source_folder);
-                
-            mex(src_file,                                           ...
-                sprintf('-I%s', fullfile(root, 'misc', 'include'),  ...
-                varargin{:}));
+filename = [mexname '.' mexext];
+src_file = fullfile (src_dir, sprintf ('%s.c', mexname));
+mex_file = fullfile (dst_dir, filename);
 
-            if ~strcmp(source_folder, output_folder)
-                system(sprintf('mv %s/%s %s', ...
-                    source_folder, filename, output_folder));
-            end
+dir_src = dir (src_file);
+dir_mex = dir (mex_file);
 
-        end
-                
-        fid = fopen(mex_file, 'r');
-        if fid ~= -1,
-            fprintf('ok.\n');
-            fclose(fid);
-        else
-            fprintf('not found.\n\n');
-            error('compilation error ?\n');
-        end
-        
+if isempty (dir_src)
+    stk_error (sprintf ('File %s not found', src_file), 'FileNotFound');
+end
+
+compile = opts.force_recompile || (isempty(dir_mex)) ...
+    || (dir_mex.datenum < dir_src.datenum);
+
+if compile,
+    
+    cd (src_dir);
+    
+    mex (src_file, sprintf('-I%s', opts.include_dir, varargin{:}));
+    
+    if ~strcmp (src_dir, dst_dir)
+        system (sprintf('mv %s/%s %s', src_dir, filename, dst_dir));
     end
+    
+end
+
+fid = fopen (mex_file, 'r');
+if fid ~= -1,
+    fprintf ('ok.\n');
+    fclose (fid);
+else
+    fprintf ('not found.\n\n');
+    error ('compilation error ?\n');
+end
 
 end

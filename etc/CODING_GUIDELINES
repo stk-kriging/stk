@@ -30,4 +30,14 @@ follows:
      stk_error ('Too many input arguments.', 'TooManyInputArgs');
    end
 
+
+--- Nested functions --------------------------------------------------------
+
+Octave 3.6.4 does not support nested functions.
+
+Octave 3.8.x probably won't support them either.
+
+So don't use them.
+
+
 -----------------------------------------------------------------------------
