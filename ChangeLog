@@ -1,6 +1,11 @@
 2013-08-21  Julien Bect  <julien.bect@supelec.fr>
 
-	Rewrite get/set for the setk_dataframe class.
+	Fix horzcat/vertcat in the stk_dataframe class (Octave only).
+
+	* utils/@stk_dataframe/vertcat.m: modified.
+	* utils/@stk_dataframe/horzcat.m: modified.
+
+	Rewrite get/set in the stk_dataframe class.
 
 	* utils/@stk_dataframe/private/get_column_number.c: new MEX-file.
 	* utils/@stk_dataframe/private/get_column_number.m: its brother.
