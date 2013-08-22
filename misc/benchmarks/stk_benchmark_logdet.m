@@ -56,5 +56,5 @@ for k = 1:L
     fprintf('\n');
 end
 
-t
-v
+display (t)
+display (v)
