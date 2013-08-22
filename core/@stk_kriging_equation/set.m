@@ -1,4 +1,4 @@
-% STK_KRIGING_EQUATION...
+% SET...
 
 % Copyright Notice
 %
@@ -26,26 +26,33 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = stk_kriging_equation (model, xi, xt)
+function kreq = set(kreq, propname, value)
 
-kreq = struct ( 'model',     model,  ...
-    'xi',   [], 'xt',        [],     ...
-    'LS_Q', [],  'LS_R',     [],     ...
-    'RS',   [], 'lambda_mu', []      );
+% This class implements GREEDY EVALUATION: computations are made as soon as the
+% required inputs are made available.
 
-kreq = class (kreq, 'stk_kriging_equation');
-
-if nargin > 1,
-
-    % this triggers a first set of partial computations...
-    kreq = set (kreq, 'xi', xi);
+switch propname
     
-    if nargin > 2,
-        % ...and this triggers the remaining computation
-        % (if xt is not provided, we end up with an incomplete kreq)
-        kreq = set (kreq, 'xt', xt);
-    end
-    
-end % if
+    case 'xi'
+        
+        kreq.xi        = double (value);
+        kreq.LS_Q      = []; % need to be recomputed
+        kreq.LS_R      = []; % need to be recomputed
+        kreq.RS        = []; % need to be recomputed
+        kreq.lambda_mu = []; % need to be recomputed
+        
+        kreq = do_compute (kreq);
+        
+    case 'xt'
+        
+        kreq.xt        = double (value);
+        kreq.RS        = []; % need to be recomputed
+        kreq.lambda_mu = []; % need to be recomputed
 
-end % function stk_kriging_equation
+        kreq = do_compute (kreq);
+        
+    otherwise
+        
+        error ('Unknown property.');
+        
+end

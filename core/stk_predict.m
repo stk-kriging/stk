@@ -137,7 +137,7 @@ end
 %! idx_prd = (1:2:(n+m))';
 %!
 %! x_obs = x0(idx_obs);
-%! z_obs = stk_feval(@sin, x_obs);
+%! z_obs = sin (double (x_obs));
 %! x_prd = x0(idx_prd);
 %!
 %! model = stk_model('stk_materncov32_iso');

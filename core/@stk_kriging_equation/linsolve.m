@@ -1,4 +1,4 @@
-% LINSOLVE
+% LINSOLVE solves the kriging equation
 
 % Copyright Notice
 %
@@ -27,21 +27,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = linsolve(kreq, xt) 
+function w = linsolve (kreq, rs)
 
-[Kti, Pt] = stk_make_matcov(kreq.model, xt, kreq.xi);
+% Solves the linear equation A * ws = rs, where A is the kriging matrix
 
-kreq.xt = double(xt);
-kreq.RS = [Kti Pt]';
-
-% solve the upper-triangular system to get the extended
-% kriging weights vector (weights + Lagrange multipliers)
-if stk_is_octave_in_use(),
+if stk_is_octave_in_use (),
     % linsolve is missing in Octave
-    kreq.lambda_mu = kreq.LS_R \ (kreq.LS_Q' * kreq.RS);
+    w = kreq.LS_R \ (kreq.LS_Q' * rs);
 else
-    kreq.lambda_mu = linsolve ...
-        (kreq.LS_R, kreq.LS_Q' * kreq.RS, struct('UT', true));
+    w = linsolve (kreq.LS_R, kreq.LS_Q' * rs, struct ('UT', true));
 end
 
 end % function linsolve

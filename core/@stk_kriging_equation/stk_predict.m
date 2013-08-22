@@ -111,12 +111,9 @@ for block_num = 1:nb_blocks
     idx_beg = 1 + block_size * (block_num - 1);
     idx_end = min(nt, idx_beg + block_size - 1);
     idx = idx_beg:idx_end;
-    
-    % extract the block of prediction locations
-    xt_block = xt(idx, :);
-    
-    % solve the kriging equation using xt_block for the right-hand side
-    kreq = linsolve(kreq, xt_block);
+        
+    % solve the kriging equation for the current block
+    kreq = set (kreq, 'xt', xt(idx, :));
 
     % compute the kriging mean
     if compute_prediction,
