@@ -37,6 +37,13 @@ zz = [double(zi); zeros(r, 1)];
 % Compute the squared seminorm
 s = zz' * (linsolve (kreq, zz));
 
+% % Alternative (slower) implementation:
+% ni = size (kreq.xi, 1);
+% zi = double (zi);
+% QU = kreq.LS_Q(1:ni, :);
+% T  = kreq.LS_R \ (QU' * zi);
+% s  = zi' * T(1:ni, :);
+
 % Guard against numerical issues
 if s < 0, s = 0; end
 
