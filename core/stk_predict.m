@@ -181,5 +181,7 @@ end
 %! y_prd4 = stk_predict(model, x_obs, z_obs, x0);
 %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
 %! y_prd5 = stk_predict(model, idx_obs, z_obs, []);
-%! assert(stk_isequal_tolrel(double(y_prd4), double(y_prd5)));
+%! assert(stk_isequal_tolabs(double(y_prd4), double(y_prd5), 1e-15));
+%! % note: the results are not always strictly equal because, for instance, 
+%! %       qr() is not deterministic in Octave 3.6.4.
 

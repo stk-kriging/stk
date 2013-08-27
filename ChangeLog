@@ -1,3 +1,9 @@
+2013-08-27  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a test.
+
+	* core/stk_predict.m: fix a test.
+
 2013-08-22  Julien Bect  <julien.bect@supelec.fr>
 
 	Provide facilities for computing logdets.
