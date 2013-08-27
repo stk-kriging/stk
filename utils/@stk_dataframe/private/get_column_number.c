@@ -31,12 +31,121 @@
 
 #include "string.h"
 #include "stk_mex.h"
-#include "get_column_number.h"
 
-#define DATAFRAME_IN  prhs[0]
+#define ICOL_ROWNAMES -4           /* will be a -3 in the end */
+#define ICOL_COLNAMES -3           /* will be a -2 in the end */
+#define ICOL_ENTIRE_DATAFRAME -2   /* will be a -1 in the end */
+
+int get_column_number(const mxArray* mxColNames, char* s)
+{
+  size_t ncol, cmax, c;
+  char** colnames;
+  mxArray* tmp;
+  int icol, found;
+
+  if (strcmp (s, "rownames") == 0)
+    return ICOL_ROWNAMES;
+
+  if (strcmp (s, "colnames") == 0)
+    return ICOL_COLNAMES;
+
+  ncol = mxGetNumberOfElements(mxColNames);
+  if (ncol == 0) {    
+    if (strcmp(s, "a") == 0) /* LEGACY: .a */
+      return ICOL_ENTIRE_DATAFRAME;
+    mexErrMsgTxt("The dataframe has no column names.");
+  }
+
+  icol = -1;
+
+  /* Read colum names and compare with s. We stop when the first
+     match is found, assuming that we are dealing with a
+     well-formed dataframe without duplicated column names. */
+  
+  colnames = (char**) mxCalloc(ncol, sizeof(char*));
+  for (c = 0; c < ncol; c++)
+    {
+      tmp = mxGetCell(mxColNames, c);
+      if (tmp == NULL)
+	mexErrMsgTxt("Error while reading column names (mxGetCell).");
+      
+      colnames[c] = mxArrayToString(tmp);
+      if (colnames[c] == NULL)
+	mexErrMsgTxt("Error while reading column names (mxArrayToString).");
+      
+      if (strcmp(colnames[c], s) == 0)
+	{
+	  icol = (int) c;
+	  break;
+	}
+    }
+  
+  /* Maximum c such that colnames[c] must be freed */
+  found = (icol != -1);
+  cmax = ((found) ? (c) : (ncol - 1));
+  
+  /* LEGACY: deal with special cases if no exact match has been found */
+  if (!found)
+    {
+      if (strcmp(s, "a") == 0)
+	{
+	  for (c = 0; c < ncol; c++)
+	    if (strcmp(colnames[c], "mean") == 0)
+	      {
+		icol = (int) c;
+		break;
+	      }
+	  
+	  if (icol == -1)
+	    {
+	      icol = ICOL_ENTIRE_DATAFRAME;
+	      mexWarnMsgIdAndTxt("STK:subsref_dot:Legacy",
+				 "There is no variable named 'a'.\n"
+				 " => Assuming that you're an old STK user"
+				 " trying to get the entire dataframe.");
+	    }
+	  else
+	    {
+	      mexWarnMsgIdAndTxt("STK:subsref_dot:Legacy",
+				 "There is no variable named 'a'.\n"
+				 " => Assuming that you're an old STK user"
+				 " trying to get the kriging mean.");
+	    }
+	}
+      else if (strcmp(s, "v") == 0)
+	{
+	  for (c = 0; c < ncol; c++)
+	    if (strcmp(colnames[c], "var") == 0)
+	      {
+		icol = (int) c;
+		break;
+	      }
+	  
+	  if (icol != -1)
+	    mexWarnMsgIdAndTxt("STK:subsref_dot:Legacy",
+			       "There is no variable named 'v'.\n"
+			       " => Assuming that you're an old STK user"
+			       " trying to get the kriging variance.");
+	}
+    }
+
+  /* ERROR if no corresponding column can be found */
+  if (icol == -1)
+    mexErrMsgIdAndTxt("STK:subsref_dot:UnknownVariable",
+		      "There is no variable named %s.", s);
+  
+  /* Free memory used for column names. */
+  for (c = 0; c <= cmax; c++)
+    mxFree(colnames[c]);
+  mxFree(colnames);
+
+  return icol;
+}
+
+
+#define COLNAMES_IN   prhs[0]
 #define PROPNAME_IN   prhs[1]
-#define VALUE_IN      prhs[2]
-#define DATAFRAME_OUT plhs[0]
+#define ICOL_OUT      plhs[0]
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
@@ -47,8 +156,8 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   double *src, *dst;
 
   /*--- Check number of input/output arguments --------------------------------*/
-
-  if (nrhs != 3)
+  
+  if (nrhs != 2)
     mexErrMsgTxt("Incorrect number of input arguments (should be 2).");
 
   if (nlhs > 1)
@@ -64,71 +173,10 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   if(s == NULL)
     mexErrMsgTxt("mxArrayToString failed to process PropertyName argument.");
   
-  /*--- Get data, nrow, ncol --------------------------------------------------*/
-  
-  data = mxGetField(DATAFRAME_IN, 0, "data");
-  if(data == NULL)
-    mexErrMsgTxt("Unable to get field 'data'.");
+  /*--- Which column are we trying to set ? -----------------------------------*/
 
-  nrow = mxGetM(data);
-  ncol = mxGetN(data);
-  
-  /*--- Prepare output dataframe ----------------------------------------------*/
-  
-  DATAFRAME_OUT = mxDuplicateArray(DATAFRAME_IN);
-  
-  /*--- Parse PropertyName ----------------------------------------------------*/
-
-  if (strcmp(s, "rownames") == 0)
-    {
-      if (!mxIsCell(VALUE_IN))
-	mexErrMsgTxt("PropertyValue should be a cell array of strings.");
-      
-      mxReplaceField(DATAFRAME_OUT, 0, "rownames", VALUE_IN);
-    }
-  else
-    {
-      if (strcmp(s, "colnames") == 0)
-        {
-	  if (!mxIsCell(VALUE_IN))
-	    mexErrMsgTxt("PropertyValue should be a cell array of strings.");
-
-	  mxReplaceField(DATAFRAME_OUT, 0, "vnames", VALUE_IN);         
-        }
-      else
-        {
-	  /* Which column are we trying to set ? */
-	  colnames = mxGetField(DATAFRAME_OUT, 0, "vnames");
-          icol = (double) get_column_number(colnames, s);
-	  
-	  /* Get the 'data' field of the output dataframe */
-	  data = mxGetField(DATAFRAME_OUT, 0, "data");
-	  if(data == NULL)
-	    mexErrMsgTxt("Unable to get field 'data'.");
-
-          if (icol == -2)
-            {
-              /* Special case: setting the entire dataframe at once */
-	      src = mxGetPr(VALUE_IN);
-	      dst = mxGetPr(data);
-	      memcpy(dst, src, nrow * ncol * sizeof(double));	      
-            }
-          else
-            {
-              /* General case: icol is a column index */
-              if (icol >= ncol)
-                {
-                  mexErrMsgTxt("What the hell !?!?");
-                }
-              else
-                {
-                  src = mxGetPr(VALUE_IN);
-                  dst = mxGetPr(data) + nrow * icol;
-                  memcpy(dst, src, nrow * sizeof(double));
-                }
-            }
-        }
-    }
+  icol = get_column_number(COLNAMES_IN, s);	  
+  ICOL_OUT = mxCreateDoubleScalar (icol + 1);
 
   mxFree(s);
 }

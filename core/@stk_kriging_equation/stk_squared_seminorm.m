@@ -1,10 +1,10 @@
-% STK_KRIGING_EQUATION...
+% STK_SQUARED_SEMINORM...
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,26 +26,25 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = stk_kriging_equation (model, xi, xt)
+function s = stk_squared_seminorm (kreq, zi)
 
-kreq = struct ( 'model',     model,  ...
-    'xi',   [], 'xt',        [],     ...
-    'LS_Q', [],  'LS_R',     [],     ...
-    'RS',   [], 'lambda_mu', []      );
+n = size (kreq.LS_Q, 1);
+r = n - size (kreq.xi, 1);
 
-kreq = class (kreq, 'stk_kriging_equation');
+% Extend the observation vector with zeros
+zz = [double(zi); zeros(r, 1)];
 
-if nargin > 1,
+% Compute the squared seminorm
+s = zz' * (linsolve (kreq, zz));
 
-    % this triggers a first set of partial computations...
-    kreq = set (kreq, 'xi', xi);
-    
-    if nargin > 2,
-        % ...and this triggers the remaining computation
-        % (if xt is not provided, we end up with an incomplete kreq)
-        kreq = set (kreq, 'xt', xt);
-    end
-    
-end % if
+% % Alternative (slower) implementation:
+% ni = size (kreq.xi, 1);
+% zi = double (zi);
+% QU = kreq.LS_Q(1:ni, :);
+% T  = kreq.LS_R \ (QU' * zi);
+% s  = zi' * T(1:ni, :);
 
-end % function stk_kriging_equation
+% Guard against numerical issues
+if s < 0, s = 0; end
+
+end % function stk_squared_seminorm

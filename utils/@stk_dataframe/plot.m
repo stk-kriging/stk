@@ -28,8 +28,6 @@
 
 function plot(x, z, varargin)
 
-stk_narginchk(2, inf);
-
 xx = double(x);
 zz = double(z);
 

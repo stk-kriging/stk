@@ -1,4 +1,4 @@
-% STK_KRIGING_EQUATION...
+% GET [overloaded base function]
 
 % Copyright Notice
 %
@@ -26,26 +26,24 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = stk_kriging_equation (model, xi, xt)
+function value = get (x, propname)
 
-kreq = struct ( 'model',     model,  ...
-    'xi',   [], 'xt',        [],     ...
-    'LS_Q', [],  'LS_R',     [],     ...
-    'RS',   [], 'lambda_mu', []      );
+icol = get_column_number (x.vnames, propname);
 
-kreq = class (kreq, 'stk_kriging_equation');
-
-if nargin > 1,
-
-    % this triggers a first set of partial computations...
-    kreq = set (kreq, 'xi', xi);
+switch icol
     
-    if nargin > 2,
-        % ...and this triggers the remaining computation
-        % (if xt is not provided, we end up with an incomplete kreq)
-        kreq = set (kreq, 'xt', xt);
-    end
-    
-end % if
+    case -3 % 'rownames'
+        value = x.rownames;
+        
+    case -2 % 'colnames'
+        value = x.vnames;
+            
+    case -1 % get entire array
+        value = x.data;
+        
+    otherwise
+        value = x.data(:, icol);
 
-end % function stk_kriging_equation
+end
+
+end % function get

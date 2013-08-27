@@ -1,4 +1,4 @@
-% STK_KRIGING_EQUATION...
+% GET_COLUMN_NUMBER [STK internal]
 
 % Copyright Notice
 %
@@ -26,26 +26,5 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = stk_kriging_equation (model, xi, xt)
-
-kreq = struct ( 'model',     model,  ...
-    'xi',   [], 'xt',        [],     ...
-    'LS_Q', [],  'LS_R',     [],     ...
-    'RS',   [], 'lambda_mu', []      );
-
-kreq = class (kreq, 'stk_kriging_equation');
-
-if nargin > 1,
-
-    % this triggers a first set of partial computations...
-    kreq = set (kreq, 'xi', xi);
-    
-    if nargin > 2,
-        % ...and this triggers the remaining computation
-        % (if xt is not provided, we end up with an incomplete kreq)
-        kreq = set (kreq, 'xt', xt);
-    end
-    
-end % if
-
-end % function stk_kriging_equation
+% Do NOT remove this seemingly useless M-file, otherwise some not-so-old
+% versions of Octave would faild to detect the corresponding mex-file.

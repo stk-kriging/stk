@@ -27,7 +27,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [param, lnv] = stk_param_init(model, xi, yi, box, noisy)
-stk_narginchk(3, 5);
+if nargin > 5,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 %--- first, default values for arguments 'box' and 'noisy' ------------------------------
 

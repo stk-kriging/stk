@@ -40,7 +40,9 @@
 
 function md = stk_mindist(x)
 
-stk_narginchk(1, 1);
+if nargin > 1,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 % call MEX-file
 md = stk_mindist_mex(double(x));

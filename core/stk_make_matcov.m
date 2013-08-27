@@ -55,7 +55,9 @@ function [K, P] = stk_make_matcov(model, x0, x1, pairwise)
 
 %=== process input arguments
 
-stk_narginchk(2, 4);
+if nargin > 4,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 x0 = double(x0);
 

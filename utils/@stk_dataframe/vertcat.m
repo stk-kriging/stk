@@ -33,11 +33,11 @@ if isa(x, 'stk_dataframe')
     % In this case, [x; y] will be an stk_dataframe also.
     
     y_data = double(y);
-    data = [x.data; y_data];
+    data = [double(x); y_data];
     
     if isa(y, 'stk_dataframe')
-        y_colnames = y.vnames;
-        y_rownames = y.rownames;
+        y_colnames = get (y, 'colnames');
+        y_rownames = get (y, 'rownames');
     else
         y_colnames = {};
         y_rownames = {};
@@ -45,24 +45,28 @@ if isa(x, 'stk_dataframe')
     
     %--- COLUMN NAMES -----------------------------------------------------
     
-    if isempty(x.vnames)
+    x_colnames = get (x, 'colnames');
+    
+    if isempty (x_colnames)
         
         colnames = y_colnames;
         
-    elseif ~isempty(y_colnames) && ~all(strcmp(x.vnames, y_colnames))
+    elseif ~isempty(y_colnames) && ~all(strcmp(x_colnames, y_colnames))
         
         stk_error(['Cannot concatenate because of incompatible column ' ...
             'names.'], 'IncompatibleColNames');
         
     else % ok, we can use x's column names
         
-        colnames = x.vnames;
+        colnames = x_colnames;
         
     end
     
     %--- ROW NAMES --------------------------------------------------------
     
-    bx = isempty(x.rownames);
+    x_rownames = get (x, 'rownames');
+    
+    bx = isempty(x_rownames);
     by = isempty(y_rownames);
     
     if bx && by, % none of the argument has row names
@@ -73,9 +77,6 @@ if isa(x, 'stk_dataframe')
         
         if bx
             x_rownames = repmat({''}, size(x.data, 1), 1);
-        else
-            x_rownames = x.rownames;
-            
         end
         
         if by
@@ -100,6 +101,13 @@ end
 
 end % function subsref
 
+%%%%%%%%%%%%%
+%%% tests %%%
+%%%%%%%%%%%%%
+
+% IMPORTANT NOTE: [x; y; ...] fails to give the same result as vertcat(x, y, 
+% ...) in some releases of Octave. As a consequence, all tests must be written
+% using horzcat explicitely.
 
 %!shared u v
 %! u = rand(3, 2);
@@ -111,38 +119,38 @@ end % function subsref
 %!test
 %! x = stk_dataframe(u);
 %! y = stk_dataframe(v);
-%! z = [x; y];
+%! z = vertcat (x, y);
 %! assert (isa(z, 'stk_dataframe') && isequal(double(z), [u; v]));
 
 %!test % the same, with row names this time
 %! x = stk_dataframe(u, {}, {'a'; 'b'; 'c'});
 %! y = stk_dataframe(v, {}, {'d'; 'e'; 'f'});
-%! z = [x; y];
+%! z = vertcat (x, y);
 %! assert (isa(z, 'stk_dataframe') && isequal(double(z), [u; v]));
 %! assert (all(strcmp(z.rownames, {'a'; 'b'; 'c'; 'd'; 'e'; 'f'})));
 
 %!test % the same, with row names only for the first argument
 %! x = stk_dataframe(u, {}, {'a'; 'b'; 'c'});
 %! y = stk_dataframe(v);
-%! z = [x; y];
+%! z = vertcat (x, y);
 %! assert (isa(z, 'stk_dataframe') && isequal(double(z), [u; v]));
 
 %!error % incompatible variable names
 %! u = rand(3, 1);  x = stk_dataframe(u, {'x'});
 %! v = rand(3, 1);  y = stk_dataframe(v, {'y'});
-%! z = [x; y];
+%! z = vertcat (x, y);
 
 %%
 % Vertical concatenation [dataframe; matrix]
 
 %!test
 %! x = stk_dataframe(u);
-%! z = [x; v];
+%! z = vertcat (x, v);
 %! assert (isa(z, 'stk_dataframe') && isequal(double(z), [u; v]));
 
 %!test % the same, with row names for the first argument
 %! x = stk_dataframe(u, {}, {'a'; 'b'; 'c'});
-%! z = [x; v];
+%! z = vertcat (x, v);
 %! assert (isa(z, 'stk_dataframe') && isequal(double(z), [u; v]));
 
 %%
@@ -150,7 +158,7 @@ end % function subsref
 
 %!test
 %! y = stk_dataframe(v);
-%! z = [u; y];
+%! z = vertcat (u, y);
 %! assert(isa(z, 'double') && (isequal(z, [u; v])));
 
 %%
@@ -159,5 +167,5 @@ end % function subsref
 %!test
 %! x = stk_dataframe(u);
 %! y = stk_dataframe(v);
-%! z = [x; y; u; v];
+%! z = vertcat (x, y, u, v);
 %! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u; v; u; v]));

@@ -9,7 +9,7 @@
 %
 %    Ladislav Kocis and William J. Whiten, "Computational investigations of low
 %    discrepancy sequences", ACM Transactions on Mathematical Software, 
-%    23(2):266–294, 1997.
+%    23(2):266-294, 1997.
 %    http://dx.doi.org/10.1145/264029.264064
 %
 % SEE ALSO: stk_sampling_vdc_rr2
@@ -42,15 +42,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_sampling_halton_rr2(n, d)
+function x = stk_sampling_halton_rr2 (n, d)
 
-xdata = zeros(n, d);
-
-for j = 1:d,
-    xdata(:, j) = stk_sampling_vdc_rr2(n, j);
+if nargin > 2,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-x = stk_dataframe(xdata);
+xdata = zeros (n, d);
+
+for j = 1:d,
+    xdata(:, j) = double (stk_sampling_vdc_rr2 (n, j));
+end
+
+x = stk_dataframe (xdata);
 
 end % function stk_sampling_halton_rr2
 
