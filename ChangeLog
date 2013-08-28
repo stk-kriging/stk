@@ -1,12 +1,16 @@
 2013-08-28  Julien Bect  <julien.bect@supelec.fr>
 
+	Add file AUTHORS (list of all contributors).
+
+	* AUTHORS: new text file.
+
 	Add admin script to find non-standard characters.
 
-	* admin/findNonStandardCharacters: New bash script.
+	* admin/findNonStandardCharacters: new bash script.
 
 	Fix end of lines (use LF).
 
-	* admin/fixEOL: New bash script to fix end of lines.
+	* admin/fixEOL: new bash script to fix end of lines.
 	* sampling/stk_sampling_vdc_rr2.c: fix EOL.
 	* misc/dist/stk_filldist_exact.m: fix EOL.
 	* misc/config/stk_octave_config.m: fix EOL.
