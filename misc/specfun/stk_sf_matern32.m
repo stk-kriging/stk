@@ -43,7 +43,9 @@
 
 function k = stk_sf_matern32(h, diff)
 
-stk_narginchk(1, 2);
+if nargin > 2,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 % default: compute the value (not a derivative)
 if (nargin<2), diff = -1; end

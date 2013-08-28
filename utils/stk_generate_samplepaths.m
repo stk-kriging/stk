@@ -49,7 +49,9 @@
 
 function zsim = stk_generate_samplepaths(model, xt, nb_paths)
 
-stk_narginchk(2, 3);
+if nargin > 3,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 if nargin < 3, nb_paths = 1; end
 

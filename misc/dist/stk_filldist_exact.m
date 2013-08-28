@@ -71,7 +71,9 @@
 
 function [fd, ymax] = stk_filldist_exact(x, box) %---------------------------------------
 
-stk_narginchk(1, 2);
+if nargin > 2,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 x = double(x);
 [n, d] = size(x);
 

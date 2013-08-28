@@ -66,7 +66,9 @@
 
 function [zp, lambda, mu, K] = stk_predict(model, xt)
 
-stk_narginchk(2, 2);
+if nargin > 2,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 %=== todo: these should become options
 

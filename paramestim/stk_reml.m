@@ -38,7 +38,10 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [rl, drl_param, drl_lnv] = stk_reml(model)
-stk_narginchk(1, 1);
+
+if nargin > 1,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 % % Ensure that param is a column vector (note: in the case where model.param is 
 % % an object, this is actually a call to subsasgn() in disguise).

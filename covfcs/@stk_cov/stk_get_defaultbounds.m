@@ -26,7 +26,10 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [lb, ub] = stk_get_defaultbounds(cov, cparam0, z) %#ok<INUSL,INUSD>
-stk_narginchk(1, 3);
+
+if nargin > 3,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 if (nargin > 1) && ~isempty(cparam0),
     stk_error('Incorrect size for cparam0.', 'IncorrectArgument');

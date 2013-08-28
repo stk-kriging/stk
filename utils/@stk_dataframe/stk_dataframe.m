@@ -28,7 +28,9 @@
 
 function x = stk_dataframe(x0, colnames, rownames)
 
-stk_narginchk(0, 3);
+if nargin > 3,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 if nargin == 0  % default constructor
     x = struct('data', zeros(0, 1), 'vnames', {{}}, 'rownames', {{}});    

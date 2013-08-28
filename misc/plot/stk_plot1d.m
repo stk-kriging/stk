@@ -34,7 +34,10 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function stk_plot1d(obsi, obst, pred, h_axis)
-stk_narginchk(3, 4);
+
+if nargin > 4,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 if nargin < 4,
     % Create figure

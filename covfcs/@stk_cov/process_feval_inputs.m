@@ -28,7 +28,10 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [x, y, diff, pairwise] = process_feval_inputs(cov, x, y, diff, pairwise)
-stk_narginchk(2, 5);
+
+if nargin > 5,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 % arg #2: x is mandatory
 if nargin < 2,

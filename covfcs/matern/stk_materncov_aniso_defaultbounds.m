@@ -27,7 +27,9 @@
 
 function [lb, ub] = stk_materncov_aniso_defaultbounds(param0, z)
 
-stk_narginchk(1, 2);
+if nargin > 2,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 if nargin < 2,
     empirical_variance = 1.0;

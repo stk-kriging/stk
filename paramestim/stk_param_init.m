@@ -27,7 +27,10 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [param, lnv] = stk_param_init(model, box, noisy)
-stk_narginchk(1, 3);
+
+if nargin > 3,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 errmsg = 'This function must be adapted to the object-oriented approach...';
 stk_error(errmsg, 'NotReadyYet');

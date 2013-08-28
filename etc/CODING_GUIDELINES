@@ -1,0 +1,33 @@
+This document gather various recommendations for writing code to be included in
+the STK.
+
+
+--- Checking the value of nargin -----------------------------------------------
+
+Older versions of Matlab and Octave (e.g., Matlab R2007a or Octave 3.4.3) have
+nargchk but not narginchk available. But the syntax of nargchk is ugly, and the
+function is marked as obsolete in recent versions of Matlab (e.g., R2012a), so
+we recommend using neither nargchk nor narginchk.
+
+Testing for nargin being too small is usually a waste of time, since an error
+will be issued when trying to use the absent argument.
+
+Testing for nargin being too large is not necessary in Matlab, since this
+automatically generates an error, but unfortunately the Octave developpers have
+made a different choice; see:
+
+http://octave.1599824.n4.nabble.com/Too-many-arguments-td1637206.html
+
+The current recommendation for checking the value of nargin in STK is as
+follows:
+
+ * don't check for nargin being too small, unless there is a specific reason to
+   do so,
+
+ * check for nargin being too large this way:
+
+   if nargin > 2,
+     stk_error ('Too many input arguments.', 'TooManyInputArgs');
+   end
+
+-----------------------------------------------------------------------------

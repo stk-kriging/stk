@@ -52,7 +52,9 @@
 %
 function z = stk_feval(f, x, progress_msg)
 
-stk_narginchk(2, 3);
+if nargin > 3,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 if ischar(f),
     zname = f;

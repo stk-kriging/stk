@@ -47,7 +47,9 @@
 
 function [paramopt, paramlnvopt] = stk_param_estim (model, cparam0, param0lnv)
 
-stk_narginchk(1, 3);
+if nargin > 3,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 % TODO: think of a better way to tell we want to estimate the noise variance
 NOISEESTIM = (nargin == 3);

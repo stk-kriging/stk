@@ -67,7 +67,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [x, aux] = stk_sampling_olhs(n, d, box, permut, extended)
-stk_narginchk(1, 5);
+if nargin > 5,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 if nargin < 5, extended = false; end
 

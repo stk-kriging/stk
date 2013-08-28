@@ -57,7 +57,9 @@ function res = stk_isequal_tolrel(a, b, tolrel)
 
 DEFAULT_TOLREL = 1e-8;
 
-stk_narginchk(2, 3);
+if nargin > 3,
+   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 if nargin == 2,
     tolrel = DEFAULT_TOLREL;
