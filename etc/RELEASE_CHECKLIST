@@ -1,0 +1,60 @@
+Assume, say, that we want to release STK version 4.5 (hum... not yet...).
+
+
+--- Step #0: check that everything is ok in the trunk --------------------------
+
+Check copyright years on all files modified since the previous release.
+
+Check that only unix-style EOL characters are used and that only "standard"
+extended ASCII characters are used (see scripts in ./admin).
+
+Check that all unit tests and all example scripts run on all available test
+platforms (Linux/Windows, Octave/Matlab...).
+
+Check that AUTHORS is up-to-date.
+
+
+--- Step #1: create maintenance branch -----------------------------------------
+
+svn copy \
+  svn+ssh://USERNAME@svn.code.sf.net/p/kriging/code/trunk \
+  svn+ssh://USERNAME@svn.code.sf.net/p/kriging/code/branches/4.5.x \
+  -m "Create maintenance branch for release 4.5"
+
+svn update  # to get our freshly created maintenance branch
+
+
+--- Step #2: update version numbers --------------------------------------------
+
+In branches/4.5.x/README, update version number to "4.5.0" and modify copyright
+years if appropriate. Commit.
+
+svn commit -m "Update version number to 4.5.0"
+
+In trunk/README, update version number to "4.6-dev" (or "5.0-dev") and modify
+copyright years if appropriate. Commit.
+
+svn commit -m "Update version number to 4.6-dev"
+
+
+--- Step #3: documentation -----------------------------------------------------
+
+Generate and commit HTML doc (see stk_makedoc.m).
+
+Describe changes in branches/4.5.x/WHATSNEW, starting from the WHATSNEW file of
+the previous release. Commit.
+
+
+--- Step #4: release -----------------------------------------------------------
+
+Export (svn export).
+
+Remove ./etc, ./admin, stk_makedoc.m and ./misc/m2html.
+
+Create tarball, compress and upload on Sourceforge.
+http://sourceforge.net/projects/kriging/files/
+
+TODO: create a script to automate these steps.
+
+Post a message to announce the release in the 'news' section on Sourceforge.
+http://sourceforge.net/p/kriging/news/

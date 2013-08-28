@@ -1,5 +1,9 @@
 2013-08-28  Julien Bect  <julien.bect@supelec.fr>
 
+	Add checklist for creating releases.
+
+	* etc/RELEASE_CHECKLIST: new text file.
+
 	Add file AUTHORS (list of all contributors).
 
 	* AUTHORS: new text file.
