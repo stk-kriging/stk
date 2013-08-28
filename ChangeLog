@@ -1,3 +1,25 @@
+2013-08-28  Julien Bect  <julien.bect@supelec.fr>
+
+	Add checklist for creating releases.
+
+	* etc/RELEASE_CHECKLIST: new text file.
+
+	Add file AUTHORS (list of all contributors).
+
+	* AUTHORS: new text file.
+
+	Add admin script to find non-standard characters.
+
+	* admin/findNonStandardCharacters: new bash script.
+
+	Fix end of lines (use LF).
+
+	* admin/fixEOL: new bash script to fix end of lines.
+	* sampling/stk_sampling_vdc_rr2.c: fix EOL.
+	* misc/dist/stk_filldist_exact.m: fix EOL.
+	* misc/config/stk_octave_config.m: fix EOL.
+	* misc/test/stk_runscript.m: fix EOL.
+
 2013-08-27  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a test.
