@@ -93,6 +93,10 @@ stk_select_optimizer();
 % to force recompilation of all MEX-files, use stk_compile_all(true);
 stk_compile_all();
 
+%=== Disable a warning in stk_predict
+
+warning('off', 'STK:stk_predict:NegativeVariancesSetToZero');
+
 %=== Cleanup
 
 fprintf('\n');
