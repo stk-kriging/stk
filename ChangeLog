@@ -1,3 +1,13 @@
+2013-08-28  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix end of lines (use LF).
+
+	* admin/fixEOL: New (bash) script to fix end of lines.
+	* sampling/stk_sampling_vdc_rr2.c: fix EOL.
+	* misc/dist/stk_filldist_exact.m: fix EOL.
+	* misc/config/stk_octave_config.m: fix EOL.
+	* misc/test/stk_runscript.m: fix EOL.
+
 2013-08-27  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a test.
