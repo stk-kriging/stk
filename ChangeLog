@@ -1,5 +1,18 @@
 2013-08-21  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a bug in sampling/stk_sampling_halton_rr2.m (Octave only).
+
+	* sampling/stk_sampling_halton_rr2.m: modified.
+	
+	Get rid of a nested function in stk_compile_all.m.
+
+	* misc/config/stk_compile_all.m: remove nested function.
+	* etc/CODING_GUIDELINES: Explain the rationale for this change.
+
+	Fix a bug in get_column_number.h.
+
+	* utils/@stk_dataframe/src/get_column_number.h: modified.
+
 	Get rid of stk_narginchk.
 
 	* misc/error/stk_narginchk.m: Removed.
