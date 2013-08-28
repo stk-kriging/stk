@@ -131,7 +131,7 @@ end
 %! idx_prd = (1:2:(n+m))';
 %!
 %! x_obs = x0(idx_obs);
-%! z_obs = stk_feval(@sin, x_obs);
+%! z_obs = sin (double (x_obs));
 %! x_prd = x0(idx_prd);
 %!
 %! model = stk_model('stk_materncov32_iso');
@@ -156,13 +156,15 @@ end
 % %! model = stk_model('stk_materncov32_iso');
 % %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
 % %! y_prd3 = stk_predict(model, idx_obs, z_obs, idx_prd);
-% %! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd3)));
+% %! assert(stk_isequal_tolabs(double(y_prd1), double(y_prd3), 1e-15));
+% %! % note: the results are not always strictly equal because, for instance, 
+% %! %       qr() is not deterministic in Octave 3.6.4.
 % 
 % %!test % same test,with idx_prd as a row vector
 % %! model = stk_model('stk_materncov32_iso');
 % %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
 % %! y_prd3 = stk_predict(model, idx_obs, z_obs, idx_prd');
-% %! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd3)));
+% %! assert(stk_isequal_tolabs(double(y_prd1), double(y_prd3), 1e-15));
 % 
 % %!test
 % %! idx_all = (1:(n+m))';
@@ -170,4 +172,4 @@ end
 % %! y_prd4 = stk_predict(model, x_obs, z_obs, x0);
 % %! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
 % %! y_prd5 = stk_predict(model, idx_obs, z_obs, []);
-% %! assert(stk_isequal_tolrel(double(y_prd4), double(y_prd5)));
+% %! assert(stk_isequal_tolabs(double(y_prd4), double(y_prd5), 1e-15));

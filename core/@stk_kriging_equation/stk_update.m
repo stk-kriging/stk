@@ -1,10 +1,10 @@
-% STK_KRIGING_EQUATION...
+% STK_UPDATE...
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,28 +26,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = stk_kriging_equation (model, xt)
+function kreq_updated = stk_update (kreq, x_new)
 
-xi = double (model.observations.x);
+% Poor man's update: we recompute EVERYTHING
+kreq_updated = stk_kriging_equation (kreq.model, [kreq.xi; x_new]);
 
-kreq = struct ( 'model',     model,  ...
-    'xi',   [], 'xt',        [],     ...
-    'LS_Q', [],  'LS_R',     [],     ...
-    'RS',   [], 'lambda_mu', []      );
+% TODO: implement efficient update equations
 
-kreq = class (kreq, 'stk_kriging_equation');
-
-if ~ isempty (xi),
-
-    % this triggers a first set of partial computations...
-    kreq = set (kreq, 'xi', xi);
-    
-    if nargin > 2,
-        % ...and this triggers the remaining computation
-        % (if xt is not provided, we end up with an incomplete kreq)
-        kreq = set (kreq, 'xt', xt);
-    end
-    
-end % if
-
-end % function stk_kriging_equation
+end % stk_kriging_equation_update

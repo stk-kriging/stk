@@ -1,9 +1,55 @@
+2013-08-27  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a test.
+
+	* core/stk_predict.m: fix a test.
+
+2013-08-22  Julien Bect  <julien.bect@supelec.fr>
+
+	Provide facilities for computing logdets.
+
+	* core/@stk_kriging_equation/get.m: new function.
+	* core/@stk_kriging_equation/set.m: new function.
+	* misc/benchmarks/stk_benchmark_logdet.m: new script
+
+	Prepare for future work on updating kreq objects.
+
+	* core/@stk_kriging_equation/stk_update.m: new function
+
+	Implement a greedy evaluation model in @stk_kriging_equation.
+
+	* core/@stk_kriging_equation/stk_kriging_equation.m: modified.
+	* core/@stk_kriging_equation/private/do_compute.m: new function.
+	* core/@stk_kriging_equation/stk_squared_seminorm.m: new function.
+	* core/@stk_kriging_equation/stk_predict.m: modified.
+	* core/@stk_kriging_equation/get.m: new function.
+	* core/@stk_kriging_equation/set.m: new function.
+	* core/@stk_kriging_equation/linsolve.m: modified.
+	* core/stk_predict.m: modified
+
 2013-08-21  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix horzcat/vertcat in the stk_dataframe class (Octave only).
+
+	* utils/@stk_dataframe/vertcat.m: modified.
+	* utils/@stk_dataframe/horzcat.m: modified.
+
+	Rewrite get/set in the stk_dataframe class.
+
+	* utils/@stk_dataframe/private/get_column_number.c: new MEX-file.
+	* utils/@stk_dataframe/private/get_column_number.m: its brother.
+	* utils/@stk_dataframe/get.m: new M-file.
+	* utils/@stk_dataframe/set.m: its sister.
+	* misc/config/stk_compile_all.m: modified.
+	* utils/@stk_dataframe/src/get_column_number.h: removed
+	* utils/@stk_dataframe/src/set.c: removed
+	* utils/@stk_dataframe/src/get.c: removed
+	* etc/CODING_GUIDELINES: Explain the rationale for this change.
 
 	Fix a bug in sampling/stk_sampling_halton_rr2.m (Octave only).
 
 	* sampling/stk_sampling_halton_rr2.m: modified.
-	
+
 	Get rid of a nested function in stk_compile_all.m.
 
 	* misc/config/stk_compile_all.m: remove nested function.

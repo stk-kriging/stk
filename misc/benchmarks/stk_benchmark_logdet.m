@@ -1,4 +1,4 @@
-% STK_KRIGING_EQUATION...
+% STK_BENCHMARK_LOGDET1
 
 % Copyright Notice
 %
@@ -26,28 +26,35 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = stk_kriging_equation (model, xt)
+% NREP = 1000; n = 20; % test on small matrices
+NREP = 100; n = 200; % test on large matrices
 
-xi = double (model.observations.x);
+d = 2;
+x = stk_sampling_maximinlhs (n, d, [], 10);
+model = stk_model ('stk_materncov52_aniso', d);
 
-kreq = struct ( 'model',     model,  ...
-    'xi',   [], 'xt',        [],     ...
-    'LS_Q', [],  'LS_R',     [],     ...
-    'RS',   [], 'lambda_mu', []      );
+propname = {                       ...
+    'log_det_covariance_matrix_a', ...
+    'log_det_covariance_matrix_b', ...
+    'log_det_covariance_matrix_c', ...
+    'log_det_covariance_matrix_d', ...
+    'log_det_covariance_matrix_e'  };
 
-kreq = class (kreq, 'stk_kriging_equation');
+L = length (propname);
+t = zeros (L, 1);
+v = zeros (L, 1);
 
-if ~ isempty (xi),
-
-    % this triggers a first set of partial computations...
-    kreq = set (kreq, 'xi', xi);
-    
-    if nargin > 2,
-        % ...and this triggers the remaining computation
-        % (if xt is not provided, we end up with an incomplete kreq)
-        kreq = set (kreq, 'xt', xt);
+for k = 1:L
+    fprintf('Method %d/%d...', k, L);
+    tic;
+    for i = 1:NREP,
+        kreq = stk_kriging_equation (model, x);
+        logdet = get (kreq, propname{k});
     end
-    
-end % if
+    t(k) = toc / NREP;
+    v(k) = logdet;
+    fprintf('\n');
+end
 
-end % function stk_kriging_equation
+display (t)
+display (v)
