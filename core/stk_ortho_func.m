@@ -10,12 +10,6 @@
 %    where L is the number of regression functions in the linear part of the
 %    model; e.g., L = 1 if MODEL.order is zero (ordinary kriging).
 %
-% SPECIAL CASE:
-%
-%    If MODEL has a field 'Kx_cache', X is expected to be a vector of integer
-%    indices (instead of structures with an 'a' field). This feature is not
-%    fully documented as of today...
-%
 % NOTE:
 %
 %    At the present time, stk_ortho_func() only handles polynomial regressions,
@@ -50,44 +44,38 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function P = stk_ortho_func(model, x)
+function P = stk_ortho_func (model, x)
+
 if nargin > 2,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-x = double(x);
+x = double (x);
 
-if ~isfield(model, 'Kx_cache'), % SYNTAX: x(factors), model
-    
-    P = stk_ortho_func_(model.order, x);
-    
-else % SYNTAX: x(indices), model
-    
-    if ~isfield(model, 'Px_cache'),
-        P = zeros(size(model.Kx_cache,1), 0);
-    else
-        P = model.Px_cache(x, :);
-    end
-    
+if strcmp (model.covariance_type, 'stk_discretecov')    
+    P = model.param.P(x, :);    
+else    
+    P = stk_ortho_func_ (model.order, x);    
 end
 
 end
+
 
 %%%%%%%%%%%%%%%%%%%%%%%
 %%% stk_ortho_func_ %%%
 %%%%%%%%%%%%%%%%%%%%%%%
 
-function P = stk_ortho_func_(order, x)
+function P = stk_ortho_func_ (order, x)
 
-[n,d] = size(x);
+[n, d] = size (x);
 
 switch order
     
     case -1, % 'simple' kriging
-        P = zeros(n, 0);
+        P = zeros (n, 0);
         
     case 0, % 'ordinary' kriging
-        P = ones(n, 1);
+        P = ones (n, 1);
         
     case 1, % linear trend
         P = [ones(n, 1) x];
@@ -103,11 +91,12 @@ switch order
         end
         
     otherwise, % syntax error
-        error('order should be in {-1,0,1,2}');
+        error ('order should be in {-1,0,1,2}');
         
 end
 
 end
+
 
 %%%%%%%%%%%%%
 %%% tests %%%
@@ -139,6 +128,6 @@ end
 %! model.order =  2; P = stk_ortho_func(model, x);
 %! assert(isequal(size(P), [n, 1 + d * (d + 3) / 2]));
 
-%!error 
+%!error
 %! model.order =  3; P = stk_ortho_func(model, x);
 %! % model.order > 2 is not allowed
