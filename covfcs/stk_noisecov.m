@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -27,30 +27,32 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = stk_noisecov(ni, lognoisevariance, diff)
+function K = stk_noisecov (ni, lognoisevariance, diff)
 
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-s = size(lognoisevariance);
-n = max(s);
-if ~isequal(s, [1,n]) && ~isequal(s, [n,1])
-    error('lognoisvariance must be a vector.');
-end
-
-if nargin == 2,
+if nargin < 3,
     diff = -1; % default: compute the value (not a derivative)
 end
 
-if n == 1
+if isscalar (lognoisevariance), % homoscedastic
+    
     % the result does not depend on diff
     K = exp(lognoisevariance) * eye(ni);
-else
-    if diff ~= -1,
-        error('not implemented');
+    
+else % heteroscedastic
+    
+    if ~ ((isequal (s, [1, ni])) || (isequal (s, [ni, 1])))
+        error ('lognoisevariance must be a scalar or a vector of length ni.');
     end
-    K = diag(exp(lognoisevariance));
+
+    if diff ~= -1,
+        error ('diff ~= -1 is not allowed in the heteroscedastic case');
+    end
+    
+    K = diag (exp (lognoisevariance));
 end
 
 end % function

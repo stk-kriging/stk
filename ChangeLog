@@ -1,3 +1,9 @@
+2013-08-29  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite stk_noisecov for clarity.
+
+	* covfcs/stk_noisecov.m: modified.
+
 2013-08-28  Julien Bect  <julien.bect@supelec.fr>
 
 	Disable a warning in stk_predict.
