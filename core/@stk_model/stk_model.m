@@ -64,36 +64,107 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 %
-function model = stk_model(covariance_type, dim)
+
+function model = stk_model (covariance_type, varargin)
+
+if nargin < 1,
+    
+    % use the (isotropic, 1D) Matern covariance function as a default choice
+    model = stk_model_ ('stk_materncov_iso');      
+
+elseif strcmp (covariance_type, 'stk_discretecov')
+    
+    % special case: build a discrete model
+    model = stk_model_discrete (varargin{:});
+    
+else
+    
+    % general case
+    model = stk_model_ (covariance_type, varargin{:});
+    
+end
+
+% NOTE: we should probably have two classes of models !
+
+model = class(model, 'stk_model');
+
+end % function stk_model
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% stk_model_discrete %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function model = stk_model_discrete (model_base, x)
+
+if nargin > 2,
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
+model = prepare_empty_model_struct ();
+
+% domain
+model.domain.type = 'discrete';
+model.domain.dim  = nan; % unused in the 'discrete' case
+model.domain.nt   = size (x, 1); 
+
+% mean and covariance functions
+model.randomprocess.priormean = stk_lm_finiteset ...
+    (feval (model_base.randomprocess.priormean, x));
+model.randomprocess.priorcov = stk_discretecov ...
+    (feval (model_base.randomprocess.priorcov, x));
+
+noisecov = model_base.noise.cov;
+if isa (noisecov, 'stk_nullcov')
+    model.noise.cov = stk_nullcov ();
+else
+    model.noise.cov = stk_discretecov (feval (noisecov, x));
+end
+
+end % function stk_model_discrete
+ 
+ 
+%%%%%%%%%%%%%%%%%%
+%%% stk_model_ %%%
+%%%%%%%%%%%%%%%%%%
+
+function model = stk_model_ (covariance_type, dim)
 
 if nargin > 2,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
-%=== handle optional arguments
-
-if nargin < 1,
-    % use the (isotropic) Matern covariance function as a default choice
-    % (note that, since nargin == 0 here, a one-dimensional will be produced)
-    covariance_type = 'stk_materncov_iso';
 end
 
 if nargin < 2,
     dim = 1;
 end
 
-%=== set default values
+model = prepare_empty_model_struct ();
 
-config        = struct('use_cache',       false,  ...
-                       'parallel_comput', false,  ...
-                       'guess_params',    true    );
+% domain
+model.domain.type = 'continuous';
+model.domain.dim  = dim;
+model.domain.nt   = nan; % unused in the 'continuous' case
 
-private       = struct('config', config,          ...
-                       'Kx_cache', [],            ...
-                       'Px_cache', []             );
+% observations
+model.observations.n = 0;
+model.observations.x = zeros (0, dim);
+model.observations.z = zeros (0, 1);
 
-domain        = struct('type', 'continuous',      ...
-                       'dim',   dim,              ...
+% mean and covariance functions
+model.randomprocess.priormean = stk_lm ('constant'); % default: ordinary kriging
+model.randomprocess.priorcov = stk_cov (covariance_type, 'dim', dim);
+
+end
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% prepare_empty_model_struct %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function model = prepare_empty_model_struct ()
+
+domain        = struct('type',  '',               ...
+                       'dim',   [],               ...
                        'box',   [],               ...
                        'xt',    [],               ...
                        'nt',    0,                ...
@@ -105,36 +176,14 @@ randomprocess = struct('type',     'GP',          ...
 
 noise         = struct('cov', stk_nullcov());
 
-n             = 0;
-x             = struct('a', zeros(n, dim));
-z             = struct('a', zeros(n,1));
-observations  = struct('x',  x, ...
-                       'z',  z, ...
-                       'n',  n ...
-                       );
+observations  = struct('x',  [], ...
+                       'z',  [], ...
+                       'n',  0   );
 
-model         = struct('private',       private, ...
-                       'domain',        domain, ...
+model         = struct('domain',        domain,        ...
                        'randomprocess', randomprocess, ...
-                       'noise',         noise, ...
-                       'observations',  observations ...
-                       );
-
-
-%%% covariance type
-
-if nargin < 1,
-    % use the (isotropic) Matern covariance function as a default choice
-    % (note that, since nargin == 0 here, a one-dimensional will be produced)
-    covariance_type = 'stk_materncov_iso';
-end
-
-%%% mean and covarance functions
-
-model.randomprocess.priormean = stk_lm('constant'); % default: ordinary kriging
-model.randomprocess.priorcov = stk_cov(covariance_type, 'dim', dim);
-
-model = class(model, 'stk_model');
+                       'noise',         noise,         ...
+                       'observations',  observations   );
 
 end
 

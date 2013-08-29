@@ -73,41 +73,15 @@ pairwise = (nargin > 3) && pairwise;
 
 %=== compute the covariance matrix
 
-switch  model.domain.type
-    
-    case 'discrete',
-        
-        switch model.private.config.use_cache
-            
-            case true,  % handle the case where a 'Kx_cache' field is present
-                % NB: this feature only works with a discrete domain
-                if ~pairwise,
-                    K = model.private.Kx_cache(x0, x0);
-                else
-                    idx = sub2ind(size(model.Kx_cache), x0, x1);
-                    K = model.private.Kx_cache(idx);
-                end
-                
-            case false, % handle the case where the covariance matrix must be computed
-                error('feature not implemented yet'); % FIXME
-        end
-        
-    case 'continuous'
-        
-        % covariance function
-        cov = model.randomprocess.priorcov;
-        
-        K = feval(cov, x0, x1, -1, pairwise);
-        
-        if make_matcov_auto,
-            if ~pairwise,
-                K = K + feval(model.noise.cov, x0, x0, -1, pairwise);
-            else
-                stk_error('Not implemented yet.', 'NotImplementedYet');
-            end
-        end
-        
-end % switch model.domain.type
+K = feval(model.randomprocess.priorcov, x0, x1, -1, pairwise);
+
+if make_matcov_auto && ~isa (model.noise.cov, 'stk_nullcov')
+    if ~pairwise,
+        K = K + feval(model.noise.cov, x0, x0, -1, pairwise);
+    else
+        stk_error('Not implemented yet.', 'NotImplementedYet');
+    end
+end
 
 %=== compute the regression functions
 
@@ -130,7 +104,6 @@ end
 %! x0 = stk_sampling_randunif(n0, d);
 %! x1 = stk_sampling_randunif(n1, d);
 
-%!error [KK, PP] = stk_make_matcov();
 %!test  [KK, PP] = stk_make_matcov(model);
 %!test  [Ka, Pa] = stk_make_matcov(model, x0);           % (1)
 %!test  [Kb, Pb] = stk_make_matcov(model, x0, x0);       % (2)
@@ -156,14 +129,3 @@ end
 %!% The second output depends on x0 only => should be the same for (1)--(3)
 %!test  assert(isequal(Pa, Pb));
 %!test  assert(isequal(Pa, Pc));
-
-% FIXME: outdated tests related to Kx_cache/Px_cache
-
-% %!test %% use of Kx_cache, with matrices
-% %! model2 = model;
-% %! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
-% %! idx = [1 4 9];
-% %! [K1, P1] = stk_make_matcov(model,  x0(idx, :));
-% %! [K2, P2] = stk_make_matcov(model2, idx');
-% %! assert(stk_isequal_tolrel(K1, K2));
-% %! assert(stk_isequal_tolrel(P1, P2));

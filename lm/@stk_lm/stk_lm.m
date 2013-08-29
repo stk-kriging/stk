@@ -43,7 +43,7 @@ else
             lm = stk_lm_poly2full(varargin{:});
         case {'userdefined', 'user defined'}
             lm = stk_lm_userdefined(varargin{:});
-        case {'finiteset', 'finite set', 'finite'}
+        case {'discrete', 'finiteset', 'finite set', 'finite'}
             lm = stk_lm_finiteset(varargin{:});
         otherwise
             try

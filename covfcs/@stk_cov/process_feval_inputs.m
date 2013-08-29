@@ -53,9 +53,8 @@ if nargin < 5,
     pairwise = false;
 end
 
-% extract data matrices from structures, if appropriate
-if isstruct(x), x = x.a; end
-if isstruct(y), y = y.a; end
+x = double (x);
+y = double (y);
 
 % sanity check
 if pairwise && (size(x, 1) ~= size(y, 1))

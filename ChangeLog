@@ -1,4 +1,23 @@
+2013-08-29  Julien Bect  <julien.bect@supelec.fr>
+
+	Use new covariance type 'stk_discretecov' instead of Kx_cache/Px_cache.
+
+	* covfcs/stk_discretecov.m: new function.
+	* core/@stk_kriging_equation/stk_predict.m: modified.
+	* core/stk_ortho_func.m: modified.
+	* core/stk_make_matcov.m: modified.
+	* core/stk_predict.m: modified.
+	* utils/stk_model.m: modified.
+
+	Rewrite stk_noisecov for clarity.
+
+	* covfcs/stk_noisecov.m: modified.
+
 2013-08-28  Julien Bect  <julien.bect@supelec.fr>
+
+	Disable a warning in stk_predict.
+
+	* stk_init.m: modified.
 
 	Add checklist for creating releases.
 
