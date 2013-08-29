@@ -51,55 +51,42 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [K, P] = stk_make_matcov(model, x0, x1, pairwise)
+function [K, P] = stk_make_matcov (model, x0, x1, pairwise)
 
 %=== process input arguments
 
 if nargin > 4,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-x0 = double(x0);
+x0 = double (x0);
 
 if (nargin > 2) && ~isempty(x1)
-    x1 = double(x1);
+    x1 = double (x1);
     make_matcov_auto = false;
 else
     x1 = x0;
-    make_matcov_auto = true;    
+    make_matcov_auto = true;
 end
 
 pairwise = (nargin > 3) && pairwise;
 
 %=== compute the covariance matrix
 
-if isfield(model, 'Kx_cache'), % handle the case where 'Kx_cache' is present
-    
+K = feval (model.covariance_type, model.param, x0, x1, -1, pairwise);
+
+if make_matcov_auto && isfield (model, 'lognoisevariance'),
     if ~pairwise,
-        K = model.Kx_cache(x0, x1);
+        K = K + stk_noisecov (size (K,1), model.lognoisevariance);
     else
-        idx = sub2ind(size(model.Kx_cache), x0, x1);
-        K = model.Kx_cache(idx);
+        stk_error('Not implemented yet.', 'NotImplementedYet');
     end
-    
-else % handle the case where the covariance matrix must be computed
-    
-    K = feval(model.covariance_type, model.param, x0, x1, -1, pairwise);
-        
-    if make_matcov_auto && isfield(model, 'lognoisevariance'),
-        if ~pairwise,
-            K = K + stk_noisecov(size(K,1), model.lognoisevariance);
-        else
-            stk_error('Not implemented yet.', 'NotImplementedYet');
-        end
-    end
-        
 end
 
 %=== compute the regression functions
 
 if nargout > 1,
-    P = stk_ortho_func(model, x0);
+    P = stk_ortho_func (model, x0);
 end
 
 end
@@ -141,19 +128,3 @@ end
 %!% The second output depends on x0 only => should be the same for (1)--(3)
 %!test  assert(isequal(Pa, Pb));
 %!test  assert(isequal(Pa, Pc));
-
-%!test %% use of Kx_cache
-%! model2 = model;
-%! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
-%! idx = [1 4 9];
-%! [K1, P1] = stk_make_matcov(model,  x0(idx, :));
-%! [K2, P2] = stk_make_matcov(model2, idx');
-%! assert(stk_isequal_tolrel(K1, K2));
-%! assert(stk_isequal_tolrel(P1, P2));
-
-%!test %% use of Kx_cache + pairwise=true
-%! model2 = model;
-%! [model2.Kx_cache, model2.Px_cache] = stk_make_matcov(model, x0);
-%! K1 = stk_make_matcov(model,  x0([2 5 6], :), [], true);
-%! K2 = stk_make_matcov(model2, [2 5 6]', [], true);
-%! assert(stk_isequal_tolrel(K1, K2));

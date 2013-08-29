@@ -28,14 +28,7 @@
 %    an NP x NP covariance matrix). From a frequentist point of view, K can be
 %    seen as the covariance matrix of the prediction errors.
 %
-% SPECIAL CASE #1
-%
-%    If MODEL has a field 'Kx_cache', XI and XP are expected to be vectors of
-%    integer indices. This feature is not fully documented as of today... If
-%    XT is empty, it is assumed that predictions must be computed at all points
-%    of the underlying discrete space.
-%
-% SPECIAL CASE #2
+% SPECIAL CASE
 %
 %    If ZI is empty, everything but ZP.mean is computed. Indeed, neither the
 %    kriging variance ZP.var nor the matrices LAMBDA and MU actually depend on
@@ -160,28 +153,3 @@ end
 %! y_prd2 = stk_predict(model, struct('a', double(x_obs)), ...
 %!                      struct('a', double(z_obs)), struct('a', double(x_prd)));
 %! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd2)));
-
-%%% test Kx_cache
-
-%!test
-%! model = stk_model('stk_materncov32_iso');
-%! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
-%! y_prd3 = stk_predict(model, idx_obs, z_obs, idx_prd);
-%! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd3)));
-
-%!test % same test,with idx_prd as a row vector
-%! model = stk_model('stk_materncov32_iso');
-%! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
-%! y_prd3 = stk_predict(model, idx_obs, z_obs, idx_prd');
-%! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd3)));
-
-%!test
-%! idx_all = (1:(n+m))';
-%! model = stk_model('stk_materncov32_iso');
-%! y_prd4 = stk_predict(model, x_obs, z_obs, x0);
-%! [model.Kx_cache, model.Px_cache] = stk_make_matcov(model, x0);
-%! y_prd5 = stk_predict(model, idx_obs, z_obs, []);
-%! assert(stk_isequal_tolabs(double(y_prd4), double(y_prd5), 1e-15));
-%! % note: the results are not always strictly equal because, for instance, 
-%! %       qr() is not deterministic in Octave 3.6.4.
-

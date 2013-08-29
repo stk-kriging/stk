@@ -1,4 +1,4 @@
-% STK_PREDICT_  [STK internal function]
+% STK_PREDICT [STK internal function]
 
 % Copyright Notice
 %
@@ -42,20 +42,19 @@ end
 
 %=== convert xt and get its size
 
-xt = double(xt);
+xt = double (xt);
 
-if isfield(kreq.model, 'Kx_cache') % use indices
-    
-    if isempty(xt)
-        xt = (1:size(kreq.model.Kx_cache, 1))';
-    elseif ~iscolumn(xt)
-        warning('STK:stk_predict:IncorrectSize', 'xt should be a column.');
+if strcmp (kreq.model.covariance_type, 'stk_discretecov') % use indices    
+    if isempty (xt)
+        m = size (kreq.model.param.K, 1);
+        xt = (1:m)';
+    elseif ~iscolumn (xt)
+        warning ('STK:stk_predict:IncorrectSize', 'xt should be a column.');
         xt = xt(:);
-    end
-    
+    end    
 end
 
-nt = size(xt, 1);
+nt = size (xt, 1);
 
 %=== optional arguments
 
