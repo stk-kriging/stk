@@ -21,7 +21,7 @@
 % which has mandatory fields and optional fields.
 %
 %   MANDATORY FIELDS: covariance_type, param
-%   OPTIONAL FIELDS: Kx_cache, lognoisevariance
+%   OPTIONAL FIELD: lognoisevariance
 %
 % See also stk_materncov_iso, stk_materncov_aniso, ...
 
@@ -52,7 +52,56 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function model = stk_model(covariance_type, dim)
+function model = stk_model (covariance_type, varargin)
+
+if nargin < 1,
+    
+    % use the (isotropic, 1D) Matern covariance function as a default choice
+    model = stk_model_ ('stk_materncov_iso');
+    
+elseif strcmp (covariance_type, 'stk_discretecov')
+    
+    % special case: build a discrete model
+    model = stk_model_discretecov (varargin{:});
+    
+else
+    
+    % general case
+    model = stk_model_ (covariance_type, varargin{:});
+    
+end
+
+end % function stk_model
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% stk_model_discretecov %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+function model_out = stk_model_discretecov (model_base, x)
+
+if nargin > 3,
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
+[K, P] = stk_make_matcov (model_base, x, x);
+
+model_out = struct ( ...
+    'covariance_type', 'stk_discretecov', ...
+    'param', struct ('K', K, 'P', P));
+
+if isfield (model_base, 'lognoisevariance');
+    model_out.lognoisevariance = model_base.lognoisevariance;
+end
+
+end % function stk_model_discretecov
+
+
+%%%%%%%%%%%%%%%%%%
+%%% stk_model_ %%%
+%%%%%%%%%%%%%%%%%%
+
+function model = stk_model_ (covariance_type, dim)
 
 if nargin > 2,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -62,13 +111,7 @@ model = struct();
 
 %%% covariance type
 
-if nargin < 1,
-    % use the (isotropic) Matern covariance function as a default choice
-    % (note that, since nargin == 0 here, a one-dimensional will be produced)
-    model.covariance_type = 'stk_materncov_iso';
-else
-    model.covariance_type = covariance_type;
-end
+model.covariance_type = covariance_type;
 
 %%% model.order
 
@@ -124,7 +167,7 @@ switch model.covariance_type
         
 end % switch
 
-end % function stk_model
+end % function stk_model_
 
 
 %%%%%%%%%%%%%
