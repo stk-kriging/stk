@@ -80,7 +80,7 @@ end % function stk_model
 
 function model_out = stk_model_discretecov (model_base, x)
 
-if nargin > 3,
+if nargin > 2,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
