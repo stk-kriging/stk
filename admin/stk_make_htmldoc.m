@@ -42,5 +42,5 @@ cd (STK_ROOT);
 DOC_FOLDER = fullfile (STK_ROOT, 'htmldoc');
 
 % Generate HTML documentation
-m2html ('htmlDir', DOC_FOLDER, 'recursive', 'on', 'graph', 'on', ...
+m2html ('htmlDir', DOC_FOLDER, 'recursive', 'on', 'graph', 'off', ...
     'ignoredDir', {'htmldoc', 'matlab', 'admin', 'etc'});
