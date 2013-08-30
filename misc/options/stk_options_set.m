@@ -1,4 +1,4 @@
-% STK_OPTIONS_SET ... (FIXME: missing doc)
+% STK_OPTIONS_SET sets the value of one or all STK options.
 
 % Copyright Notice
 %

@@ -1,4 +1,4 @@
-% STK_PARALLEL_CUTBLOCKS ... (FIXME: missing doc)
+% STK_PARALLEL_CUTBLOCKS [STK internal]
 
 % Copyright Notice
 %

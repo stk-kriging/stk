@@ -1,4 +1,4 @@
-% STK_PARALLEL_ENGINE_GET ... (FIXME: missing doc)
+% STK_PARALLEL_ENGINE_GET returns the current parallelization engine.
 
 % Copyright Notice
 %
