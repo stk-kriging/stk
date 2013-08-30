@@ -1,4 +1,4 @@
-% STK_PARALLEL_STOP ... (FIXME: missing doc)
+% STK_PARALLEL_STOP stops the parallelization engine.
 
 % Copyright Notice
 %
@@ -26,8 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_parallel_stop()
+function stk_parallel_stop ()
 
-stk_parallel_stop(stk_parallel_engine_get());
+stk_parallel_stop (stk_parallel_engine_get ());
 
 end % function stk_parallel_stop

@@ -1,4 +1,4 @@
-% STK_PARALLEL_FEVAL ... (FIXME: missing doc)
+% STK_PARALLEL_FEVAL does parallel evaluations of a function.
 
 % Copyright Notice
 %

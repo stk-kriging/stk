@@ -1,4 +1,4 @@
-% STK_PARALLEL_ENGINE_PARFOR ... (FIXME: missing doc)
+% STK_PARALLEL_ENGINE_PARFOR [overloaded STK function]
 
 % Copyright Notice
 %

@@ -1,4 +1,4 @@
-% STK_PARALLEL_STOP ... (FIXME: missing doc)
+% STK_PARALLEL_STOP [overloaded STK function]
 
 % Copyright Notice
 %

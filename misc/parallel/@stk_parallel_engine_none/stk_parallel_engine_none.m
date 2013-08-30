@@ -1,4 +1,4 @@
-% STK_PARALLEL_ENGINE_NONE ... (FIXME: missing doc)
+% STK_PARALLEL_ENGINE_NONE [overloaded STK function]
 
 % Copyright Notice
 %
