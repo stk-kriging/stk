@@ -510,8 +510,7 @@ end
 fid = openfile(curfile,'w');
 
 %- Set some template variables
-tpl = set(tpl,'var','DATE',[datestr(now,8) ' ' datestr(now,1) ' ' ...
-							datestr(now,13)]);
+tpl = tpl_set_all (tpl);
 tpl = set(tpl,'var','MASTERPATH', './');
 tpl = set(tpl,'var','DIRS', sprintf('%s ',mdir{:}));
 
@@ -640,8 +639,7 @@ if options.search
 	%- Set template fields
 	tpl = set(tpl,'var','INDEX',[options.indexFile options.extension]);
 	tpl = set(tpl,'var','MASTERPATH','./');
-	tpl = set(tpl,'var','DATE',[datestr(now,8) ' ' datestr(now,1) ' ' ...
-								datestr(now,13)]);
+    tpl = tpl_set_all (tpl);
 	tpl = set(tpl,'var','IDXFILE',idx_search);
 	tpl = set(tpl,'var','PHPFILE',php_search);
 	
@@ -722,8 +720,7 @@ tpl = set(tpl,'block','TPL_MDIR','subfolder','subfold');
 tpl = set(tpl,'block','subfolder','subdir','subdirs');
 tpl = set(tpl,'block','TPL_MDIR','todolist','todolists');
 tpl = set(tpl,'block','TPL_MDIR','graph','graphs');
-tpl = set(tpl,'var','DATE',[datestr(now,8) ' ' datestr(now,1) ' ' ...
-							datestr(now,13)]);
+tpl = tpl_set_all (tpl);
 
 for i=1:length(mdir)
 	%- Open for writing each output directory index file
@@ -821,8 +818,7 @@ if options.todo
 	tpl = set(tpl,'file','TPL_TODO',tpl_todo);
 	tpl = set(tpl,'block','TPL_TODO','filelist','filelists');
 	tpl = set(tpl,'block','filelist','row','rows');
-	tpl = set(tpl,'var','DATE',[datestr(now,8) ' ' datestr(now,1) ' ' ...
-								datestr(now,13)]);
+    tpl = tpl_set_all (tpl);
 
 	for i=1:length(mdir)
 		mfilestodo = intersect(find(strcmp(mdir{i},mdirs)),todo.mfile);
@@ -878,8 +874,7 @@ if options.graph
 	%- Create the HTML template
 	tpl = template(options.template,'remove');
 	tpl = set(tpl,'file','TPL_GRAPH',tpl_graph);
-	tpl = set(tpl,'var','DATE',[datestr(now,8) ' ' datestr(now,1) ' ' ...
-								datestr(now,13)]);
+    tpl = tpl_set_all (tpl);
 	
     %- Create a full dependency graph for all directories if possible
     if options.globalHypertextLinks & length(mdir) > 1
@@ -973,8 +968,7 @@ tpl = set(tpl,'block','TPL_MFILE','subfunction','subf');
 tpl = set(tpl,'block','subfunction','onesubfunction','onesubf');
 tpl = set(tpl,'block','TPL_MFILE','source','thesource');
 tpl = set(tpl,'block','TPL_MFILE','download','downloads');
-tpl = set(tpl,'var','DATE',[datestr(now,8) ' ' datestr(now,1) ' ' ...
-							datestr(now,13)]);
+tpl = tpl_set_all (tpl);
 
 nblinetot = 0;
 for i=1:length(mdir)
@@ -1419,4 +1413,23 @@ function str = horztab(str,n)
 	
 	if n > 0
 		str = strrep(str,sprintf('\t'),blanks(n));
-	end
+    end
+
+%===============================================================================
+function tpl = tpl_set_all (tpl)
+
+tpl = set (tpl, ...
+    'var', 'DATE', ...
+    [datestr(now, 8) ' ' datestr(now, 1) ' ' datestr(now, 13)]);
+
+tpl = set (tpl, ...
+    'var', 'STK_VERSION_NUMBER', ...
+    stk_version);
+
+tpl = set (tpl, ...
+    'var', 'M2HTML_VERSION', ...
+    'M2HTML 1.5');
+
+tpl = set (tpl, ...
+    'var', 'M2HTML_URL', ...
+    'http://www.artefact.tk/software/matlab/m2html/');
