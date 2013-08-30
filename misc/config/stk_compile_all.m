@@ -64,15 +64,17 @@ function stk_compile (dst_dir, src_dir, opts, mexname, varargin)
 
 fprintf ('MEX-file %s... ', mexname);
 
-filename = [mexname '.' mexext];
-src_file = fullfile (src_dir, sprintf ('%s.c', mexname));
-mex_file = fullfile (dst_dir, filename);
+mex_filename = [mexname '.' mexext];
+mex_fullpath = fullfile (dst_dir, mex_filename);
 
-dir_src = dir (src_file);
-dir_mex = dir (mex_file);
+src_filename = [mexname '.c'];
+src_fullpath = fullfile (src_dir, src_filename);
+
+dir_src = dir (src_fullpath);
+dir_mex = dir (mex_fullpath);
 
 if isempty (dir_src)
-    stk_error (sprintf ('File %s not found', src_file), 'FileNotFound');
+    stk_error (sprintf ('File %s not found', src_filename), 'FileNotFound');
 end
 
 compile = opts.force_recompile || (isempty(dir_mex)) ...
@@ -82,15 +84,16 @@ if compile,
     
     cd (src_dir);
     
-    mex (src_file, sprintf('-I%s', opts.include_dir, varargin{:}));
+    include = sprintf('-I%s', opts.include_dir);
+    mex (src_filename, include, varargin{:});
     
     if ~strcmp (src_dir, dst_dir)
-        system (sprintf('mv %s/%s %s', src_dir, filename, dst_dir));
+        movefile (fullfile (src_dir, mex_filename), dst_dir);
     end
     
 end
 
-fid = fopen (mex_file, 'r');
+fid = fopen (mex_fullpath, 'r');
 if fid ~= -1,
     fprintf ('ok.\n');
     fclose (fid);

@@ -1,5 +1,9 @@
 2013-08-30  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix several issues in stk_compile_all.
+
+	* misc/config/stk_compile_all.m: modified
+
 	Fix stk_octave_config to make it work in Octave 3.4.3.
 
 	* misc/config/stk_octave_config.m: modified
