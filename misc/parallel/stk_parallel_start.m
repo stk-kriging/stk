@@ -1,4 +1,4 @@
-% STK_PARALLEL_START ... (FIXME: missing doc)
+% STK_PARALLEL_START starts the parallelization engine.
 
 % Copyright Notice
 %
