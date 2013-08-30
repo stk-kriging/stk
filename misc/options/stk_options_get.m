@@ -1,4 +1,4 @@
-% STK_OPTIONS_GET ... (FIXME: missing doc)
+% STK_OPTIONS_GET returns the value of one or all STK options.
 
 % Copyright Notice
 %
