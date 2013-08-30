@@ -1,4 +1,4 @@
-% STK_MAKEDOC generates the HTML documentation for the STK.
+% STK_MAKE_HTMLDOC generates the HTML documentation for the STK.
 
 % Copyright Notice
 %
@@ -26,11 +26,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-STK_ROOT = fileparts(mfilename('fullpath'));
+STK_ROOT = stk_get_root ();
 
-addpath( ...
-    fullfile(STK_ROOT, 'misc', 'm2html'), ...
-    fullfile(STK_ROOT, 'misc', 'config'));
+addpath (fullfile (STK_ROOT, 'admin', 'm2html'));
 
 % Check that we are running the script from Matlab
 if stk_is_octave_in_use(),
@@ -38,11 +36,11 @@ if stk_is_octave_in_use(),
 end
 
 % Ensure that we are at the root of STK
-cd(STK_ROOT);
+cd (STK_ROOT);
 
 % Output directory
-DOC_FOLDER = fullfile(STK_ROOT, 'htmldoc');
-   
+DOC_FOLDER = fullfile (STK_ROOT, 'htmldoc');
+
 % Generate HTML documentation
-m2html('htmlDir', DOC_FOLDER, 'recursive', 'on', 'graph', 'on', ...
-       'ignoredDir', {'htmldoc', 'm2html', 'matlab'});
+m2html ('htmlDir', DOC_FOLDER, 'recursive', 'on', 'graph', 'on', ...
+    'ignoredDir', {'htmldoc', 'matlab', 'admin', 'etc'});

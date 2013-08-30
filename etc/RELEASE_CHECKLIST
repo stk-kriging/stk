@@ -39,7 +39,7 @@ svn commit -m "Update version number to 4.6-dev"
 
 --- Step #3: documentation -----------------------------------------------------
 
-Generate and commit HTML doc (see stk_makedoc.m).
+Generate and commit HTML doc (see admin/stk_make_htmldoc.m).
 
 Describe changes in branches/4.5.x/WHATSNEW, starting from the WHATSNEW file of
 the previous release. Commit.
@@ -49,7 +49,7 @@ the previous release. Commit.
 
 Export (svn export).
 
-Remove ./etc, ./admin, stk_makedoc.m and ./misc/m2html.
+Remove ./etc and ./admin.
 
 Create tarball, compress and upload on Sourceforge.
 http://sourceforge.net/projects/kriging/files/
