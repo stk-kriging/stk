@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -51,9 +51,11 @@ suppress_verbose_help_message(true);
 
 % So, we keep gnuplot as a graphical backend
 % but use GNUTERM=wxt for prettier and faster plots!
-setenv('GNUTERM', 'wxt')
-
-fprintf('Graphics toolkit: %s\n', graphics_toolkit());
+if ismember ('gnuplot', available_graphics_toolkits)
+	graphics_toolkit ('gnuplot')
+	setenv ('GNUTERM', 'wxt')
+	fprintf('Graphics toolkit: gnuplot\n');
+end
 
 end
 

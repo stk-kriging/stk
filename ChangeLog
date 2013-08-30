@@ -1,5 +1,9 @@
 2013-08-30  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix stk_octave_config to make it work in Octave 3.4.3.
+
+	* misc/config/stk_octave_config.m: modified
+
 	Rename stk_remlqrg to stk_param_relik.
 
 	* paramestim/stk_param_relik.m: formerly known as stk_remlgrg.m
