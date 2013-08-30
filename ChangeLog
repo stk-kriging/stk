@@ -1,5 +1,12 @@
 2013-08-30  Julien Bect  <julien.bect@supelec.fr>
 
+	Rename stk_remlqrg to stk_param_relik.
+
+	* paramestim/stk_param_relik.m: formerly known as stk_remlgrg.m
+	* paramestim/stk_remlqrg.m: removed
+	* paramestim/stk_param_init.m: modified
+	* paramestim/stk_param_estim.m: modified
+
 	Add new function that returns STK's version number.
 
 	* misc/config/stk_version.m: new function.
