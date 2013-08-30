@@ -1,3 +1,9 @@
+2013-08-30  Julien Bect  <julien.bect@supelec.fr>
+
+	Add new function that returns STK's version number.
+
+	* misc/config/stk_version.m: new function.
+
 2013-08-29  Julien Bect  <julien.bect@supelec.fr>
 
 	Use new covariance type 'stk_discretecov' instead of Kx_cache/Px_cache.
