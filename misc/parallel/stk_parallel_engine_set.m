@@ -1,4 +1,4 @@
-% STK_PARALLEL_ENGINE_SET ... (FIXME: missing doc)
+% STK_PARALLEL_ENGINE_SET chooses a parallelization engine.
 
 % Copyright Notice
 %

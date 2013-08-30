@@ -1,4 +1,4 @@
-% STK_PARALLEL_FEVAL ... (FIXME: missing doc)
+% STK_PARALLEL_FEVAL [overloaded STK function]
 
 % Copyright Notice
 %
