@@ -1,4 +1,4 @@
-% STK_SAMPLING_HALTON_RR2 generates point from the RR2-scrambled Halton sequence
+% STK_SAMPLING_HALTON_RR2 generates points from the Halton/RR2 sequence
 %
 % CALL: X = stk_sampling_halton_rr2(N, D)
 %
@@ -9,8 +9,7 @@
 %
 %    Ladislav Kocis and William J. Whiten, "Computational investigations of low
 %    discrepancy sequences", ACM Transactions on Mathematical Software, 
-%    23(2):266-294, 1997.
-%    http://dx.doi.org/10.1145/264029.264064
+%    23(2):266-294, 1997.  http://dx.doi.org/10.1145/264029.264064
 %
 % SEE ALSO: stk_sampling_vdc_rr2
 
@@ -58,6 +57,7 @@ x = stk_dataframe (xdata);
 
 end % function stk_sampling_halton_rr2
 
+
 %%%%%%%%%%%%%
 %%% tests %%%
 %%%%%%%%%%%%%
@@ -76,3 +76,42 @@ end % function stk_sampling_halton_rr2
 %! y = x(end, :);
 %! yref = [0.9052734375 0.028349336991312 0.74848];
 %! assert(stk_isequal_tolrel(y, yref, 1e-13));
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Comparison with Scilab+lowdisc %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % Matlab/Octave STK test script
+% 
+% NREP = 10;
+% M = 1e5;
+% DIM = 20;
+% 
+% tic;
+% for i = 1:NREP
+%     x = stk_sampling_halton_rr2(M, DIM);
+% end;
+% t1 = toc/NREP;
+% fprintf('time elapsed: %.2e seconds\n', t1);
+% 
+% fprintf('%.15f\n', x(1:5, 2))
+
+% // Scilab lowdisc test script
+%
+% NREP = 10;
+% M = 1e5;
+% DIM = 20;
+% 
+% tic();
+% for i = 1:NREP,
+%     rng = lowdisc_new("halton");
+%     rng = lowdisc_configure(rng, "-dimension", DIM);
+%     rng = lowdisc_configure(rng, "-scrambling", "RR2");
+%     rng = lowdisc_startup(rng);
+%     [rng, x] = lowdisc_next(rng, M);
+%     rng = lowdisc_destroy(rng);
+% end
+% t = toc() / NREP
+% 
+% mprintf('%.15f\n', x(1:9, 2))
