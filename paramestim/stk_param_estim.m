@@ -179,24 +179,24 @@ end % function stk_param_estim ------------------------------------------------
 function [l, dl] = f_(model, w)
 model.randomprocess.priorcov.cparam = w;
 if nargout == 1,
-    l = stk_reml(model);
+    l = stk_param_relik (model);
 else
-	[l, dl] = stk_reml(model);
+	[l, dl] = stk_param_relik (model);
 end
 end
 
 function dl = nablaf_(model, w)
 model.randomprocess.priorcov.cparam = w;
-[l_ignored, dl] = stk_reml(model); %#ok<ASGLU>
+[l_ignored, dl] = stk_param_relik (model); %#ok<ASGLU>
 end
 
 function [l, dl] = f_with_noise_(model, w)
 model.randomprocess.priorcov.cparam = w(1:end-1);
 model.noise.cov.variance = exp(w(end));
 if nargin == 1,
-    l = stk_reml(model);
+    l = stk_param_relik (model);
 else
-    [l, dl, dln] = stk_reml(model);
+    [l, dl, dln] = stk_param_relik (model);
     dl = [dl; dln];
 end
 end
@@ -204,7 +204,7 @@ end
 function dl = nablaf_with_noise_(model, w)
 model.randomprocess.priorcov.cparam = w(1:end-1);
 model.noise.cov.variance = exp(w(end));
-[l_ignored, dl, dln] = stk_reml(model); %#ok<ASGLU>
+[l_ignored, dl, dln] = stk_param_relik (model); %#ok<ASGLU>
 dl = [dl; dln];
 end
 
