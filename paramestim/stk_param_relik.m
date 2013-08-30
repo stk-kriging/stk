@@ -1,6 +1,6 @@
 % STK_REMLQRG computes the restricted likelihood of a model given data.
 %
-% CALL: [ARL, dARL_dtheta, dARL_dLNV] = stk_remlqrg(MODEL, XI, YI)
+% CALL: [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (MODEL, XI, YI)
 %
 %   computes the opposite of the restricted likelihood (denoted by ARL for
 %   Anti-Restricted Likelihood) of MODEL given the data (XI, YI). The function
@@ -37,7 +37,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [rl, drl_param, drl_lnv] = stk_remlqrg(model, xi, yi)
+function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
@@ -153,9 +153,9 @@ end
 %! model = stk_model('stk_materncov_aniso');
 %! model.param = log([SIGMA2; NU; 1/RHO1 * ones(DIM, 1)]);
 
-%!error [J, dJ1, dJ2] = stk_remlqrg();
-%!error [J, dJ1, dJ2] = stk_remlqrg(model);
-%!error [J, dJ1, dJ2] = stk_remlqrg(model, xi);
-%!test  [J, dJ1, dJ2] = stk_remlqrg(model, xi, zi);
-%!error [J, dJ1, dJ2] = stk_remlqrg(model, xi, zi, pi);
+%!error [J, dJ1, dJ2] = stk_param_relik ();
+%!error [J, dJ1, dJ2] = stk_param_relik (model);
+%!error [J, dJ1, dJ2] = stk_param_relik (model, xi);
+%!test  [J, dJ1, dJ2] = stk_param_relik (model, xi, zi);
+%!error [J, dJ1, dJ2] = stk_param_relik (model, xi, zi, pi);
 
