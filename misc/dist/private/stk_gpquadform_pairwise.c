@@ -70,7 +70,7 @@ mxArray* compute_qxy_matrixy
  const mxArray* ry
  )
 {
-  unsigned int k, d, m;
+  unsigned int d, m;
   mxArray *h;
 
   if((!stk_is_realmatrix(x))  || (!stk_is_realmatrix(y)) ||

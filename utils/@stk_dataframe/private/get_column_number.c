@@ -150,10 +150,7 @@ int get_column_number(const mxArray* mxColNames, char* s)
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
   char *s;
-  mxArray *data, *colnames, *tmp;
   int icol;
-  size_t nrow, ncol;
-  double *src, *dst;
 
   /*--- Check number of input/output arguments --------------------------------*/
   
