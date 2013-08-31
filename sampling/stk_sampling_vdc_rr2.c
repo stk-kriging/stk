@@ -242,6 +242,8 @@ int construct_permutRR
     }
 
   mxFree(pi_b_max);
+  
+  return STK_OK;
 }
 
 
@@ -263,7 +265,7 @@ int construct_permutRR_Mersenne
   
   if ((digits = compute_nb_digits(b - 1, 2)) == -1)
     return STK_ERROR_SANITY;
-  
+
   permut[0] = 0;
 
   for (i = 1; i < b; i++)
@@ -277,7 +279,9 @@ int construct_permutRR_Mersenne
 	  direct >>= 1;
 	}        
       permut[i] = reversed;
-    }  
+    }
+
+  return STK_OK;
 }
 
 

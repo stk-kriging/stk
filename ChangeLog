@@ -1,5 +1,9 @@
 2013-08-31  Julien Bect  <julien.bect@supelec.fr>
 
+	Add return code to several C functions.
+
+	* sampling/stk_sampling_vdc_rr2.c: modified
+
 	Remove unused variables in several C functions.
 
 	* misc/dist/private/stk_dist_pairwise.c: modified
