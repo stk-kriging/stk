@@ -1,5 +1,9 @@
 2013-08-30  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a problem with bsxfun/realpow in Matlab R2007a.
+
+	* utils/@stk_dataframe/bsxfun.m: modified
+
 	Fix several issues in stk_compile_all.
 
 	* misc/config/stk_compile_all.m: modified
