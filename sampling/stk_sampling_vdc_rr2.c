@@ -80,6 +80,8 @@ void mexFunction
   double *h;
   mxArray* xdata;
 
+  n_ = 0; j_ = 0;
+
   /*--- Read input arguments -----------------------------------------------*/
 
   if(nrhs != 2)
