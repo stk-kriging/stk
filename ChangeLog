@@ -1,8 +1,16 @@
-2013-08-30  Julien Bect  <julien.bect@supelec.fr>
+2013-08-31  Julien Bect  <julien.bect@supelec.fr>
+
+	Remove unused variables in several C functions.
+
+	* misc/dist/private/stk_dist_pairwise.c: modified
+	* misc/dist/private/stk_gpquadform_pairwise.c: modified
+	* utils/@stk_dataframe/private/get_column_number.c: modified
 
 	Fix a problem with bsxfun/realpow in Matlab R2007a.
 
 	* utils/@stk_dataframe/bsxfun.m: modified
+
+2013-08-30  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix several issues in stk_compile_all.
 
