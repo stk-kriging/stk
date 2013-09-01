@@ -33,7 +33,8 @@ function [x, a, b] = stk_normalize(x, varargin)
 end % function stk_normalize
 
 %!test
-%! u = rand(6, 2) * 2;
-%! x = stk_dataframe(u);
-%! y = stk_normalize(x);
-%! assert (isa (y, 'stk_dataframe') && isequal(double(y), stk_normalize(u)))
+%! u = rand (6, 2) * 2;
+%! x = stk_dataframe (u);
+%! y = stk_normalize (x);
+%! assert (isa (y, 'stk_dataframe') ...
+%!    && stk_isequal_tolabs (double (y), stk_normalize (u)))

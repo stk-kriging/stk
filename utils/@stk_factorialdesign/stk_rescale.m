@@ -37,7 +37,7 @@ end
 end % function stk_rescale
 
 %!test
-%! x = stk_factorialdesign({[1 2], [5 6]})
-%! y = stk_factorialdesign({[0 3], [0 3]})
-%! z = stk_rescale(x, [1 5; 2 6], [0 0; 3 3]);
-%! assert(isequal(y, z))
+%! x = stk_factorialdesign ({[1 2], [5 6]});
+%! y = stk_factorialdesign ({[0 3], [0 3]});
+%! z = stk_rescale (x, [1 5; 2 6], [0 0; 3 3]);
+%! assert (stk_isequal_tolabs (y, z))

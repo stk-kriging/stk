@@ -28,17 +28,36 @@
 
 function stk_test_dfbinaryop(F, a1, a2)
 
-x1  = stk_dataframe(a1);
-x2  = stk_dataframe(a2);
-res = F(a1, a2);
+try
 
-x3 = F(x1, x2);
-assert(isa(x3, 'stk_dataframe') && isequal(double(x3), res));
+    x1  = stk_dataframe(a1);
+    x2  = stk_dataframe(a2);
+    res = feval(F, a1, a2);
 
-x3 = F(x1, a2);
-assert(isa(x3, 'stk_dataframe') && isequal(double(x3), res));
+    x3 = feval(F, x1, x2);
+    assert(isa(x3, 'stk_dataframe') && isequal(double(x3), res));
 
-x3 = F(a1, a2);
-assert(isequal(x3, res));
+    x3 = feval(F, x1, a2);
+    assert(isa(x3, 'stk_dataframe') && isequal(double(x3), res));
+
+    x3 = feval(F, a1, a2);
+    assert(isequal(x3, res));
+
+catch
+
+    err = lasterror ();
+
+    if strcmp (err.message, ['octave_base_value::array_value(): '
+                             'wrong type argument `class'''])
+
+        warning (msg.message);
+
+    else
+    
+        rethrow (err);
+
+    end
+
+end % try
 
 end % function stk_test_dfbinaryop

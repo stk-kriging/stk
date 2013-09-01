@@ -27,6 +27,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function z = min(x, y, dim)
+
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
@@ -51,9 +52,9 @@ end %--- that's all, folks -----------------------------------------------------
 end % function min
 
 
-%!test  stk_test_dfbinaryop(@min, rand(7, 2), rand(7, 2));
-%!test  stk_test_dfbinaryop(@min, rand(7, 2), pi);
-%!error stk_test_dfbinaryop(@min, rand(7, 2), rand(7, 3));
+%!test  stk_test_dfbinaryop ('min', rand(7, 2), rand(7, 2));
+%!test  stk_test_dfbinaryop ('min', rand(7, 2), pi);
+%!error stk_test_dfbinaryop ('min', rand(7, 2), rand(7, 3));
 
 %!shared x1 df1
 %! x1 = rand(9, 3);

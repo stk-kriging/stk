@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -51,9 +51,23 @@ suppress_verbose_help_message(true);
 
 % So, we keep gnuplot as a graphical backend
 % but use GNUTERM=wxt for prettier and faster plots!
-setenv('GNUTERM', 'wxt')
+try
+    % doesn't work in old Octave versions (e.g., 3.2.3)
+    if ismember ('gnuplot', available_graphics_toolkits)
+        graphics_toolkit ('gnuplot')
+        setenv ('GNUTERM', 'wxt')
+        fprintf ('Graphics toolkit: gnuplot\n');
+    end
+end
 
-fprintf('Graphics toolkit: %s\n', graphics_toolkit());
+% Fix a problem with private folders in Octave 3.2.x
+v = version;
+if strcmp (v(1:4), '3.2.')
+    addpath (fullfile ...
+        (stk_get_root, 'utils', '@stk_dataframe', 'private'));
+    addpath (fullfile ...
+        (stk_get_root, 'core', '@stk_kriging_equation', 'private'));
+end
 
 end
 

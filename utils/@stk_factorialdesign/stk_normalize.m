@@ -37,6 +37,6 @@ end
 end % function stk_normalize
 
 %!test
-%! x = stk_factorialdesign({[1 2], [5 6]})
-%! y = stk_factorialdesign({[0 1], [0 1]})
-%! assert(isequal(stk_normalize(x), y))
+%! x = stk_factorialdesign ({[1 2], [5 6]});
+%! y = stk_factorialdesign ({[0 1], [0 1]});
+%! assert (stk_isequal_tolabs (stk_normalize (x), y))

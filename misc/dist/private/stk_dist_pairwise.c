@@ -34,7 +34,7 @@
 
 static void distance3(double* x, double* y, double* h, int n, int dim)
 {
-  int i, j, k;
+  int i, k;
   double diff, lambda;
 
   for (i = 0; i < n; i++) {
