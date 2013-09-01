@@ -69,6 +69,8 @@ if strcmp (v(1:4), '3.2.')
         (stk_get_root, 'core', '@stk_kriging_equation', 'private'));
 end
 
+end
+
 
 %%%%%%%%%%%%%%%%%%%%%%
 %%% stk_test_glpk_ %%%
