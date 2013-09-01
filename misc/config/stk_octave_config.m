@@ -51,10 +51,13 @@ suppress_verbose_help_message(true);
 
 % So, we keep gnuplot as a graphical backend
 % but use GNUTERM=wxt for prettier and faster plots!
-if ismember ('gnuplot', available_graphics_toolkits)
-	graphics_toolkit ('gnuplot')
-	setenv ('GNUTERM', 'wxt')
-	fprintf('Graphics toolkit: gnuplot\n');
+try
+    % doesn't work in old Octave versions (e.g., 3.2.3)
+    if ismember ('gnuplot', available_graphics_toolkits)
+        graphics_toolkit ('gnuplot')
+        setenv ('GNUTERM', 'wxt')
+        fprintf ('Graphics toolkit: gnuplot\n');
+    end
 end
 
 end

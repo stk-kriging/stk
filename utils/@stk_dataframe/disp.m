@@ -63,14 +63,19 @@ if n == 0,
 else
     
     if nargin < 2,
-        switch get(0, 'Format')
-            case 'short'
-                max_width = 6;
-            case 'long'
-                max_width = 16;
-            otherwise
-                % FIXME: handle other formatting modes...
-                max_width = 10;
+        try
+            switch get (0, 'Format')
+                case 'short'
+                    max_width = 6;
+                case 'long'
+                    max_width = 16;
+                otherwise
+                    % FIXME: handle other formatting modes...
+                    max_width = 10;
+            end
+        catch
+            % get (0, ...) doesn't work in Octave 3.2.x
+            max_width = 6;
         end
     end
     
