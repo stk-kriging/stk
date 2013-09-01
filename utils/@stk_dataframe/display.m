@@ -33,13 +33,11 @@
 
 function display(x)
 
-fprintf('\n%s = ', inputname(1));
-
-if isequal(get(0, 'FormatSpacing'), 'loose')
-    fprintf('\n\n');
-end
+fprintf('\n%s = \n\n', inputname(1));
 
 disp(x);
+
+fprintf('\n');
 
 end % function display
 

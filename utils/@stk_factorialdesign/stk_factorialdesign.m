@@ -113,9 +113,9 @@ end % function stk_factorialdesign
 %! end
 %! x = stk_sampling_regulargrid (3^2, 2);
 
-%!test format short;     disp (x);
-%!test format long;      disp (x);
-%!test format rat;       disp (x);
+%!test format rat;      disp (x);
+%!test format long;     disp (x);
+%!test format short;    disp (x);
 %!     if ~isnan (fmt), set (0, 'Format', fmt); end
 
 %!test disp (stk_sampling_regulargrid (0^1, 1));

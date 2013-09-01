@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function z = apply(x, dim, F, u)
+function z = apply (x, dim, F, u)
 
 if nargin == 4
     uu = {u};
@@ -36,13 +36,13 @@ end
 
 if dim == 1
     % act along columns
-    z = F(x.data, uu{:}, 1);
+    z = feval (F, x.data, uu{:}, 1);
 else
     if dim ~= 2,
-        stk_error('Incorrect dimension specifier', 'IncorrectDimSpec');
+        stk_error ('Incorrect dimension specifier', 'IncorrectDimSpec');
     else
         % act along rows (less usual)
-        z = F(x.data, uu{:}, 2);
+        z = feval (F, x.data, uu{:}, 2);
     end
 end
 

@@ -81,9 +81,24 @@ if isstruct(a) && isstruct(b),
 elseif isnumeric(a) && isnumeric(b)
     
     res = all(abs(b(:) - a(:)) <= tolabs);
-    
+
+elseif iscell (a) && iscell (b)
+
+    for i = 1:numel(a),
+        if ~stk_isequal_tolabs (a{i}, b{i}, tolabs);
+	    res = false;
+            return;
+        end
+    end
+
+    res = true;
+
+elseif isa (a, 'stk_dataframe') && (strcmp (class (a), class (b)))
+
+    res = stk_isequal_tolabs (struct (a), struct (b), tolabs);
+
 else
-    
+
     res = false;
     
 end
