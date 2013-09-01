@@ -32,6 +32,11 @@ y = bsxfun(@xor, x1, x2);
 
 end % function xor
 
-%!test  stk_test_dfbinaryop(@xor, floor(3*rand(7, 2)), floor(3*rand(7, 2)));
-%!test  stk_test_dfbinaryop(@xor, floor(3*rand(7, 2)), 1.0);
-%!error stk_test_dfbinaryop(@xor, floor(3*rand(7, 2)), floor(3*rand(7, 3)));
+%!shared x y z
+%! x = floor (3 * rand (7, 2));
+%! y = floor (3 * rand (7, 2));
+%! z = floor (3 * rand (7, 3));
+
+%!test  stk_test_dfbinaryop ('xor', x, y);
+%!test  stk_test_dfbinaryop ('xor', x, 1.0);
+%!error stk_test_dfbinaryop ('xor', x, z);

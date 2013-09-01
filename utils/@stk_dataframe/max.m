@@ -51,9 +51,9 @@ end %--- that's all, folks -----------------------------------------------------
 end % function max
 
 
-%!test  stk_test_dfbinaryop(@max, rand(7, 2), rand(7, 2));
-%!test  stk_test_dfbinaryop(@max, rand(7, 2), pi);
-%!error stk_test_dfbinaryop(@max, rand(7, 2), rand(7, 3));
+%!test  stk_test_dfbinaryop ('max', rand(7, 2), rand(7, 2));
+%!test  stk_test_dfbinaryop ('max', rand(7, 2), pi);
+%!error stk_test_dfbinaryop ('max', rand(7, 2), rand(7, 3));
 
 %!shared x1 df1
 %! x1 = rand(9, 3);

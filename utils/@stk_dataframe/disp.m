@@ -49,13 +49,13 @@ if n == 0,
         
         if d == 1,
             fprintf('Empty stk_dataframe with 1 variable: ');
-            fprintf('%s\n\n', x.vnames{1});
+            fprintf('%s\n', x.vnames{1});
         else
             fprintf('Empty stk_dataframe with %d variables: ', d);
             for j = 1:(d-1),
                 fprintf('%s, ', x.vnames{j});
             end
-            fprintf('%s\n\n', x.vnames{end});
+            fprintf('%s\n', x.vnames{end});
         end
         
     end
@@ -74,7 +74,7 @@ else
                     max_width = 10;
             end
         catch
-            % get (0, ...) doesn't work in Octave 3.2.x
+            % Property 'Format' doesn't exist in Octave 3.2.x
             max_width = 6;
         end
     end
@@ -130,7 +130,7 @@ else
         
     end % for
     
-    disp(str); fprintf('\n');
+    disp(str);
     
 end % if
 
@@ -145,9 +145,9 @@ end % function disp
 %! end
 %! x = stk_dataframe (rand (3, 2));
 
-%!test format short;     disp (x);
-%!test format long;      disp (x);
-%!test format rat;       disp (x);
+%!test format rat;      disp (x);
+%!test format long;     disp (x);
+%!test format short;    disp (x);
 %!     if ~isnan (fmt), set (0, 'Format', fmt); end
 
 %!test disp (stk_dataframe (zeros (0, 1)))

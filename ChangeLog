@@ -2,9 +2,20 @@
 
 	Improve Octave 3.2.x compatibility.
 
+	* utils/@stk_dataframe/max.m: modified
+	* utils/@stk_dataframe/apply.m: modified
+	* utils/@stk_dataframe/display.m: modified
+	* utils/@stk_dataframe/xor.m: modified
 	* utils/@stk_dataframe/disp.m: modified
+	* utils/@stk_dataframe/stk_normalize.m: modified
+	* utils/@stk_dataframe/min.m: modified
+	* utils/@stk_factorialdesign/stk_factorialdesign.m: modified
+	* utils/@stk_factorialdesign/stk_rescale.m: modified
+	* utils/@stk_factorialdesign/stk_normalize.m: modified	
 	* misc/config/stk_octave_config.m: modified
-
+	* misc/test/stk_isequal_tolabs.m: modified
+	* misc/test/stk_test_dfbinaryop.m: modified
+	
 	Provide a quantile function since Matlab (base) does not have it.
 
 	* misc/stats/octave_quantile.m: new function
