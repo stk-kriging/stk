@@ -1,3 +1,11 @@
+2013-09-01  Julien Bect  <julien.bect@supelec.fr>
+
+	Provide a quantile function since Matlab (base) does not have it.
+
+	* misc/stats/octave_quantile.m: new function
+	* utils/@stk_dataframe/quantile.m: modified
+	* misc/config/stk_path.m: modified
+
 2013-08-31  Julien Bect  <julien.bect@supelec.fr>
 
 	Add return code to several C functions.
