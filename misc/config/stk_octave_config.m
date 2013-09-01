@@ -60,6 +60,13 @@ try
     end
 end
 
+% Fix a problem with private folders in Octave 3.2.x
+v = version;
+if strcmp (v(1:4), '3.2.')
+    addpath (fullfile ...
+        (stk_get_root, 'utils', '@stk_dataframe', 'private'));
+    addpath (fullfile ...
+        (stk_get_root, 'core', '@stk_kriging_equation', 'private'));
 end
 
 

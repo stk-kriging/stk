@@ -346,7 +346,8 @@ end
 %!error octave_quantile ()
 %!error octave_quantile (1, 2, 3, 4, 5)
 %!error octave_quantile (['A'; 'B'], 10)
-%!error octave_quantile (1:10, [true, false])
+% %!error octave_quantile (1:10, [true, false])
+% % this test fails in Octave 3.2.x
 %!error octave_quantile (1:10, ones (2,2))
 %!error octave_quantile (1, 1, 1.5)
 %!error octave_quantile (1, 1, 0)

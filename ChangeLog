@@ -13,6 +13,7 @@
 	* utils/@stk_factorialdesign/stk_rescale.m: modified
 	* utils/@stk_factorialdesign/stk_normalize.m: modified	
 	* misc/config/stk_octave_config.m: modified
+	* misc/stats/octave_quantile.m: modified
 	* misc/test/stk_isequal_tolabs.m: modified
 	* misc/test/stk_test_dfbinaryop.m: modified
 	
