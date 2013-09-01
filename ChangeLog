@@ -1,5 +1,10 @@
 2013-09-01  Julien Bect  <julien.bect@supelec.fr>
 
+	Improve Octave 3.2.x compatibility.
+
+	* utils/@stk_dataframe/disp.m: modified
+	* misc/config/stk_octave_config.m: modified
+
 	Provide a quantile function since Matlab (base) does not have it.
 
 	* misc/stats/octave_quantile.m: new function
