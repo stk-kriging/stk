@@ -36,7 +36,7 @@ o Quick Start
 
 o Requirements and recommendations for use with GNU Octave
 
-    The STK works with GNU Octave 3.2.0 or newer.
+    The STK works with GNU Octave 3.2.2 or newer.
 
     Note  that  the STK relies  on  some mex files  that  are compiled
     during the initialization. Thus, your installation must be able to
