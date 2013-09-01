@@ -49,13 +49,13 @@ if n == 0,
         
         if d == 1,
             fprintf('Empty stk_dataframe with 1 variable: ');
-            fprintf('%s\n\n', x.vnames{1});
+            fprintf('%s\n', x.vnames{1});
         else
             fprintf('Empty stk_dataframe with %d variables: ', d);
             for j = 1:(d-1),
                 fprintf('%s, ', x.vnames{j});
             end
-            fprintf('%s\n\n', x.vnames{end});
+            fprintf('%s\n', x.vnames{end});
         end
         
     end
@@ -63,14 +63,19 @@ if n == 0,
 else
     
     if nargin < 2,
-        switch get(0, 'Format')
-            case 'short'
-                max_width = 6;
-            case 'long'
-                max_width = 16;
-            otherwise
-                % FIXME: handle other formatting modes...
-                max_width = 10;
+        try
+            switch get (0, 'Format')
+                case 'short'
+                    max_width = 6;
+                case 'long'
+                    max_width = 16;
+                otherwise
+                    % FIXME: handle other formatting modes...
+                    max_width = 10;
+            end
+        catch
+            % Property 'Format' doesn't exist in Octave 3.2.x
+            max_width = 6;
         end
     end
     
@@ -125,7 +130,7 @@ else
         
     end % for
     
-    disp(str); fprintf('\n');
+    disp(str);
     
 end % if
 
@@ -133,13 +138,17 @@ end % function disp
 
 
 %!shared x fmt
-%! fmt = get(0, 'Format');
-%! x = stk_dataframe(rand(3, 2));
+%! try % doesn't work on old Octave versions, nevermind
+%!   fmt = get (0, 'Format');
+%! catch
+%!   fmt = nan;
+%! end
+%! x = stk_dataframe (rand (3, 2));
 
-%!test set(0, 'Format', 'short');     disp(x);
-%!test set(0, 'Format', 'long');      disp(x);
-%!test set(0, 'Format', 'rational');  disp(x);
-%!test set(0, 'Format', fmt);
+%!test format rat;      disp (x);
+%!test format long;     disp (x);
+%!test format short;    disp (x);
+%!     if ~isnan (fmt), set (0, 'Format', fmt); end
 
-%!test disp(stk_dataframe(zeros(0, 1)))
-%!test disp(stk_dataframe(zeros(0, 2)))
+%!test disp (stk_dataframe (zeros (0, 1)))
+%!test disp (stk_dataframe (zeros (0, 2)))

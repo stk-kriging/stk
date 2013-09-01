@@ -1,4 +1,53 @@
+2013-09-01  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve Octave 3.2.x compatibility.
+
+	* utils/@stk_dataframe/max.m: modified
+	* utils/@stk_dataframe/apply.m: modified
+	* utils/@stk_dataframe/display.m: modified
+	* utils/@stk_dataframe/xor.m: modified
+	* utils/@stk_dataframe/disp.m: modified
+	* utils/@stk_dataframe/stk_normalize.m: modified
+	* utils/@stk_dataframe/min.m: modified
+	* utils/@stk_factorialdesign/stk_factorialdesign.m: modified
+	* utils/@stk_factorialdesign/stk_rescale.m: modified
+	* utils/@stk_factorialdesign/stk_normalize.m: modified	
+	* misc/config/stk_octave_config.m: modified
+	* misc/stats/octave_quantile.m: modified
+	* misc/test/stk_isequal_tolabs.m: modified
+	* misc/test/stk_test_dfbinaryop.m: modified
+	
+	Provide a quantile function since Matlab (base) does not have it.
+
+	* misc/stats/octave_quantile.m: new function
+	* utils/@stk_dataframe/quantile.m: modified
+	* misc/config/stk_path.m: modified
+
+2013-08-31  Julien Bect  <julien.bect@supelec.fr>
+
+	Add return code to several C functions.
+
+	* sampling/stk_sampling_vdc_rr2.c: modified
+
+	Remove unused variables in several C functions.
+
+	* misc/dist/private/stk_dist_pairwise.c: modified
+	* misc/dist/private/stk_gpquadform_pairwise.c: modified
+	* utils/@stk_dataframe/private/get_column_number.c: modified
+
+	Fix a problem with bsxfun/realpow in Matlab R2007a.
+
+	* utils/@stk_dataframe/bsxfun.m: modified
+
 2013-08-30  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix several issues in stk_compile_all.
+
+	* misc/config/stk_compile_all.m: modified
+
+	Fix stk_octave_config to make it work in Octave 3.4.3.
+
+	* misc/config/stk_octave_config.m: modified
 
 	Rename stk_remlqrg to stk_param_relik.
 

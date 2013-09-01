@@ -28,7 +28,22 @@
 
 function y = bsxfun(F, x1, x2)
 
-ydata = bsxfun(F, double(x1), double(x2));
+x1data = double (x1);
+x2data = double (x2);
+
+try
+    ydata = bsxfun(F, x1data, x2data);
+catch
+    err = lasterror ();
+    if strcmp (err.identifier, 'MATLAB:bsxfun:unsupportedBuiltin')
+        % This happens in some old versions of Matlab with realpow, for
+        % instance. Let's try without singleton expansion...
+        ydata = feval (F, x1data, x2data);
+        % TODO: manual bsxfun !!!
+    else
+        rethrow (err);
+    end
+end
 
 % choose if the output type
 if isa(x1, 'stk_dataframe'),

@@ -106,18 +106,22 @@ end % function stk_factorialdesign
 %--- disp & display -----------------------------------------------------------
 
 %!shared x fmt
-%! fmt = get(0, 'Format');
-%! x = stk_sampling_regulargrid(3^2, 2);
+%! try % doesn't work on old Octave versions, nevermind
+%!   fmt = get (0, 'Format');
+%! catch
+%!   fmt = nan;
+%! end
+%! x = stk_sampling_regulargrid (3^2, 2);
 
-%!test set(0, 'Format', 'short');     disp(x);
-%!test set(0, 'Format', 'long');      disp(x);
-%!test set(0, 'Format', 'rational');  disp(x);
-%!test set(0, 'Format', fmt);
+%!test format rat;      disp (x);
+%!test format long;     disp (x);
+%!test format short;    disp (x);
+%!     if ~isnan (fmt), set (0, 'Format', fmt); end
 
-%!test disp(stk_sampling_regulargrid(0^1, 1));
-%!test disp(stk_sampling_regulargrid(0^2, 2));
+%!test disp (stk_sampling_regulargrid (0^1, 1));
+%!test disp (stk_sampling_regulargrid (0^2, 2));
 
-%!test display(x);
+%!test display (x);
 
 %--- size, length, end --------------------------------------------------------
 
