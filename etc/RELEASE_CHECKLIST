@@ -41,8 +41,16 @@ svn commit -m "trunk/README: set version number to 4.6-dev"
 
 Generate and commit HTML doc (see admin/stk_make_htmldoc.m).
 
+svn add branches/4.5.x/htmldoc
+svn commit -m "branches/4.5.x/htmldoc: generate HTML documentation"
+
 Describe changes in branches/4.5.x/WHATSNEW, starting from the WHATSNEW file of
 the previous release. Commit.
+
+cp branches/4.4.x/WHATSNEW branches/4.5.x/WHATSNEW
+# update WHATSNEW
+svn add branches/4.5.x/WHATSNEW
+svn commit -m "branches/4.5.x/WHATSNEW: create WHATSNEW for release 4.5.0"
 
 
 --- Step #4: release ------------------------------------------------------------
