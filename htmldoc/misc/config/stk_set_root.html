@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_set_root</title>
+  <meta name="keywords" content="stk_set_root">
+  <meta name="description" content="STK_SET_ROOT sets STK's root folder and add subfolder to the path">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">config</a> &gt; stk_set_root.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/config&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_set_root
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_SET_ROOT sets STK's root folder and add subfolder to the path</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function out = stk_set_root(root) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_SET_ROOT sets STK's root folder and add subfolder to the path</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_path.html" class="code" title="function path = stk_path(root)">stk_path</a>	STK_PATH returns the searchpath of STK.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_get_root.html" class="code" title="function root = stk_get_root()">stk_get_root</a>	STK_GET_ROOT retrieves STK's root folder</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="#_sub1" class="code">function stk_rmpath(root)</a></li><li><a href="#_sub2" class="code">function stk_addpath(root)</a></li><li><a href="#_sub3" class="code">function root = find_stk_root()</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_SET_ROOT sets STK's root folder and add subfolder to the path</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
+0008 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0009 
+0010 <span class="comment">% Copying Permission Statement</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    This file is part of</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0015 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0018 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0019 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0020 <span class="comment">%    option) any later version.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0023 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0024 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0025 <span class="comment">%    License for more details.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0028 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0029 
+0030 <a name="_sub0" href="#_subfunctions" class="code">function out = stk_set_root(root)</a>
+0031 
+0032 current_root = <a href="#_sub3" class="code" title="subfunction root = find_stk_root()">find_stk_root</a>();
+0033 
+0034 <span class="keyword">if</span> nargin &gt; 0,
+0035         
+0036     <span class="keyword">while</span> ~isempty(current_root) &amp;&amp; ~strcmp(current_root, root)                
+0037         warning(sprintf([<span class="string">'Removing another copy of STK from the '</span> <span class="keyword">...</span>
+0038             <span class="string">'search path.\n    (%s)\n'</span>], current_root)); <span class="comment">%#ok&lt;SPWRN&gt;</span>
+0039         <a href="#_sub1" class="code" title="subfunction stk_rmpath(root)">stk_rmpath</a>(current_root);
+0040         current_root = <a href="#_sub3" class="code" title="subfunction root = find_stk_root()">find_stk_root</a>();
+0041     <span class="keyword">end</span>
+0042     
+0043     <span class="comment">% NOTE: calling stk_rmpath when root and stkRootFolder are identical</span>
+0044     <span class="comment">% is harmless in recent versions of Matlab and Octave, but has been</span>
+0045     <span class="comment">% found to cause a bug in Octave 3.0.2 when calling stk_init twice</span>
+0046     <span class="comment">% in a row.</span>
+0047     
+0048     current_root = root;
+0049     
+0050     <span class="comment">% finally, add STK folders to the path</span>
+0051     <a href="#_sub2" class="code" title="subfunction stk_addpath(root)">stk_addpath</a>(current_root);
+0052     
+0053 <span class="keyword">end</span>
+0054 
+0055 out = current_root;
+0056 
+0057 <span class="keyword">end</span> <span class="comment">% stk_set_root</span>
+0058 
+0059 
+0060 <span class="comment">%%%%%%%%%%%%%%%%%%</span>
+0061 <span class="comment">%%% stk_rmpath %%%</span>
+0062 <span class="comment">%%%%%%%%%%%%%%%%%%</span>
+0063 
+0064 <a name="_sub1" href="#_subfunctions" class="code">function stk_rmpath(root)</a>
+0065 
+0066 warning(<span class="string">'off'</span>,<span class="string">'MATLAB:rmpath:DirNotFound'</span>);
+0067 path = <a href="stk_path.html" class="code" title="function path = stk_path(root)">stk_path</a>(root);
+0068 rmpath( path{:} );
+0069 warning(<span class="string">'on'</span>,<span class="string">'MATLAB:rmpath:DirNotFound'</span>);
+0070 
+0071 <span class="keyword">end</span> <span class="comment">% stk_rmpath</span>
+0072 
+0073 
+0074 <span class="comment">%%%%%%%%%%%%%%%%%%%</span>
+0075 <span class="comment">%%% stk_addpath %%%</span>
+0076 <span class="comment">%%%%%%%%%%%%%%%%%%%</span>
+0077 
+0078 <a name="_sub2" href="#_subfunctions" class="code">function stk_addpath(root)</a>
+0079 
+0080 path = <a href="stk_path.html" class="code" title="function path = stk_path(root)">stk_path</a>(root);
+0081 
+0082 <span class="keyword">for</span> i = 1:length(path),
+0083     <span class="keyword">if</span> exist(path{i},<span class="string">'dir'</span>)
+0084         addpath(path{i});
+0085     <span class="keyword">else</span>
+0086         error(<span class="string">'problem in stk_path ?'</span>);
+0087     <span class="keyword">end</span>
+0088 <span class="keyword">end</span>
+0089 
+0090 <span class="keyword">end</span> <span class="comment">% stk_addpath</span>
+0091 
+0092 
+0093 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0094 <span class="comment">%%% find_stk_root %%%</span>
+0095 <span class="comment">%%%%%%%%%%%%%%%%%%%%%</span>
+0096 
+0097 <a name="_sub3" href="#_subfunctions" class="code">function root = find_stk_root()</a>
+0098 
+0099 <span class="keyword">try</span>
+0100     <span class="comment">% This will raise an error if STK is not in the search path</span>
+0101     s = which(<span class="string">'stk_test'</span>);
+0102     <span class="comment">% Extract root folder</span>
+0103     n = length(s) - 1 - length(fullfile(<span class="string">'misc'</span>, <span class="string">'test'</span>, <span class="string">'stk_test.m'</span>));
+0104     root = s(1:n);
+0105 <span class="keyword">catch</span>
+0106     root = [];
+0107 <span class="keyword">end</span>
+0108 
+0109 <span class="keyword">end</span> <span class="comment">% function find_stk_root</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

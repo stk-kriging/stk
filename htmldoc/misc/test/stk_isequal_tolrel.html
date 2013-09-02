@@ -1,0 +1,201 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_isequal_tolrel</title>
+  <meta name="keywords" content="stk_isequal_tolrel">
+  <meta name="description" content="STK_ISEQUAL_TOLREL tests approximate equality of two matrices or structures.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">test</a> &gt; stk_isequal_tolrel.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/test&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_isequal_tolrel
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_ISEQUAL_TOLREL tests approximate equality of two matrices or structures.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function res = stk_isequal_tolrel(a, b, tolrel) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_ISEQUAL_TOLREL tests approximate equality of two matrices or structures.
+
+ CALL: BOOL = stk_isequal_tolrel(A, B, TOLREL)
+
+   returns true if A and B are numeric arrays of the same size, such that for
+   any pair (a, b) of corresponding entries,
+
+      abs(b - a) &lt;= TOLABS,                                                (1)
+
+   where
+
+      TOLABS = max(max(A(:)), max(B(:))) * TOLREL.
+
+   For numeric array, the function returns false is either
+
+    * the array don't have identical sizes, or
+    * the array have identical sizes but (1) doesn't hold.
+
+   If A and B are structures with the same list of fieldnames, the function
+   works recursively on the fields, and returns true iff all the fields are
+   approximately equal.
+
+ CALL: b = stk_isequal_tolrel(a, b)
+
+   uses the default value 1e-8 for TOLREL.
+
+ See also isequal.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_isequal_tolrel.html" class="code" title="function res = stk_isequal_tolrel(a, b, tolrel)">stk_isequal_tolrel</a>	STK_ISEQUAL_TOLREL tests approximate equality of two matrices or structures.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_isequal_tolrel.html" class="code" title="function res = stk_isequal_tolrel(a, b, tolrel)">stk_isequal_tolrel</a>	STK_ISEQUAL_TOLREL tests approximate equality of two matrices or structures.</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_ISEQUAL_TOLREL tests approximate equality of two matrices or structures.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: BOOL = stk_isequal_tolrel(A, B, TOLREL)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   returns true if A and B are numeric arrays of the same size, such that for</span>
+0006 <span class="comment">%   any pair (a, b) of corresponding entries,</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%      abs(b - a) &lt;= TOLABS,                                                (1)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   where</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%      TOLABS = max(max(A(:)), max(B(:))) * TOLREL.</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%   For numeric array, the function returns false is either</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    * the array don't have identical sizes, or</span>
+0017 <span class="comment">%    * the array have identical sizes but (1) doesn't hold.</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%   If A and B are structures with the same list of fieldnames, the function</span>
+0020 <span class="comment">%   works recursively on the fields, and returns true iff all the fields are</span>
+0021 <span class="comment">%   approximately equal.</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">% CALL: b = stk_isequal_tolrel(a, b)</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%   uses the default value 1e-8 for TOLREL.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% See also isequal.</span>
+0028 
+0029 <span class="comment">% Copyright Notice</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    Copyright (C) 2012, 2013 SUPELEC</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
+0034 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0035 
+0036 <span class="comment">% Copying Permission Statement</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%    This file is part of</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0041 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0044 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0045 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0046 <span class="comment">%    option) any later version.</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0049 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0050 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0051 <span class="comment">%    License for more details.</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0054 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0055 
+0056 <a name="_sub0" href="#_subfunctions" class="code">function res = stk_isequal_tolrel(a, b, tolrel)</a>
+0057 
+0058 DEFAULT_TOLREL = 1e-8;
+0059 
+0060 <span class="keyword">if</span> nargin &gt; 3,
+0061    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0062 <span class="keyword">end</span>
+0063 
+0064 <span class="keyword">if</span> nargin == 2,
+0065     tolrel = DEFAULT_TOLREL;
+0066 <span class="keyword">end</span>
+0067 
+0068 <span class="keyword">if</span> isstruct(a) &amp;&amp; isstruct(b),
+0069     
+0070     L = fieldnames(a);
+0071     <span class="keyword">if</span> ~isequal(fieldnames(b), L),
+0072         res = false;
+0073         <span class="keyword">return</span>;
+0074     <span class="keyword">end</span>
+0075     res = true;
+0076     <span class="keyword">for</span> k = 1:length(L),
+0077         <span class="keyword">if</span> ~isfield(b, L{k}),
+0078             res = false;
+0079             <span class="keyword">return</span>;
+0080         <span class="keyword">end</span>
+0081         res = <a href="stk_isequal_tolrel.html" class="code" title="function res = stk_isequal_tolrel(a, b, tolrel)">stk_isequal_tolrel</a>(a.(L{k}), b.(L{k}), tolrel);
+0082         <span class="keyword">if</span> ~ res, <span class="keyword">return</span>; <span class="keyword">end</span>
+0083     <span class="keyword">end</span>
+0084     
+0085 <span class="keyword">elseif</span> isnumeric(a) &amp;&amp; isnumeric(b)
+0086     
+0087     aa = a(:);
+0088     bb = b(:);
+0089     tolabs = max(abs(aa), abs(bb)) * tolrel;
+0090     res = all(abs(bb - aa) &lt;= tolabs);
+0091     
+0092 <span class="keyword">else</span>
+0093     
+0094     res = false;
+0095     
+0096 <span class="keyword">end</span>
+0097 
+0098 <span class="keyword">end</span> <span class="comment">% function stk_isequal_tolrel</span>
+0099 
+0100 <span class="comment">%%%%%%%%%%%%%</span>
+0101 <span class="comment">%%% tests %%%</span>
+0102 <span class="comment">%%%%%%%%%%%%%</span>
+0103 
+0104 <span class="comment">%!shared r1, r2, a, b, tolrel</span>
+0105 <span class="comment">%! a = 1.01; b = 1.02; tolrel = 0.1;</span>
+0106 
+0107 <span class="comment">%!error rr = stk_isequal_tolrel();</span>
+0108 <span class="comment">%!error rr = stk_isequal_tolrel(a);</span>
+0109 <span class="comment">%!test  r1 = stk_isequal_tolrel(a, b);</span>
+0110 <span class="comment">%!test  r2 = stk_isequal_tolrel(a, b, tolrel);</span>
+0111 <span class="comment">%!error rr = stk_isequal_tolrel(a, b, tolrel, pi);</span>
+0112 
+0113 <span class="comment">%!test assert(~r1);</span>
+0114 <span class="comment">%!test assert(r2);</span>
+0115 
+0116 <span class="comment">%!test</span>
+0117 <span class="comment">%! a = struct('u', []); b = struct('v', []);</span>
+0118 <span class="comment">%! assert(~ stk_isequal_tolrel(a, b))</span>
+0119 <span class="comment">%!test</span>
+0120 <span class="comment">%! a = struct('u', 1.01); b = struct('u', 1.02);</span>
+0121 <span class="comment">%! assert(stk_isequal_tolrel(a, b, tolrel))</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

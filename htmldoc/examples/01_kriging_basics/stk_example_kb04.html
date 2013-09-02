@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_example_kb04</title>
+  <meta name="keywords" content="stk_example_kb04">
+  <meta name="description" content="Example 08 constructs a kriging approximation in 1D from noisy">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; <a href="index.html">01_kriging_basics</a> &gt; stk_example_kb04.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for examples/01_kriging_basics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_example_kb04
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>Example 08 constructs a kriging approximation in 1D from noisy</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> Example 08 constructs a kriging approximation in 1D from noisy
+ observations (estimates the noise)
+ ===================================================
+    Construct a kriging approximation in 1D. In this example, the model is
+    estimated from data.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% Example 08 constructs a kriging approximation in 1D from noisy</span>
+0002 <span class="comment">% observations (estimates the noise)</span>
+0003 <span class="comment">% ===================================================</span>
+0004 <span class="comment">%    Construct a kriging approximation in 1D. In this example, the model is</span>
+0005 <span class="comment">%    estimated from data.</span>
+0006 
+0007 <span class="comment">% Copyright Notice</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0012 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0013 
+0014 <span class="comment">% Copying Permission Statement</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    This file is part of</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0019 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0022 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0023 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0024 <span class="comment">%    option) any later version.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0027 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0028 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0029 <span class="comment">%    License for more details.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0032 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0033 
+0034 stk_disp_examplewelcome();
+0035 
+0036 
+0037 <span class="comment">%% Define a 1d test function (the same as in example01.m)</span>
+0038 
+0039 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  <span class="comment">% define a 1D test function</span>
+0040 DIM = 1;                                        <span class="comment">% dimension of the factor space</span>
+0041 BOX = [-1.0; 1.0];                              <span class="comment">% factor space</span>
+0042 
+0043 NT = 400; <span class="comment">% nb of points in the grid</span>
+0044 xt = stk_sampling_regulargrid(NT, DIM, BOX);
+0045 zt = stk_feval(f, xt);
+0046 
+0047 
+0048 <span class="comment">%% Generate a random sampling plan</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% The objective is to construct an approximation of f with a budget of NI</span>
+0051 <span class="comment">% evaluations performed on a randomly generated (uniform) design.</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">% Change the value of NOISEVARIANCE to add a Gaussian evaluation noise on</span>
+0054 <span class="comment">% the observations.</span>
+0055 <span class="comment">%</span>
+0056 
+0057 NOISEVARIANCE = 0.05;
+0058 
+0059 NI = 30;                                    <span class="comment">% nb of evaluations that will be used</span>
+0060 xi = stk_sampling_randunif(NI, DIM, BOX);   <span class="comment">% evaluation points</span>
+0061 zi = stk_feval(f, xi);                      <span class="comment">% evaluation results</span>
+0062 
+0063 zi = zi + sqrt(NOISEVARIANCE) * randn(NI,1);
+0064 
+0065 
+0066 <span class="comment">%% Specification of the model</span>
+0067 <span class="comment">%</span>
+0068 <span class="comment">% We choose a Matern covariance, the parameters of which will be estimated from the data.</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% The values of the parameters that are provided here, including the noise variance, are</span>
+0071 <span class="comment">% only used as an initial point for the optimization algorithm used in stk_param_estim().</span>
+0072 <span class="comment">%</span>
+0073 
+0074 <span class="comment">% The following line defines a model with a constant but unknown mean (ordinary</span>
+0075 <span class="comment">% kriging) and a Matern covariance function. (Some default parameters are also</span>
+0076 <span class="comment">% set, but they will be replaced below by estimated parameters.)</span>
+0077 model = stk_model(<span class="string">'stk_materncov_iso'</span>);
+0078 
+0079 <span class="comment">% Noise variance</span>
+0080 model.lognoisevariance = log(100 * eps);
+0081 <span class="comment">% (this is not the true value of the noise variance !)</span>
+0082 
+0083 
+0084 <span class="comment">%% Estimate the parameters of the covariance function</span>
+0085 <span class="comment">%</span>
+0086 <span class="comment">% Here, the parameters of the Matern covariance function are estimated by the</span>
+0087 <span class="comment">% REML (REstricted Maximum Likelihood) method using stk_param_estim().</span>
+0088 <span class="comment">%</span>
+0089 
+0090 <span class="comment">% Initial guess for the parameters for the Matern covariance</span>
+0091 <span class="comment">% (see &quot;help stk_materncov_iso&quot; for more information)</span>
+0092 SIGMA2 = 1.0;  <span class="comment">% variance parameter</span>
+0093 NU     = 4.0;  <span class="comment">% regularity parameter</span>
+0094 RHO1   = 0.4;  <span class="comment">% scale (range) parameter</span>
+0095 param0 = log([SIGMA2; NU; 1/RHO1]);
+0096 
+0097 <span class="comment">% Initial guess for the (log of the) noise variance</span>
+0098 lnv0 = 2 * log(std(zi) / 100);
+0099 
+0100 [param, paramlnv] = stk_param_estim(model, xi, zi, param0, lnv0);
+0101 
+0102 model.param = param;
+0103 model.lognoisevariance = paramlnv;
+0104 
+0105 
+0106 <span class="comment">%% Carry out kriging prediction</span>
+0107 
+0108 zp = stk_predict(model, xi, zi, xt);
+0109 
+0110 
+0111 <span class="comment">%% Display results</span>
+0112 
+0113 stk_plot1d(xi,zi,xt,zt,zp)
+0114 xlabel(<span class="string">'x'</span>); ylabel(<span class="string">'z'</span>);
+0115 
+0116 model <span class="comment">%#ok&lt;NOPTS&gt;</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

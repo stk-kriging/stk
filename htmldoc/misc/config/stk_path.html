@@ -1,0 +1,130 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_path</title>
+  <meta name="keywords" content="stk_path">
+  <meta name="description" content="STK_PATH returns the searchpath of STK.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">config</a> &gt; stk_path.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/config&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_path
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_PATH returns the searchpath of STK.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function path = stk_path(root) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_PATH returns the searchpath of STK.
+
+ FIXME: missing doc</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_get_root.html" class="code" title="function root = stk_get_root()">stk_get_root</a>	STK_GET_ROOT retrieves STK's root folder</li><li><a href="stk_is_octave_in_use.html" class="code" title="function octave_in_use = stk_is_octave_in_use()">stk_is_octave_in_use</a>	STK_IS_OCTAVE_IN_USE returns true if the STK runs in Octave</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_set_root.html" class="code" title="function out = stk_set_root(root)">stk_set_root</a>	STK_SET_ROOT sets STK's root folder and add subfolder to the path</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_PATH returns the searchpath of STK.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% FIXME: missing doc</span>
+0004 <span class="comment">%</span>
+0005 
+0006 <span class="comment">% Copyright Notice</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%    Copyright (C) 2012, 2013 SUPELEC</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    Author:   Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0011 
+0012 <span class="comment">% Copying Permission Statement</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%    This file is part of</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0017 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0020 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0021 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0022 <span class="comment">%    option) any later version.</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0025 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0026 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0027 <span class="comment">%    License for more details.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0030 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0031 
+0032 <a name="_sub0" href="#_subfunctions" class="code">function path = stk_path(root)</a>
+0033 
+0034 <span class="keyword">if</span> nargin == 0,
+0035     root = <a href="stk_get_root.html" class="code" title="function root = stk_get_root()">stk_get_root</a>();
+0036 <span class="keyword">end</span>
+0037 
+0038 <span class="comment">% folders that contain functions</span>
+0039 path = { <span class="keyword">...</span>
+0040     fullfile(root, <span class="string">'core'</span>             ) <span class="keyword">...</span>
+0041     fullfile(root, <span class="string">'covfcs'</span>           ) <span class="keyword">...</span>
+0042     fullfile(root, <span class="string">'paramestim'</span>       ) <span class="keyword">...</span>
+0043     fullfile(root, <span class="string">'sampling'</span>         ) <span class="keyword">...</span>
+0044     fullfile(root, <span class="string">'utils'</span>            ) <span class="keyword">...</span>
+0045     fullfile(root, <span class="string">'misc'</span>             ) <span class="keyword">...</span>
+0046     fullfile(root, <span class="string">'misc'</span>, <span class="string">'config'</span>   ) <span class="keyword">...</span>
+0047     fullfile(root, <span class="string">'misc'</span>, <span class="string">'dist'</span>     ) <span class="keyword">...</span>
+0048     fullfile(root, <span class="string">'misc'</span>, <span class="string">'error'</span>    ) <span class="keyword">...</span>
+0049     fullfile(root, <span class="string">'misc'</span>, <span class="string">'options'</span>  ) <span class="keyword">...</span>
+0050     fullfile(root, <span class="string">'misc'</span>, <span class="string">'parallel'</span> ) <span class="keyword">...</span><span class="comment">    </span>
+0051     fullfile(root, <span class="string">'misc'</span>, <span class="string">'plot'</span>     ) <span class="keyword">...</span>
+0052     fullfile(root, <span class="string">'misc'</span>, <span class="string">'specfun'</span>  ) <span class="keyword">...</span>
+0053     fullfile(root, <span class="string">'misc'</span>, <span class="string">'stats'</span>    ) <span class="keyword">...</span>
+0054     fullfile(root, <span class="string">'misc'</span>, <span class="string">'test'</span>     ) <span class="keyword">...</span>
+0055     fullfile(root, <span class="string">'misc'</span>, <span class="string">'text'</span>     ) };
+0056 
+0057 <span class="comment">% folders that contain examples</span>
+0058 path = { path{:} <span class="keyword">...</span>
+0059     fullfile(root, <span class="string">'examples'</span>, <span class="string">'01_kriging_basics'</span>       ) <span class="keyword">...</span>
+0060     fullfile(root, <span class="string">'examples'</span>, <span class="string">'02_design_of_experiments'</span>) <span class="keyword">...</span>
+0061     fullfile(root, <span class="string">'examples'</span>, <span class="string">'03_miscellaneous'</span>        ) <span class="keyword">...</span>
+0062     fullfile(root, <span class="string">'examples'</span>, <span class="string">'test_functions'</span>          ) };
+0063 
+0064 <span class="keyword">if</span> ~<a href="stk_is_octave_in_use.html" class="code" title="function octave_in_use = stk_is_octave_in_use()">stk_is_octave_in_use</a>(),
+0065     <span class="comment">% MATLAB-specific</span>
+0066     path = [path {fullfile(root, <span class="string">'misc'</span>, <span class="string">'matlab'</span>)}];
+0067 <span class="keyword">else</span>
+0068     <span class="comment">% Octave-specific</span>
+0069     <span class="keyword">if</span> exist(<span class="string">'stk_dist_matrixx'</span>) == 0, <span class="comment">%#ok&lt;EXIST&gt;</span>
+0070         path = [path {fullfile(root, <span class="string">'misc'</span>, <span class="string">'dist'</span>, <span class="string">'private'</span>)}];
+0071     <span class="keyword">end</span>
+0072 <span class="keyword">end</span>
+0073 
+0074 <span class="keyword">end</span> <span class="comment">% stk_path</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

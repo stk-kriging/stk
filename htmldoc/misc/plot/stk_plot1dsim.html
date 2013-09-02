@@ -1,0 +1,120 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_plot1dsim</title>
+  <meta name="keywords" content="stk_plot1dsim">
+  <meta name="description" content="STK_PLOT1DSIM is a plot helper for using with conditional sample paths">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">plot</a> &gt; stk_plot1dsim.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/plot&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_plot1dsim
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_PLOT1DSIM is a plot helper for using with conditional sample paths</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function stk_plot1dsim (xi, zi, xt, zt, zp, zsim) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_PLOT1DSIM is a plot helper for using with conditional sample paths
+
+ CALL: stk_plot1dsim ( xi, zi, xt, zt, zp, zsim)
+
+ STK_PLOT1DSIM plots the result of a 1D approximation, together with
+ sample paths
+
+ EXAMPLE: See examples/example05.m</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_PLOT1DSIM is a plot helper for using with conditional sample paths</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: stk_plot1dsim ( xi, zi, xt, zt, zp, zsim)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% STK_PLOT1DSIM plots the result of a 1D approximation, together with</span>
+0006 <span class="comment">% sample paths</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% EXAMPLE: See examples/example05.m</span>
+0009 
+0010 <span class="comment">% Copyright Notice</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0015 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0016 
+0017 <span class="comment">% Copying Permission Statement</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%    This file is part of</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0022 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0025 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0026 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0027 <span class="comment">%    option) any later version.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0030 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0031 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0032 <span class="comment">%    License for more details.</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0035 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0036 
+0037 <a name="_sub0" href="#_subfunctions" class="code">function stk_plot1dsim (xi, zi, xt, zt, zp, zsim)</a>
+0038 
+0039 <span class="comment">% Create figure</span>
+0040 figure1 = figure(<span class="string">'InvertHardcopy'</span>, <span class="string">'off'</span>, <span class="string">'Color'</span>, [1 1 1]);
+0041 <span class="comment">% Create axes</span>
+0042 axes1 = axes(<span class="string">'Parent'</span>, figure1, <span class="string">'FontSize'</span>, 12);
+0043 
+0044 dz = 1.96 * sqrt(abs(zp.var));
+0045 h = area(double(xt), [zp.mean - dz, 2*dz]);
+0046 set(h(1),<span class="string">'FaceColor'</span>,<span class="string">'none'</span>);
+0047 set(h(2),<span class="string">'FaceColor'</span>,[0.8 0.8 0.8]);
+0048 set(h,<span class="string">'LineStyle'</span>,<span class="string">'-'</span>,<span class="string">'LineWidth'</span>, 1, <span class="string">'EdgeColor'</span>, <span class="string">'none'</span>);
+0049 hold on
+0050 plot(xt, zsim, <span class="string">'-'</span>,  <span class="string">'LineWidth'</span>, 1, <span class="string">'Color'</span>, [0.39, 0.47, 0.64])
+0051 plot(xt, zt,   <span class="string">'--'</span>, <span class="string">'LineWidth'</span>, 3, <span class="string">'Color'</span>, [0.39, 0.47, 0.64])
+0052 plot(xt, zp.mean,    <span class="string">'LineWidth'</span>, 4, <span class="string">'Color'</span>, [0.95 0.25 0.3])
+0053 plot(xi, zi,   <span class="string">'ks'</span>, <span class="string">'LineWidth'</span>, 3, <span class="string">'MarkerSize'</span>, 10,  <span class="keyword">...</span>
+0054     <span class="string">'MarkerEdgeColor'</span>, [0.95 0.25 0.3], <span class="string">'MarkerFaceColor'</span>, [0.8 0.8 0.8] )
+0055 hold off
+0056 h = gca;
+0057 set(h, <span class="string">'Box'</span>, <span class="string">'off'</span>)
+0058 
+0059 <span class="keyword">end</span> <span class="comment">% stk_plot1dsim</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>
