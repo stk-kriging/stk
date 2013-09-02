@@ -1,7 +1,7 @@
 Assume, say, that we want to release STK version 4.5 (hum... not yet...).
 
 
---- Step #0: check that everything is ok in the trunk --------------------------
+--- Step #0: check that everything is ok in the trunk ---------------------------
 
 Check copyright years on all files modified since the previous release.
 
@@ -14,30 +14,30 @@ platforms (Linux/Windows, Octave/Matlab...).
 Check that AUTHORS is up-to-date.
 
 
---- Step #1: create maintenance branch -----------------------------------------
+--- Step #1: create release branch ----------------------------------------------
 
 svn copy \
   svn+ssh://USERNAME@svn.code.sf.net/p/kriging/code/trunk \
   svn+ssh://USERNAME@svn.code.sf.net/p/kriging/code/branches/4.5.x \
-  -m "Create maintenance branch for release 4.5"
+  -m "Create release branch 4.5.x"
 
-svn update  # to get our freshly created maintenance branch
+svn update  # to get our freshly created release branch
 
 
---- Step #2: update version numbers --------------------------------------------
+--- Step #2: update version numbers ---------------------------------------------
 
 In branches/4.5.x/README, update version number to "4.5.0" and modify copyright
 years if appropriate. Commit.
 
-svn commit -m "Update version number to 4.5.0"
+svn commit -m "branches/4.5.x/README: set version number to 4.5.0"
 
 In trunk/README, update version number to "4.6-dev" (or "5.0-dev") and modify
 copyright years if appropriate. Commit.
 
-svn commit -m "Update version number to 4.6-dev"
+svn commit -m "trunk/README: set version number to 4.6-dev"
 
 
---- Step #3: documentation -----------------------------------------------------
+--- Step #3: documentation ------------------------------------------------------
 
 Generate and commit HTML doc (see admin/stk_make_htmldoc.m).
 
@@ -45,7 +45,7 @@ Describe changes in branches/4.5.x/WHATSNEW, starting from the WHATSNEW file of
 the previous release. Commit.
 
 
---- Step #4: release -----------------------------------------------------------
+--- Step #4: release ------------------------------------------------------------
 
 Export (svn export).
 
