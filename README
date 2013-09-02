@@ -38,13 +38,15 @@ o Requirements and recommendations for use with GNU Octave
 
     The STK works with GNU Octave 3.2.2 or newer.
 
-    Note  that  the STK relies  on  some mex files  that  are compiled
-    during the initialization. Thus, your installation must be able to
-    compile mex files.
+    Note that  the STK relies on some mex files  that are compiled during 
+    the initialization.  Thus,  your installation must be able to compile 
+    mex files.  In Debian 6.0 (Squeeze)  or  gNewSense 3.0 (Parkes),  for 
+    instance,  this means installing octave3.2-headers in addition to the 
+    base octave3.2 package.
 
-    The sqp() function internally relies on the GLPK library, which is
-    shipped with most (but not all) versions of Octave.   The STK will
-    not start if GLPK is not installed.
+    The sqp() function  internally relies on  the GLPK library,  which is
+    shipped with most (but not all) versions of Octave.  The STK will not
+    start if GLPK is not installed.
 
 o Requirements and recommendations for use with Matlab
 
