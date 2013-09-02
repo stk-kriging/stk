@@ -1,0 +1,138 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_error</title>
+  <meta name="keywords" content="stk_error">
+  <meta name="description" content="STK_ERROR throws an STK error with a good-looking error identifier.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">error</a> &gt; stk_error.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/error&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_error
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_ERROR throws an STK error with a good-looking error identifier.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function stk_error(errmsg, mnemonic, stack) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_ERROR throws an STK error with a good-looking error identifier.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_assert_box.html" class="code" title="function stk_assert_box(box, dim)">stk_assert_box</a>	STK_ASSERT_BOX ... [FIXME: missing documentation]</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_ERROR throws an STK error with a good-looking error identifier.</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2012 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
+0008 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0009 
+0010 <span class="comment">% Copying Permission Statement</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    This file is part of</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0015 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0018 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0019 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0020 <span class="comment">%    option) any later version.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0023 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0024 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0025 <span class="comment">%    License for more details.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0028 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0029 
+0030 <a name="_sub0" href="#_subfunctions" class="code">function stk_error(errmsg, mnemonic, stack)</a>
+0031 
+0032 <span class="comment">% second component of error identifier = name of calling function</span>
+0033 <span class="comment">% (unless stk_error has been called directly from the base workspace)</span>
+0034 <span class="keyword">if</span> nargin &lt; 3,
+0035     stack = dbstack();
+0036     <span class="keyword">if</span> length(stack) == 1,
+0037         caller = <span class="string">'BaseWorkspace'</span>;
+0038     <span class="keyword">else</span>
+0039         <span class="comment">% pretend that the error has been thrown by the caller</span>
+0040         stack = stack(2:end);
+0041         <span class="comment">% and get caller name to form the error identifier</span>
+0042         caller = stack(1).name;
+0043     <span class="keyword">end</span>
+0044 <span class="keyword">else</span>
+0045     <span class="comment">% if a &quot;stack&quot; has been provided by the user, we use it without asking</span>
+0046     <span class="comment">% questions (if it's a struct)</span>
+0047     <span class="keyword">if</span> ~isstruct(stack) || ~isfield(stack, <span class="string">'name'</span>),
+0048         <span class="comment">% We will throw an error, but not the one we were requested to!</span>
+0049         errmsg = <span class="string">'Argument &quot;stack&quot; should be a valid stack structure.'</span>;
+0050         mnemonic = <span class="string">'InvalidArgument'</span>;
+0051         stack = dbstack();
+0052     <span class="keyword">end</span>
+0053     caller = stack(1).name;
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="comment">% keep only subfunction name (Octave)</span>
+0057 gt_pos = strfind(caller, <span class="string">'&gt;'</span>);
+0058 <span class="keyword">if</span> ~isempty(gt_pos),
+0059     caller = caller((gt_pos + 1):end);
+0060 <span class="keyword">end</span>
+0061 
+0062 <span class="comment">% construct the error structure</span>
+0063 errstruct = struct( <span class="keyword">...</span>
+0064     <span class="string">'message'</span>, errmsg, <span class="keyword">...</span>
+0065     <span class="string">'identifier'</span>, sprintf(<span class="string">'STK:%s:%s'</span>, caller, mnemonic), <span class="keyword">...</span>
+0066     <span class="string">'stack'</span>, stack);
+0067 
+0068 error(errstruct);
+0069 
+0070 <span class="keyword">end</span> <span class="comment">% stk_error</span>
+0071 
+0072 
+0073 <span class="comment">%!shared errmsg, mnemonic, badstack</span>
+0074 <span class="comment">%!  errmsg = 'Go ahead, make my day.';</span>
+0075 <span class="comment">%!  mnemonic = 'ClintEastwood';</span>
+0076 <span class="comment">%!  badstack = 0; % not a valid stack structure</span>
+0077 
+0078 <span class="comment">%!% valid use of stk_error</span>
+0079 <span class="comment">%!error &lt;make my day&gt; stk_error(errmsg, mnemonic);</span>
+0080 <span class="comment">%!error id=STK:eval_test_code:ClintEastwood stk_error(errmsg, mnemonic);</span>
+0081 
+0082 <span class="comment">%!% use of an incorrect stack structure</span>
+0083 <span class="comment">%!error &lt;stack structure&gt; stk_error(errmsg, mnemonic, badstack);</span>
+0084 <span class="comment">%!error id=STK:stk_error:InvalidArgument stk_error(errmsg, mnemonic, badstack);</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

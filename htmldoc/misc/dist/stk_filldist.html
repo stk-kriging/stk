@@ -1,0 +1,308 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_filldist</title>
+  <meta name="keywords" content="stk_filldist">
+  <meta name="description" content="STK_FILLDIST computes the fill distance of a set of points.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">dist</a> &gt; stk_filldist.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/dist&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_filldist
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_FILLDIST computes the fill distance of a set of points.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [fd, ymax] = stk_filldist(x, arg2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_FILLDIST computes the fill distance of a set of points.
+
+ CALL: FD = stk_filldist(X, BOX)
+
+    computes the fill distance FD of the dataset X in the hyper-rectangle
+    BOX, using the computational-geometric algorithm of L. Pronzato and 
+    W. G. Muller [1]. Recall that
+
+       D = max_{Y in BOX} min_{1 &lt;= i &lt;= n} norm(X(i,:) - Y),         (1)
+
+    where norm(.) denotes the Euclidean norm in R^d. Optimal designs with
+    respect to the fill distance are sometimes called &quot;minimax&quot; designs
+    (see, e.g., [2]).
+
+ CALL: FD = stk_filldist(X)
+
+    assumes that the fill distance is to be computed with respect to the
+    hyperrectangle BOX = [0; 1]^d.
+
+ CALL: FD = stk_filldist(X, Y)
+
+    computes the fill distance FD of X using the &quot;test set&quot; Y. More preci-
+    sely, if X and Y are respectively n x d and m x d, then
+
+       FD = max_{1 &lt;= j &lt;= m} min_{1 &lt;= i &lt;= n} norm(X(i,:) - Y(j,:)),
+
+    If Y is dense enough in some subset BOX of R^d, then FD should be close
+    to the actual fill distance of X in BOX.
+
+ CALL: [FD, YMAX] = stk_filldist(...)
+
+    also returns the point YMAX where the maximal distance is attained.
+
+ NOTE:
+
+    stk_filldist is actually a wrapper around stk_filldist_discretized and
+    stk_filldist_exact. Which function to call is guessed based on the number
+    of rows of the second argument. Because of that, the test set Y is required
+    to have at least 3 rows.
+
+ REFERENCES:
+
+   [1] Luc Pronzato and Werner G. Müller, &quot;Design of computer 
+       experiments: space filling and beyond&quot;, Statistics and Computing,
+       22(3):681-701, 2012.
+
+   [2] Mark E. Johnson, Leslie M. Moore and Donald Ylvisaker, &quot;Minimax
+       and maximin distance designs&quot;, Journal of Statistical Planning
+       and Inference, 26(2):131-148, 1990.
+
+ See also: <a href="stk_dist.html" class="code" title="function D = stk_dist(x, y, pairwise)">stk_dist</a>, <a href="stk_mindist.html" class="code" title="function md = stk_mindist(x)">stk_mindist</a>, <a href="stk_filldist_exact.html" class="code" title="function [fd, ymax] = stk_filldist_exact(x, box) %---------------------------------------">stk_filldist_exact</a>, <a href="stk_filldist_discretized.html" class="code" title="function [fd, ymax] = stk_filldist_discretized(x, y)">stk_filldist_discretized</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_filldist_exact.html" class="code" title="function [fd, ymax] = stk_filldist_exact(x, box) %---------------------------------------">stk_filldist_exact</a>	STK_FILLDIST_EXACT computes the (exact) fill distance of a set of points.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_FILLDIST computes the fill distance of a set of points.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: FD = stk_filldist(X, BOX)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    computes the fill distance FD of the dataset X in the hyper-rectangle</span>
+0006 <span class="comment">%    BOX, using the computational-geometric algorithm of L. Pronzato and</span>
+0007 <span class="comment">%    W. G. Muller [1]. Recall that</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%       D = max_{Y in BOX} min_{1 &lt;= i &lt;= n} norm(X(i,:) - Y),         (1)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    where norm(.) denotes the Euclidean norm in R^d. Optimal designs with</span>
+0012 <span class="comment">%    respect to the fill distance are sometimes called &quot;minimax&quot; designs</span>
+0013 <span class="comment">%    (see, e.g., [2]).</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">% CALL: FD = stk_filldist(X)</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%    assumes that the fill distance is to be computed with respect to the</span>
+0018 <span class="comment">%    hyperrectangle BOX = [0; 1]^d.</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% CALL: FD = stk_filldist(X, Y)</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    computes the fill distance FD of X using the &quot;test set&quot; Y. More preci-</span>
+0023 <span class="comment">%    sely, if X and Y are respectively n x d and m x d, then</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%       FD = max_{1 &lt;= j &lt;= m} min_{1 &lt;= i &lt;= n} norm(X(i,:) - Y(j,:)),</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    If Y is dense enough in some subset BOX of R^d, then FD should be close</span>
+0028 <span class="comment">%    to the actual fill distance of X in BOX.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">% CALL: [FD, YMAX] = stk_filldist(...)</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%    also returns the point YMAX where the maximal distance is attained.</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">% NOTE:</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%    stk_filldist is actually a wrapper around stk_filldist_discretized and</span>
+0037 <span class="comment">%    stk_filldist_exact. Which function to call is guessed based on the number</span>
+0038 <span class="comment">%    of rows of the second argument. Because of that, the test set Y is required</span>
+0039 <span class="comment">%    to have at least 3 rows.</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">% REFERENCES:</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%   [1] Luc Pronzato and Werner G. Müller, &quot;Design of computer</span>
+0044 <span class="comment">%       experiments: space filling and beyond&quot;, Statistics and Computing,</span>
+0045 <span class="comment">%       22(3):681-701, 2012.</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">%   [2] Mark E. Johnson, Leslie M. Moore and Donald Ylvisaker, &quot;Minimax</span>
+0048 <span class="comment">%       and maximin distance designs&quot;, Journal of Statistical Planning</span>
+0049 <span class="comment">%       and Inference, 26(2):131-148, 1990.</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">% See also: stk_dist, stk_mindist, stk_filldist_exact, stk_filldist_discretized</span>
+0052 
+0053 <span class="comment">% Copyright Notice</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0056 <span class="comment">%</span>
+0057 <span class="comment">%    Author: Julien Bect &lt;julien.bect@supelec.fr&gt;</span>
+0058 
+0059 <span class="comment">% Copying Permission Statement</span>
+0060 <span class="comment">%</span>
+0061 <span class="comment">%    This file is part of</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0064 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0067 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0068 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0069 <span class="comment">%    option) any later version.</span>
+0070 <span class="comment">%</span>
+0071 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0072 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0073 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0074 <span class="comment">%    License for more details.</span>
+0075 <span class="comment">%</span>
+0076 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0077 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0078 
+0079 <a name="_sub0" href="#_subfunctions" class="code">function [fd, ymax] = stk_filldist(x, arg2)</a>
+0080 
+0081 <span class="keyword">if</span> nargin &gt; 2,
+0082    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0083 <span class="keyword">end</span>
+0084 
+0085 x = double(x);
+0086 
+0087 <span class="keyword">if</span> nargin == 1, <span class="comment">% defaults: &quot;exact&quot; over [0; 1]^d</span>
+0088     
+0089     default_box = repmat([0; 1], 1, size(x, 2));
+0090     fd = <a href="stk_filldist_exact.html" class="code" title="function [fd, ymax] = stk_filldist_exact(x, box) %---------------------------------------">stk_filldist_exact</a>(x, default_box);
+0091     
+0092 <span class="keyword">else</span>
+0093 
+0094     arg2 = double(arg2);
+0095     
+0096     ny = size(arg2, 1);
+0097     
+0098     <span class="keyword">if</span> ny == 2, <span class="comment">% arg2 is interpreted as a box</span>
+0099         
+0100         [fd, ymax] = <a href="stk_filldist_exact.html" class="code" title="function [fd, ymax] = stk_filldist_exact(x, box) %---------------------------------------">stk_filldist_exact</a>(x, arg2);
+0101         
+0102     <span class="keyword">elseif</span> ny &gt; 2, <span class="comment">% arg2 is interpreted a discrete test set</span>
+0103         
+0104         [fd, idx_max] = stk_filldist_discr_mex(x, arg2);
+0105         ymax = arg2(idx_max, :);
+0106         
+0107     <span class="keyword">else</span>
+0108         
+0109         errmsg = <span class="string">'Incorrect size for argument #2: nb rows &gt; 1 expected.'</span>;
+0110         stk_error(errmsg, <span class="string">'InvalidArgument'</span>);
+0111         
+0112     <span class="keyword">end</span>
+0113             
+0114 <span class="keyword">end</span> <span class="comment">% if</span>
+0115 
+0116 <span class="keyword">end</span> <span class="comment">% function stk_filldist</span>
+0117 
+0118 
+0119 <span class="comment">%%</span>
+0120 <span class="comment">% Check that both double-precision matrices and stk_dataframe objects are accepted</span>
+0121 
+0122 <span class="comment">%!test %%% exact</span>
+0123 <span class="comment">%! d = 3; x = rand(7, d); box = repmat([0; 1], 1, d);</span>
+0124 <span class="comment">%! fd1 = stk_filldist(x, box);</span>
+0125 <span class="comment">%! fd2 = stk_filldist(stk_dataframe(x), stk_dataframe(box));</span>
+0126 <span class="comment">%! assert(stk_isequal_tolabs(fd1, fd2));</span>
+0127 
+0128 <span class="comment">%!test %%% discretized</span>
+0129 <span class="comment">%! d = 3; x = rand(7, d); y = rand(20, d);</span>
+0130 <span class="comment">%! fd1 = stk_filldist(x, y);</span>
+0131 <span class="comment">%! fd2 = stk_filldist(stk_dataframe(x), stk_dataframe(y));</span>
+0132 <span class="comment">%! assert(stk_isequal_tolabs(fd1, fd2));</span>
+0133 
+0134 <span class="comment">%%</span>
+0135 <span class="comment">% fd = 0 if X = Y (discretized filldist)</span>
+0136 
+0137 <span class="comment">%!test</span>
+0138 <span class="comment">%! n = 5; % must be bigger than 2</span>
+0139 <span class="comment">%! for dim = 1:10,</span>
+0140 <span class="comment">%!     x = rand(n, dim);</span>
+0141 <span class="comment">%!     fd = stk_filldist(x, x);</span>
+0142 <span class="comment">%!     assert(stk_isequal_tolabs(fd, 0.0));</span>
+0143 <span class="comment">%! end</span>
+0144 
+0145 <span class="comment">%%</span>
+0146 <span class="comment">% One point in the middle of [0; 1]^d (exact &amp; discretized filldist)</span>
+0147 
+0148 <span class="comment">%!test %%% exact</span>
+0149 <span class="comment">%! for dim = 1:6,</span>
+0150 <span class="comment">%!     x = 0.5 * ones(1, dim);</span>
+0151 <span class="comment">%!     fd = stk_filldist(x); % [0; 1]^d is the default box</span>
+0152 <span class="comment">%!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));</span>
+0153 <span class="comment">%! end</span>
+0154 
+0155 <span class="comment">%!test %%% discretized</span>
+0156 <span class="comment">%! for dim = 1:6,</span>
+0157 <span class="comment">%!     x  = 0.5 * ones(1, dim);</span>
+0158 <span class="comment">%!     y  = stk_sampling_regulargrid(2^dim, dim);  % [0; 1]^d is the default box</span>
+0159 <span class="comment">%!     fd = stk_filldist(x, y);</span>
+0160 <span class="comment">%!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));</span>
+0161 <span class="comment">%! end</span>
+0162 
+0163 <span class="comment">%%</span>
+0164 <span class="comment">% One point in the middle of [1; 2]^d (exact filldist)</span>
+0165 
+0166 <span class="comment">%!test</span>
+0167 <span class="comment">%! for dim = [1 3 7],</span>
+0168 <span class="comment">%!     box = repmat([1; 2], 1, dim);</span>
+0169 <span class="comment">%!     x = 1 + 0.5 * ones(1, dim);</span>
+0170 <span class="comment">%!     fd = stk_filldist(x, box);</span>
+0171 <span class="comment">%!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));</span>
+0172 <span class="comment">%! end</span>
+0173 
+0174 <span class="comment">%%</span>
+0175 <span class="comment">% 20 points in [-1; 1]^3</span>
+0176 
+0177 <span class="comment">%!test</span>
+0178 <span class="comment">%! dim = 3;</span>
+0179 <span class="comment">%! box = repmat([-1; 1], 1, dim);</span>
+0180 <span class="comment">%! x   = stk_sampling_randunif(20, dim, box);</span>
+0181 <span class="comment">%! y   = stk_sampling_regulargrid(3^dim, dim, box);</span>
+0182 <span class="comment">%! fd1 = stk_filldist(x, box);</span>
+0183 <span class="comment">%! fd2 = stk_filldist(x, y);</span>
+0184 <span class="comment">%! assert(fd1 &gt;= fd2 - 10 * eps);</span>
+0185 
+0186 <span class="comment">%%</span>
+0187 <span class="comment">% One point at the origin, BOX = [0; 1]^d</span>
+0188 
+0189 <span class="comment">%!test %%% exact</span>
+0190 <span class="comment">%! for dim = [1 3 7],</span>
+0191 <span class="comment">%!     x = zeros(1, dim);</span>
+0192 <span class="comment">%!     [fd, ymax] = stk_filldist_exact(x);</span>
+0193 <span class="comment">%!     assert(stk_isequal_tolabs(fd, sqrt(dim)));</span>
+0194 <span class="comment">%!     assert(stk_isequal_tolabs(ymax, ones(1, dim)));</span>
+0195 <span class="comment">%! end</span>
+0196 
+0197 <span class="comment">%!test %%% discretized</span>
+0198 <span class="comment">%! for dim = [1 3 7],</span>
+0199 <span class="comment">%!     x = zeros(1, dim);</span>
+0200 <span class="comment">%!     y = stk_sampling_regulargrid(3^dim, dim);</span>
+0201 <span class="comment">%!     [fd, ymax] = stk_filldist(x, y);</span>
+0202 <span class="comment">%!     assert(stk_isequal_tolabs(fd, sqrt(dim)));</span>
+0203 <span class="comment">%!     assert(stk_isequal_tolabs(ymax, ones(1, dim)));</span>
+0204 <span class="comment">%! end</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

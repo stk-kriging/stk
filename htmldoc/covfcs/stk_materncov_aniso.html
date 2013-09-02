@@ -1,0 +1,271 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_materncov_aniso</title>
+  <meta name="keywords" content="stk_materncov_aniso">
+  <meta name="description" content="STK_MATERNCOV_ANISO computes the anisotropic Matern covariance">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">covfcs</a> &gt; stk_materncov_aniso.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for covfcs&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_materncov_aniso
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_MATERNCOV_ANISO computes the anisotropic Matern covariance</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function k = stk_materncov_aniso(param, x, y, diff, pairwise) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_MATERNCOV_ANISO computes the anisotropic Matern covariance
+
+ CALL: k = stk_materncov_aniso(param, x, y, diff)
+   param  = vector of parameters of size 2+d
+   x      = structure whose field 'a' contains the observed points.
+            x is a matrix of size n x d, where n is the number of
+            points and d is the dimension of the factor space
+   y      = same as x
+   diff   = differentiation parameter
+
+ STK_MATERNCOV_ANISO computes a Matern covariance between two random vectors
+ specified by the locations of the observations. This anisotropic
+ covariance function has 2+d parameters, where d is the dimension of the
+ factor space. They are defined as follows:
+    param(1)   = log(sigma^2) is the logarithm of the variance
+    param(2)   = log(nu) is the logarithm of the regularity parameter
+    param(2+i) = -log(rho(i)) is the logarithm of the inverse of the
+                 range parameter for the ith dimension
+
+ If diff ~= -1, the function returns the derivative of the covariance wrt
+ param(diff)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_MATERNCOV_ANISO computes the anisotropic Matern covariance</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: k = stk_materncov_aniso(param, x, y, diff)</span>
+0004 <span class="comment">%   param  = vector of parameters of size 2+d</span>
+0005 <span class="comment">%   x      = structure whose field 'a' contains the observed points.</span>
+0006 <span class="comment">%            x is a matrix of size n x d, where n is the number of</span>
+0007 <span class="comment">%            points and d is the dimension of the factor space</span>
+0008 <span class="comment">%   y      = same as x</span>
+0009 <span class="comment">%   diff   = differentiation parameter</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% STK_MATERNCOV_ANISO computes a Matern covariance between two random vectors</span>
+0012 <span class="comment">% specified by the locations of the observations. This anisotropic</span>
+0013 <span class="comment">% covariance function has 2+d parameters, where d is the dimension of the</span>
+0014 <span class="comment">% factor space. They are defined as follows:</span>
+0015 <span class="comment">%    param(1)   = log(sigma^2) is the logarithm of the variance</span>
+0016 <span class="comment">%    param(2)   = log(nu) is the logarithm of the regularity parameter</span>
+0017 <span class="comment">%    param(2+i) = -log(rho(i)) is the logarithm of the inverse of the</span>
+0018 <span class="comment">%                 range parameter for the ith dimension</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">% If diff ~= -1, the function returns the derivative of the covariance wrt</span>
+0021 <span class="comment">% param(diff)</span>
+0022 
+0023 <span class="comment">% Copyright Notice</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0028 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0029 
+0030 <span class="comment">% Copying Permission Statement</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%    This file is part of</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0035 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0038 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0039 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0040 <span class="comment">%    option) any later version.</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0043 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0044 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0045 <span class="comment">%    License for more details.</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0048 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0049 
+0050 <a name="_sub0" href="#_subfunctions" class="code">function k = stk_materncov_aniso(param, x, y, diff, pairwise)</a>
+0051 <span class="keyword">if</span> nargin &gt; 5,
+0052    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="keyword">persistent</span> x0 y0 xs ys param0 pairwise0 D Kx_cache compute_Kx_cache
+0056 
+0057 <span class="comment">% process input arguments</span>
+0058 x = double(x);
+0059 y = double(y);
+0060 <span class="keyword">if</span> nargin &lt; 4, diff = -1; <span class="keyword">end</span>
+0061 <span class="keyword">if</span> nargin &lt; 5, pairwise = false; <span class="keyword">end</span>
+0062 
+0063 <span class="comment">% check size consistency</span>
+0064 dim = size(x, 2);
+0065 <span class="keyword">if</span> (size(y, 2) ~= dim),
+0066     stk_error(<span class="string">'xi and yi have incompatible sizes.'</span>, <span class="string">'InvalidArgument'</span>);
+0067 <span class="keyword">end</span>
+0068 nb_params = dim + 2;
+0069 <span class="keyword">if</span> (numel(param) ~= nb_params)
+0070     stk_error(<span class="string">'xi and param have incompatible sizes.'</span>, <span class="string">'InvalidArgument'</span>);
+0071 <span class="keyword">end</span>
+0072 
+0073 <span class="comment">% extract parameters from the &quot;param&quot; vector</span>
+0074 Sigma2 = exp(param(1));
+0075 Nu     = exp(param(2));
+0076 invRho = exp(param(3:end));
+0077 
+0078 <span class="comment">% check parameter values</span>
+0079 <span class="keyword">if</span> ~(Sigma2&gt;0) || ~(Nu&gt;0) || ~all(invRho&gt;0),
+0080     error(<span class="string">'Incorrect parameter value.'</span>);
+0081 <span class="keyword">end</span>
+0082 
+0083 invRho = diag(invRho);
+0084 
+0085 <span class="comment">% check if all input arguments are the same as before</span>
+0086 <span class="comment">% (or if this is the first call to the function)</span>
+0087 <span class="keyword">if</span> isempty(x0) || isempty(y0) || isempty(param0) || <span class="keyword">...</span>
+0088         ~isequal({x, y, param}, {x0, y0, param0}) || ~isequal(pairwise, pairwise0)
+0089     <span class="comment">% compute the distance matrix</span>
+0090     xs = x * invRho; ys = y * invRho;
+0091     D = stk_dist(xs, ys, pairwise);
+0092     <span class="comment">% save arguments for the next call</span>
+0093     x0 = x; y0 = y; param0 = param; pairwise0 = pairwise;
+0094     <span class="comment">% recomputation of Kx_cache is required</span>
+0095     compute_Kx_cache = true;
+0096 <span class="keyword">end</span>
+0097 
+0098 <span class="keyword">if</span> diff == -1,
+0099     <span class="comment">%%% compute the value (not a derivative)</span>
+0100     k = Sigma2 * stk_sf_matern(Nu, D, -1);
+0101 <span class="keyword">elseif</span> diff == 1,
+0102     <span class="comment">%%% diff wrt param(1) = log(Sigma2)</span>
+0103     k = Sigma2 * stk_sf_matern(Nu, D, -1);
+0104 <span class="keyword">elseif</span> diff == 2,
+0105     <span class="comment">%%% diff wrt param(2) = log(Nu)</span>
+0106     k = Nu * Sigma2 * stk_sf_matern(Nu, D, 1);
+0107 <span class="keyword">elseif</span> (diff &gt;= 3) &amp;&amp; (diff &lt;= nb_params),
+0108     <span class="comment">%%% diff wrt param(diff) = - log(invRho(diff-2))</span>
+0109     ind = diff - 2;
+0110     <span class="keyword">if</span> compute_Kx_cache || isempty(Kx_cache)
+0111         Kx_cache  = 1./(D+eps) .* (Sigma2 * stk_sf_matern(Nu, D, 2));
+0112         compute_Kx_cache = false;
+0113     <span class="keyword">end</span>
+0114     nx = size(x,1); ny = size(y,1);
+0115     <span class="keyword">if</span> pairwise,
+0116         k = (xs(:, ind) - ys(:, ind)).^2 .* Kx_cache;
+0117     <span class="keyword">else</span>
+0118         k = (repmat(xs(:, ind), 1, ny) - repmat(ys(:, ind)', nx, 1)).^2 .* Kx_cache;
+0119     <span class="keyword">end</span>
+0120 <span class="keyword">else</span>
+0121     stk_error(<span class="string">'Incorrect value for the ''diff'' parameter.'</span>, <span class="string">'InvalidArgument'</span>);
+0122 <span class="keyword">end</span>
+0123 
+0124 <span class="keyword">end</span> <span class="comment">% function</span>
+0125 
+0126 
+0127 <span class="comment">%%%%%%%%%%%%%</span>
+0128 <span class="comment">%%% tests %%%</span>
+0129 <span class="comment">%%%%%%%%%%%%%</span>
+0130 
+0131 <span class="comment">%%</span>
+0132 <span class="comment">% 1D, 5x5</span>
+0133 
+0134 <span class="comment">%!shared param x y</span>
+0135 <span class="comment">%!  dim = 1;</span>
+0136 <span class="comment">%!  model = stk_model('stk_materncov_aniso', dim);</span>
+0137 <span class="comment">%!  param = model.param;</span>
+0138 <span class="comment">%!  x = stk_sampling_randunif(5, dim);</span>
+0139 <span class="comment">%!  y = stk_sampling_randunif(5, dim);</span>
+0140 
+0141 <span class="comment">%!error stk_materncov_aniso();</span>
+0142 <span class="comment">%!error stk_materncov_aniso(param);</span>
+0143 <span class="comment">%!error stk_materncov_aniso(param, x);</span>
+0144 <span class="comment">%!test  stk_materncov_aniso(param, x, y);</span>
+0145 <span class="comment">%!test  stk_materncov_aniso(param, x, y, -1);</span>
+0146 <span class="comment">%!test  stk_materncov_aniso(param, x, y, -1, false);</span>
+0147 <span class="comment">%!error stk_materncov_aniso(param, x, y, -1, false, pi^2);</span>
+0148 
+0149 <span class="comment">%!error stk_materncov_aniso(param, x, y, -2);</span>
+0150 <span class="comment">%!test  stk_materncov_aniso(param, x, y, -1);</span>
+0151 <span class="comment">%!error stk_materncov_aniso(param, x, y,  0);</span>
+0152 <span class="comment">%!test  stk_materncov_aniso(param, x, y,  1);</span>
+0153 <span class="comment">%!test  stk_materncov_aniso(param, x, y,  2);</span>
+0154 <span class="comment">%!test  stk_materncov_aniso(param, x, y,  3);</span>
+0155 <span class="comment">%!error stk_materncov_aniso(param, x, y,  4);</span>
+0156 <span class="comment">%!error stk_materncov_aniso(param, x, y,  nan);</span>
+0157 <span class="comment">%!error stk_materncov_aniso(param, x, y,  inf);</span>
+0158 
+0159 <span class="comment">%%</span>
+0160 <span class="comment">% 3D, 4x10</span>
+0161 
+0162 <span class="comment">%!shared dim param x y nx ny</span>
+0163 <span class="comment">%!  dim = 3;</span>
+0164 <span class="comment">%!  model = stk_model('stk_materncov_aniso', dim);</span>
+0165 <span class="comment">%!  param = model.param;</span>
+0166 <span class="comment">%!  nx = 4; ny = 10;</span>
+0167 <span class="comment">%!  x = stk_sampling_randunif(nx,  dim);</span>
+0168 <span class="comment">%!  y = stk_sampling_randunif(ny, dim);</span>
+0169 
+0170 <span class="comment">%!test</span>
+0171 <span class="comment">%!  K1 = stk_materncov_aniso(param, x, y);</span>
+0172 <span class="comment">%!  K2 = stk_materncov_aniso(param, x, y, -1);</span>
+0173 <span class="comment">%!  assert(isequal(size(K1), [nx ny]));</span>
+0174 <span class="comment">%!  assert(stk_isequal_tolabs(K1, K2));</span>
+0175 
+0176 <span class="comment">%!test</span>
+0177 <span class="comment">%!  for i = 1:(dim+2),</span>
+0178 <span class="comment">%!    dK = stk_materncov_aniso(param, x, y,  i);</span>
+0179 <span class="comment">%!    assert(isequal(size(dK), [nx ny]));</span>
+0180 <span class="comment">%!  end</span>
+0181 
+0182 <span class="comment">%!test</span>
+0183 <span class="comment">%! n = 7;</span>
+0184 <span class="comment">%! x = stk_sampling_randunif(n, dim);</span>
+0185 <span class="comment">%! y = stk_sampling_randunif(n, dim);</span>
+0186 <span class="comment">%!</span>
+0187 <span class="comment">%! K1 = stk_materncov_aniso(param, x, y);</span>
+0188 <span class="comment">%! K2 = stk_materncov_aniso(param, x, y, -1, true);</span>
+0189 <span class="comment">%! assert(isequal(size(K1), [n n]));</span>
+0190 <span class="comment">%! assert(stk_isequal_tolabs(K2, diag(K1)));</span>
+0191 <span class="comment">%!</span>
+0192 <span class="comment">%! for i = 1:(dim+2),</span>
+0193 <span class="comment">%!     dK1 = stk_materncov_aniso(param, x, y,  i);</span>
+0194 <span class="comment">%!     dK2 = stk_materncov_aniso(param, x, y,  i, true);</span>
+0195 <span class="comment">%!     assert(isequal(size(dK1), [n n]));</span>
+0196 <span class="comment">%!     assert(stk_isequal_tolabs(dK2, diag(dK1)));</span>
+0197 <span class="comment">%! end</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

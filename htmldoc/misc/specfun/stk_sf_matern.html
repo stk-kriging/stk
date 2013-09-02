@@ -1,0 +1,199 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_sf_matern</title>
+  <meta name="keywords" content="stk_sf_matern">
+  <meta name="description" content="STK_SF_MATERN computes the Matern correlation function.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">specfun</a> &gt; stk_sf_matern.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/specfun&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_sf_matern
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_SF_MATERN computes the Matern correlation function.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function k = stk_sf_matern(Nu, h, diff) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_SF_MATERN computes the Matern correlation function.
+
+ CALL: K = stk_sf_matern(NU, H)
+
+    computes the value of the Matern correlation function of order NU at
+    distance H. Note that the Matern correlation function is a valid
+    correlation function for all dimensions.
+
+ CALL: K = stk_sf_matern(NU, H, DIFF)
+
+    computes the derivative of the Matern correlation function of order NU, at
+    distance H, with respect to the order NU if DIFF is equal to 1, or with
+    respect the distance H if DIFF is equal to 2. (If DIFF is equal to -1,
+    this is the same as K = stk_sf_matern(NU, H).)
+
+ See also: <a href="stk_sf_matern32.html" class="code" title="function k = stk_sf_matern32(h, diff)">stk_sf_matern32</a>, <a href="stk_sf_matern52.html" class="code" title="function k = stk_sf_matern52(h, diff)">stk_sf_matern52</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="#_sub1" class="code">function y = besselk_ (nu, x)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_SF_MATERN computes the Matern correlation function.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: K = stk_sf_matern(NU, H)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    computes the value of the Matern correlation function of order NU at</span>
+0006 <span class="comment">%    distance H. Note that the Matern correlation function is a valid</span>
+0007 <span class="comment">%    correlation function for all dimensions.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% CALL: K = stk_sf_matern(NU, H, DIFF)</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    computes the derivative of the Matern correlation function of order NU, at</span>
+0012 <span class="comment">%    distance H, with respect to the order NU if DIFF is equal to 1, or with</span>
+0013 <span class="comment">%    respect the distance H if DIFF is equal to 2. (If DIFF is equal to -1,</span>
+0014 <span class="comment">%    this is the same as K = stk_sf_matern(NU, H).)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% See also: stk_sf_matern32, stk_sf_matern52</span>
+0017 
+0018 <span class="comment">% Copyright Notice</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0023 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0024 
+0025 <span class="comment">% Copying Permission Statement</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    This file is part of</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0030 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0033 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0034 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0035 <span class="comment">%    option) any later version.</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0038 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0039 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0040 <span class="comment">%    License for more details.</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0043 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0044 
+0045 <a name="_sub0" href="#_subfunctions" class="code">function k = stk_sf_matern(Nu, h, diff)</a>
+0046 
+0047 <span class="keyword">if</span> nargin &gt; 3,
+0048    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="comment">% default: compute the value (not a derivative)</span>
+0052 <span class="keyword">if</span> (nargin&lt;3), diff = -1; <span class="keyword">end</span>
+0053 
+0054 BIGNUM = 1e50;
+0055 
+0056 [N,M]=size(h);
+0057 hp = abs(reshape(h,N*M,1));
+0058 t = 2 * sqrt (Nu) * hp;
+0059 z = 2^(Nu - 1) * gamma(Nu) * t.^(-Nu);
+0060 I = (z &lt; BIGNUM);
+0061 
+0062 <span class="keyword">if</span> diff == -1
+0063     
+0064     k = ones(N*M, 1);
+0065     k(I) = 1 ./ z(I) .* <a href="#_sub1" class="code" title="subfunction y = besselk_ (nu, x)">besselk_</a>(Nu, t(I));
+0066     
+0067 <span class="keyword">elseif</span> diff == 1  <span class="comment">% numerical derivative wrt Nu</span>
+0068     
+0069     itermax = 2;
+0070     delta = 1e-4;
+0071     dk = zeros(N*M,itermax);
+0072     <span class="keyword">for</span> l= 1:itermax
+0073         Nu_p = Nu + 2^(l-1)*delta;
+0074         Nu_m = Nu - 2^(l-1)*delta;
+0075         t_p = 2 * sqrt (Nu_p) * hp;
+0076         t_m = 2 * sqrt (Nu_m) * hp;
+0077         k_p = 1 / (2^(Nu_p - 1) * gamma(Nu_p)) .* t_p(I).^Nu_p .* <span class="keyword">...</span>
+0078             <a href="#_sub1" class="code" title="subfunction y = besselk_ (nu, x)">besselk_</a>(Nu_p, t_p(I));
+0079         k_m = 1 / (2^(Nu_m - 1) * gamma(Nu_m)) .* t_m(I).^Nu_m .* <span class="keyword">...</span>
+0080             <a href="#_sub1" class="code" title="subfunction y = besselk_ (nu, x)">besselk_</a>(Nu_m, t_m(I));
+0081         dk(I,l) =  k_p - k_m;
+0082     <span class="keyword">end</span>
+0083     k = 1/(12 * delta)* (- dk(:,2) + 8*dk(:,1));
+0084     
+0085 <span class="keyword">elseif</span> diff == 2  <span class="comment">% deriv. wrt h</span>
+0086     
+0087     k = zeros(N*M,1);
+0088     dtdh = 2 * sqrt(Nu);
+0089     k(I)  = - dtdh ./ z(I) .* <a href="#_sub1" class="code" title="subfunction y = besselk_ (nu, x)">besselk_</a>( Nu-1, t(I) );
+0090     
+0091 <span class="keyword">end</span>
+0092 
+0093 k = reshape(k, N, M);
+0094 
+0095 <span class="keyword">end</span> <span class="comment">% function</span>
+0096 
+0097 
+0098 <a name="_sub1" href="#_subfunctions" class="code">function y = besselk_ (nu, x)</a>
+0099 
+0100 opts = stk_options_get(<span class="string">'stk_sf_matern'</span>);
+0101 
+0102 <span class="keyword">if</span> size(x, 1) &lt; opts.min_size_for_parallelization,
+0103     y = besselk(nu, x);
+0104 <span class="keyword">else</span>
+0105     y = stk_parallel_feval(@(t)(besselk(nu, t)), x, true, opts.min_block_size);
+0106 <span class="keyword">end</span>
+0107 
+0108 <span class="keyword">end</span> <span class="comment">% function</span>
+0109 
+0110 
+0111 <span class="comment">%%%%%%%%%%%%%</span>
+0112 <span class="comment">%%% tests %%%</span>
+0113 <span class="comment">%%%%%%%%%%%%%</span>
+0114 
+0115 <span class="comment">%!shared nu, h, diff</span>
+0116 <span class="comment">%! nu = 1.0; h = 1.0; diff = -1;</span>
+0117 
+0118 <span class="comment">%!error stk_sf_matern();</span>
+0119 <span class="comment">%!error stk_sf_matern(nu);</span>
+0120 <span class="comment">%!test  stk_sf_matern(nu, h);</span>
+0121 <span class="comment">%!test  stk_sf_matern(nu, h, diff);</span>
+0122 <span class="comment">%!error stk_sf_matern(nu, h, diff, pi);</span>
+0123 
+0124 <span class="comment">%!test %% h = 0.0 =&gt; correlation = 1.0</span>
+0125 <span class="comment">%! for nu = 0.1:0.2:5.0,</span>
+0126 <span class="comment">%!   x = stk_sf_matern(nu, 0.0);</span>
+0127 <span class="comment">%!   assert(stk_isequal_tolrel(x, 1.0, 1e-8));</span>
+0128 <span class="comment">%! end</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

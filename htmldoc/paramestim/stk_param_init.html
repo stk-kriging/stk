@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_param_init</title>
+  <meta name="keywords" content="stk_param_init">
+  <meta name="description" content="STK_PARAM_INIT provides a starting point for stk_param_estim().">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">paramestim</a> &gt; stk_param_init.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for paramestim&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_param_init
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_PARAM_INIT provides a starting point for stk_param_estim().</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [param, lnv] = stk_param_init(model, xi, yi, box, noisy) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_PARAM_INIT provides a starting point for stk_param_estim().</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+<li><a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a>	STK_REMLQRG computes the restricted likelihood of a model given data.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<ul style="list-style-image:url(../octave-sombrero.png)">
+<li><a href="#_sub1" class="code">function [param, lnv] = paraminit_(xi, yi, box, nu, order, noisy)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_PARAM_INIT provides a starting point for stk_param_estim().</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2012, 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 
+0009 <span class="comment">% Copying Permission Statement</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    This file is part of</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0014 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0017 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0018 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0019 <span class="comment">%    option) any later version.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0022 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0023 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0024 <span class="comment">%    License for more details.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0027 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0028 
+0029 <a name="_sub0" href="#_subfunctions" class="code">function [param, lnv] = stk_param_init(model, xi, yi, box, noisy)</a>
+0030 <span class="keyword">if</span> nargin &gt; 5,
+0031    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0032 <span class="keyword">end</span>
+0033 
+0034 <span class="comment">%--- first, default values for arguments 'box' and 'noisy' ------------------------------</span>
+0035 
+0036 <span class="keyword">if</span> (nargin &lt; 4) || isempty(box),
+0037     box = [min(xi); max(xi)];
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="keyword">if</span> nargin &lt; 5,
+0041     noisy = false;
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="comment">%--- lognoisevariance ? -----------------------------------------------------------------</span>
+0045 
+0046 <span class="keyword">if</span> isfield(model, <span class="string">'lognoisevariance'</span>) &amp;&amp; ~isempty(model.lognoisevariance)
+0047     warning(sprintf(<span class="string">'Ignoring current value of lognoisevariance (%.3e)'</span>, <span class="keyword">...</span>
+0048         model.lognoisevariance), <span class="string">'IgnoringLogNoiseVariance'</span>);
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="comment">%--- then, each type of covariance is dealt with specifically ---------------------------</span>
+0052 
+0053 <span class="keyword">switch</span> model.covariance_type
+0054     
+0055     <span class="keyword">case</span> <span class="string">'stk_materncov_iso'</span>
+0056         nu = 5/2 * size(xi, 2);
+0057         [param, lnv] = <a href="#_sub1" class="code" title="subfunction [param, lnv] = paraminit_(xi, yi, box, nu, order, noisy)">paraminit_</a>(xi, yi, box, nu, model.order, noisy);
+0058         
+0059     <span class="keyword">case</span> <span class="string">'stk_materncov_aniso'</span>
+0060         nu = 5/2 * size(xi, 2);
+0061         xi = stk_normalize(xi, box);
+0062         [param, lnv] = <a href="#_sub1" class="code" title="subfunction [param, lnv] = paraminit_(xi, yi, box, nu, order, noisy)">paraminit_</a>(xi, yi, [], nu, model.order, noisy);
+0063         param = [param(1:2); param(3) - log(diff(box, [], 1))'];
+0064         
+0065     <span class="keyword">case</span> <span class="string">'stk_materncov32_iso'</span>
+0066         [param, lnv] = <a href="#_sub1" class="code" title="subfunction [param, lnv] = paraminit_(xi, yi, box, nu, order, noisy)">paraminit_</a>(xi, yi, box, 3/2, model.order, noisy);
+0067         param = [param(1); param(3)];
+0068         
+0069     <span class="keyword">case</span> <span class="string">'stk_materncov32_aniso'</span>
+0070         xi = stk_normalize(xi, box);
+0071         [param, lnv] = <a href="#_sub1" class="code" title="subfunction [param, lnv] = paraminit_(xi, yi, box, nu, order, noisy)">paraminit_</a>(xi, yi, [], 3/2, model.order, noisy);
+0072         param = [param(1); param(3) - log(diff(box, [], 1))'];
+0073         
+0074     <span class="keyword">case</span> <span class="string">'stk_materncov52_iso'</span>
+0075         [param, lnv] = <a href="#_sub1" class="code" title="subfunction [param, lnv] = paraminit_(xi, yi, box, nu, order, noisy)">paraminit_</a>(xi, yi, box, 5/2, model.order, noisy);
+0076         param = [param(1); param(3)];
+0077         
+0078     <span class="keyword">case</span> <span class="string">'stk_materncov52_aniso'</span>
+0079         xi = stk_normalize(xi, box);
+0080         [param, lnv] = <a href="#_sub1" class="code" title="subfunction [param, lnv] = paraminit_(xi, yi, box, nu, order, noisy)">paraminit_</a>(xi, yi, [], 5/2, model.order, noisy);
+0081         param = [param(1); param(3) - log(diff(box, [], 1))'];
+0082         
+0083     <span class="keyword">otherwise</span>
+0084         errmsg = <span class="string">'Unsupported covariance type.'</span>;
+0085         stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
+0086 <span class="keyword">end</span>
+0087 
+0088 <span class="keyword">end</span> <span class="comment">% function stk_param_init</span>
+0089 
+0090 
+0091 <a name="_sub1" href="#_subfunctions" class="code">function [param, lnv] = paraminit_(xi, yi, box, nu, order, noisy)</a>
+0092 
+0093 [ni d] = size(xi);
+0094 
+0095 model = stk_model(<span class="string">'stk_materncov_iso'</span>);
+0096 model.order = order;
+0097 
+0098 <span class="comment">% list of possible values for the ratio eta = sigma2_noise / sigma2</span>
+0099 <span class="keyword">if</span> noisy,
+0100     eta_list = 10 .^ (-6:3:0);
+0101 <span class="keyword">else</span>
+0102     eta_list = 1e-10;
+0103 <span class="keyword">end</span>
+0104 
+0105 <span class="comment">% list of possible values for the range parameter</span>
+0106 <span class="keyword">if</span> isempty(box)
+0107     <span class="comment">% assume box = repmat([0; 1], 1, d)</span>
+0108     box_diameter = sqrt(d);
+0109 <span class="keyword">else</span>
+0110     box_diameter = sqrt(sum(diff(box) .^ 2));
+0111 <span class="keyword">end</span>
+0112 rho_max  = 2 * box_diameter;
+0113 rho_min  = box_diameter / 50;
+0114 rho_list = logspace(log10(rho_min), log10(rho_max), 5);
+0115 
+0116 <span class="comment">% try all possible combinations</span>
+0117 eta_best    = NaN;
+0118 rho_best    = NaN;
+0119 sigma2_best = NaN;
+0120 aLL_best    = +Inf;
+0121 <span class="keyword">for</span> eta = eta_list
+0122     <span class="keyword">for</span> rho = rho_list
+0123         fprintf(<span class="string">'[stk_param_init] eta = %.3e, rho = %.3e...\n'</span>, eta, rho);
+0124         <span class="comment">% first use sigma2 = 1</span>
+0125         model.param = log([1.0; nu; 1/rho]);
+0126         model.lognoisevariance = log(eta);
+0127         [K, P] = stk_make_matcov(model, xi);
+0128         <span class="comment">% estimate sigma2</span>
+0129         <span class="comment">% (TODO: use Cholesky ?)</span>
+0130         yi_ = double(yi);
+0131         beta = (P' * (K \ P)) \ (P' * yi_);
+0132         zi = yi_ - P * beta;
+0133         sigma2 = 1 / (ni - length(beta)) * zi' * (K \ zi);
+0134         <span class="comment">% now compute the antilog-likelihood</span>
+0135         <span class="keyword">if</span> sigma2 &gt; 0
+0136             model.param(1) = log(sigma2);
+0137             model.lognoisevariance = log(eta * sigma2);
+0138             aLL = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
+0139             <span class="keyword">if</span> ~isnan(aLL) &amp;&amp; (aLL &lt; aLL_best)
+0140                 eta_best    = eta;
+0141                 rho_best    = rho;
+0142                 aLL_best    = aLL;
+0143                 sigma2_best = sigma2;
+0144             <span class="keyword">end</span>
+0145             <span class="comment">%fprintf('eta = %.2e,  rho = %.2e,  aLL=%.2e\n', eta, rho, aLL);</span>
+0146         <span class="keyword">end</span>
+0147     <span class="keyword">end</span>
+0148 <span class="keyword">end</span>
+0149 
+0150 <span class="keyword">if</span> isinf(aLL_best)
+0151     errmsg = <span class="string">'Couldn''t find reasonable parameter values... ?!?'</span>;
+0152     stk_error(errmsg, <span class="string">'AlgorithmFailure'</span>);
+0153 <span class="keyword">end</span>
+0154 
+0155 param = log([sigma2_best; nu; 1/rho_best]);
+0156 lnv = log(eta_best * sigma2_best);
+0157 
+0158 <span class="keyword">end</span> <span class="comment">% function paraminit_</span>
+0159 
+0160 
+0161 <span class="comment">%!test</span>
+0162 <span class="comment">%! xi = (1:10)'; zi = sin(xi);</span>
+0163 <span class="comment">%! model = stk_model('stk_materncov52_iso');</span>
+0164 <span class="comment">%! model.param = stk_param_init(model, xi, zi, [1; 10], false);</span>
+0165 <span class="comment">%! xt = (1:9)' + 0.5; zt = sin(xt);</span>
+0166 <span class="comment">%! zp = stk_predict(model, xi, zi, xt);</span>
+0167 <span class="comment">%! assert(sum((zt - zp.mean).^2) &lt; 1e-3);</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

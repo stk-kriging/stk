@@ -1,0 +1,145 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_discretecov</title>
+  <meta name="keywords" content="stk_discretecov">
+  <meta name="description" content="STK_DISCRETECOV...">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">covfcs</a> &gt; stk_discretecov.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for covfcs&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_discretecov
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_DISCRETECOV...</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function K = stk_discretecov (param, x, y, diff, pairwise) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_DISCRETECOV...</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_DISCRETECOV...</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0008 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0009 
+0010 <span class="comment">% Copying Permission Statement</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    This file is part of</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0015 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0018 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0019 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0020 <span class="comment">%    option) any later version.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0023 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0024 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0025 <span class="comment">%    License for more details.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0028 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0029 
+0030 <a name="_sub0" href="#_subfunctions" class="code">function K = stk_discretecov (param, x, y, diff, pairwise)</a>
+0031 
+0032 <span class="comment">%--- process input arguments ---------------------------------------------------</span>
+0033 
+0034 x = double (x);
+0035 y = double (y);
+0036 
+0037 <span class="keyword">if</span> (nargin &gt;= 4) &amp;&amp; (diff ~= -1),
+0038     stk_error (<span class="string">'diff should be equal to -1'</span>, <span class="string">'InvalidArgument'</span>);
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="keyword">if</span> nargin &lt; 5,
+0042     pairwise = false;
+0043 <span class="keyword">end</span>
+0044 
+0045 <span class="comment">%--- compute covariance matrix -------------------------------------------------</span>
+0046 
+0047 <span class="keyword">if</span> ~pairwise,
+0048     K = param.K(x, y);
+0049 <span class="keyword">else</span>
+0050     idx = sub2ind (size (param.K), x, y);
+0051     K = param.K(idx);
+0052 <span class="keyword">end</span>
+0053     
+0054 <span class="keyword">end</span> <span class="comment">% function</span>
+0055 
+0056 
+0057 <span class="comment">%%%%%%%%%%%%%</span>
+0058 <span class="comment">%%% tests %%%</span>
+0059 <span class="comment">%%%%%%%%%%%%%</span>
+0060 
+0061 <span class="comment">%!shared model, model2, x0</span>
+0062 <span class="comment">%! n0 = 20; n1 = 10; dim = 4;</span>
+0063 <span class="comment">%! x0 = stk_sampling_randunif (n0, dim);</span>
+0064 <span class="comment">%! x1 = stk_sampling_randunif (n1, dim);</span>
+0065 <span class="comment">%! model = stk_model ('stk_materncov_aniso', dim);</span>
+0066 <span class="comment">%! model.order = 1;</span>
+0067 
+0068 <span class="comment">%!test % without noise, pairwise = false</span>
+0069 <span class="comment">%! if isfield (model, 'lognoisevariance')</span>
+0070 <span class="comment">%!   model = rmfield (model, 'lognoisevariance');</span>
+0071 <span class="comment">%! end</span>
+0072 <span class="comment">%! model2 = stk_model ('stk_discretecov', model, x0);</span>
+0073 <span class="comment">%! idx = [1 4 9];</span>
+0074 <span class="comment">%! [K1, P1] = stk_make_matcov (model,  x0(idx, :));</span>
+0075 <span class="comment">%! [K2, P2] = stk_make_matcov (model2, idx');</span>
+0076 <span class="comment">%! assert (stk_isequal_tolrel (K1, K2));</span>
+0077 <span class="comment">%! assert (stk_isequal_tolrel (P1, P2));</span>
+0078 
+0079 <span class="comment">%!test % without noise, pairwise = true</span>
+0080 <span class="comment">%! K1 = stk_make_matcov (model,  x0([2 5 6], :), [], true);</span>
+0081 <span class="comment">%! K2 = stk_make_matcov (model2, [2 5 6]', [], true);</span>
+0082 <span class="comment">%! assert (stk_isequal_tolrel (K1, K2));</span>
+0083 
+0084 <span class="comment">%!test % with noise, pairwise = false</span>
+0085 <span class="comment">%! model.lognoisevariance = log (0.01);</span>
+0086 <span class="comment">%! model2 = stk_model ('stk_discretecov', model, x0);</span>
+0087 <span class="comment">%! idx = [1 4 9];</span>
+0088 <span class="comment">%! [K1, P1] = stk_make_matcov (model,  x0(idx, :));</span>
+0089 <span class="comment">%! [K2, P2] = stk_make_matcov (model2, idx');</span>
+0090 <span class="comment">%! assert (stk_isequal_tolrel (K1, K2));</span>
+0091 <span class="comment">%! assert (stk_isequal_tolrel (P1, P2));</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

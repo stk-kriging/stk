@@ -1,0 +1,755 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_test</title>
+  <meta name="keywords" content="stk_test">
+  <meta name="description" content="STK_TEST performs tests for a given M-file.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">test</a> &gt; stk_test.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/test&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_test
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_TEST performs tests for a given M-file.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [x__ret1, x__ret2, x__ret3] = stk_test (x__name, x__flag, x__fid) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_TEST performs tests for a given M-file.
+
+ FIXME: missing doc</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_runtests.html" class="code" title="function stk_runtests(directory)">stk_runtests</a>	STK_RUNTESTS runs all tests in a given directory (or in STK's searchpath).</li></ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="#_sub1" class="code">function varargout = eval_test_code(x__code, x__list_shared, varargin)</a></li><li><a href="#_sub2" class="code">function [pattern, id, rest] = getpattern (str)</a></li><li><a href="#_sub3" class="code">function msg = trimerr (msg, prefix)</a></li><li><a href="#_sub4" class="code">function str = trimleft (str)</a></li><li><a href="#_sub5" class="code">function body = x__extract_test_code (nm)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_TEST performs tests for a given M-file.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% FIXME: missing doc</span>
+0004 
+0005 <span class="comment">% Copyright Notice</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Copyright (C) 2012, 2013 SUPELEC</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
+0010 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    This file has been adapted from test.m in Octave 3.6.2,  distributed</span>
+0013 <span class="comment">%    under the GNU General Public Licence version 3 (GPLv3). The original</span>
+0014 <span class="comment">%    copyright notice was as follows:</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%        Copyright (C) 2005-2012 Paul Kienzle</span>
+0017 
+0018 <span class="comment">% Copying Permission Statement</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%    This file is part of</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0023 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0026 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0027 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0028 <span class="comment">%    option) any later version.</span>
+0029 <span class="comment">%</span>
+0030 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0031 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0032 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0033 <span class="comment">%    License for more details.</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0036 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0037 
+0038 <span class="comment">%%</span>
+0039 <span class="comment">% Octave doc, to be adapted...</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">% -*- texinfo -*-</span>
+0042 <span class="comment">% @deftypefn  {Command} {} test @var{name}</span>
+0043 <span class="comment">% @deftypefnx {Command} {} test @var{name} quiet|normal|verbose</span>
+0044 <span class="comment">% @deftypefnx {Function File} {} test ('@var{name}', 'quiet|normal|verbose', @var{fid})</span>
+0045 <span class="comment">% @deftypefnx {Function File} {} test ([], 'explain', @var{fid})</span>
+0046 <span class="comment">% @deftypefnx {Function File} {@var{success} =} test (@dots{})</span>
+0047 <span class="comment">% @deftypefnx {Function File} {[@var{n}, @var{max}] =} test (@dots{})</span>
+0048 <span class="comment">% @deftypefnx {Function File} {[@var{code}, @var{idx}] =} test ('@var{name}', 'grabdemo')</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">% Perform tests from the first file in the loadpath matching @var{name}.</span>
+0051 <span class="comment">% @code{test} can be called as a command or as a function.  Called with</span>
+0052 <span class="comment">% a single argument @var{name}, the tests are run interactively and stop</span>
+0053 <span class="comment">% after the first error is encountered.</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">% With a second argument the tests which are performed and the amount of</span>
+0056 <span class="comment">% output is selected.</span>
+0057 <span class="comment">%</span>
+0058 <span class="comment">% @table @asis</span>
+0059 <span class="comment">% @item 'quiet'</span>
+0060 <span class="comment">%  Don't report all the tests as they happen, just the errors.</span>
+0061 <span class="comment">%</span>
+0062 <span class="comment">% @item 'normal'</span>
+0063 <span class="comment">% Report all tests as they happen, but don't do tests which require</span>
+0064 <span class="comment">% user interaction.</span>
+0065 <span class="comment">%</span>
+0066 <span class="comment">% @item 'verbose'</span>
+0067 <span class="comment">% Do tests which require user interaction.</span>
+0068 <span class="comment">% @end table</span>
+0069 <span class="comment">%</span>
+0070 <span class="comment">% The argument @var{fid} can be used to allow batch processing.  Errors</span>
+0071 <span class="comment">% can be written to the already open file defined by @var{fid}, and</span>
+0072 <span class="comment">% hopefully when Octave crashes this file will tell you what was happening</span>
+0073 <span class="comment">% when it did.  You can use @code{stdout} if you want to see the results as</span>
+0074 <span class="comment">% they happen.  You can also give a file name rather than an @var{fid}, in</span>
+0075 <span class="comment">% which case the contents of the file will be replaced with the log from</span>
+0076 <span class="comment">% the current test.</span>
+0077 <span class="comment">%</span>
+0078 <span class="comment">% Called with a single output argument @var{success}, @code{test} returns</span>
+0079 <span class="comment">% true if all of the tests were successful.  Called with two output arguments</span>
+0080 <span class="comment">% @var{n} and @var{max}, the number of successful tests and the total number</span>
+0081 <span class="comment">% of tests in the file @var{name} are returned.</span>
+0082 <span class="comment">%</span>
+0083 <span class="comment">% If the second argument is 'explain', then @var{name} is ignored and an</span>
+0084 <span class="comment">% explanation of the line markers used is written to the file @var{fid}.</span>
+0085 <span class="comment">% @seealso{assert, error, example}</span>
+0086 <span class="comment">% @end deftypefn</span>
+0087 
+0088 <a name="_sub0" href="#_subfunctions" class="code">function [x__ret1, x__ret2, x__ret3] = stk_test (x__name, x__flag, x__fid)</a>
+0089 
+0090 SIGNAL_FAIL  = <span class="string">'!!!!! '</span>;  <span class="comment">% prefix: test had an unexpected result</span>
+0091 SIGNAL_EMPTY = <span class="string">'????? '</span>;  <span class="comment">% prefix: no tests in file</span>
+0092 SIGNAL_BLOCK = <span class="string">'***** '</span>;  <span class="comment">% prefix: code for the test</span>
+0093 SIGNAL_FILE  = <span class="string">'&gt;&gt;&gt;&gt;&gt; '</span>;  <span class="comment">% prefix: new test file</span>
+0094 
+0095 nb_expected_failures = 0;  <span class="comment">% counter for expected failures ('xtest' blocks)</span>
+0096 
+0097 <span class="comment">% default value for input arg #2: 'quiet'</span>
+0098 <span class="keyword">if</span> nargin &lt; 2 || isempty(x__flag), x__flag = <span class="string">'quiet'</span>; <span class="keyword">end</span>
+0099 
+0100 <span class="comment">% default value for input arg #3: []  (interactive mode, output --&gt; stdout)</span>
+0101 <span class="keyword">if</span> nargin &lt; 3, x__fid = []; <span class="keyword">end</span>
+0102 
+0103 <span class="keyword">if</span> (nargin &lt; 1) || (nargin &gt; 3),
+0104     error(<span class="string">'Incorrect number of input arguments.'</span>);
+0105 <span class="keyword">end</span>
+0106 
+0107 <span class="comment">% first argument must be a non-empty string</span>
+0108 <span class="keyword">if</span> isempty(x__name) || ~ischar(x__name),
+0109     error(<span class="string">'The first argument of stk_test() must be a non-empty string'</span>);
+0110 <span class="keyword">end</span>
+0111 
+0112 <span class="comment">% second argument must be a non-empty string</span>
+0113 <span class="keyword">if</span> ~isempty(x__flag) &amp;&amp; ~ischar(x__flag),
+0114     error(<span class="string">'The first argument of stk_test() must be either empty or a string'</span>);
+0115 <span class="keyword">end</span>
+0116 
+0117 x__batch = (~ isempty (x__fid));
+0118 
+0119 <span class="comment">% Decide if error messages should be collected.</span>
+0120 x__close_fid = 0;
+0121 <span class="keyword">if</span> (x__batch)
+0122     <span class="keyword">if</span> (ischar (x__fid))
+0123         x__fid = fopen (x__fid, <span class="string">'wt'</span>);
+0124         <span class="keyword">if</span> (x__fid &lt; 0)
+0125             error (<span class="string">'test: could not open log file'</span>);
+0126         <span class="keyword">end</span>
+0127         x__close_fid = 1;
+0128     <span class="keyword">end</span>
+0129     <span class="comment">%fprintf (x__fid, '%sprocessing %s\n', SIGNAL_FILE, x__name);</span>
+0130     <span class="comment">%fflush (x__fid);</span>
+0131 <span class="keyword">else</span>
+0132     x__fid = stdout;
+0133 <span class="keyword">end</span>
+0134 
+0135 <span class="keyword">switch</span> x__flag,
+0136     <span class="keyword">case</span> <span class="string">'normal'</span>,
+0137         x__verbose = x__batch;
+0138     <span class="keyword">case</span> <span class="string">'quiet'</span>,
+0139         x__verbose = 0;
+0140     <span class="keyword">case</span> <span class="string">'verbose'</span>,
+0141         x__verbose = 1;
+0142     <span class="keyword">otherwise</span>,
+0143         error(<span class="string">'test: unknown flag ''%s'''</span>, x__flag);
+0144 <span class="keyword">end</span>
+0145 
+0146 <span class="comment">% Locate the file to test.</span>
+0147 x__file = file_in_loadpath (x__name, <span class="string">'all'</span>);
+0148 <span class="keyword">if</span> (isempty (x__file))
+0149     x__file = file_in_loadpath ([x__name, <span class="string">'.m'</span>], <span class="string">'all'</span>);
+0150 <span class="keyword">end</span>
+0151 <span class="keyword">if</span> (isempty (x__file))
+0152     x__file = file_in_loadpath ([x__name, <span class="string">'.cc'</span>], <span class="string">'all'</span>);
+0153 <span class="keyword">end</span>
+0154 
+0155 <span class="keyword">if</span> (iscell (x__file))
+0156     <span class="comment">% If repeats, return first in path.</span>
+0157     <span class="keyword">if</span> (isempty (x__file))
+0158         x__file = <span class="string">''</span>;
+0159     <span class="keyword">else</span>
+0160         x__file = x__file{1};
+0161     <span class="keyword">end</span>
+0162 <span class="keyword">end</span>
+0163 <span class="keyword">if</span> (isempty (x__file))
+0164     <span class="keyword">if</span> (exist (x__name) == 3)
+0165         fprintf (x__fid, <span class="string">'%s%s source code with tests for dynamically linked function not found\n'</span>, SIGNAL_EMPTY, x__name);
+0166     <span class="keyword">else</span>
+0167         fprintf (x__fid, <span class="string">'%s%s does not exist in path\n'</span>, SIGNAL_EMPTY, x__name);
+0168     <span class="keyword">end</span>
+0169     fflush (x__fid);
+0170     <span class="keyword">if</span> (nargout &gt; 0)
+0171         x__ret1 = 0; x__ret2 = 0;
+0172     <span class="keyword">end</span>
+0173     <span class="keyword">if</span> (x__close_fid)
+0174         fclose(x__fid);
+0175     <span class="keyword">end</span>
+0176     <span class="keyword">return</span>;
+0177 <span class="keyword">end</span>
+0178 
+0179 <span class="comment">% Grab the test code from the file.</span>
+0180 x__body = <a href="#_sub5" class="code" title="subfunction body = x__extract_test_code (nm)">x__extract_test_code</a> (x__file);
+0181 
+0182 <span class="keyword">if</span> (isempty (x__body))
+0183     fprintf (x__fid, <span class="string">'%s%s has no tests available\n'</span>, SIGNAL_EMPTY, x__file);
+0184     fflush (x__fid);
+0185     <span class="keyword">if</span> (nargout &gt; 0)
+0186         x__ret1 = 0; x__ret2 = 0;
+0187     <span class="keyword">end</span>
+0188     <span class="keyword">if</span> (x__close_fid)
+0189         fclose(x__fid);
+0190     <span class="keyword">end</span>
+0191     <span class="keyword">return</span>;
+0192 <span class="keyword">else</span>
+0193     <span class="comment">% Add a dummy comment block to the end for ease of indexing.</span>
+0194     <span class="keyword">if</span> (x__body (length(x__body)) == sprintf(<span class="string">'\n'</span>))
+0195         x__body = sprintf (<span class="string">'\n%s%%'</span>, x__body);
+0196     <span class="keyword">else</span>
+0197         x__body = sprintf (<span class="string">'\n%s\n%%'</span>, x__body);
+0198     <span class="keyword">end</span>
+0199 <span class="keyword">end</span>
+0200 
+0201 <span class="comment">% Chop it up into blocks for evaluation.</span>
+0202 x__lineidx = find (x__body == sprintf(<span class="string">'\n'</span>));
+0203 x__blockidx = x__lineidx(find (~ isspace (x__body(x__lineidx+1))))+1;
+0204 
+0205 <span class="comment">% Ready to start tests ... if in batch mode, tell us what is happening.</span>
+0206 <span class="keyword">if</span> (x__verbose)
+0207     disp ([SIGNAL_FILE, x__file]);
+0208 <span class="keyword">end</span>
+0209 
+0210 <span class="comment">% Assume all tests will pass.</span>
+0211 x__all_success = 1;
+0212 
+0213 <span class="comment">% Process each block separately, initially with no shared variables.</span>
+0214 x__tests = 0; x__successes = 0;
+0215 x__shared_names = {};
+0216 x__shared_vals = {};
+0217 <span class="keyword">for</span> x__i = 1:length(x__blockidx)-1
+0218     
+0219     <span class="comment">% Extract the block.</span>
+0220     x__block = x__body(x__blockidx(x__i):x__blockidx(x__i+1)-2);
+0221     
+0222     <span class="comment">% Let the user/logfile know what is happening.</span>
+0223     <span class="keyword">if</span> (x__verbose)
+0224         fprintf (x__fid, <span class="string">'%s%s\n'</span>, SIGNAL_BLOCK, x__block);
+0225         fflush (x__fid);
+0226     <span class="keyword">end</span>
+0227     
+0228     <span class="comment">% Split x__block into x__type and x__code.</span>
+0229     x__idx = find (~ isletter (x__block));
+0230     <span class="keyword">if</span> (isempty (x__idx))
+0231         x__type = x__block;
+0232         x__code = <span class="string">''</span>;
+0233     <span class="keyword">else</span>
+0234         x__type = x__block(1:x__idx(1)-1);
+0235         x__code = x__block(x__idx(1):length(x__block));
+0236     <span class="keyword">end</span>
+0237     
+0238     <span class="comment">% Assume the block will succeed.</span>
+0239     x__success = 1;
+0240     x__msg = [];
+0241     
+0242     <span class="comment">%%% SHARED</span>
+0243     
+0244     <span class="keyword">if</span> (strcmp (x__type, <span class="string">'shared'</span>))
+0245         x__istest = 0;
+0246         
+0247         <span class="comment">% Separate initialization code from variables.</span>
+0248         x__idx = find (x__code == sprintf(<span class="string">'\n'</span>));
+0249         <span class="keyword">if</span> (isempty (x__idx))
+0250             x__vars = x__code;
+0251             x__code = <span class="string">''</span>;
+0252         <span class="keyword">else</span>
+0253             x__vars = x__code (1:x__idx(1)-1);
+0254             x__code = x__code (x__idx(1):length(x__code));
+0255         <span class="keyword">end</span>
+0256         
+0257         <span class="comment">% Strip comments off the variables.</span>
+0258         x__idx = find(x__vars == <span class="string">'%'</span>);
+0259         <span class="keyword">if</span> (~ isempty (x__idx))
+0260             x__vars = x__vars(1:x__idx(1)-1);
+0261         <span class="keyword">end</span>
+0262         
+0263         <span class="comment">% Assign default values to variables.</span>
+0264         <span class="keyword">try</span>
+0265             x__vars = deblank (x__vars);
+0266             <span class="keyword">if</span> (~ isempty (x__vars))
+0267                 x__shared_names = {};
+0268                 <span class="keyword">while</span> ~isempty(x__vars),
+0269                     [x__shared_names{end+1}, x__vars] = strtok(x__vars, <span class="string">', '</span>);
+0270                 <span class="keyword">end</span>
+0271                 x__shared_vals = repmat({[]}, 1, length(x__shared_names));
+0272             <span class="keyword">else</span>
+0273                 x__shared_names = {};
+0274                 x__shared_vals = {};
+0275             <span class="keyword">end</span>
+0276         <span class="keyword">catch</span>
+0277             <span class="comment">% Couldn't declare, so don't initialize.</span>
+0278             x__code = <span class="string">''</span>;
+0279             x__success = 0;
+0280             x__msg = sprintf (<span class="string">'%sshared variable initialization failed\n'</span>, <span class="keyword">...</span>
+0281                 SIGNAL_FAIL);
+0282         <span class="keyword">end</span>
+0283         
+0284         <span class="comment">% Initialization code will be evaluated below.</span>
+0285         
+0286     <span class="keyword">elseif</span> (strcmp (x__type, <span class="string">'end'</span>))
+0287         <span class="comment">% end simply declares the end of a previous function block.</span>
+0288         <span class="comment">% There is no processing to be done here, just skip to next block.</span>
+0289         x__istest = 0;
+0290         x__code = <span class="string">''</span>;
+0291         
+0292         <span class="comment">%%% ASSERT</span>
+0293         
+0294     <span class="keyword">elseif</span> strcmp(x__type, <span class="string">'assert'</span>)
+0295         x__istest = 1;
+0296         <span class="comment">% Put the keyword back on the code.</span>
+0297         x__code = x__block;
+0298         <span class="comment">% The code will be evaluated below as a test block.</span>
+0299         
+0300         <span class="comment">%%% ERROR/WARNING</span>
+0301         
+0302     <span class="keyword">elseif</span> (strcmp (x__type, <span class="string">'error'</span>) || strcmp(x__type, <span class="string">'warning'</span>))
+0303         x__istest = 1;
+0304         x__warning = strcmp (x__type, <span class="string">'warning'</span>);
+0305         [x__pattern, x__id, x__code] = <a href="#_sub2" class="code" title="subfunction [pattern, id, rest] = getpattern (str)">getpattern</a> (x__code);
+0306         <span class="keyword">if</span> (x__id)
+0307             x__patstr = [<span class="string">'id='</span>,x__id];
+0308         <span class="keyword">else</span>
+0309             x__patstr = [<span class="string">'&lt;'</span>,x__pattern,<span class="string">'&gt;'</span>];
+0310         <span class="keyword">end</span>
+0311         
+0312         <span class="comment">% FIXME: in the Octave version, syntax errors are counted as</span>
+0313         <span class="comment">% failure, even for an 'error' block. This won't be the case here.</span>
+0314         
+0315         <span class="keyword">if</span> (x__success)
+0316             x__success = 0;
+0317             <span class="comment">%x__warnstate = warning ('query', 'quiet');</span>
+0318             <span class="comment">%warning ('on', 'quiet');</span>
+0319             <span class="keyword">try</span>
+0320                 <span class="comment">% This code is supposed to fail, so we don't save the output</span>
+0321                 <span class="comment">% into x__shared_vals.</span>
+0322                 <a href="#_sub1" class="code" title="subfunction varargout = eval_test_code(x__code, x__list_shared, varargin)">eval_test_code</a>(x__code, x__shared_names, x__shared_vals{:});
+0323                 <span class="keyword">if</span> (~ x__warning)
+0324                     x__msg = sprintf (<span class="string">'%sexpected %s but got no error\n'</span>, <span class="keyword">...</span>
+0325                         SIGNAL_FAIL, x__patstr);
+0326                 <span class="keyword">else</span>
+0327                     <span class="keyword">if</span> (~ isempty (x__id))
+0328                         [ignore_arg, x__err] = lastwarn;
+0329                         x__mismatch =~strcmp (x__err, x__id);
+0330                     <span class="keyword">else</span>
+0331                         x__err = <a href="#_sub3" class="code" title="subfunction msg = trimerr (msg, prefix)">trimerr</a> (lastwarn, <span class="string">'warning'</span>);
+0332                         x__mismatch = isempty (regexp (x__err, x__pattern, <span class="string">'once'</span>));
+0333                     <span class="keyword">end</span>
+0334                     <span class="comment">%warning (x__warnstate.state, 'quiet');</span>
+0335                     <span class="keyword">if</span> (isempty (x__err))
+0336                         x__msg = sprintf (<span class="string">'%sexpected %s but got no warning\n'</span>, <span class="keyword">...</span>
+0337                             SIGNAL_FAIL, x__patstr);
+0338                     <span class="keyword">elseif</span> (x__mismatch)
+0339                         x__msg = sprintf (<span class="string">'%sexpected %s but got %s\n'</span>, <span class="keyword">...</span>
+0340                             SIGNAL_FAIL, x__patstr, x__err);
+0341                     <span class="keyword">else</span>
+0342                         x__success = 1;
+0343                     <span class="keyword">end</span>
+0344                 <span class="keyword">end</span>
+0345                 
+0346             <span class="keyword">catch</span>
+0347                 <span class="keyword">if</span> (~ isempty (x__id))
+0348                     [ignore_arg, x__err] = lasterr();
+0349                     x__mismatch =~strcmp (x__err, x__id);
+0350                 <span class="keyword">else</span>
+0351                     x__err = <a href="#_sub3" class="code" title="subfunction msg = trimerr (msg, prefix)">trimerr</a> (lasterr(), <span class="string">'error'</span>);
+0352                     x__mismatch = isempty (regexp (x__err, x__pattern, <span class="string">'once'</span>));
+0353                 <span class="keyword">end</span>
+0354                 <span class="comment">%warning (x__warnstate.state, 'quiet');</span>
+0355                 <span class="keyword">if</span> (x__warning)
+0356                     x__msg = sprintf (<span class="string">'%sexpected warning %s but got error %s\n'</span>, <span class="keyword">...</span>
+0357                         SIGNAL_FAIL, x__patstr, x__err);
+0358                 <span class="keyword">elseif</span> (x__mismatch)
+0359                     x__msg = sprintf (<span class="string">'%sexpected %s but got %s\n'</span>, <span class="keyword">...</span>
+0360                         SIGNAL_FAIL, x__patstr, x__err);
+0361                 <span class="keyword">else</span>
+0362                     x__success = 1;
+0363                 <span class="keyword">end</span>
+0364             <span class="keyword">end</span>
+0365             clear x__testx__;
+0366         <span class="keyword">end</span>
+0367         <span class="comment">% Code already processed.</span>
+0368         x__code = <span class="string">''</span>;
+0369         
+0370         <span class="comment">%%% TEST</span>
+0371         
+0372     <span class="keyword">elseif</span> (strcmp (x__type, <span class="string">'test'</span>) || strcmp (x__type, <span class="string">'xtest'</span>))
+0373         x__istest = 1;
+0374         <span class="comment">% Code will be evaluated below.</span>
+0375         
+0376         <span class="comment">%%% Comment block.</span>
+0377         
+0378     <span class="keyword">elseif</span> ((x__block(1) == <span class="string">'%'</span>) || (x__block(1) == <span class="string">'#'</span>))
+0379         x__istest = 0;
+0380         x__code = <span class="string">''</span>; <span class="comment">% skip the code</span>
+0381         
+0382         <span class="comment">%%% Unknown block.</span>
+0383         
+0384     <span class="keyword">else</span>
+0385         x__istest = 1;
+0386         x__success = 0;
+0387         x__msg = sprintf (<span class="string">'%sunknown test type!\n'</span>, SIGNAL_FAIL);
+0388         x__code = <span class="string">''</span>; <span class="comment">% skip the code</span>
+0389     <span class="keyword">end</span>
+0390     
+0391     <span class="comment">% evaluate code for test, shared, and assert.</span>
+0392     <span class="keyword">if</span> (~ isempty(x__code))
+0393         <span class="keyword">try</span>
+0394             <span class="comment">% FIXME: need to check for embedded test functions, which cause</span>
+0395             <span class="comment">% segfaults, until issues with subfunctions in functions are resolved.</span>
+0396             embed_func = regexp (x__code, <span class="string">'^\s*function '</span>, <span class="string">'once'</span>, <span class="string">'lineanchors'</span>);
+0397             <span class="keyword">if</span> (isempty (embed_func))
+0398                 [x__shared_vals{:}] = <a href="#_sub1" class="code" title="subfunction varargout = eval_test_code(x__code, x__list_shared, varargin)">eval_test_code</a>(x__code, <span class="keyword">...</span>
+0399                     x__shared_names, x__shared_vals{:});
+0400             <span class="keyword">else</span>
+0401                 error ([<span class="string">'Functions embedded in %!test blocks are not allowed.\n'</span>, <span class="keyword">...</span>
+0402                     <span class="string">'Use the %!function/%!end syntax instead to define shared functions for testing.\n'</span>]);
+0403             <span class="keyword">end</span>
+0404         <span class="keyword">catch</span>
+0405             <span class="keyword">if</span> (strcmp (x__type, <span class="string">'xtest'</span>))
+0406                 x__msg = sprintf (<span class="string">'%sknown failure\n%s'</span>, SIGNAL_FAIL, lasterr ());
+0407                 nb_expected_failures = nb_expected_failures + 1;
+0408             <span class="keyword">else</span>
+0409                 x__msg = sprintf (<span class="string">'%stest failed\n%s'</span>, SIGNAL_FAIL, lasterr ());
+0410                 x__success = 0;
+0411             <span class="keyword">end</span>
+0412             <span class="keyword">if</span> (isempty (lasterr ()))
+0413                 error (<span class="string">'empty error text, probably Ctrl-C --- aborting'</span>);
+0414             <span class="keyword">end</span>
+0415         <span class="keyword">end</span>
+0416         clear x__testx__;
+0417     <span class="keyword">end</span>
+0418     
+0419     <span class="comment">% All done.  Remember if we were successful and print any messages.</span>
+0420     <span class="keyword">if</span> (~ isempty (x__msg))
+0421         <span class="comment">% Make sure the user knows what caused the error.</span>
+0422         <span class="keyword">if</span> (~ x__verbose)
+0423             fprintf (x__fid, <span class="string">'%s%s\n'</span>, SIGNAL_BLOCK, x__block);
+0424             fflush (x__fid);
+0425         <span class="keyword">end</span>
+0426         fprintf(x__fid, <span class="string">'%s'</span>, x__msg);
+0427         fprintf(x__fid, <span class="string">'%s'</span>, sprintf(<span class="string">'\n'</span>));
+0428         fflush (x__fid);
+0429         <span class="comment">% FIXME: Dump the shared variables to x__fid... Octave uses fdisp()</span>
+0430         <span class="comment">% to do that, but Matlab doesn't have this function</span>
+0431     <span class="keyword">end</span>
+0432     <span class="keyword">if</span> (x__success == 0)
+0433         x__all_success = 0;
+0434         <span class="comment">% Stop after one error if not in batch mode.</span>
+0435         <span class="keyword">if</span> (~ x__batch)
+0436             <span class="keyword">if</span> (nargout &gt; 0)
+0437                 x__ret1 = 0; x__ret2 = 0;
+0438             <span class="keyword">end</span>
+0439             <span class="keyword">if</span> (x__close_fid)
+0440                 fclose(x__fid);
+0441             <span class="keyword">end</span>
+0442             <span class="keyword">return</span>;
+0443         <span class="keyword">end</span>
+0444     <span class="keyword">end</span>
+0445     x__tests = x__tests + x__istest;
+0446     x__successes = x__successes + x__success * x__istest;
+0447 <span class="keyword">end</span>
+0448 
+0449 <span class="keyword">if</span> nargout == 0
+0450     <span class="keyword">if</span> x__tests || (nb_expected_failures &gt; 0)
+0451         <span class="keyword">if</span> (nb_expected_failures)
+0452             fprintf (<span class="string">'PASSES %d out of %d tests (%d expected failures)\n'</span>, <span class="keyword">...</span>
+0453                 x__successes, x__tests, nb_expected_failures);
+0454         <span class="keyword">else</span>
+0455             fprintf (<span class="string">'PASSES %d out of %d tests\n'</span>, x__successes, x__tests);
+0456         <span class="keyword">end</span>
+0457     <span class="keyword">else</span>
+0458         fprintf (<span class="string">'%s%s has no tests available\n'</span>, SIGNAL_EMPTY, x__file);
+0459     <span class="keyword">end</span>
+0460 <span class="keyword">elseif</span> (nargout == 1)
+0461     x__ret1 = x__all_success;
+0462 <span class="keyword">else</span>
+0463     x__ret1 = x__successes;
+0464     x__ret2 = x__tests;
+0465     x__ret3 = nb_expected_failures;
+0466 <span class="keyword">end</span>
+0467 <span class="keyword">end</span>
+0468 
+0469 <span class="comment">%%%%%%%%%%%%%%%%%%</span>
+0470 <span class="comment">% eval_test_code %</span>
+0471 <span class="comment">%%%%%%%%%%%%%%%%%%</span>
+0472 <span class="comment">%</span>
+0473 <span class="comment">% Evaluate a block of code in a 'controlled' environment.</span>
+0474 <span class="comment">%</span>
+0475 <a name="_sub1" href="#_subfunctions" class="code">function varargout = eval_test_code(x__code, x__list_shared, varargin)</a>
+0476 
+0477 <span class="comment">% Check input arguments</span>
+0478 <span class="keyword">if</span> length(x__list_shared) ~= length(varargin),
+0479     error(<span class="string">'Incorrect argument sizes.'</span>);
+0480 <span class="keyword">end</span>
+0481 
+0482 <span class="comment">% Protect variable names x__list_shared, x__i</span>
+0483 <span class="keyword">for</span> i = 1:length(x__list_shared),
+0484     <span class="keyword">if</span> strcmp(x__list_shared{i}, <span class="string">'x__list_shared'</span>),
+0485         error(<span class="string">'x__list_shared cannot be used as a shared variable'</span>);
+0486     <span class="keyword">elseif</span> strcmp(x__list_shared{i}, <span class="string">'x__i'</span>),
+0487         error(<span class="string">'x__i cannot be used as a shared variable'</span>);
+0488     <span class="keyword">end</span>
+0489 <span class="keyword">end</span>
+0490 
+0491 <span class="comment">% Prepare shared variables</span>
+0492 <span class="keyword">for</span> x__i = 1:length(x__list_shared),
+0493     eval(sprintf(<span class="string">'%s = varargin{%d};'</span>, x__list_shared{x__i}, x__i));
+0494 <span class="keyword">end</span>
+0495 
+0496 <span class="comment">% Run the code</span>
+0497 <span class="keyword">if</span> stk_is_octave_in_use()
+0498     <span class="comment">% Run without output capture (evalc is not implemented yet in Octave)</span>
+0499     eval(x__code);
+0500 <span class="keyword">else</span>
+0501     <span class="comment">% Run with output capture</span>
+0502     <span class="comment">% (TODO: compare the output with a reference, if provided)</span>
+0503     gobble_output = evalc(x__code); <span class="comment">%#ok&lt;NASGU&gt;</span>
+0504 <span class="keyword">end</span>
+0505 
+0506 <span class="comment">% Save shared variables</span>
+0507 varargout = cell(1, length(x__list_shared));
+0508 <span class="keyword">for</span> x__i = 1:length(x__list_shared),
+0509     <span class="keyword">if</span> ~exist(x__list_shared{x__i}, <span class="string">'var'</span>),
+0510         varargout{x__i} = [];
+0511     <span class="keyword">else</span>
+0512         varargout{x__i} = eval(x__list_shared{x__i});
+0513     <span class="keyword">end</span>
+0514 <span class="keyword">end</span>
+0515 
+0516 <span class="keyword">end</span>
+0517 
+0518 <span class="comment">%%%%%%%%%%%%%%</span>
+0519 <span class="comment">% getpattern %</span>
+0520 <span class="comment">%%%%%%%%%%%%%%</span>
+0521 <span class="comment">%</span>
+0522 <span class="comment">% Strip &lt;pattern&gt; from '&lt;pattern&gt; code'.</span>
+0523 <span class="comment">% Also handles 'id=ID code'</span>
+0524 <span class="comment">%</span>
+0525 <a name="_sub2" href="#_subfunctions" class="code">function [pattern, id, rest] = getpattern (str)</a>
+0526 
+0527 pattern = <span class="string">'.'</span>;
+0528 id = [];
+0529 rest = str;
+0530 str = <a href="#_sub4" class="code" title="subfunction str = trimleft (str)">trimleft</a> (str);
+0531 <span class="keyword">if</span> (~ isempty (str) &amp;&amp; str(1) == <span class="string">'&lt;'</span>)
+0532     close = index (str, <span class="string">'&gt;'</span>);
+0533     <span class="keyword">if</span> (close)
+0534         pattern = str(2:close-1);
+0535         rest = str(close+1:end);
+0536     <span class="keyword">end</span>
+0537 <span class="keyword">elseif</span> (strncmp (str, <span class="string">'id='</span>, 3))
+0538     [id, rest] = strtok (str(4:end));
+0539 <span class="keyword">end</span>
+0540 
+0541 <span class="keyword">end</span>
+0542 
+0543 <span class="comment">%%%%%%%%%%%</span>
+0544 <span class="comment">% trimerr %</span>
+0545 <span class="comment">%%%%%%%%%%%</span>
+0546 <span class="comment">%</span>
+0547 <span class="comment">% Strip '.*prefix:' from '.*prefix: msg\n' and strip trailing blanks.</span>
+0548 <span class="comment">%</span>
+0549 <a name="_sub3" href="#_subfunctions" class="code">function msg = trimerr (msg, prefix)</a>
+0550 idx = index (msg, [prefix, <span class="string">':'</span>]);
+0551 <span class="keyword">if</span> (idx &gt; 0)
+0552     msg(1:idx+length(prefix)) = [];
+0553 <span class="keyword">end</span>
+0554 msg = <a href="#_sub4" class="code" title="subfunction str = trimleft (str)">trimleft</a> (deblank (msg));
+0555 <span class="keyword">end</span>
+0556 
+0557 <span class="comment">%%%%%%%%%%%%</span>
+0558 <span class="comment">% trimleft %</span>
+0559 <span class="comment">%%%%%%%%%%%%</span>
+0560 <span class="comment">%</span>
+0561 <span class="comment">% Strip leading blanks from string.</span>
+0562 <span class="comment">%</span>
+0563 <a name="_sub4" href="#_subfunctions" class="code">function str = trimleft (str)</a>
+0564 idx = find (isspace (str));
+0565 leading = find (idx == 1:length(idx));
+0566 <span class="keyword">if</span> (~ isempty (leading))
+0567     str = str(leading(end)+1:end);
+0568 <span class="keyword">end</span>
+0569 <span class="keyword">end</span>
+0570 
+0571 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0572 <span class="comment">% x__extract_test_code %</span>
+0573 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0574 <span class="comment">%</span>
+0575 <a name="_sub5" href="#_subfunctions" class="code">function body = x__extract_test_code (nm)</a>
+0576 
+0577 fid = fopen (nm, <span class="string">'rt'</span>);
+0578 <span class="keyword">if</span> fid == -1,
+0579     error(sprintf(<span class="string">'File %s cannot be opened.'</span>, nm));
+0580 <span class="keyword">end</span>
+0581 
+0582 body = [];
+0583 <span class="keyword">if</span> (fid &gt;= 0)
+0584     <span class="keyword">while</span> (~ feof (fid))
+0585         ln = fgetl (fid);
+0586         <span class="keyword">if</span> (length (ln) &gt;= 2 &amp;&amp; strcmp (ln(1:2), <span class="string">'%!'</span>))
+0587             body = [body, sprintf(<span class="string">'\n'</span>)];
+0588             <span class="keyword">if</span> (length(ln) &gt; 2)
+0589                 body = [body, ln(3:end)];
+0590             <span class="keyword">end</span>
+0591         <span class="keyword">end</span>
+0592     <span class="keyword">end</span>
+0593     fclose (fid);
+0594 <span class="keyword">end</span>
+0595 
+0596 <span class="keyword">end</span> <span class="comment">% x__extract_test_code</span>
+0597 
+0598 
+0599 <span class="comment">%%%%%%%%%</span>
+0600 <span class="comment">% TESTS %</span>
+0601 <span class="comment">%%%%%%%%%</span>
+0602 
+0603 <span class="comment">%% Tests of comments</span>
+0604 
+0605 <span class="comment">%!% This is a lonely comment</span>
+0606 
+0607 <span class="comment">%!# This is a lonely Octave-style comment (why not)</span>
+0608 
+0609 <span class="comment">%!% This is a comment block. It can contain anything!</span>
+0610 <span class="comment">%!</span>
+0611 <span class="comment">%! It is the '%' as the block type that makes it a comment</span>
+0612 <span class="comment">%! and it  stays as a comment even through continuation lines</span>
+0613 <span class="comment">%! which means that it works well with commenting out whole tests</span>
+0614 <span class="comment">%!</span>
+0615 <span class="comment">%! zobi la mouche</span>
+0616 <span class="comment">%!</span>
+0617 
+0618 <span class="comment">%% Tests of 'assert' blocks</span>
+0619 
+0620 <span class="comment">%!assert(isempty([]))      % support for test assert shorthand</span>
+0621 <span class="comment">%!assert((1 + 1) == 2)</span>
+0622 
+0623 <span class="comment">%% Tests of shared variables</span>
+0624 
+0625 <span class="comment">%!% Default: variables are not shared between blocks.</span>
+0626 <span class="comment">%!test a=1;</span>
+0627 <span class="comment">%!test assert(~exist('a'));</span>
+0628 
+0629 <span class="comment">%!% 'shared' blocks allow to declare a variable shared by several blocks</span>
+0630 <span class="comment">%!shared a              % create a shared variable</span>
+0631 <span class="comment">%!test a = 3;           % assign to a shared variable</span>
+0632 <span class="comment">%!test assert(a == 3);  % variable should equal 3 in this second 'test' block</span>
+0633 
+0634 <span class="comment">%!% each 'shared' blocks deletes previously declared shared variables</span>
+0635 <span class="comment">%!shared b, c                % replace shared variables {'a'} --&gt; {'b', 'c'}</span>
+0636 <span class="comment">%!test assert(~exist('a'));  % a no longer exists</span>
+0637 <span class="comment">%!test assert(isempty(b));   % variables start off empty</span>
+0638 
+0639 <span class="comment">%!shared a                   % recreate a shared variable that had been deleted</span>
+0640 <span class="comment">%!test assert (isempty(a));  % it is empty, even though it was equal to 3 before</span>
+0641 
+0642 <span class="comment">%!shared a, b, c            % creates three shared variables</span>
+0643 <span class="comment">%! a = 1; b = 2; c = 3;     % give values to all variables, in the same block</span>
+0644 <span class="comment">%!assert(isequal([a, b, c], [1, 2, 3]));   % test all of them together</span>
+0645 <span class="comment">%!test c=6;                 % update a value</span>
+0646 <span class="comment">%!test                      % show that the update sticks between blocks</span>
+0647 <span class="comment">%! assert(isequal([a, b, c], [1, 2, 6]));</span>
+0648 <span class="comment">%!shared                    % clear all shared variables</span>
+0649 <span class="comment">%!assert(~exist('a'))       % show that they are cleared</span>
+0650 
+0651 <span class="comment">%% Tests for 'error' and 'warning' blocks</span>
+0652 
+0653 <span class="comment">%!error test                   % not enough input arguments</span>
+0654 <span class="comment">%!error test(1, 2, 3, 4)       % too many input args</span>
+0655 <span class="comment">%!error &lt;garbage&gt; garbage      % usage on nonexistent function should be</span>
+0656 
+0657 <span class="comment">%!% when used without a pattern &lt;&gt;, 'error' block succeed on any error</span>
+0658 <span class="comment">%!error stt_test('test', 'bogus');   % undefined function error</span>
+0659 <span class="comment">%!error stk_test('test', 'bogus');   % error raised by stk_test itself</span>
+0660 
+0661 <span class="comment">% !test lastwarn();        % clear last warning just in case</span>
+0662 <span class="comment">% !warning &lt;worry about&gt;   % we expect a warning msg including &quot;worry about&quot;</span>
+0663 <span class="comment">% ! warning('Don''t worry about this warning');</span>
+0664 
+0665 <span class="comment">%!% 'error' tests succeed on syntax errors if no pattern is provided (this</span>
+0666 <span class="comment">%!% is not the behaviour of Octave's test() function)</span>
+0667 <span class="comment">%!error }{</span>
+0668 
+0669 <span class="comment">%% Tests the behaviour of stk_test() itself</span>
+0670 
+0671 <span class="comment">%!% The number of input arguments should be between one and three</span>
+0672 <span class="comment">%!error stk_test();</span>
+0673 <span class="comment">%!error stk_test('disp', 'verbose', [], 'extra arg !!!');</span>
+0674 
+0675 <span class="comment">%!% The first argument of stk_test() must be a non-empty string</span>
+0676 <span class="comment">%!error &lt;non-empty string&gt; stk_test([])</span>
+0677 <span class="comment">%!error &lt;non-empty string&gt; stk_test(0.0)</span>
+0678 
+0679 <span class="comment">%!% The second argument of stk_test() must be a either empty, or one of the</span>
+0680 <span class="comment">%%! following strings: normal, quiet, verbose</span>
+0681 <span class="comment">%!error &lt;empty or a string&gt; stk_test('stk_mindist', 0.0)</span>
+0682 <span class="comment">%!error &lt;unknown flag&gt; stk_test('stk_mindist', 'dudule')</span>
+0683 
+0684 <span class="comment">%% Failure tests</span>
+0685 <span class="comment">% All the following should fail. These tests should be disabled unless you</span>
+0686 <span class="comment">% are developing stk_test() since users don't like to be presented with</span>
+0687 <span class="comment">% expected failures.  Use % ! to disable.</span>
+0688 
+0689 <span class="comment">% !xtest  error('This test is known to fail') % expected failure</span>
+0690 <span class="comment">% !test   error('---------Failure tests.  Use test(''test'',''verbose'',1)');</span>
+0691 <span class="comment">% !test   assert(1 == 2);</span>
+0692 <span class="comment">% !bogus                     % unknown block type</span>
+0693 <span class="comment">% !error  toeplitz([1,2,3]); % correct usage</span>
+0694 <span class="comment">% !shared garbage in         % variables must be comma separated</span>
+0695 <span class="comment">% !test   }{                 % syntax errors fail properly</span>
+0696 <span class="comment">% !error  'succeeds.';       % error test fails if code succeeds</span>
+0697 <span class="comment">% !error  &lt;wrong pattern&gt; error('message')  % error pattern must match</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

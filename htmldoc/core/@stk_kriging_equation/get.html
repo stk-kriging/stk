@@ -1,0 +1,149 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of get</title>
+  <meta name="keywords" content="get">
+  <meta name="description" content="GET...">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="../index.html">core</a> &gt; <a href="index.html">@stk_kriging_equation</a> &gt; get.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for core/@stk_kriging_equation&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>get
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>GET...</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function value = get (kreq, propname) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> GET...</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% GET...</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 
+0009 <span class="comment">% Copying Permission Statement</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    This file is part of</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0014 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0017 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0018 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0019 <span class="comment">%    option) any later version.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0022 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0023 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0024 <span class="comment">%    License for more details.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0027 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0028 
+0029 <a name="_sub0" href="#_subfunctions" class="code">function value = get (kreq, propname)</a>
+0030 
+0031 <span class="keyword">switch</span> propname
+0032     
+0033     <span class="keyword">case</span> <span class="string">'log_abs_det_kriging_matrix'</span>
+0034         <span class="comment">% LS_Q has +/- 1 determinant, so we only need to care about LS_R</span>
+0035         value = sum (log (abs (diag (kreq.LS_R))));
+0036                  
+0037     <span class="keyword">case</span> <span class="string">'log_det_covariance_matrix_a'</span>
+0038         n = size (kreq.xi, 1);
+0039         Q11 = kreq.LS_Q(1:n, 1:n);
+0040         R11 = kreq.LS_R(1:n, 1:n);
+0041         value = log (det (Q11 * R11)); <span class="comment">% K = Q11 * R11</span>
+0042         <span class="comment">% note: this method seems much less accurate than the others,</span>
+0043         <span class="comment">%       we strongly recommend to avoid using it</span>
+0044         
+0045     <span class="keyword">case</span> <span class="string">'log_det_covariance_matrix_b'</span>
+0046         n = size (kreq.xi, 1);
+0047         Q11 = kreq.LS_Q(1:n, 1:n);
+0048         R11 = kreq.LS_R(1:n, 1:n);
+0049         Kchol = chol (Q11 * R11); <span class="comment">% K = Q11 * R11</span>
+0050         value = 2 * sum (log (diag (Kchol)));
+0051         
+0052     <span class="keyword">case</span> <span class="string">'log_det_covariance_matrix_c'</span>
+0053         <span class="comment">% note: very efficient (but not the best) and quite simple to understand</span>
+0054         n = size(kreq.xi, 1);
+0055         Q11 = kreq.LS_Q(1:n, 1:n);
+0056         diag_R  = diag (kreq.LS_R);
+0057         logdet1 = log (abs (det (Q11)));
+0058         logdet2 = sum (log (abs (diag_R(1:n))));
+0059         value = logdet1 + logdet2;
+0060         
+0061     <span class="keyword">case</span> {<span class="string">'log_det_covariance_matrix'</span>, <span class="string">'log_det_covariance_matrix_d'</span>}
+0062         <span class="comment">% note: this is the fastest of all five solutions for large matrices</span>
+0063         <span class="comment">%       (for small matrices, the difference is negligible)... but also</span>
+0064         <span class="comment">%       the trickiest !</span>
+0065         n = size (kreq.xi, 1);
+0066         QL = kreq.LS_Q((n + 1):<span class="keyword">end</span>, :); <span class="comment">% lowerpart of LS_Q</span>
+0067         diag_R = diag (kreq.LS_R);
+0068         logdet1 = sum (log (abs (diag_R)));
+0069         T = kreq.LS_R \ (QL');
+0070         logdet2 = log (abs (det (T((n + 1):<span class="keyword">end</span>, :))));
+0071         value = logdet1 + logdet2;
+0072         
+0073     <span class="keyword">case</span> <span class="string">'log_det_covariance_matrix_e'</span>
+0074         <span class="comment">% note: the most time consuming of all five solutions (blame qrdelete),</span>
+0075         <span class="comment">%       we strongly recommend to avoid using it</span>
+0076         n = size (kreq.xi, 1);
+0077         Q = kreq.LS_Q;
+0078         R = kreq.LS_R;
+0079         r = size (Q, 1) - n;
+0080         <span class="keyword">for</span> i = 0:(r - 1),
+0081             [Q, R] = qrdelete (Q, R, n + r - i, <span class="string">'row'</span>);
+0082             [Q, R] = qrdelete (Q, R, n + r - i, <span class="string">'col'</span>);
+0083         <span class="keyword">end</span>
+0084         value = sum (log (abs (diag (R))));
+0085         
+0086     <span class="keyword">otherwise</span>
+0087         <span class="keyword">try</span>
+0088             value = kreq.(propname);
+0089         <span class="keyword">catch</span>
+0090             error (<span class="string">'There is no property called ''%s''.'</span>, propname);
+0091         <span class="keyword">end</span>
+0092         
+0093 <span class="keyword">end</span> <span class="comment">% switch</span>
+0094 
+0095 <span class="keyword">end</span> <span class="comment">% function get</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

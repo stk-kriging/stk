@@ -1,0 +1,139 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_runexamples</title>
+  <meta name="keywords" content="stk_runexamples">
+  <meta name="description" content="STK_RUNEXAMPLES checks that all the examples run without errors.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">test</a> &gt; stk_runexamples.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/test&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_runexamples
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_RUNEXAMPLES checks that all the examples run without errors.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function stk_runexamples() </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_RUNEXAMPLES checks that all the examples run without errors.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_runscript.html" class="code" title="function err = stk_runscript(scriptname)">stk_runscript</a>	STK_RUNSCRIPT runs a script in a 'controlled' environment.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="#_sub1" class="code">function [scriptname, err] = stk_runexamples_recurs_(example_dir)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_RUNEXAMPLES checks that all the examples run without errors.</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2012, 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 
+0009 <span class="comment">% Copying Permission Statement</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    This file is part of</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0014 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0017 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0018 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0019 <span class="comment">%    option) any later version.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0022 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0023 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0024 <span class="comment">%    License for more details.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0027 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0028 
+0029 <a name="_sub0" href="#_subfunctions" class="code">function stk_runexamples()</a>
+0030 
+0031 <span class="comment">% run all examples, recursively</span>
+0032 example_dir = fullfile(stk_get_root(), <span class="string">'examples'</span>);
+0033 [scriptname, err] = <a href="#_sub1" class="code" title="subfunction [scriptname, err] = stk_runexamples_recurs_(example_dir)">stk_runexamples_recurs_</a>(example_dir);
+0034 
+0035 <span class="comment">% display a summary</span>
+0036 fprintf(<span class="string">'%s\n'</span>, stk_sprintf_framed(<span class="string">'stk_runexamples summary'</span>));
+0037 
+0038 <span class="keyword">for</span> i = 1:length(scriptname)
+0039     fprintf(<span class="string">'[%02d] %s %s '</span>, i, scriptname{i}, <span class="keyword">...</span>
+0040         repmat(<span class="string">'.'</span>, 1, 30 - length(scriptname{i})));
+0041     <span class="keyword">if</span> isempty(err{i})
+0042         fprintf(<span class="string">'OK\n'</span>);
+0043     <span class="keyword">else</span>
+0044         id = err{i}.identifier;
+0045         <span class="keyword">if</span> isempty(id),
+0046             fprintf(<span class="string">'ERROR (no identifier provided)\n'</span>);
+0047         <span class="keyword">else</span>
+0048             fprintf(<span class="string">'%s\n'</span>, id);
+0049         <span class="keyword">end</span>
+0050     <span class="keyword">end</span>
+0051 <span class="keyword">end</span>
+0052 
+0053 assignin(<span class="string">'base'</span>, <span class="string">'stkRunExamplesErrors'</span>, err);
+0054 
+0055 fprintf(<span class="string">'\n'</span>);
+0056 
+0057 <span class="keyword">end</span> <span class="comment">% function stk_runexamples</span>
+0058 
+0059 
+0060 <a name="_sub1" href="#_subfunctions" class="code">function [scriptname, err] = stk_runexamples_recurs_(example_dir)</a>
+0061 
+0062 s = dir(example_dir);
+0063 
+0064 scriptname = {};
+0065 err = {};
+0066 
+0067 <span class="keyword">for</span> i = 1:length(s),
+0068     
+0069     <span class="keyword">if</span> s(i).isdir &amp;&amp; (s(i).name(1) ~= <span class="string">'.'</span>)
+0070         [n, e] = <a href="#_sub1" class="code" title="subfunction [scriptname, err] = stk_runexamples_recurs_(example_dir)">stk_runexamples_recurs_</a>(fullfile(example_dir, s(i).name));
+0071         scriptname = [scriptname n];
+0072         err = [err e];
+0073     <span class="keyword">else</span>
+0074         <span class="keyword">if</span> ~isempty(regexp(s(i).name, <span class="string">'^stk_example.*.m$'</span>))
+0075             scriptname{end+1} = s(i).name(1:end-2);
+0076             err{end+1} = <a href="stk_runscript.html" class="code" title="function err = stk_runscript(scriptname)">stk_runscript</a>(fullfile(example_dir, scriptname{end}));
+0077             drawnow; pause(1.0); close all;
+0078         <span class="keyword">end</span>
+0079     <span class="keyword">end</span>
+0080     
+0081 <span class="keyword">end</span>
+0082 
+0083 <span class="keyword">end</span> <span class="comment">% function stk_runexamples_recurs_</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

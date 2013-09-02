@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_sampling_halton_rr2</title>
+  <meta name="keywords" content="stk_sampling_halton_rr2">
+  <meta name="description" content="STK_SAMPLING_HALTON_RR2 generates points from the Halton/RR2 sequence">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">sampling</a> &gt; stk_sampling_halton_rr2.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sampling&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_sampling_halton_rr2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_SAMPLING_HALTON_RR2 generates points from the Halton/RR2 sequence</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function x = stk_sampling_halton_rr2 (n, d) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_SAMPLING_HALTON_RR2 generates points from the Halton/RR2 sequence
+
+ CALL: X = stk_sampling_halton_rr2(N, D)
+
+    computes the first N terms of the D-dimensional RR2-scrambled Halton
+    sequence.
+
+ REFERENCE: 
+
+    Ladislav Kocis and William J. Whiten, &quot;Computational investigations of low
+    discrepancy sequences&quot;, ACM Transactions on Mathematical Software, 
+    23(2):266-294, 1997.  http://dx.doi.org/10.1145/264029.264064
+
+ SEE ALSO: <a href="stk_sampling_vdc_rr2.html" class="code" title="">stk_sampling_vdc_rr2</a></pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+<li><a href="stk_sampling_vdc_rr2.html" class="code" title="">stk_sampling_vdc_rr2</a>	STK_SAMPLING_VDC_RR2 generates points from the "RR2" van der Corput sequence</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_SAMPLING_HALTON_RR2 generates points from the Halton/RR2 sequence</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: X = stk_sampling_halton_rr2(N, D)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    computes the first N terms of the D-dimensional RR2-scrambled Halton</span>
+0006 <span class="comment">%    sequence.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% REFERENCE:</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    Ladislav Kocis and William J. Whiten, &quot;Computational investigations of low</span>
+0011 <span class="comment">%    discrepancy sequences&quot;, ACM Transactions on Mathematical Software,</span>
+0012 <span class="comment">%    23(2):266-294, 1997.  http://dx.doi.org/10.1145/264029.264064</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">% SEE ALSO: stk_sampling_vdc_rr2</span>
+0015 
+0016 <span class="comment">% Copyright Notice</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    Copyright  (C) 2013 Alexandra Krauth, Elham Rahali &amp; SUPELEC</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0021 <span class="comment">%               Alexandra Krauth  &lt;alexandrakrauth@gmail.com&gt;</span>
+0022 <span class="comment">%               Elham Rahali      &lt;elham.rahali@gmail.com&gt;</span>
+0023  
+0024 <span class="comment">% Copying Permission Statement</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    This file is part of</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0029 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0032 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0033 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0034 <span class="comment">%    option) any later version.</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0037 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0038 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0039 <span class="comment">%    License for more details.</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0042 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0043 
+0044 <a name="_sub0" href="#_subfunctions" class="code">function x = stk_sampling_halton_rr2 (n, d)</a>
+0045 
+0046 <span class="keyword">if</span> nargin &gt; 2,
+0047    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0048 <span class="keyword">end</span>
+0049 
+0050 xdata = zeros (n, d);
+0051 
+0052 <span class="keyword">for</span> j = 1:d,
+0053     xdata(:, j) = double (<a href="stk_sampling_vdc_rr2.html" class="code" title="">stk_sampling_vdc_rr2</a> (n, j));
+0054 <span class="keyword">end</span>
+0055 
+0056 x = stk_dataframe (xdata);
+0057 
+0058 <span class="keyword">end</span> <span class="comment">% function stk_sampling_halton_rr2</span>
+0059 
+0060 
+0061 <span class="comment">%%%%%%%%%%%%%</span>
+0062 <span class="comment">%%% tests %%%</span>
+0063 <span class="comment">%%%%%%%%%%%%%</span>
+0064 
+0065 <span class="comment">%!error stk_sampling_halton_rr2()           % two inputs required</span>
+0066 <span class="comment">%!error stk_sampling_halton_rr2(10)         % two inputs required</span>
+0067 <span class="comment">%!error stk_sampling_halton_rr2(10, 3, -1)  % two inputs required</span>
+0068 
+0069 <span class="comment">%!test</span>
+0070 <span class="comment">%! n = 300; d = 25;</span>
+0071 <span class="comment">%! x = stk_sampling_halton_rr2(n, d);</span>
+0072 <span class="comment">%! assert(isequal(size(x), [n d]))</span>
+0073 
+0074 <span class="comment">%!test</span>
+0075 <span class="comment">%! x = stk_sampling_halton_rr2(1000, 3);</span>
+0076 <span class="comment">%! y = x(end, :);</span>
+0077 <span class="comment">%! yref = [0.9052734375 0.028349336991312 0.74848];</span>
+0078 <span class="comment">%! assert(stk_isequal_tolrel(y, yref, 1e-13));</span>
+0079 
+0080 
+0081 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0082 <span class="comment">%%% Comparison with Scilab+lowdisc %%%</span>
+0083 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0084 
+0085 <span class="comment">% % Matlab/Octave STK test script</span>
+0086 <span class="comment">%</span>
+0087 <span class="comment">% NREP = 10;</span>
+0088 <span class="comment">% M = 1e5;</span>
+0089 <span class="comment">% DIM = 20;</span>
+0090 <span class="comment">%</span>
+0091 <span class="comment">% tic;</span>
+0092 <span class="comment">% for i = 1:NREP</span>
+0093 <span class="comment">%     x = stk_sampling_halton_rr2(M, DIM);</span>
+0094 <span class="comment">% end;</span>
+0095 <span class="comment">% t1 = toc/NREP;</span>
+0096 <span class="comment">% fprintf('time elapsed: %.2e seconds\n', t1);</span>
+0097 <span class="comment">%</span>
+0098 <span class="comment">% fprintf('%.15f\n', x(1:5, 2))</span>
+0099 
+0100 <span class="comment">% // Scilab lowdisc test script</span>
+0101 <span class="comment">%</span>
+0102 <span class="comment">% NREP = 10;</span>
+0103 <span class="comment">% M = 1e5;</span>
+0104 <span class="comment">% DIM = 20;</span>
+0105 <span class="comment">%</span>
+0106 <span class="comment">% tic();</span>
+0107 <span class="comment">% for i = 1:NREP,</span>
+0108 <span class="comment">%     rng = lowdisc_new(&quot;halton&quot;);</span>
+0109 <span class="comment">%     rng = lowdisc_configure(rng, &quot;-dimension&quot;, DIM);</span>
+0110 <span class="comment">%     rng = lowdisc_configure(rng, &quot;-scrambling&quot;, &quot;RR2&quot;);</span>
+0111 <span class="comment">%     rng = lowdisc_startup(rng);</span>
+0112 <span class="comment">%     [rng, x] = lowdisc_next(rng, M);</span>
+0113 <span class="comment">%     rng = lowdisc_destroy(rng);</span>
+0114 <span class="comment">% end</span>
+0115 <span class="comment">% t = toc() / NREP</span>
+0116 <span class="comment">%</span>
+0117 <span class="comment">% mprintf('%.15f\n', x(1:9, 2))</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>
