@@ -40,7 +40,14 @@ if (nargin > 1) && (~ ischar (varargin{1}))
     if size(x, 2) > 1,
         stk_error('Incorrect size for argument x.', 'IncorrectSize');
     else
-        x = horzcat (x, varargin{1});
+        z = varargin{1};
+        n = size (x, 1);
+        if size (z, 1) == n,
+            x = horzcat (x, z);
+        elseif isequal(size (z), [1 n]),
+            % special case: we tolerate that in silence...
+            x = horzcat (x, z');
+        end
         opts_pos = 2;
     end
 else
