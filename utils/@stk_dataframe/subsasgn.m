@@ -82,7 +82,7 @@ switch idx(1).type
                     remove_rows = (strcmp(idx_col, ':') ...
                         || ((d == 1) && isequal(idx_col, 1)));
                     
-                    if ~xor(remove_columns, remove_rows)
+                    if ~ (remove_columns || remove_rows)
                         
                         stk_error('Illegal indexing.', 'IllegalIndexing');
                         
@@ -181,12 +181,17 @@ end % function subsasgn
 
 %!test
 %! x(1, 2) = 11;
-%! assert (isequal(size(x), [2 2]))
-%! assert (isequal(double(x), [1 11; 4 12]))
+%! assert (isequal (size (x), [2 2]))
+%! assert (isequal (double (x), [1 11; 4 12]))
+
+%!assert (isequal (x(:, :), [1 11; 4 12]));
+
+%!test
+%! x(:, :) = [];
+%! assert (isempty (x));
 
 %!error x{1} = 2;
 %!error x(1, 2) = [];
-%!error x(:, :) = [];
 %!error x(1, 2).a = 3;
 %!error x(3) = 2;
 

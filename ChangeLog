@@ -1,3 +1,19 @@
+2013-09-05  Julien Bect  <julien.bect@supelec.fr>
+
+	Plot dataframes with two columns or more.
+
+	* utils/@stk_dataframe/plot.m: modified
+
+2013-09-04  Julien Bect  <julien.bect@supelec.fr>
+
+	Make @stk_dataframe behave more like matrices wrt row/column deletion.
+
+	* utils/@stk_dataframe/subsasgn.m: modified
+
+	Make line lengths equal in README.
+
+	* README: modified
+
 2013-09-01  Julien Bect  <julien.bect@supelec.fr>
 
 	Improve Octave 3.2.x compatibility.
