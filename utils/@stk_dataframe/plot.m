@@ -26,32 +26,62 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function plot(x, z, varargin)
+function plot (x, varargin)
 
-xx = double(x);
-zz = double(z);
+if ~ strcmp (x, 'stk_dataframe'),
+    if isa (x, 'stk_dataframe')
+        x = stk_dataframe (double (x), get (x, 'colnames'));
+    else
+        x = stk_dataframe (double (x));
+    end
+end
 
-if size(xx, 2) > 1,
-    
-    stk_error('Incorrect size for argument x.', 'IncorrectSize');
-    
-else % ok, the first argument has one (and only one) column
-    
-    plot(xx, zz, varargin{:});
-    
-    if isa(x, 'stk_dataframe') && ~isempty(x.vnames)
-        xlabel(x.vnames{1}, 'FontWeight', 'bold');
+if (nargin > 1) && (~ ischar (varargin{1}))
+    if size(x, 2) > 1,
+        stk_error('Incorrect size for argument x.', 'IncorrectSize');
+    else
+        x = horzcat (x, varargin{1});
+        opts_pos = 2;
     end
-    
-    if isa(z, 'stk_dataframe') && ~isempty(z.vnames)
-        if size(zz, 2) == 1,
-            ylabel(z.vnames{1}, 'FontWeight', 'bold');
-        else
-            legend(z.vnames);
-        end
+else
+    if size (x, 2) > 2,
+        warning ('Plotting the first two columns only.'); %#ok<WNTAG>
+        % TODO: implement scatter plot matrices
     end
-    
-end % if
+    opts_pos = 1;
+end
+
+if nargin > opts_pos,
+    opts = varargin(opts_pos:end);
+else
+    opts = {};
+end
+
+xx = double (x);
+yy = xx(:, 2:end);
+xx = xx(:, 1);
+
+nb_outputs = size (yy, 2);
+
+colnames = get (x, 'colnames');
+
+if ~ isempty (colnames)
+    xlab = colnames{1};
+    ylab = colnames(2:end);
+else
+    xlab = '';
+    ylab = repmat ({''}, 1, nb_outputs);
+end
+
+plot (xx, yy, opts{:});
+
+xlabel (xlab, 'FontWeight', 'bold');
+
+if nb_outputs == 1,
+    ylabel (ylab{1}, 'FontWeight', 'bold');
+elseif ~ isempty (ylab)
+    legend (ylab{:});
+end
 
 end % function plot
 
@@ -69,6 +99,14 @@ end % function plot
 %! x = stk_dataframe(linspace(0, 2*pi, 30)');
 %! z = sin(double(x));
 %! figure; plot(x, z); close(gcf);
+
+%!test
+%! x = stk_dataframe (rand (10, 2));
+%! figure; plot (x); close (gcf);
+
+%!test % same thing, but with more than two columns
+%! x = stk_dataframe (rand (10, 4));
+%! figure; plot (x, 'k.'); close (gcf);
 
 %!error % the first argument should have one and only one column
 %! x = stk_dataframe(rand(10, 2));
