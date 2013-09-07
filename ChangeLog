@@ -1,5 +1,15 @@
 2013-09-07  Julien Bect  <julien.bect@supelec.fr>
 
+	Rename internal field 'vnames' to 'colnames' in @stk_dataframe.
+
+	* utils/@stk_dataframe/subsasgn.m: modified
+	* utils/@stk_dataframe/stk_dataframe.m: modified
+	* utils/@stk_dataframe/get.m: modified
+	* utils/@stk_dataframe/set.m: modified
+	* utils/@stk_dataframe/disp.m: modified
+	* utils/@stk_dataframe/bsxfun.m: modified
+	* utils/@stk_dataframe/fieldnames.m: modified
+
 	Return an stk_dataframe when using ()-indexing on an stk_dataframe.
 
 	* utils/@stk_dataframe/subsref.m: modified

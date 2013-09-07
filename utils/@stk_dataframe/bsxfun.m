@@ -47,7 +47,7 @@ end
 
 % choose if the output type
 if isa(x1, 'stk_dataframe'),
-    y = stk_dataframe(ydata, x1.vnames);
+    y = stk_dataframe(ydata, x1.colnames);
 else
     y = ydata;
 end

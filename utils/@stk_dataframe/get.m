@@ -28,7 +28,7 @@
 
 function value = get (x, propname)
 
-icol = get_column_number (x.vnames, propname);
+icol = get_column_number (x.colnames, propname);
 
 switch icol
     
@@ -36,7 +36,7 @@ switch icol
         value = x.rownames;
         
     case -2 % 'colnames'
-        value = x.vnames;
+        value = x.colnames;
             
     case -1 % get entire array
         value = x.data;
