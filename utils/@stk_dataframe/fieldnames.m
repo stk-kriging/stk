@@ -28,7 +28,7 @@
 
 function fn = fieldnames(x)
 
-fn = [x.vnames reserved_field_names()];
+fn = [x.colnames reserved_field_names()];
 
 end % function fieldnames
 

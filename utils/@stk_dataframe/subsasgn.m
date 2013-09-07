@@ -63,8 +63,8 @@ switch idx(1).type
                     if (n1 > n) && ~isempty(x.rownames) 
                         x.rownames = vertcat(x.rownames, repmat({''}, n1 - n, 1));
                     end
-                    if (d1 > d) && ~isempty(x.vnames)
-                        x.vnames = horzcat(x.vnames, repmat({''}, 1, d1 - d));
+                    if (d1 > d) && ~isempty(x.colnames)
+                        x.colnames = horzcat(x.colnames, repmat({''}, 1, d1 - d));
                     end
                     
                 else % assignment rhs is empty
@@ -89,8 +89,8 @@ switch idx(1).type
                     elseif remove_columns
                         
                         x.data(:, J) = [];
-                        if ~isempty(x.vnames)
-                            x.vnames(J) = [];
+                        if ~isempty(x.colnames)
+                            x.colnames(J) = [];
                         end
                         
                     else % remove_rows
