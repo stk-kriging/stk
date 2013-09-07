@@ -73,7 +73,7 @@ end % function stk_sampling_halton_rr2
 
 %!test
 %! x = stk_sampling_halton_rr2(1000, 3);
-%! y = x(end, :);
+%! y = double (x(end, :));
 %! yref = [0.9052734375 0.028349336991312 0.74848];
 %! assert(stk_isequal_tolrel(y, yref, 1e-13));
 
