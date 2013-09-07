@@ -69,18 +69,18 @@ switch idx(1).type
                     
                 else % assignment rhs is empty
                     
-                    idx_row = idx(1).subs{1};                    
+                    I = idx(1).subs{1};                    
                     
                     if L > 1
-                        idx_col = idx(1).subs{2};
+                        J = idx(1).subs{2};
                     else
-                        idx_col = 1;
+                        J = 1;
                     end
                     
-                    remove_columns = (strcmp(idx_row, ':') ...
-                        || ((n == 1) && isequal(idx_row, 1)));
-                    remove_rows = (strcmp(idx_col, ':') ...
-                        || ((d == 1) && isequal(idx_col, 1)));
+                    remove_columns = (strcmp(I, ':') ...
+                        || ((n == 1) && isequal(I, 1)));
+                    remove_rows = (strcmp(J, ':') ...
+                        || ((d == 1) && isequal(J, 1)));
                     
                     if ~ (remove_columns || remove_rows)
                         
@@ -88,16 +88,16 @@ switch idx(1).type
                         
                     elseif remove_columns
                         
-                        x.data(:, idx_col) = [];
+                        x.data(:, J) = [];
                         if ~isempty(x.vnames)
-                            x.vnames(idx_col) = [];
+                            x.vnames(J) = [];
                         end
                         
                     else % remove_rows
                         
-                        x.data(idx_row, :) = [];
+                        x.data(I, :) = [];
                         if ~isempty(x.rownames),
-                            x.rownames(idx_row) = [];
+                            x.rownames(I) = [];
                         end
                         
                     end
@@ -184,7 +184,7 @@ end % function subsasgn
 %! assert (isequal (size (x), [2 2]))
 %! assert (isequal (double (x), [1 11; 4 12]))
 
-%!assert (isequal (x(:, :), [1 11; 4 12]));
+%!assert (isequal (double (x(:, :)), [1 11; 4 12]));
 
 %!test
 %! x(:, :) = [];
@@ -201,8 +201,8 @@ end % function subsasgn
 %! x = stk_dataframe((1:5)');
 
 % linear indexing is allowed for univariate dataframes
-%!test x(2) = 0;   assert (isequal(double(x), [1; 0; 3; 4; 5]));
-%!test x(3) = [];  assert (isequal(double(x), [1; 0; 4; 5]));
+%!test x(2) = 0;   assert (isequal (double (x), [1; 0; 3; 4; 5]));
+%!test x(3) = [];  assert (isequal (double (x), [1; 0; 4; 5]));
 
 % matrix-style indexing also
 %!test x(3, 1) = 0;  assert (isequal(double(x), [1; 0; 0; 5]));

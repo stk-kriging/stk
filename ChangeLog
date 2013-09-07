@@ -1,3 +1,14 @@
+2013-09-07  Julien Bect  <julien.bect@supelec.fr>
+
+	Return an stk_dataframe when using ()-indexing on an stk_dataframe.
+
+	* utils/@stk_dataframe/subsref.m: modified
+	* utils/stk_feval.m: modified
+	* utils/@stk_dataframe/subsasgn.m: modified (nothing serious)
+	* utils/@stk_dataframe/end.m: modified (tests)
+	* sampling/stk_sampling_vdc_rr2.m: modified (tests)
+	* sampling/stk_sampling_halton_rr2.m: modified (tests)
+
 2013-09-05  Julien Bect  <julien.bect@supelec.fr>
 
 	Plot dataframes with two columns or more.
