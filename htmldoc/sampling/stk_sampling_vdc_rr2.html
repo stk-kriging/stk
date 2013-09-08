@@ -115,7 +115,7 @@ This function is called by:
 0057 
 0058 <span class="comment">%!test</span>
 0059 <span class="comment">%! x = stk_sampling_vdc_rr2(2000, 7);</span>
-0060 <span class="comment">%! y = x(1998:2000, :)</span>
+0060 <span class="comment">%! y = double (x(1998:2000, :));</span>
 0061 <span class="comment">%! yref = [0.849786281294525; 0.085080398941584; 0.555668634235701];</span>
 0062 <span class="comment">%! assert(stk_isequal_tolrel(y, yref, 1e-13));</span>
 0063</pre></div>

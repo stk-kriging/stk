@@ -24,7 +24,7 @@
 <div class="box"><strong>PLOT [overloaded base function]</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
-<div class="box"><strong>function plot(x, z, varargin) </strong></div>
+<div class="box"><strong>function plot (x, varargin) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> PLOT [overloaded base function]</pre></div>
@@ -33,10 +33,10 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../octave-sombrero.png)">
-<li><a href="double.html" class="code" title="function xdata = double(x)">double</a>	DOUBLE [overloaded base function]</li><li><a href="end.html" class="code" title="function idx = end(x, k, nb_indices)">end</a>	END implements the the 'end' keyword for indexing</li><li><a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>	ISEMPTY [overloaded base function]</li><li><a href="plot.html" class="code" title="function plot(x, z, varargin)">plot</a>	PLOT [overloaded base function]</li><li><a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>	SIZE [overloaded base function]</li></ul>
+<li><a href="double.html" class="code" title="function xdata = double(x)">double</a>	DOUBLE [overloaded base function]</li><li><a href="end.html" class="code" title="function idx = end(x, k, nb_indices)">end</a>	END implements the the 'end' keyword for indexing</li><li><a href="get.html" class="code" title="function value = get (x, propname)">get</a>	GET [overloaded base function]</li><li><a href="horzcat.html" class="code" title="function z = horzcat(x, y, varargin)">horzcat</a>	HORZCAT [overloaded base function]</li><li><a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>	ISEMPTY [overloaded base function]</li><li><a href="plot.html" class="code" title="function plot (x, varargin)">plot</a>	PLOT [overloaded base function]</li><li><a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>	SIZE [overloaded base function]</li><li><a href="stk_dataframe.html" class="code" title="function x = stk_dataframe(x0, colnames, rownames)">stk_dataframe</a>	STK_DATAFRAME constructs a dataframe</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../octave-sombrero.png)">
-<li><a href="plot.html" class="code" title="function plot(x, z, varargin)">plot</a>	PLOT [overloaded base function]</li></ul>
+<li><a href="plot.html" class="code" title="function plot (x, varargin)">plot</a>	PLOT [overloaded base function]</li></ul>
 <!-- crossreference -->
 
 
@@ -70,54 +70,103 @@ This function is called by:
 0026 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
 0027 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 0028 
-0029 <a name="_sub0" href="#_subfunctions" class="code">function plot(x, z, varargin)</a>
+0029 <a name="_sub0" href="#_subfunctions" class="code">function plot (x, varargin)</a>
 0030 
-0031 xx = <a href="double.html" class="code" title="function xdata = double(x)">double</a>(x);
-0032 zz = <a href="double.html" class="code" title="function xdata = double(x)">double</a>(z);
-0033 
-0034 <span class="keyword">if</span> <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(xx, 2) &gt; 1,
-0035     
-0036     stk_error(<span class="string">'Incorrect size for argument x.'</span>, <span class="string">'IncorrectSize'</span>);
-0037     
-0038 <span class="keyword">else</span> <span class="comment">% ok, the first argument has one (and only one) column</span>
-0039     
-0040     <a href="plot.html" class="code" title="function plot(x, z, varargin)">plot</a>(xx, zz, varargin{:});
-0041     
-0042     <span class="keyword">if</span> isa(x, <span class="string">'stk_dataframe'</span>) &amp;&amp; ~<a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>(x.vnames)
-0043         xlabel(x.vnames{1}, <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
-0044     <span class="keyword">end</span>
-0045     
-0046     <span class="keyword">if</span> isa(z, <span class="string">'stk_dataframe'</span>) &amp;&amp; ~<a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>(z.vnames)
-0047         <span class="keyword">if</span> <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(zz, 2) == 1,
-0048             ylabel(z.vnames{1}, <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
-0049         <span class="keyword">else</span>
-0050             legend(z.vnames);
-0051         <span class="keyword">end</span>
+0031 <span class="keyword">if</span> ~ strcmp (x, <span class="string">'stk_dataframe'</span>),
+0032     <span class="keyword">if</span> isa (x, <span class="string">'stk_dataframe'</span>)
+0033         x = <a href="stk_dataframe.html" class="code" title="function x = stk_dataframe(x0, colnames, rownames)">stk_dataframe</a> (<a href="double.html" class="code" title="function xdata = double(x)">double</a> (x), <a href="get.html" class="code" title="function value = get (x, propname)">get</a> (x, <span class="string">'colnames'</span>));
+0034     <span class="keyword">else</span>
+0035         x = <a href="stk_dataframe.html" class="code" title="function x = stk_dataframe(x0, colnames, rownames)">stk_dataframe</a> (<a href="double.html" class="code" title="function xdata = double(x)">double</a> (x));
+0036     <span class="keyword">end</span>
+0037 <span class="keyword">end</span>
+0038 
+0039 <span class="keyword">if</span> (nargin &gt; 1) &amp;&amp; (~ ischar (varargin{1}))
+0040     <span class="keyword">if</span> <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(x, 2) &gt; 1,
+0041         stk_error(<span class="string">'Incorrect size for argument x.'</span>, <span class="string">'IncorrectSize'</span>);
+0042     <span class="keyword">else</span>
+0043         z = varargin{1};
+0044         n = <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a> (x, 1);
+0045         <span class="keyword">if</span> <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a> (z, 1) == n,
+0046             x = <a href="horzcat.html" class="code" title="function z = horzcat(x, y, varargin)">horzcat</a> (x, z);
+0047         <span class="keyword">elseif</span> isequal(<a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a> (z), [1 n]),
+0048             <span class="comment">% special case: we tolerate that in silence...</span>
+0049             x = <a href="horzcat.html" class="code" title="function z = horzcat(x, y, varargin)">horzcat</a> (x, z');
+0050         <span class="keyword">end</span>
+0051         opts_pos = 2;
 0052     <span class="keyword">end</span>
-0053     
-0054 <span class="keyword">end</span> <span class="comment">% if</span>
-0055 
-0056 <span class="keyword">end</span> <span class="comment">% function plot</span>
-0057 
-0058 <span class="comment">%!test % plot with x as a vector and z as a (univariate) dataframe</span>
-0059 <span class="comment">%! x = linspace(0, 2*pi, 30)';</span>
-0060 <span class="comment">%! z = stk_dataframe(sin(x));</span>
-0061 <span class="comment">%! figure; plot(x, z); close(gcf);</span>
-0062 
-0063 <span class="comment">%!test % plot with x as a vector and z as a (multivariate) dataframe</span>
-0064 <span class="comment">%! x = linspace(0, 2*pi, 30)';</span>
-0065 <span class="comment">%! z = stk_dataframe([sin(x) cos(x)], {'sin' 'cos'});</span>
-0066 <span class="comment">%! figure; plot(x, z); close(gcf);</span>
-0067 
-0068 <span class="comment">%!test % plot with x as a dataframe and z as a vector</span>
-0069 <span class="comment">%! x = stk_dataframe(linspace(0, 2*pi, 30)');</span>
-0070 <span class="comment">%! z = sin(double(x));</span>
-0071 <span class="comment">%! figure; plot(x, z); close(gcf);</span>
+0053 <span class="keyword">else</span>
+0054     <span class="keyword">if</span> <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a> (x, 2) &gt; 2,
+0055         warning (<span class="string">'Plotting the first two columns only.'</span>); <span class="comment">%#ok&lt;WNTAG&gt;</span>
+0056         <span class="comment">% TODO: implement scatter plot matrices</span>
+0057     <span class="keyword">end</span>
+0058     opts_pos = 1;
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="keyword">if</span> nargin &gt; opts_pos,
+0062     opts = varargin(opts_pos:end);
+0063 <span class="keyword">else</span>
+0064     opts = {};
+0065 <span class="keyword">end</span>
+0066 
+0067 xx = <a href="double.html" class="code" title="function xdata = double(x)">double</a> (x);
+0068 yy = xx(:, 2:end);
+0069 xx = xx(:, 1);
+0070 
+0071 nb_outputs = <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a> (yy, 2);
 0072 
-0073 <span class="comment">%!error % the first argument should have one and only one column</span>
-0074 <span class="comment">%! x = stk_dataframe(rand(10, 2));</span>
-0075 <span class="comment">%! z = stk_dataframe(rand(10, 1));</span>
-0076 <span class="comment">%! plot(x, z);</span></pre></div>
+0073 colnames = <a href="get.html" class="code" title="function value = get (x, propname)">get</a> (x, <span class="string">'colnames'</span>);
+0074 
+0075 <span class="keyword">if</span> ~ <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a> (colnames)
+0076     xlab = colnames{1};
+0077     ylab = colnames(2:end);
+0078 <span class="keyword">else</span>
+0079     xlab = <span class="string">''</span>;
+0080     <span class="keyword">if</span> nb_outputs == 1,
+0081         ylab = {<span class="string">''</span>};
+0082     <span class="keyword">else</span>
+0083         ylab = {};
+0084     <span class="keyword">end</span>
+0085 <span class="keyword">end</span>
+0086 
+0087 <a href="plot.html" class="code" title="function plot (x, varargin)">plot</a> (xx, yy, opts{:});
+0088 
+0089 xlabel (xlab, <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+0090 
+0091 <span class="keyword">if</span> nb_outputs == 1,
+0092     ylabel (ylab{1}, <span class="string">'FontWeight'</span>, <span class="string">'bold'</span>);
+0093 <span class="keyword">elseif</span> ~ <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a> (ylab)
+0094     legend (ylab{:});
+0095 <span class="keyword">end</span>
+0096 
+0097 <span class="keyword">end</span> <span class="comment">% function plot</span>
+0098 
+0099 <span class="comment">%!test % plot with x as a vector and z as a (univariate) dataframe</span>
+0100 <span class="comment">%! x = linspace(0, 2*pi, 30)';</span>
+0101 <span class="comment">%! z = stk_dataframe(sin(x));</span>
+0102 <span class="comment">%! figure; plot(x, z); close(gcf);</span>
+0103 
+0104 <span class="comment">%!test % plot with x as a vector and z as a (multivariate) dataframe</span>
+0105 <span class="comment">%! x = linspace(0, 2*pi, 30)';</span>
+0106 <span class="comment">%! z = stk_dataframe([sin(x) cos(x)], {'sin' 'cos'});</span>
+0107 <span class="comment">%! figure; plot(x, z); close(gcf);</span>
+0108 
+0109 <span class="comment">%!test % plot with x as a dataframe and z as a vector</span>
+0110 <span class="comment">%! x = stk_dataframe(linspace(0, 2*pi, 30)');</span>
+0111 <span class="comment">%! z = sin(double(x));</span>
+0112 <span class="comment">%! figure; plot(x, z); close(gcf);</span>
+0113 
+0114 <span class="comment">%!test</span>
+0115 <span class="comment">%! x = stk_dataframe (rand (10, 2));</span>
+0116 <span class="comment">%! figure; plot (x); close (gcf);</span>
+0117 
+0118 <span class="comment">%!test % same thing, but with more than two columns</span>
+0119 <span class="comment">%! x = stk_dataframe (rand (10, 4));</span>
+0120 <span class="comment">%! figure; plot (x, 'k.'); close (gcf);</span>
+0121 
+0122 <span class="comment">%!error % the first argument should have one and only one column</span>
+0123 <span class="comment">%! x = stk_dataframe(rand(10, 2));</span>
+0124 <span class="comment">%! z = stk_dataframe(rand(10, 1));</span>
+0125 <span class="comment">%! plot(x, z);</span></pre></div>
 <hr>
 
 <address>
