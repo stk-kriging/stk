@@ -1,3 +1,10 @@
+2013-09-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Preserve row names when removing rows from a dataframe.
+
+	* utils/@stk_dataframe/subsref.m: modified
+	* utils/@stk_dataframe/subsasgn.m: modified
+
 2013-09-07  Julien Bect  <julien.bect@supelec.fr>
 
 	Rename internal field 'vnames' to 'colnames' in @stk_dataframe.

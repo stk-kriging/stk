@@ -52,24 +52,24 @@ switch idx(1).type
                     'matrix-style indexing.'], 'IllegalIndexing');
                 
             else % ok, legal indexing
-                            
+                
                 val = double(val);
                 
                 if ~isempty(val)
-
+                    
                     x.data = subsasgn(x.data, idx, val);
                     
                     [n1, d1] = size(x.data);
-                    if (n1 > n) && ~isempty(x.rownames) 
+                    if (n1 > n) && ~ isempty (x.rownames)
                         x.rownames = vertcat(x.rownames, repmat({''}, n1 - n, 1));
                     end
-                    if (d1 > d) && ~isempty(x.colnames)
+                    if (d1 > d) && ~ isempty (x.colnames)
                         x.colnames = horzcat(x.colnames, repmat({''}, 1, d1 - d));
                     end
                     
                 else % assignment rhs is empty
                     
-                    I = idx(1).subs{1};                    
+                    I = idx(1).subs{1};
                     
                     if L > 1
                         J = idx(1).subs{2};
@@ -89,20 +89,27 @@ switch idx(1).type
                     elseif remove_columns
                         
                         x.data(:, J) = [];
-                        if ~isempty(x.colnames)
+                        if ~ isempty(x.colnames)
                             x.colnames(J) = [];
                         end
                         
                     else % remove_rows
                         
                         x.data(I, :) = [];
-                        if ~isempty(x.rownames),
+                        
+                        if isempty (x.rownames)
+                            nn1 = 1:n;  nn2 = nn1;  nn2(I) = [];
+                            if ~ isequal (nn1, nn2)
+                                x.rownames = cellfun (@num2str, ...
+                                    num2cell (nn2'), 'UniformOutput', false);
+                            end
+                        else
                             x.rownames(I) = [];
                         end
                         
                     end
                 end
-            end            
+            end
         end
         
     case '{}'
@@ -160,24 +167,26 @@ end % function subsasgn
 %!error data.toto = rand(3, 1);
 
 %!shared x
-%! x = stk_dataframe(reshape(1:12, 4, 3));
+%! x = stk_dataframe(reshape(1:12, 4, 3), {'u' 'v' 'w'});
 
 %!test
 %! x(:, 2) = [];
-%! assert (isequal(size(x), [4 2]))
-%! assert (isequal(double(x), [1 9; 2 10; 3 11; 4 12]))
+%! assert (isequal (size (x), [4 2]))
+%! assert (isequal (double (x), [1 9; 2 10; 3 11; 4 12]))
+%! assert (isequal (get (x, 'colnames'), {'u' 'w'}))
 
 %!test
 %! x(2, :) = [];
-%! assert (isequal(size(x), [3 2]))
-%! assert (isequal(double(x), [1 9; 3 11; 4 12]))
+%! assert (isequal (size (x), [3 2]))
+%! assert (isequal (double (x), [1 9; 3 11; 4 12]))
+%! assert (isequal (get (x, 'rownames'), {'1'; '3'; '4'}))
 
 %!test
 %! x.rownames = {'a'; 'b'; 'c'};
 %! x(2, :) = [];
-%! assert (isequal(size(x), [2 2]))
-%! assert (isequal(double(x), [1 9; 4 12]))
-%! assert (isequal(x.rownames, {'a'; 'c'}))
+%! assert (isequal (size (x), [2 2]))
+%! assert (isequal (double (x), [1 9; 4 12]))
+%! assert (isequal (x.rownames, {'a'; 'c'}))
 
 %!test
 %! x(1, 2) = 11;
