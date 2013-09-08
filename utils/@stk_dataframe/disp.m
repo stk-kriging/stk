@@ -37,7 +37,7 @@ function disp(x, max_width)
 
 if n == 0,
     
-    if isempty(x.vnames)
+    if isempty(x.colnames)
         
         if d == 1,
             fprintf('Empty stk_dataframe with 1 variable.\n');
@@ -49,13 +49,13 @@ if n == 0,
         
         if d == 1,
             fprintf('Empty stk_dataframe with 1 variable: ');
-            fprintf('%s\n', x.vnames{1});
+            fprintf('%s\n', x.colnames{1});
         else
             fprintf('Empty stk_dataframe with %d variables: ', d);
             for j = 1:(d-1),
-                fprintf('%s, ', x.vnames{j});
+                fprintf('%s, ', x.colnames{j});
             end
-            fprintf('%s\n', x.vnames{end});
+            fprintf('%s\n', x.colnames{end});
         end
         
     end
@@ -82,7 +82,7 @@ else
     nb_spaces_before = 1;
     nb_spaces_colsep = 2;
     
-    has_colnames = ~isempty(x.vnames);
+    has_colnames = ~isempty(x.colnames);
     nb_rows = n + has_colnames;
     
     str = repmat(' ', nb_rows, nb_spaces_before); %#ok<*AGROW>
@@ -115,7 +115,7 @@ else
             
         else
             
-            vn = x.vnames{j};
+            vn = x.colnames{j};
             Lxx = size(xx, 2);
             L = max(length(vn), Lxx);
             str = [str [sprintf('% *s', L, vn);  % variable name

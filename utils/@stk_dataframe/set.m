@@ -28,7 +28,7 @@
 
 function x = set (x, propname, value)
 
-icol = get_column_number (x.vnames, propname);
+icol = get_column_number (x.colnames, propname);
 
 switch icol
     
@@ -36,7 +36,7 @@ switch icol
         x.rownames = value;
         
     case -2 % 'colnames'
-        x.vnames = value;
+        x.colnames = value;
             
     case - 1 % set entire array
         if isequal (size(x.data), size(value))

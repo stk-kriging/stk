@@ -38,24 +38,51 @@ switch idx(1).type
             
         else % ok, only one level of indexing
             
-            d = size(x, 2);
-            L = length(idx(1).subs);
+            d = size (x, 2);
+            L = length (idx(1).subs);
             
-            if (d == 1) && ~((L == 1) || (L == 2))
+            if d == 1, % univariate dataframe
                 
-                stk_error(['Illegal indexing for a univariate stk_dataframe' ...
-                    'object.'], 'IllegalIndexing');
+                if L == 1,
+                    % linear indexing allowed for univariate dataframes
+                    I = idx(1).subs{1};
+                    J = 1;
+                else
+                    % general case: matrix-style indexing expected
+                    if L ~= 2,
+                        stk_error(['Illegal indexing for a univariate ' ...
+                            'stk_dataframe object.'], 'IllegalIndexing');
+                    else
+                        I = idx(1).subs{1};
+                        J = idx(1).subs{2};
+                    end
+                end
                 
-            elseif (d > 1) && (L ~= 2)
+            else % multivariate dataframe: matrix-style indexing expected
                 
-                stk_error(['multivariate stk_dataframe objects only support ' ...
-                    'matrix-style indexing.'], 'IllegalIndexing');
-                
-            else % ok, legal indexing
-                
-                t = subsref(x.data, idx);
+                if L ~= 2,
+                    stk_error(['multivariate stk_dataframe objects only ' ...
+                        'support matrix-style indexing.'], 'IllegalIndexing');
+                else
+                    I = idx(1).subs{1};
+                    J = idx(1).subs{2};
+                end
                 
             end
+            
+            c = get (x, 'colnames');
+            if ~ isempty (c),
+                c = c(J);
+            end
+            
+            r = get (x, 'rownames');
+            if ~ isempty (r),
+                r = r(I);
+            elseif ~ isequal (I, 1:length(I))
+                r = cellfun (@num2str, num2cell (I(:)), 'UniformOutput', false);
+            end
+            
+            t = stk_dataframe (x.data(I, J), c, r);
             
         end
         
@@ -114,13 +141,17 @@ end % function subsref
 %! data = set(data, 'colnames', {'x1', 'x2'});
 %! assert(isequal(data.a, u));
 
+%!test % select rows and columns
+%! x = stk_dataframe (reshape (1:15, 5, 3), {'u' 'v' 'w'});
+%! assert (isequal (x([3 5], 2), stk_dataframe ([8; 10], {'v'}, {'3'; '5'})));
+
 %--- tests with a univariate dataframe ----------------------------------------
 
 %!shared u data
 %! u = rand(3, 1); data = stk_dataframe(u, {'x'});
 
 %!assert (isequal (data.x, u))
-%!assert (isequal (double(data), u))
-%!assert (isequal (data(2), u(2)))
-%!assert (isequal (data(3, 1), u(3)))
+%!assert (isequal (double (data),       u))
+%!assert (isequal (double (data(2)),    u(2)))
+%!assert (isequal (double (data(3, 1)), u(3)))
 %!error t = data(1, 1, 1);    % too many indices

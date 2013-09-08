@@ -33,9 +33,9 @@ if nargin > 3,
 end
 
 if nargin == 0  % default constructor
-    x = struct('data', zeros(0, 1), 'vnames', {{}}, 'rownames', {{}});    
+    x = struct('data', zeros(0, 1), 'colnames', {{}}, 'rownames', {{}});    
 else    
-    x = struct('data', x0, 'vnames', {{}}, 'rownames', {{}});
+    x = struct('data', x0, 'colnames', {{}}, 'rownames', {{}});
 end   
 
 x = class(x, 'stk_dataframe');

@@ -57,7 +57,7 @@
 
 %!test
 %! x = stk_sampling_vdc_rr2(2000, 7);
-%! y = x(1998:2000, :)
+%! y = double (x(1998:2000, :));
 %! yref = [0.849786281294525; 0.085080398941584; 0.555668634235701];
 %! assert(stk_isequal_tolrel(y, yref, 1e-13));
    
