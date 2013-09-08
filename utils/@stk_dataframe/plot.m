@@ -77,7 +77,11 @@ if ~ isempty (colnames)
     ylab = colnames(2:end);
 else
     xlab = '';
-    ylab = repmat ({''}, 1, nb_outputs);
+    if nb_outputs == 1,
+        ylab = {''};
+    else
+        ylab = {};
+    end
 end
 
 plot (xx, yy, opts{:});
