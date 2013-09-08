@@ -1,5 +1,9 @@
 2013-09-08  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a bug with y-labels (empty legend) in @stk_dataframe/plot.
+
+	* utils/@stk_dataframe/plot.m: modified
+
 	Preserve row names when removing rows from a dataframe.
 
 	* utils/@stk_dataframe/subsref.m: modified
