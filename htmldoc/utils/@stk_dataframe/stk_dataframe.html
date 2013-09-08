@@ -36,7 +36,7 @@ This function calls:
 <li><a href="end.html" class="code" title="function idx = end(x, k, nb_indices)">end</a>	END implements the the 'end' keyword for indexing</li><li><a href="set.html" class="code" title="function x = set (x, propname, value)">set</a>	SET [overloaded base function]</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../octave-sombrero.png)">
-<li><a href="bsxfun.html" class="code" title="function y = bsxfun(F, x1, x2)">bsxfun</a>	BSXFUN [overloaded base function]</li><li><a href="ctranspose.html" class="code" title="function y = ctranspose(x)">ctranspose</a>	CTRANSPOSE [overloaded base function]</li><li><a href="horzcat.html" class="code" title="function z = horzcat(x, y, varargin)">horzcat</a>	HORZCAT [overloaded base function]</li><li><a href="transpose.html" class="code" title="function y = transpose(x)">transpose</a>	TRANSPOSE [overloaded base function]</li><li><a href="vertcat.html" class="code" title="function z = vertcat(x, y, varargin)">vertcat</a>	VERTCAT [overloaded base function]</li></ul>
+<li><a href="bsxfun.html" class="code" title="function y = bsxfun(F, x1, x2)">bsxfun</a>	BSXFUN [overloaded base function]</li><li><a href="ctranspose.html" class="code" title="function y = ctranspose(x)">ctranspose</a>	CTRANSPOSE [overloaded base function]</li><li><a href="horzcat.html" class="code" title="function z = horzcat(x, y, varargin)">horzcat</a>	HORZCAT [overloaded base function]</li><li><a href="plot.html" class="code" title="function plot (x, varargin)">plot</a>	PLOT [overloaded base function]</li><li><a href="subsref.html" class="code" title="function t = subsref(x, idx)">subsref</a>	SUBSREF [overloaded base function]</li><li><a href="transpose.html" class="code" title="function y = transpose(x)">transpose</a>	TRANSPOSE [overloaded base function]</li><li><a href="vertcat.html" class="code" title="function z = vertcat(x, y, varargin)">vertcat</a>	VERTCAT [overloaded base function]</li></ul>
 <!-- crossreference -->
 
 
@@ -77,9 +77,9 @@ This function is called by:
 0033 <span class="keyword">end</span>
 0034 
 0035 <span class="keyword">if</span> nargin == 0  <span class="comment">% default constructor</span>
-0036     x = struct(<span class="string">'data'</span>, zeros(0, 1), <span class="string">'vnames'</span>, {{}}, <span class="string">'rownames'</span>, {{}});    
+0036     x = struct(<span class="string">'data'</span>, zeros(0, 1), <span class="string">'colnames'</span>, {{}}, <span class="string">'rownames'</span>, {{}});    
 0037 <span class="keyword">else</span>    
-0038     x = struct(<span class="string">'data'</span>, x0, <span class="string">'vnames'</span>, {{}}, <span class="string">'rownames'</span>, {{}});
+0038     x = struct(<span class="string">'data'</span>, x0, <span class="string">'colnames'</span>, {{}}, <span class="string">'rownames'</span>, {{}});
 0039 <span class="keyword">end</span>   
 0040 
 0041 x = class(x, <span class="string">'stk_dataframe'</span>);

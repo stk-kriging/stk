@@ -86,7 +86,7 @@ This function is called by:
 0037 
 0038 <span class="keyword">if</span> n == 0,
 0039     
-0040     <span class="keyword">if</span> <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>(x.vnames)
+0040     <span class="keyword">if</span> <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>(x.colnames)
 0041         
 0042         <span class="keyword">if</span> d == 1,
 0043             fprintf(<span class="string">'Empty stk_dataframe with 1 variable.\n'</span>);
@@ -98,13 +98,13 @@ This function is called by:
 0049         
 0050         <span class="keyword">if</span> d == 1,
 0051             fprintf(<span class="string">'Empty stk_dataframe with 1 variable: '</span>);
-0052             fprintf(<span class="string">'%s\n'</span>, x.vnames{1});
+0052             fprintf(<span class="string">'%s\n'</span>, x.colnames{1});
 0053         <span class="keyword">else</span>
 0054             fprintf(<span class="string">'Empty stk_dataframe with %d variables: '</span>, d);
 0055             <span class="keyword">for</span> j = 1:(d-1),
-0056                 fprintf(<span class="string">'%s, '</span>, x.vnames{j});
+0056                 fprintf(<span class="string">'%s, '</span>, x.colnames{j});
 0057             <span class="keyword">end</span>
-0058             fprintf(<span class="string">'%s\n'</span>, x.vnames{end});
+0058             fprintf(<span class="string">'%s\n'</span>, x.colnames{end});
 0059         <span class="keyword">end</span>
 0060         
 0061     <span class="keyword">end</span>
@@ -131,7 +131,7 @@ This function is called by:
 0082     nb_spaces_before = 1;
 0083     nb_spaces_colsep = 2;
 0084     
-0085     has_colnames = ~<a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>(x.vnames);
+0085     has_colnames = ~<a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>(x.colnames);
 0086     nb_rows = n + has_colnames;
 0087     
 0088     str = repmat(<span class="string">' '</span>, nb_rows, nb_spaces_before); <span class="comment">%#ok&lt;*AGROW&gt;</span>
@@ -164,7 +164,7 @@ This function is called by:
 0115             
 0116         <span class="keyword">else</span>
 0117             
-0118             vn = x.vnames{j};
+0118             vn = x.colnames{j};
 0119             Lxx = <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(xx, 2);
 0120             L = <a href="max.html" class="code" title="function z = max(x, y, dim)">max</a>(<a href="length.html" class="code" title="function N = length(x) %#ok<STOUT>">length</a>(vn), Lxx);
 0121             str = [str [sprintf(<span class="string">'% *s'</span>, L, vn);  <span class="comment">% variable name</span>

@@ -36,7 +36,7 @@ This function calls:
 <li><a href="end.html" class="code" title="function idx = end(x, k, nb_indices)">end</a>	END implements the the 'end' keyword for indexing</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../octave-sombrero.png)">
-<li><a href="ctranspose.html" class="code" title="function y = ctranspose(x)">ctranspose</a>	CTRANSPOSE [overloaded base function]</li><li><a href="disp.html" class="code" title="function disp(x, max_width)">disp</a>	DISP [overloaded base function]</li><li><a href="horzcat.html" class="code" title="function z = horzcat(x, y, varargin)">horzcat</a>	HORZCAT [overloaded base function]</li><li><a href="subsasgn.html" class="code" title="function x = subsasgn(x, idx, val)">subsasgn</a>	SUBSASGN [overloaded base function]</li><li><a href="subsref.html" class="code" title="function t = subsref(x, idx)">subsref</a>	SUBSREF [overloaded base function]</li><li><a href="transpose.html" class="code" title="function y = transpose(x)">transpose</a>	TRANSPOSE [overloaded base function]</li><li><a href="vertcat.html" class="code" title="function z = vertcat(x, y, varargin)">vertcat</a>	VERTCAT [overloaded base function]</li></ul>
+<li><a href="ctranspose.html" class="code" title="function y = ctranspose(x)">ctranspose</a>	CTRANSPOSE [overloaded base function]</li><li><a href="disp.html" class="code" title="function disp(x, max_width)">disp</a>	DISP [overloaded base function]</li><li><a href="horzcat.html" class="code" title="function z = horzcat(x, y, varargin)">horzcat</a>	HORZCAT [overloaded base function]</li><li><a href="plot.html" class="code" title="function plot (x, varargin)">plot</a>	PLOT [overloaded base function]</li><li><a href="subsasgn.html" class="code" title="function x = subsasgn(x, idx, val)">subsasgn</a>	SUBSASGN [overloaded base function]</li><li><a href="subsref.html" class="code" title="function t = subsref(x, idx)">subsref</a>	SUBSREF [overloaded base function]</li><li><a href="transpose.html" class="code" title="function y = transpose(x)">transpose</a>	TRANSPOSE [overloaded base function]</li><li><a href="vertcat.html" class="code" title="function z = vertcat(x, y, varargin)">vertcat</a>	VERTCAT [overloaded base function]</li></ul>
 <!-- crossreference -->
 
 
@@ -72,7 +72,7 @@ This function is called by:
 0028 
 0029 <a name="_sub0" href="#_subfunctions" class="code">function value = get (x, propname)</a>
 0030 
-0031 icol = get_column_number (x.vnames, propname);
+0031 icol = get_column_number (x.colnames, propname);
 0032 
 0033 <span class="keyword">switch</span> icol
 0034     
@@ -80,7 +80,7 @@ This function is called by:
 0036         value = x.rownames;
 0037         
 0038     <span class="keyword">case</span> -2 <span class="comment">% 'colnames'</span>
-0039         value = x.vnames;
+0039         value = x.colnames;
 0040             
 0041     <span class="keyword">case</span> -1 <span class="comment">% get entire array</span>
 0042         value = x.data;

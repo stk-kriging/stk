@@ -123,70 +123,72 @@ This function is called by:
 0056    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
 0057 <span class="keyword">end</span>
 0058 
-0059 <span class="keyword">if</span> ischar(f),
-0060     zname = f;
-0061 <span class="keyword">else</span>
-0062     <span class="keyword">if</span> ~isa(f, <span class="string">'function_handle'</span>)
-0063         errmsg = <span class="string">'Incorrect type for argument ''f''.'</span>;
-0064         stk_error(errmsg, <span class="string">'IncorrectType'</span>);
-0065     <span class="keyword">else</span>
-0066         zname = func2str(f);
-0067     <span class="keyword">end</span>
-0068 <span class="keyword">end</span>
-0069     
-0070 <span class="keyword">if</span> nargin &lt; 3,
-0071     progress_msg = false;
-0072 <span class="keyword">else</span>
-0073     <span class="keyword">if</span> ~islogical(progress_msg),
-0074         errmsg = <span class="string">'Incorrect type for argument ''progress_msg''.'</span>;
-0075         stk_error(errmsg, <span class="string">'IncorrectType'</span>);
-0076     <span class="keyword">end</span>
-0077 <span class="keyword">end</span>
-0078 
-0079 [n, d] = size(x);
-0080 <span class="keyword">if</span> d == 0,
-0081     error(<span class="string">'zero-dimensional inputs are not allowed.'</span>);
-0082 <span class="keyword">end</span>
-0083 
-0084 <span class="keyword">if</span> n == 0, <span class="comment">% no input =&gt; no output</span>
-0085     
-0086     zdata = zeros(0, 1);
+0059 x = double (x);
+0060 
+0061 <span class="keyword">if</span> ischar(f),
+0062     zname = f;
+0063 <span class="keyword">else</span>
+0064     <span class="keyword">if</span> ~isa(f, <span class="string">'function_handle'</span>)
+0065         errmsg = <span class="string">'Incorrect type for argument ''f''.'</span>;
+0066         stk_error(errmsg, <span class="string">'IncorrectType'</span>);
+0067     <span class="keyword">else</span>
+0068         zname = func2str(f);
+0069     <span class="keyword">end</span>
+0070 <span class="keyword">end</span>
+0071     
+0072 <span class="keyword">if</span> nargin &lt; 3,
+0073     progress_msg = false;
+0074 <span class="keyword">else</span>
+0075     <span class="keyword">if</span> ~islogical(progress_msg),
+0076         errmsg = <span class="string">'Incorrect type for argument ''progress_msg''.'</span>;
+0077         stk_error(errmsg, <span class="string">'IncorrectType'</span>);
+0078     <span class="keyword">end</span>
+0079 <span class="keyword">end</span>
+0080 
+0081 [n, d] = size (x);
+0082 <span class="keyword">if</span> d == 0,
+0083     error(<span class="string">'zero-dimensional inputs are not allowed.'</span>);
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="keyword">if</span> n == 0, <span class="comment">% no input =&gt; no output</span>
 0087     
-0088 <span class="keyword">else</span> <span class="comment">% at least one input point</span>
+0088     zdata = zeros(0, 1);
 0089     
-0090     zdata = zeros(n, 1);
-0091     <span class="keyword">for</span> i = 1:n,
-0092         <span class="keyword">if</span> progress_msg, fprintf(<span class="string">'feval %d/%d... '</span>, i, n); <span class="keyword">end</span>
-0093         zdata(i) = feval(f, x(i,:));
-0094         <span class="keyword">if</span> progress_msg, fprintf(<span class="string">'done.\n'</span>); <span class="keyword">end</span>
-0095     <span class="keyword">end</span>
-0096     
-0097 <span class="keyword">end</span>
-0098 
-0099 z = stk_dataframe(zdata, {zname});
+0090 <span class="keyword">else</span> <span class="comment">% at least one input point</span>
+0091     
+0092     zdata = zeros(n, 1);
+0093     <span class="keyword">for</span> i = 1:n,
+0094         <span class="keyword">if</span> progress_msg, fprintf(<span class="string">'feval %d/%d... '</span>, i, n); <span class="keyword">end</span>
+0095         zdata(i) = feval(f, x(i,:));
+0096         <span class="keyword">if</span> progress_msg, fprintf(<span class="string">'done.\n'</span>); <span class="keyword">end</span>
+0097     <span class="keyword">end</span>
+0098     
+0099 <span class="keyword">end</span>
 0100 
-0101 <span class="keyword">end</span> <span class="comment">% function stk_feval</span>
+0101 z = stk_dataframe(zdata, {zname});
 0102 
-0103 
-0104 <span class="comment">%%%%%%%%%%%%%</span>
-0105 <span class="comment">%%% tests %%%</span>
+0103 <span class="keyword">end</span> <span class="comment">% function stk_feval</span>
+0104 
+0105 
 0106 <span class="comment">%%%%%%%%%%%%%</span>
-0107 
-0108 <span class="comment">%!shared f xt</span>
-0109 <span class="comment">%!  f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );</span>
-0110 <span class="comment">%!  xt = stk_sampling_regulargrid(20, 1, [0; 1]);</span>
-0111 
-0112 <span class="comment">%!error  yt = stk_feval();</span>
-0113 <span class="comment">%!error  yt = stk_feval(f);</span>
-0114 <span class="comment">%!test   yt = stk_feval(f, xt);</span>
-0115 <span class="comment">%!test   yt = stk_feval(f, xt, false);</span>
-0116 <span class="comment">%!error  yt = stk_feval(f, xt, false, pi^2);</span>
-0117 
-0118 <span class="comment">%!test</span>
-0119 <span class="comment">%!  N = 15;</span>
-0120 <span class="comment">%!  xt = stk_sampling_regulargrid(N, 1, [0; 1]);</span>
-0121 <span class="comment">%!  yt = stk_feval(f, xt);</span>
-0122 <span class="comment">%!  assert(isequal(size(yt), [N 1]));</span></pre></div>
+0107 <span class="comment">%%% tests %%%</span>
+0108 <span class="comment">%%%%%%%%%%%%%</span>
+0109 
+0110 <span class="comment">%!shared f xt</span>
+0111 <span class="comment">%!  f = @(x)( - (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));</span>
+0112 <span class="comment">%!  xt = stk_sampling_regulargrid (20, 1, [0; 1]);</span>
+0113 
+0114 <span class="comment">%!error  yt = stk_feval ();</span>
+0115 <span class="comment">%!error  yt = stk_feval (f);</span>
+0116 <span class="comment">%!test   yt = stk_feval (f, xt);</span>
+0117 <span class="comment">%!test   yt = stk_feval (f, xt, false);</span>
+0118 <span class="comment">%!error  yt = stk_feval (f, xt, false, pi^2);</span>
+0119 
+0120 <span class="comment">%!test</span>
+0121 <span class="comment">%!  N = 15;</span>
+0122 <span class="comment">%!  xt = stk_sampling_regulargrid (N, 1, [0; 1]);</span>
+0123 <span class="comment">%!  yt = stk_feval (f, xt);</span>
+0124 <span class="comment">%!  assert (isequal (size (yt), [N 1]));</span></pre></div>
 <hr>
 
 <address>

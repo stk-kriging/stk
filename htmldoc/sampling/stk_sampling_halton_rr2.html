@@ -130,7 +130,7 @@ This function is called by:
 0073 
 0074 <span class="comment">%!test</span>
 0075 <span class="comment">%! x = stk_sampling_halton_rr2(1000, 3);</span>
-0076 <span class="comment">%! y = x(end, :);</span>
+0076 <span class="comment">%! y = double (x(end, :));</span>
 0077 <span class="comment">%! yref = [0.9052734375 0.028349336991312 0.74848];</span>
 0078 <span class="comment">%! assert(stk_isequal_tolrel(y, yref, 1e-13));</span>
 0079 
