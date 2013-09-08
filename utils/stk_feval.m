@@ -56,6 +56,8 @@ if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
+x = double (x);
+
 if ischar(f),
     zname = f;
 else
@@ -76,7 +78,7 @@ else
     end
 end
 
-[n, d] = size(x);
+[n, d] = size (x);
 if d == 0,
     error('zero-dimensional inputs are not allowed.');
 end
@@ -106,17 +108,17 @@ end % function stk_feval
 %%%%%%%%%%%%%
 
 %!shared f xt
-%!  f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );
-%!  xt = stk_sampling_regulargrid(20, 1, [0; 1]);
+%!  f = @(x)( - (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
+%!  xt = stk_sampling_regulargrid (20, 1, [0; 1]);
 
-%!error  yt = stk_feval();
-%!error  yt = stk_feval(f);
-%!test   yt = stk_feval(f, xt);
-%!test   yt = stk_feval(f, xt, false);
-%!error  yt = stk_feval(f, xt, false, pi^2);
+%!error  yt = stk_feval ();
+%!error  yt = stk_feval (f);
+%!test   yt = stk_feval (f, xt);
+%!test   yt = stk_feval (f, xt, false);
+%!error  yt = stk_feval (f, xt, false, pi^2);
 
 %!test
 %!  N = 15;
-%!  xt = stk_sampling_regulargrid(N, 1, [0; 1]);
-%!  yt = stk_feval(f, xt);
-%!  assert(isequal(size(yt), [N 1]));
+%!  xt = stk_sampling_regulargrid (N, 1, [0; 1]);
+%!  yt = stk_feval (f, xt);
+%!  assert (isequal (size (yt), [N 1]));
