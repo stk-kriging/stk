@@ -46,6 +46,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function b = stk_is_lhs(x, n, dim, box)
+
 if nargin > 4,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end

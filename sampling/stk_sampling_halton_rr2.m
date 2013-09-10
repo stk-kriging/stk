@@ -58,10 +58,6 @@ x = stk_dataframe (xdata);
 end % function stk_sampling_halton_rr2
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %!error stk_sampling_halton_rr2()           % two inputs required
 %!error stk_sampling_halton_rr2(10)         % two inputs required
 %!error stk_sampling_halton_rr2(10, 3, -1)  % two inputs required
@@ -78,9 +74,7 @@ end % function stk_sampling_halton_rr2
 %! assert(stk_isequal_tolrel(y, yref, 1e-13));
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%% Comparison with Scilab+lowdisc %%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Comparison with Scilab+lowdisc
 
 % % Matlab/Octave STK test script
 % 

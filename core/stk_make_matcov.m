@@ -91,9 +91,6 @@ end
 
 end
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
 
 %!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
 %! n0 = 20; n1 = 10; d = 4;

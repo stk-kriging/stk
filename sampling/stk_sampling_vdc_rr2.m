@@ -42,10 +42,6 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %!error stk_sampling_vdc_rr2()           % two inputs required
 %!error stk_sampling_vdc_rr2(10)         % two inputs required
 %!error stk_sampling_vdc_rr2(10, 3, -1)  % two inputs required

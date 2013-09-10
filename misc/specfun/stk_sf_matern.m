@@ -108,10 +108,6 @@ end
 end % function
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %!shared nu, h, diff
 %! nu = 1.0; h = 1.0; diff = -1;
 
