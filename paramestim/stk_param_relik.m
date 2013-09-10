@@ -38,6 +38,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)
+
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end

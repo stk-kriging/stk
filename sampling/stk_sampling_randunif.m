@@ -39,6 +39,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_randunif(n, dim, box)
+
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
