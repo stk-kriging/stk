@@ -90,10 +90,6 @@ zsimc = stk_dataframe(zsim + lambda' * delta);
 end
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %!shared n m ni xi_ind lambda zsim zi
 %!
 %! n = 50; m = 5; ni = 10; xi_ind = 1:ni;

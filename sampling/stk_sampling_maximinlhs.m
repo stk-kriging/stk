@@ -111,10 +111,6 @@ x = (x - rand(size(x))) / n;
 end
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %%
 % Check error for incorrect number of input arguments
 

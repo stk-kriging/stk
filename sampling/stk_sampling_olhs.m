@@ -221,11 +221,6 @@ end
 end % function stk_sampling_olhs
 
 
-
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %%
 % Check error for incorrect number of input arguments
 

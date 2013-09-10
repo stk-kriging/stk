@@ -105,9 +105,6 @@ end
 
 end % function stk_isequal_tolabs
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
 
 %!shared r1, r2, a, b, tolabs
 %! a = 1.01; b = 1.02; tolabs = 0.1;

@@ -220,10 +220,6 @@ ublnv = log(empirical_variance) + TOLVAR;
 end % function get_default_bounds_lnv -----------------------------------------
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %!shared f, xi, zi, NI, param0, model
 %!
 %! f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );

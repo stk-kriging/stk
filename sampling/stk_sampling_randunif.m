@@ -66,10 +66,6 @@ x = stk_dataframe(xdata);
 end % function stk_sampling_randunif
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %%
 % Check error for incorrect number of input arguments
 

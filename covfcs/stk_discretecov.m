@@ -54,10 +54,6 @@ end
 end % function
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %!shared model, model2, x0
 %! n0 = 20; n1 = 10; dim = 4;
 %! x0 = stk_sampling_randunif (n0, dim);

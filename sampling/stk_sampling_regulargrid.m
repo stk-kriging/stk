@@ -79,10 +79,6 @@ x = stk_factorialdesign(levels);
 end % function stk_sampling_regulargrid
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %%
 % Check error for incorrect number of input arguments
 

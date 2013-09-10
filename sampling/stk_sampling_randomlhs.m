@@ -60,10 +60,6 @@ x = stk_sampling_maximinlhs(n, dim, box, niter);
 end % function stk_sampling_randomlhs
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %%
 % Check error for incorrect number of input arguments
 

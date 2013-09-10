@@ -71,10 +71,6 @@ zsim = stk_dataframe(zsim_data, zsim_varnames);
 end % function stk_generate_samplepaths
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %!shared model xt n nb_paths
 %!  dim = 1; n = 400; nb_paths = 5;
 %!  model = stk_model('stk_materncov32_iso', dim);
