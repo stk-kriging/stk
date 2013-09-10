@@ -74,6 +74,7 @@ y = repmat(a, n, 1) + x * diag(b);
 
 end % function stk_rescale
 
+
 %!shared x
 %!  x = rand(10, 4);
 %!  y = stk_rescale(x, [], []);

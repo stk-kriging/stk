@@ -97,9 +97,6 @@ end
 
 end % function stk_isequal_tolrel
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
 
 %!shared r1, r2, a, b, tolrel
 %! a = 1.01; b = 1.02; tolrel = 0.1;

@@ -101,9 +101,6 @@ end
 
 end % function subsref
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
 
 % IMPORTANT NOTE: [x; y; ...] fails to give the same result as vertcat(x, y, 
 % ...) in some releases of Octave. As a consequence, all tests must be written

@@ -98,10 +98,6 @@ end
 end
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %!shared model, x, n, d
 %! n = 15; d = 4;
 %! model = stk_model('stk_materncov_aniso', d);
