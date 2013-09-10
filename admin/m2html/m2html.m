@@ -1412,8 +1412,8 @@ function f = fullurl(varargin)
 function str = escapeblank(str)
 	%- Escape white spaces using '\'
 	
-	str = deblank(fliplr(deblank(fliplr(str))));
-	str = strrep(str,' ','\ ');
+	str = strtrim (str);
+	str = strrep (str,' ','\ ');
 
 %===============================================================================
 function str = entity(str)
