@@ -1,5 +1,9 @@
 2013-09-10  Julien Bect  <julien.bect@supelec.fr>
 
+	Do not display Octave-style unit tests in the HTML documentation.
+
+	* admin/m2html/m2html.m: modified
+
 	Clarify author & copyright information in README.
 
 	* README: modified
