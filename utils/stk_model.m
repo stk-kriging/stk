@@ -170,10 +170,6 @@ end % switch
 end % function stk_model_
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %!test model = stk_model();
 
 %!test model = stk_model('stk_materncov_iso');

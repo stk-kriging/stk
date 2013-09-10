@@ -58,10 +58,6 @@ end
 end % function
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %!shared ni, lognoisevariance, diff
 %!  ni = 5;
 %!  lognoisevariance = 0.0;
