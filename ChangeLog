@@ -1,3 +1,9 @@
+2013-09-10  Julien Bect  <julien.bect@supelec.fr>
+
+	Clarify author & copyright information in README.
+
+	* README: modified
+
 2013-09-08  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a bug with y-labels (empty legend) in @stk_dataframe/plot.
