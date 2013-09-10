@@ -1,5 +1,11 @@
 2013-09-10  Julien Bect  <julien.bect@supelec.fr>
 
+	Use strtrim instead of deblank + fliplr.
+
+	* misc/config/stk_version.m: modified (bugfix)
+	* admin/m2html/m2html.m: modified
+	* admin/m2html/private/mfileparse.m: modified
+
 	Do not display Octave-style unit tests in the HTML documentation.
 
 	* admin/m2html/m2html.m: modified
