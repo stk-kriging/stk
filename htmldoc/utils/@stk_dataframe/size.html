@@ -77,16 +77,15 @@ This function is called by:
 0033 
 0034 <span class="keyword">end</span> <span class="comment">% function size</span>
 0035 
-0036 <span class="comment">%!shared x</span>
-0037 <span class="comment">%! x = stk_dataframe([1 2; 3 4; 5 6]);</span>
-0038 <span class="comment">%!assert (isequal (size(x), [3 2]))</span>
-0039 <span class="comment">%!assert (numel(x) == 1)</span>
-0040 <span class="comment">%!assert (ndims(x) == 2)</span>
-0041 <span class="comment">%!test size(x); % force exploration of branch nargout == 0</span>
+0036 
+0037 
+0038 
+0039 
+0040 
+0041 
 0042 
 0043 <span class="comment">% Note: numel MUST return 1 and not prod(size(x))</span>
-0044 <span class="comment">% http://www.mathworks.fr/support/solutions/en/data/1-19EZ0/?1-19EZ0</span>
-0045</pre></div>
+0044 <span class="comment">% http://www.mathworks.fr/support/solutions/en/data/1-19EZ0/?1-19EZ0</span></pre></div>
 <hr>
 
 <address>

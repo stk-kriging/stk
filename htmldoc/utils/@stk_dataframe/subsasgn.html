@@ -171,101 +171,96 @@ This function is called by:
 0127 
 0128 <span class="keyword">end</span> <span class="comment">% function subsasgn</span>
 0129 
-0130 <span class="comment">%!shared x s t data</span>
-0131 <span class="comment">%! x = stk_dataframe(rand(3, 2));</span>
-0132 <span class="comment">%! s = {'a'; 'b'; 'c'};</span>
-0133 <span class="comment">%! t = {'xx' 'yy'};</span>
+0130 
+0131 
+0132 
+0133 
 0134 
-0135 <span class="comment">%!test</span>
-0136 <span class="comment">%! x.rownames = s;</span>
-0137 <span class="comment">%! assert (isequal(get(x, 'rownames'), s))</span>
+0135 
+0136 
+0137 
 0138 
-0139 <span class="comment">%!test</span>
-0140 <span class="comment">%! x.colnames = t;</span>
-0141 <span class="comment">%! assert (isequal(get(x, 'rownames'), s))</span>
-0142 <span class="comment">%! assert (isequal(get(x, 'colnames'), t))</span>
+0139 
+0140 
+0141 
+0142 
 0143 
-0144 <span class="comment">%!test</span>
-0145 <span class="comment">%! x.rownames{2} = 'dudule';</span>
-0146 <span class="comment">%! assert (isequal(get(x, 'rownames'), {'a'; 'dudule'; 'c'}))</span>
-0147 <span class="comment">%! assert (isequal(get(x, 'colnames'), t))</span>
+0144 
+0145 
+0146 
+0147 
 0148 
-0149 <span class="comment">%!test</span>
-0150 <span class="comment">%! x.colnames{1} = 'martha';</span>
-0151 <span class="comment">%! assert (isequal(get(x, 'rownames'), {'a'; 'dudule'; 'c'}))</span>
-0152 <span class="comment">%! assert (isequal(get(x, 'colnames'), {'martha' 'yy'}))</span>
+0149 
+0150 
+0151 
+0152 
 0153 
 0154 <span class="comment">% %!error x.colnames{1} = 'yy'</span>
 0155 <span class="comment">% %!error x.colnames = {'xx' 'xx'}</span>
 0156 
-0157 <span class="comment">%!test</span>
-0158 <span class="comment">%! data = stk_dataframe(zeros(3, 2), {'x1' 'x2'});</span>
-0159 <span class="comment">%! u = rand(3, 1); data.x2 = u;</span>
-0160 <span class="comment">%! assert (isequal(double(data), [zeros(3, 1) u]))</span>
+0157 
+0158 
+0159 
+0160 
 0161 
-0162 <span class="comment">%!test</span>
-0163 <span class="comment">%! data = stk_dataframe(zeros(3, 2), {'x1' 'x2'});</span>
-0164 <span class="comment">%! data.x2(3) = 27;</span>
-0165 <span class="comment">%! assert (isequal(double(data), [0 0; 0 0; 0 27]))</span>
+0162 
+0163 
+0164 
+0165 
 0166 
-0167 <span class="comment">%!error data.toto = rand(3, 1);</span>
+0167 
 0168 
-0169 <span class="comment">%!shared x</span>
-0170 <span class="comment">%! x = stk_dataframe(reshape(1:12, 4, 3), {'u' 'v' 'w'});</span>
+0169 
+0170 
 0171 
-0172 <span class="comment">%!test</span>
-0173 <span class="comment">%! x(:, 2) = [];</span>
-0174 <span class="comment">%! assert (isequal (size (x), [4 2]))</span>
-0175 <span class="comment">%! assert (isequal (double (x), [1 9; 2 10; 3 11; 4 12]))</span>
-0176 <span class="comment">%! assert (isequal (get (x, 'colnames'), {'u' 'w'}))</span>
+0172 
+0173 
+0174 
+0175 
+0176 
 0177 
-0178 <span class="comment">%!test</span>
-0179 <span class="comment">%! x(2, :) = [];</span>
-0180 <span class="comment">%! assert (isequal (size (x), [3 2]))</span>
-0181 <span class="comment">%! assert (isequal (double (x), [1 9; 3 11; 4 12]))</span>
-0182 <span class="comment">%! assert (isequal (get (x, 'rownames'), {'1'; '3'; '4'}))</span>
+0178 
+0179 
+0180 
+0181 
+0182 
 0183 
-0184 <span class="comment">%!test</span>
-0185 <span class="comment">%! x.rownames = {'a'; 'b'; 'c'};</span>
-0186 <span class="comment">%! x(2, :) = [];</span>
-0187 <span class="comment">%! assert (isequal (size (x), [2 2]))</span>
-0188 <span class="comment">%! assert (isequal (double (x), [1 9; 4 12]))</span>
-0189 <span class="comment">%! assert (isequal (x.rownames, {'a'; 'c'}))</span>
+0184 
+0185 
+0186 
+0187 
+0188 
+0189 
 0190 
-0191 <span class="comment">%!test</span>
-0192 <span class="comment">%! x(1, 2) = 11;</span>
-0193 <span class="comment">%! assert (isequal (size (x), [2 2]))</span>
-0194 <span class="comment">%! assert (isequal (double (x), [1 11; 4 12]))</span>
+0191 
+0192 
+0193 
+0194 
 0195 
-0196 <span class="comment">%!assert (isequal (double (x(:, :)), [1 11; 4 12]));</span>
+0196 
 0197 
-0198 <span class="comment">%!test</span>
-0199 <span class="comment">%! x(:, :) = [];</span>
-0200 <span class="comment">%! assert (isempty (x));</span>
+0198 
+0199 
+0200 
 0201 
-0202 <span class="comment">%!error x{1} = 2;</span>
-0203 <span class="comment">%!error x(1, 2) = [];</span>
-0204 <span class="comment">%!error x(1, 2).a = 3;</span>
-0205 <span class="comment">%!error x(3) = 2;</span>
+0202 
+0203 
+0204 
+0205 
 0206 
 0207 <span class="comment">%--- tests with a univariate dataframe ----------------------------------------</span>
 0208 
-0209 <span class="comment">%!shared x</span>
-0210 <span class="comment">%! x = stk_dataframe((1:5)');</span>
+0209 
+0210 
 0211 
 0212 <span class="comment">% linear indexing is allowed for univariate dataframes</span>
-0213 <span class="comment">%!test x(2) = 0;   assert (isequal (double (x), [1; 0; 3; 4; 5]));</span>
-0214 <span class="comment">%!test x(3) = [];  assert (isequal (double (x), [1; 0; 4; 5]));</span>
+0213 
+0214 
 0215 
 0216 <span class="comment">% matrix-style indexing also</span>
-0217 <span class="comment">%!test x(3, 1) = 0;  assert (isequal(double(x), [1; 0; 0; 5]));</span>
+0217 
 0218 
-0219 <span class="comment">% three indices is not allowed (even if the third is one...)</span>
-0220 <span class="comment">%!error x(3, 1, 1) = 297;</span>
-0221 
-0222 <span class="comment">%!test % create a new row and a new column through subsasgn()</span>
-0223 <span class="comment">%! x = stk_dataframe(rand(5, 2)); x(6, 3) = 7; disp(x)</span>
-0224 <span class="comment">%! assert(isequal(size(x), [6, 3]));</span></pre></div>
+0219 <span class="comment">% three indices is not allowed (even if the third is one...)</span></pre></div>
 <hr>
 
 <address>

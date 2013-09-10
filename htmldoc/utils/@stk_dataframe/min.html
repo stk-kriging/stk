@@ -93,20 +93,7 @@ This function is called by:
 0049     
 0050 <span class="keyword">end</span> <span class="comment">%--- that's all, folks --------------------------------------------------------------</span>
 0051 
-0052 <span class="keyword">end</span> <span class="comment">% function min</span>
-0053 
-0054 
-0055 <span class="comment">%!test  stk_test_dfbinaryop ('min', rand(7, 2), rand(7, 2));</span>
-0056 <span class="comment">%!test  stk_test_dfbinaryop ('min', rand(7, 2), pi);</span>
-0057 <span class="comment">%!error stk_test_dfbinaryop ('min', rand(7, 2), rand(7, 3));</span>
-0058 
-0059 <span class="comment">%!shared x1 df1</span>
-0060 <span class="comment">%! x1 = rand(9, 3);</span>
-0061 <span class="comment">%! df1 = stk_dataframe(x1, {'a', 'b', 'c'});</span>
-0062 <span class="comment">%!assert (isequal (min(df1),        min(x1)))</span>
-0063 <span class="comment">%!assert (isequal (min(df1, [], 1), min(x1)))</span>
-0064 <span class="comment">%!assert (isequal (min(df1, [], 2), min(x1, [], 2)))</span>
-0065 <span class="comment">%!error (min(df1, df1, 2))</span></pre></div>
+0052 <span class="keyword">end</span> <span class="comment">% function min</span></pre></div>
 <hr>
 
 <address>

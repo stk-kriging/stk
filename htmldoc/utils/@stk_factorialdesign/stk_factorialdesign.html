@@ -131,159 +131,154 @@ This function is called by:
 0087 
 0088 <span class="comment">%--- constructor --------------------------------------------------------------</span>
 0089 
-0090 <span class="comment">%!test % default constructor</span>
-0091 <span class="comment">%! x = stk_factorialdesign();</span>
-0092 <span class="comment">%! assert(strcmp(class(x), 'stk_factorialdesign'));</span>
+0090 
+0091 
+0092 
 0093 
-0094 <span class="comment">%!test % constructor with two factors + column names</span>
-0095 <span class="comment">%! x = stk_factorialdesign({[0 1], [1 2 3]}, {'a', 'b'})</span>
-0096 <span class="comment">%! assert( isequal(x.colnames, {'a', 'b'}) );</span>
-0097 <span class="comment">%! assert( isequal(get(x, 'colnames'), {'a', 'b'}) );</span>
+0094 
+0095 
+0096 
+0097 
 0098 
 0099 <span class="comment">% tests some incorrect values for 'levels'</span>
-0100 <span class="comment">%!error stk_factorialdesign('bouh');</span>
-0101 <span class="comment">%!error stk_factorialdesign(repmat({[0 1]}, 2, 2));</span>
+0100 
+0101 
 0102 
 0103 <span class="comment">% categorical variable not supported yet</span>
-0104 <span class="comment">%!error stk_factorialdesign({{'a' 'b'}});</span>
+0104 
 0105 
 0106 <span class="comment">%--- disp &amp; display -----------------------------------------------------------</span>
 0107 
-0108 <span class="comment">%!shared x fmt</span>
-0109 <span class="comment">%! try % doesn't work on old Octave versions, nevermind</span>
-0110 <span class="comment">%!   fmt = get (0, 'Format');</span>
-0111 <span class="comment">%! catch</span>
-0112 <span class="comment">%!   fmt = nan;</span>
-0113 <span class="comment">%! end</span>
-0114 <span class="comment">%! x = stk_sampling_regulargrid (3^2, 2);</span>
+0108 
+0109 
+0110 
+0111 
+0112 
+0113 
+0114 
 0115 
-0116 <span class="comment">%!test format rat;      disp (x);</span>
-0117 <span class="comment">%!test format long;     disp (x);</span>
-0118 <span class="comment">%!test format short;    disp (x);</span>
-0119 <span class="comment">%!     if ~isnan (fmt), set (0, 'Format', fmt); end</span>
+0116 
+0117 
+0118 
+0119 
 0120 
-0121 <span class="comment">%!test disp (stk_sampling_regulargrid (0^1, 1));</span>
-0122 <span class="comment">%!test disp (stk_sampling_regulargrid (0^2, 2));</span>
+0121 
+0122 
 0123 
-0124 <span class="comment">%!test display (x);</span>
+0124 
 0125 
 0126 <span class="comment">%--- size, length, end --------------------------------------------------------</span>
 0127 
-0128 <span class="comment">%!error length(stk_sampling_regulargrid(7^2, 2))  % not defined</span>
+0128 
 0129 
-0130 <span class="comment">%!shared x</span>
-0131 <span class="comment">%! x = stk_factorialdesign({[0 1], [0 1]});</span>
-0132 <span class="comment">%!assert (isequal (x(2:end, :), x(2:4, :)))</span>
-0133 <span class="comment">%!assert (isequal (x(2, 1:end), x(2, :)))</span>
-0134 <span class="comment">%!assert (isequal (x(2:end, 2:end), x(2:4, 2)))</span>
-0135 <span class="comment">%!error x(1:end, 1:end, 1:end)</span>
+0130 
+0131 
+0132 
+0133 
+0134 
+0135 
 0136 
 0137 <span class="comment">%--- cat, vertcat, horzcat ----------------------------------------------------</span>
 0138 
 0139 <span class="comment">% Note: the output is a plain stk_dataframe</span>
 0140 
-0141 <span class="comment">%!shared x y</span>
-0142 <span class="comment">%! x = stk_sampling_regulargrid(3^2, 2);</span>
-0143 <span class="comment">%! y = x;</span>
+0141 
+0142 
+0143 
 0144 
-0145 <span class="comment">%!test %%%% vercat</span>
-0146 <span class="comment">%! z = vertcat(x, y);</span>
-0147 <span class="comment">%! assert (strcmp(class(z), 'stk_dataframe'));</span>
-0148 <span class="comment">%! assert (isequal(double(z), [double(x); double(y)]));</span>
+0145 
+0146 
+0147 
+0148 
 0149 
-0150 <span class="comment">%!test %%%% same thing, using cat(1, ...)</span>
-0151 <span class="comment">%! z = cat(1, x, y);</span>
-0152 <span class="comment">%! assert (strcmp(class(z), 'stk_dataframe'));</span>
-0153 <span class="comment">%! assert (isequal(double(z), [double(x); double(y)]));</span>
+0150 
+0151 
+0152 
+0153 
 0154 
-0155 <span class="comment">%!test %%%% horzcat</span>
-0156 <span class="comment">%! y.colnames = {'y1' 'y2'}; z = horzcat(x, y);</span>
-0157 <span class="comment">%! assert (strcmp(class(z), 'stk_dataframe'));</span>
-0158 <span class="comment">%! assert (isequal(double(z), [double(x) double(y)]));</span>
+0155 
+0156 
+0157 
+0158 
 0159 
-0160 <span class="comment">%!test %%%% same thing, using cat(2, ...)</span>
-0161 <span class="comment">%! z = cat(2, x, y);</span>
-0162 <span class="comment">%! assert (strcmp(class(z), 'stk_dataframe'));</span>
-0163 <span class="comment">%! assert (isequal(double(z), [double(x) double(y)]));</span>
+0160 
+0161 
+0162 
+0163 
 0164 
-0165 <span class="comment">%!error cat(3, x, y)</span>
+0165 
 0166 
 0167 <span class="comment">%--- apply &amp; related functions ------------------------------------------------</span>
 0168 
-0169 <span class="comment">%!shared x t</span>
-0170 <span class="comment">%! x = stk_sampling_regulargrid(3^2, 2);</span>
-0171 <span class="comment">%! t = double(x);</span>
+0169 
+0170 
+0171 
 0172 
-0173 <span class="comment">%!assert (isequal(apply(x, 1, @sum), sum(t, 1)))</span>
-0174 <span class="comment">%!assert (isequal(apply(x, 2, @sum), sum(t, 2)))</span>
-0175 <span class="comment">%!error u = apply(x, 3, @sum);</span>
+0173 
+0174 
+0175 
 0176 
-0177 <span class="comment">%!assert (isequal(apply(x, 1, @min, []), min(t, [], 1)))</span>
-0178 <span class="comment">%!assert (isequal(apply(x, 2, @min, []), min(t, [], 2)))</span>
-0179 <span class="comment">%!error u = apply(x, 3, @min, []);</span>
+0177 
+0178 
+0179 
 0180 
-0181 <span class="comment">%!assert (isequal(min(x), min(t)))</span>
-0182 <span class="comment">%!assert (isequal(max(x), max(t)))</span>
-0183 <span class="comment">%!assert (isequal(std(x), std(t)))</span>
-0184 <span class="comment">%!assert (isequal(var(x), var(t)))</span>
-0185 <span class="comment">%!assert (isequal(sum(x), sum(t)))</span>
-0186 <span class="comment">%!assert (isequal(mean(x), mean(t)))</span>
-0187 <span class="comment">%!assert (isequal(mode(x), mode(t)))</span>
-0188 <span class="comment">%!assert (isequal(prod(x), prod(t)))</span>
-0189 <span class="comment">%!assert (isequal(median(x), median(t)))</span>
+0181 
+0182 
+0183 
+0184 
+0185 
+0186 
+0187 
+0188 
+0189 
 0190 
 0191 <span class="comment">%--- bsxfun &amp; related functions -----------------------------------------------</span>
 0192 
-0193 <span class="comment">%!shared x1 x2 x3 u1 u2 u3</span>
-0194 <span class="comment">%! x1 = stk_sampling_regulargrid([4 3], 2);  u1 = double(x1);</span>
-0195 <span class="comment">%! x2 = stk_sampling_regulargrid([3 4], 2);  u2 = double(x2);</span>
-0196 <span class="comment">%! x3 = x1 + 1;                              u3 = u1 + 1;</span>
+0193 
+0194 
+0195 
+0196 
 0197 
-0198 <span class="comment">%!test</span>
-0199 <span class="comment">%! z = bsxfun(@plus, x1, u2);</span>
-0200 <span class="comment">%! assert(isa(z, 'stk_dataframe') &amp;&amp; isequal(double(z), u1 + u2))</span>
+0198 
+0199 
+0200 
 0201 
-0202 <span class="comment">%!test</span>
-0203 <span class="comment">%! z = bsxfun(@plus, u1, x2);</span>
-0204 <span class="comment">%! assert(isa(z, 'double') &amp;&amp; isequal(z, u1 + u2))</span>
+0202 
+0203 
+0204 
 0205 
-0206 <span class="comment">%!test</span>
-0207 <span class="comment">%! z = bsxfun(@plus, x1, x2);</span>
-0208 <span class="comment">%! assert(isa(z, 'stk_dataframe') &amp;&amp; isequal(double(z), u1 + u2))</span>
+0206 
+0207 
+0208 
 0209 
-0210 <span class="comment">%!test  z = min(x1, x2);     assert(isequal(double(z), min(u1, u2)));</span>
-0211 <span class="comment">%!test  z = max(x1, x2);     assert(isequal(double(z), max(u1, u2)));</span>
-0212 <span class="comment">%!error z = min(x1, x2, 1);</span>
-0213 <span class="comment">%!error z = max(x1, x2, 1);</span>
+0210 
+0211 
+0212 
+0213 
 0214 
-0215 <span class="comment">%!test  z = x1 + x2;           assert(isequal(double(z), u1 + u2));</span>
-0216 <span class="comment">%!test  z = x1 - x2;           assert(isequal(double(z), u1 - u2));</span>
-0217 <span class="comment">%!test  z = x1 .* x2;          assert(isequal(double(z), u1 .* u2));</span>
-0218 <span class="comment">%!test  z = x3 .\ x2;          assert(isequal(double(z), u3 .\ u2));</span>
-0219 <span class="comment">%!test  z = x2 ./ x3;          assert(isequal(double(z), u2 ./ u3));</span>
-0220 <span class="comment">%!test  z = x3 .^ x2;          assert(isequal(double(z), u3 .^ u2));</span>
-0221 <span class="comment">%!test  z = realpow(x3, x2);   assert(isequal(double(z), realpow(u3, u2)));</span>
+0215 
+0216 
+0217 
+0218 
+0219 
+0220 
+0221 
 0222 
-0223 <span class="comment">%!test  z = (x1 == x2);        assert(isequal(double(z), (u1 == u2)));</span>
-0224 <span class="comment">%!test  z = (x1 ~= x2);        assert(isequal(double(z), (u1 ~= u2)));</span>
-0225 <span class="comment">%!test  z = (x1 &lt;= x2);        assert(isequal(double(z), (u1 &lt;= u2)));</span>
-0226 <span class="comment">%!test  z = (x1 &gt;= x2);        assert(isequal(double(z), (u1 &gt;= u2)));</span>
-0227 <span class="comment">%!test  z = (x1 &lt; x2);         assert(isequal(double(z), (u1 &lt; u2)));</span>
-0228 <span class="comment">%!test  z = (x1 &gt; x2);         assert(isequal(double(z), (u1 &gt; u2)));</span>
+0223 
+0224 
+0225 
+0226 
+0227 
+0228 
 0229 
-0230 <span class="comment">%!test  z = x1 &amp; x2;           assert(isequal(double(z), u1 &amp; u2));</span>
-0231 <span class="comment">%!test  z = x1 | x2;           assert(isequal(double(z), u1 | u2));</span>
-0232 <span class="comment">%!test  z = xor(x1, x2);       assert(isequal(double(z), xor(u1, u2)));</span>
+0230 
+0231 
+0232 
 0233 
 0234 <span class="comment">%--- transpose, ctranspose ----------------------------------------------------</span>
 0235 
 0236 <span class="comment">% Transposing a dataframe that represents a factorial design results in a</span>
-0237 <span class="comment">% dataframe that does NOT represent a factorial design</span>
-0238 
-0239 <span class="comment">%!shared x</span>
-0240 <span class="comment">%! x = stk_factorialdesign({[0 1], [0 1 2]});</span>
-0241 <span class="comment">%!assert (strcmp (class(x'), 'stk_dataframe'))</span>
-0242 <span class="comment">%!assert (strcmp (class(x.'), 'stk_dataframe'))</span></pre></div>
+0237 <span class="comment">% dataframe that does NOT represent a factorial design</span></pre></div>
 <hr>
 
 <address>

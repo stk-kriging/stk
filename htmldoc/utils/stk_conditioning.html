@@ -158,53 +158,7 @@ This function is called by:
 0087 delta = repmat(zi, 1, m) - zsim(xi_ind, :);
 0088 zsimc = stk_dataframe(zsim + lambda' * delta);
 0089 
-0090 <span class="keyword">end</span>
-0091 
-0092 
-0093 <span class="comment">%%%%%%%%%%%%%</span>
-0094 <span class="comment">%%% tests %%%</span>
-0095 <span class="comment">%%%%%%%%%%%%%</span>
-0096 
-0097 <span class="comment">%!shared n m ni xi_ind lambda zsim zi</span>
-0098 <span class="comment">%!</span>
-0099 <span class="comment">%! n = 50; m = 5; ni = 10; xi_ind = 1:ni;</span>
-0100 <span class="comment">%! lambda = 1/ni * ones(ni, n);                % prediction == averaging</span>
-0101 <span class="comment">%! zsim = ones(n, m);                          % const unconditioned samplepaths</span>
-0102 <span class="comment">%! zi = zeros(ni, 1);                          % conditioning by zeros</span>
-0103 
-0104 <span class="comment">%!error  zsimc = stk_conditioning();</span>
-0105 <span class="comment">%!error  zsimc = stk_conditioning(lambda);</span>
-0106 <span class="comment">%!error  zsimc = stk_conditioning(lambda, zi);</span>
-0107 <span class="comment">%!test   zsimc = stk_conditioning(lambda, zi, zsim);</span>
-0108 <span class="comment">%!test   zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);</span>
-0109 <span class="comment">%!error  zsimc = stk_conditioning(lambda, zi, zsim, xi_ind, pi^2);</span>
-0110 
-0111 <span class="comment">%!test</span>
-0112 <span class="comment">%! zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);</span>
-0113 <span class="comment">%! assert(stk_isequal_tolabs(double(zsimc), zeros(n, m)));</span>
-0114 
-0115 <span class="comment">%!test</span>
-0116 <span class="comment">%! zi = 2 * ones(ni, 1);          % conditioning by twos</span>
-0117 <span class="comment">%! zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);</span>
-0118 <span class="comment">%! assert(stk_isequal_tolabs(double(zsimc), 2 * ones(n, m)));</span>
-0119 
-0120 <span class="comment">%!test</span>
-0121 <span class="comment">%!</span>
-0122 <span class="comment">%! DIM = 1; nt = 400;</span>
-0123 <span class="comment">%! xt = stk_sampling_regulargrid(nt, DIM, [-1.0; 1.0]);</span>
-0124 <span class="comment">%!</span>
-0125 <span class="comment">%! NI = 6; xi_ind  = [1 20 90 200 300 350];</span>
-0126 <span class="comment">%! xi = xt(xi_ind, 1);</span>
-0127 <span class="comment">%! zi = (1:NI)';  % linear response ;-)</span>
-0128 <span class="comment">%!</span>
-0129 <span class="comment">%! % Carry out the kriging prediction at points xt</span>
-0130 <span class="comment">%! model = stk_model('stk_materncov_iso');</span>
-0131 <span class="comment">%! [ignore_zp, lambda] = stk_predict(model, xi, [], xt);</span>
-0132 <span class="comment">%!</span>
-0133 <span class="comment">%! % Generate (unconditional) sample paths according to the model</span>
-0134 <span class="comment">%! NB_PATHS = 10;</span>
-0135 <span class="comment">%! zsim = stk_generate_samplepaths(model, xt, NB_PATHS);</span>
-0136 <span class="comment">%! zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);</span></pre></div>
+0090 <span class="keyword">end</span></pre></div>
 <hr>
 
 <address>

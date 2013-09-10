@@ -138,35 +138,7 @@ This function is called by:
 0094     legend (ylab{:});
 0095 <span class="keyword">end</span>
 0096 
-0097 <span class="keyword">end</span> <span class="comment">% function plot</span>
-0098 
-0099 <span class="comment">%!test % plot with x as a vector and z as a (univariate) dataframe</span>
-0100 <span class="comment">%! x = linspace(0, 2*pi, 30)';</span>
-0101 <span class="comment">%! z = stk_dataframe(sin(x));</span>
-0102 <span class="comment">%! figure; plot(x, z); close(gcf);</span>
-0103 
-0104 <span class="comment">%!test % plot with x as a vector and z as a (multivariate) dataframe</span>
-0105 <span class="comment">%! x = linspace(0, 2*pi, 30)';</span>
-0106 <span class="comment">%! z = stk_dataframe([sin(x) cos(x)], {'sin' 'cos'});</span>
-0107 <span class="comment">%! figure; plot(x, z); close(gcf);</span>
-0108 
-0109 <span class="comment">%!test % plot with x as a dataframe and z as a vector</span>
-0110 <span class="comment">%! x = stk_dataframe(linspace(0, 2*pi, 30)');</span>
-0111 <span class="comment">%! z = sin(double(x));</span>
-0112 <span class="comment">%! figure; plot(x, z); close(gcf);</span>
-0113 
-0114 <span class="comment">%!test</span>
-0115 <span class="comment">%! x = stk_dataframe (rand (10, 2));</span>
-0116 <span class="comment">%! figure; plot (x); close (gcf);</span>
-0117 
-0118 <span class="comment">%!test % same thing, but with more than two columns</span>
-0119 <span class="comment">%! x = stk_dataframe (rand (10, 4));</span>
-0120 <span class="comment">%! figure; plot (x, 'k.'); close (gcf);</span>
-0121 
-0122 <span class="comment">%!error % the first argument should have one and only one column</span>
-0123 <span class="comment">%! x = stk_dataframe(rand(10, 2));</span>
-0124 <span class="comment">%! z = stk_dataframe(rand(10, 1));</span>
-0125 <span class="comment">%! plot(x, z);</span></pre></div>
+0097 <span class="keyword">end</span> <span class="comment">% function plot</span></pre></div>
 <hr>
 
 <address>

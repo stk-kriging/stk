@@ -74,25 +74,7 @@ This function is called by:
 0030 
 0031 xdata = <a href="double.html" class="code" title="function xdata = double(x)">double</a>(x.data);
 0032 
-0033 <span class="keyword">end</span> <span class="comment">% function double</span>
-0034 
-0035 <span class="comment">%!test</span>
-0036 <span class="comment">%! u = rand(4, 3);</span>
-0037 <span class="comment">%! x = stk_dataframe(u);</span>
-0038 <span class="comment">%! v = double(x);</span>
-0039 <span class="comment">%! assert (strcmp(class(v), 'double') &amp;&amp; isequal(v, u))</span>
-0040 
-0041 <span class="comment">%!test</span>
-0042 <span class="comment">%! u = (rand(4, 3) &lt; 0.5);</span>
-0043 <span class="comment">%! x = stk_dataframe(u);</span>
-0044 <span class="comment">%! v = double(x);</span>
-0045 <span class="comment">%! assert (strcmp(class(v), 'double') &amp;&amp; isequal(v, double(u)))</span>
-0046 
-0047 <span class="comment">%!test</span>
-0048 <span class="comment">%! u = uint8(rand(4, 3) * 5)</span>
-0049 <span class="comment">%! x = stk_dataframe(u);</span>
-0050 <span class="comment">%! v = double(x);</span>
-0051 <span class="comment">%! assert (strcmp(class(v), 'double') &amp;&amp; isequal(v, double(u)))</span></pre></div>
+0033 <span class="keyword">end</span> <span class="comment">% function double</span></pre></div>
 <hr>
 
 <address>

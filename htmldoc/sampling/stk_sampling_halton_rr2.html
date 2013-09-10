@@ -115,63 +115,57 @@ This function is called by:
 0058 <span class="keyword">end</span> <span class="comment">% function stk_sampling_halton_rr2</span>
 0059 
 0060 
-0061 <span class="comment">%%%%%%%%%%%%%</span>
-0062 <span class="comment">%%% tests %%%</span>
-0063 <span class="comment">%%%%%%%%%%%%%</span>
+0061 
+0062 
+0063 
 0064 
-0065 <span class="comment">%!error stk_sampling_halton_rr2()           % two inputs required</span>
-0066 <span class="comment">%!error stk_sampling_halton_rr2(10)         % two inputs required</span>
-0067 <span class="comment">%!error stk_sampling_halton_rr2(10, 3, -1)  % two inputs required</span>
+0065 
+0066 
+0067 
 0068 
-0069 <span class="comment">%!test</span>
-0070 <span class="comment">%! n = 300; d = 25;</span>
-0071 <span class="comment">%! x = stk_sampling_halton_rr2(n, d);</span>
-0072 <span class="comment">%! assert(isequal(size(x), [n d]))</span>
+0069 
+0070 
+0071 
+0072 
 0073 
-0074 <span class="comment">%!test</span>
-0075 <span class="comment">%! x = stk_sampling_halton_rr2(1000, 3);</span>
-0076 <span class="comment">%! y = double (x(end, :));</span>
-0077 <span class="comment">%! yref = [0.9052734375 0.028349336991312 0.74848];</span>
-0078 <span class="comment">%! assert(stk_isequal_tolrel(y, yref, 1e-13));</span>
-0079 
-0080 
-0081 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0082 <span class="comment">%%% Comparison with Scilab+lowdisc %%%</span>
-0083 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0084 
-0085 <span class="comment">% % Matlab/Octave STK test script</span>
-0086 <span class="comment">%</span>
-0087 <span class="comment">% NREP = 10;</span>
-0088 <span class="comment">% M = 1e5;</span>
-0089 <span class="comment">% DIM = 20;</span>
-0090 <span class="comment">%</span>
-0091 <span class="comment">% tic;</span>
-0092 <span class="comment">% for i = 1:NREP</span>
-0093 <span class="comment">%     x = stk_sampling_halton_rr2(M, DIM);</span>
-0094 <span class="comment">% end;</span>
-0095 <span class="comment">% t1 = toc/NREP;</span>
-0096 <span class="comment">% fprintf('time elapsed: %.2e seconds\n', t1);</span>
-0097 <span class="comment">%</span>
-0098 <span class="comment">% fprintf('%.15f\n', x(1:5, 2))</span>
-0099 
-0100 <span class="comment">% // Scilab lowdisc test script</span>
-0101 <span class="comment">%</span>
-0102 <span class="comment">% NREP = 10;</span>
-0103 <span class="comment">% M = 1e5;</span>
-0104 <span class="comment">% DIM = 20;</span>
-0105 <span class="comment">%</span>
-0106 <span class="comment">% tic();</span>
-0107 <span class="comment">% for i = 1:NREP,</span>
-0108 <span class="comment">%     rng = lowdisc_new(&quot;halton&quot;);</span>
-0109 <span class="comment">%     rng = lowdisc_configure(rng, &quot;-dimension&quot;, DIM);</span>
-0110 <span class="comment">%     rng = lowdisc_configure(rng, &quot;-scrambling&quot;, &quot;RR2&quot;);</span>
-0111 <span class="comment">%     rng = lowdisc_startup(rng);</span>
-0112 <span class="comment">%     [rng, x] = lowdisc_next(rng, M);</span>
-0113 <span class="comment">%     rng = lowdisc_destroy(rng);</span>
-0114 <span class="comment">% end</span>
-0115 <span class="comment">% t = toc() / NREP</span>
-0116 <span class="comment">%</span>
-0117 <span class="comment">% mprintf('%.15f\n', x(1:9, 2))</span></pre></div>
+0074 
+0075 
+0076 
+0077 <span class="comment">%% Comparison with Scilab+lowdisc</span>
+0078 
+0079 <span class="comment">% % Matlab/Octave STK test script</span>
+0080 <span class="comment">%</span>
+0081 <span class="comment">% NREP = 10;</span>
+0082 <span class="comment">% M = 1e5;</span>
+0083 <span class="comment">% DIM = 20;</span>
+0084 <span class="comment">%</span>
+0085 <span class="comment">% tic;</span>
+0086 <span class="comment">% for i = 1:NREP</span>
+0087 <span class="comment">%     x = stk_sampling_halton_rr2(M, DIM);</span>
+0088 <span class="comment">% end;</span>
+0089 <span class="comment">% t1 = toc/NREP;</span>
+0090 <span class="comment">% fprintf('time elapsed: %.2e seconds\n', t1);</span>
+0091 <span class="comment">%</span>
+0092 <span class="comment">% fprintf('%.15f\n', x(1:5, 2))</span>
+0093 
+0094 <span class="comment">% // Scilab lowdisc test script</span>
+0095 <span class="comment">%</span>
+0096 <span class="comment">% NREP = 10;</span>
+0097 <span class="comment">% M = 1e5;</span>
+0098 <span class="comment">% DIM = 20;</span>
+0099 <span class="comment">%</span>
+0100 <span class="comment">% tic();</span>
+0101 <span class="comment">% for i = 1:NREP,</span>
+0102 <span class="comment">%     rng = lowdisc_new(&quot;halton&quot;);</span>
+0103 <span class="comment">%     rng = lowdisc_configure(rng, &quot;-dimension&quot;, DIM);</span>
+0104 <span class="comment">%     rng = lowdisc_configure(rng, &quot;-scrambling&quot;, &quot;RR2&quot;);</span>
+0105 <span class="comment">%     rng = lowdisc_startup(rng);</span>
+0106 <span class="comment">%     [rng, x] = lowdisc_next(rng, M);</span>
+0107 <span class="comment">%     rng = lowdisc_destroy(rng);</span>
+0108 <span class="comment">% end</span>
+0109 <span class="comment">% t = toc() / NREP</span>
+0110 <span class="comment">%</span>
+0111 <span class="comment">% mprintf('%.15f\n', x(1:9, 2))</span></pre></div>
 <hr>
 
 <address>

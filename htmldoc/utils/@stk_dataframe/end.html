@@ -90,21 +90,14 @@ This function is called by:
 0046 
 0047 <span class="comment">%--- tests with a univariate dataframe ----------------------------------------</span>
 0048 
-0049 <span class="comment">%!shared x</span>
-0050 <span class="comment">%! x = stk_dataframe([1; 2; 3]);</span>
-0051 <span class="comment">%!assert (isequal (double (x(2:end, :)), [2; 3]))</span>
-0052 <span class="comment">%!assert (isequal (double (x(2:end)),    [2; 3]))</span>
-0053 <span class="comment">%!assert (isequal (double (x(2, 1:end)), 2))</span>
-0054 <span class="comment">%!assert (isequal (double (x(end)),      3))</span>
+0049 
+0050 
+0051 
+0052 
+0053 
+0054 
 0055 
-0056 <span class="comment">%--- tests with a bivariate dataframe -----------------------------------------</span>
-0057 
-0058 <span class="comment">%!shared x</span>
-0059 <span class="comment">%! x = stk_dataframe([1 2; 3 4; 5 6]);</span>
-0060 <span class="comment">%!assert (isequal (x(2:end, :), x(2:3, :)))</span>
-0061 <span class="comment">%!assert (isequal (x(2, 1:end), x(2, :)))</span>
-0062 <span class="comment">%!assert (isequal (x(2:end, 2:end), x(2:3, 2)))</span>
-0063 <span class="comment">%!error x(1:end, 1:end, 1:end)</span></pre></div>
+0056 <span class="comment">%--- tests with a bivariate dataframe -----------------------------------------</span></pre></div>
 <hr>
 
 <address>

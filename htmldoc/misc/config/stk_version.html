@@ -84,7 +84,7 @@ This function is called by:
 0040     <span class="keyword">end</span>
 0041     
 0042     <span class="comment">% what we're looking for</span>
-0043     t = <span class="string">'Version:   '</span>;
+0043     t = <span class="string">'Version: '</span>;
 0044     
 0045     <span class="keyword">while</span> 1
 0046         
@@ -98,7 +98,7 @@ This function is called by:
 0054         <span class="comment">% look for the pattern</span>
 0055         i = strfind (s, t);
 0056         <span class="keyword">if</span> ~isempty (i)
-0057             version_number = deblank (s((i + length(t)):end));
+0057             version_number = strtrim (s((i + length(t)):end));
 0058             fclose (fid);
 0059             <span class="keyword">break</span>
 0060         <span class="keyword">end</span>

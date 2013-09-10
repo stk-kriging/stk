@@ -166,27 +166,7 @@ This function is called by:
 0105     y = stk_parallel_feval(@(t)(besselk(nu, t)), x, true, opts.min_block_size);
 0106 <span class="keyword">end</span>
 0107 
-0108 <span class="keyword">end</span> <span class="comment">% function</span>
-0109 
-0110 
-0111 <span class="comment">%%%%%%%%%%%%%</span>
-0112 <span class="comment">%%% tests %%%</span>
-0113 <span class="comment">%%%%%%%%%%%%%</span>
-0114 
-0115 <span class="comment">%!shared nu, h, diff</span>
-0116 <span class="comment">%! nu = 1.0; h = 1.0; diff = -1;</span>
-0117 
-0118 <span class="comment">%!error stk_sf_matern();</span>
-0119 <span class="comment">%!error stk_sf_matern(nu);</span>
-0120 <span class="comment">%!test  stk_sf_matern(nu, h);</span>
-0121 <span class="comment">%!test  stk_sf_matern(nu, h, diff);</span>
-0122 <span class="comment">%!error stk_sf_matern(nu, h, diff, pi);</span>
-0123 
-0124 <span class="comment">%!test %% h = 0.0 =&gt; correlation = 1.0</span>
-0125 <span class="comment">%! for nu = 0.1:0.2:5.0,</span>
-0126 <span class="comment">%!   x = stk_sf_matern(nu, 0.0);</span>
-0127 <span class="comment">%!   assert(stk_isequal_tolrel(x, 1.0, 1e-8));</span>
-0128 <span class="comment">%! end</span></pre></div>
+0108 <span class="keyword">end</span> <span class="comment">% function</span></pre></div>
 <hr>
 
 <address>

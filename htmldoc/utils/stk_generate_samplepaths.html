@@ -132,31 +132,7 @@ This function is called by:
 0068 zsim_varnames = arrayfun(@(i)(sprintf(<span class="string">'z%d'</span>, i)), 1:nb_paths, <span class="string">'UniformOutput'</span>, false);
 0069 zsim = stk_dataframe(zsim_data, zsim_varnames);
 0070 
-0071 <span class="keyword">end</span> <span class="comment">% function stk_generate_samplepaths</span>
-0072 
-0073 
-0074 <span class="comment">%%%%%%%%%%%%%</span>
-0075 <span class="comment">%%% tests %%%</span>
-0076 <span class="comment">%%%%%%%%%%%%%</span>
-0077 
-0078 <span class="comment">%!shared model xt n nb_paths</span>
-0079 <span class="comment">%!  dim = 1; n = 400; nb_paths = 5;</span>
-0080 <span class="comment">%!  model = stk_model('stk_materncov32_iso', dim);</span>
-0081 <span class="comment">%!  xt = stk_sampling_regulargrid(n, dim, [-1.0; 1.0]);</span>
-0082 
-0083 <span class="comment">%!error  zsim = stk_generate_samplepaths();</span>
-0084 <span class="comment">%!error  zsim = stk_generate_samplepaths(model);</span>
-0085 <span class="comment">%!test   zsim = stk_generate_samplepaths(model, xt);</span>
-0086 <span class="comment">%!test   zsim = stk_generate_samplepaths(model, xt, nb_paths);</span>
-0087 <span class="comment">%!error  zsim = stk_generate_samplepaths(model, xt, nb_paths, log(2));</span>
-0088 
-0089 <span class="comment">%!test</span>
-0090 <span class="comment">%!  zsim = stk_generate_samplepaths(model, xt);</span>
-0091 <span class="comment">%!  assert(isequal(size(zsim), [n, 1]));</span>
-0092 
-0093 <span class="comment">%!test</span>
-0094 <span class="comment">%!  zsim = stk_generate_samplepaths(model, xt, nb_paths);</span>
-0095 <span class="comment">%!  assert(isequal(size(zsim), [n, nb_paths]));</span></pre></div>
+0071 <span class="keyword">end</span> <span class="comment">% function stk_generate_samplepaths</span></pre></div>
 <hr>
 
 <address>

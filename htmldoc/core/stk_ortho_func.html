@@ -158,42 +158,7 @@ This function is called by:
 0095         
 0096 <span class="keyword">end</span>
 0097 
-0098 <span class="keyword">end</span>
-0099 
-0100 
-0101 <span class="comment">%%%%%%%%%%%%%</span>
-0102 <span class="comment">%%% tests %%%</span>
-0103 <span class="comment">%%%%%%%%%%%%%</span>
-0104 
-0105 <span class="comment">%!shared model, x, n, d</span>
-0106 <span class="comment">%! n = 15; d = 4;</span>
-0107 <span class="comment">%! model = stk_model('stk_materncov_aniso', d);</span>
-0108 <span class="comment">%! x = stk_sampling_randunif(n, d);</span>
-0109 
-0110 <span class="comment">%!error P = stk_ortho_func();</span>
-0111 <span class="comment">%!error P = stk_ortho_func(model);</span>
-0112 <span class="comment">%!test  P = stk_ortho_func(model, x);</span>
-0113 <span class="comment">%!error P = stk_ortho_func(model, x, pi);</span>
-0114 
-0115 <span class="comment">%!test</span>
-0116 <span class="comment">%! model.order = -1; P = stk_ortho_func(model, x);</span>
-0117 <span class="comment">%! assert(isequal(size(P), [n, 0]));</span>
-0118 
-0119 <span class="comment">%!test</span>
-0120 <span class="comment">%! model.order =  0; P = stk_ortho_func(model, x);</span>
-0121 <span class="comment">%! assert(isequal(size(P), [n, 1]));</span>
-0122 
-0123 <span class="comment">%!test</span>
-0124 <span class="comment">%! model.order =  1; P = stk_ortho_func(model, x);</span>
-0125 <span class="comment">%! assert(isequal(size(P), [n, d + 1]));</span>
-0126 
-0127 <span class="comment">%!test</span>
-0128 <span class="comment">%! model.order =  2; P = stk_ortho_func(model, x);</span>
-0129 <span class="comment">%! assert(isequal(size(P), [n, 1 + d * (d + 3) / 2]));</span>
-0130 
-0131 <span class="comment">%!error</span>
-0132 <span class="comment">%! model.order =  3; P = stk_ortho_func(model, x);</span>
-0133 <span class="comment">%! % model.order &gt; 2 is not allowed</span></pre></div>
+0098 <span class="keyword">end</span></pre></div>
 <hr>
 
 <address>

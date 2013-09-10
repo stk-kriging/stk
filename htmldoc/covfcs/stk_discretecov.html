@@ -95,44 +95,7 @@ This function is called by:
 0051     K = param.K(idx);
 0052 <span class="keyword">end</span>
 0053     
-0054 <span class="keyword">end</span> <span class="comment">% function</span>
-0055 
-0056 
-0057 <span class="comment">%%%%%%%%%%%%%</span>
-0058 <span class="comment">%%% tests %%%</span>
-0059 <span class="comment">%%%%%%%%%%%%%</span>
-0060 
-0061 <span class="comment">%!shared model, model2, x0</span>
-0062 <span class="comment">%! n0 = 20; n1 = 10; dim = 4;</span>
-0063 <span class="comment">%! x0 = stk_sampling_randunif (n0, dim);</span>
-0064 <span class="comment">%! x1 = stk_sampling_randunif (n1, dim);</span>
-0065 <span class="comment">%! model = stk_model ('stk_materncov_aniso', dim);</span>
-0066 <span class="comment">%! model.order = 1;</span>
-0067 
-0068 <span class="comment">%!test % without noise, pairwise = false</span>
-0069 <span class="comment">%! if isfield (model, 'lognoisevariance')</span>
-0070 <span class="comment">%!   model = rmfield (model, 'lognoisevariance');</span>
-0071 <span class="comment">%! end</span>
-0072 <span class="comment">%! model2 = stk_model ('stk_discretecov', model, x0);</span>
-0073 <span class="comment">%! idx = [1 4 9];</span>
-0074 <span class="comment">%! [K1, P1] = stk_make_matcov (model,  x0(idx, :));</span>
-0075 <span class="comment">%! [K2, P2] = stk_make_matcov (model2, idx');</span>
-0076 <span class="comment">%! assert (stk_isequal_tolrel (K1, K2));</span>
-0077 <span class="comment">%! assert (stk_isequal_tolrel (P1, P2));</span>
-0078 
-0079 <span class="comment">%!test % without noise, pairwise = true</span>
-0080 <span class="comment">%! K1 = stk_make_matcov (model,  x0([2 5 6], :), [], true);</span>
-0081 <span class="comment">%! K2 = stk_make_matcov (model2, [2 5 6]', [], true);</span>
-0082 <span class="comment">%! assert (stk_isequal_tolrel (K1, K2));</span>
-0083 
-0084 <span class="comment">%!test % with noise, pairwise = false</span>
-0085 <span class="comment">%! model.lognoisevariance = log (0.01);</span>
-0086 <span class="comment">%! model2 = stk_model ('stk_discretecov', model, x0);</span>
-0087 <span class="comment">%! idx = [1 4 9];</span>
-0088 <span class="comment">%! [K1, P1] = stk_make_matcov (model,  x0(idx, :));</span>
-0089 <span class="comment">%! [K2, P2] = stk_make_matcov (model2, idx');</span>
-0090 <span class="comment">%! assert (stk_isequal_tolrel (K1, K2));</span>
-0091 <span class="comment">%! assert (stk_isequal_tolrel (P1, P2));</span></pre></div>
+0054 <span class="keyword">end</span> <span class="comment">% function</span></pre></div>
 <hr>
 
 <address>

@@ -100,25 +100,21 @@ This function is called by:
 0042 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
 0043 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 0044 
-0045 <span class="comment">%%%%%%%%%%%%%</span>
-0046 <span class="comment">%%% tests %%%</span>
-0047 <span class="comment">%%%%%%%%%%%%%</span>
+0045 
+0046 
+0047 
 0048 
-0049 <span class="comment">%!error stk_sampling_vdc_rr2()           % two inputs required</span>
-0050 <span class="comment">%!error stk_sampling_vdc_rr2(10)         % two inputs required</span>
-0051 <span class="comment">%!error stk_sampling_vdc_rr2(10, 3, -1)  % two inputs required</span>
+0049 
+0050 
+0051 
 0052 
-0053 <span class="comment">%!test</span>
-0054 <span class="comment">%! n = 300; j = 25;</span>
-0055 <span class="comment">%! x = stk_sampling_vdc_rr2(n, j);</span>
-0056 <span class="comment">%! assert(isequal(size(x), [n 1]))</span>
+0053 
+0054 
+0055 
+0056 
 0057 
-0058 <span class="comment">%!test</span>
-0059 <span class="comment">%! x = stk_sampling_vdc_rr2(2000, 7);</span>
-0060 <span class="comment">%! y = double (x(1998:2000, :));</span>
-0061 <span class="comment">%! yref = [0.849786281294525; 0.085080398941584; 0.555668634235701];</span>
-0062 <span class="comment">%! assert(stk_isequal_tolrel(y, yref, 1e-13));</span>
-0063</pre></div>
+0058 
+0059</pre></div>
 <hr>
 
 <address>

@@ -165,103 +165,78 @@ This function is called by:
 0105 <span class="comment">% TESTS %</span>
 0106 <span class="comment">%%%%%%%%%</span>
 0107 
-0108 <span class="comment">%!shared x, y, z, rx, ry, rz</span>
-0109 <span class="comment">%! x = rand(5, 2);  rx = rand(5, 2) + 1;</span>
-0110 <span class="comment">%! y = rand(6, 2);  ry = rand(6, 2) + 1;</span>
-0111 <span class="comment">%! z = rand(5, 3);  rz = rand(5, 3) + 1;</span>
+0108 
+0109 
+0110 
+0111 
 0112 
 0113 <span class="comment">%%</span>
 0114 <span class="comment">% Check that an error is raised when sizes are incompatible</span>
 0115 
-0116 <span class="comment">%!error Q = stk_gpquadform(x, ry, y, ry)</span>
-0117 <span class="comment">%!error Q = stk_gpquadform(x, rz, y, ry)</span>
-0118 <span class="comment">%!error Q = stk_gpquadform(x, rx, y, rx)</span>
-0119 <span class="comment">%!error Q = stk_gpquadform(x, rx, y, rz)</span>
-0120 <span class="comment">%!error Q = stk_gpquadform(x, rx, z, ry)</span>
+0116 
+0117 
+0118 
+0119 
+0120 
 0121 
 0122 <span class="comment">%%</span>
 0123 <span class="comment">% Check that &quot;.a&quot; structures are accepted</span>
 0124 
-0125 <span class="comment">%!test</span>
-0126 <span class="comment">%! Dxy1 = stk_gpquadform(x, y, rx, ry);</span>
-0127 <span class="comment">%! Dxy2 = stk_gpquadform(struct('a', x), struct('a', y), rx, ry);</span>
-0128 <span class="comment">%! assert(stk_isequal_tolabs(Dxy1, Dxy2));</span>
+0125 
+0126 
+0127 
+0128 
 0129 
 0130 <span class="comment">%%</span>
 0131 <span class="comment">% Tests with r = 1/sqrt(2)</span>
 0132 
-0133 <span class="comment">%!shared x, y, z, rx, ry, rz</span>
-0134 <span class="comment">%! x = zeros (11, 5);  rx = 1/sqrt(2) * ones (11, 5);</span>
-0135 <span class="comment">%! y = zeros (13, 5);  ry = 1/sqrt(2) * ones (13, 5);</span>
-0136 <span class="comment">%! z = ones  ( 7, 5);  rz = 1/sqrt(2) * ones ( 7, 5);</span>
+0133 
+0134 
+0135 
+0136 
 0137 
-0138 <span class="comment">%!test</span>
-0139 <span class="comment">%! Qx = stk_gpquadform(x, [], rx);</span>
-0140 <span class="comment">%! assert(isequal(Qx, zeros(11)));</span>
+0138 
+0139 
+0140 
 0141 
-0142 <span class="comment">%!test</span>
-0143 <span class="comment">%! Qxx = stk_gpquadform(x, x, rx, rx);</span>
-0144 <span class="comment">%! assert(isequal(Qxx, zeros(11)));</span>
+0142 
+0143 
+0144 
 0145 
-0146 <span class="comment">%!test</span>
-0147 <span class="comment">%! Qxy = stk_gpquadform(x, y, rx, ry);</span>
-0148 <span class="comment">%! assert(isequal(Qxy, zeros(11, 13)));</span>
+0146 
+0147 
+0148 
 0149 
-0150 <span class="comment">%!test</span>
-0151 <span class="comment">%! Qzz = stk_gpquadform(z, [], rz);</span>
-0152 <span class="comment">%! assert(isequal(Qzz, zeros(7)));</span>
+0150 
+0151 
+0152 
 0153 
-0154 <span class="comment">%!test</span>
-0155 <span class="comment">%! Qxz = stk_gpquadform(x, z, rx, rz);</span>
-0156 <span class="comment">%! assert(stk_isequal_tolabs(Qxz, 5 * ones(11, 7)));</span>
+0154 
+0155 
+0156 
 0157 
 0158 <span class="comment">%%</span>
 0159 <span class="comment">% Tests with a random r</span>
 0160 
-0161 <span class="comment">%!test</span>
-0162 <span class="comment">%! x = randn(5, 3);  rx = 1 + rand(5, 3);</span>
-0163 <span class="comment">%! y = randn(5, 3);  ry = 1 + rand(5, 3);</span>
-0164 <span class="comment">%! Q1 = stk_gpquadform(x, y, rx, ry, true); % pairwise</span>
-0165 <span class="comment">%! Q2 = stk_gpquadform(x, y, rx, ry, false);</span>
-0166 <span class="comment">%! assert(isequal(size(Q1), [5 1]));</span>
-0167 <span class="comment">%! assert(isequal(size(Q2), [5 5]));</span>
-0168 <span class="comment">%! assert(stk_isequal_tolabs(Q1, diag(Q2)));</span>
+0161 
+0162 
+0163 
+0164 
+0165 
+0166 
+0167 
+0168 
 0169 
-0170 <span class="comment">%!test</span>
-0171 <span class="comment">%! x = randn(5, 3);  rx = 1 + rand(5, 3);</span>
-0172 <span class="comment">%! Q1 = stk_gpquadform(x, [], rx, [], true); % pairwise</span>
-0173 <span class="comment">%! assert(stk_isequal_tolabs(Q1, zeros(5, 1)));</span>
-0174 <span class="comment">%! Q1 = stk_gpquadform(x, x, rx, rx, true); % pairwise</span>
-0175 <span class="comment">%! assert(stk_isequal_tolabs(Q1, zeros(5, 1)));</span>
+0170 
+0171 
+0172 
+0173 
+0174 
+0175 
 0176 
 0177 
 0178 <span class="comment">%%</span>
-0179 <span class="comment">% Tests with r = 2</span>
-0180 
-0181 <span class="comment">%!shared x, y, z, rx, ry, rz</span>
-0182 <span class="comment">%! x = zeros (11, 5);  rx = 2 * ones (11, 5);</span>
-0183 <span class="comment">%! y = zeros (13, 5);  ry = 2 * ones (13, 5);</span>
-0184 <span class="comment">%! z = ones  ( 7, 5);  rz = 2 * ones ( 7, 5);</span>
-0185 
-0186 <span class="comment">%!test</span>
-0187 <span class="comment">%! Qx = stk_gpquadform(x, [], rx);</span>
-0188 <span class="comment">%! assert(isequal(Qx, zeros(11)));</span>
-0189 
-0190 <span class="comment">%!test</span>
-0191 <span class="comment">%! Qxx = stk_gpquadform(x, x, rx, rx);</span>
-0192 <span class="comment">%! assert(isequal(Qxx, zeros(11)));</span>
-0193 
-0194 <span class="comment">%!test</span>
-0195 <span class="comment">%! Qxy = stk_gpquadform(x, y, rx, ry);</span>
-0196 <span class="comment">%! assert(isequal(Qxy, zeros(11, 13)));</span>
-0197 
-0198 <span class="comment">%!test</span>
-0199 <span class="comment">%! Qzz = stk_gpquadform(z, [], rz);</span>
-0200 <span class="comment">%! assert(isequal(Qzz, zeros(7)));</span>
-0201 
-0202 <span class="comment">%!test</span>
-0203 <span class="comment">%! Qxz = stk_gpquadform(x, z, rx, rz);</span>
-0204 <span class="comment">%! assert(stk_isequal_tolabs(Qxz, 5/8 * ones(11, 7)));</span></pre></div>
+0179 <span class="comment">% Tests with r = 2</span></pre></div>
 <hr>
 
 <address>

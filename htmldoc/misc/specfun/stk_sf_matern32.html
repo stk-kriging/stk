@@ -128,38 +128,7 @@ This function is called by:
 0070         
 0071 <span class="keyword">end</span>
 0072 
-0073 <span class="keyword">end</span>
-0074 
-0075 
-0076 <span class="comment">%%%%%%%%%%%%%</span>
-0077 <span class="comment">%%% tests %%%</span>
-0078 <span class="comment">%%%%%%%%%%%%%</span>
-0079 
-0080 <span class="comment">%!shared h, diff</span>
-0081 <span class="comment">%! h = 1.0; diff = -1;</span>
-0082 
-0083 <span class="comment">%!error stk_sf_matern32();</span>
-0084 <span class="comment">%!test  stk_sf_matern32(h);</span>
-0085 <span class="comment">%!test  stk_sf_matern32(h, diff);</span>
-0086 <span class="comment">%!error stk_sf_matern32(h, diff, pi);</span>
-0087 
-0088 <span class="comment">%!test %% h = 0.0 =&gt; correlation = 1.0</span>
-0089 <span class="comment">%! x = stk_sf_matern32(0.0);</span>
-0090 <span class="comment">%! assert(stk_isequal_tolrel(x, 1.0, 1e-8));</span>
-0091 
-0092 <span class="comment">%!test %% consistency with stk_sf_matern: function values</span>
-0093 <span class="comment">%! for h = 0.1:0.1:2.0,</span>
-0094 <span class="comment">%!   x = stk_sf_matern(3/2, h);</span>
-0095 <span class="comment">%!   y = stk_sf_matern32(h);</span>
-0096 <span class="comment">%!   assert(stk_isequal_tolrel(x, y, 1e-8));</span>
-0097 <span class="comment">%! end</span>
-0098 
-0099 <span class="comment">%!test %% consistency with stk_sf_matern: derivatives</span>
-0100 <span class="comment">%! for h = 0.1:0.1:2.0,</span>
-0101 <span class="comment">%!   x = stk_sf_matern(3/2, h, 2);</span>
-0102 <span class="comment">%!   y = stk_sf_matern32(h, 1);</span>
-0103 <span class="comment">%!   assert(stk_isequal_tolrel(x, y, 1e-8));</span>
-0104 <span class="comment">%! end</span></pre></div>
+0073 <span class="keyword">end</span></pre></div>
 <hr>
 
 <address>

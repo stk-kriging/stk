@@ -132,48 +132,7 @@ This function is called by:
 0088 str = arrayfun(@(u)(sprintf(fmt, u)), x, <span class="string">'UniformOutput'</span>, false);
 0089 str = char(str{:});
 0090 
-0091 <span class="keyword">end</span> <span class="comment">% function stk_sprintf_colvect_fixedpoint</span>
-0092 
-0093 <span class="comment">%!shared x s</span>
-0094 <span class="comment">%! x = [1.2; 3.48];</span>
-0095 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 1);</span>
-0096 <span class="comment">%!assert (isequal(s, ['1'; '3']))</span>
-0097 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 2);</span>
-0098 <span class="comment">%!assert (isequal(s, ['1'; '3']))</span>
-0099 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 3);</span>
-0100 <span class="comment">%!assert (isequal(s, ['1.2'; '3.5']))</span>
-0101 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 4);</span>
-0102 <span class="comment">%!assert (isequal(s, ['1.20'; '3.48']))</span>
-0103 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 5);</span>
-0104 <span class="comment">%!assert (isequal(s, ['1.20'; '3.48']))</span>
-0105 
-0106 <span class="comment">%!shared x s</span>
-0107 <span class="comment">%! x = [1.2; -3.48];</span>
-0108 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 1);</span>
-0109 <span class="comment">%!assert (isequal(s, ['#'; '#']))</span>
-0110 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 2);</span>
-0111 <span class="comment">%!assert (isequal(s, [' 1'; '-3']))</span>
-0112 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 3);</span>
-0113 <span class="comment">%!assert (isequal(s, [' 1'; '-3']))</span>
-0114 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 4);</span>
-0115 <span class="comment">%!assert (isequal(s, [' 1.2'; '-3.5']))</span>
-0116 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 5);</span>
-0117 <span class="comment">%!assert (isequal(s, [' 1.20'; '-3.48']))</span>
-0118 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 6);</span>
-0119 <span class="comment">%!assert (isequal(s, [' 1.20'; '-3.48']))</span>
-0120 
-0121 <span class="comment">%!shared x s</span>
-0122 <span class="comment">%! x = [0.2; 0.48];</span>
-0123 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 1);</span>
-0124 <span class="comment">%!assert (isequal(s, ['0'; '0']))</span>
-0125 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 2);</span>
-0126 <span class="comment">%!assert (isequal(s, ['0'; '0']))</span>
-0127 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 3);</span>
-0128 <span class="comment">%!assert (isequal(s, ['0.2'; '0.5']))</span>
-0129 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 4);</span>
-0130 <span class="comment">%!assert (isequal(s, ['0.20'; '0.48']))</span>
-0131 <span class="comment">%!test s = stk_sprintf_colvect_fixedpoint(x, 5);</span>
-0132 <span class="comment">%!assert (isequal(s, ['0.20'; '0.48']))</span></pre></div>
+0091 <span class="keyword">end</span> <span class="comment">% function stk_sprintf_colvect_fixedpoint</span></pre></div>
 <hr>
 
 <address>
