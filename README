@@ -1,31 +1,55 @@
-          STK : a Small (Matlab/Octave) Toolbox for Kriging
-          =================================================
-
-o Copyright Notice
+README Copyright Notice
 
     Copyright (C) 2011-2013 SUPELEC
 
-    Version:   2.1-dev
+    Authors:   Julien Bect       <julien.bect@supelec.fr>
+               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
-    Authors:   Julien Bect        <julien.bect@supelec.fr>
-               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+README Copying Permission Statement
 
-    URL:       http://sourceforge.net/projects/kriging
+    This file is part of
 
-o Copying Permission Statement
+            STK: a Small (Matlab/Octave) Toolbox for Kriging
+               (http://sourceforge.net/projects/kriging)
 
-    The STK is free software:  you can redistribute it  and/or  modify it
-    under the terms of the GNU General Public License as published by the
-    Free Software Foundation,  either version 3  of the License,  or  (at
-    your option) any later version.
+    STK is free software: you can redistribute it and/or modify it under
+    the terms of the GNU General Public License as published by the Free
+    Software Foundation,  either version 3  of the License, or  (at your
+    option) any later version.
 
-    STK is distributed  in the hope  that it will be useful,  but WITHOUT
-    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-    FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-    for more details.
+    STK is distributed  in the hope that it will  be useful, but WITHOUT
+    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY
+    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public
+    License for more details.
 
-    You should  have received  a copy of the GNU  General  Public License
+    You should  have received a copy  of the GNU  General Public License
     along with STK.  If not, see <http://www.gnu.org/licenses/>.
+
+------------------------------------------------------------------------
+
+
+          STK : a Small (Matlab/Octave) Toolbox for Kriging
+          =================================================
+
+
+o General information
+
+    Version:      2.1-dev
+
+    Authors:      Julien Bect        <julien.bect@supelec.fr>
+                  Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+                  and others         (see AUTHORS file)
+
+    Maintainers:  Julien Bect        <julien.bect@supelec.fr>
+                  Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+
+    Copyright:    Large portions are Copyright (C) 2011-2013 SUPELEC.
+                  See individual copyright notices for more details.
+
+    License:      GNU General Public License, version 3 (GPLv3).
+                  See COPYING for the full license.
+
+    URL:          http://sourceforge.net/projects/kriging
 
 o Quick Start
 
