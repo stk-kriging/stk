@@ -1182,6 +1182,13 @@ for i=1:length(mdir)
 					tline = fgetl(fid2);
 					if ~ischar(tline), break, end
 					myline = '';
+                    
+                    % ignore Octave-style unit tests
+                    if ((length(tline) >= 2) && strcmp(tline(1:2), '%!')) || ...
+                            ((length(tline) >= 3) && strcmp(tline(1:3), '% !'))
+                        tline = '';
+                    end                                        
+                
 					splitc = splitcode(entity(tline));
 					for k=1:length(splitc)
 						if isempty(splitc{k})
@@ -1258,7 +1265,20 @@ for i=1:length(mdir)
 					end
 					matlabsource = [matlabsource sprintf(tpl_mfile_line,it,myline)];
 					it = it + 1;
-				end
+                end
+                
+                % remove extra empty lines at the end
+                while 1
+                    s = sprintf (tpl_mfile_line, it - 1, '');
+                    n2 = length (matlabsource);
+                    n1 = n2 - length(s) + 1;
+                    if ~ strcmp (matlabsource (n1:n2), s)
+                        break;
+                    end
+                    matlabsource (n1:n2) = [];
+                    it = it - 1;
+                end
+                
                 nblinetot = nblinetot + it - 1;
 				tpl = set(tpl,'var','SOURCECODE',...
 						  horztab(matlabsource,options.tabs));
