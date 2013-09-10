@@ -213,89 +213,72 @@ This function is called by:
 0119 <span class="comment">%%</span>
 0120 <span class="comment">% Check that both double-precision matrices and stk_dataframe objects are accepted</span>
 0121 
-0122 <span class="comment">%!test %%% exact</span>
-0123 <span class="comment">%! d = 3; x = rand(7, d); box = repmat([0; 1], 1, d);</span>
-0124 <span class="comment">%! fd1 = stk_filldist(x, box);</span>
-0125 <span class="comment">%! fd2 = stk_filldist(stk_dataframe(x), stk_dataframe(box));</span>
-0126 <span class="comment">%! assert(stk_isequal_tolabs(fd1, fd2));</span>
+0122 
+0123 
+0124 
+0125 
+0126 
 0127 
-0128 <span class="comment">%!test %%% discretized</span>
-0129 <span class="comment">%! d = 3; x = rand(7, d); y = rand(20, d);</span>
-0130 <span class="comment">%! fd1 = stk_filldist(x, y);</span>
-0131 <span class="comment">%! fd2 = stk_filldist(stk_dataframe(x), stk_dataframe(y));</span>
-0132 <span class="comment">%! assert(stk_isequal_tolabs(fd1, fd2));</span>
+0128 
+0129 
+0130 
+0131 
+0132 
 0133 
 0134 <span class="comment">%%</span>
 0135 <span class="comment">% fd = 0 if X = Y (discretized filldist)</span>
 0136 
-0137 <span class="comment">%!test</span>
-0138 <span class="comment">%! n = 5; % must be bigger than 2</span>
-0139 <span class="comment">%! for dim = 1:10,</span>
-0140 <span class="comment">%!     x = rand(n, dim);</span>
-0141 <span class="comment">%!     fd = stk_filldist(x, x);</span>
-0142 <span class="comment">%!     assert(stk_isequal_tolabs(fd, 0.0));</span>
-0143 <span class="comment">%! end</span>
+0137 
+0138 
+0139 
+0140 
+0141 
+0142 
+0143 
 0144 
 0145 <span class="comment">%%</span>
 0146 <span class="comment">% One point in the middle of [0; 1]^d (exact &amp; discretized filldist)</span>
 0147 
-0148 <span class="comment">%!test %%% exact</span>
-0149 <span class="comment">%! for dim = 1:6,</span>
-0150 <span class="comment">%!     x = 0.5 * ones(1, dim);</span>
-0151 <span class="comment">%!     fd = stk_filldist(x); % [0; 1]^d is the default box</span>
-0152 <span class="comment">%!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));</span>
-0153 <span class="comment">%! end</span>
+0148 
+0149 
+0150 
+0151 
+0152 
+0153 
 0154 
-0155 <span class="comment">%!test %%% discretized</span>
-0156 <span class="comment">%! for dim = 1:6,</span>
-0157 <span class="comment">%!     x  = 0.5 * ones(1, dim);</span>
-0158 <span class="comment">%!     y  = stk_sampling_regulargrid(2^dim, dim);  % [0; 1]^d is the default box</span>
-0159 <span class="comment">%!     fd = stk_filldist(x, y);</span>
-0160 <span class="comment">%!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));</span>
-0161 <span class="comment">%! end</span>
+0155 
+0156 
+0157 
+0158 
+0159 
+0160 
+0161 
 0162 
 0163 <span class="comment">%%</span>
 0164 <span class="comment">% One point in the middle of [1; 2]^d (exact filldist)</span>
 0165 
-0166 <span class="comment">%!test</span>
-0167 <span class="comment">%! for dim = [1 3 7],</span>
-0168 <span class="comment">%!     box = repmat([1; 2], 1, dim);</span>
-0169 <span class="comment">%!     x = 1 + 0.5 * ones(1, dim);</span>
-0170 <span class="comment">%!     fd = stk_filldist(x, box);</span>
-0171 <span class="comment">%!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));</span>
-0172 <span class="comment">%! end</span>
+0166 
+0167 
+0168 
+0169 
+0170 
+0171 
+0172 
 0173 
 0174 <span class="comment">%%</span>
 0175 <span class="comment">% 20 points in [-1; 1]^3</span>
 0176 
-0177 <span class="comment">%!test</span>
-0178 <span class="comment">%! dim = 3;</span>
-0179 <span class="comment">%! box = repmat([-1; 1], 1, dim);</span>
-0180 <span class="comment">%! x   = stk_sampling_randunif(20, dim, box);</span>
-0181 <span class="comment">%! y   = stk_sampling_regulargrid(3^dim, dim, box);</span>
-0182 <span class="comment">%! fd1 = stk_filldist(x, box);</span>
-0183 <span class="comment">%! fd2 = stk_filldist(x, y);</span>
-0184 <span class="comment">%! assert(fd1 &gt;= fd2 - 10 * eps);</span>
+0177 
+0178 
+0179 
+0180 
+0181 
+0182 
+0183 
+0184 
 0185 
 0186 <span class="comment">%%</span>
-0187 <span class="comment">% One point at the origin, BOX = [0; 1]^d</span>
-0188 
-0189 <span class="comment">%!test %%% exact</span>
-0190 <span class="comment">%! for dim = [1 3 7],</span>
-0191 <span class="comment">%!     x = zeros(1, dim);</span>
-0192 <span class="comment">%!     [fd, ymax] = stk_filldist_exact(x);</span>
-0193 <span class="comment">%!     assert(stk_isequal_tolabs(fd, sqrt(dim)));</span>
-0194 <span class="comment">%!     assert(stk_isequal_tolabs(ymax, ones(1, dim)));</span>
-0195 <span class="comment">%! end</span>
-0196 
-0197 <span class="comment">%!test %%% discretized</span>
-0198 <span class="comment">%! for dim = [1 3 7],</span>
-0199 <span class="comment">%!     x = zeros(1, dim);</span>
-0200 <span class="comment">%!     y = stk_sampling_regulargrid(3^dim, dim);</span>
-0201 <span class="comment">%!     [fd, ymax] = stk_filldist(x, y);</span>
-0202 <span class="comment">%!     assert(stk_isequal_tolabs(fd, sqrt(dim)));</span>
-0203 <span class="comment">%!     assert(stk_isequal_tolabs(ymax, ones(1, dim)));</span>
-0204 <span class="comment">%! end</span></pre></div>
+0187 <span class="comment">% One point at the origin, BOX = [0; 1]^d</span></pre></div>
 <hr>
 
 <address>

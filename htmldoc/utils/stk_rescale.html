@@ -116,26 +116,7 @@ This function is called by:
 0072 a = a2 + a1 .* b2;
 0073 y = repmat(a, n, 1) + x * diag(b);
 0074 
-0075 <span class="keyword">end</span> <span class="comment">% function stk_rescale</span>
-0076 
-0077 <span class="comment">%!shared x</span>
-0078 <span class="comment">%!  x = rand(10, 4);</span>
-0079 <span class="comment">%!  y = stk_rescale(x, [], []);</span>
-0080 <span class="comment">%!  assert(stk_isequal_tolabs(x, y));</span>
-0081 
-0082 <span class="comment">%!test</span>
-0083 <span class="comment">%!  y = stk_rescale(0.5, [], [0; 2]);</span>
-0084 <span class="comment">%!  assert(stk_isequal_tolabs(y, 1.0));</span>
-0085 <span class="comment">%!test</span>
-0086 <span class="comment">%!  y = stk_rescale(0.5, [0; 1], [0; 2]);</span>
-0087 <span class="comment">%!  assert(stk_isequal_tolabs(y, 1.0));</span>
-0088 
-0089 <span class="comment">%!test</span>
-0090 <span class="comment">%!  y = stk_rescale(0.5, [0; 2], []);</span>
-0091 <span class="comment">%!  assert(stk_isequal_tolabs(y, 0.25));</span>
-0092 <span class="comment">%!test</span>
-0093 <span class="comment">%!  y = stk_rescale(0.5, [0; 2], [0; 1]);</span>
-0094 <span class="comment">%!  assert(stk_isequal_tolabs(y, 0.25));</span></pre></div>
+0075 <span class="keyword">end</span> <span class="comment">% function stk_rescale</span></pre></div>
 <hr>
 
 <address>

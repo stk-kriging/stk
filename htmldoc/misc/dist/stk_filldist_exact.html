@@ -243,43 +243,35 @@ This function is called by:
 0163 <span class="comment">%%</span>
 0164 <span class="comment">% Check that both double-precision matrices and stk_dataframe objects are accepted</span>
 0165 
-0166 <span class="comment">%!test</span>
-0167 <span class="comment">%! d = 3; x = rand(7, d); box = repmat([0; 1], 1, d);</span>
-0168 <span class="comment">%! fd1 = stk_filldist_exact(x, box);</span>
-0169 <span class="comment">%! fd2 = stk_filldist_exact(stk_dataframe(x), stk_dataframe(box));</span>
-0170 <span class="comment">%! assert(stk_isequal_tolabs(fd1, fd2));</span>
+0166 
+0167 
+0168 
+0169 
+0170 
 0171 
 0172 <span class="comment">%%</span>
 0173 <span class="comment">% One point in the middle of [0; 1]^d</span>
 0174 
-0175 <span class="comment">%!test</span>
-0176 <span class="comment">%! for dim = 1:6,</span>
-0177 <span class="comment">%!     x = 0.5 * ones(1, dim);</span>
-0178 <span class="comment">%!     fd = stk_filldist_exact(x); % [0; 1]^d is the default box</span>
-0179 <span class="comment">%!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));</span>
-0180 <span class="comment">%! end</span>
+0175 
+0176 
+0177 
+0178 
+0179 
+0180 
 0181 
 0182 <span class="comment">%%</span>
 0183 <span class="comment">% One point in the middle of [1; 2]^d</span>
 0184 
-0185 <span class="comment">%!test</span>
-0186 <span class="comment">%! for dim = [1 3 7],</span>
-0187 <span class="comment">%!     box = repmat([1; 2], 1, dim);</span>
-0188 <span class="comment">%!     x = 1 + 0.5 * ones(1, dim);</span>
-0189 <span class="comment">%!     fd = stk_filldist_exact(x, box);</span>
-0190 <span class="comment">%!     assert(stk_isequal_tolabs(fd, 0.5 * sqrt(dim)));</span>
-0191 <span class="comment">%! end</span>
+0185 
+0186 
+0187 
+0188 
+0189 
+0190 
+0191 
 0192 
 0193 <span class="comment">%%</span>
-0194 <span class="comment">% One point at the origin, BOX = [0; 1]^d</span>
-0195 
-0196 <span class="comment">%!test</span>
-0197 <span class="comment">%! for dim = [1 3 7],</span>
-0198 <span class="comment">%!     x = zeros(1, dim);</span>
-0199 <span class="comment">%!     [fd, ymax] = stk_filldist_exact(x);</span>
-0200 <span class="comment">%!     assert(stk_isequal_tolabs(fd, sqrt(dim)));</span>
-0201 <span class="comment">%!     assert(stk_isequal_tolabs(ymax, ones(1, dim)));</span>
-0202 <span class="comment">%! end</span></pre></div>
+0194 <span class="comment">% One point at the origin, BOX = [0; 1]^d</span></pre></div>
 <hr>
 
 <address>

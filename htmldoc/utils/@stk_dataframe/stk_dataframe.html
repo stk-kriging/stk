@@ -92,24 +92,7 @@ This function is called by:
 0048     x = <a href="set.html" class="code" title="function x = set (x, propname, value)">set</a>(x, <span class="string">'rownames'</span>, rownames);
 0049 <span class="keyword">end</span>
 0050 
-0051 <span class="keyword">end</span> <span class="comment">% function stk_dataframe</span>
-0052 
-0053 <span class="comment">%!shared x y</span>
-0054 
-0055 <span class="comment">%!test % default constructor</span>
-0056 <span class="comment">%! x = stk_dataframe();</span>
-0057 
-0058 <span class="comment">%!test</span>
-0059 <span class="comment">%! y = stk_dataframe(rand(3, 2));</span>
-0060 <span class="comment">%! assert (isa (y, 'stk_dataframe') &amp;&amp; isequal(size(y), [3 2]))</span>
-0061 
-0062 <span class="comment">%!test</span>
-0063 <span class="comment">%! y = stk_dataframe(rand(3, 2), {'x', 'y'});</span>
-0064 <span class="comment">%! assert (isa (y, 'stk_dataframe') &amp;&amp; isequal(size(y), [3 2]))</span>
-0065 
-0066 <span class="comment">%!test</span>
-0067 <span class="comment">%! y = stk_dataframe(rand(3, 2), {'x', 'y'}, {'a', 'b', 'c'});</span>
-0068 <span class="comment">%! assert (isa (y, 'stk_dataframe') &amp;&amp; isequal(size(y), [3 2]))</span></pre></div>
+0051 <span class="keyword">end</span> <span class="comment">% function stk_dataframe</span></pre></div>
 <hr>
 
 <address>

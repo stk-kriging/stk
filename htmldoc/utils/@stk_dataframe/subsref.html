@@ -148,57 +148,48 @@ This function is called by:
 0104 <span class="keyword">end</span> <span class="comment">% function subsref</span>
 0105 
 0106 
-0107 <span class="comment">%!shared x s t data</span>
-0108 <span class="comment">%! x = stk_dataframe(rand(3, 2));</span>
-0109 <span class="comment">%! s = {'a'; 'b'; 'c'};</span>
-0110 <span class="comment">%! t = {'xx' 'yy'};</span>
+0107 
+0108 
+0109 
+0110 
 0111 
-0112 <span class="comment">%!test</span>
-0113 <span class="comment">%! x = set(x, 'rownames', s);</span>
-0114 <span class="comment">%! assert (isequal (x.rownames, s))</span>
-0115 <span class="comment">%! assert (isequal (x.rownames{2}, 'b'))</span>
+0112 
+0113 
+0114 
+0115 
 0116 
-0117 <span class="comment">%!test</span>
-0118 <span class="comment">%! x = set(x, 'colnames', t);</span>
-0119 <span class="comment">%! assert (isequal (x.rownames, s))</span>
-0120 <span class="comment">%! assert (isequal (x.colnames, t))</span>
-0121 <span class="comment">%! assert (isequal (x.colnames{2}, 'yy'))</span>
+0117 
+0118 
+0119 
+0120 
+0121 
 0122 
 0123 <span class="comment">%--- tests with a bivariate dataframe + column names --------------------------</span>
 0124 
-0125 <span class="comment">%!shared u data</span>
-0126 <span class="comment">%! u = rand(3, 2);</span>
-0127 <span class="comment">%! data = stk_dataframe(u, {'x1', 'x2'});</span>
+0125 
+0126 
+0127 
 0128 
-0129 <span class="comment">%!assert (isequal (data.x2, u(:, 2)))</span>
-0130 <span class="comment">%!assert (data.x2(3) == u(3, 2))</span>
-0131 <span class="comment">%!error t = data.toto;</span>
-0132 <span class="comment">%!error t = data(1, 1).zzz;   % illegal multilevel indexing</span>
-0133 <span class="comment">%!error t = data(1, 1, 1);    % too many indices</span>
-0134 <span class="comment">%!error t = data{1};          % curly braces not allowed</span>
+0129 
+0130 
+0131 
+0132 
+0133 
+0134 
 0135 
-0136 <span class="comment">%!test % legacy feature: data.a returns the 'mean' column if it exists</span>
-0137 <span class="comment">%! data = set(data, 'colnames', {'mean', 'x2'});</span>
-0138 <span class="comment">%! assert(isequal(data.a, u(:, 1)));</span>
+0136 
+0137 
+0138 
 0139 
-0140 <span class="comment">%!test % legacy feature: data.a returns the whole dataframe otherwise</span>
-0141 <span class="comment">%! data = set(data, 'colnames', {'x1', 'x2'});</span>
-0142 <span class="comment">%! assert(isequal(data.a, u));</span>
+0140 
+0141 
+0142 
 0143 
-0144 <span class="comment">%!test % select rows and columns</span>
-0145 <span class="comment">%! x = stk_dataframe (reshape (1:15, 5, 3), {'u' 'v' 'w'});</span>
-0146 <span class="comment">%! assert (isequal (x([3 5], 2), stk_dataframe ([8; 10], {'v'}, {'3'; '5'})));</span>
+0144 
+0145 
+0146 
 0147 
-0148 <span class="comment">%--- tests with a univariate dataframe ----------------------------------------</span>
-0149 
-0150 <span class="comment">%!shared u data</span>
-0151 <span class="comment">%! u = rand(3, 1); data = stk_dataframe(u, {'x'});</span>
-0152 
-0153 <span class="comment">%!assert (isequal (data.x, u))</span>
-0154 <span class="comment">%!assert (isequal (double (data),       u))</span>
-0155 <span class="comment">%!assert (isequal (double (data(2)),    u(2)))</span>
-0156 <span class="comment">%!assert (isequal (double (data(3, 1)), u(3)))</span>
-0157 <span class="comment">%!error t = data(1, 1, 1);    % too many indices</span></pre></div>
+0148 <span class="comment">%--- tests with a univariate dataframe ----------------------------------------</span></pre></div>
 <hr>
 
 <address>

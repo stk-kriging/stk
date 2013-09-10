@@ -98,19 +98,7 @@ This function is called by:
 0054 
 0055 y = repmat(a, n, 1) + x * diag(b);
 0056 
-0057 <span class="keyword">end</span> <span class="comment">% function stk_normalize</span>
-0058 
-0059 
-0060 <span class="comment">%!shared x box y1 y2 y3 y4</span>
-0061 <span class="comment">%!  n = 5; box = [2; 3]; x = box(1) + diff(box) * rand(n, 1);</span>
-0062 
-0063 <span class="comment">%!error  y1 = stk_normalize();</span>
-0064 <span class="comment">%!test   y2 = stk_normalize(x);</span>
-0065 <span class="comment">%!test   y3 = stk_normalize(x, box);</span>
-0066 <span class="comment">%!error  y4 = stk_normalize(x, box, log(2));</span>
-0067 
-0068 <span class="comment">%!test assert(~any((y2 &lt; -10 * eps) | (y2 &gt; 1 + 10 * eps)));</span>
-0069 <span class="comment">%!test assert(~any((y3 &lt; -10 * eps) | (y3 &gt; 1 + 10 * eps)));</span></pre></div>
+0057 <span class="keyword">end</span> <span class="comment">% function stk_normalize</span></pre></div>
 <hr>
 
 <address>

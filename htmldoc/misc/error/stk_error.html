@@ -111,21 +111,7 @@ This function is called by:
 0067 
 0068 error(errstruct);
 0069 
-0070 <span class="keyword">end</span> <span class="comment">% stk_error</span>
-0071 
-0072 
-0073 <span class="comment">%!shared errmsg, mnemonic, badstack</span>
-0074 <span class="comment">%!  errmsg = 'Go ahead, make my day.';</span>
-0075 <span class="comment">%!  mnemonic = 'ClintEastwood';</span>
-0076 <span class="comment">%!  badstack = 0; % not a valid stack structure</span>
-0077 
-0078 <span class="comment">%!% valid use of stk_error</span>
-0079 <span class="comment">%!error &lt;make my day&gt; stk_error(errmsg, mnemonic);</span>
-0080 <span class="comment">%!error id=STK:eval_test_code:ClintEastwood stk_error(errmsg, mnemonic);</span>
-0081 
-0082 <span class="comment">%!% use of an incorrect stack structure</span>
-0083 <span class="comment">%!error &lt;stack structure&gt; stk_error(errmsg, mnemonic, badstack);</span>
-0084 <span class="comment">%!error id=STK:stk_error:InvalidArgument stk_error(errmsg, mnemonic, badstack);</span></pre></div>
+0070 <span class="keyword">end</span> <span class="comment">% stk_error</span></pre></div>
 <hr>
 
 <address>

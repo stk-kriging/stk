@@ -157,36 +157,7 @@ This function is called by:
 0113     err = max(err_mantissa .* 10.^(exponent));
 0114 <span class="keyword">end</span>
 0115     
-0116 <span class="keyword">end</span> <span class="comment">% function stk_sprintf_colvect_scientific</span>
-0117 
-0118 
-0119 <span class="comment">%!shared x s</span>
-0120 <span class="comment">%! x = [1.2; -34567];</span>
-0121 <span class="comment">%!test s = stk_sprintf_colvect_scientific(x, 1);</span>
-0122 <span class="comment">%!assert (isequal(s, ['#'; '#']))</span>
-0123 <span class="comment">%!test s = stk_sprintf_colvect_scientific(x, 3);</span>
-0124 <span class="comment">%!assert (isequal(s, ['###'; '###']))</span>
-0125 <span class="comment">%!test s = stk_sprintf_colvect_scientific(x, 5);</span>
-0126 <span class="comment">%!assert (isequal(s, ['#####'; '#####']))</span>
-0127 <span class="comment">%!test s = stk_sprintf_colvect_scientific(x, 6);</span>
-0128 <span class="comment">%!assert (isequal(s, [' 1e+00'; '-3e+04']))</span>
-0129 <span class="comment">%!test s = stk_sprintf_colvect_scientific(x, 7);</span>
-0130 <span class="comment">%!assert (isequal(s, [' 1e+00'; '-3e+04']))</span>
-0131 <span class="comment">%!test s = stk_sprintf_colvect_scientific(x, 8);</span>
-0132 <span class="comment">%!assert (isequal(s, [' 1.2e+00'; '-3.5e+04']))</span>
-0133 <span class="comment">%!test s = stk_sprintf_colvect_scientific(x, 9);</span>
-0134 <span class="comment">%!assert (isequal(s, [' 1.20e+00'; '-3.46e+04']))</span>
-0135 <span class="comment">%!test s = stk_sprintf_colvect_scientific(x, 10);</span>
-0136 <span class="comment">%!assert (isequal(s, [' 1.200e+00'; '-3.457e+04']))</span>
-0137 <span class="comment">%!test s = stk_sprintf_colvect_scientific(x, 11);</span>
-0138 <span class="comment">%!assert (isequal(s, [' 1.2000e+00'; '-3.4567e+04']))</span>
-0139 <span class="comment">%!test s = stk_sprintf_colvect_scientific(x, 12);</span>
-0140 <span class="comment">%!assert (isequal(s, [' 1.2000e+00'; '-3.4567e+04']))</span>
-0141 
-0142 <span class="comment">%!test</span>
-0143 <span class="comment">%! x = [1e6; -1e10; 1e-221];</span>
-0144 <span class="comment">%! s = stk_sprintf_colvect_scientific(x, 10);</span>
-0145 <span class="comment">%! assert(isequal(s, [' 1e+006'; '-1e+010'; ' 1e-221']));</span></pre></div>
+0116 <span class="keyword">end</span> <span class="comment">% function stk_sprintf_colvect_scientific</span></pre></div>
 <hr>
 
 <address>

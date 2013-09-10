@@ -80,15 +80,7 @@ This function is called by:
 0036 <span class="keyword">end</span> <span class="comment">% function ctranspose</span>
 0037 
 0038 <span class="comment">% note: complex-valued dataframes are supported but, currently,</span>
-0039 <span class="comment">%       not properly displayed</span>
-0040 
-0041 <span class="comment">%!test</span>
-0042 <span class="comment">%! u = rand(3, 2) + 1i * rand(3, 2);</span>
-0043 <span class="comment">%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});</span>
-0044 <span class="comment">%! data = data';</span>
-0045 <span class="comment">%! assert (isa(data, 'stk_dataframe') &amp;&amp; isequal(double(data), u'));</span>
-0046 <span class="comment">%! assert (isequal(data.rownames, {'x'; 'y'}));</span>
-0047 <span class="comment">%! assert (isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));</span></pre></div>
+0039 <span class="comment">%       not properly displayed</span></pre></div>
 <hr>
 
 <address>

@@ -109,53 +109,54 @@ This function is called by:
 0046 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 0047 
 0048 <a name="_sub0" href="#_subfunctions" class="code">function b = stk_is_lhs(x, n, dim, box)</a>
-0049 <span class="keyword">if</span> nargin &gt; 4,
-0050    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
-0051 <span class="keyword">end</span>
-0052 
-0053 x = double(x);
-0054 
-0055 <span class="keyword">if</span> nargin == 1,
-0056     [n dim] = size(x);
-0057 <span class="keyword">elseif</span> nargin == 2,
-0058     <span class="keyword">if</span> size(x, 1) ~= n,
-0059         b = false; <span class="keyword">return</span>;
-0060     <span class="keyword">end</span>
-0061     dim = size(x, 2);
-0062 <span class="keyword">else</span> <span class="comment">% nargin &gt; 2</span>
-0063     <span class="keyword">if</span> ~isequal(size(x), [n dim])
-0064         b = false; <span class="keyword">return</span>;
-0065     <span class="keyword">end</span>
-0066 <span class="keyword">end</span>
-0067 
-0068 <span class="keyword">if</span> nargin &lt; 4,
-0069     box = repmat([0; 1], 1, dim);
-0070 <span class="keyword">else</span>
-0071     stk_assert_box(box, dim);
-0072 <span class="keyword">end</span>
-0073 
-0074 xmin = box(1, :);
-0075 xmax = box(2, :);
-0076 
-0077 <span class="keyword">for</span> j = 1:dim,
-0078     
-0079     y = x(:,j);
-0080     
-0081     <span class="keyword">if</span> (xmin(j) &gt; min(y)) || (xmax(j) &lt; max(y))
-0082         b = false; <span class="keyword">return</span>;
-0083     <span class="keyword">end</span>
-0084     
-0085     y = (y - xmin(j)) / (xmax(j) - xmin(j));
-0086     y = ceil(y * n);
-0087     <span class="keyword">if</span> ~isequal(sort(y), (1:n)'),
-0088         b = false; <span class="keyword">return</span>;
-0089     <span class="keyword">end</span>
-0090     
-0091 <span class="keyword">end</span>
-0092 
-0093 b = true;
-0094 
-0095 <span class="keyword">end</span></pre></div>
+0049 
+0050 <span class="keyword">if</span> nargin &gt; 4,
+0051    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0052 <span class="keyword">end</span>
+0053 
+0054 x = double(x);
+0055 
+0056 <span class="keyword">if</span> nargin == 1,
+0057     [n dim] = size(x);
+0058 <span class="keyword">elseif</span> nargin == 2,
+0059     <span class="keyword">if</span> size(x, 1) ~= n,
+0060         b = false; <span class="keyword">return</span>;
+0061     <span class="keyword">end</span>
+0062     dim = size(x, 2);
+0063 <span class="keyword">else</span> <span class="comment">% nargin &gt; 2</span>
+0064     <span class="keyword">if</span> ~isequal(size(x), [n dim])
+0065         b = false; <span class="keyword">return</span>;
+0066     <span class="keyword">end</span>
+0067 <span class="keyword">end</span>
+0068 
+0069 <span class="keyword">if</span> nargin &lt; 4,
+0070     box = repmat([0; 1], 1, dim);
+0071 <span class="keyword">else</span>
+0072     stk_assert_box(box, dim);
+0073 <span class="keyword">end</span>
+0074 
+0075 xmin = box(1, :);
+0076 xmax = box(2, :);
+0077 
+0078 <span class="keyword">for</span> j = 1:dim,
+0079     
+0080     y = x(:,j);
+0081     
+0082     <span class="keyword">if</span> (xmin(j) &gt; min(y)) || (xmax(j) &lt; max(y))
+0083         b = false; <span class="keyword">return</span>;
+0084     <span class="keyword">end</span>
+0085     
+0086     y = (y - xmin(j)) / (xmax(j) - xmin(j));
+0087     y = ceil(y * n);
+0088     <span class="keyword">if</span> ~isequal(sort(y), (1:n)'),
+0089         b = false; <span class="keyword">return</span>;
+0090     <span class="keyword">end</span>
+0091     
+0092 <span class="keyword">end</span>
+0093 
+0094 b = true;
+0095 
+0096 <span class="keyword">end</span></pre></div>
 <hr>
 
 <address>

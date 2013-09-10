@@ -183,24 +183,7 @@ This function is called by:
 0134     
 0135 <span class="keyword">end</span> <span class="comment">% if</span>
 0136 
-0137 <span class="keyword">end</span> <span class="comment">% function disp</span>
-0138 
-0139 
-0140 <span class="comment">%!shared x fmt</span>
-0141 <span class="comment">%! try % doesn't work on old Octave versions, nevermind</span>
-0142 <span class="comment">%!   fmt = get (0, 'Format');</span>
-0143 <span class="comment">%! catch</span>
-0144 <span class="comment">%!   fmt = nan;</span>
-0145 <span class="comment">%! end</span>
-0146 <span class="comment">%! x = stk_dataframe (rand (3, 2));</span>
-0147 
-0148 <span class="comment">%!test format rat;      disp (x);</span>
-0149 <span class="comment">%!test format long;     disp (x);</span>
-0150 <span class="comment">%!test format short;    disp (x);</span>
-0151 <span class="comment">%!     if ~isnan (fmt), set (0, 'Format', fmt); end</span>
-0152 
-0153 <span class="comment">%!test disp (stk_dataframe (zeros (0, 1)))</span>
-0154 <span class="comment">%!test disp (stk_dataframe (zeros (0, 2)))</span></pre></div>
+0137 <span class="keyword">end</span> <span class="comment">% function disp</span></pre></div>
 <hr>
 
 <address>

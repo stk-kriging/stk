@@ -191,48 +191,7 @@ This function is called by:
 0111     
 0112 <span class="keyword">end</span>
 0113 
-0114 <span class="keyword">end</span>
-0115 
-0116 
-0117 <span class="comment">%%%%%%%%%%%%%</span>
-0118 <span class="comment">%%% tests %%%</span>
-0119 <span class="comment">%%%%%%%%%%%%%</span>
-0120 
-0121 <span class="comment">%!shared n, m, model, x0, x_obs, z_obs, x_prd, y_prd1, idx_obs, idx_prd</span>
-0122 <span class="comment">%!</span>
-0123 <span class="comment">%! n = 10;     % number of observations</span>
-0124 <span class="comment">%! m = n + 1;  % number of predictions</span>
-0125 <span class="comment">%! d = 1;      % dimension of the input space</span>
-0126 <span class="comment">%!</span>
-0127 <span class="comment">%! x0 = stk_sampling_regulargrid(n+m, d, [0; pi]);</span>
-0128 <span class="comment">%!</span>
-0129 <span class="comment">%! idx_obs = (2:2:(n+m-1))';</span>
-0130 <span class="comment">%! idx_prd = (1:2:(n+m))';</span>
-0131 <span class="comment">%!</span>
-0132 <span class="comment">%! x_obs = x0(idx_obs);</span>
-0133 <span class="comment">%! z_obs = sin (double (x_obs));</span>
-0134 <span class="comment">%! x_prd = x0(idx_prd);</span>
-0135 <span class="comment">%!</span>
-0136 <span class="comment">%! model = stk_model('stk_materncov32_iso');</span>
-0137 <span class="comment">%! model.order = 0; % this is currently the default, but better safe than sorry</span>
-0138 
-0139 <span class="comment">%!error y_prd1 = stk_predict();</span>
-0140 <span class="comment">%!error y_prd1 = stk_predict(model);</span>
-0141 <span class="comment">%!error y_prd1 = stk_predict(model, x_obs);</span>
-0142 <span class="comment">%!error y_prd1 = stk_predict(model, x_obs, z_obs);</span>
-0143 <span class="comment">%!test  y_prd1 = stk_predict(model, x_obs, z_obs, x_prd);</span>
-0144 <span class="comment">%!error y_prd1 = stk_predict(model, x_obs, z_obs, x_prd, 0);</span>
-0145 
-0146 <span class="comment">%!test</span>
-0147 <span class="comment">%! [y_prd1, lambda, mu, K] = stk_predict(model, x_obs, z_obs, x_prd);</span>
-0148 <span class="comment">%! assert(isequal(size(lambda), [n m]));</span>
-0149 <span class="comment">%! assert(isequal(size(mu), [1 m]));  % ordinary kriging</span>
-0150 <span class="comment">%! assert(isequal(size(K), [m m]));</span>
-0151 
-0152 <span class="comment">%!test % use old-style .a structures (legacy)</span>
-0153 <span class="comment">%! y_prd2 = stk_predict(model, struct('a', double(x_obs)), ...</span>
-0154 <span class="comment">%!                      struct('a', double(z_obs)), struct('a', double(x_prd)));</span>
-0155 <span class="comment">%! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd2)));</span></pre></div>
+0114 <span class="keyword">end</span></pre></div>
 <hr>
 
 <address>

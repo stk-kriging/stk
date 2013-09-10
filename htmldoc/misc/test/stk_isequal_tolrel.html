@@ -165,30 +165,7 @@ This function is called by:
 0095     
 0096 <span class="keyword">end</span>
 0097 
-0098 <span class="keyword">end</span> <span class="comment">% function stk_isequal_tolrel</span>
-0099 
-0100 <span class="comment">%%%%%%%%%%%%%</span>
-0101 <span class="comment">%%% tests %%%</span>
-0102 <span class="comment">%%%%%%%%%%%%%</span>
-0103 
-0104 <span class="comment">%!shared r1, r2, a, b, tolrel</span>
-0105 <span class="comment">%! a = 1.01; b = 1.02; tolrel = 0.1;</span>
-0106 
-0107 <span class="comment">%!error rr = stk_isequal_tolrel();</span>
-0108 <span class="comment">%!error rr = stk_isequal_tolrel(a);</span>
-0109 <span class="comment">%!test  r1 = stk_isequal_tolrel(a, b);</span>
-0110 <span class="comment">%!test  r2 = stk_isequal_tolrel(a, b, tolrel);</span>
-0111 <span class="comment">%!error rr = stk_isequal_tolrel(a, b, tolrel, pi);</span>
-0112 
-0113 <span class="comment">%!test assert(~r1);</span>
-0114 <span class="comment">%!test assert(r2);</span>
-0115 
-0116 <span class="comment">%!test</span>
-0117 <span class="comment">%! a = struct('u', []); b = struct('v', []);</span>
-0118 <span class="comment">%! assert(~ stk_isequal_tolrel(a, b))</span>
-0119 <span class="comment">%!test</span>
-0120 <span class="comment">%! a = struct('u', 1.01); b = struct('u', 1.02);</span>
-0121 <span class="comment">%! assert(stk_isequal_tolrel(a, b, tolrel))</span></pre></div>
+0098 <span class="keyword">end</span> <span class="comment">% function stk_isequal_tolrel</span></pre></div>
 <hr>
 
 <address>

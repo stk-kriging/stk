@@ -77,15 +77,7 @@ This function is called by:
 0033 
 0034 y = <a href="stk_dataframe.html" class="code" title="function x = stk_dataframe(x0, colnames, rownames)">stk_dataframe</a>(<a href="transpose.html" class="code" title="function y = transpose(x)">transpose</a>(x.data), rn', cn');
 0035 
-0036 <span class="keyword">end</span> <span class="comment">% function transpose</span>
-0037 
-0038 <span class="comment">%!test</span>
-0039 <span class="comment">%! u = rand(3, 2) + 1i * rand(3, 2);</span>
-0040 <span class="comment">%! data = stk_dataframe(u, {'x' 'y'}, {'obs1'; 'obs2'; 'obs3'});</span>
-0041 <span class="comment">%! data = data.';</span>
-0042 <span class="comment">%! assert (isa(data, 'stk_dataframe') &amp;&amp; isequal(double(data), u.'));</span>
-0043 <span class="comment">%! assert (isequal(data.rownames, {'x'; 'y'}));</span>
-0044 <span class="comment">%! assert (isequal(data.colnames, {'obs1' 'obs2' 'obs3'}));</span></pre></div>
+0036 <span class="keyword">end</span> <span class="comment">% function transpose</span></pre></div>
 <hr>
 
 <address>

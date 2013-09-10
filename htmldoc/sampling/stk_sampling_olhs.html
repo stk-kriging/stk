@@ -151,202 +151,182 @@ This function is called by:
 0067 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 0068 
 0069 <a name="_sub0" href="#_subfunctions" class="code">function [x, aux] = stk_sampling_olhs(n, d, box, permut, extended)</a>
-0070 <span class="keyword">if</span> nargin &gt; 5,
-0071    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
-0072 <span class="keyword">end</span>
-0073 
-0074 <span class="keyword">if</span> nargin &lt; 5, extended = false; <span class="keyword">end</span>
-0075 
-0076 <span class="comment">%%% PROCESS INPUT ARGUMENTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0077 
-0078 <span class="comment">% recover the &quot;order&quot; r from the value of n</span>
-0079 r = floor(log2(n - 1) - 1);
-0080 n_ = 2^(r + 1) + 1;
-0081 <span class="keyword">if</span> (r == 0) || (abs(n - n_) &gt; eps),
-0082     errmsg = <span class="string">'n must be an integer of the form 2^(r+1) + 1 with r &gt; 0'</span>;
-0083     stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
-0084 <span class="keyword">end</span>
-0085 n = n_;
-0086 
-0087 <span class="keyword">if</span> ~extended
-0088     <span class="comment">% check that d has the correct value for a &quot;full&quot; Ye98-OLHS</span>
-0089     <span class="comment">% (other values of d can be reached by removing columns from a full OLHS)</span>
-0090     <span class="keyword">if</span> (nargin &gt; 1) &amp;&amp; ~isempty(d),
-0091         <span class="keyword">if</span> d ~= 2 * r,
-0092             errmsg = <span class="string">'Incorrect value of d, please read the documentation...'</span>;
-0093             stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
-0094         <span class="keyword">end</span>
-0095     <span class="keyword">else</span>
-0096         d = 2 * r;
-0097     <span class="keyword">end</span>
-0098 <span class="keyword">else</span>
-0099     <span class="comment">% check that d has the correct value for a &quot;full&quot; Cioppa-Lucas(2007) NOLHS</span>
-0100     <span class="comment">% (other values of d can be reached by removing columns from a full NOLHS)</span>
-0101     <span class="keyword">if</span> (nargin &gt; 1) &amp;&amp; ~isempty(d),
-0102         <span class="keyword">if</span> d ~= r + 1 + nchoosek(r, 2),
-0103             errmsg = <span class="string">'Incorrect value of d, please read the documentation...'</span>;
-0104             stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
-0105         <span class="keyword">end</span>
-0106     <span class="keyword">else</span>
-0107         d = r + 1 + nchoosek(r, 2);
-0108     <span class="keyword">end</span>
-0109 <span class="keyword">end</span>
-0110 
-0111 <span class="comment">% number of &quot;positive levels&quot;</span>
-0112 q = 2^r; <span class="comment">% = (n - 1)/2</span>
-0113 
-0114 <span class="comment">% box</span>
-0115 <span class="keyword">if</span> (nargin &lt; 3) || isempty(box),
-0116     box = repmat([-1; 1], 1, d);
-0117 <span class="keyword">else</span>
-0118     stk_assert_box(box);
-0119 <span class="keyword">end</span>
-0120 
-0121 <span class="comment">% permutation</span>
-0122 <span class="keyword">if</span> (nargin &lt; 4) || isempty(permut),
-0123     permut = randperm(q)';
-0124 <span class="keyword">else</span>
-0125     permut = permut(:);
-0126     <span class="keyword">if</span> ~isequal(sort(permut), (1:q)'),
-0127         errmsg = sprintf(<span class="string">'permut should be a permutation of 1:%d.'</span>, q);
-0128         stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
-0129     <span class="keyword">end</span>
-0130 <span class="keyword">end</span>
-0131 
-0132 <span class="comment">%%% CONSTRUCT AN &quot;ORTHOGONAL&quot; LHS FOLLOWING PROCESS INPUT ARGUMENTS %%%%%%%%%%%</span>
-0133 
-0134 <span class="comment">% Construct permutation matrices A1, A2, ..., Ar</span>
-0135 A = cell(1, r);
-0136 <span class="keyword">for</span> i = 1:r,
-0137     Ai = 1;
-0138     <span class="keyword">for</span> j = 1:i,
-0139         Z  = zeros(size(Ai));
-0140         Ai = [Z Ai; Ai Z]; <span class="comment">%#ok&lt;AGROW&gt;</span>
-0141     <span class="keyword">end</span>
-0142     <span class="keyword">for</span> j = (i+1):r,
-0143         Z  = zeros(size(Ai));
-0144         Ai = [Ai Z; Z Ai]; <span class="comment">%#ok&lt;AGROW&gt;</span>
-0145     <span class="keyword">end</span>
-0146     A{i} = Ai;
-0147 <span class="keyword">end</span>
-0148 
-0149 <span class="comment">% Construct the matrix M</span>
-0150 M = [permut zeros(q, 2*r-1)];
-0151 <span class="keyword">for</span> j = 1:r, <span class="comment">% from column 2 to column r+1</span>
-0152     M(:, j+1) = A{j} * permut;
-0153 <span class="keyword">end</span>
-0154 <span class="keyword">if</span> ~extended, <span class="comment">% OLHS / Ye (1998)</span>
-0155     <span class="keyword">for</span> j = 1:(r-1), <span class="comment">% from column r+2 to column 2*r</span>
-0156         M(:, j+r+1) = A{j} * A{r} * permut;
-0157     <span class="keyword">end</span>
-0158 <span class="keyword">else</span> <span class="comment">% NOLHS / Cioppa &amp; Lucas(2007)</span>
-0159     col = r + 2;
-0160     <span class="keyword">for</span> j = 1:(r-1),
-0161         <span class="keyword">for</span> k = (j + 1):r,
-0162             M(:, col) = A{j} * A{k} * permut;
-0163             col = col + 1;
-0164         <span class="keyword">end</span>
-0165     <span class="keyword">end</span>
-0166 <span class="keyword">end</span>    
-0167     
-0168 <span class="comment">% Construct the matrix S</span>
-0169 S = ones(q, 2*r);
-0170 <span class="keyword">for</span> j = 1:r, <span class="comment">% from column 2 to column r+1</span>
-0171     aj = 1;
-0172     <span class="keyword">for</span> l = r:(-1):1,
-0173         <span class="keyword">if</span> l == r - j + 1,
-0174             aj = [-aj; aj]; <span class="comment">%#ok&lt;AGROW&gt;</span>
-0175         <span class="keyword">else</span>
-0176             aj = [aj; aj]; <span class="comment">%#ok&lt;AGROW&gt;</span>
-0177         <span class="keyword">end</span>
-0178     <span class="keyword">end</span>
-0179     S(:, j+1) = aj;
-0180 <span class="keyword">end</span>
-0181 <span class="keyword">if</span> ~extended, <span class="comment">% OLHS / Ye (1998)</span>
-0182     <span class="keyword">for</span> j = 1:(r-1), <span class="comment">% from column r+2 to column 2*r</span>
-0183         S(:, r+1+j) = S(:, 2) .* S(:, j+2);
-0184     <span class="keyword">end</span>
-0185 <span class="keyword">else</span> <span class="comment">% NOLHS / Cioppa &amp; Lucas(2007)</span>
-0186     col = r + 2;
-0187     <span class="keyword">for</span> j = 1:(r - 1),
-0188         <span class="keyword">for</span> k = (j + 1):r,
-0189             S(:, col) = S(:, j+1) .* S(:, k+1);
-0190             col = col + 1;
-0191         <span class="keyword">end</span>
-0192     <span class="keyword">end</span>
-0193 <span class="keyword">end</span>
-0194 
-0195 <span class="comment">% Construct the matrix T</span>
-0196 T = M .* S;
-0197 
-0198 <span class="comment">% Construct the OLHS X (with integer levels -q, ..., 0, ... +q)</span>
-0199 x_integer_levels = [T; zeros(1, d); -T];
-0200 
-0201 <span class="comment">%%% CONVERT TO THE REQUESTED BOX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0202 
-0203 <span class="comment">% Convert to positive integer levels (1 ... n)</span>
-0204 x = x_integer_levels + q + 1;
-0205 
-0206 <span class="comment">% Convert to [0; 1]-valued levels</span>
-0207 x = (2*x - 1) / (2*n);
-0208 
-0209 <span class="comment">% And, finally, convert to box</span>
-0210 x = stk_dataframe(stk_rescale(x, [], box));
-0211 
-0212 <span class="comment">% Note: the results reported in Cioppa &amp; Lucas correspond to the scaling</span>
-0213 <span class="comment">%   x = struct('a', stk_rescale(x, [min(x); max(x)], box));</span>
-0214 
-0215 <span class="comment">%%% OUTPUT SOME AUXILIARY DATA IF REQUESTED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0216 
-0217 <span class="keyword">if</span> nargout &gt; 1,
-0218     aux = struct(<span class="string">'M'</span>, M, <span class="string">'S'</span>, S, <span class="string">'X'</span>, x_integer_levels);
-0219 <span class="keyword">end</span>
-0220 
-0221 <span class="keyword">end</span> <span class="comment">% function stk_sampling_olhs</span>
-0222 
+0070 
+0071 <span class="keyword">if</span> nargin &gt; 5,
+0072    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="keyword">if</span> nargin &lt; 5, extended = false; <span class="keyword">end</span>
+0076 
+0077 <span class="comment">%%% PROCESS INPUT ARGUMENTS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0078 
+0079 <span class="comment">% recover the &quot;order&quot; r from the value of n</span>
+0080 r = floor(log2(n - 1) - 1);
+0081 n_ = 2^(r + 1) + 1;
+0082 <span class="keyword">if</span> (r == 0) || (abs(n - n_) &gt; eps),
+0083     errmsg = <span class="string">'n must be an integer of the form 2^(r+1) + 1 with r &gt; 0'</span>;
+0084     stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
+0085 <span class="keyword">end</span>
+0086 n = n_;
+0087 
+0088 <span class="keyword">if</span> ~extended
+0089     <span class="comment">% check that d has the correct value for a &quot;full&quot; Ye98-OLHS</span>
+0090     <span class="comment">% (other values of d can be reached by removing columns from a full OLHS)</span>
+0091     <span class="keyword">if</span> (nargin &gt; 1) &amp;&amp; ~isempty(d),
+0092         <span class="keyword">if</span> d ~= 2 * r,
+0093             errmsg = <span class="string">'Incorrect value of d, please read the documentation...'</span>;
+0094             stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
+0095         <span class="keyword">end</span>
+0096     <span class="keyword">else</span>
+0097         d = 2 * r;
+0098     <span class="keyword">end</span>
+0099 <span class="keyword">else</span>
+0100     <span class="comment">% check that d has the correct value for a &quot;full&quot; Cioppa-Lucas(2007) NOLHS</span>
+0101     <span class="comment">% (other values of d can be reached by removing columns from a full NOLHS)</span>
+0102     <span class="keyword">if</span> (nargin &gt; 1) &amp;&amp; ~isempty(d),
+0103         <span class="keyword">if</span> d ~= r + 1 + nchoosek(r, 2),
+0104             errmsg = <span class="string">'Incorrect value of d, please read the documentation...'</span>;
+0105             stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
+0106         <span class="keyword">end</span>
+0107     <span class="keyword">else</span>
+0108         d = r + 1 + nchoosek(r, 2);
+0109     <span class="keyword">end</span>
+0110 <span class="keyword">end</span>
+0111 
+0112 <span class="comment">% number of &quot;positive levels&quot;</span>
+0113 q = 2^r; <span class="comment">% = (n - 1)/2</span>
+0114 
+0115 <span class="comment">% box</span>
+0116 <span class="keyword">if</span> (nargin &lt; 3) || isempty(box),
+0117     box = repmat([-1; 1], 1, d);
+0118 <span class="keyword">else</span>
+0119     stk_assert_box(box);
+0120 <span class="keyword">end</span>
+0121 
+0122 <span class="comment">% permutation</span>
+0123 <span class="keyword">if</span> (nargin &lt; 4) || isempty(permut),
+0124     permut = randperm(q)';
+0125 <span class="keyword">else</span>
+0126     permut = permut(:);
+0127     <span class="keyword">if</span> ~isequal(sort(permut), (1:q)'),
+0128         errmsg = sprintf(<span class="string">'permut should be a permutation of 1:%d.'</span>, q);
+0129         stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
+0130     <span class="keyword">end</span>
+0131 <span class="keyword">end</span>
+0132 
+0133 <span class="comment">%%% CONSTRUCT AN &quot;ORTHOGONAL&quot; LHS FOLLOWING PROCESS INPUT ARGUMENTS %%%%%%%%%%%</span>
+0134 
+0135 <span class="comment">% Construct permutation matrices A1, A2, ..., Ar</span>
+0136 A = cell(1, r);
+0137 <span class="keyword">for</span> i = 1:r,
+0138     Ai = 1;
+0139     <span class="keyword">for</span> j = 1:i,
+0140         Z  = zeros(size(Ai));
+0141         Ai = [Z Ai; Ai Z]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0142     <span class="keyword">end</span>
+0143     <span class="keyword">for</span> j = (i+1):r,
+0144         Z  = zeros(size(Ai));
+0145         Ai = [Ai Z; Z Ai]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0146     <span class="keyword">end</span>
+0147     A{i} = Ai;
+0148 <span class="keyword">end</span>
+0149 
+0150 <span class="comment">% Construct the matrix M</span>
+0151 M = [permut zeros(q, 2*r-1)];
+0152 <span class="keyword">for</span> j = 1:r, <span class="comment">% from column 2 to column r+1</span>
+0153     M(:, j+1) = A{j} * permut;
+0154 <span class="keyword">end</span>
+0155 <span class="keyword">if</span> ~extended, <span class="comment">% OLHS / Ye (1998)</span>
+0156     <span class="keyword">for</span> j = 1:(r-1), <span class="comment">% from column r+2 to column 2*r</span>
+0157         M(:, j+r+1) = A{j} * A{r} * permut;
+0158     <span class="keyword">end</span>
+0159 <span class="keyword">else</span> <span class="comment">% NOLHS / Cioppa &amp; Lucas(2007)</span>
+0160     col = r + 2;
+0161     <span class="keyword">for</span> j = 1:(r-1),
+0162         <span class="keyword">for</span> k = (j + 1):r,
+0163             M(:, col) = A{j} * A{k} * permut;
+0164             col = col + 1;
+0165         <span class="keyword">end</span>
+0166     <span class="keyword">end</span>
+0167 <span class="keyword">end</span>    
+0168     
+0169 <span class="comment">% Construct the matrix S</span>
+0170 S = ones(q, 2*r);
+0171 <span class="keyword">for</span> j = 1:r, <span class="comment">% from column 2 to column r+1</span>
+0172     aj = 1;
+0173     <span class="keyword">for</span> l = r:(-1):1,
+0174         <span class="keyword">if</span> l == r - j + 1,
+0175             aj = [-aj; aj]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0176         <span class="keyword">else</span>
+0177             aj = [aj; aj]; <span class="comment">%#ok&lt;AGROW&gt;</span>
+0178         <span class="keyword">end</span>
+0179     <span class="keyword">end</span>
+0180     S(:, j+1) = aj;
+0181 <span class="keyword">end</span>
+0182 <span class="keyword">if</span> ~extended, <span class="comment">% OLHS / Ye (1998)</span>
+0183     <span class="keyword">for</span> j = 1:(r-1), <span class="comment">% from column r+2 to column 2*r</span>
+0184         S(:, r+1+j) = S(:, 2) .* S(:, j+2);
+0185     <span class="keyword">end</span>
+0186 <span class="keyword">else</span> <span class="comment">% NOLHS / Cioppa &amp; Lucas(2007)</span>
+0187     col = r + 2;
+0188     <span class="keyword">for</span> j = 1:(r - 1),
+0189         <span class="keyword">for</span> k = (j + 1):r,
+0190             S(:, col) = S(:, j+1) .* S(:, k+1);
+0191             col = col + 1;
+0192         <span class="keyword">end</span>
+0193     <span class="keyword">end</span>
+0194 <span class="keyword">end</span>
+0195 
+0196 <span class="comment">% Construct the matrix T</span>
+0197 T = M .* S;
+0198 
+0199 <span class="comment">% Construct the OLHS X (with integer levels -q, ..., 0, ... +q)</span>
+0200 x_integer_levels = [T; zeros(1, d); -T];
+0201 
+0202 <span class="comment">%%% CONVERT TO THE REQUESTED BOX %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0203 
+0204 <span class="comment">% Convert to positive integer levels (1 ... n)</span>
+0205 x = x_integer_levels + q + 1;
+0206 
+0207 <span class="comment">% Convert to [0; 1]-valued levels</span>
+0208 x = (2*x - 1) / (2*n);
+0209 
+0210 <span class="comment">% And, finally, convert to box</span>
+0211 x = stk_dataframe(stk_rescale(x, [], box));
+0212 
+0213 <span class="comment">% Note: the results reported in Cioppa &amp; Lucas correspond to the scaling</span>
+0214 <span class="comment">%   x = struct('a', stk_rescale(x, [min(x); max(x)], box));</span>
+0215 
+0216 <span class="comment">%%% OUTPUT SOME AUXILIARY DATA IF REQUESTED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0217 
+0218 <span class="keyword">if</span> nargout &gt; 1,
+0219     aux = struct(<span class="string">'M'</span>, M, <span class="string">'S'</span>, S, <span class="string">'X'</span>, x_integer_levels);
+0220 <span class="keyword">end</span>
+0221 
+0222 <span class="keyword">end</span> <span class="comment">% function stk_sampling_olhs</span>
 0223 
 0224 
-0225 <span class="comment">%%%%%%%%%%%%%</span>
-0226 <span class="comment">%%% tests %%%</span>
-0227 <span class="comment">%%%%%%%%%%%%%</span>
+0225 <span class="comment">%%</span>
+0226 <span class="comment">% Check error for incorrect number of input arguments</span>
+0227 
 0228 
-0229 <span class="comment">%%</span>
-0230 <span class="comment">% Check error for incorrect number of input arguments</span>
+0229 
+0230 
 0231 
-0232 <span class="comment">%!shared x, n, d, box, permut</span>
-0233 <span class="comment">%! n = 5; d = 2; box = [0 0; 1, 1]; permut = 1:2;</span>
+0232 
+0233 
 0234 
-0235 <span class="comment">%!error x = stk_sampling_olhs();</span>
-0236 <span class="comment">%!test  x = stk_sampling_olhs(n);</span>
-0237 <span class="comment">%!test  x = stk_sampling_olhs(n, d);</span>
-0238 <span class="comment">%!test  x = stk_sampling_olhs(n, d, box);</span>
-0239 <span class="comment">%!test  x = stk_sampling_olhs(n, d, box, permut);</span>
-0240 <span class="comment">%!error x = stk_sampling_olhs(n, d, box, permut, pi);</span>
+0235 
+0236 
+0237 
+0238 <span class="comment">%%</span>
+0239 <span class="comment">% Check that the output is a dataframe</span>
+0240 <span class="comment">% (all stk_sampling_* functions should behave similarly in this respect)</span>
 0241 
-0242 <span class="comment">%%</span>
-0243 <span class="comment">% Check that the output is a dataframe</span>
-0244 <span class="comment">% (all stk_sampling_* functions should behave similarly in this respect)</span>
-0245 
-0246 <span class="comment">%!assert (isa(x, 'stk_dataframe'));</span>
-0247 
-0248 <span class="comment">%%</span>
-0249 <span class="comment">% Check output argument</span>
-0250 
-0251 <span class="comment">%!test</span>
-0252 <span class="comment">%! for r = 1:5</span>
-0253 <span class="comment">%!</span>
-0254 <span class="comment">%!   n = 2^(r+1) + 1; d = 2*r;</span>
-0255 <span class="comment">%!   x = stk_sampling_olhs(n, d);</span>
-0256 <span class="comment">%!</span>
-0257 <span class="comment">%!   assert(isequal(size(x), [n d]));</span>
-0258 <span class="comment">%!</span>
-0259 <span class="comment">%!   box = repmat([-1; 1], 1, d);</span>
-0260 <span class="comment">%!   assert(stk_is_lhs(x, n, d, box));</span>
-0261 <span class="comment">%!</span>
-0262 <span class="comment">%!   w = double(x)' * double(x);</span>
-0263 <span class="comment">%!   assert(stk_isequal_tolabs(w/w(1,1), eye(d)));</span>
-0264 <span class="comment">%!</span>
-0265 <span class="comment">%! end</span></pre></div>
+0242 
+0243 
+0244 <span class="comment">%%</span>
+0245 <span class="comment">% Check output argument</span></pre></div>
 <hr>
 
 <address>

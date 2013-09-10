@@ -149,70 +149,61 @@ This function is called by:
 0105 
 0106 <span class="keyword">end</span> <span class="comment">% function horzcat</span>
 0107 
-0108 <span class="comment">%%%%%%%%%%%%%</span>
-0109 <span class="comment">%%% tests %%%</span>
-0110 <span class="comment">%%%%%%%%%%%%%</span>
-0111 
-0112 <span class="comment">% IMPORTANT NOTE: [x y ...] fails to give the same result as horzcat(x, y, ...)</span>
-0113 <span class="comment">% in some releases of Octave. As a consequence, all tests must be written using</span>
-0114 <span class="comment">% horzcat explicitely.</span>
+0108 
+0109 <span class="comment">% IMPORTANT NOTE: [x y ...] fails to give the same result as horzcat(x, y, ...)</span>
+0110 <span class="comment">% in some releases of Octave. As a consequence, all tests must be written using</span>
+0111 <span class="comment">% horzcat explicitely.</span>
+0112 
+0113 
+0114 
 0115 
-0116 <span class="comment">%!shared u v</span>
-0117 <span class="comment">%! u = rand(3, 2);</span>
-0118 <span class="comment">%! v = rand(3, 2);</span>
+0116 
+0117 <span class="comment">%%</span>
+0118 <span class="comment">% Horizontal concatenation of two dataframes</span>
 0119 
-0120 <span class="comment">%%</span>
-0121 <span class="comment">% Horizontal concatenation of two dataframes</span>
+0120 
+0121 
 0122 
-0123 <span class="comment">%!test</span>
-0124 <span class="comment">%! x = stk_dataframe(u, {'x1' 'x2'});</span>
-0125 <span class="comment">%! y = stk_dataframe(v, {'y1' 'y2'});</span>
-0126 <span class="comment">%! z = horzcat (x, y);</span>
-0127 <span class="comment">%! assert(isa(z, 'stk_dataframe') &amp;&amp; isequal(double(z), [u v]));</span>
-0128 <span class="comment">%! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));</span>
+0123 
+0124 
+0125 
+0126 
+0127 
+0128 
 0129 
-0130 <span class="comment">%!test</span>
-0131 <span class="comment">%! x = stk_dataframe(u, {'x1' 'x2'}, {'a'; 'b'; 'c'});</span>
-0132 <span class="comment">%! y = stk_dataframe(v, {'y1' 'y2'});</span>
-0133 <span class="comment">%! z = horzcat (x, y);</span>
-0134 <span class="comment">%! assert(isa(z, 'stk_dataframe') &amp;&amp; isequal(double(z), [u v]));</span>
-0135 <span class="comment">%! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));</span>
-0136 <span class="comment">%! assert(all(strcmp(z.rownames, {'a'; 'b'; 'c'})));</span>
+0130 
+0131 
+0132 
+0133 
+0134 
+0135 
+0136 
 0137 
-0138 <span class="comment">%!test</span>
-0139 <span class="comment">%! x = stk_dataframe(u, {'x1' 'x2'});</span>
-0140 <span class="comment">%! y = stk_dataframe(v, {'y1' 'y2'}, {'a'; 'b'; 'c'});</span>
-0141 <span class="comment">%! z = horzcat (x, y);</span>
-0142 <span class="comment">%! assert(isa(z, 'stk_dataframe') &amp;&amp; isequal(double(z), [u v]));</span>
-0143 <span class="comment">%! assert(all(strcmp(z.colnames, {'x1' 'x2' 'y1' 'y2'})));</span>
-0144 <span class="comment">%! assert(all(strcmp(z.rownames, {'a'; 'b'; 'c'})));</span>
+0138 
+0139 
+0140 
+0141 
+0142 
+0143 
+0144 
 0145 
-0146 <span class="comment">%!error % incompatible row names</span>
-0147 <span class="comment">%! x = stk_dataframe(u, {'x1' 'x2'}, {'a'; 'b'; 'c'});</span>
-0148 <span class="comment">%! y = stk_dataframe(v, {'y1' 'y2'}, {'a'; 'b'; 'd'});</span>
-0149 <span class="comment">%! z = horzcat (x, y);</span>
+0146 
+0147 
+0148 <span class="comment">%%</span>
+0149 <span class="comment">% Horizontal concatenation [dataframe matrix] or [matrix dataframe]</span>
 0150 
-0151 <span class="comment">%%</span>
-0152 <span class="comment">% Horizontal concatenation [dataframe matrix] or [matrix dataframe]</span>
+0151 
+0152 
 0153 
-0154 <span class="comment">%!test</span>
-0155 <span class="comment">%! x = stk_dataframe(u);</span>
-0156 <span class="comment">%! z = horzcat (x, v);</span>
-0157 <span class="comment">%! assert(isa(z, 'stk_dataframe') &amp;&amp; isequal(double(z), [u v]));</span>
+0154 
+0155 
+0156 
+0157 
 0158 
-0159 <span class="comment">%!test</span>
-0160 <span class="comment">%! y = stk_dataframe(v);</span>
-0161 <span class="comment">%! z = horzcat (u, y);</span>
-0162 <span class="comment">%! assert(isa(z, 'double') &amp;&amp; isequal(z, [u v]));</span>
-0163 
-0164 <span class="comment">%%</span>
-0165 <span class="comment">% Horizontal concatenation of more than two elements</span>
-0166 
-0167 <span class="comment">%!test</span>
-0168 <span class="comment">%! x = stk_dataframe(u, {'x1' 'x2'});</span>
-0169 <span class="comment">%! y = stk_dataframe(v, {'y1' 'y2'});</span>
-0170 <span class="comment">%! z = horzcat (x, y, u, v);</span>
-0171 <span class="comment">%! assert(isa(z, 'stk_dataframe') &amp;&amp; isequal(double(z), [u v u v]));</span></pre></div>
+0159 
+0160 
+0161 <span class="comment">%%</span>
+0162 <span class="comment">% Horizontal concatenation of more than two elements</span></pre></div>
 <hr>
 
 <address>

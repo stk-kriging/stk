@@ -169,30 +169,7 @@ This function is called by:
 0103     
 0104 <span class="keyword">end</span>
 0105 
-0106 <span class="keyword">end</span> <span class="comment">% function stk_isequal_tolabs</span>
-0107 
-0108 <span class="comment">%%%%%%%%%%%%%</span>
-0109 <span class="comment">%%% tests %%%</span>
-0110 <span class="comment">%%%%%%%%%%%%%</span>
-0111 
-0112 <span class="comment">%!shared r1, r2, a, b, tolabs</span>
-0113 <span class="comment">%! a = 1.01; b = 1.02; tolabs = 0.1;</span>
-0114 
-0115 <span class="comment">%!error rr = stk_isequal_tolabs();</span>
-0116 <span class="comment">%!error rr = stk_isequal_tolabs(a);</span>
-0117 <span class="comment">%!test  r1 = stk_isequal_tolabs(a, b);</span>
-0118 <span class="comment">%!test  r2 = stk_isequal_tolabs(a, b, tolabs);</span>
-0119 <span class="comment">%!error rr = stk_isequal_tolabs(a, b, tolabs, pi);</span>
-0120 
-0121 <span class="comment">%!test assert(~r1);</span>
-0122 <span class="comment">%!test assert(r2);</span>
-0123 
-0124 <span class="comment">%!test</span>
-0125 <span class="comment">%! a = struct('u', []); b = struct('v', []);</span>
-0126 <span class="comment">%! assert(~ stk_isequal_tolabs(a, b))</span>
-0127 <span class="comment">%!test</span>
-0128 <span class="comment">%! a = struct('u', 1.01); b = struct('u', 1.02);</span>
-0129 <span class="comment">%! assert(stk_isequal_tolabs(a, b, tolabs))</span></pre></div>
+0106 <span class="keyword">end</span> <span class="comment">% function stk_isequal_tolabs</span></pre></div>
 <hr>
 
 <address>

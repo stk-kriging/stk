@@ -101,35 +101,25 @@ This function is called by:
 0057 
 0058 
 0059 <span class="comment">%--- general case -------------------------------------------------------------</span>
-0060 <span class="comment">%!shared data</span>
-0061 <span class="comment">%! data = stk_factorialdesign({[0 1], [5 6 7]});</span>
+0060 
+0061 
 0062 
-0063 <span class="comment">%!test % nargout = 0</span>
-0064 <span class="comment">%! ndgrid(data);</span>
-0065 <span class="comment">%! assert(isequal(ans, [0 0 0; 1 1 1]));</span>
+0063 
+0064 
+0065 
 0066 
-0067 <span class="comment">%!test % nargout = 1</span>
-0068 <span class="comment">%! x = ndgrid(data);</span>
-0069 <span class="comment">%! assert(isequal(x, [0 0 0; 1 1 1]));</span>
+0067 
+0068 
+0069 
 0070 
-0071 <span class="comment">%!test % nargout = 2</span>
-0072 <span class="comment">%! [x, y] = ndgrid(data);</span>
-0073 <span class="comment">%! assert(isequal({x, y}, {[0 0 0; 1 1 1], [5 6 7; 5 6 7]}));</span>
+0071 
+0072 
+0073 
 0074 
-0075 <span class="comment">%!error % nargout = 3</span>
-0076 <span class="comment">%! [x, y, z] = ndgrid(data);</span>
+0075 
+0076 
 0077 
-0078 <span class="comment">%--- special cases ------------------------------------------------------------</span>
-0079 
-0080 <span class="comment">%!test</span>
-0081 <span class="comment">%! data = stk_factorialdesign({[], []});</span>
-0082 <span class="comment">%! [x, y] = ndgrid(data);</span>
-0083 <span class="comment">%! assert(isequal({x, y}, {[], []}));</span>
-0084 
-0085 <span class="comment">%!test</span>
-0086 <span class="comment">%! data = stk_factorialdesign({[1:3]});</span>
-0087 <span class="comment">%! x = ndgrid(data);</span>
-0088 <span class="comment">%! assert(isequal(x, [1; 2; 3]));</span></pre></div>
+0078 <span class="comment">%--- special cases ------------------------------------------------------------</span></pre></div>
 <hr>
 
 <address>
