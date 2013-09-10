@@ -49,6 +49,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function k = stk_materncov_iso(param, x, y, diff, pairwise)
+
 if nargin > 5,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
