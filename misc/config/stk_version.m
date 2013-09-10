@@ -40,7 +40,7 @@ if isempty (version_number)
     end
     
     % what we're looking for
-    t = 'Version:   ';
+    t = 'Version: ';
     
     while 1
         
@@ -54,7 +54,7 @@ if isempty (version_number)
         % look for the pattern
         i = strfind (s, t);
         if ~isempty (i)
-            version_number = deblank (s((i + length(t)):end));
+            version_number = strtrim (s((i + length(t)):end));
             fclose (fid);
             break
         end
