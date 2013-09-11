@@ -99,6 +99,7 @@ else % at least one input point
 end
 
 z = stk_dataframe(zdata, {zname});
+z.info.creator = 'function stk_eval';
 
 end % function stk_feval
 
