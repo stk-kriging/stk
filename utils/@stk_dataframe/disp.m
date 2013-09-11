@@ -33,34 +33,55 @@
 
 function disp(x, max_width)
 
+nb_spaces_before = 4;
+spstr = repmat(' ', 1, nb_spaces_before); %#ok<*AGROW>
+
 [n, d] = size(x.data);
 
-if n == 0,
-    
-    if isempty(x.colnames)
-        
-        if d == 1,
-            fprintf('Empty stk_dataframe with 1 variable.\n');
-        else
-            fprintf('Empty stk_dataframe with %d variables.\n', d);
-        end
+fprintf('stk_dataframe object\n\n');
+fprintf(' .colnames:\n');
 
+if isempty(x.colnames)
+    
+    if d == 1,
+        fprintf('%sstk_dataframe with 1 unnamed variable.\n', spstr);
     else
-        
-        if d == 1,
-            fprintf('Empty stk_dataframe with 1 variable: ');
-            fprintf('%s\n', x.colnames{1});
-        else
-            fprintf('Empty stk_dataframe with %d variables: ', d);
-            for j = 1:(d-1),
-                fprintf('%s, ', x.colnames{j});
-            end
-            fprintf('%s\n', x.colnames{end});
-        end
-        
+        fprintf('%sstk_dataframe with %d unnamed variables.\n', spstr, d);
     end
     
 else
+    
+    if d == 1,
+        fprintf('%sstk_dataframe with 1 variable: ', spstr);
+        fprintf('%s\n', x.colnames{1});
+    else
+        fprintf('%sstk_dataframe with %d variables: ', spstr, d);
+        for j = 1:(d-1),
+            fprintf('%s, ', x.colnames{j});
+        end
+        fprintf('%s\n', x.colnames{end});
+    end
+    
+end
+
+fprintf(' .rownames:\n');
+
+if isempty(x.rownames)
+    
+        fprintf('%sstk_dataframe with %d unnamed elements.\n', spstr, n);  
+else
+    
+        fprintf('%sstk_dataframe with %d elements: ', spstr, n);
+        for j = 1:(n-1),
+            fprintf('%s, ', x.rownames{j});
+        end
+        fprintf('%s\n', x.rownames{end});
+    
+end
+
+fprintf(' .data/.a:\n');
+nb_spaces_colsep = 2;
+if n>0,
     
     if nargin < 2,
         try
@@ -78,9 +99,6 @@ else
             max_width = 6;
         end
     end
-    
-    nb_spaces_before = 1;
-    nb_spaces_colsep = 2;
     
     has_colnames = ~isempty(x.colnames);
     nb_rows = n + has_colnames;
@@ -131,7 +149,8 @@ else
     end % for
     
     disp(str);
-    
+else
+    fprintf('\tempty dataframe\n')
 end % if
 
 end % function disp

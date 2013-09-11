@@ -33,7 +33,7 @@
 
 function display(x)
 
-fprintf('\n%s = \n\n', inputname(1));
+fprintf('\n%s = ', inputname(1));
 
 disp(x);
 
