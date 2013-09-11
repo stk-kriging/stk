@@ -73,11 +73,12 @@ else
         
         % base dataframe
         df = stk_dataframe(xdata, varargin{:});
+        df.info.type = 'stk_factorialdesign object';
+        df.info.levels = levels;
         
         % "factorial design" object
-        x = struct('levels', {levels});
-        x = class(x, 'stk_factorialdesign', df);
-        
+        x = struct('levels', {levels}); %FIXME: no need to store levels twice
+        x = class(x, 'stk_factorialdesign', df); 
     end % if
     
 end % if

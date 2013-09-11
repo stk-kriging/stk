@@ -76,6 +76,7 @@ for j = 1:dim,
 end
 
 x = stk_factorialdesign(levels);
+x.info.creator = 'function stk_sampling_regulargrid';
 
 end % function stk_sampling_regulargrid
 
