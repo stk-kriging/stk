@@ -92,9 +92,9 @@ switch idx(1).type
         stk_error(errmsg, 'IllegalIndexing');
         
     case '.'
-        
+ 
         t = get(x, idx(1).subs);
-        
+
         if length(idx) > 1,
             t = subsref(t, idx(2:end));
         end

@@ -30,11 +30,14 @@ function stk_disp_examplewelcome()
 
 stack = dbstack();
 
-if length(stack) < 2,
-    errmsg = 'stk_disp_examplewelcome() is meant to be used in example scripts.';
-    stk_error(errmsg, 'WhatTheFuck');
+if length(stack) >= 2,
+    fprintf('%s\n', stk_sprintf_framed(stack(2).name));
+else
+    fprintf('This is a demo example...\n');
+%     errmsg = 'stk_disp_examplewelcome() is meant to be used in example scripts.';
+%     stk_error(errmsg, 'disp');
 end
 
-fprintf('%s\n', stk_sprintf_framed(stack(2).name));
+
 
 end % function stk_disp_examplewelcome
