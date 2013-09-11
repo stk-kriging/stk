@@ -32,10 +32,12 @@ if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
+info = struct('creator', 'default constructor');
+
 if nargin == 0  % default constructor
-    x = struct('data', zeros(0, 1), 'colnames', {{}}, 'rownames', {{}});    
+    x = struct('data', zeros(0, 1), 'colnames', {{}}, 'rownames', {{}}, 'info', info);    
 else    
-    x = struct('data', x0, 'colnames', {{}}, 'rownames', {{}});
+    x = struct('data', x0, 'colnames', {{}}, 'rownames', {{}}, 'info', info);
 end   
 
 x = class(x, 'stk_dataframe');
