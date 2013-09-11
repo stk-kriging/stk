@@ -1,3 +1,10 @@
+2013-09-11  Julien Bect  <julien.bect@supelec.fr>
+
+	Allow string arguments in stk_isequal_tolabs and stk_isequal_tolrel.
+
+	* misc/test/stk_isequal_tolrel.m: modified
+	* misc/test/stk_isequal_tolabs.m: modified
+
 2013-09-11  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 	@stk_dataframe: Increase display verbosity.
