@@ -1,3 +1,9 @@
+2013-09-11  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
+	stk_disp_examplewelcome.m: Define a default welcome message.
+
+	* misc/text/stk_disp_examplewelcome.m: modified
+
 2013-09-10  Julien Bect  <julien.bect@supelec.fr>
 
 	Use strtrim instead of deblank + fliplr.
