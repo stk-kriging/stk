@@ -9,7 +9,8 @@
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -31,15 +32,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function display(x)
+function display (x)
 
-fprintf('\n%s = ', inputname(1));
+fprintf ('\n%s = ', inputname (1));
 
-disp(x);
+disp (x);
 
-fprintf('\n');
+fprintf ('\n');
 
 end % function display
 
 
-%!test display(stk_dataframe(rand(3, 2)));
+%!test display (stk_dataframe (rand (3, 2)));
