@@ -1,5 +1,10 @@
 2013-09-11  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
+	@stk_dataframe: Increase display verbosity.
+
+	* utils/@stk_dataframe/display.m: modified
+	* utils/@stk_dataframe/disp.m: modified
+
 	@stk_dataframe: Make 'data' available through get/set and dot-indexation.
 
 	* utils/@stk_dataframe/private/get_column_number.c: modified

@@ -3,13 +3,14 @@
 % Example:
 %    format short
 %    x = [1 1e6 rand; 10 -1e10 rand; 100 1e-22 rand];
-%    disp(stk_dataframe(x))
+%    disp (stk_dataframe (x))
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -31,56 +32,53 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function disp(x, max_width)
+function disp (x, max_width)
 
 nb_spaces_before = 4;
-spstr = repmat(' ', 1, nb_spaces_before); %#ok<*AGROW>
+spstr = repmat (' ', 1, nb_spaces_before); %#ok<*AGROW>
 
-[n, d] = size(x.data);
+[n, d] = size (x.data);
 
-fprintf('stk_dataframe object\n\n');
-fprintf(' .info:\n%sinfo struct\n', spstr);
-fprintf(' .colnames:\n');
+fprintf ('%s object\n\n', class (x));
+fprintf (' .info:\n%sinfo struct\n', spstr);
+fprintf (' .colnames:\n');
 
-if isempty(x.colnames)
+if isempty (x.colnames)
     
     if d == 1,
-        fprintf('%sstk_dataframe with 1 unnamed variable.\n', spstr);
+        fprintf ('%sstk_dataframe with 1 unnamed variable.\n', spstr);
     else
-        fprintf('%sstk_dataframe with %d unnamed variables.\n', spstr, d);
+        fprintf ('%sstk_dataframe with %d unnamed variables.\n', spstr, d);
     end
     
 else
     
     if d == 1,
-        fprintf('%sstk_dataframe with 1 variable: ', spstr);
-        fprintf('%s\n', x.colnames{1});
+        fprintf ('%sstk_dataframe with 1 variable: ', spstr);
+        fprintf ('%s\n', x.colnames{1});
     else
-        fprintf('%sstk_dataframe with %d variables: ', spstr, d);
+        fprintf ('%sstk_dataframe with %d variables: ', spstr, d);
         for j = 1:(d-1),
-            fprintf('%s, ', x.colnames{j});
+            fprintf ('%s, ', x.colnames{j});
         end
-        fprintf('%s\n', x.colnames{end});
+        fprintf ('%s\n', x.colnames{end});
     end
     
 end
 
-fprintf(' .rownames:\n');
+fprintf (' .rownames:\n');
 
-if isempty(x.rownames)
-    
-        fprintf('%sstk_dataframe with %d unnamed elements.\n', spstr, n);  
+if isempty (x.rownames)
+    fprintf ('%sstk_dataframe with %d unnamed elements.\n', spstr, n);
 else
-    
-        fprintf('%sstk_dataframe with %d elements: ', spstr, n);
-        for j = 1:(n-1),
-            fprintf('%s, ', x.rownames{j});
-        end
-        fprintf('%s\n', x.rownames{end});
-    
+    fprintf ('%sstk_dataframe with %d elements: ', spstr, n);
+    for j = 1:(n-1),
+        fprintf ('%s, ', x.rownames{j});
+    end
+    fprintf ('%s\n', x.rownames{end});
 end
 
-fprintf(' .data/.a:\n');
+fprintf (' .data/.a:\n');
 nb_spaces_colsep = 2;
 if n>0,
     
@@ -101,16 +99,16 @@ if n>0,
         end
     end
     
-    has_colnames = ~isempty(x.colnames);
+    has_colnames = ~ isempty (x.colnames);
     nb_rows = n + has_colnames;
     
-    str = repmat(' ', nb_rows, nb_spaces_before); %#ok<*AGROW>
+    str = repmat (' ', nb_rows, nb_spaces_before); %#ok<*AGROW>
     
     % first columns: row names
-    if isempty(x.rownames)
-        rownames = stk_sprintf_colvect(1:n);
+    if isempty (x.rownames)
+        rownames = stk_sprintf_colvect (1:n);
     else
-        rownames = char(x.rownames);
+        rownames = char (x.rownames);
     end
     
     if has_colnames
@@ -125,18 +123,17 @@ if n>0,
     
     for j = 1:d,
         
-        xx  = stk_sprintf_colvect(x.data(:, j), max_width);
+        xx  = stk_sprintf_colvect (x.data(:, j), max_width);
         
-        
-        if ~has_colnames % no need for a header row in this case
+        if ~ has_colnames % no need for a header row in this case
             
             str = [str xx];
             
         else
             
             vn = x.colnames{j};
-            Lxx = size(xx, 2);
-            L = max(length(vn), Lxx);
+            Lxx = size (xx, 2);
+            L = max (length (vn), Lxx);
             str = [str [sprintf('% *s', L, vn);  % variable name
                 repmat(' ', n, L - Lxx) xx]];    % formatted data
             
@@ -149,9 +146,12 @@ if n>0,
         
     end % for
     
-    disp(str);
+    disp (str);
+    
 else
-    fprintf('\tempty dataframe\n')
+    
+    fprintf ('\tempty dataframe\n');
+    
 end % if
 
 end % function disp
