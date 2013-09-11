@@ -32,6 +32,7 @@
 #include "string.h"
 #include "stk_mex.h"
 
+#define ICOL_INFO     -5           /* will be a -4 in the end */
 #define ICOL_ROWNAMES -4           /* will be a -3 in the end */
 #define ICOL_COLNAMES -3           /* will be a -2 in the end */
 #define ICOL_ENTIRE_DATAFRAME -2   /* will be a -1 in the end */
@@ -42,6 +43,9 @@ int get_column_number(const mxArray* mxColNames, char* s)
     char** colnames;
     mxArray* tmp;
     int icol, found;
+    
+    if (strcmp (s, "info") == 0)
+        return ICOL_INFO;
     
     if (strcmp (s, "rownames") == 0)
         return ICOL_ROWNAMES;

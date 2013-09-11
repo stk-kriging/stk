@@ -39,6 +39,7 @@ spstr = repmat(' ', 1, nb_spaces_before); %#ok<*AGROW>
 [n, d] = size(x.data);
 
 fprintf('stk_dataframe object\n\n');
+fprintf(' .info:\n%sinfo struct\n', spstr);
 fprintf(' .colnames:\n');
 
 if isempty(x.colnames)
