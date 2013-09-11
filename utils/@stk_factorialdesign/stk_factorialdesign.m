@@ -73,8 +73,6 @@ else
         
         % base dataframe
         df = stk_dataframe(xdata, varargin{:});
-        df.info.type = 'stk_factorialdesign object';
-        df.info.levels = levels;
         
         % "factorial design" object
         x = struct('levels', {levels}); %FIXME: no need to store levels twice
