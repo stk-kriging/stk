@@ -75,8 +75,8 @@ for j = 1:dim,
     levels{j} = linspace(box(1, j), box(2, j), n(j));
 end
 
-x = stk_factorialdesign(levels);
-x.info.creator = 'function stk_sampling_regulargrid';
+x = stk_factorialdesign (levels);
+x.info = 'Created by stk_sampling_regulargrid';
 
 end % function stk_sampling_regulargrid
 

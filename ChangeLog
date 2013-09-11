@@ -1,5 +1,24 @@
 2013-09-11  Julien Bect  <julien.bect@supelec.fr>
 
+	@stk_dataframe, @stk_factorialdesign: Improve display.
+
+	* utils/@stk_dataframe/stk_sprintf_info.m: new function
+	* utils/@stk_dataframe/stk_sprintf_data.m: new function
+	* utils/@stk_dataframe/disp.m: modified
+	* utils/@stk_dataframe/stk_sprintf_colnames.m: new function
+	* utils/@stk_dataframe/stk_dataframe.m: modified
+	* utils/@stk_dataframe/stk_sprintf_rownames.m: new function
+	* utils/@stk_dataframe/stk_sprintf_sizetype.m: new function
+	* utils/@stk_factorialdesign/disp.m: new function
+	* utils/@stk_factorialdesign/stk_factorialdesign.m: modified
+	* utils/@stk_factorialdesign/stk_sprintf_levels.m: new function
+	* sampling/stk_sampling_regulargrid.m: modified
+	* misc/text/stk_sprintf_sizetype.m: new function
+	* misc/text/stk_sprintf_rownames.m: new function
+	* misc/text/stk_sprintf_info.m: new function
+	* misc/text/stk_sprintf_colnames.m: new function
+	* misc/text/stk_sprintf_data.m: new function
+
 	Allow string arguments in stk_isequal_tolabs and stk_isequal_tolrel.
 
 	* misc/test/stk_isequal_tolrel.m: modified

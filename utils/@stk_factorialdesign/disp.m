@@ -39,6 +39,11 @@ spstr = '    ';
 fprintf ('%s\n\n', stk_sprintf_sizetype (x));
 fprintf (' .info:\n%s%s\n', spstr, stk_sprintf_info (x));
 fprintf (' .colnames\n%s%s\n', spstr, stk_sprintf_colnames (x));
+
+fprintf (' .levels\n');
+s = stk_sprintf_levels (x);
+disp ([repmat(spstr, size(s, 1), 1) s]);
+
 fprintf (' .rownames\n%s%s\n', spstr, stk_sprintf_rownames (x));
 
 fprintf (' .data\n');
