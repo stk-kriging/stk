@@ -40,7 +40,19 @@ spstr = repmat (' ', 1, nb_spaces_before); %#ok<*AGROW>
 [n, d] = size (x.data);
 
 fprintf ('%s object\n\n', class (x));
-fprintf (' .info:\n%sinfo struct\n', spstr);
+fprintf (' .info:\n', spstr);
+info = x.info;
+info_fields = fields(info);
+for i = 1:length(info_fields)
+    field_val =  getfield(info, info_fields{i});
+    if ischar(field_val)
+        fprintf('%s%s: %s\n', spstr, info_fields{i},  field_val);
+    else
+        z = field_val;
+        fprintf('%s%s: %s object\n', spstr, info_fields{i}, class(z));
+    end
+end
+
 fprintf (' .colnames:\n');
 
 if isempty (x.colnames)
