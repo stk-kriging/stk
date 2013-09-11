@@ -111,6 +111,8 @@ else
     
 end
 
+zp.info.creator = 'function stk_predict';
+
 end
 
 
