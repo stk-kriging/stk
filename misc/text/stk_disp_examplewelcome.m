@@ -4,7 +4,8 @@
 %
 %    Copyright (C) 2012, 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,18 +27,16 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_examplewelcome()
+function stk_disp_examplewelcome ()
 
-stack = dbstack();
+stack = dbstack ();
 
 if length(stack) >= 2,
-    fprintf('%s\n', stk_sprintf_framed(stack(2).name));
+    demo_name = stack(2).name;
 else
-    fprintf('This is a demo example...\n');
-%     errmsg = 'stk_disp_examplewelcome() is meant to be used in example scripts.';
-%     stk_error(errmsg, 'disp');
+    demo_name = 'This is a demo example...';
 end
 
-
+fprintf ('%s\n', stk_sprintf_framed (demo_name));
 
 end % function stk_disp_examplewelcome
