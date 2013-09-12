@@ -1,3 +1,16 @@
+2013-09-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Fill .info field after the construction of a dataframe.
+
+	* core/stk_predict.m: modified
+	* core/@stk_kriging_equation/stk_predict.m: modified
+	* utils/stk_feval.m: modified
+	* sampling/stk_sampling_olhs.m: modified
+	* sampling/stk_sampling_randunif.m: modified
+	* sampling/stk_sampling_maximinlhs.m: modified
+	* sampling/stk_sampling_halton_rr2.m: modified
+	* sampling/stk_sampling_randomlhs.m: modified
+
 2013-09-11  Julien Bect  <julien.bect@supelec.fr>
 
 	@stk_dataframe, @stk_factorialdesign: Improve display.
