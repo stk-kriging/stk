@@ -1,5 +1,22 @@
 2013-09-12  Julien Bect  <julien.bect@supelec.fr>
 
+	Reorganize folders.
+
+	* utils/arrays: new folder
+	* utils/arrays/generic: new folder
+	* utils/@stk_dataframe: moved to utils/arrays
+	* utils/@stk_factorialdesign: moved to utils/arrays
+	* utils/@struct: moved to utils/arrays
+	* misc/text/stk_sprintf_data.m: moved to utils/arrays/generic
+	* misc/text/stk_sprintf_rownames.m: moved to utils/arrays/generic
+	* misc/text/stk_sprintf_info.m: moved to utils/arrays/generic
+	* misc/text/stk_sprintf_sizetype.m: moved to utils/arrays/generic
+	* misc/text/stk_sprintf_colnames.m: moved to utils/arrays/generic
+	* utils/stk_rescale.m: moved to utils/arrays/generic
+	* utils/stk_normalize.m: moved to utils/arrays/generic
+	* misc/config/stk_path.m: modified
+	* misc/config/stk_compile_all.m: modified
+
 	Fill .info field after the construction of a dataframe.
 
 	* core/stk_predict.m: modified

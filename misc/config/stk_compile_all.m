@@ -45,7 +45,7 @@ stk_compile (dst_dir, src_dir, opts, 'stk_gpquadform_matrixy');
 stk_compile (dst_dir, src_dir, opts, 'stk_gpquadform_matrixx');
 stk_compile (dst_dir, src_dir, opts, 'stk_gpquadform_pairwise');
 
-src_dir = fullfile (root, 'utils', '@stk_dataframe', 'private');
+src_dir = fullfile (root, 'utils', 'arrays', '@stk_dataframe', 'private');
 dst_dir = src_dir;
 stk_compile (dst_dir, src_dir, opts, 'get_column_number');
 
