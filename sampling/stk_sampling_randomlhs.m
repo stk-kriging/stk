@@ -56,7 +56,8 @@ end
 
 niter = 1;
 
-x = stk_sampling_maximinlhs(n, dim, box, niter);
+x = stk_sampling_maximinlhs (n, dim, box, niter);
+x.info = 'Created by stk_sampling_randomlhs';
 
 end % function stk_sampling_randomlhs
 
