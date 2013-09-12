@@ -1,11 +1,11 @@
-% STK_DISP_EXAMPLEWELCOME
+% STK_SPRINTF_COLNAMES returns the column names of an array
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
-%    Authors:  Julien Bect       <julien.bect@supelec.fr>
-%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,16 +27,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_examplewelcome ()
+function s = stk_sprintf_colnames (x)
 
-stack = dbstack ();
+d = size (x, 2);
+colnames = get (x, 'colnames');
 
-if length(stack) >= 2,
-    demo_name = stack(2).name;
+if isempty (colnames)
+    s = stk_sprintf_colnames (zeros (0, d));
 else
-    demo_name = 'This is a demo example...';
+    s = '{';
+    for j = 1:(d-1),
+        s = [s sprintf('%s, ', x.colnames{j})]; %#ok<AGROW>
+    end
+    s = [s sprintf('%s}', x.colnames{end})];
 end
 
-fprintf ('%s\n', stk_sprintf_framed (demo_name));
-
-end % function stk_disp_examplewelcome
+end % function stk_sprintf_colnames

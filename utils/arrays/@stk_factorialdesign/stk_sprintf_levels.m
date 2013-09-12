@@ -1,11 +1,10 @@
-% STK_DISP_EXAMPLEWELCOME
+% STK_SPRINTF_LEVELS prints the levels of a factorial design into a string
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
-%    Authors:  Julien Bect       <julien.bect@supelec.fr>
-%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,16 +26,34 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_examplewelcome ()
+function s = stk_sprintf_levels (x)
 
-stack = dbstack ();
+levels = x.levels;
+colnames = get (x.stk_dataframe, 'colnames');
 
-if length(stack) >= 2,
-    demo_name = stack(2).name;
-else
-    demo_name = 'This is a demo example...';
+d = length (levels);
+s = sprintf ('1 x %d cell array', d);
+
+for i = 1:d   
+    
+    if isempty (colnames)
+        line{i} = sprintf('levels for column #%d: ', i);
+    else
+        line{i} = sprintf('levels for variable %s: ', colnames{i});
+    end
+        
+    L = levels{i};
+    if isempty (L)
+        line{i} = [line{i} '[]'];
+    else
+        for j = 1:(length(L) - 1)
+            line{i} = [line{i} num2str(L(j)) ', '];
+        end
+        line{i} = [line{i} sprintf('%s', num2str(L(end)))];
+    end
+    
 end
 
-fprintf ('%s\n', stk_sprintf_framed (demo_name));
+s = strvcat (s, line{:});
 
-end % function stk_disp_examplewelcome
+end % function stk_sprintf_levels

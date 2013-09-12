@@ -1,11 +1,10 @@
-% STK_DISP_EXAMPLEWELCOME
+% FIELDNAMES [overloaded base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
-%    Authors:  Julien Bect       <julien.bect@supelec.fr>
-%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,16 +26,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_examplewelcome ()
+function fn = fieldnames(x)
 
-stack = dbstack ();
+fn = [x.colnames reserved_field_names()];
 
-if length(stack) >= 2,
-    demo_name = stack(2).name;
-else
-    demo_name = 'This is a demo example...';
-end
+end % function fieldnames
 
-fprintf ('%s\n', stk_sprintf_framed (demo_name));
-
-end % function stk_disp_examplewelcome
+%!test
+%! x = stk_dataframe(rand(3, 2), {'u' 'v'});
+%! assert(all(strcmp(sort(fieldnames(x)), {'colnames' 'rownames' 'u' 'v'})));

@@ -49,7 +49,7 @@ function [paramopt, paramlnvopt] = stk_param_estim ...
     (model, xi, yi, param0, param0lnv)
 
 if nargin > 5,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % size checking: xi, yi
@@ -173,21 +173,28 @@ end % function stk_param_estim ------------------------------------------------
 
 %--- The objective function and its gradient ----------------------------------
 
-function [l, dl] = f_(model, u, xi, yi)
+function [l, dl] = f_ (model, u, xi, yi)
+
 model.param(:) = u;
 if nargout == 1,
     l = stk_param_relik (model, xi, yi);
 else
     [l, dl] = stk_param_relik (model, xi, yi);
 end
-end
 
-function dl = nablaf_(model, u, xi, yi)
+end % function f_
+
+
+function dl = nablaf_ (model, u, xi, yi)
+
 model.param(:) = u;
 [l_ignored, dl] = stk_param_relik (model, xi, yi); %#ok<ASGLU>
-end
 
-function [l, dl] = f_with_noise_(model, u, xi, yi)
+end % function nablaf_
+
+
+function [l, dl] = f_with_noise_ (model, u, xi, yi)
+
 model.param(:) = u(1:end-1);
 model.lognoisevariance  = u(end);
 if nargin == 1,
@@ -196,14 +203,19 @@ else
     [l, dl, dln] = stk_param_relik (model, xi, yi);
     dl = [dl; dln];
 end
-end
 
-function dl = nablaf_with_noise_(model, u, xi, yi)
+end % function f_with_noise_
+
+
+function dl = nablaf_with_noise_ (model, u, xi, yi)
+
 model.param(:) = u(1:end-1);
 model.lognoisevariance  = u(end);
 [l_ignored, dl, dln] = stk_param_relik (model, xi, yi); %#ok<ASGLU>
 dl = [dl; dln];
-end
+
+end % function nablaf_with_noise_
+
 
 function [lblnv,ublnv] = get_default_bounds_lnv ... % -------------------------
     (model, param0lnv, xi, yi) %#ok<INUSL>
@@ -219,10 +231,6 @@ ublnv = log(empirical_variance) + TOLVAR;
 
 end % function get_default_bounds_lnv -----------------------------------------
 
-
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
 
 %!shared f, xi, zi, NI, param0, model
 %!

@@ -1,11 +1,11 @@
-% STK_DISP_EXAMPLEWELCOME
+% STK_SPRINTF_DATA prints the content of an array into a string
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
-%    Authors:  Julien Bect       <julien.bect@supelec.fr>
-%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,16 +27,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_examplewelcome ()
+function s = stk_sprintf_data (x, max_width)
 
-stack = dbstack ();
-
-if length(stack) >= 2,
-    demo_name = stack(2).name;
-else
-    demo_name = 'This is a demo example...';
+if nargin < 2,
+    max_width = [];
 end
 
-fprintf ('%s\n', stk_sprintf_framed (demo_name));
+colnames = get (x, 'colnames');
+rownames = get (x, 'rownames');
 
-end % function stk_disp_examplewelcome
+s = stk_sprintf_data (double (x), max_width, colnames, rownames);
+
+end % function stk_sprintf_data

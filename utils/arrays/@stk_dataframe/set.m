@@ -1,4 +1,4 @@
-% FIELDNAMES [overloaded base function]
+% SET [overloaded base function]
 
 % Copyright Notice
 %
@@ -26,12 +26,35 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function fn = fieldnames(x)
+function x = set (x, propname, value)
 
-fn = [x.vnames reserved_field_names()];
+icol = get_column_number (x.colnames, propname);
 
-end % function fieldnames
+switch icol
+     
+    case -4 % 'info'
+        x.info = value;
+    
+    case -3 % 'rownames'
+        x.rownames = value;
+        
+    case -2 % 'colnames'
+        x.colnames = value;
+            
+    case - 1 % set entire array
+        if isequal (size(x.data), size(value))
+            x.data = value;
+        else
+            error ('Incorrect size');
+        end
+        
+    otherwise
+        if isequal (size(value), [size(x.data, 1) 1])
+            x.data(:, icol) = value;
+        else
+            error ('Incorrect size');
+        end
+        
+end
 
-%!test
-%! x = stk_dataframe(rand(3, 2), {'u' 'v'});
-%! assert(all(strcmp(sort(fieldnames(x)), {'colnames' 'rownames' 'u' 'v'})));
+end % function get

@@ -47,7 +47,7 @@ while 1
 	tline = fgetl(fid);
 	if ~ischar(tline), break, end
 	it = it + 1;
-	tline = deblank(fliplr(deblank(fliplr(tline))));
+	tline = strtrim (tline);
 	%- Synopsis line
 	if ~isempty(strmatch('function',tline))
 		s.synopsis = tline;
@@ -94,7 +94,7 @@ end
 %  hrefs(i) is 1 if mfile calls mfiles{i} and 0 otherwise
 while ischar(tline)
 	% Remove blanks at both ends
-	tline = deblank(fliplr(deblank(fliplr(tline))));
+	tline = strtrim (tline);
 	
 	% Split code into meaningful chunks
 	splitc = splitcode(tline);

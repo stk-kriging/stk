@@ -58,7 +58,7 @@ function res = stk_isequal_tolrel(a, b, tolrel)
 DEFAULT_TOLREL = 1e-8;
 
 if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 if nargin == 2,
@@ -89,6 +89,25 @@ elseif isnumeric(a) && isnumeric(b)
     tolabs = max(abs(aa), abs(bb)) * tolrel;
     res = all(abs(bb - aa) <= tolabs);
     
+elseif ischar (a) && ischar (b)
+    
+    res = strcmp (a, b);
+    
+elseif iscell (a) && iscell (b)
+    
+    for i = 1:numel(a),
+        if ~ stk_isequal_tolrel (a{i}, b{i}, tolrel);
+            res = false;
+            return;
+        end
+    end
+    
+    res = true;
+    
+elseif isa (a, 'stk_dataframe') && (strcmp (class (a), class (b)))
+    
+    res = stk_isequal_tolrel (struct (a), struct (b), tolrel);
+    
 else
     
     res = false;
@@ -97,9 +116,6 @@ end
 
 end % function stk_isequal_tolrel
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
 
 %!shared r1, r2, a, b, tolrel
 %! a = 1.01; b = 1.02; tolrel = 0.1;

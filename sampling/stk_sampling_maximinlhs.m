@@ -47,6 +47,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_maximinlhs(n, d, box, niter)
+
 if nargin > 4,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
@@ -69,8 +70,9 @@ else % at least one input point
 end
 
 x = stk_dataframe(xdata);
+x.info = 'Created by stk_sampling_maximinlhs';
 
-end
+end % function stk_sampling_maximinlhs
 
 
 %%%%%%%%%%%%%%%%%%
@@ -110,10 +112,6 @@ x = (x - rand(size(x))) / n;
 
 end
 
-
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
 
 %%
 % Check error for incorrect number of input arguments

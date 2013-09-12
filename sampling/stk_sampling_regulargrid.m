@@ -43,6 +43,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_regulargrid(n, dim, box)
+
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
@@ -74,14 +75,11 @@ for j = 1:dim,
     levels{j} = linspace(box(1, j), box(2, j), n(j));
 end
 
-x = stk_factorialdesign(levels);
+x = stk_factorialdesign (levels);
+x.info = 'Created by stk_sampling_regulargrid';
 
 end % function stk_sampling_regulargrid
 
-
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
 
 %%
 % Check error for incorrect number of input arguments

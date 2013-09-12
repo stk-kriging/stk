@@ -1,10 +1,16 @@
-% GET [overloaded base function]
+% DISPLAY [overloaded base function]
+%
+% Example:
+%    format short
+%    x = [1 1e6 rand; 10 -1e10 rand; 100 1e-22 rand];
+%    stk_dataframe(x)  % implicitely calls display()
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,24 +32,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function value = get (x, propname)
+function display (x)
 
-icol = get_column_number (x.vnames, propname);
+fprintf ('\n%s = ', inputname (1));
 
-switch icol
-    
-    case -3 % 'rownames'
-        value = x.rownames;
-        
-    case -2 % 'colnames'
-        value = x.vnames;
-            
-    case -1 % get entire array
-        value = x.data;
-        
-    otherwise
-        value = x.data(:, icol);
+disp (x);
 
-end
+fprintf ('\n');
 
-end % function get
+end % function display
+
+
+%!test display (stk_dataframe (rand (3, 2)));
