@@ -1,5 +1,13 @@
 2013-09-12  Julien Bect  <julien.bect@supelec.fr>
 
+	Control the verbosity of display for dataframe objects.
+
+	* misc/options/stk_options_set.m: modified
+	* utils/arrays/@stk_factorialdesign/disp.m: modified
+	* utils/arrays/@stk_dataframe/disp.m: modified
+	* utils/arrays/@stk_dataframe/display.m: modified
+	* stk_init.m: modified
+
 	Display row and column names between simple quotes.
 
 	* utils/arrays/@stk_dataframe/stk_sprintf_colnames.m: modified

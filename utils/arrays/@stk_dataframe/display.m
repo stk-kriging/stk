@@ -36,6 +36,10 @@ function display (x)
 
 fprintf ('\n%s = ', inputname (1));
 
+if strcmp ('basic', stk_options_get ('stk_dataframe', 'disp_format'))
+    fprintf ('\n\n');
+end
+
 disp (x);
 
 fprintf ('\n');
