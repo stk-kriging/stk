@@ -26,34 +26,34 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function value = get (kreq, propname)
+function value = get (posterior, propname)
 
 switch propname
     
     case 'log_abs_det_kriging_matrix'
         % LS_Q has +/- 1 determinant, so we only need to care about LS_R
-        value = sum (log (abs (diag (kreq.LS_R))));
+        value = sum (log (abs (diag (posterior.LS_R))));
                  
     case 'log_det_covariance_matrix_a'
-        n = size (kreq.xi, 1);
-        Q11 = kreq.LS_Q(1:n, 1:n);
-        R11 = kreq.LS_R(1:n, 1:n);
+        n = size (posterior.xi, 1);
+        Q11 = posterior.LS_Q(1:n, 1:n);
+        R11 = posterior.LS_R(1:n, 1:n);
         value = log (det (Q11 * R11)); % K = Q11 * R11
         % note: this method seems much less accurate than the others,
         %       we strongly recommend to avoid using it
         
     case 'log_det_covariance_matrix_b'
-        n = size (kreq.xi, 1);
-        Q11 = kreq.LS_Q(1:n, 1:n);
-        R11 = kreq.LS_R(1:n, 1:n);
+        n = size (posterior.xi, 1);
+        Q11 = posterior.LS_Q(1:n, 1:n);
+        R11 = posterior.LS_R(1:n, 1:n);
         Kchol = chol (Q11 * R11); % K = Q11 * R11
         value = 2 * sum (log (diag (Kchol)));
         
     case 'log_det_covariance_matrix_c'
         % note: very efficient (but not the best) and quite simple to understand
-        n = size(kreq.xi, 1);
-        Q11 = kreq.LS_Q(1:n, 1:n);
-        diag_R  = diag (kreq.LS_R);
+        n = size(posterior.xi, 1);
+        Q11 = posterior.LS_Q(1:n, 1:n);
+        diag_R  = diag (posterior.LS_R);
         logdet1 = log (abs (det (Q11)));
         logdet2 = sum (log (abs (diag_R(1:n))));
         value = logdet1 + logdet2;
@@ -62,20 +62,20 @@ switch propname
         % note: this is the fastest of all five solutions for large matrices
         %       (for small matrices, the difference is negligible)... but also
         %       the trickiest !
-        n = size (kreq.xi, 1);
-        QL = kreq.LS_Q((n + 1):end, :); % lowerpart of LS_Q
-        diag_R = diag (kreq.LS_R);
+        n = size (posterior.xi, 1);
+        QL = posterior.LS_Q((n + 1):end, :); % lowerpart of LS_Q
+        diag_R = diag (posterior.LS_R);
         logdet1 = sum (log (abs (diag_R)));
-        T = kreq.LS_R \ (QL');
+        T = posterior.LS_R \ (QL');
         logdet2 = log (abs (det (T((n + 1):end, :))));
         value = logdet1 + logdet2;
         
     case 'log_det_covariance_matrix_e'
         % note: the most time consuming of all five solutions (blame qrdelete),
         %       we strongly recommend to avoid using it
-        n = size (kreq.xi, 1);
-        Q = kreq.LS_Q;
-        R = kreq.LS_R;
+        n = size (posterior.xi, 1);
+        Q = posterior.LS_Q;
+        R = posterior.LS_R;
         r = size (Q, 1) - n;
         for i = 0:(r - 1),
             [Q, R] = qrdelete (Q, R, n + r - i, 'row');
@@ -85,7 +85,7 @@ switch propname
         
     otherwise
         try
-            value = kreq.(propname);
+            value = posterior.(propname);
         catch
             error ('There is no property called ''%s''.', propname);
         end

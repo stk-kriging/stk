@@ -1,11 +1,10 @@
-% LINSOLVE solves the kriging equation
+% STK_SQUARED_SEMINORM...
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,15 +26,25 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function w = linsolve (kreq, rs)
+function s = stk_squared_seminorm (posterior, zi)
 
-% Solves the linear equation A * ws = rs, where A is the kriging matrix
+n = size (posterior.LS_Q, 1);
+r = n - size (posterior.xi, 1);
 
-if stk_is_octave_in_use (),
-    % linsolve is missing in Octave
-    w = kreq.LS_R \ (kreq.LS_Q' * rs);
-else
-    w = linsolve (kreq.LS_R, kreq.LS_Q' * rs, struct ('UT', true));
-end
+% Extend the observation vector with zeros
+zz = [double(zi); zeros(r, 1)];
 
-end % function linsolve
+% Compute the squared seminorm
+s = zz' * (linsolve (posterior, zz));
+
+% % Alternative (slower) implementation:
+% ni = size (kreq.xi, 1);
+% zi = double (zi);
+% QU = kreq.LS_Q(1:ni, :);
+% T  = kreq.LS_R \ (QU' * zi);
+% s  = zi' * T(1:ni, :);
+
+% Guard against numerical issues
+if s < 0, s = 0; end
+
+end % function stk_squared_seminorm

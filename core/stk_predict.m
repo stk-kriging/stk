@@ -77,7 +77,7 @@ options = {display_waitbar, block_size};
 
 %=== prepare lefthand side of the kriging equation
 
-kreq = stk_kriging_equation(model, xi);
+posterior = stk_posterior_model(model, xi);
 
 %=== solve the kriging system and extract all requested outputs
 
@@ -87,26 +87,26 @@ if nargout == 1,
     % argument is more memory-efficient (we don't build full lambda_mu and RS
     % matrices)
     
-    zp = stk_predict(kreq, zi, xt, options{:});
+    zp = stk_predict(posterior, zi, xt, options{:});
     
 else
     
-    [zp, kreq] = stk_predict(kreq, zi, xt, options{:});
+    [zp, posterior] = stk_predict(posterior, zi, xt, options{:});
     
     % extracts kriging weights (if requested)
     if nargout > 1,
-        lambda = kreq.lambda;
+        lambda = posterior.lambda;
     end
     
     % extracts Lagrange multipliers (if requested)
     if nargout > 2,
-        mu = kreq.mu;
+        mu = posterior.mu;
     end
     
     % compute posterior covariance matrix (if requested)
     if nargout > 3,
         nt = size(xt, 1);
-        K = stk_posterior_matcov(kreq, 1:nt, 1:nt, false);
+        K = stk_posterior_matcov(posterior, 1:nt, 1:nt, false);
     end
     
 end
