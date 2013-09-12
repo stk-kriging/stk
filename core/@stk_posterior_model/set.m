@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = set(kreq, propname, value)
+function posterior = set(posterior, propname, value)
 
 % This class implements GREEDY EVALUATION: computations are made as soon as the
 % required inputs are made available.
@@ -35,21 +35,21 @@ switch propname
     
     case 'xi'
         
-        kreq.xi        = double (value);
-        kreq.LS_Q      = []; % need to be recomputed
-        kreq.LS_R      = []; % need to be recomputed
-        kreq.RS        = []; % need to be recomputed
-        kreq.lambda_mu = []; % need to be recomputed
+        posterior.xi        = double (value);
+        posterior.LS_Q      = []; % need to be recomputed
+        posterior.LS_R      = []; % need to be recomputed
+        posterior.RS        = []; % need to be recomputed
+        posterior.lambda_mu = []; % need to be recomputed
         
-        kreq = do_compute (kreq);
+        posterior = do_compute (posterior);
         
     case 'xt'
         
-        kreq.xt        = double (value);
-        kreq.RS        = []; % need to be recomputed
-        kreq.lambda_mu = []; % need to be recomputed
+        posterior.xt        = double (value);
+        posterior.RS        = []; % need to be recomputed
+        posterior.lambda_mu = []; % need to be recomputed
 
-        kreq = do_compute (kreq);
+        posterior = do_compute (posterior);
         
     otherwise
         
