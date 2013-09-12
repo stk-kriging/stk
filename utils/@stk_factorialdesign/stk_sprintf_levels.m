@@ -1,16 +1,10 @@
-% DISPLAY [overloaded base function]
-%
-% Example:
-%    format short
-%    x = [1 1e6 rand; 10 -1e10 rand; 100 1e-22 rand];
-%    stk_dataframe(x)  % implicitely calls display()
+% STK_SPRINTF_LEVELS prints the levels of a factorial design into a string
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -32,15 +26,34 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function display (x)
+function s = stk_sprintf_levels (x)
 
-fprintf ('\n%s = ', inputname (1));
+levels = x.levels;
+colnames = get (x.stk_dataframe, 'colnames');
 
-disp (x);
+d = length (levels);
+s = sprintf ('1 x %d cell array', d);
 
-fprintf ('\n');
+for i = 1:d   
+    
+    if isempty (colnames)
+        line{i} = sprintf('levels for column #%d: ', i);
+    else
+        line{i} = sprintf('levels for variable %s: ', colnames{i});
+    end
+        
+    L = levels{i};
+    if isempty (L)
+        line{i} = [line{i} '[]'];
+    else
+        for j = 1:(length(L) - 1)
+            line{i} = [line{i} num2str(L(j)) ', '];
+        end
+        line{i} = [line{i} sprintf('%s', num2str(L(end)))];
+    end
+    
+end
 
-end % function display
+s = strvcat (s, line{:});
 
-
-%!test display (stk_dataframe (rand (3, 2)));
+end % function stk_sprintf_levels
