@@ -1,4 +1,4 @@
-% STK_KRIGING_EQUATION...
+% STK_SET_RIGHTHANDSIDE [STK internal]
 
 % Copyright Notice
 %
@@ -26,26 +26,16 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function posterior = stk_posterior_model (model, xi, xt)
+function kreq = stk_set_righthandside (kreq, Kti, Pt)
 
-posterior = struct ( 'model',     model,  ...
-    'xi',   [], 'xt',        [],     ...
-    'LS_Q', [],  'LS_R',     [],     ...
-    'RS',   [], 'lambda_mu', []      );
+% This class implements GREEDY EVALUATION: computations are made as soon as the
+% required inputs are made available.
 
-posterior = class (posterior, 'stk_posterior_model');
+% prepare the right-hand side of the kriging equation
+kreq.RS = [Kti Pt]';
 
-if nargin > 1,
+% Solve the kriging equation to get the extended
+% kriging weights vector (weights + Lagrange multipliers)
+kreq.lambda_mu = linsolve (kreq);
 
-    % this triggers a first set of partial computations...
-    posterior = set (posterior, 'xi', xi);
-    
-    if nargin > 2,
-        % ...and this triggers the remaining computation
-        % (if xt is not provided, we end up with an incomplete kreq)
-        posterior = set (posterior, 'xt', xt);
-    end
-    
-end % if
-
-end % function stk_kriging_equation
+end % function stk_set_righthandside

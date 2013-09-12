@@ -1,10 +1,10 @@
-% SUBSREF [overloaded base function]
+% STK_UPDATE...
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,35 +26,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = subsref(posterior, idx)
+function kreq_updated = stk_update (kreq, x_new)
 
-switch idx(1).type
-    
-    case {'()', '{}'}
-        
-        stk_error('Illegal indexing.', 'IllegalIndexing');        
-        
-    case '.'
-        
-        switch idx(1).subs
-                        
-            case 'lambda',
-                ni = size(posterior.xi, 1);
-                t = posterior.lambda_mu(1:ni, :);
-                
-            case 'mu',
-                ni = size(posterior.xi, 1);
-                t = posterior.lambda_mu((ni + 1):end, :);
-                
-            otherwise,                
-                t = posterior.(idx(1).subs);
-                
-        end % switch
-        
-        if length(idx) > 1,
-            t = subsref(t, idx(2:end));
-        end
-        
-end
+% Poor man's update: we recompute EVERYTHING
+kreq_updated = stk_kriging_equation (kreq.model, [kreq.xi; x_new]);
 
-end % function subsref
+% TODO: implement efficient update equations
+
+end % stk_kriging_equation_update

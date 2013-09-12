@@ -1,10 +1,10 @@
-% STK_UPDATE...
+% STK_SQUARED_SEMINORM...
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Authors:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,11 +26,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function posterior_updated = stk_update (posterior, x_new)
+function s = stk_squared_seminorm (kreq, zi)
 
-% Poor man's update: we recompute EVERYTHING
-posterior_updated = stk_kriging_equation (posterior.model, [posterior.xi; x_new]);
+% Extend the observation vector with zeros
+zz = [double(zi); zeros(kreq.r, 1)];
 
-% TODO: implement efficient update equations
+% Compute the squared seminorm
+s = zz' * (linsolve (kreq, zz));
 
-end % stk_kriging_equation_update
+% % Alternative (slower) implementation:
+% ni = size (kreq.LS_Q, 1) - kreq.r;
+% zi = double (zi);
+% QU = kreq.LS_Q(1:ni, :);
+% T  = kreq.LS_R \ (QU' * zi);
+% s  = zi' * T(1:ni, :);
+
+% Guard against numerical issues
+if s < 0, s = 0; end
+
+end % function stk_squared_seminorm
