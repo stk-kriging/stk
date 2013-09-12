@@ -63,6 +63,7 @@ else % at least one input point
 end
 
 x = stk_dataframe(xdata);
+x.info = 'Created by stk_sampling_randunif';
 
 end % function stk_sampling_randunif
 
