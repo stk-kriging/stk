@@ -1,5 +1,10 @@
 2013-09-12  Julien Bect  <julien.bect@supelec.fr>
 
+	Display row and column names between simple quotes.
+
+	* utils/arrays/@stk_dataframe/stk_sprintf_colnames.m: modified
+	* utils/arrays/@stk_dataframe/stk_sprintf_rownames.m: modified
+
 	stk_param_estim.m: Fix a stupid bug.
 
 	* paramestim/stk_param_estim.m: modified
