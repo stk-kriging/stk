@@ -1,11 +1,10 @@
-% LINSOLVE solves the kriging equation
+% STK_KREQ_QR [internal STK class]
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,15 +26,27 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function w = linsolve (posterior, rs)
+function kreq = stk_kreq_qr (model, xi, xt)
+        
+[Kii, Pi] = stk_make_matcov (model, xi);
+[n, r] = size (Pi);
 
-% Solves the linear equation A * ws = rs, where A is the kriging matrix
+% kriging matrix (left-hand side of the kriging equation)
+LS =                              ...
+    [[ Kii, Pi                 ]; ...
+    [  Pi', zeros(size(Pi, 2)) ]];
+        
+% orthogonal-triangular decomposition
+[Q, R] = qr (LS);
 
-if stk_is_octave_in_use (),
-    % linsolve is missing in Octave
-    w = posterior.LS_R \ (posterior.LS_Q' * rs);
-else
-    w = linsolve (posterior.LS_R, posterior.LS_Q' * rs, struct ('UT', true));
+kreq = struct ('n', n, 'r', r, ...
+    'LS_Q', Q, 'LS_R', R, 'RS', [], 'lambda_mu', []);
+kreq = class (kreq, 'stk_kreq_qr');
+
+% prepare the right-hand side of the kriging equation
+if nargin > 2,
+    [Kti, Pt] = stk_make_matcov (model, xt, xi);
+    kreq = stk_set_righthandside (kreq, Kti, Pt);
 end
 
-end % function linsolve
+end % function stk_kreq_qr
