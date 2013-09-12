@@ -31,6 +31,9 @@ function x = set (x, propname, value)
 icol = get_column_number (x.colnames, propname);
 
 switch icol
+     
+    case -4 % 'info'
+        x.info = value;
     
     case -3 % 'rownames'
         x.rownames = value;

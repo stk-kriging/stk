@@ -1,9 +1,9 @@
-% DISPLAY [overloaded base function]
+% DISP [overloaded base function]
 %
 % Example:
 %    format short
 %    x = [1 1e6 rand; 10 -1e10 rand; 100 1e-22 rand];
-%    stk_dataframe(x)  % implicitely calls display()
+%    disp (stk_dataframe (x))
 
 % Copyright Notice
 %
@@ -32,15 +32,39 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function display (x)
+function disp (x)
 
-fprintf ('\n%s = ', inputname (1));
+spstr = '    ';
 
-disp (x);
+fprintf ('%s\n\n', stk_sprintf_sizetype (x));
+fprintf (' .info:\n%s%s\n', spstr, stk_sprintf_info (x));
+fprintf (' .colnames\n%s%s\n', spstr, stk_sprintf_colnames (x));
 
-fprintf ('\n');
+fprintf (' .levels\n');
+s = stk_sprintf_levels (x);
+disp ([repmat(spstr, size(s, 1), 1) s]);
 
-end % function display
+fprintf (' .rownames\n%s%s\n', spstr, stk_sprintf_rownames (x));
+
+fprintf (' .data\n');
+s = stk_sprintf_data (x);
+disp ([repmat(spstr, size(s, 1), 1) s]);
+
+end % function disp
 
 
-%!test display (stk_dataframe (rand (3, 2)));
+%!shared x fmt
+%! try % doesn't work on old Octave versions, nevermind
+%!   fmt = get (0, 'Format');
+%! catch
+%!   fmt = nan;
+%! end
+%! x = stk_dataframe (rand (3, 2));
+
+%!test format rat;      disp (x);
+%!test format long;     disp (x);
+%!test format short;    disp (x);
+%!     if ~isnan (fmt), set (0, 'Format', fmt); end
+
+%!test disp (stk_dataframe (zeros (0, 1)))
+%!test disp (stk_dataframe (zeros (0, 2)))

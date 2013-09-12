@@ -72,11 +72,12 @@ else
         end
         
         % base dataframe
-        df = stk_dataframe(xdata, varargin{:});
+        df = stk_dataframe (xdata, varargin{:});
+        df = set (df, 'info', 'Created by stk_factorialdesign');
         
         % "factorial design" object
-        x = struct('levels', {levels});
-        x = class(x, 'stk_factorialdesign', df);
+        x = struct ('levels', {levels});
+        x = class (x, 'stk_factorialdesign', df); 
         
     end % if
     

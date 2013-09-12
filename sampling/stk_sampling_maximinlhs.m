@@ -70,7 +70,7 @@ else % at least one input point
 end
 
 x = stk_dataframe(xdata);
-
+x.info.creator = 'function stk_sampling_maximinlhs';
 end
 
 
