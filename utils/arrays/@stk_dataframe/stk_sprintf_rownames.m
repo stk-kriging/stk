@@ -37,9 +37,9 @@ if isempty (rownames)
 else
     s = '{';
     for j = 1:(n-1),
-        s = [s sprintf('%s; ', x.rownames{j})]; %#ok<AGROW>
+        s = [s sprintf('''%s''; ', x.rownames{j})]; %#ok<AGROW>
     end
-    s = [s sprintf('%s}', x.rownames{end})];
+    s = [s sprintf('''%s''}', x.rownames{end})];
 end
 
 end % function stk_sprintf_rownames
