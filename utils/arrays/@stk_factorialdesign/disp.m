@@ -34,19 +34,25 @@
 
 function disp (x)
 
-spstr = '    ';
+spstr  = stk_options_get ('stk_dataframe', 'disp_spstr');
+format = stk_options_get ('stk_dataframe', 'disp_format');
 
-fprintf ('%s\n\n', stk_sprintf_sizetype (x));
-fprintf (' .info:\n%s%s\n', spstr, stk_sprintf_info (x));
-fprintf (' .colnames\n%s%s\n', spstr, stk_sprintf_colnames (x));
+if strcmp (format, 'verbose')
 
-fprintf (' .levels\n');
-s = stk_sprintf_levels (x);
-disp ([repmat(spstr, size(s, 1), 1) s]);
+    fprintf ('%s\n\n', stk_sprintf_sizetype (x));
+    fprintf (' .info:\n%s%s\n', spstr, stk_sprintf_info (x));
+    fprintf (' .colnames\n%s%s\n', spstr, stk_sprintf_colnames (x));
+    
+    fprintf (' .levels\n');
+    s = stk_sprintf_levels (x);
+    disp ([repmat(spstr, size(s, 1), 1) s]);
+    
+    fprintf (' .rownames\n%s%s\n', spstr, stk_sprintf_rownames (x));
+    
+    fprintf (' .data\n');
+    
+end
 
-fprintf (' .rownames\n%s%s\n', spstr, stk_sprintf_rownames (x));
-
-fprintf (' .data\n');
 s = stk_sprintf_data (x);
 disp ([repmat(spstr, size(s, 1), 1) s]);
 
