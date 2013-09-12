@@ -1,5 +1,9 @@
 2013-09-12  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_param_estim.m: Fix a stupid bug.
+
+	* paramestim/stk_param_estim.m: modified
+
 	Reorganize folders.
 
 	* utils/arrays: new folder

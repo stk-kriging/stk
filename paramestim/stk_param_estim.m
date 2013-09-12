@@ -176,6 +176,7 @@ end % function stk_param_estim ------------------------------------------------
 function [l, dl] = f_ (model, u, xi, yi)
 
 model.param(:) = u;
+
 if nargout == 1,
     l = stk_param_relik (model, xi, yi);
 else
@@ -197,7 +198,8 @@ function [l, dl] = f_with_noise_ (model, u, xi, yi)
 
 model.param(:) = u(1:end-1);
 model.lognoisevariance  = u(end);
-if nargin == 1,
+
+if nargout == 1,
     l = stk_param_relik (model, xi, yi);
 else
     [l, dl, dln] = stk_param_relik (model, xi, yi);
