@@ -54,6 +54,7 @@ for j = 1:d,
 end
 
 x = stk_dataframe (xdata);
+x.info = 'Created by stk_sampling_halton_rr2';
 
 end % function stk_sampling_halton_rr2
 
