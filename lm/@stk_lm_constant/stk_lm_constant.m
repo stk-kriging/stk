@@ -32,5 +32,6 @@ lm = class(struct(), 'stk_lm_constant', stk_lm());
 
 end % function stk_lm_constant
 
+
 % Default constructor
 %!test lm = stk_lm_constant(); assert(isa(lm, 'stk_lm_constant'));

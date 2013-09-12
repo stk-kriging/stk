@@ -67,6 +67,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [x, aux] = stk_sampling_olhs(n, d, box, permut, extended)
+
 if nargin > 5,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
@@ -207,7 +208,8 @@ x = x_integer_levels + q + 1;
 x = (2*x - 1) / (2*n);
 
 % And, finally, convert to box
-x = stk_dataframe(stk_rescale(x, [], box));
+x = stk_dataframe (stk_rescale(x, [], box));
+x.info = 'Created by stk_sampling_olhs';
 
 % Note: the results reported in Cioppa & Lucas correspond to the scaling
 %   x = struct('a', stk_rescale(x, [min(x); max(x)], box));
@@ -220,11 +222,6 @@ end
 
 end % function stk_sampling_olhs
 
-
-
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
 
 %%
 % Check error for incorrect number of input arguments

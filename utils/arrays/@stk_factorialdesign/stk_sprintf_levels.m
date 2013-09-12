@@ -1,8 +1,8 @@
-% STK_LM_MATRIX ... [FIXME: missing documentation]
+% STK_SPRINTF_LEVELS prints the levels of a factorial design into a string
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,31 +26,34 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function lm = stk_lm_matrix(data)
+function s = stk_sprintf_levels (x)
 
-if nargin == 0,
-    lm = struct('data', []);
-else
-    lm = struct('data', data);
+levels = x.levels;
+colnames = get (x.stk_dataframe, 'colnames');
+
+d = length (levels);
+s = sprintf ('1 x %d cell array', d);
+
+for i = 1:d   
+    
+    if isempty (colnames)
+        line{i} = sprintf('levels for column #%d: ', i);
+    else
+        line{i} = sprintf('levels for variable %s: ', colnames{i});
+    end
+        
+    L = levels{i};
+    if isempty (L)
+        line{i} = [line{i} '[]'];
+    else
+        for j = 1:(length(L) - 1)
+            line{i} = [line{i} num2str(L(j)) ', '];
+        end
+        line{i} = [line{i} sprintf('%s', num2str(L(end)))];
+    end
+    
 end
 
-lm = class(lm, 'stk_lm_matrix', stk_lm());
+s = strvcat (s, line{:});
 
-end % function stk_lm_matrix
-
-
-%!test %%% Default constructor
-%!   lm = stk_lm_matrix();
-%!   assert(isa(lm, 'stk_lm_matrix'));
-
-%!test %%% dim 1
-%!   data = rand(10, 1);  idx = 3:7;
-%!   lm = stk_lm_matrix(data);
-%!   assert(isa(lm, 'stk_lm_matrix'));
-%!   assert(isequal(data(idx, :), feval(lm, idx)));
-
-%!test %%% dim 3
-%!   data = rand(10, 3);  idx = 3:7;
-%!   lm = stk_lm_matrix(data);
-%!   assert(isa(lm, 'stk_lm_matrix'));
-%!   assert(isequal(data(idx, :), feval(lm, idx)));
+end % function stk_sprintf_levels

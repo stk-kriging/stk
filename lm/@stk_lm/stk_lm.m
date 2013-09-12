@@ -60,6 +60,7 @@ assert(isa(lm, 'stk_lm'));
 
 end % function stk_lm
 
+
 %!test %%% Default constructor
 %!   lm = stk_lm();
 %!   assert(isa(lm, 'stk_lm'));

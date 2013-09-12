@@ -48,7 +48,7 @@
 function [paramopt, paramlnvopt] = stk_param_estim (model, cparam0, param0lnv)
 
 if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % TODO: think of a better way to tell we want to estimate the noise variance
@@ -176,21 +176,28 @@ end % function stk_param_estim ------------------------------------------------
 
 %--- The objective function and its gradient ----------------------------------
 
-function [l, dl] = f_(model, w)
+function [l, dl] = f_ (model, w)
+
 model.randomprocess.priorcov.cparam = w;
 if nargout == 1,
     l = stk_param_relik (model);
 else
 	[l, dl] = stk_param_relik (model);
 end
-end
 
-function dl = nablaf_(model, w)
+end % function f_
+
+
+function dl = nablaf_ (model, w)
+
 model.randomprocess.priorcov.cparam = w;
 [l_ignored, dl] = stk_param_relik (model); %#ok<ASGLU>
-end
 
-function [l, dl] = f_with_noise_(model, w)
+end % function nablaf_
+
+
+function [l, dl] = f_with_noise_ (model, w)
+
 model.randomprocess.priorcov.cparam = w(1:end-1);
 model.noise.cov.variance = exp(w(end));
 if nargin == 1,
@@ -199,14 +206,18 @@ else
     [l, dl, dln] = stk_param_relik (model);
     dl = [dl; dln];
 end
-end
 
-function dl = nablaf_with_noise_(model, w)
+end % function f_with_noise_
+
+
+function dl = nablaf_with_noise_ (model, w)
+
 model.randomprocess.priorcov.cparam = w(1:end-1);
 model.noise.cov.variance = exp(w(end));
 [l_ignored, dl, dln] = stk_param_relik (model); %#ok<ASGLU>
 dl = [dl; dln];
-end
+
+end % function nablaf_with_noise_
 
 
 function [lblnv, ublnv] = get_defaultbounds_lnv ... %--------------------------
@@ -223,10 +234,6 @@ ublnv = log(empirical_variance) + TOLVAR;
 
 end % function get_default_bounds_lnv -----------------------------------------
 
-
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
 
 %!shared f, xi, zi, NI, param0, model
 %!

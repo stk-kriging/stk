@@ -39,6 +39,7 @@ lm = class(lm, 'stk_lm_userdefined', stk_lm());
 
 end % function stk_lm_userdefined
 
+
 %!test %%% Default constructor
 %!   lm = stk_lm_userdefined(); assert(isa(lm, 'stk_lm_userdefined'));
 

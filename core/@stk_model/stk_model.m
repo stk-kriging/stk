@@ -188,10 +188,6 @@ model         = struct('domain',        domain,        ...
 end
 
 
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
-
 %!test model = stk_model();
 
 %!test model = stk_model('stk_materncov_iso');

@@ -1,8 +1,8 @@
-% STK_LM_MATRIX ... [FIXME: missing documentation]
+% FIELDNAMES [overloaded base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,31 +26,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function lm = stk_lm_matrix(data)
+function fn = fieldnames(x)
 
-if nargin == 0,
-    lm = struct('data', []);
-else
-    lm = struct('data', data);
-end
+fn = [x.colnames reserved_field_names()];
 
-lm = class(lm, 'stk_lm_matrix', stk_lm());
+end % function fieldnames
 
-end % function stk_lm_matrix
-
-
-%!test %%% Default constructor
-%!   lm = stk_lm_matrix();
-%!   assert(isa(lm, 'stk_lm_matrix'));
-
-%!test %%% dim 1
-%!   data = rand(10, 1);  idx = 3:7;
-%!   lm = stk_lm_matrix(data);
-%!   assert(isa(lm, 'stk_lm_matrix'));
-%!   assert(isequal(data(idx, :), feval(lm, idx)));
-
-%!test %%% dim 3
-%!   data = rand(10, 3);  idx = 3:7;
-%!   lm = stk_lm_matrix(data);
-%!   assert(isa(lm, 'stk_lm_matrix'));
-%!   assert(isequal(data(idx, :), feval(lm, idx)));
+%!test
+%! x = stk_dataframe(rand(3, 2), {'u' 'v'});
+%! assert(all(strcmp(sort(fieldnames(x)), {'colnames' 'rownames' 'u' 'v'})));

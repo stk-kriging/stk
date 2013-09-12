@@ -164,7 +164,8 @@ end
 
 %=== Prepare outputs
 
-zp = stk_dataframe([zp_a zp_v], {'mean' 'var'});
+zp = stk_dataframe ([zp_a zp_v], {'mean' 'var'});
+zp.info = 'Created by stk_predict';
 
 if (nargin > 1) && (nb_blocks > 1)
     kreq.lambda_mu = lambda_mu;

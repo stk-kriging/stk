@@ -464,7 +464,9 @@ else
     x__ret2 = x__tests;
     x__ret3 = nb_expected_failures;
 end
-end
+
+end % function stk_test
+
 
 %%%%%%%%%%%%%%%%%%
 % eval_test_code %
@@ -513,7 +515,8 @@ for x__i = 1:length(x__list_shared),
     end
 end
 
-end
+end % function eval_test_code
+
 
 %%%%%%%%%%%%%%
 % getpattern %
@@ -538,7 +541,8 @@ elseif (strncmp (str, 'id=', 3))
     [id, rest] = strtok (str(4:end));
 end
 
-end
+end % function getpattern
+
 
 %%%%%%%%%%%
 % trimerr %
@@ -547,12 +551,15 @@ end
 % Strip '.*prefix:' from '.*prefix: msg\n' and strip trailing blanks.
 %
 function msg = trimerr (msg, prefix)
+
 idx = index (msg, [prefix, ':']);
 if (idx > 0)
     msg(1:idx+length(prefix)) = [];
 end
 msg = trimleft (deblank (msg));
-end
+
+end % function trimerr
+
 
 %%%%%%%%%%%%
 % trimleft %
@@ -561,12 +568,15 @@ end
 % Strip leading blanks from string.
 %
 function str = trimleft (str)
+
 idx = find (isspace (str));
 leading = find (idx == 1:length(idx));
 if (~ isempty (leading))
     str = str(leading(end)+1:end);
 end
-end
+
+end % function trimleft
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 % x__extract_test_code %
@@ -593,12 +603,8 @@ if (fid >= 0)
     fclose (fid);
 end
 
-end % x__extract_test_code
+end % function x__extract_test_code
 
-
-%%%%%%%%%
-% TESTS %
-%%%%%%%%%
 
 %% Tests of comments
 

@@ -1,47 +1,71 @@
-          STK : a Small (Matlab/Octave) Toolbox for Kriging
-          =================================================
-
-o Copyright Notice
+README Copyright Notice
 
     Copyright (C) 2011-2013 SUPELEC
 
-    Version:   2.1-dev/objectify-me
+    Authors:   Julien Bect       <julien.bect@supelec.fr>
+               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
-    Authors:   Julien Bect        <julien.bect@supelec.fr>
-               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+README Copying Permission Statement
 
-    URL:       http://sourceforge.net/projects/kriging
+    This file is part of
 
-o Copying Permission Statement
+            STK: a Small (Matlab/Octave) Toolbox for Kriging
+               (http://sourceforge.net/projects/kriging)
 
-    The STK is free software: you can redistribute it and/or modify it
-    under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    STK is free software: you can redistribute it and/or modify it under
+    the terms of the GNU General Public License as published by the Free
+    Software Foundation,  either version 3  of the License, or  (at your
+    option) any later version.
 
-    STK is distributed in the hope that it will be useful, but WITHOUT
-    ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
-    or FITNESS FOR  A PARTICULAR PURPOSE.  See the  GNU General Public
+    STK is distributed  in the hope that it will  be useful, but WITHOUT
+    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY
+    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public
     License for more details.
 
-    You should have received a  copy of the GNU General Public License
+    You should  have received a copy  of the GNU  General Public License
     along with STK.  If not, see <http://www.gnu.org/licenses/>.
+
+------------------------------------------------------------------------
+
+
+          STK : a Small (Matlab/Octave) Toolbox for Kriging
+          =================================================
+
+
+o General information
+
+    Version:      2.1-dev/objectify_me
+
+    Authors:      Julien Bect        <julien.bect@supelec.fr>
+                  Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+                  and others         (see AUTHORS file)
+
+    Maintainers:  Julien Bect        <julien.bect@supelec.fr>
+                  Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+
+    Copyright:    Large portions are Copyright (C) 2011-2013 SUPELEC.
+                  See individual copyright notices for more details.
+
+    License:      GNU General Public License, version 3 (GPLv3).
+                  See LICENSE for the full license.
+
+    URL:          http://sourceforge.net/projects/kriging
 
 o Quick Start
 
     Run stk_init.m in Matlab(TM) or GNU Octave.
 
-    Once  the STK is properly initialized,  you should be able  to run
-    the examples located in the 'examples' directory.
+    Once the STK  is properly initialized,  you should be able to run the
+    examples located in the 'examples' directory.
 
 o Requirements and recommendations for use with GNU Octave
 
     The STK works with GNU Octave 3.2.2 or newer.
 
-    Note that  the STK relies on some mex files  that are compiled during 
-    the initialization.  Thus,  your installation must be able to compile 
-    mex files.  In Debian 6.0 (Squeeze)  or  gNewSense 3.0 (Parkes),  for 
-    instance,  this means installing octave3.2-headers in addition to the 
+    Note that  the STK relies on some mex files  that are compiled during
+    the initialization.  Thus,  your installation must be able to compile
+    mex files.  In Debian 6.0 (Squeeze)  or  gNewSense 3.0 (Parkes),  for
+    instance,  this means installing octave3.2-headers in addition to the
     base octave3.2 package.
 
     The sqp() function  internally relies on  the GLPK library,  which is
@@ -100,11 +124,11 @@ o Content
 
 References
 
-J. Bect, D. Ginsbourger, L. Li, V. Picheny, and E. Vazquez. Sequential
+J. Bect, D. Ginsbourger, L. Li, V. Picheny, and E. Vazquez.   Sequential
    design of computer experiments for the estimation of a probability of
    failure. Statistics and Computing, pages 1-21, 2011. DOI:
    10.1007/s11222-011-9241-4.
 
-D. R. Jones, M. Schonlau, and J. William. Efficient global optimization
+D. R. Jones, M. Schonlau, and J. William.  Efficient global optimization
    of expensive black-box functions. Journal of Global Optimization,
    13(4):455-492, 1998.

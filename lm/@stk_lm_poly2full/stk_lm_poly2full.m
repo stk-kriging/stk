@@ -32,5 +32,6 @@ lm = class(struct(), 'stk_lm_poly2full', stk_lm());
 
 end % function stk_lm_poly2full
 
+
 % Default constructor
 %!test lm = stk_lm_poly2full(); assert(isa(lm, 'stk_lm_poly2full'));

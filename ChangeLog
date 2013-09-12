@@ -1,3 +1,138 @@
+2013-09-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Reorganize folders.
+
+	* utils/arrays: new folder
+	* utils/arrays/generic: new folder
+	* utils/@stk_dataframe: moved to utils/arrays
+	* utils/@stk_factorialdesign: moved to utils/arrays
+	* utils/@struct: moved to utils/arrays
+	* misc/text/stk_sprintf_data.m: moved to utils/arrays/generic
+	* misc/text/stk_sprintf_rownames.m: moved to utils/arrays/generic
+	* misc/text/stk_sprintf_info.m: moved to utils/arrays/generic
+	* misc/text/stk_sprintf_sizetype.m: moved to utils/arrays/generic
+	* misc/text/stk_sprintf_colnames.m: moved to utils/arrays/generic
+	* utils/stk_rescale.m: moved to utils/arrays/generic
+	* utils/stk_normalize.m: moved to utils/arrays/generic
+	* misc/config/stk_path.m: modified
+	* misc/config/stk_compile_all.m: modified
+
+	Fill .info field after the construction of a dataframe.
+
+	* core/stk_predict.m: modified
+	* core/@stk_kriging_equation/stk_predict.m: modified
+	* utils/stk_feval.m: modified
+	* sampling/stk_sampling_olhs.m: modified
+	* sampling/stk_sampling_randunif.m: modified
+	* sampling/stk_sampling_maximinlhs.m: modified
+	* sampling/stk_sampling_halton_rr2.m: modified
+	* sampling/stk_sampling_randomlhs.m: modified
+
+2013-09-11  Julien Bect  <julien.bect@supelec.fr>
+
+	@stk_dataframe, @stk_factorialdesign: Improve display.
+
+	* utils/@stk_dataframe/stk_sprintf_info.m: new function
+	* utils/@stk_dataframe/stk_sprintf_data.m: new function
+	* utils/@stk_dataframe/disp.m: modified
+	* utils/@stk_dataframe/stk_sprintf_colnames.m: new function
+	* utils/@stk_dataframe/stk_dataframe.m: modified
+	* utils/@stk_dataframe/stk_sprintf_rownames.m: new function
+	* utils/@stk_dataframe/stk_sprintf_sizetype.m: new function
+	* utils/@stk_factorialdesign/disp.m: new function
+	* utils/@stk_factorialdesign/stk_factorialdesign.m: modified
+	* utils/@stk_factorialdesign/stk_sprintf_levels.m: new function
+	* sampling/stk_sampling_regulargrid.m: modified
+	* misc/text/stk_sprintf_sizetype.m: new function
+	* misc/text/stk_sprintf_rownames.m: new function
+	* misc/text/stk_sprintf_info.m: new function
+	* misc/text/stk_sprintf_colnames.m: new function
+	* misc/text/stk_sprintf_data.m: new function
+
+	Allow string arguments in stk_isequal_tolabs and stk_isequal_tolrel.
+
+	* misc/test/stk_isequal_tolrel.m: modified
+	* misc/test/stk_isequal_tolabs.m: modified
+
+2013-09-11  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
+	@stk_dataframe: Increase display verbosity.
+
+	* utils/@stk_dataframe/display.m: modified
+	* utils/@stk_dataframe/disp.m: modified
+
+	@stk_dataframe: Make 'data' available through get/set and dot-indexation.
+
+	* utils/@stk_dataframe/private/get_column_number.c: modified
+
+	stk_disp_examplewelcome.m: Define a default welcome message.
+
+	* misc/text/stk_disp_examplewelcome.m: modified
+
+2013-09-10  Julien Bect  <julien.bect@supelec.fr>
+
+	Use strtrim instead of deblank + fliplr.
+
+	* misc/config/stk_version.m: modified (bugfix)
+	* admin/m2html/m2html.m: modified
+	* admin/m2html/private/mfileparse.m: modified
+
+	Do not display Octave-style unit tests in the HTML documentation.
+
+	* admin/m2html/m2html.m: modified
+
+	Clarify author & copyright information in README.
+
+	* README: modified
+
+2013-09-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a bug with y-labels (empty legend) in @stk_dataframe/plot.
+
+	* utils/@stk_dataframe/plot.m: modified
+
+	Preserve row names when removing rows from a dataframe.
+
+	* utils/@stk_dataframe/subsref.m: modified
+	* utils/@stk_dataframe/subsasgn.m: modified
+
+2013-09-07  Julien Bect  <julien.bect@supelec.fr>
+
+	Rename internal field 'vnames' to 'colnames' in @stk_dataframe.
+
+	* utils/@stk_dataframe/subsasgn.m: modified
+	* utils/@stk_dataframe/stk_dataframe.m: modified
+	* utils/@stk_dataframe/get.m: modified
+	* utils/@stk_dataframe/set.m: modified
+	* utils/@stk_dataframe/disp.m: modified
+	* utils/@stk_dataframe/bsxfun.m: modified
+	* utils/@stk_dataframe/fieldnames.m: modified
+
+	Return an stk_dataframe when using ()-indexing on an stk_dataframe.
+
+	* utils/@stk_dataframe/subsref.m: modified
+	* utils/stk_feval.m: modified
+	* utils/@stk_dataframe/subsasgn.m: modified (nothing serious)
+	* utils/@stk_dataframe/end.m: modified (tests)
+	* sampling/stk_sampling_vdc_rr2.m: modified (tests)
+	* sampling/stk_sampling_halton_rr2.m: modified (tests)
+
+2013-09-05  Julien Bect  <julien.bect@supelec.fr>
+
+	Plot dataframes with two columns or more.
+
+	* utils/@stk_dataframe/plot.m: modified
+
+2013-09-04  Julien Bect  <julien.bect@supelec.fr>
+
+	Make @stk_dataframe behave more like matrices wrt row/column deletion.
+
+	* utils/@stk_dataframe/subsasgn.m: modified
+
+	Make line lengths equal in README.
+
+	* README: modified
+
 2013-09-01  Julien Bect  <julien.bect@supelec.fr>
 
 	Improve Octave 3.2.x compatibility.
@@ -11,12 +146,12 @@
 	* utils/@stk_dataframe/min.m: modified
 	* utils/@stk_factorialdesign/stk_factorialdesign.m: modified
 	* utils/@stk_factorialdesign/stk_rescale.m: modified
-	* utils/@stk_factorialdesign/stk_normalize.m: modified	
+	* utils/@stk_factorialdesign/stk_normalize.m: modified
 	* misc/config/stk_octave_config.m: modified
 	* misc/stats/octave_quantile.m: modified
 	* misc/test/stk_isequal_tolabs.m: modified
 	* misc/test/stk_test_dfbinaryop.m: modified
-	
+
 	Provide a quantile function since Matlab (base) does not have it.
 
 	* misc/stats/octave_quantile.m: new function

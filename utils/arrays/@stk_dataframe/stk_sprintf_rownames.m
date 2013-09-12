@@ -1,10 +1,11 @@
-% SET [overloaded base function]
+% STK_SPRINTF_ROWNAMES returns the row names of an array
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,32 +27,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = set (x, propname, value)
+function s = stk_sprintf_rownames (x)
 
-icol = get_column_number (x.vnames, propname);
+n = size (x, 1);
+rownames = get (x, 'rownames');
 
-switch icol
-    
-    case -3 % 'rownames'
-        x.rownames = value;
-        
-    case -2 % 'colnames'
-        x.vnames = value;
-            
-    case - 1 % set entire array
-        if isequal (size(x.data), size(value))
-            x.data = value;
-        else
-            error ('Incorrect size');
-        end
-        
-    otherwise
-        if isequal (size(value), [size(x.data, 1) 1])
-            x.data(:, icol) = value;
-        else
-            error ('Incorrect size');
-        end
-        
+if isempty (rownames)
+    s = stk_sprintf_rownames (zeros (n, 0));
+else
+    s = '{';
+    for j = 1:(n-1),
+        s = [s sprintf('%s; ', x.rownames{j})]; %#ok<AGROW>
+    end
+    s = [s sprintf('%s}', x.rownames{end})];
 end
 
-end % function get
+end % function stk_sprintf_rownames

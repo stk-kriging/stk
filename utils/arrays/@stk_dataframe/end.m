@@ -48,10 +48,10 @@ end % function
 
 %!shared x
 %! x = stk_dataframe([1; 2; 3]);
-%!assert (isequal (x(2:end, :), [2; 3]))
-%!assert (isequal (x(2:end), [2; 3]))
-%!assert (isequal (x(2, 1:end), 2))
-%!assert (isequal (x(end), 3))
+%!assert (isequal (double (x(2:end, :)), [2; 3]))
+%!assert (isequal (double (x(2:end)),    [2; 3]))
+%!assert (isequal (double (x(2, 1:end)), 2))
+%!assert (isequal (double (x(end)),      3))
 
 %--- tests with a bivariate dataframe -----------------------------------------
 

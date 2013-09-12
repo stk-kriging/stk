@@ -39,6 +39,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_randunif(n, dim, box)
+
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
@@ -62,13 +63,10 @@ else % at least one input point
 end
 
 x = stk_dataframe(xdata);
+x.info = 'Created by stk_sampling_randunif';
 
 end % function stk_sampling_randunif
 
-
-%%%%%%%%%%%%%
-%%% tests %%%
-%%%%%%%%%%%%%
 
 %%
 % Check error for incorrect number of input arguments
