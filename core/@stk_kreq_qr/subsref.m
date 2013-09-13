@@ -1,10 +1,10 @@
-% STK_UPDATE...
+% SUBSREF [overloaded base function]
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Authors:  Julien Bect  <julien.bect@supelec.fr>
+%    Author: Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,11 +26,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq_updated = stk_update (kreq, x_new)
+function value = subsref (kreq, idx)
 
-% Poor man's update: we recompute EVERYTHING
-kreq_updated = stk_kriging_equation (kreq.model, [kreq.xi; x_new]);
+if strcmp (idx(1).type, '.')
+    
+    value = get (kreq, idx(1).subs);
+    
+    if length(idx) > 1,
+        value = subsref(value, idx(2:end));
+    end
+    
+else
+    
+    stk_error('Illegal indexing.', 'IllegalIndexing');
+    
+end
 
-% TODO: implement efficient update equations
-
-end % stk_kriging_equation_update
+end % function subsref

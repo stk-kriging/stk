@@ -1,4 +1,4 @@
-% STK_SQUARED_SEMINORM...
+% STK_SQUARED_SEMINORM [STK internal]
 
 % Copyright Notice
 %
@@ -28,17 +28,14 @@
 
 function s = stk_squared_seminorm (kreq, zi)
 
-n = size (kreq.LS_Q, 1);
-r = n - size (kreq.xi, 1);
-
 % Extend the observation vector with zeros
-zz = [double(zi); zeros(r, 1)];
+zz = [double(zi); zeros(kreq.r, 1)];
 
 % Compute the squared seminorm
 s = zz' * (linsolve (kreq, zz));
 
 % % Alternative (slower) implementation:
-% ni = size (kreq.xi, 1);
+% ni = size (kreq.LS_Q, 1) - kreq.r;
 % zi = double (zi);
 % QU = kreq.LS_Q(1:ni, :);
 % T  = kreq.LS_R \ (QU' * zi);
