@@ -292,23 +292,23 @@ This function is called by:
 0208 x = (2*x - 1) / (2*n);
 0209 
 0210 <span class="comment">% And, finally, convert to box</span>
-0211 x = stk_dataframe(stk_rescale(x, [], box));
-0212 
-0213 <span class="comment">% Note: the results reported in Cioppa &amp; Lucas correspond to the scaling</span>
-0214 <span class="comment">%   x = struct('a', stk_rescale(x, [min(x); max(x)], box));</span>
-0215 
-0216 <span class="comment">%%% OUTPUT SOME AUXILIARY DATA IF REQUESTED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
-0217 
-0218 <span class="keyword">if</span> nargout &gt; 1,
-0219     aux = struct(<span class="string">'M'</span>, M, <span class="string">'S'</span>, S, <span class="string">'X'</span>, x_integer_levels);
-0220 <span class="keyword">end</span>
-0221 
-0222 <span class="keyword">end</span> <span class="comment">% function stk_sampling_olhs</span>
-0223 
+0211 x = stk_dataframe (stk_rescale(x, [], box));
+0212 x.info = <span class="string">'Created by stk_sampling_olhs'</span>;
+0213 
+0214 <span class="comment">% Note: the results reported in Cioppa &amp; Lucas correspond to the scaling</span>
+0215 <span class="comment">%   x = struct('a', stk_rescale(x, [min(x); max(x)], box));</span>
+0216 
+0217 <span class="comment">%%% OUTPUT SOME AUXILIARY DATA IF REQUESTED %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%</span>
+0218 
+0219 <span class="keyword">if</span> nargout &gt; 1,
+0220     aux = struct(<span class="string">'M'</span>, M, <span class="string">'S'</span>, S, <span class="string">'X'</span>, x_integer_levels);
+0221 <span class="keyword">end</span>
+0222 
+0223 <span class="keyword">end</span> <span class="comment">% function stk_sampling_olhs</span>
 0224 
-0225 <span class="comment">%%</span>
-0226 <span class="comment">% Check error for incorrect number of input arguments</span>
-0227 
+0225 
+0226 <span class="comment">%%</span>
+0227 <span class="comment">% Check error for incorrect number of input arguments</span>
 0228 
 0229 
 0230 
@@ -319,14 +319,15 @@ This function is called by:
 0235 
 0236 
 0237 
-0238 <span class="comment">%%</span>
-0239 <span class="comment">% Check that the output is a dataframe</span>
-0240 <span class="comment">% (all stk_sampling_* functions should behave similarly in this respect)</span>
-0241 
+0238 
+0239 <span class="comment">%%</span>
+0240 <span class="comment">% Check that the output is a dataframe</span>
+0241 <span class="comment">% (all stk_sampling_* functions should behave similarly in this respect)</span>
 0242 
 0243 
-0244 <span class="comment">%%</span>
-0245 <span class="comment">% Check output argument</span></pre></div>
+0244 
+0245 <span class="comment">%%</span>
+0246 <span class="comment">% Check output argument</span></pre></div>
 <hr>
 
 <address>

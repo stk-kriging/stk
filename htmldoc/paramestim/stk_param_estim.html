@@ -240,60 +240,62 @@ This function is called by:
 0176 <a name="_sub1" href="#_subfunctions" class="code">function [l, dl] = f_ (model, u, xi, yi)</a>
 0177 
 0178 model.param(:) = u;
-0179 <span class="keyword">if</span> nargout == 1,
-0180     l = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
-0181 <span class="keyword">else</span>
-0182     [l, dl] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
-0183 <span class="keyword">end</span>
-0184 
-0185 <span class="keyword">end</span> <span class="comment">% function f_</span>
-0186 
+0179 
+0180 <span class="keyword">if</span> nargout == 1,
+0181     l = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
+0182 <span class="keyword">else</span>
+0183     [l, dl] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
+0184 <span class="keyword">end</span>
+0185 
+0186 <span class="keyword">end</span> <span class="comment">% function f_</span>
 0187 
-0188 <a name="_sub2" href="#_subfunctions" class="code">function dl = nablaf_ (model, u, xi, yi)</a>
-0189 
-0190 model.param(:) = u;
-0191 [l_ignored, dl] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi); <span class="comment">%#ok&lt;ASGLU&gt;</span>
-0192 
-0193 <span class="keyword">end</span> <span class="comment">% function nablaf_</span>
-0194 
+0188 
+0189 <a name="_sub2" href="#_subfunctions" class="code">function dl = nablaf_ (model, u, xi, yi)</a>
+0190 
+0191 model.param(:) = u;
+0192 [l_ignored, dl] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi); <span class="comment">%#ok&lt;ASGLU&gt;</span>
+0193 
+0194 <span class="keyword">end</span> <span class="comment">% function nablaf_</span>
 0195 
-0196 <a name="_sub3" href="#_subfunctions" class="code">function [l, dl] = f_with_noise_ (model, u, xi, yi)</a>
-0197 
-0198 model.param(:) = u(1:end-1);
-0199 model.lognoisevariance  = u(end);
-0200 <span class="keyword">if</span> nargin == 1,
-0201     l = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
-0202 <span class="keyword">else</span>
-0203     [l, dl, dln] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
-0204     dl = [dl; dln];
-0205 <span class="keyword">end</span>
-0206 
-0207 <span class="keyword">end</span> <span class="comment">% function f_with_noise_</span>
+0196 
+0197 <a name="_sub3" href="#_subfunctions" class="code">function [l, dl] = f_with_noise_ (model, u, xi, yi)</a>
+0198 
+0199 model.param(:) = u(1:end-1);
+0200 model.lognoisevariance  = u(end);
+0201 
+0202 <span class="keyword">if</span> nargout == 1,
+0203     l = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
+0204 <span class="keyword">else</span>
+0205     [l, dl, dln] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
+0206     dl = [dl; dln];
+0207 <span class="keyword">end</span>
 0208 
-0209 
-0210 <a name="_sub4" href="#_subfunctions" class="code">function dl = nablaf_with_noise_ (model, u, xi, yi)</a>
+0209 <span class="keyword">end</span> <span class="comment">% function f_with_noise_</span>
+0210 
 0211 
-0212 model.param(:) = u(1:end-1);
-0213 model.lognoisevariance  = u(end);
-0214 [l_ignored, dl, dln] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi); <span class="comment">%#ok&lt;ASGLU&gt;</span>
-0215 dl = [dl; dln];
-0216 
-0217 <span class="keyword">end</span> <span class="comment">% function nablaf_with_noise_</span>
+0212 <a name="_sub4" href="#_subfunctions" class="code">function dl = nablaf_with_noise_ (model, u, xi, yi)</a>
+0213 
+0214 model.param(:) = u(1:end-1);
+0215 model.lognoisevariance  = u(end);
+0216 [l_ignored, dl, dln] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi); <span class="comment">%#ok&lt;ASGLU&gt;</span>
+0217 dl = [dl; dln];
 0218 
-0219 
-0220 <a name="_sub5" href="#_subfunctions" class="code">function [lblnv,ublnv] = get_default_bounds_lnv </a><span class="keyword">...</span><span class="comment"> % -------------------------</span>
-0221     (model, param0lnv, xi, yi) <span class="comment">%#ok&lt;INUSL&gt;</span>
-0222 
-0223 <span class="comment">% assume NOISEESTIM</span>
-0224 <span class="comment">% constants</span>
-0225 TOLVAR = 0.5;
-0226 
-0227 <span class="comment">% bounds for the variance parameter</span>
-0228 empirical_variance = var(yi);
-0229 lblnv = log(eps);
-0230 ublnv = log(empirical_variance) + TOLVAR;
-0231 
-0232 <span class="keyword">end</span> <span class="comment">% function get_default_bounds_lnv -----------------------------------------</span></pre></div>
+0219 <span class="keyword">end</span> <span class="comment">% function nablaf_with_noise_</span>
+0220 
+0221 
+0222 <a name="_sub5" href="#_subfunctions" class="code">function [lblnv,ublnv] = get_default_bounds_lnv </a><span class="keyword">...</span><span class="comment"> % -------------------------</span>
+0223     (model, param0lnv, xi, yi) <span class="comment">%#ok&lt;INUSL&gt;</span>
+0224 
+0225 <span class="comment">% assume NOISEESTIM</span>
+0226 <span class="comment">% constants</span>
+0227 TOLVAR = 0.5;
+0228 
+0229 <span class="comment">% bounds for the variance parameter</span>
+0230 empirical_variance = var(yi);
+0231 lblnv = log(eps);
+0232 ublnv = log(empirical_variance) + TOLVAR;
+0233 
+0234 <span class="keyword">end</span> <span class="comment">% function get_default_bounds_lnv -----------------------------------------</span></pre></div>
 <hr>
 
 <address>

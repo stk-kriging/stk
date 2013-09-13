@@ -165,9 +165,10 @@ This function is called by:
 0098     
 0099 <span class="keyword">end</span>
 0100 
-0101 z = stk_dataframe(zdata, {zname});
-0102 
-0103 <span class="keyword">end</span> <span class="comment">% function stk_feval</span></pre></div>
+0101 z = stk_dataframe (zdata, {zname});
+0102 z.info = <span class="string">'Created by stk_feval'</span>;
+0103 
+0104 <span class="keyword">end</span> <span class="comment">% function stk_feval</span></pre></div>
 <hr>
 
 <address>
