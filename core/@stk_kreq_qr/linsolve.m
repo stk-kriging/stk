@@ -1,10 +1,11 @@
-% STK_KRIGING_EQUATION...
+% LINSOLVE [overloaded base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,26 +27,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = stk_kriging_equation (model, xi, xt)
+function w = linsolve (kreq, rs)
 
-kreq = struct ( 'model',     model,  ...
-    'xi',   [], 'xt',        [],     ...
-    'LS_Q', [],  'LS_R',     [],     ...
-    'RS',   [], 'lambda_mu', []      );
+if nargin < 2,
+    rs = kreq.RS;
+end
 
-kreq = class (kreq, 'stk_kriging_equation');
+% Solves the linear equation A * ws = rs, where A is the kriging matrix
 
-if nargin > 1,
+if stk_is_octave_in_use (),
+    % linsolve is missing in Octave
+    w = kreq.LS_R \ (kreq.LS_Q' * rs);
+else
+    w = linsolve (kreq.LS_R, kreq.LS_Q' * rs, struct ('UT', true));
+end
 
-    % this triggers a first set of partial computations...
-    kreq = set (kreq, 'xi', xi);
-    
-    if nargin > 2,
-        % ...and this triggers the remaining computation
-        % (if xt is not provided, we end up with an incomplete kreq)
-        kreq = set (kreq, 'xt', xt);
-    end
-    
-end % if
-
-end % function stk_kriging_equation
+end % function linsolve

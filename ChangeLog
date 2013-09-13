@@ -1,3 +1,18 @@
+2013-09-13  Julien Bect  <julien.bect@supelec.fr>
+
+	New approach for the encapsulation of QR-based kriging computations.
+
+	* core/@stk_kriging_equation: removed
+	* core/@stk_kreq_qr: new class
+	* core/stk_predict.m: modified
+
+2013-09-13  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
+	Switch to verbose display mode for examples kb01 and kb02.
+
+	* examples/01_kriging_basics/stk_example_kb01.m: modified
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+
 2013-09-12  Julien Bect  <julien.bect@supelec.fr>
 
 	Control the verbosity of display for dataframe objects.
