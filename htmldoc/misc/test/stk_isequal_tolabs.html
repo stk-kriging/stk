@@ -120,7 +120,7 @@ This function is called by:
 0054 DEFAULT_TOLABS = 1e-8;
 0055 
 0056 <span class="keyword">if</span> nargin &gt; 3,
-0057    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0057     stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
 0058 <span class="keyword">end</span>
 0059 
 0060 <span class="keyword">if</span> nargin == 2,
@@ -141,35 +141,41 @@ This function is called by:
 0075             <span class="keyword">return</span>;
 0076         <span class="keyword">end</span>
 0077         res = <a href="stk_isequal_tolabs.html" class="code" title="function res = stk_isequal_tolabs(a, b, tolabs)">stk_isequal_tolabs</a>(a.(L{k}), b.(L{k}), tolabs);
-0078         <span class="keyword">if</span> ~ res, <span class="keyword">return</span>; <span class="keyword">end</span>
-0079     <span class="keyword">end</span>
-0080     
-0081 <span class="keyword">elseif</span> isnumeric(a) &amp;&amp; isnumeric(b)
+0078         <span class="keyword">if</span> ~ res,
+0079             <span class="keyword">return</span>;
+0080         <span class="keyword">end</span>
+0081     <span class="keyword">end</span>
 0082     
-0083     res = all(abs(b(:) - a(:)) &lt;= tolabs);
-0084 
-0085 <span class="keyword">elseif</span> iscell (a) &amp;&amp; iscell (b)
-0086 
-0087     <span class="keyword">for</span> i = 1:numel(a),
-0088         <span class="keyword">if</span> ~<a href="stk_isequal_tolabs.html" class="code" title="function res = stk_isequal_tolabs(a, b, tolabs)">stk_isequal_tolabs</a> (a{i}, b{i}, tolabs);
-0089         res = false;
-0090             <span class="keyword">return</span>;
-0091         <span class="keyword">end</span>
-0092     <span class="keyword">end</span>
-0093 
-0094     res = true;
-0095 
-0096 <span class="keyword">elseif</span> isa (a, <span class="string">'stk_dataframe'</span>) &amp;&amp; (strcmp (class (a), class (b)))
-0097 
-0098     res = <a href="stk_isequal_tolabs.html" class="code" title="function res = stk_isequal_tolabs(a, b, tolabs)">stk_isequal_tolabs</a> (struct (a), struct (b), tolabs);
-0099 
-0100 <span class="keyword">else</span>
-0101 
-0102     res = false;
+0083 <span class="keyword">elseif</span> isnumeric(a) &amp;&amp; isnumeric(b)
+0084     
+0085     res = all(abs(b(:) - a(:)) &lt;= tolabs);
+0086     
+0087 <span class="keyword">elseif</span> ischar (a) &amp;&amp; ischar (b)
+0088     
+0089     res = strcmp (a, b);
+0090     
+0091 <span class="keyword">elseif</span> iscell (a) &amp;&amp; iscell (b)
+0092     
+0093     <span class="keyword">for</span> i = 1:numel(a),
+0094         <span class="keyword">if</span> ~<a href="stk_isequal_tolabs.html" class="code" title="function res = stk_isequal_tolabs(a, b, tolabs)">stk_isequal_tolabs</a> (a{i}, b{i}, tolabs);
+0095             res = false;
+0096             <span class="keyword">return</span>;
+0097         <span class="keyword">end</span>
+0098     <span class="keyword">end</span>
+0099     
+0100     res = true;
+0101     
+0102 <span class="keyword">elseif</span> isa (a, <span class="string">'stk_dataframe'</span>) &amp;&amp; (strcmp (class (a), class (b)))
 0103     
-0104 <span class="keyword">end</span>
-0105 
-0106 <span class="keyword">end</span> <span class="comment">% function stk_isequal_tolabs</span></pre></div>
+0104     res = <a href="stk_isequal_tolabs.html" class="code" title="function res = stk_isequal_tolabs(a, b, tolabs)">stk_isequal_tolabs</a> (struct (a), struct (b), tolabs);
+0105     
+0106 <span class="keyword">else</span>
+0107     
+0108     res = false;
+0109     
+0110 <span class="keyword">end</span>
+0111 
+0112 <span class="keyword">end</span> <span class="comment">% function stk_isequal_tolabs</span></pre></div>
 <hr>
 
 <address>

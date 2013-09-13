@@ -134,14 +134,14 @@ This function is called by:
 0075     levels{j} = linspace(box(1, j), box(2, j), n(j));
 0076 <span class="keyword">end</span>
 0077 
-0078 x = stk_factorialdesign(levels);
-0079 
-0080 <span class="keyword">end</span> <span class="comment">% function stk_sampling_regulargrid</span>
-0081 
+0078 x = stk_factorialdesign (levels);
+0079 x.info = <span class="string">'Created by stk_sampling_regulargrid'</span>;
+0080 
+0081 <span class="keyword">end</span> <span class="comment">% function stk_sampling_regulargrid</span>
 0082 
-0083 <span class="comment">%%</span>
-0084 <span class="comment">% Check error for incorrect number of input arguments</span>
-0085 
+0083 
+0084 <span class="comment">%%</span>
+0085 <span class="comment">% Check error for incorrect number of input arguments</span>
 0086 
 0087 
 0088 
@@ -151,14 +151,15 @@ This function is called by:
 0092 
 0093 
 0094 
-0095 <span class="comment">%%</span>
-0096 <span class="comment">% Check that the output is an stk_factorialdesign (special king of dataframe)</span>
-0097 <span class="comment">% (all stk_sampling_* functions should behave similarly in this respect)</span>
-0098 
+0095 
+0096 <span class="comment">%%</span>
+0097 <span class="comment">% Check that the output is an stk_factorialdesign (special king of dataframe)</span>
+0098 <span class="comment">% (all stk_sampling_* functions should behave similarly in this respect)</span>
 0099 
 0100 
-0101 <span class="comment">%%</span>
-0102 <span class="comment">% Check output argument</span></pre></div>
+0101 
+0102 <span class="comment">%%</span>
+0103 <span class="comment">% Check output argument</span></pre></div>
 <hr>
 
 <address>

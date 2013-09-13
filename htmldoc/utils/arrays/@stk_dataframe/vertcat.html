@@ -1,0 +1,216 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of vertcat</title>
+  <meta name="keywords" content="vertcat">
+  <meta name="description" content="VERTCAT [overloaded base function]">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">utils</a> &gt; <a href="#">arrays</a> &gt; <a href="index.html">@stk_dataframe</a> &gt; vertcat.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for utils/arrays/@stk_dataframe&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>vertcat
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>VERTCAT [overloaded base function]</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function z = vertcat(x, y, varargin) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> VERTCAT [overloaded base function]</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+<li><a href="double.html" class="code" title="function xdata = double(x)">double</a>	DOUBLE [overloaded base function]</li><li><a href="end.html" class="code" title="function idx = end(x, k, nb_indices)">end</a>	END implements the the 'end' keyword for indexing</li><li><a href="get.html" class="code" title="function value = get (x, propname)">get</a>	GET [overloaded base function]</li><li><a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>	ISEMPTY [overloaded base function]</li><li><a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>	SIZE [overloaded base function]</li><li><a href="stk_dataframe.html" class="code" title="function x = stk_dataframe (x0, colnames, rownames)">stk_dataframe</a>	STK_DATAFRAME constructs a dataframe</li><li><a href="vertcat.html" class="code" title="function z = vertcat(x, y, varargin)">vertcat</a>	VERTCAT [overloaded base function]</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+<li><a href="cat.html" class="code" title="function z = cat(dim, varargin)">cat</a>	CAT [overloaded base function]</li><li><a href="subsasgn.html" class="code" title="function x = subsasgn(x, idx, val)">subsasgn</a>	SUBSASGN [overloaded base function]</li><li><a href="vertcat.html" class="code" title="function z = vertcat(x, y, varargin)">vertcat</a>	VERTCAT [overloaded base function]</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% VERTCAT [overloaded base function]</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author: Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 
+0009 <span class="comment">% Copying Permission Statement</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    This file is part of</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0014 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0017 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0018 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0019 <span class="comment">%    option) any later version.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0022 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0023 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0024 <span class="comment">%    License for more details.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0027 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0028 
+0029 <a name="_sub0" href="#_subfunctions" class="code">function z = vertcat(x, y, varargin)</a>
+0030 
+0031 <span class="keyword">if</span> isa(x, <span class="string">'stk_dataframe'</span>)
+0032     
+0033     <span class="comment">% In this case, [x; y] will be an stk_dataframe also.</span>
+0034     
+0035     y_data = <a href="double.html" class="code" title="function xdata = double(x)">double</a>(y);
+0036     data = [<a href="double.html" class="code" title="function xdata = double(x)">double</a>(x); y_data];
+0037     
+0038     <span class="keyword">if</span> isa(y, <span class="string">'stk_dataframe'</span>)
+0039         y_colnames = <a href="get.html" class="code" title="function value = get (x, propname)">get</a> (y, <span class="string">'colnames'</span>);
+0040         y_rownames = <a href="get.html" class="code" title="function value = get (x, propname)">get</a> (y, <span class="string">'rownames'</span>);
+0041     <span class="keyword">else</span>
+0042         y_colnames = {};
+0043         y_rownames = {};
+0044     <span class="keyword">end</span>
+0045     
+0046     <span class="comment">%--- COLUMN NAMES -----------------------------------------------------</span>
+0047     
+0048     x_colnames = <a href="get.html" class="code" title="function value = get (x, propname)">get</a> (x, <span class="string">'colnames'</span>);
+0049     
+0050     <span class="keyword">if</span> <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a> (x_colnames)
+0051         
+0052         colnames = y_colnames;
+0053         
+0054     <span class="keyword">elseif</span> ~<a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>(y_colnames) &amp;&amp; ~all(strcmp(x_colnames, y_colnames))
+0055         
+0056         stk_error([<span class="string">'Cannot concatenate because of incompatible column '</span> <span class="keyword">...</span>
+0057             <span class="string">'names.'</span>], <span class="string">'IncompatibleColNames'</span>);
+0058         
+0059     <span class="keyword">else</span> <span class="comment">% ok, we can use x's column names</span>
+0060         
+0061         colnames = x_colnames;
+0062         
+0063     <span class="keyword">end</span>
+0064     
+0065     <span class="comment">%--- ROW NAMES --------------------------------------------------------</span>
+0066     
+0067     x_rownames = <a href="get.html" class="code" title="function value = get (x, propname)">get</a> (x, <span class="string">'rownames'</span>);
+0068     
+0069     bx = <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>(x_rownames);
+0070     by = <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>(y_rownames);
+0071     
+0072     <span class="keyword">if</span> bx &amp;&amp; by, <span class="comment">% none of the argument has row names</span>
+0073         
+0074         rownames = {};
+0075         
+0076     <span class="keyword">else</span> <span class="comment">% at least of one the arguments has row names</span>
+0077         
+0078         <span class="keyword">if</span> bx
+0079             x_rownames = repmat({<span class="string">''</span>}, <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(x.data, 1), 1);
+0080         <span class="keyword">end</span>
+0081         
+0082         <span class="keyword">if</span> by
+0083             y_rownames = repmat({<span class="string">''</span>}, <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(y_data, 1), 1);
+0084         <span class="keyword">end</span>
+0085         
+0086         rownames = [x_rownames; y_rownames];
+0087         
+0088     <span class="keyword">end</span>
+0089     
+0090     z = <a href="stk_dataframe.html" class="code" title="function x = stk_dataframe (x0, colnames, rownames)">stk_dataframe</a>(data, colnames, rownames);
+0091     
+0092 <span class="keyword">else</span>  <span class="comment">% In this case, z will be a matrix.</span>
+0093     
+0094     z = [<a href="double.html" class="code" title="function xdata = double(x)">double</a>(x); <a href="double.html" class="code" title="function xdata = double(x)">double</a>(y)];
+0095     
+0096 <span class="keyword">end</span>
+0097 
+0098 <span class="keyword">if</span> ~<a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>(varargin),
+0099     z = <a href="vertcat.html" class="code" title="function z = vertcat(x, y, varargin)">vertcat</a>(z, varargin{:});
+0100 <span class="keyword">end</span>
+0101 
+0102 <span class="keyword">end</span> <span class="comment">% function subsref</span>
+0103 
+0104 
+0105 <span class="comment">% IMPORTANT NOTE: [x; y; ...] fails to give the same result as vertcat(x, y,</span>
+0106 <span class="comment">% ...) in some releases of Octave. As a consequence, all tests must be written</span>
+0107 <span class="comment">% using horzcat explicitely.</span>
+0108 
+0109 
+0110 
+0111 
+0112 
+0113 <span class="comment">%%</span>
+0114 <span class="comment">% Vertical concatenation of two dataframes</span>
+0115 
+0116 
+0117 
+0118 
+0119 
+0120 
+0121 
+0122 
+0123 
+0124 
+0125 
+0126 
+0127 
+0128 
+0129 
+0130 
+0131 
+0132 
+0133 
+0134 
+0135 
+0136 
+0137 
+0138 
+0139 
+0140 <span class="comment">%%</span>
+0141 <span class="comment">% Vertical concatenation [dataframe; matrix]</span>
+0142 
+0143 
+0144 
+0145 
+0146 
+0147 
+0148 
+0149 
+0150 
+0151 
+0152 
+0153 <span class="comment">%%</span>
+0154 <span class="comment">% Vertical concatenation [matrix; dataframe]</span>
+0155 
+0156 
+0157 
+0158 
+0159 
+0160 
+0161 <span class="comment">%%</span>
+0162 <span class="comment">% Vertical concatenation of more than two elements</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.0.0</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

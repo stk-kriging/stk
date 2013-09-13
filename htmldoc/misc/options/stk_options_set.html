@@ -107,7 +107,10 @@ This function is called by:
 0061 opts.stk_sf_matern.min_size_for_parallelization = 1e5;
 0062 opts.stk_sf_matern.min_block_size = 1e3;
 0063 
-0064 <span class="keyword">end</span> <span class="comment">% function init_options</span></pre></div>
+0064 opts.stk_dataframe.disp_format = <span class="string">'basic'</span>; <span class="comment">% 'basic' or 'verbose'</span>
+0065 opts.stk_dataframe.disp_spstr = <span class="string">'    '</span>;
+0066 
+0067 <span class="keyword">end</span> <span class="comment">% function init_options</span></pre></div>
 <hr>
 
 <address>

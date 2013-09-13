@@ -134,52 +134,52 @@ This function is called by:
 0069     xdata = stk_rescale(xx, [], box);    
 0070 <span class="keyword">end</span>
 0071 
-0072 x = stk_dataframe(xdata);
-0073 
-0074 <span class="keyword">end</span>
-0075 
+0072 x = stk_dataframe (xdata);
+0073 x.info = <span class="string">'Created by stk_sampling_maximinlhs'</span>;
+0074 
+0075 <span class="keyword">end</span> <span class="comment">% function stk_sampling_maximinlhs</span>
 0076 
-0077 <span class="comment">%%%%%%%%%%%%%%%%%%</span>
-0078 <span class="comment">%%% lhsdesign_ %%%</span>
-0079 <span class="comment">%%%%%%%%%%%%%%%%%%</span>
-0080 
-0081 <a name="_sub1" href="#_subfunctions" class="code">function x = lhsdesign_( n, d, niter)</a>
-0082 
-0083 bestscore = 0;
-0084 x = [];
-0085 
-0086 <span class="keyword">for</span> j = 1:niter
-0087     y = <a href="#_sub2" class="code" title="subfunction x = generatedesign_( n, d )">generatedesign_</a>(n, d);
-0088     score = stk_mindist(y);
-0089     <span class="keyword">if</span> isempty(x) || (score &gt; bestscore)
-0090         x = y;
-0091         bestscore = score;
-0092     <span class="keyword">end</span>
-0093 <span class="keyword">end</span>
-0094 
-0095 <span class="keyword">end</span>
-0096 
+0077 
+0078 <span class="comment">%%%%%%%%%%%%%%%%%%</span>
+0079 <span class="comment">%%% lhsdesign_ %%%</span>
+0080 <span class="comment">%%%%%%%%%%%%%%%%%%</span>
+0081 
+0082 <a name="_sub1" href="#_subfunctions" class="code">function x = lhsdesign_( n, d, niter)</a>
+0083 
+0084 bestscore = 0;
+0085 x = [];
+0086 
+0087 <span class="keyword">for</span> j = 1:niter
+0088     y = <a href="#_sub2" class="code" title="subfunction x = generatedesign_( n, d )">generatedesign_</a>(n, d);
+0089     score = stk_mindist(y);
+0090     <span class="keyword">if</span> isempty(x) || (score &gt; bestscore)
+0091         x = y;
+0092         bestscore = score;
+0093     <span class="keyword">end</span>
+0094 <span class="keyword">end</span>
+0095 
+0096 <span class="keyword">end</span>
 0097 
-0098 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
-0099 <span class="comment">%%% generatedesign_ %%%</span>
-0100 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
-0101 
-0102 <a name="_sub2" href="#_subfunctions" class="code">function x = generatedesign_( n, d )</a>
-0103 
-0104 x = zeros(n, d);
-0105 
-0106 <span class="keyword">for</span> i = 1:d <span class="comment">% for each dimension, draw a random permutation</span>
-0107     [sx, x(:,i)] = sort(rand(n,1)); <span class="comment">%#ok&lt;ASGLU&gt;</span>
-0108 <span class="keyword">end</span>
-0109 
-0110 x = (x - rand(size(x))) / n;
-0111 
-0112 <span class="keyword">end</span>
-0113 
+0098 
+0099 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0100 <span class="comment">%%% generatedesign_ %%%</span>
+0101 <span class="comment">%%%%%%%%%%%%%%%%%%%%%%%</span>
+0102 
+0103 <a name="_sub2" href="#_subfunctions" class="code">function x = generatedesign_( n, d )</a>
+0104 
+0105 x = zeros(n, d);
+0106 
+0107 <span class="keyword">for</span> i = 1:d <span class="comment">% for each dimension, draw a random permutation</span>
+0108     [sx, x(:,i)] = sort(rand(n,1)); <span class="comment">%#ok&lt;ASGLU&gt;</span>
+0109 <span class="keyword">end</span>
+0110 
+0111 x = (x - rand(size(x))) / n;
+0112 
+0113 <span class="keyword">end</span>
 0114 
-0115 <span class="comment">%%</span>
-0116 <span class="comment">% Check error for incorrect number of input arguments</span>
-0117 
+0115 
+0116 <span class="comment">%%</span>
+0117 <span class="comment">% Check error for incorrect number of input arguments</span>
 0118 
 0119 
 0120 
@@ -190,14 +190,15 @@ This function is called by:
 0125 
 0126 
 0127 
-0128 <span class="comment">%%</span>
-0129 <span class="comment">% Check that the output is a dataframe</span>
-0130 <span class="comment">% (all stk_sampling_* functions should behave similarly in this respect)</span>
-0131 
+0128 
+0129 <span class="comment">%%</span>
+0130 <span class="comment">% Check that the output is a dataframe</span>
+0131 <span class="comment">% (all stk_sampling_* functions should behave similarly in this respect)</span>
 0132 
 0133 
-0134 <span class="comment">%%</span>
-0135 <span class="comment">% Check output argument</span></pre></div>
+0134 
+0135 <span class="comment">%%</span>
+0136 <span class="comment">% Check output argument</span></pre></div>
 <hr>
 
 <address>
