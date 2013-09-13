@@ -1,4 +1,4 @@
-% LINSOLVE solves the kriging equation
+% LINSOLVE [overloaded base function]
 
 % Copyright Notice
 %

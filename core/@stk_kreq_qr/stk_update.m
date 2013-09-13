@@ -1,4 +1,4 @@
-% STK_UPDATE...
+% STK_UPDATE [STK internal]
 
 % Copyright Notice
 %
@@ -33,4 +33,4 @@ kreq_updated = stk_kriging_equation (kreq.model, [kreq.xi; x_new]);
 
 % TODO: implement efficient update equations
 
-end % stk_kriging_equation_update
+end % stk_update

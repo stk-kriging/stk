@@ -1,4 +1,4 @@
-% STK_SQUARED_SEMINORM...
+% STK_SQUARED_SEMINORM [STK internal]
 
 % Copyright Notice
 %

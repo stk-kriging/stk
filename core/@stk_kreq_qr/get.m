@@ -1,4 +1,4 @@
-% GET...
+% GET  [overloaded base function]
 
 % Copyright Notice
 %
