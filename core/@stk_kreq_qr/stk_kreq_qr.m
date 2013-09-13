@@ -1,4 +1,4 @@
-% STK_KREQ_QR [internal STK class]
+% STK_KREQ_QR [STK internal]
 
 % Copyright Notice
 %
