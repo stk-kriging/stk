@@ -21,10 +21,10 @@ Changes in version 2.0
 * Many improvements in the internal structure of STK, for the sake of clarity
   (for those who happen to read the code) and efficiency:
 
-   o @stk_kreq_qr: new class for encapsulating  basic computations related 
+   o @stk_kreq_qr: new class for encapsulating basic computations related 
      to a Gaussian process (kriging) model.
 
-   o The old Kx_cache/Px_cache mechanisme, for working efficiently on finite
+   o The old Kx_cache/Px_cache mechanism, for working efficiently on finite
      spaces, has been replaced by a new covariance fonction: stk_discretecov.
 
    o A new framework to encapsulate various approaches to parallel
@@ -60,9 +60,9 @@ Changes in version 2.0
      future work on non-stationary covariance functions.
 
    o AUTHORS: a list of maintainers and contributors can now be found at the
-     root of the source tree
+     root of the source tree.
 
-   o stk_compile_all: now recompiles MEX-files automatically is the source code
+   o stk_compile_all: now recompiles MEX-files automatically if the source code
      has changed.
 
    o Various new utility functions, tiny or not-so-tiny improvements,
