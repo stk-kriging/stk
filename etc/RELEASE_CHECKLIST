@@ -29,12 +29,12 @@ svn update  # to get our freshly created release branch
 In branches/4.5.x/README, update version number to "4.5.0" and modify copyright
 years if appropriate. Commit.
 
-svn commit -m "branches/4.5.x/README: set version number to 4.5.0"
+svn commit -m "Update version number to 4.5.0"
 
 In trunk/README, update version number to "4.6-dev" (or "5.0-dev") and modify
 copyright years if appropriate. Commit.
 
-svn commit -m "trunk/README: set version number to 4.6-dev"
+svn commit -m "Update version number to 4.6-dev"
 
 
 --- Step #3: documentation ------------------------------------------------------
@@ -42,7 +42,7 @@ svn commit -m "trunk/README: set version number to 4.6-dev"
 Generate and commit HTML doc (see admin/stk_make_htmldoc.m).
 
 svn add branches/4.5.x/htmldoc
-svn commit -m "branches/4.5.x/htmldoc: generate HTML documentation"
+svn commit -m "Generate HTML documentation"
 
 Describe changes in branches/4.5.x/WHATSNEW, starting from the WHATSNEW file of
 the previous release. Commit.
@@ -50,7 +50,7 @@ the previous release. Commit.
 cp branches/4.4.x/WHATSNEW branches/4.5.x/WHATSNEW
 # update WHATSNEW
 svn add branches/4.5.x/WHATSNEW
-svn commit -m "branches/4.5.x/WHATSNEW: create WHATSNEW for release 4.5.0"
+svn commit -m "Create WHATSNEW for release 4.5.0"
 
 --- Step #4: create release tag--------------------------------------------------
 
@@ -68,7 +68,7 @@ cd tags/4.5.0
 
 Export (svn export). Remove ./etc and ./admin. Create targz archive.
 
-Use etc/make_release_targz.sh  script to automate these steps.
+Use etc/make_release_targz.sh script to automate these steps.
 
 Upload on Sourceforge.
 http://sourceforge.net/projects/kriging/files/
