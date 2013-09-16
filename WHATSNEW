@@ -21,9 +21,8 @@ Changes in version 2.0
 * Many improvements in the internal structure of STK, for the sake of clarity
   (for those who happen to read the code) and efficiency:
 
-   o @stk_kriging_equation: new class for encapsulating all the basic 
-     computations related to a Gaussian process (kriging) model: solving the
-     kriging system, computing log-determinants...
+   o @stk_kreq_qr: new class for encapsulating  basic computations related 
+     to a Gaussian process (kriging) model.
 
    o The old Kx_cache/Px_cache mechanisme, for working efficiently on finite
      spaces, has been replaced by a new covariance fonction: stk_discretecov.
