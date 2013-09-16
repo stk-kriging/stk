@@ -1,8 +1,8 @@
 #!/bin/bash
-ETC="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BASEDIR=$( dirname $ETC )
-SUBBASEDIR=$( dirname $BASEDIR )
-VERSION=$( basename $BASEDIR )
+ADMIN="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd)"
+BASEDIR=$(dirname $ADMIN)
+SUBBASEDIR=$(dirname $BASEDIR)
+VERSION=$(basename $BASEDIR)
 
 echo "Making SVN export $VERSION in $SUBBASEDIR.."
 
