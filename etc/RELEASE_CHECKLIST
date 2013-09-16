@@ -52,17 +52,26 @@ cp branches/4.4.x/WHATSNEW branches/4.5.x/WHATSNEW
 svn add branches/4.5.x/WHATSNEW
 svn commit -m "branches/4.5.x/WHATSNEW: create WHATSNEW for release 4.5.0"
 
+--- Step #4: create release tag--------------------------------------------------
 
---- Step #4: release ------------------------------------------------------------
+svn copy \
+  svn+ssh://USERNAME@svn.code.sf.net/p/kriging/code/branches/4.5.x \
+  svn+ssh://USERNAME@svn.code.sf.net/p/kriging/code/tags/4.5.0 \
+  -m "Create release tag 4.5.0"
 
-Export (svn export).
+svn update  # to get our freshly created release tag
 
-Remove ./etc and ./admin.
 
-Create tarball, compress and upload on Sourceforge.
+--- Step #5: release ------------------------------------------------------------
+
+cd tags/4.5.0
+
+Export (svn export). Remove ./etc and ./admin. Create targz archive.
+
+Use etc/make_release_targz.sh  script to automate these steps.
+
+Upload on Sourceforge.
 http://sourceforge.net/projects/kriging/files/
-
-TODO: create a script to automate these steps.
 
 Post a message to announce the release in the 'news' section on Sourceforge.
 http://sourceforge.net/p/kriging/news/
