@@ -37,9 +37,9 @@ if isempty (colnames)
 else
     s = '{';
     for j = 1:(d-1),
-        s = [s sprintf('%s, ', x.colnames{j})]; %#ok<AGROW>
+        s = [s sprintf('''%s'', ', x.colnames{j})]; %#ok<AGROW>
     end
-    s = [s sprintf('%s}', x.colnames{end})];
+    s = [s sprintf('''%s''}', x.colnames{end})];
 end
 
 end % function stk_sprintf_colnames

@@ -63,55 +63,151 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [zp, lambda, mu, K] = stk_predict(model, xi, zi, xt)
+function [zp, lambda, mu, K] = stk_predict (model, xi, zi, xt)
 
 if nargin > 4,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-%=== todo: these should become options
-
+% TODO: these should become options
 display_waitbar = false;
 block_size = [];
-options = {display_waitbar, block_size};
 
-%=== prepare lefthand side of the kriging equation
+%--- Prepare the lefthand side of the KRiging EQuation -------------------------
 
-kreq = stk_kriging_equation(model, xi);
-
-%=== solve the kriging system and extract all requested outputs
-
-if nargout == 1,
-    
-    % note: calling @stk_kriging_equation.stk_predict without its second output
-    % argument is more memory-efficient (we don't build full lambda_mu and RS
-    % matrices)
-    
-    zp = stk_predict(kreq, zi, xt, options{:});
-    
+if iscell (xi)
+    % WARNING: experimental HIDDEN feature, use at your own risk !!!    
+    kreq = xi{2}; % already computed, I hope you kown what you're doing ;-)
+    xi = xi{1};
 else
-    
-    [zp, kreq] = stk_predict(kreq, zi, xt, options{:});
-    
-    % extracts kriging weights (if requested)
-    if nargout > 1,
-        lambda = kreq.lambda;
-    end
-    
-    % extracts Lagrange multipliers (if requested)
-    if nargout > 2,
-        mu = kreq.mu;
-    end
-    
-    % compute posterior covariance matrix (if requested)
-    if nargout > 3,
-        nt = size(xt, 1);
-        K = stk_posterior_matcov(kreq, 1:nt, 1:nt, false);
-    end
-    
+    kreq = stk_kreq_qr (model, xi);
 end
 
+%--- Convert and check input arguments: zi, xt ---------------------------------
+
+zi = double (zi);
+ni = kreq.n;
+
+if ~ (isempty (zi) || isequal (size (zi), [ni 1]))
+    stk_error ('zi must have size ni x 1.', 'IncorrectSize');
 end
+
+xt = double (xt);
+
+if strcmp (model.covariance_type, 'stk_discretecov') % use indices    
+    if isempty (xt)
+        m = size (model.param.K, 1);
+        xt = (1:m)';
+    elseif ~ iscolumn (xt)
+        warning ('STK:stk_predict:IncorrectSize', 'xt should be a column.');
+        xt = xt(:);
+    end    
+end
+
+nt = size (xt, 1);
+
+%--- Prepare the output arguments ----------------------------------------------
+
+zp_v = zeros (nt, 1);
+compute_prediction = ~ isempty (zi);
+
+% compute the kriging prediction, or just the variances ?
+if compute_prediction,
+    zp_a = zeros (nt, 1);
+else
+    zp_a = nan (nt, 1);
+end
+
+%--- Choose nb_blocks & block_size ---------------------------------------------
+
+if isempty (block_size)
+    MAX_RS_SIZE = 5e6; SIZE_OF_DOUBLE = 8; % in bytes
+    block_size = ceil( MAX_RS_SIZE / (ni * SIZE_OF_DOUBLE));
+end
+
+% blocks of size approx. block_size
+nb_blocks = max (1, ceil(nt / block_size));
+
+block_size = ceil (nt / nb_blocks);
+
+% if we want to return a full kreq object in the case where several blocks are
+% used, we need to recompose full lambda_mu and RS matrices.
+if nargin > 1
+    lambda_mu = zeros (ni + kreq.r, nt);
+    RS = zeros (size (lambda_mu));
+end
+
+%--- MAIN LOOP (over blocks) ---------------------------------------------------
+
+% TODO: this loop should be parallelized !!!
+
+for block_num = 1:nb_blocks
+    
+    % compute the indices for the current block
+    idx_beg = 1 + block_size * (block_num - 1);
+    idx_end = min(nt, idx_beg + block_size - 1);
+    idx = idx_beg:idx_end;
+        
+    % solve the kriging equation for the current block
+    [Kti, Pt] = stk_make_matcov (model, xt, xi);
+    kreq = stk_set_righthandside (kreq, Kti, Pt);
+    
+    % compute the kriging mean
+    if compute_prediction,
+        zp_a(idx) = kreq.lambda' * zi;
+    end
+
+    if nargin > 1
+        lambda_mu(:, idx) = kreq.lambda_mu;
+        RS(:, idx) = kreq.RS;
+    end
+    
+    % compute kriging variances (this does NOT include the noise variance)
+    zp_v(idx) = stk_make_matcov (model, xt, xt, true) - kreq.delta_var;
+    
+    % note: the following modification computes prediction variances for noisy
+    % variance, i.e., including the noise variance also
+    % zp_v(idx) = stk_make_matcov (model, xt, [], true) ...
+    %     - dot (kreq.lambda_mu, kreq.RS);
+    
+    b = (zp_v < 0);
+    if any (b),
+        zp_v(b) = 0.0;
+        warning('STK:stk_predict:NegativeVariancesSetToZero', sprintf ( ...
+            ['Correcting numerical inaccuracies in kriging variance.\n' ...
+            '(%d negative variances have been set to zero)'], sum (b)));
+    end
+    
+    if display_waitbar,
+        waitbar (idx_end/nt, hwb, sprintf ( ...
+            'In stk\\_predict(): %d/%d predictions completed',idx_end,nt));
+    end
+end
+
+if display_waitbar,
+    close (hwb);
+end
+
+%--- Prepare outputs -----------------------------------------------------------
+
+zp = stk_dataframe ([zp_a zp_v], {'mean' 'var'});
+zp.info = 'Created by stk_predict';
+
+if nargin > 1 % lambda requested
+    lambda = lambda_mu(1:ni, :);
+end
+
+if nargin > 2 % mu requested
+    mu = lambda_mu((ni+1):end, :);
+end
+
+if nargout > 3,
+    K0 = stk_make_matcov (model, xt, xt);
+    deltaK = lambda_mu' * RS;
+    K = K0 - 0.5 * (deltaK + deltaK');    
+end
+
+end % function stk_predict -----------------------------------------------------
 
 
 %!shared n, m, model, x0, x_obs, z_obs, x_prd, y_prd1, idx_obs, idx_prd

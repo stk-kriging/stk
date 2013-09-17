@@ -1,4 +1,4 @@
-% SET...
+% STK_KREQ_QR [STK internal]
 
 % Copyright Notice
 %
@@ -26,33 +26,27 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = set(kreq, propname, value)
+function kreq = stk_kreq_qr (model, xi, xt)
+        
+[Kii, Pi] = stk_make_matcov (model, xi);
+[n, r] = size (Pi);
 
-% This class implements GREEDY EVALUATION: computations are made as soon as the
-% required inputs are made available.
+% kriging matrix (left-hand side of the kriging equation)
+LS =                              ...
+    [[ Kii, Pi                 ]; ...
+    [  Pi', zeros(size(Pi, 2)) ]];
+        
+% orthogonal-triangular decomposition
+[Q, R] = qr (LS);
 
-switch propname
-    
-    case 'xi'
-        
-        kreq.xi        = double (value);
-        kreq.LS_Q      = []; % need to be recomputed
-        kreq.LS_R      = []; % need to be recomputed
-        kreq.RS        = []; % need to be recomputed
-        kreq.lambda_mu = []; % need to be recomputed
-        
-        kreq = do_compute (kreq);
-        
-    case 'xt'
-        
-        kreq.xt        = double (value);
-        kreq.RS        = []; % need to be recomputed
-        kreq.lambda_mu = []; % need to be recomputed
+kreq = struct ('n', n, 'r', r, ...
+    'LS_Q', Q, 'LS_R', R, 'RS', [], 'lambda_mu', []);
+kreq = class (kreq, 'stk_kreq_qr');
 
-        kreq = do_compute (kreq);
-        
-    otherwise
-        
-        error ('Unknown property.');
-        
+% prepare the right-hand side of the kriging equation
+if nargin > 2,
+    [Kti, Pt] = stk_make_matcov (model, xt, xi);
+    kreq = stk_set_righthandside (kreq, Kti, Pt);
 end
+
+end % function stk_kreq_qr
