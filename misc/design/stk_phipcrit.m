@@ -20,7 +20,7 @@
 %
 %    * When p -> +Inf, the value of the phi_p criterion tends to the inverse of
 %      the mindist criterion. The phi_p criterion with a high value of p is
-%      often used in place of the mindist criterion for its being easier to 
+%      often used in place of the mindist criterion for its being easier to
 %      optimize. Morris & Mitchell recommend using p in the range 20-50 for this
 %      purpose.
 %
@@ -72,7 +72,7 @@
 function phi = stk_phipcrit (x, p)
 
 if nargin > 2
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 if nargin < 2,
