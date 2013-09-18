@@ -79,7 +79,7 @@ if nargin < 5, extended = false; end
 % recover the "order" r from the value of n
 r = floor(log2(n - 1) - 1);
 n_ = 2^(r + 1) + 1;
-if (r == 0) || (abs(n - n_) > eps),
+if (r <= 0) || (abs(n - n_) > eps),
     errmsg = 'n must be an integer of the form 2^(r+1) + 1 with r > 0';
     stk_error(errmsg, 'IncorrectArgument');
 end
