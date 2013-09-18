@@ -1,5 +1,9 @@
 2013-09-18  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a bug in stk_sampling_olhs.
+
+	* sampling/stk_sampling_olhs.m: modified
+
 	Add new criterions for the design of computer experiments.
 
 	* misc/design: new folder
