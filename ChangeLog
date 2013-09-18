@@ -1,5 +1,13 @@
 2013-09-13  Julien Bect  <julien.bect@supelec.fr>
 
+	Add new function to compute the criterion of Morris & Mitchell (1995).
+
+	* misc/spacefill: new folder
+	* misc/spacefill/stk_phipcrit.m: new function
+	* misc/config/stk_path.m: modified
+
+2013-09-13  Julien Bect  <julien.bect@supelec.fr>
+
 	New approach for the encapsulation of QR-based kriging computations.
 
 	* core/@stk_kriging_equation: removed
