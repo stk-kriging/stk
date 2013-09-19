@@ -1,3 +1,9 @@
+2013-09-19  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a bug in stk_predict.
+
+	* core/stk_predict.m: modified
+
 2013-09-18  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a bug in stk_sampling_olhs.
