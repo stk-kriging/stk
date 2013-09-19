@@ -33,7 +33,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 stk_disp_examplewelcome();
-
+stk_options_set ('stk_dataframe', 'disp_format', 'verbose'); 
 
 %% DEFINE A 1D TEST FUNCTION
 

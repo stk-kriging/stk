@@ -1,11 +1,10 @@
-% LINSOLVE solves the kriging equation
+% STK_SET_RIGHTHANDSIDE [STK internal]
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,15 +26,16 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function w = linsolve (kreq, rs)
+function kreq = stk_set_righthandside (kreq, Kti, Pt)
 
-% Solves the linear equation A * ws = rs, where A is the kriging matrix
+% This class implements GREEDY EVALUATION: computations are made as soon as the
+% required inputs are made available.
 
-if stk_is_octave_in_use (),
-    % linsolve is missing in Octave
-    w = kreq.LS_R \ (kreq.LS_Q' * rs);
-else
-    w = linsolve (kreq.LS_R, kreq.LS_Q' * rs, struct ('UT', true));
-end
+% prepare the right-hand side of the kriging equation
+kreq.RS = [Kti Pt]';
 
-end % function linsolve
+% Solve the kriging equation to get the extended
+% kriging weights vector (weights + Lagrange multipliers)
+kreq.lambda_mu = linsolve (kreq);
+
+end % function stk_set_righthandside
