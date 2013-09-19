@@ -97,6 +97,12 @@ stk_compile_all();
 
 warning('off', 'STK:stk_predict:NegativeVariancesSetToZero');
 
+%=== Options
+
+% Uncomment this line if you want to see a lot of details about the internals
+% of stk_dataframe and stk_factorialdesign objects:
+% stk_options_set ('stk_dataframe', 'disp_format', 'verbose');
+
 %=== Cleanup
 
 fprintf('\n');

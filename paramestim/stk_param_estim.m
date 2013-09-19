@@ -179,6 +179,7 @@ end % function stk_param_estim ------------------------------------------------
 function [l, dl] = f_ (model, w)
 
 model.randomprocess.priorcov.cparam = w;
+
 if nargout == 1,
     l = stk_param_relik (model);
 else
@@ -200,7 +201,8 @@ function [l, dl] = f_with_noise_ (model, w)
 
 model.randomprocess.priorcov.cparam = w(1:end-1);
 model.noise.cov.variance = exp(w(end));
-if nargin == 1,
+
+if nargout == 1,
     l = stk_param_relik (model);
 else
     [l, dl, dln] = stk_param_relik (model);
