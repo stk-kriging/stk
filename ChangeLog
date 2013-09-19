@@ -1,3 +1,22 @@
+2013-09-19  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a bug in stk_predict.
+
+	* core/stk_predict.m: modified
+
+2013-09-18  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a bug in stk_sampling_olhs.
+
+	* sampling/stk_sampling_olhs.m: modified
+
+	Add new criterions for the design of computer experiments.
+
+	* misc/design: new folder
+	* misc/design/stk_phipcrit.m: new function
+	* misc/design/stk_maxabscorr.m: new function
+	* misc/config/stk_path.m: modified
+
 2013-09-13  Julien Bect  <julien.bect@supelec.fr>
 
 	New approach for the encapsulation of QR-based kriging computations.

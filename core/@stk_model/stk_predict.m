@@ -80,7 +80,7 @@ xi = double (model.observations.x);
 
 if iscell (xi)
     % WARNING: experimental HIDDEN feature, use at your own risk !!!
-    kreq = xi{2}; % already computed, I hope you known what you're doing ;-)
+    kreq = xi{2}; % already computed, I hope you know what you're doing ;-)
     xi = xi{1};
 else
     kreq = stk_kreq_qr (model, xi);
