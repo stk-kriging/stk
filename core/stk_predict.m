@@ -77,7 +77,7 @@ block_size = [];
 
 if iscell (xi)
     % WARNING: experimental HIDDEN feature, use at your own risk !!!    
-    kreq = xi{2}; % already computed, I hope you kown what you're doing ;-)
+    kreq = xi{2}; % already computed, I hope you know what you're doing ;-)
     xi = xi{1};
 else
     kreq = stk_kreq_qr (model, xi);
@@ -193,11 +193,11 @@ end
 zp = stk_dataframe ([zp_a zp_v], {'mean' 'var'});
 zp.info = 'Created by stk_predict';
 
-if nargin > 1 % lambda requested
+if nargout > 1 % lambda requested
     lambda = lambda_mu(1:ni, :);
 end
 
-if nargin > 2 % mu requested
+if nargout > 2 % mu requested
     mu = lambda_mu((ni+1):end, :);
 end
 
