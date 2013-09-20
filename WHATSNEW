@@ -1,5 +1,16 @@
-Changes in version 2.0
-======================
+Changes in version 2.0.1
+========================
+
+* This is a minor bugfix release.
+
+   o Fix a bug in stk_predict (don't compute the optional outputs lambda and mu
+     when they are not requested by the caller).
+
+   o Fix a bug in stk_sampling_olhs (fail neatly when called with n = 2).
+
+
+Changes in version 2.0.0
+========================
 
 * Required Octave version number has been raised to 3.2.2.
 
