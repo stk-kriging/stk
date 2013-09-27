@@ -1,8 +1,8 @@
-% STK_RUNSCRIPT runs a script in a 'controlled' environment.
+% ISMATLAB returns true if Octave is used as an interpreter, false otherwise
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,29 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function err = stk_runscript(scriptname)
+function matlab_in_use = ismatlab
 
-has_dot_m = strcmp(scriptname(end-1:end), '.m');
+matlab_in_use = ~ isoctave;
 
-if isoctave,
-    % Octave's run() wants scriptnames WITH a .m in 3.6.2
-    % (both forms were accepted in 3.2.4... damn it...)
-    if ~has_dot_m,
-        scriptname = [scriptname '.m'];
-    end
-else
-    % Matlab wants scriptnames WITHOUT a .m
-    if has_dot_m,
-        scriptname = scriptname(1:end-2);
-    end
-end
-
-err = [];
-
-try
-    run(scriptname);
-catch %#ok<CTCH>
-    err = lasterror(); %#ok<LERR>
-end
-
-end % function stk_runscript
+end % function ismatlab

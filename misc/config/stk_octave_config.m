@@ -66,7 +66,7 @@ if strcmp (v(1:4), '3.2.')
     addpath (fullfile ...
         (stk_get_root, 'utils', '@stk_dataframe', 'private'));
     addpath (fullfile ...
-        (stk_get_root, 'core', '@stk_kriging_equation', 'private'));
+        (stk_get_root, 'misc', 'dist', 'private'));
 end
 
 end

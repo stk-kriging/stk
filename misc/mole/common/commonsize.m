@@ -1,8 +1,8 @@
-% STK_RUNSCRIPT runs a script in a 'controlled' environment.
+% COMMONSIZE ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,29 +26,34 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function err = stk_runscript(scriptname)
+function varargout = commonsize (varargin)
 
-has_dot_m = strcmp(scriptname(end-1:end), '.m');
+n = length (varargin);
 
-if isoctave,
-    % Octave's run() wants scriptnames WITH a .m in 3.6.2
-    % (both forms were accepted in 3.2.4... damn it...)
-    if ~has_dot_m,
-        scriptname = [scriptname '.m'];
+if n == 0,
+    
+    varargout = {};
+    
+else % at least one input argument
+    
+    varargout = cell (1, n);
+    
+    d = cellfun (@ndims, varargin);
+    s = ones (n, max (d));
+    for i = 1:n,
+        s(i, 1:d(i)) = size (varargin{i});
     end
-else
-    % Matlab wants scriptnames WITHOUT a .m
-    if has_dot_m,
-        scriptname = scriptname(1:end-2);
+    
+    smax = max (s);
+    
+    for i = 1:n,
+        nrep = smax ./ s(i, :);
+        if any (floor (nrep) ~= nrep)
+            error ('Input arguments cannot be brought to a common size.');
+        else
+            varargout{i} = repmat (varargin{i}, nrep);
+        end
     end
 end
 
-err = [];
-
-try
-    run(scriptname);
-catch %#ok<CTCH>
-    err = lasterror(); %#ok<LERR>
-end
-
-end % function stk_runscript
+end % function commonsize

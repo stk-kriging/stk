@@ -58,44 +58,47 @@ disp( '                                                                     ' );
 
 %=== Add STK folders to the path
 
-STK_ROOT = fileparts(mfilename('fullpath'));
-addpath(fullfile(STK_ROOT, 'misc', 'config'));
-stk_set_root(STK_ROOT);
+STK_ROOT = fileparts (mfilename ('fullpath'));
+addpath (fullfile (STK_ROOT, 'misc', 'config'));
+addpath (fullfile (STK_ROOT, 'misc', 'mole', 'common'));
+stk_set_root (STK_ROOT);
 
 %=== Check which of Matlab or Octave is in use
 
-octave_in_use = stk_is_octave_in_use();
-if octave_in_use,
-    fprintf('Using Octave %s\n', OCTAVE_VERSION);
+if isoctave,
+    fprintf ('Using Octave %s\n', OCTAVE_VERSION);
     % some Octave-specific configuration
-    stk_octave_config();
+    stk_octave_config;
 else
-    fprintf('Using Matlab %s\n', version());
+    fprintf ('Using Matlab %s\n', version);
 end
 
 %=== Check for presence of the Parallel Computing Toolbox
 
-fprintf('Parallel Computing toolbox... ');
-if octave_in_use,
-    fprintf('not available in Octave.\n');
+fprintf ('Parallel Computing toolbox... ');
+if isoctave,
+    fprintf ('not available in Octave.\n');
 else
-    pct_found = stk_is_pct_installed();
-    if pct_found, fprintf('found.\n');
-    else fprintf('not found.\n'); end
+    pct_found = stk_is_pct_installed;
+    if pct_found,
+        fprintf ('found.\n');
+    else
+        fprintf ('not found.\n');
+    end
 end
 
 %=== Select optimizers for stk_param_estim
 
-stk_select_optimizer();
+stk_select_optimizer;
 
 %=== Build MEX-files (if necessary)
 
 % to force recompilation of all MEX-files, use stk_compile_all(true);
-stk_compile_all();
+stk_compile_all;
 
 %=== Disable a warning in stk_predict
 
-warning('off', 'STK:stk_predict:NegativeVariancesSetToZero');
+warning ('off', 'STK:stk_predict:NegativeVariancesSetToZero');
 
 %=== Options
 
@@ -105,7 +108,7 @@ warning('off', 'STK:stk_predict:NegativeVariancesSetToZero');
 
 %=== Cleanup
 
-fprintf('\n');
+fprintf ('\n');
 
 clear here STK_ROOT pct_found fmincon_found octave_in_use s ans
 
