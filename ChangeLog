@@ -1,3 +1,32 @@
+2013-09-27  Julien Bect  <julien.bect@supelec.fr>
+
+	Make Matlab/Octave compatibility easier to achieve.
+
+	* misc/mole: new folder
+	* misc/mole/README: new text file
+	* misc/mole/common: new folder
+	* misc/mole/common/commonsize.m: new function
+	* misc/mole/common/ismatlab.m: new function
+	* misc/mole/common/isoctave.m: new function
+	* misc/mole/matlab: new folder
+	* misc/mole/matlab/file_in_path.m: moved form misc/matlab
+	* misc/mole/matlab/file_in_loadpath.m: moved form misc/matlab
+	* misc/mole/matlab/stdout.m: moved form misc/matlab
+	* misc/mole/matlab/index.m: moved form misc/matlab
+	* misc/mole/matlab/fflush.m: moved form misc/matlab
+	* misc/matlab: deleted
+	* misc/mole/octave: new folder
+	* misc/mole/octave/linsolve.m: new function
+	* stk_init.m: modified
+	* admin/stk_make_htmldoc.m: modified
+	* core/@stk_kreq_qr/linsolve.m: modified
+	* misc/test/stk_test.m: modified
+	* misc/test/stk_runscript.m: modified
+	* misc/config/stk_select_optimizer.m: modified
+	* misc/config/stk_path.m: modified
+	* misc/config/stk_octave_config.m: modified
+	* misc/config/stk_is_octave_in_use.m: modified
+
 2013-09-19  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a bug in stk_predict.

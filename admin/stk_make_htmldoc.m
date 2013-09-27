@@ -31,8 +31,8 @@ STK_ROOT = stk_get_root ();
 addpath (fullfile (STK_ROOT, 'admin', 'm2html'));
 
 % Check that we are running the script from Matlab
-if stk_is_octave_in_use(),
-    error('M2HTML is not (yet) working with GNU Octave...');
+if isoctave,
+    error ('M2HTML is not (yet) working with GNU Octave...');
 end
 
 % Ensure that we are at the root of STK

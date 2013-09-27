@@ -53,7 +53,7 @@ end
 
 % select an appropriate optimizer
 if isempty(optim_num_con) || isempty(optim_num_unc) || force_recheck,
-    if stk_is_octave_in_use(),
+    if isoctave,
         % We assume that the 'optim' package is installed, loaded, and
         % provides the spq() function. But we check anyway (better safe
         % than sorry) and raise an error if sqp() is nowhere to be found.

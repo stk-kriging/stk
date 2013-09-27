@@ -1,10 +1,10 @@
 % STK_IS_OCTAVE_IN_USE returns true if the STK runs in Octave
 %
-% CALL: octave_in_use = stk_is_octave_in_use()
+% CALL: octave_in_use = isoctave
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -28,13 +28,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function octave_in_use = stk_is_octave_in_use()
+function octave_in_use = stk_is_octave_in_use ()
 
-persistent b;
+warning ('STK:stk_is_octave_in_use:obsolete', ...
+    'This function is obsolete, use isoctave instead.');
 
-if isempty(b),
-    b = exist('OCTAVE_VERSION', 'builtin');
-    mlock();
-end
+octave_in_use = isoctave;
 
-octave_in_use = b;
+end % function stk_is_octave_in_use
