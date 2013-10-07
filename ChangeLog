@@ -1,3 +1,9 @@
+2013-10-07  Julien Bect  <julien.bect@supelec.fr>
+
+	Make commonsize work directly on cell arrays when nargin == 1.
+
+	* misc/mole/common/commonsize.m: modified
+
 2013-09-27  Julien Bect  <julien.bect@supelec.fr>
 
 	Make Matlab/Octave compatibility easier to achieve.

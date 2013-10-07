@@ -34,26 +34,39 @@ if n == 0,
     
     varargout = {};
     
-else % at least one input argument
+else
     
-    varargout = cell (1, n);
+    if n == 1
+        % varargin{1} is expected to be a cell array in this case
+        C = varargin{1};
+        n = length (C);        
+    else
+        C = varargin;
+    end
     
-    d = cellfun (@ndims, varargin);
+    d = cellfun (@ndims, C);
     s = ones (n, max (d));
     for i = 1:n,
-        s(i, 1:d(i)) = size (varargin{i});
+        s(i, 1:d(i)) = size (C{i});
     end
     
     smax = max (s);
     
     for i = 1:n,
-        nrep = smax ./ s(i, :);
-        if any (floor (nrep) ~= nrep)
+        nrep = smax ./ s(i, :);        
+        if ~ all ((s(i, :) == 1) | (nrep == 1))
             error ('Input arguments cannot be brought to a common size.');
         else
-            varargout{i} = repmat (varargin{i}, nrep);
+            C{i} = repmat (C{i}, nrep);
         end
     end
+    
+    if nargout > 1,
+        varargout = C(1:nargout);
+    else
+        varargout = {C};
+    end
+    
 end
 
 end % function commonsize
