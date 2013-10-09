@@ -1,3 +1,15 @@
+2013-10-09  Julien Bect  <julien.bect@supelec.fr>
+
+	Provide a first set of pdf/cdf replacement functions.
+
+	* misc/distrib: new folder
+	* misc/distrib/README: new text file
+	* misc/distrib/distrib_student_pdf.m: new function
+	* misc/distrib/distrib_normal_pdf.m: new function
+	* misc/distrib/distrib_student_cdf.m: new function
+	* misc/distrib/distrib_normal_cdf.m: new function
+	* misc/config/stk_path.m: modified
+
 2013-10-07  Julien Bect  <julien.bect@supelec.fr>
 
 	Make commonsize work directly on cell arrays when nargin == 1.
