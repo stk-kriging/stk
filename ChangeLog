@@ -1,3 +1,10 @@
+2013-10-10  Julien Bect  <julien.bect@supelec.fr>
+
+	distrib_normal_*: return NaN for negative standard deviations.
+
+	* misc/distrib/distrib_normal_pdf.m: modified
+	* misc/distrib/distrib_normal_cdf.m: modified
+
 2013-10-09  Julien Bect  <julien.bect@supelec.fr>
 
 	Provide a first set of pdf/cdf replacement functions.
