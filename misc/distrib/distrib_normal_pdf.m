@@ -37,15 +37,18 @@ if nargin > 1,
 end
 
 if nargin > 2,
-    x = bsxfun (@rdivide, x, sigma);
+    [x, sigma] = commonsize (x, sigma);
+    x = x ./ sigma;
+    k0 = (sigma > 0);
 else
     sigma = 1;
+    k0 = 1;
 end
 
 xx = x .^ 2;
 density = nan (size (x));
 
-k0 = ~ isnan (x);
+k0 = k0 & (~ isnan (x));
 kb = (xx > 1491);  % when x^2 > 1491, the result is 0 in double precision
 
 % Deal with "large" values of abs(x)
@@ -71,3 +74,4 @@ end % function distrib_normal_pdf
 %!assert (isequal (distrib_normal_pdf (inf), 0.0));
 %!assert (isequal (distrib_normal_pdf (-inf), 0.0));
 %!assert (isnan   (distrib_normal_pdf (nan)));
+%!assert (isnan   (distrib_normal_pdf (0, 0, -1)));

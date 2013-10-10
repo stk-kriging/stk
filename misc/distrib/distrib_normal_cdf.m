@@ -37,13 +37,17 @@ if nargin > 1,
 end
 
 if nargin > 2,
-    x = bsxfun (@rdivide, x, sigma);
+    [x, sigma] = commonsize (x, sigma);
+    x = x ./ sigma;
+    k0 = (sigma > 0);
+else
+    k0 = 1;
 end
    
 p = nan (size (x));
 q = nan (size (x));
 
-k0 = ~ isnan (x);
+k0 = k0 & (~ isnan (x));
 kp = (x > 0);
 kn = k0 & (~ kp);
 kp = k0 & kp;
@@ -75,3 +79,4 @@ end % function distrib_normal_cdf
 %!assert (isequal (distrib_normal_cdf ( inf), 1.0));
 %!assert (isequal (distrib_normal_cdf (-inf), 0.0));
 %!assert (isnan   (distrib_normal_cdf ( nan)));
+%!assert (isnan   (distrib_normal_cdf (0, 0, -1)));
