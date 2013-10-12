@@ -1,5 +1,9 @@
 2013-12-10  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a bug in stk_dataframe.m and add a copy constructor.
+
+	* utils/arrays/@stk_dataframe/stk_dataframe.m: modified
+
 	Provide Gaussian and Student EI functions.
 
 	* misc/distrib/distrib_student_ei.m: new function
