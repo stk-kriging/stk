@@ -33,11 +33,18 @@ if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if nargin == 0  % default constructor
-    x0 = zeros(0, 1);
+if nargin == 0
+    % Default constructor
+    data = zeros(0, 1);
+elseif (nargin == 1) && (isa (x0, 'stk_dataframe'))
+    % Copy constructor
+    x = x0;  return;
+else
+    % Only numerical dataframes are currently allowed
+    data = double (x0);
 end
 
-x = struct ('data', x0, 'colnames', {{}}, 'rownames', {{}}, 'info', '');
+x = struct ('data', data, 'colnames', {{}}, 'rownames', {{}}, 'info', '');
 
 x = class (x, 'stk_dataframe');
 
