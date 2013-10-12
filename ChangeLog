@@ -1,3 +1,10 @@
+2013-12-10  Julien Bect  <julien.bect@supelec.fr>
+
+	Provide Gaussian and Student EI functions.
+
+	* misc/distrib/distrib_student_ei.m: new function
+	* misc/distrib/distrib_normal_ei.m: new function
+
 2013-10-10  Julien Bect  <julien.bect@supelec.fr>
 
 	distrib_normal_*: return NaN for negative standard deviations.
