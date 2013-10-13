@@ -1,10 +1,10 @@
-2013-12-10  Julien Bect  <julien.bect@supelec.fr>
+2013-10-13  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a bug in @stk_dataframe/subsref.
 
 	* utils/arrays/@stk_dataframe/subsref.m: modified
 
-2013-12-10  Julien Bect  <julien.bect@supelec.fr>
+2013-10-12  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a bug in stk_dataframe.m and add a copy constructor.
 
