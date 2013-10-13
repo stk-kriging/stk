@@ -39,4 +39,6 @@ end
 
 fprintf ('%s\n', stk_sprintf_framed (demo_name));
 
+help (demo_name);
+
 end % function stk_disp_examplewelcome

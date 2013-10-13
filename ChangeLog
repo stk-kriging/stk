@@ -1,5 +1,9 @@
 2013-10-13  Julien Bect  <julien.bect@supelec.fr>
 
+	Display help text when running an example script.
+
+	* misc/text/stk_disp_examplewelcome.m: modified
+
 	Restore output verbosity at the end of example scripts.
 
 	* examples/01_kriging_basics/stk_example_kb01.m: modified
