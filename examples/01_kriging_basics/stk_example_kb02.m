@@ -31,7 +31,11 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 stk_disp_examplewelcome();
-stk_options_set ('stk_dataframe', 'disp_format', 'verbose'); 
+
+% Use verbose output
+save_verbosity = stk_options_get ('stk_dataframe', 'disp_format');
+stk_options_set ('stk_dataframe', 'disp_format', 'verbose');
+
 
 %% DEFINE A 1D TEST FUNCTION
 
@@ -115,3 +119,9 @@ zp = stk_predict(model, xi, zi, xt);
 % Visualisation
 stk_plot1d(xi, zi, xt, zt, zp);
 xlabel('x'); ylabel('z');
+
+
+%% Cleanup
+
+% Restore output verbosity
+stk_options_set ('stk_dataframe', 'disp_format', save_verbosity);
