@@ -1,3 +1,14 @@
+Changes in version 2.0.2
+========================
+
+* This is a minor bugfix release.
+
+   o Fix a bug in @stk_dataframe/subsref.m (handle colnames properly when
+     ()-indexing is used to extract a subset of rows).
+
+   o Fix a bug in @stk_dataframe/stk_dataframe.m (make sure that .data contains
+     numerical data) and add a copy constructor.
+
 Changes in version 2.0.1
 ========================
 
