@@ -1,5 +1,10 @@
 2013-10-13  Julien Bect  <julien.bect@supelec.fr>
 
+	Restore output verbosity at the end of example scripts.
+
+	* examples/01_kriging_basics/stk_example_kb01.m: modified
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+
 	Use input row names for the output of stk_feval.
 
 	* utils/stk_feval.m: modified
