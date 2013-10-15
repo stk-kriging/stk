@@ -1,3 +1,13 @@
+2013-10-15  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite the description of example 'kb01'.
+
+	* examples/01_kriging_basics/stk_example_kb01.m: modified
+
+	Insert an empty line before the example header.
+
+	* misc/text/stk_disp_examplewelcome.m: modified
+
 2013-10-13  Julien Bect  <julien.bect@supelec.fr>
 
 	New example script: 1D Bayesian optimization.

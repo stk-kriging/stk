@@ -1,8 +1,15 @@
-% STK_EXAMPLE_KB01 constructs a kriging approximation in 1D.
+% STK_EXAMPLE_KB01 constructs an ordinary kriging approximation in 1D.
 %
-%   This example shows how to construct an ordinary kriging predictor for a
-%   scalar input. The covariance function is assumed to be fully known (i.e., no
-%   parameter estimation is performed here).
+% A Matern covariance function is used for the Gaussian Process (GP) prior. The
+% parameters of this covariance function are assumed to be known (i.e., no
+% parameter estimation is performed here).
+%
+% The word 'ordinary' indicates that the mean function of the GP prior is
+% assumed to be constant and unknown.
+%
+% The example first performs kriging prediction based on noiseless data (the
+% kriging predictor, which is the posterior mean of the GP model, interpolates
+% the data in this case) and then based on noisy data.
 %
 
 % Copyright Notice
@@ -32,26 +39,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome();
+stk_disp_examplewelcome
 
-% Use verbose output
+% Use verbose output for the display of dataframes
 save_verbosity = stk_options_get ('stk_dataframe', 'disp_format');
 stk_options_set ('stk_dataframe', 'disp_format', 'verbose');
 
 
 %% Define a 1d test function
 
-f = @(x)( -(0.7*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
-DIM = 1;                                        % dimension of the factor space
-BOX = [-1.0; 1.0];                              % factor space
+f   = @(x)(- (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
+DIM = 1;            % dimension of the factor space
+BOX = [-1.0; 1.0];  % factor space
 
 NT = 400; % nb of points in the grid
-xt = stk_sampling_regulargrid(NT, DIM, BOX);
-zt = stk_feval(f, xt);
+xt = stk_sampling_regulargrid (NT, DIM, BOX);
+zt = stk_feval (f, xt);
 
-figure(1);
-set(gcf, 'Name', 'Plot of the function to be approximated');
-plot(xt, zt); xlabel('x'); ylabel('z');
+figure (1);
+set (gcf, 'Name', 'Plot of the function to be approximated');
+plot (xt, zt); xlabel ('x'); ylabel ('z');
 
 
 %% Generate a space-filling design
@@ -60,26 +67,26 @@ plot(xt, zt); xlabel('x'); ylabel('z');
 % evaluations performed on a "space-filling design".
 %
 % A regular grid (i.e., a grid with constant spacing) is constructed using
-% stk_sampling_regulargrid(), which is equivalent to linspace() in this
-% 1d example.
+% stk_sampling_regulargrid(), which is equivalent to linspace() in this 1D
+% example.
 %
 
-NI = 6;                                        % nb of evaluations that will be used
-xi = stk_sampling_regulargrid(NI, DIM, BOX);   % evaluation points
-zi = stk_feval(f, xi);                         % evaluation results
+NI = 6;                                        % number of evaluations
+xi = stk_sampling_regulargrid (NI, DIM, BOX);  % evaluation points
+zi = stk_feval (f, xi);                        % evaluation results
 
 
 %% Specification of the model
 %
-% We choose a Matern covariance with "fixed parameters" (in other
-% words, the parameters of the covariance function are provided by the user
-% rather than estimated from data).
+% We choose a Matern covariance with "fixed parameters" (in other  words, the
+% parameters of the covariance function are provided by the user rather than
+% estimated from data).
 %
 
-% The following line defines a model with a constant but unknown mean
-% (ordinary kriging) and a Matern covariance function. (Some default
-% parameters are also set, but we override them below.)
-model = stk_model('stk_materncov_iso');
+% The following line defines a model with a constant but unknown mean (ordinary
+% kriging) and a Matern covariance function. (Some default parameters are also
+% set, but we override them below.)
+model = stk_model ('stk_materncov_iso');
 
 % NOTE: the suffix '_iso' indicates an ISOTROPIC covariance function, but the
 % distinction isotropic / anisotropic is irrelevant here since DIM = 1.
@@ -89,7 +96,7 @@ model = stk_model('stk_materncov_iso');
 SIGMA2 = 1.0;  % variance parameter
 NU     = 4.0;  % regularity parameter
 RHO1   = 0.4;  % scale (range) parameter
-model.param = log([SIGMA2; NU; 1/RHO1]);
+model.param = log ([SIGMA2; NU; 1/RHO1]);
 
 
 %% Carry out the kriging prediction and display the result
@@ -100,13 +107,13 @@ model.param = log([SIGMA2; NU; 1/RHO1]);
 %
 
 % Carry out the kriging prediction at points xt
-zp = stk_predict(model, xi, zi, xt);
+zp = stk_predict (model, xi, zi, xt);
 
 % Display the result
-stk_plot1d(xi, zi, xt, zt, zp);
+stk_plot1d (xi, zi, xt, zt, zp);
 t = 'Kriging prediction based on noiseless observations';
-set(gcf, 'Name', t); title(t);
-xlabel('x'); ylabel('z');
+set (gcf, 'Name', t); title (t);
+xlabel ('x'); ylabel ('z');
 
 
 %% Repeat the experiment in a noisy setting
@@ -114,21 +121,21 @@ xlabel('x'); ylabel('z');
 NOISEVARIANCE = (1e-1)^2;
 
 % Now the observations are perturbed by an additive Gaussian noise
-noise = sqrt(NOISEVARIANCE) * randn(size(zi));
+noise = sqrt (NOISEVARIANCE) * randn (size (zi));
 zi_n = zi + noise;
 
 % We also include the observation noise in the model
 model_n = model;
-model_n.lognoisevariance = log(NOISEVARIANCE);
+model_n.lognoisevariance = log (NOISEVARIANCE);
 
 % Carry out the kriging prediction at locations xt
-zp_n = stk_predict(model_n, xi, zi_n, xt);
+zp_n = stk_predict (model_n, xi, zi_n, xt);
 
 % Display the result
-stk_plot1d(xi, zi_n, xt, zt, zp_n);
+stk_plot1d (xi, zi_n, xt, zt, zp_n);
 t = 'Kriging prediction based on noisy observations';
-set(gcf, 'Name', t); title(t);
-xlabel('x'); ylabel('z');
+set (gcf, 'Name', t); title (t);
+xlabel ('x'); ylabel ('z');
 
 
 %% Cleanup
