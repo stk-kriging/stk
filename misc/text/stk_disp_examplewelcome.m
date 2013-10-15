@@ -37,7 +37,7 @@ else
     demo_name = 'This is a demo example...';
 end
 
-fprintf ('%s\n', stk_sprintf_framed (demo_name));
+fprintf ('\n%s\n', stk_sprintf_framed (demo_name));
 
 help (demo_name);
 
