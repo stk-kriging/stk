@@ -10,7 +10,6 @@
 % The example first performs kriging prediction based on noiseless data (the
 % kriging predictor, which is the posterior mean of the GP model, interpolates
 % the data in this case) and then based on noisy data.
-%
 
 % Copyright Notice
 %
