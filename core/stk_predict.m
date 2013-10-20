@@ -66,7 +66,7 @@
 function [zp, lambda, mu, K] = stk_predict (model, xi, zi, xt)
 
 if nargin > 4,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % TODO: these should become options
@@ -76,7 +76,7 @@ block_size = [];
 %--- Prepare the lefthand side of the KRiging EQuation -------------------------
 
 if iscell (xi)
-    % WARNING: experimental HIDDEN feature, use at your own risk !!!    
+    % WARNING: experimental HIDDEN feature, use at your own risk !!!
     kreq = xi{2}; % already computed, I hope you know what you're doing ;-)
     xi = xi{1};
 else
@@ -94,14 +94,14 @@ end
 
 xt = double (xt);
 
-if strcmp (model.covariance_type, 'stk_discretecov') % use indices    
+if strcmp (model.covariance_type, 'stk_discretecov') % use indices
     if isempty (xt)
         m = size (model.param.K, 1);
         xt = (1:m)';
     elseif ~ iscolumn (xt)
         warning ('STK:stk_predict:IncorrectSize', 'xt should be a column.');
         xt = xt(:);
-    end    
+    end
 end
 
 nt = size (xt, 1);
@@ -147,27 +147,28 @@ for block_num = 1:nb_blocks
     idx_beg = 1 + block_size * (block_num - 1);
     idx_end = min(nt, idx_beg + block_size - 1);
     idx = idx_beg:idx_end;
-        
+    
     % solve the kriging equation for the current block
-    [Kti, Pt] = stk_make_matcov (model, xt, xi);
+    xt_ = xt(idx, :);
+    [Kti, Pt] = stk_make_matcov (model, xt_, xi);
     kreq = stk_set_righthandside (kreq, Kti, Pt);
     
     % compute the kriging mean
     if compute_prediction,
         zp_a(idx) = kreq.lambda' * zi;
     end
-
+    
     if nargin > 1
         lambda_mu(:, idx) = kreq.lambda_mu;
         RS(:, idx) = kreq.RS;
     end
     
     % compute kriging variances (this does NOT include the noise variance)
-    zp_v(idx) = stk_make_matcov (model, xt, xt, true) - kreq.delta_var;
+    zp_v(idx) = stk_make_matcov (model, xt_, xt_, true) - kreq.delta_var;
     
     % note: the following modification computes prediction variances for noisy
     % variance, i.e., including the noise variance also
-    % zp_v(idx) = stk_make_matcov (model, xt, [], true) ...
+    % zp_v(idx) = stk_make_matcov (model, xt_, [], true) ...
     %     - dot (kreq.lambda_mu, kreq.RS);
     
     b = (zp_v < 0);
@@ -204,7 +205,7 @@ end
 if nargout > 3,
     K0 = stk_make_matcov (model, xt, xt);
     deltaK = lambda_mu' * RS;
-    K = K0 - 0.5 * (deltaK + deltaK');    
+    K = K0 - 0.5 * (deltaK + deltaK');
 end
 
 end % function stk_predict -----------------------------------------------------
@@ -245,3 +246,9 @@ end % function stk_predict -----------------------------------------------------
 %! y_prd2 = stk_predict(model, struct('a', double(x_obs)), ...
 %!                      struct('a', double(z_obs)), struct('a', double(x_prd)));
 %! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd2)));
+
+%!test  % predict on large set of locations
+%! x_obs = stk_sampling_regulargrid (20, 1, [0; pi]);
+%! z_obs = stk_feval (@sin, x_obs);
+%! x_prd = stk_sampling_regulargrid (1e5, 1, [0; pi]);
+%! y_prd = stk_predict (model, x_obs, z_obs, x_prd);
