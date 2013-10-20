@@ -1,8 +1,8 @@
-% STK_RUNSCRIPT runs a script in a 'controlled' environment.
+% COMMONSIZE ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,29 +26,47 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function err = stk_runscript(scriptname)
+function varargout = commonsize (varargin)
 
-has_dot_m = strcmp(scriptname(end-1:end), '.m');
+n = length (varargin);
 
-if isoctave,
-    % Octave's run() wants scriptnames WITH a .m in 3.6.2
-    % (both forms were accepted in 3.2.4... damn it...)
-    if ~has_dot_m,
-        scriptname = [scriptname '.m'];
-    end
+if n == 0,
+    
+    varargout = {};
+    
 else
-    % Matlab wants scriptnames WITHOUT a .m
-    if has_dot_m,
-        scriptname = scriptname(1:end-2);
+    
+    if n == 1
+        % varargin{1} is expected to be a cell array in this case
+        C = varargin{1};
+        n = length (C);        
+    else
+        C = varargin;
     end
+    
+    d = cellfun (@ndims, C);
+    s = ones (n, max (d));
+    for i = 1:n,
+        s(i, 1:d(i)) = size (C{i});
+    end
+    
+    smax = max (s);
+    
+    for i = 1:n,
+        nrep = smax ./ s(i, :);        
+        if ~ all ((s(i, :) == 1) | (nrep == 1))
+            error ('Input arguments cannot be brought to a common size.');
+        else
+            C{i} = repmat (C{i}, nrep);
+        end
+    end
+    
+    if nargout > 1,
+        varargout = C(1:nargout);
+    else
+        varargout = {C};
+    end
+    
 end
 
-err = [];
-
-try
-    run(scriptname);
-catch %#ok<CTCH>
-    err = lasterror(); %#ok<LERR>
-end
-
-end % function stk_runscript
+end % function commonsize

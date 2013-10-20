@@ -35,11 +35,6 @@ end
 
 % Solves the linear equation A * ws = rs, where A is the kriging matrix
 
-if stk_is_octave_in_use (),
-    % linsolve is missing in Octave
-    w = kreq.LS_R \ (kreq.LS_Q' * rs);
-else
-    w = linsolve (kreq.LS_R, kreq.LS_Q' * rs, struct ('UT', true));
-end
+w = linsolve (kreq.LS_R, kreq.LS_Q' * rs, struct ('UT', true));
 
 end % function linsolve
