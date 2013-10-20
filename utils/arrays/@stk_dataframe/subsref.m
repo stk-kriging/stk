@@ -72,12 +72,12 @@ switch idx(1).type
             
             c = get (x, 'colnames');
             if ~ isempty (c),
-                c = c(J);
+                c = c(1, J);
             end
             
             r = get (x, 'rownames');
             if ~ isempty (r),
-                r = r(I);
+                r = r(I, 1);
             elseif ~ isequal (I, 1:length(I))
                 r = cellfun (@num2str, num2cell (I(:)), 'UniformOutput', false);
             end

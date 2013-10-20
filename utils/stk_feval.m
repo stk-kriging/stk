@@ -49,51 +49,51 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-%
-function z = stk_feval(f, x, progress_msg)
+
+function z = stk_feval (f, x, progress_msg)
 
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-x = double (x);
+xdata = double (x);
 
-if ischar(f),
+if ischar (f),
     zname = f;
 else
-    if ~isa(f, 'function_handle')
+    if ~isa (f, 'function_handle')
         errmsg = 'Incorrect type for argument ''f''.';
-        stk_error(errmsg, 'IncorrectType');
+        stk_error (errmsg, 'IncorrectType');
     else
-        zname = func2str(f);
+        zname = func2str (f);
     end
 end
     
 if nargin < 3,
     progress_msg = false;
 else
-    if ~islogical(progress_msg),
+    if ~ islogical (progress_msg),
         errmsg = 'Incorrect type for argument ''progress_msg''.';
-        stk_error(errmsg, 'IncorrectType');
+        stk_error (errmsg, 'IncorrectType');
     end
 end
 
 [n, d] = size (x);
 if d == 0,
-    error('zero-dimensional inputs are not allowed.');
+    error ('zero-dimensional inputs are not allowed.');
 end
 
 if n == 0, % no input => no output
     
-    zdata = zeros(0, 1);
+    zdata = zeros (0, 1);
     
 else % at least one input point
     
-    zdata = zeros(n, 1);
+    zdata = zeros( n, 1);
     for i = 1:n,
-        if progress_msg, fprintf('feval %d/%d... ', i, n); end
-        zdata(i) = feval(f, x(i, :));
-        if progress_msg, fprintf('done.\n'); end
+        if progress_msg, fprintf ('feval %d/%d... ', i, n); end
+        zdata(i) = feval (f, xdata(i, :));
+        if progress_msg, fprintf ('done.\n'); end
     end
     
 end
@@ -101,6 +101,10 @@ end
 z = stk_dataframe(zdata, {zname});
 z.info = 'Created by stk_feval';
 
+if isa (x, 'stk_dataframe'),
+    z.rownames = x.rownames;
+end
+    
 end % function stk_feval
 
 
@@ -115,7 +119,13 @@ end % function stk_feval
 %!error  yt = stk_feval (f, xt, false, pi^2);
 
 %!test
-%!  N = 15;
-%!  xt = stk_sampling_regulargrid (N, 1, [0; 1]);
-%!  yt = stk_feval (f, xt);
-%!  assert (isequal (size (yt), [N 1]));
+%! N = 15;
+%! xt = stk_sampling_regulargrid (N, 1, [0; 1]);
+%! yt = stk_feval (f, xt);
+%! assert (isequal (size (yt), [N 1]));
+
+%!test
+%! x = stk_dataframe ([1; 2; 3], {'x'}, {'a'; 'b'; 'c'});
+%! y = stk_feval (@(u)(2 * u), x);
+%! assert (isequal (y.data, [2; 4; 6]));
+%! assert (isequal (y.rownames, {'a'; 'b'; 'c'}));

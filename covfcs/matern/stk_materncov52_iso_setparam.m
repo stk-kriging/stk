@@ -1,11 +1,9 @@
-% STK_DISP_EXAMPLEWELCOME
-
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
-%    Authors:  Julien Bect       <julien.bect@supelec.fr>
-%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,18 +25,28 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_disp_examplewelcome ()
+function param = stk_materncov52_iso_setparam (param, idx, value)
 
-stack = dbstack ();
-
-if length(stack) >= 2,
-    demo_name = stack(2).name;
-else
-    demo_name = 'This is a demo example...';
+switch class (idx),
+    
+    case 'double'  % idx is an index
+        param(idx) = value;
+        
+    case 'char'
+        switch idx,
+            case 'sigma2'
+                param(1) = log (value);
+            case 'rho'
+                param(2) = - log (value);
+            case 'alpha'
+                param(2) = log (value);
+            otherwise
+                stk_error ('Invalid paramer name', 'InvalidArgument');
+        end
+        
+    otherwise
+        stk_error ('Invalid type of parameter idx.', 'InvalidArgument');
+        
 end
 
-fprintf ('\n%s\n', stk_sprintf_framed (demo_name));
-
-help (demo_name);
-
-end % function stk_disp_examplewelcome
+end % function stk_materncov52_iso_setparam

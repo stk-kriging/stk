@@ -165,7 +165,8 @@ for block_num = 1:nb_blocks
     idx = idx_beg:idx_end;
     
     % solve the kriging equation for the current block
-    [Kti, Pt] = stk_make_matcov (model, xt, xi);
+    xt_ = xt(idx, :);
+    [Kti, Pt] = stk_make_matcov (model, xt_, xi);
     kreq = stk_set_righthandside (kreq, Kti, Pt);
     
     % compute the kriging mean
@@ -179,11 +180,11 @@ for block_num = 1:nb_blocks
     end
     
     % compute kriging variances (this does NOT include the noise variance)
-    zp_v(idx) = stk_make_matcov (model, xt, xt, true) - kreq.delta_var;
+    zp_v(idx) = stk_make_matcov (model, xt_, xt_, true) - kreq.delta_var;
     
     % note: the following modification computes prediction variances for noisy
     % variance, i.e., including the noise variance also
-    % zp_v(idx) = stk_make_matcov (model, xt, [], true) ...
+    % zp_v(idx) = stk_make_matcov (model, xt_, [], true) ...
     %     - dot (kreq.lambda_mu, kreq.RS);
     
     b = (zp_v < 0);

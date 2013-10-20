@@ -100,7 +100,7 @@ if NOISEESTIM % optimize wrt to an "extended" vector of parameters
     w0 = [cparam0(:); param0lnv];
 else % optimize with respect to cparam
     w_lb = lb;
-    w_ub = ub
+    w_ub = ub;
     w0 = cparam0(:);
 end
 
