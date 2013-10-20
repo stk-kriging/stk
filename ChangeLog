@@ -1,3 +1,9 @@
+2013-10-20  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a bug in stk_predict and add a test.
+
+	* core/stk_predict.m: modified
+
 2013-10-16  Julien Bect  <julien.bect@supelec.fr>
 
 	Rewrite the description of example 'kb02'.
