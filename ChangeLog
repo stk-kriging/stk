@@ -1,3 +1,9 @@
+2013-10-23  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite the description of example 'kb03'.
+
+	* examples/01_kriging_basics/stk_example_kb03.m: modified
+
 2013-10-20  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a bug in stk_predict and add a test.
