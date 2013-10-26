@@ -1,3 +1,9 @@
+2013-10-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite the description of example 'kb04'.
+
+	* examples/01_kriging_basics/stk_example_kb04.m: modified
+
 2013-10-23  Julien Bect  <julien.bect@supelec.fr>
 
 	Rewrite the description of example 'kb03'.
