@@ -1,4 +1,25 @@
-% Example: a very simple sequential space-filling design
+% STK_EXAMPLE_DOE02 shows how to build a "sequential maximin" design
+%
+% In this example, a two-dimensional space-filling design is progressively
+% enriched with new points using a "sequential maximin" approach. More
+% precisely, the k-th point X(k, :) is selected to maximize the distance to the
+% set of all previously selected points X(1, :), X(2, :), ..., X(k-1, :).
+%
+% NOTES:
+%
+%  * The resulting design is NOT optimal with respect to the maximin criterion
+%    (separation distance).
+%
+%  * This procedure is not truly a *sequential* design procedure, since the
+%    choice of the k-th point X(k, :) does NOT depend on the response at the
+%    previously selected locations X(i, :), i < k.
+%
+% REFERENCE:
+%
+%  [1] Emmanuel Vazquez and Julien Bect, "Sequential search based on kriging:
+%      convergence analysis of some algorithms", In: ISI – 58th World
+%      Statistics Congress of the International Statistical Institute (ISI’11),
+%      Dublin, Ireland, August 21-26, 2011.
 
 % Copyright Notice
 %
@@ -26,15 +47,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome();
+stk_disp_examplewelcome
 
 
 %% Preliminaries
 
-DIM = 2; BOX = repmat([0; 1], 1, DIM);
+DIM = 2;  BOX = repmat ([0; 1], 1, DIM);
 
 % start from, e. g., a random/maximin LHS
-N0 = 10; x = stk_sampling_maximinlhs(N0, DIM, BOX);
+N0 = 10;  x = stk_sampling_maximinlhs (N0, DIM, BOX);
 
 % final size of the desired DoE
 NB_ITER = 10;
@@ -50,13 +71,14 @@ STYLE_NEXT = {'ro', 'MarkerFaceColor', 'y'};
 %
 
 for i = 1:NB_ITER,
-    % compute the current fill distance & the point where the maximum is attained
-    [fd, next_x] = stk_filldist(x, BOX);
+    % compute the current fill distance
+    % & the point where the maximum is attained
+    [fd, next_x] = stk_filldist (x, BOX);
     % plot
-    figure(1); cla; plot(x(:, 1), x(:, 2), STYLE_CURRENT{:});
-    hold on; plot(next_x(:, 1), next_x(:, 2), STYLE_NEXT{:});
-    title(sprintf('n = %d,  fd = %.2e\n', size(x, 1), fd));
-    drawnow; pause(0.5);
+    figure(1);  cla;  plot (x(:, 1), x(:, 2), STYLE_CURRENT{:});
+    hold on;  plot (next_x(:, 1), next_x(:, 2), STYLE_NEXT{:});
+    title (sprintf ('n = %d,  fd = %.2e\n', size (x, 1), fd));
+    drawnow;  pause (0.5);
     % enrich the DoE
-    x = vertcat(x, next_x);
+    x = vertcat (x, next_x);
 end
