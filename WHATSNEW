@@ -1,3 +1,10 @@
+Changes in version 2.0.3
+========================
+
+* This is a minor bugfix release.
+
+   o Fix a bug core/stk_predict.m (related to blockwise computations)
+
 Changes in version 2.0.2
 ========================
 
