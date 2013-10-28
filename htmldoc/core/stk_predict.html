@@ -146,7 +146,7 @@ This function is called by:
 0066 <a name="_sub0" href="#_subfunctions" class="code">function [zp, lambda, mu, K] = stk_predict (model, xi, zi, xt)</a>
 0067 
 0068 <span class="keyword">if</span> nargin &gt; 4,
-0069    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0069     stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
 0070 <span class="keyword">end</span>
 0071 
 0072 <span class="comment">% TODO: these should become options</span>
@@ -181,7 +181,7 @@ This function is called by:
 0101     <span class="keyword">elseif</span> ~ iscolumn (xt)
 0102         warning (<span class="string">'STK:stk_predict:IncorrectSize'</span>, <span class="string">'xt should be a column.'</span>);
 0103         xt = xt(:);
-0104     <span class="keyword">end</span>    
+0104     <span class="keyword">end</span>
 0105 <span class="keyword">end</span>
 0106 
 0107 nt = size (xt, 1);
@@ -227,71 +227,72 @@ This function is called by:
 0147     idx_beg = 1 + block_size * (block_num - 1);
 0148     idx_end = min(nt, idx_beg + block_size - 1);
 0149     idx = idx_beg:idx_end;
-0150         
+0150     
 0151     <span class="comment">% solve the kriging equation for the current block</span>
-0152     [Kti, Pt] = <a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov (model, x0, x1, pairwise)">stk_make_matcov</a> (model, xt, xi);
-0153     kreq = stk_set_righthandside (kreq, Kti, Pt);
-0154     
-0155     <span class="comment">% compute the kriging mean</span>
-0156     <span class="keyword">if</span> compute_prediction,
-0157         zp_a(idx) = kreq.lambda' * zi;
-0158     <span class="keyword">end</span>
-0159 
-0160     <span class="keyword">if</span> nargin &gt; 1
-0161         lambda_mu(:, idx) = kreq.lambda_mu;
-0162         RS(:, idx) = kreq.RS;
-0163     <span class="keyword">end</span>
-0164     
-0165     <span class="comment">% compute kriging variances (this does NOT include the noise variance)</span>
-0166     zp_v(idx) = <a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov (model, x0, x1, pairwise)">stk_make_matcov</a> (model, xt, xt, true) - kreq.delta_var;
-0167     
-0168     <span class="comment">% note: the following modification computes prediction variances for noisy</span>
-0169     <span class="comment">% variance, i.e., including the noise variance also</span>
-0170     <span class="comment">% zp_v(idx) = stk_make_matcov (model, xt, [], true) ...</span>
-0171     <span class="comment">%     - dot (kreq.lambda_mu, kreq.RS);</span>
-0172     
-0173     b = (zp_v &lt; 0);
-0174     <span class="keyword">if</span> any (b),
-0175         zp_v(b) = 0.0;
-0176         warning(<span class="string">'STK:stk_predict:NegativeVariancesSetToZero'</span>, sprintf ( <span class="keyword">...</span>
-0177             [<span class="string">'Correcting numerical inaccuracies in kriging variance.\n'</span> <span class="keyword">...</span>
-0178             <span class="string">'(%d negative variances have been set to zero)'</span>], sum (b)));
-0179     <span class="keyword">end</span>
-0180     
-0181     <span class="keyword">if</span> display_waitbar,
-0182         waitbar (idx_end/nt, hwb, sprintf ( <span class="keyword">...</span>
-0183             <span class="string">'In stk\\_predict(): %d/%d predictions completed'</span>,idx_end,nt));
-0184     <span class="keyword">end</span>
-0185 <span class="keyword">end</span>
-0186 
-0187 <span class="keyword">if</span> display_waitbar,
-0188     close (hwb);
-0189 <span class="keyword">end</span>
-0190 
-0191 <span class="comment">%--- Prepare outputs -----------------------------------------------------------</span>
-0192 
-0193 zp = stk_dataframe ([zp_a zp_v], {<span class="string">'mean'</span> <span class="string">'var'</span>});
-0194 zp.info = <span class="string">'Created by stk_predict'</span>;
-0195 
-0196 <span class="keyword">if</span> nargout &gt; 1 <span class="comment">% lambda requested</span>
-0197     lambda = lambda_mu(1:ni, :);
-0198 <span class="keyword">end</span>
-0199 
-0200 <span class="keyword">if</span> nargout &gt; 2 <span class="comment">% mu requested</span>
-0201     mu = lambda_mu((ni+1):<span class="keyword">end</span>, :);
-0202 <span class="keyword">end</span>
-0203 
-0204 <span class="keyword">if</span> nargout &gt; 3,
-0205     K0 = <a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov (model, x0, x1, pairwise)">stk_make_matcov</a> (model, xt, xt);
-0206     deltaK = lambda_mu' * RS;
-0207     K = K0 - 0.5 * (deltaK + deltaK');    
-0208 <span class="keyword">end</span>
-0209 
-0210 <span class="keyword">end</span> <span class="comment">% function stk_predict -----------------------------------------------------</span></pre></div>
+0152     xt_ = xt(idx, :);
+0153     [Kti, Pt] = <a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov (model, x0, x1, pairwise)">stk_make_matcov</a> (model, xt_, xi);
+0154     kreq = stk_set_righthandside (kreq, Kti, Pt);
+0155     
+0156     <span class="comment">% compute the kriging mean</span>
+0157     <span class="keyword">if</span> compute_prediction,
+0158         zp_a(idx) = kreq.lambda' * zi;
+0159     <span class="keyword">end</span>
+0160     
+0161     <span class="keyword">if</span> nargin &gt; 1
+0162         lambda_mu(:, idx) = kreq.lambda_mu;
+0163         RS(:, idx) = kreq.RS;
+0164     <span class="keyword">end</span>
+0165     
+0166     <span class="comment">% compute kriging variances (this does NOT include the noise variance)</span>
+0167     zp_v(idx) = <a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov (model, x0, x1, pairwise)">stk_make_matcov</a> (model, xt_, xt_, true) - kreq.delta_var;
+0168     
+0169     <span class="comment">% note: the following modification computes prediction variances for noisy</span>
+0170     <span class="comment">% variance, i.e., including the noise variance also</span>
+0171     <span class="comment">% zp_v(idx) = stk_make_matcov (model, xt_, [], true) ...</span>
+0172     <span class="comment">%     - dot (kreq.lambda_mu, kreq.RS);</span>
+0173     
+0174     b = (zp_v &lt; 0);
+0175     <span class="keyword">if</span> any (b),
+0176         zp_v(b) = 0.0;
+0177         warning(<span class="string">'STK:stk_predict:NegativeVariancesSetToZero'</span>, sprintf ( <span class="keyword">...</span>
+0178             [<span class="string">'Correcting numerical inaccuracies in kriging variance.\n'</span> <span class="keyword">...</span>
+0179             <span class="string">'(%d negative variances have been set to zero)'</span>], sum (b)));
+0180     <span class="keyword">end</span>
+0181     
+0182     <span class="keyword">if</span> display_waitbar,
+0183         waitbar (idx_end/nt, hwb, sprintf ( <span class="keyword">...</span>
+0184             <span class="string">'In stk\\_predict(): %d/%d predictions completed'</span>,idx_end,nt));
+0185     <span class="keyword">end</span>
+0186 <span class="keyword">end</span>
+0187 
+0188 <span class="keyword">if</span> display_waitbar,
+0189     close (hwb);
+0190 <span class="keyword">end</span>
+0191 
+0192 <span class="comment">%--- Prepare outputs -----------------------------------------------------------</span>
+0193 
+0194 zp = stk_dataframe ([zp_a zp_v], {<span class="string">'mean'</span> <span class="string">'var'</span>});
+0195 zp.info = <span class="string">'Created by stk_predict'</span>;
+0196 
+0197 <span class="keyword">if</span> nargout &gt; 1 <span class="comment">% lambda requested</span>
+0198     lambda = lambda_mu(1:ni, :);
+0199 <span class="keyword">end</span>
+0200 
+0201 <span class="keyword">if</span> nargout &gt; 2 <span class="comment">% mu requested</span>
+0202     mu = lambda_mu((ni+1):<span class="keyword">end</span>, :);
+0203 <span class="keyword">end</span>
+0204 
+0205 <span class="keyword">if</span> nargout &gt; 3,
+0206     K0 = <a href="stk_make_matcov.html" class="code" title="function [K, P] = stk_make_matcov (model, x0, x1, pairwise)">stk_make_matcov</a> (model, xt, xt);
+0207     deltaK = lambda_mu' * RS;
+0208     K = K0 - 0.5 * (deltaK + deltaK');
+0209 <span class="keyword">end</span>
+0210 
+0211 <span class="keyword">end</span> <span class="comment">% function stk_predict -----------------------------------------------------</span></pre></div>
 <hr>
 
 <address>
-   HTML documentation for <strong>STK 2.0.2</strong>,
+   HTML documentation for <strong>STK 2.0.3</strong>,
    generated by <strong>
    <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
 </address>
