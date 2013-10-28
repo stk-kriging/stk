@@ -17,8 +17,8 @@
 % REFERENCE:
 %
 %  [1] Emmanuel Vazquez and Julien Bect, "Sequential search based on kriging:
-%      convergence analysis of some algorithms", In: ISI – 58th World
-%      Statistics Congress of the International Statistical Institute (ISI’11),
+%      convergence analysis of some algorithms", In: ISI - 58th World
+%      Statistics Congress of the International Statistical Institute (ISI'11),
 %      Dublin, Ireland, August 21-26, 2011.
 
 % Copyright Notice

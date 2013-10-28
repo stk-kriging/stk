@@ -17,7 +17,7 @@
 % REFERENCES:
 %
 %   [1] Ales Florian, "An Efficient Sampling Scheme: Updated Latin Hypercube
-%       Sampling", Probabilistic Engineering Mechanics, 7:123–130, 1992.
+%       Sampling", Probabilistic Engineering Mechanics, 7:123-130, 1992.
 %       http://dx.doi.org/10.1016/0266-8920(92)90015-A
 %
 %   [2] Thomas M. Cioppa and Thomas W. Lucas, "Efficient Nearly Orthogonal and
