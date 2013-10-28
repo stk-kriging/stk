@@ -1,8 +1,9 @@
 2013-10-28  Julien Bect  <julien.bect@supelec.fr>
 
-	Rewrite the description of example 'doe02'.
+	Rewrite the description of examples 'doe02' and 'doe03'.
 
 	* examples/02_design_of_experiments/stk_example_doe02.m: modified
+	* examples/02_design_of_experiments/stk_example_doe03.m: modified
 
 2013-10-26  Julien Bect  <julien.bect@supelec.fr>
 
