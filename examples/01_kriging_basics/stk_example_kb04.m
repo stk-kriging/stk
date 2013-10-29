@@ -44,7 +44,7 @@
 stk_disp_examplewelcome
 
 
-%% Define a 1d test function (the same as in example01.m)
+%% Define a 1d test function
 
 f = @(x)(- (0.8 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
 DIM = 1;            % dimension of the factor space
