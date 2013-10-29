@@ -33,8 +33,6 @@
 %    If ZI is empty, everything but ZP.mean is computed. Indeed, neither the
 %    kriging variance ZP.var nor the matrices LAMBDA and MU actually depend on
 %    the observed values.
-%
-% EXAMPLE: see examples/example01.m
 
 % Copyright Notice
 %
