@@ -3,8 +3,6 @@
 % CALL: stk_plot1d ( xi, zi, xt, zt, zp )
 %
 % STK_PLOT1D plots the result of a 1D approximation
-%
-% EXAMPLE: See examples/example01.m
 
 % Copyright Notice
 %
