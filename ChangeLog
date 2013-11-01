@@ -1,5 +1,9 @@
 2013-11-01  Julien Bect  <julien.bect@supelec.fr>
 
+	Add the Gaussian correlation function.
+
+	* misc/specfun/stk_sf_gausscorr.m: new function
+
 	Improve the precision of stk_sf_matern around 0 for high nu.
 
 	* misc/specfun/stk_sf_matern.m: modified
