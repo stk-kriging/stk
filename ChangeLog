@@ -1,5 +1,11 @@
 2013-11-01  Julien Bect  <julien.bect@supelec.fr>
 
+	Add Gaussian isotropic and anisotropic covariance functions.
+
+	* covfcs/stk_gausscov_iso.m: new function
+	* covfcs/stk_gausscov_aniso.m: new function
+	* utils/stk_model.m: modified
+
 	Add the Gaussian correlation function.
 
 	* misc/specfun/stk_sf_gausscorr.m: new function

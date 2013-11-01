@@ -140,7 +140,7 @@ switch model.covariance_type
         
         model.param = log([VAR0; NU0; 1/RHO]);
         
-    case {'stk_materncov32_iso', 'stk_materncov52_iso'}
+    case {'stk_materncov32_iso', 'stk_materncov52_iso', 'stk_gausscov_iso'}
         
         RHO = 0.3;   % range parameter (spatial scale)
         
@@ -153,7 +153,8 @@ switch model.covariance_type
         
         model.param = log([VAR0; NU0; 1/RHO * ones(model.dim,1)]);
         
-    case {'stk_materncov32_aniso', 'stk_materncov52_aniso'}
+    case {'stk_materncov32_aniso', ...
+            'stk_materncov52_aniso', 'stk_gausscov_aniso'}
         
         RHO = 0.3;   % range parameter (spatial scale)
         
@@ -161,7 +162,8 @@ switch model.covariance_type
         
     otherwise
         
-        warning('Unknown covariance type, model.param cannot be initialized.');
+        warning (['Unknown covariance type, model.param ' ...
+            'cannot be initialized.']);  %#ok<WNTAG>
         
         model.param = [];
         
