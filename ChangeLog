@@ -1,5 +1,9 @@
 2013-11-02  Julien Bect  <julien.bect@supelec.fr>
 
+	Raise current axis to the top layer in stk_plot_shadedci.
+
+	* misc/plot/stk_plot_shadedci.m: modified
+
 	Add the Gaussian correlation to example 'misc02'.
 
 	* examples/03_miscellaneous/stk_example_misc02.m: modified
