@@ -1,5 +1,11 @@
 2013-11-02  Julien Bect  <julien.bect@supelec.fr>
 
+	Remove example misc01, rename misc02 and misc03.
+
+	* stk_example_misc01.m: deleted
+	* stk_example_misc02.m: renamed to misc01
+	* stk_example_misc03.m: renamed to misc02
+
 	Add a new example.
 
 	* examples/01_kriging_basics/stk_example_kb06.m: new script
