@@ -82,20 +82,38 @@ RHO1   = 0.4;  % scale (range) parameter
 model.param = log ([SIGMA2; NU; 1/RHO1]);
 
 
+%% Generate (unconditional) sample paths
+
+NB_PATHS = 10;
+
+zsim = stk_generate_samplepaths (model, xt, NB_PATHS);
+
+% Display the result
+figure;  plot (xt, zsim, 'LineWidth', 2);  legend off;
+t = 'Unconditional sample paths';
+set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');
+
+
 %% Carry out the kriging prediction and generate conditional sample paths
 
 % Carry out the kriging prediction at points xt
 [zp, lambda] = stk_predict (model, xi, zi, xt);
 
-% Generate (unconditional) sample paths according to the model
-NB_PATHS = 10;
-zsim = stk_generate_samplepaths (model, xt, NB_PATHS);
-
 % Condition sample paths on the observations
 zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
 
-% Display the result
+% Display the observations only
+figure;  t = 'Observations';
+plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
+set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');
+
+% Display the conditional sample paths
+figure;  t = 'Conditional sample paths';
+plot (xt, zsimc, 'LineWidth', 2);  legend off;  hold on;
+plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
+set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');
+
+% Display the kriging and credible intervals
 stk_plot1dsim (xi, zi, xt, zt, zp, zsimc);
 t = 'Kriging prediction and conditional sample paths';
-set (gcf, 'Name', t);  title (t);
-xlabel ('x');  ylabel ('z');
+set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');
