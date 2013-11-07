@@ -40,6 +40,8 @@ covnames = { ...
 
 result = struct('covname', [], 't', [], 'n', []);
 
+stk_figure ('stk_benchmark_cov2');
+
 
 %% Main loop
 
@@ -71,7 +73,7 @@ for j = 1:4,
         n   = N_START;
         
         while n <= N_MAX
-                       
+            
             tic;
             x = stk_sampling_regulargrid(n, DIM);
             for i = 1:REP,
@@ -82,8 +84,7 @@ for j = 1:4,
             result(j, k).n(end+1) = n;
             result(j, k).t(end+1) = t;
             
-            figure(1); cla;
-            loglog(result(j, k).n, result(j, k).t, 'o-'); drawnow;
+            cla;  loglog(result(j, k).n, result(j, k).t, 'o-');  drawnow;
             
             n = ceil(n * 1.4);
             REP = ceil(1/t);
@@ -94,9 +95,7 @@ end
 
 %% Figure
 
-figure(1); cla;
-
-legtxt = {};
+legtxt = {};  %#ok<*AGROW>
 
 loglog(vertcat(result(1, :).n)', vertcat(result(1, :).t)', 'x:'); hold on;
 for k = 1:length(covnames)

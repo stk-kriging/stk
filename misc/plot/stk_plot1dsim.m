@@ -36,12 +36,6 @@
 
 function stk_plot1dsim (xi, zi, xt, zt, zp, zsim)
 
-% Create figure
-figure1 = figure ('InvertHardcopy', 'off', 'Color', [1 1 1]);
-
-% Create axes
-axes1 = axes ('Parent', figure1, 'FontSize', 12);
-
 dz = 1.96 * sqrt (abs (zp.var));
 h = area (double (xt), [zp.mean - dz, 2*dz]);
 set (h(1), 'FaceColor', 'none');
@@ -55,6 +49,6 @@ plot (xt, zp.mean, '-',  'LineWidth', 4, 'Color', [0.95 0.25 0.3])
 plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k')
 hold off
 
-set (axes1, 'Box', 'off')
+set (gca, 'Box', 'off');
 
 end % stk_plot1dsim
