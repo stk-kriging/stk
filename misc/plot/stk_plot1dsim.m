@@ -37,23 +37,24 @@
 function stk_plot1dsim (xi, zi, xt, zt, zp, zsim)
 
 % Create figure
-figure1 = figure('InvertHardcopy', 'off', 'Color', [1 1 1]);
-% Create axes
-axes1 = axes('Parent', figure1, 'FontSize', 12);
+figure1 = figure ('InvertHardcopy', 'off', 'Color', [1 1 1]);
 
-dz = 1.96 * sqrt(abs(zp.var));
-h = area(double(xt), [zp.mean - dz, 2*dz]);
-set(h(1),'FaceColor','none');
-set(h(2),'FaceColor',[0.8 0.8 0.8]);
-set(h,'LineStyle','-','LineWidth', 1, 'EdgeColor', 'none');
+% Create axes
+axes1 = axes ('Parent', figure1, 'FontSize', 12);
+
+dz = 1.96 * sqrt (abs (zp.var));
+h = area (double (xt), [zp.mean - dz, 2*dz]);
+set (h(1), 'FaceColor', 'none');
+set (h(2), 'FaceColor', [0.8 0.8 0.8]);
+set (h, 'LineStyle', '-', 'LineWidth', 1, 'EdgeColor', 'none');
 hold on
-plot(xt, zsim, '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64])
-plot(xt, zt,   '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64])
-plot(xt, zp.mean,    'LineWidth', 4, 'Color', [0.95 0.25 0.3])
-plot(xi, zi,   'ks', 'LineWidth', 3, 'MarkerSize', 10,  ...
-    'MarkerEdgeColor', [0.95 0.25 0.3], 'MarkerFaceColor', [0.8 0.8 0.8] )
+
+plot (xt, zsim, '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64])
+plot (xt, zt, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64])
+plot (xt, zp.mean, '-',  'LineWidth', 4, 'Color', [0.95 0.25 0.3])
+plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k')
 hold off
-h = gca;
-set(h, 'Box', 'off')
+
+set (axes1, 'Box', 'off')
 
 end % stk_plot1dsim
