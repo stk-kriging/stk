@@ -1,5 +1,9 @@
 2013-11-07  Julien Bect  <julien.bect@supelec.fr>
 
+	Minor changes in stk_plot1dsim.
+
+	* misc/plot/stk_plot1dsim.m: modified
+	
 	Add figures in example kb05.
 
 	* examples/01_kriging_basics/stk_example_kb05.m: modified
