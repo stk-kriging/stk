@@ -41,7 +41,7 @@ DIM = 2;           % dimension of the factor space
 BOX = [0 0; 2 4];  % factor space
 N   = 49;          % size of the space-filling designs
 
-figure;  set (gcf, 'Name', sprintf ('Several designs with N = %d', N));
+stk_figure (sprintf ('stk_exampke_doe01 - Several designs with N = %d', N));
 
 
 %% Regular grid

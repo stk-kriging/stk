@@ -37,7 +37,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome
+stk_disp_examplewelcome;  stk_figure ('stk_example_doe03');
 
 
 %% Problem definition
@@ -136,8 +136,6 @@ iter = 0;
 DOE_STYLE  = {'ko', 'MarkerFaceColor', 'k'};
 NEXT_STYLE = {'ro', 'MarkerFaceColor', 'y'};
 
-figure;
-
 while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     % Trick: add a small "regularization" noise to our model
@@ -162,7 +160,7 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     % Figure: lower panel
     subplot (2, 1, 2);  cla;
-    plot (x_grid, EI); xlim (BOX); hold on;    
+    plot (x_grid, EI); xlim (BOX); hold on;
     plot (x_grid(i_max), EI_max, NEXT_STYLE{:});
     ylabel ('EI', 'FontWeight', 'bold');
     

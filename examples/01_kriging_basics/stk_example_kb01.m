@@ -55,9 +55,8 @@ NT = 400; % nb of points in the grid
 xt = stk_sampling_regulargrid (NT, DIM, BOX);
 zt = stk_feval (f, xt);
 
-figure (1);
-set (gcf, 'Name', 'Plot of the function to be approximated');
-plot (xt, zt); xlabel ('x'); ylabel ('z');
+stk_figure ('stk_example_kb01 (a)');  plot (xt, zt);
+title ('Function to be approximated');  xlabel ('x');  ylabel ('z');
 
 
 %% Generate a space-filling design
@@ -109,10 +108,9 @@ model.param = log ([SIGMA2; NU; 1/RHO1]);
 zp = stk_predict (model, xi, zi, xt);
 
 % Display the result
-stk_plot1d (xi, zi, xt, zt, zp);
-t = 'Kriging prediction based on noiseless observations';
-set (gcf, 'Name', t); title (t);
-xlabel ('x'); ylabel ('z');
+stk_figure ('stk_example_kb01 (b)');  stk_plot1d (xi, zi, xt, zt, zp);
+title ('Kriging prediction based on noiseless observations');
+xlabel ('x');  ylabel ('z');
 
 
 %% Repeat the experiment in a noisy setting
@@ -131,10 +129,9 @@ model_n.lognoisevariance = log (NOISEVARIANCE);
 zp_n = stk_predict (model_n, xi, zi_n, xt);
 
 % Display the result
-stk_plot1d (xi, zi_n, xt, zt, zp_n);
-t = 'Kriging prediction based on noisy observations';
-set (gcf, 'Name', t); title (t);
-xlabel ('x'); ylabel ('z');
+stk_figure ('stk_example_kb01 (c)');  stk_plot1d (xi, zi_n, xt, zt, zp_n);
+title ('Kriging prediction based on noisy observations');
+xlabel ('x');  ylabel ('z');
 
 
 %% Cleanup

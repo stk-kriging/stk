@@ -1,9 +1,31 @@
 2013-11-07  Julien Bect  <julien.bect@supelec.fr>
 
+	New function to create figures for the examples.
+
+	* misc/plot/stk_figure.m: new function
+	* misc/options/stk_options_set.m: modified
+	* examples/01_kriging_basics/stk_example_kb01.m: modified
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+	* examples/01_kriging_basics/stk_example_kb03.m: modified
+	* examples/01_kriging_basics/stk_example_kb04.m: modified
+	* examples/01_kriging_basics/stk_example_kb05.m: modified
+	* examples/01_kriging_basics/stk_example_kb06.m: modified
+	* examples/02_design_of_experiments/stk_example_doe01.m: modified
+	* examples/02_design_of_experiments/stk_example_doe02.m: modified
+	* examples/02_design_of_experiments/stk_example_doe03.m: modified
+	* examples/03_miscellaneous/stk_example_misc02.m: modified
+	* examples/03_miscellaneous/stk_example_misc01.m: modified
+	* misc/benchmarks/stk_benchmark_cov2.m: modified
+
+	Plot directly on the current axes.
+
+	* misc/plot/stk_plot1d.m: modified
+	* misc/plot/stk_plot1dsim.m: modified
+
 	Minor changes in stk_plot1dsim.
 
 	* misc/plot/stk_plot1dsim.m: modified
-	
+
 	Add figures in example kb05.
 
 	* examples/01_kriging_basics/stk_example_kb05.m: modified

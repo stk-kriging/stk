@@ -36,7 +36,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome
+stk_disp_examplewelcome;  stk_figure ('stk_example_kb05');
 
 
 %% Define a 1d test function
@@ -89,9 +89,8 @@ NB_PATHS = 10;
 zsim = stk_generate_samplepaths (model, xt, NB_PATHS);
 
 % Display the result
-figure;  plot (xt, zsim, 'LineWidth', 2);  legend off;
-t = 'Unconditional sample paths';
-set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');
+subplot (2, 2, 1);  plot (xt, zsim, 'LineWidth', 2);  legend off;
+title ('Unconditional sample paths');  xlabel ('x');  ylabel ('z');
 
 
 %% Carry out the kriging prediction and generate conditional sample paths
@@ -103,17 +102,16 @@ set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');
 zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
 
 % Display the observations only
-figure;  t = 'Observations';
+subplot (2, 2, 2);
 plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
-set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');
+title ('Observations');  xlabel ('x');  ylabel ('z');
 
 % Display the conditional sample paths
-figure;  t = 'Conditional sample paths';
-plot (xt, zsimc, 'LineWidth', 2);  legend off;  hold on;
+subplot (2, 2, 3);  plot (xt, zsimc, 'LineWidth', 2);  legend off;  hold on;
 plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
-set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');
+title ('Conditional sample paths');  xlabel ('x');  ylabel ('z');
 
 % Display the kriging and credible intervals
-stk_plot1dsim (xi, zi, xt, zt, zp, zsimc);
-t = 'Kriging prediction and conditional sample paths';
-set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');
+subplot (2, 2, 4);  stk_plot1dsim (xi, zi, xt, zt, zp, zsimc);
+title ('Kriging prediction and conditional sample paths');
+xlabel ('x');  ylabel ('z');

@@ -41,7 +41,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome
+stk_disp_examplewelcome;  stk_figure ('stk_example_kb04');
 
 
 %% Define a 1d test function
@@ -119,10 +119,8 @@ model.lognoisevariance = paramlnv;
 
 zp = stk_predict (model, xi, zi, xt);
 
-
-%% Display results
-
-stk_plot1d (xi, zi, xt, zt, zp)
-xlabel ('x');  ylabel ('z');
+% Visualisation
+stk_plot1d (xi, zi, xt, zt, zp);
+title ('Kriging prediction');  xlabel ('x');  ylabel ('z');
 
 model %#ok<NOPTS>

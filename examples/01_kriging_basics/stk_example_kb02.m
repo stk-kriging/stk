@@ -128,8 +128,14 @@ zt = stk_feval (f, xt);                        % Values of f on the grid
 % Compute the kriging predictor (and the kriging variance) on the grid
 zp = stk_predict (model, xi, zi, xt);
 
-% Visualisation
-stk_plot1d (xi, zi, xt, zt, zp);
+
+%% Visualisation
+
+stk_figure ('stk_example_kb02 (a)');  plot (xt, zt);
+title ('Function to be approximated');  xlabel ('x');  ylabel ('z');
+
+stk_figure ('stk_example_kb02 (b)');  stk_plot1d (xi, zi, xt, zt, zp);
+title ('Kriging prediction with estimated parameters');
 xlabel ('x');  ylabel ('z');
 
 
