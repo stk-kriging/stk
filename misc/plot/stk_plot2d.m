@@ -64,8 +64,7 @@ end
 
 plotfun(xx1, xx2, reshape(z, size(xx1)), varargin{:});
 
-xlabel('x_1', 'FontWeight', 'bold');
-ylabel('x_2', 'FontWeight', 'bold');
+stk_labels ('x_1', 'x_2');
 
 if ismember(func2str(plotfun), {'surf', 'pcolor'}),
     shading('interp');

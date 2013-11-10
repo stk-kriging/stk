@@ -90,7 +90,7 @@ zsim = stk_generate_samplepaths (model, xt, NB_PATHS);
 
 % Display the result
 subplot (2, 2, 1);  plot (xt, zsim, 'LineWidth', 2);  legend off;
-title ('Unconditional sample paths');  xlabel ('x');  ylabel ('z');
+title ('Unconditional sample paths');  stk_labels ('x', 'z');
 
 
 %% Carry out the kriging prediction and generate conditional sample paths
@@ -104,14 +104,14 @@ zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
 % Display the observations only
 subplot (2, 2, 2);
 plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
-title ('Observations');  xlabel ('x');  ylabel ('z');
+title ('Observations');  stk_labels ('x', 'z');
 
 % Display the conditional sample paths
 subplot (2, 2, 3);  plot (xt, zsimc, 'LineWidth', 2);  legend off;  hold on;
 plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
-title ('Conditional sample paths');  xlabel ('x');  ylabel ('z');
+title ('Conditional sample paths');  stk_labels ('x', 'z');
 
 % Display the kriging and credible intervals
 subplot (2, 2, 4);  stk_plot1dsim (xi, zi, xt, zt, zp, zsimc);
 title ('Kriging prediction and conditional sample paths');
-xlabel ('x');  ylabel ('z');
+stk_labels ('x', 'z');
