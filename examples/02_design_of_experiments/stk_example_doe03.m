@@ -162,7 +162,7 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     subplot (2, 1, 2);  cla;
     plot (x_grid, EI); xlim (BOX); hold on;
     plot (x_grid(i_max), EI_max, NEXT_STYLE{:});
-    ylabel ('EI', 'FontWeight', 'bold');
+    stk_ylabel ('EI');
     
     if EI_max > EI_max_stop,
         % Add the new evaluation to the DoE

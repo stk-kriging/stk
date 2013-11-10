@@ -120,5 +120,4 @@ end
 h = legend(legtxt, 'Location', 'NorthWest');
 set(h, 'Interpreter', 'none');
 
-xlabel('n', 'FontWeight', 'b');
-ylabel('computation time', 'FontWeight', 'b');
+stk_labels ('n', 'computation time');

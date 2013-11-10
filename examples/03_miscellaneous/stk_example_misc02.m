@@ -82,7 +82,7 @@ for k = 1:length (std_list),
     
     % Plot predicted values and pointwise confidences intervals
     haxis = subplot (2, 2, k);  stk_plot1d (xi, zi, xt, [], zp);
-    xlabel ('input x');  ylabel ('predicted output z');
+    stk_labels ('input x', 'predicted output z');
     h = title (sprintf ('prior std = %.2f', std_list(k)));
     set (h, 'FontWeight', 'bold');
 end
@@ -98,7 +98,7 @@ for j = 1:3,
     % estimated parameter versus prior std
     h = semilogx (std_list, exp (param_opt(j, :)), 'ko-');
     set (h, 'LineWidth', 2, 'MarkerFaceColor', 'y');
-    xlabel ('prior std');  ylabel (param_name{j});
+    stk_labels ('prior std', param_name{j});
     % add an horizontal line showing the value of REML estimation
     hold on;  semilogx (xlim, exp (param_opt_reml(j)) * [1 1], 'r--');
     % add a second horizontal line showing the mode of the prior
