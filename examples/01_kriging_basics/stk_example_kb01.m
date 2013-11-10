@@ -56,7 +56,7 @@ xt = stk_sampling_regulargrid (NT, DIM, BOX);
 zt = stk_feval (f, xt);
 
 stk_figure ('stk_example_kb01 (a)');  plot (xt, zt);
-title ('Function to be approximated');  stk_labels ('x', 'z');
+title ('Function to be approximated');  stk_labels ('input variable x', 'response z');
 
 
 %% Generate a space-filling design
@@ -110,7 +110,7 @@ zp = stk_predict (model, xi, zi, xt);
 % Display the result
 stk_figure ('stk_example_kb01 (b)');  stk_plot1d (xi, zi, xt, zt, zp);
 title ('Kriging prediction based on noiseless observations');
-stk_labels ('x', 'z');
+stk_labels ('input variable x', 'response z');
 
 
 %% Repeat the experiment in a noisy setting
@@ -131,7 +131,7 @@ zp_n = stk_predict (model_n, xi, zi_n, xt);
 % Display the result
 stk_figure ('stk_example_kb01 (c)');  stk_plot1d (xi, zi_n, xt, zt, zp_n);
 title ('Kriging prediction based on noisy observations');
-stk_labels ('x', 'z');
+stk_labels ('input variable x', 'response z');
 
 
 %% Cleanup
