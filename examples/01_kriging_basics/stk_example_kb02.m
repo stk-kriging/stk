@@ -132,11 +132,11 @@ zp = stk_predict (model, xi, zi, xt);
 %% Visualisation
 
 stk_figure ('stk_example_kb02 (a)');  plot (xt, zt);
-title ('Function to be approximated');  stk_labels ('x', 'z');
+title ('Function to be approximated');  stk_labels ('input variable x', 'response z');
 
 stk_figure ('stk_example_kb02 (b)');  stk_plot1d (xi, zi, xt, zt, zp);
 title ('Kriging prediction with estimated parameters');
-stk_labels ('x', 'z');
+stk_labels ('input variable x', 'response z');
 
 
 %% Cleanup
