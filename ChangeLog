@@ -1,3 +1,24 @@
+2013-11-11  Julien Bect  <julien.bect@supelec.fr>
+
+	New functions: stk_axes, stk_subplot, stk_title.
+
+	* misc/plot/stk_subplot.m: new function
+	* misc/plot/stk_axes.m: new function
+	* misc/plot/stk_title.m: new function
+	* misc/options/stk_options_set.m: modified
+	* misc/plot/stk_figure.m: modified
+	* examples/01_kriging_basics/stk_example_kb01.m: modified
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+	* examples/01_kriging_basics/stk_example_kb03.m: modified
+	* examples/01_kriging_basics/stk_example_kb04.m: modified
+	* examples/01_kriging_basics/stk_example_kb05.m: modified
+	* examples/01_kriging_basics/stk_example_kb06.m: modified
+	* examples/02_design_of_experiments/stk_example_doe01.m: modified
+	* examples/02_design_of_experiments/stk_example_doe02.m: modified
+	* examples/02_design_of_experiments/stk_example_doe03.m: modified
+	* examples/03_miscellaneous/stk_example_misc01.m: modified
+	* examples/03_miscellaneous/stk_example_misc02.m: modified
+
 2013-11-10  Julien Bect  <julien.bect@supelec.fr>
 
 	Change plot labels in several examples.

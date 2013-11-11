@@ -121,6 +121,7 @@ zp = stk_predict (model, xi, zi, xt);
 
 % Visualisation
 stk_plot1d (xi, zi, xt, zt, zp);
-title ('Kriging prediction');  stk_labels ('input variable x', 'response z');
+stk_title  ('Kriging prediction');
+stk_labels ('input variable x', 'response z');
 
 model %#ok<NOPTS>

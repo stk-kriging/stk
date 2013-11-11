@@ -152,14 +152,14 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     [EI_max, i_max] = max (EI);
     
     % Figure: upper panel
-    subplot (2, 1, 1);  cla;
+    stk_subplot (2, 1, 1);  cla;
     plot (x_grid, z_grid);  xlim (BOX);  hold on;
     plot (x_grid, z_post.mean, 'r-');
     plot (data, DOE_STYLE{:});
     plot (x_grid(i_max), z_grid(i_max), NEXT_STYLE{:});
     
     % Figure: lower panel
-    subplot (2, 1, 2);  cla;
+    stk_subplot (2, 1, 2);  cla;
     plot (x_grid, EI); xlim (BOX); hold on;
     plot (x_grid(i_max), EI_max, NEXT_STYLE{:});
     stk_ylabel ('EI');
