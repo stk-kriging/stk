@@ -77,9 +77,8 @@ model.param = stk_param_estim (model, xi, zi, param0);
 zp = stk_predict (model, xi, zi, xt);
 
 % Plot the result
-subplot (1, 2, 1);
-stk_plot1d (xi, zi, xt, [], zp);
-title ('Ordinary kriging');  ylim ([-5 5]);
+stk_subplot (1, 2, 1);  stk_plot1d (xi, zi, xt, [], zp);
+stk_title ('Ordinary kriging');  ylim ([-5 5]);
 
 
 %% Linear trend (aka "universal kriging")
@@ -94,5 +93,5 @@ model.param = stk_param_estim (model, xi, zi, param0);
 zp = stk_predict (model, xi, zi, xt);
 
 % Plot the result
-subplot (1, 2, 2);  stk_plot1d (xi, zi, xt, [], zp);
-title ('Kriging with linear trend');  ylim ([-5 5]);
+stk_subplot (1, 2, 2);  stk_plot1d (xi, zi, xt, [], zp);
+stk_title ('Kriging with linear trend');  ylim ([-5 5]);

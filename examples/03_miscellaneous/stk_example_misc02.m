@@ -81,10 +81,9 @@ for k = 1:length (std_list),
     zp = stk_predict (model, xi, zi, xt);
     
     % Plot predicted values and pointwise confidences intervals
-    haxis = subplot (2, 2, k);  stk_plot1d (xi, zi, xt, [], zp);
+    stk_subplot (2, 2, k);  stk_plot1d (xi, zi, xt, [], zp);
     stk_labels ('input x', 'predicted output z');
-    h = title (sprintf ('prior std = %.2f', std_list(k)));
-    set (h, 'FontWeight', 'bold');
+    stk_title (sprintf ('prior std = %.2f', std_list(k)));
 end
 
 
@@ -94,7 +93,7 @@ stk_figure ('stk_example_misc02 (b)');
 
 param_name = {'SIGMA2', 'NU', '1/RHO'};
 for j = 1:3,
-    subplot (2, 2, j);
+    stk_subplot (2, 2, j);
     % estimated parameter versus prior std
     h = semilogx (std_list, exp (param_opt(j, :)), 'ko-');
     set (h, 'LineWidth', 2, 'MarkerFaceColor', 'y');
@@ -110,5 +109,5 @@ for j = 1:3,
 end
 
 h1 = legend ('MAP estimates', 'REML estimate', 'mode of the prior');
-h2 = subplot (2, 2, 4); axis off;
+h2 = stk_subplot (2, 2, 4);  axis off;
 set (h1, 'Position', get (h2, 'Position'));

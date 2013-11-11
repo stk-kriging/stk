@@ -69,6 +69,5 @@ for j = 1:NB_COVARIANCE_FUNCTIONS,
     hold on;
 end
 
-stk_labels ('x', 'correlation r(x)');
-legend (list_cov{:, 1});
-title ('Some members of the Matern family');
+stk_labels ('x', 'correlation r(x)');  legend (list_cov{:, 1});
+stk_title ('Some members of the Matern family');
