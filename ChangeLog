@@ -1,3 +1,9 @@
+2013-11-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite the description of example 'misc02'.
+
+	* examples/03_miscellaneous/stk_example_misc02.m: modified
+
 2013-11-11  Julien Bect  <julien.bect@supelec.fr>
 
 	New functions: stk_axes, stk_subplot, stk_title.
