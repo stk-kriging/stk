@@ -1,4 +1,15 @@
-% STK_EXAMPLE_MISC02 ... [FIXME: missing documentation]
+% STK_EXAMPLE_MISC02 shows how to use priors on the covariance parameters
+%
+% A Matern covariance in dimension one  is considered as an example.  A Gaussian
+% prior is used for all three parameters: log-variance, log-regularity  and log-
+% inverse-range.  The corresponding parameter estimates are Maximum A Posteriori
+% (MAP) estimates or, more precisely, Restricted MAP (ReMAP) estimates.
+%
+% Several values for the variance of the prior  are successively considered,  to
+% illustrate the effect of this prior variance on the parameter estimates.  When
+% the variance is small, the MAP estimate is close to the mode of the prior.  On
+% the other hand, when the variance is large,  the prior becomes "flat"  and the
+% MAP estimate is close to the ReML estimate (see figure b).
 
 % Copyright Notice
 %
