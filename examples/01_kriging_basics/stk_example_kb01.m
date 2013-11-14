@@ -1,4 +1,4 @@
-% STK_EXAMPLE_KB01 constructs an ordinary kriging approximation in 1D.
+% STK_EXAMPLE_KB01  Ordinary kriging in 1D
 %
 % A Matern covariance function is used for the Gaussian Process (GP) prior. The
 % parameters of this covariance function are assumed to be known (i.e., no

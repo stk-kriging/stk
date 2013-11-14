@@ -1,4 +1,4 @@
-% STK_EXAMPLE_KB04 demonstrates how to estimate the variance of the noise.
+% STK_EXAMPLE_KB04  Estimating the variance of the noise
 %
 % This example constructs an ordinary kriging approximation in 1D, with
 % covariance parameters and noise variance estimated from the data.

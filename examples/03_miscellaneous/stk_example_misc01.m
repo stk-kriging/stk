@@ -1,4 +1,4 @@
-% STK_EXAMPLE_MISC01 plots several correlation functions from the Matern family
+% STK_EXAMPLE_MISC01  Several correlation functions from the Matern family
 %
 % The Matern 1/2 correlation function is also known as the "exponential correla-
 % tion function". This is the correlation function of an Ornstein-Ulhenbeck pro-

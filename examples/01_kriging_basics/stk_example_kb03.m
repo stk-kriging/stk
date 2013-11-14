@@ -1,4 +1,4 @@
-% STK_EXAMPLE_KB03 constructs an ordinary kriging approximation in 2D.
+% STK_EXAMPLE_KB03  Ordinary kriging in 2D
 %
 % An anisotropic Matern covariance function is used for the Gaussian Process
 % (GP) prior. The parameters of this covariance function (variance, regularity

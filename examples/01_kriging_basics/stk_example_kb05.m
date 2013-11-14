@@ -1,4 +1,4 @@
-% STK_EXAMPLE_KB05 show how to generate conditioned sample paths
+% STK_EXAMPLE_KB05  Generation of conditioned sample paths
 %
 % A Matern Gaussian process model is used, with constant but unknown mean
 % (ordinary kriging) and known covariance parameters.

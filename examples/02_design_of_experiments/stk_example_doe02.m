@@ -1,4 +1,4 @@
-% STK_EXAMPLE_DOE02 shows how to build a "sequential maximin" design
+% STK_EXAMPLE_DOE02  "Sequential Maximin" design
 %
 % In this example, a two-dimensional space-filling design is progressively
 % enriched with new points using a "sequential maximin" approach. More

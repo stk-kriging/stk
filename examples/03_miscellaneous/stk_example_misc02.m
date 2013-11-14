@@ -1,4 +1,4 @@
-% STK_EXAMPLE_MISC02 shows how to use priors on the covariance parameters
+% STK_EXAMPLE_MISC02  How to use priors on the covariance parameters
 %
 % A Matern covariance in dimension one  is considered as an example.  A Gaussian
 % prior is used for all three parameters: log-variance, log-regularity  and log-

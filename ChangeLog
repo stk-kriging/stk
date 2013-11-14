@@ -1,3 +1,23 @@
+2013-11-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite one-line descriptions of all examples.
+
+	* examples/01_kriging_basics/stk_example_kb01.m: modified
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+	* examples/01_kriging_basics/stk_example_kb03.m: modified
+	* examples/01_kriging_basics/stk_example_kb04.m: modified
+	* examples/01_kriging_basics/stk_example_kb05.m: modified
+	* examples/01_kriging_basics/stk_example_kb06.m: modified
+	* examples/02_design_of_experiments/stk_example_doe01.m: modified
+	* examples/02_design_of_experiments/stk_example_doe02.m: modified
+	* examples/02_design_of_experiments/stk_example_doe03.m: modified
+	* examples/03_miscellaneous/stk_example_misc01.m: modified
+	* examples/03_miscellaneous/stk_example_misc02.m: modified
+
+	Rewrite the description of example 'kb02'.
+
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+
 2013-11-12  Julien Bect  <julien.bect@supelec.fr>
 
 	Rewrite the description of example 'misc02'.
