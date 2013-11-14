@@ -1,4 +1,4 @@
-% STK_EXAMPLE_DOE03 provides a simple illustration of 1D Bayesian optimization
+% STK_EXAMPLE_DOE03  A simple illustration of 1D Bayesian optimization
 %
 % Our goal here is to optimize the one-dimensional function
 %

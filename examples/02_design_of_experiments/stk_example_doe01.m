@@ -1,4 +1,4 @@
-% STK_EXAMPLE_DOE01 displays several two-dimensional designs
+% STK_EXAMPLE_DOE01  Examples of two-dimensional designs
 %
 % All designs are constructed on the hyper-rectangle BOX = [0; 2] x [0; 4].
 %

@@ -1,4 +1,4 @@
-% STK_EXAMPLE_KB06 compares ordinary kriging and kriging with a linear trend
+% STK_EXAMPLE_KB06  Ordinary kriging VS kriging with a linear trend
 %
 % The same dataset is analyzed using two variants of kriging.
 %
