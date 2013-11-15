@@ -46,16 +46,16 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_sampling_maximinlhs(n, d, box, niter)
+function x = stk_sampling_maximinlhs (n, d, box, niter)
 
 if nargin > 4,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if (nargin < 3) || isempty(box)
-    box = repmat([0; 1], 1, d);
+if (nargin < 3) || isempty (box)
+    box = repmat ([0; 1], 1, d);
 else
-    stk_assert_box(box);
+    stk_assert_box (box);
 end
 
 if nargin < 4,
@@ -63,13 +63,13 @@ if nargin < 4,
 end
 
 if n == 0, % no input => no output    
-    xdata = zeros(0, d);    
+    xdata = zeros (0, d);    
 else % at least one input point
-    xx = lhsdesign_(n, d, niter);
-    xdata = stk_rescale(xx, [], box);    
+    xx = lhsdesign_ (n, d, niter);
+    xdata = stk_rescale (xx, [], box);    
 end
 
-x = stk_dataframe(xdata);
+x = stk_dataframe (xdata);
 x.info = 'Created by stk_sampling_maximinlhs';
 
 end % function stk_sampling_maximinlhs
@@ -79,15 +79,15 @@ end % function stk_sampling_maximinlhs
 %%% lhsdesign_ %%%
 %%%%%%%%%%%%%%%%%%
 
-function x = lhsdesign_( n, d, niter)
+function x = lhsdesign_ (n, d, niter)
 
 bestscore = 0;
 x = [];
 
 for j = 1:niter
-    y = generatedesign_(n, d);
-    score = stk_mindist(y);
-    if isempty(x) || (score > bestscore)
+    y = generatedesign_ (n, d);
+    score = stk_mindist (y);
+    if isempty (x) || (score > bestscore)
         x = y;
         bestscore = score;
     end
@@ -100,15 +100,15 @@ end
 %%% generatedesign_ %%%
 %%%%%%%%%%%%%%%%%%%%%%%
 
-function x = generatedesign_( n, d )
+function x = generatedesign_ (n, d)
 
-x = zeros(n, d);
+x = zeros (n, d);
 
 for i = 1:d % for each dimension, draw a random permutation
-    [sx, x(:,i)] = sort(rand(n,1)); %#ok<ASGLU>
+    [sx, x(:,i)] = sort (rand (n,1)); %#ok<ASGLU>
 end
 
-x = (x - rand(size(x))) / n;
+x = (x - rand (size (x))) / n;
 
 end
 
@@ -117,30 +117,30 @@ end
 % Check error for incorrect number of input arguments
 
 %!shared x, n, dim, box, niter
-%! n = 20; dim = 2; box = [0, 0; 1, 1]; niter = 1;
+%! n = 20;  dim = 2;  box = [0, 0; 1, 1];  niter = 1;
 
-%!error x = stk_sampling_maximinlhs();
-%!error x = stk_sampling_maximinlhs(n);
-%!test  x = stk_sampling_maximinlhs(n, dim);
-%!test  x = stk_sampling_maximinlhs(n, dim, box);
-%!test  x = stk_sampling_maximinlhs(n, dim, box, niter);
-%!error x = stk_sampling_maximinlhs(n, dim, box, niter, pi);
+%!error x = stk_sampling_maximinlhs ();
+%!error x = stk_sampling_maximinlhs (n);
+%!test  x = stk_sampling_maximinlhs (n, dim);
+%!test  x = stk_sampling_maximinlhs (n, dim, box);
+%!test  x = stk_sampling_maximinlhs (n, dim, box, niter);
+%!error x = stk_sampling_maximinlhs (n, dim, box, niter, pi);
 
 %% 
 % Check that the output is a dataframe
 % (all stk_sampling_* functions should behave similarly in this respect)
 
-%!assert (isa(x, 'stk_dataframe'));
+%!assert (isa (x, 'stk_dataframe'));
 
 %%
 % Check output argument
 
 %!test
 %! for dim = 1:5,
-%!   x = stk_sampling_randomlhs(n, dim);
-%!   assert(isequal(size(x), [n dim]));
-%!   u = double(x); u = u(:);
-%!   assert(~any(isnan(u) | isinf(u)));
-%!   assert((min(u) >= 0) && (max(u) <= 1));
-%!   assert(stk_is_lhs(x, n, dim));
+%!   x = stk_sampling_randomlhs (n, dim);
+%!   assert (isequal (size (x), [n dim]));
+%!   u = double (x);  u = u(:);
+%!   assert (~ any (isnan (u) | isinf (u)));
+%!   assert ((min (u) >= 0) && (max (u) <= 1));
+%!   assert (stk_is_lhs (x, n, dim));
 %! end
