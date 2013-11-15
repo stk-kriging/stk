@@ -1,6 +1,6 @@
 % STK_PLOT1D is a convenient plot function in 1D
 %
-% CALL: stk_plot1d ( xi, zi, xt, zt, zp )
+% CALL: stk_plot1d (xi, zi, xt, zt, zp)
 %
 % STK_PLOT1D plots the result of a 1D approximation
 
@@ -31,28 +31,38 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_plot1d (xi, zi, xt, zt, zp)
+function stk_plot1d (xi, zi, xt, zt, zp, zsim)
 
 xi = double (xi);
 zi = double (zi);
-xt = double (xt);
-zt = double (zt);
 
-% shaded area representing pointwise confidence intervals
-stk_plot_shadedci (xt, zp);  hold on;
+if nargin > 2
 
-% ground truth (if available)
-if ~ isempty (zt),
-    plot (xt, zt, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
+    xt = double (xt);
+    
+    % shaded area representing pointwise confidence intervals
+    stk_plot_shadedci (xt, zp);  hold on;
+    
+    % plot sample paths
+    if (nargin > 5) && (~ isempty (zsim))
+        plot (xt, zsim, '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64])
+    end
+    
+    % ground truth (if available)
+    if (nargin > 3) && (~ isempty (zt))
+        plot (xt, zt, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
+    end
+    
+    % kriging predictor (posterior mean)
+    if (nargin > 4) && (~ isempty (zp))
+        plot (xt, zp.mean, 'LineWidth', 3, 'Color', [0.95 0.25 0.3]);
+    end
+
 end
 
-% kriging predictor (posterior mean)
-plot (xt, zp.mean, 'LineWidth', 4, 'Color', [0.95 0.25 0.3]);
-
 % evaluations
-plot (xi, zi, 'ks', 'MarkerSize', 10, 'LineWidth', 3, ...
-    'MarkerEdgeColor', [0.95 0.25 0.3], 'MarkerFaceColor', [0.8 0.8 0.8]);
+plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
 
 hold off;  set (gca, 'box', 'off');
 
-end % stk_plot1d
+end % function stk_plot1d

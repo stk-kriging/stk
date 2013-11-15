@@ -103,18 +103,17 @@ stk_labels ('input variable x', 'response z');
 zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
 
 % Display the observations only
-stk_subplot (2, 2, 2);
-plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
+stk_subplot (2, 2, 2);  stk_plot1d (xi, zi);
 stk_title ('Observations');
 stk_labels ('input variable x', 'response z');
 
 % Display the conditional sample paths
 stk_subplot (2, 2, 3);  plot (xt, zsimc, 'LineWidth', 2);  legend off;  hold on;
-plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
+plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
 stk_title ('Conditional sample paths');
 stk_labels ('input variable x', 'response z');
 
 % Display the kriging and credible intervals
-stk_subplot (2, 2, 4);  stk_plot1dsim (xi, zi, xt, zt, zp, zsimc);
+stk_subplot (2, 2, 4);  stk_plot1d (xi, zi, xt, zt, zp, zsimc);
 stk_title ('Prediction and credible intervals');
 stk_labels ('input variable x', 'response z');
