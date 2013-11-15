@@ -1,6 +1,6 @@
 % STK_FEVAL evaluates a function at given evaluation points.
 %
-% CALL: Z = stk_feval(F, X)
+% CALL: Z = stk_feval (F, X)
 %
 %    evaluates the function F on the evaluation points X, where
 %
@@ -10,16 +10,16 @@
 %    The output Z is a one-column dataframe, with the same number of rows as X,
 %    and the function name of F as variable name.
 %
-% CALL: Z = stk_feval(F, X, DISPLAY_PROGRESS)
+% CALL: Z = stk_feval (F, X, DISPLAY_PROGRESS)
 %
 %    displays progress messages if DISPLAY_PROGRESS is true. This is especially
 %    useful if each evaluation of F requires a significant computation time.
 %
 % EXAMPLE:
-%       f = @(x)(-(0.7 * x + sin(5 * x + 1) + 0.1 * sin(10 * x)));
-%       xt = stk_sampling_regulargrid(100, 1, [0; 1]);
-%       yt = stk_feval(f, xt);
-%       plot(xt, yt);
+%       f = @(x)(- (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
+%       xt = stk_sampling_regulargrid (100, 1, [0; 1]);
+%       yt = stk_feval (f, xt);
+%       plot (xt, yt);
 %
 % See also feval
 
@@ -89,7 +89,7 @@ if n == 0, % no input => no output
     
 else % at least one input point
     
-    zdata = zeros( n, 1);
+    zdata = zeros (n, 1);
     for i = 1:n,
         if progress_msg, fprintf ('feval %d/%d... ', i, n); end
         zdata(i) = feval (f, xdata(i, :));
@@ -98,7 +98,7 @@ else % at least one input point
     
 end
 
-z = stk_dataframe(zdata, {zname});
+z = stk_dataframe (zdata, {zname});
 z.info = 'Created by stk_feval';
 
 if isa (x, 'stk_dataframe'),
@@ -109,7 +109,7 @@ end % function stk_feval
 
 
 %!shared f xt
-%!  f = @(x)( - (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
+%!  f = @(x)(- (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
 %!  xt = stk_sampling_regulargrid (20, 1, [0; 1]);
 
 %!error  yt = stk_feval ();
