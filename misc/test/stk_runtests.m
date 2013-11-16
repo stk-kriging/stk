@@ -45,7 +45,7 @@
 % @seealso{rundemos, path}
 % @end deftypefn
 
-function stk_runtests(directory)
+function stk_runtests (directory)
 
 if nargin == 0
     % scan all STK directories if no input argument is provided
@@ -81,14 +81,15 @@ if n_dirs > 1,
     fprintf(' --> %d/%d files had no tests\n', n_notest, n_files);
 end
 
-end
+end % function stk_runtests
 
 
 %%%%%%%%%%%%%%%%%
 % run_all_tests %
 %%%%%%%%%%%%%%%%%
 
-function [n_pass, n_total, n_notest, n_files, n_dirs] = run_all_tests(testdir, basedir)
+function [n_pass, n_total, n_notest, n_files, n_dirs] ...
+    = run_all_tests (testdir, basedir)
 
 % list directory content
 dirinfo = dir(testdir);
@@ -166,7 +167,7 @@ end
 
 cd(here);
 
-end % run_all_tests
+end % function run_all_tests
 
 
 %%%%%%%%%%%%%
@@ -184,7 +185,7 @@ else
     error ('runtests: fopen failed: %s', f);
 end
 
-end % has_tests
+end % function has_tests
 
 
 %%%%%%%%%%%%%%%%%%%
@@ -201,7 +202,7 @@ if (n > 0)
     end
 end
 
-end % print_pass_fail
+end % function print_pass_fail
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -213,4 +214,4 @@ function print_test_file_name (nm)
 filler = repmat('.', 1, 50 - length(nm));
 fprintf('  %s %s', nm, filler);
 
-end % print_test_file_name
+end % function print_test_file_name

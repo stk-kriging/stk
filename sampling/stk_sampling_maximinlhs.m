@@ -93,7 +93,7 @@ for j = 1:niter
     end
 end
 
-end
+end % function lhsdesign_
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -110,7 +110,7 @@ end
 
 x = (x - rand (size (x))) / n;
 
-end
+end % function generatedesign_
 
 
 %%

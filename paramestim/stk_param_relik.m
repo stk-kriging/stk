@@ -133,7 +133,7 @@ if nargout >= 2
     
 end
 
-end
+end % function stk_param_relik
 
 
 %!shared f, xi, zi, NI, model

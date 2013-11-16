@@ -26,34 +26,34 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function str = stk_sprintf_colvect(x, max_width)
+function str = stk_sprintf_colvect (x, max_width)
 
 if nargin < 2,
     max_width = 10;
 end
     
 % Try fixed-point notation first.
-[str, err_fp] = stk_sprintf_colvect_fixedpoint(x, max_width);
+[str, err_fp] = stk_sprintf_colvect_fixedpoint (x, max_width);
 
 if err_fp > 0,
     % Accept fixed-point notation if the error is zero,
     % try scientific notation otherwise.
-    [str_sc, err_sc] = stk_sprintf_colvect_scientific(x, max_width);
+    [str_sc, err_sc] = stk_sprintf_colvect_scientific (x, max_width);
     if err_sc < err_fp,
         % Choose scientific notation if it's better than fixed-point
         str = str_sc;
     end
 end
 
-end % function stk_sprintf_numcolvect
+end % function stk_sprintf_colvect
 
 
 %!shared s
-%!test s = stk_sprintf_colvect([1 1e1], 6);
-%!assert (isequal(s, [' 1'; '10']))
-%!test s = stk_sprintf_colvect([1 1e3], 6);
-%!assert (isequal(s, ['   1'; '1000']))
-%!test s = stk_sprintf_colvect([1 1e5], 6);
-%!assert (isequal(s, ['     1'; '100000']))
-%!test s = stk_sprintf_colvect([1 1e6], 6);
-%!assert (isequal(s, ['1e+00'; '1e+06']))
+%!test s = stk_sprintf_colvect ([1 1e1], 6);
+%!assert (isequal (s, [' 1'; '10']))
+%!test s = stk_sprintf_colvect ([1 1e3], 6);
+%!assert (isequal (s, ['   1'; '1000']))
+%!test s = stk_sprintf_colvect ([1 1e5], 6);
+%!assert (isequal (s, ['     1'; '100000']))
+%!test s = stk_sprintf_colvect ([1 1e6], 6);
+%!assert (isequal (s, ['1e+00'; '1e+06']))

@@ -121,7 +121,7 @@ function [x, R] = linsolve (A, b, opts)
       R = 0;
     endif
   endif
-endfunction
+endfunction # linsolve
 
 
 %!test
