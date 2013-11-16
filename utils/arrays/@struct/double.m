@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function xdata = double(x)
+function xdata = double (x)
 
 xdata = x.a;
 

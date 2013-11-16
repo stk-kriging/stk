@@ -1,12 +1,12 @@
 % STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process.
 %
-% CALL: ZSIM = stk_generate_samplepaths(MODEL, XT)
+% CALL: ZSIM = stk_generate_samplepaths (MODEL, XT)
 %
 %    generates one sample path ZSIM, using the kriging model MODEL and the
 %    evaluation points XT. Both XT and ZSIM are structures, whose field 'a'
 %    contains the actual numerical values.
 %
-% CALL: ZSIM = stk_generate_samplepaths(MODEL, XT, NB_PATHS)
+% CALL: ZSIM = stk_generate_samplepaths (MODEL, XT, NB_PATHS)
 %
 %    generates NB_PATHS sample paths at once.
 %
@@ -47,45 +47,48 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function zsim = stk_generate_samplepaths(model, xt, nb_paths)
+function zsim = stk_generate_samplepaths (model, xt, nb_paths)
 
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if nargin < 3, nb_paths = 1; end
+if nargin < 3,
+    nb_paths = 1;
+end
 
 % covariance matrix
-K = stk_make_matcov(model, xt);
+K = stk_make_matcov (model, xt);
 
 % Cholesky factorization, once and for all
-V = chol(K);
+V = chol (K);
 
 % generates samplepaths
-zsim_data = V' * randn(size(K,1), nb_paths);
+zsim_data = V' * randn (size (K, 1), nb_paths);
 
 % store the result in a dataframe
-zsim_varnames = arrayfun(@(i)(sprintf('z%d', i)), 1:nb_paths, 'UniformOutput', false);
-zsim = stk_dataframe(zsim_data, zsim_varnames);
+zsim_varnames = arrayfun (@(i)(...
+    sprintf ('z%d', i)), 1:nb_paths, 'UniformOutput', false);
+zsim = stk_dataframe (zsim_data, zsim_varnames);
 
 end % function stk_generate_samplepaths
 
 
 %!shared model xt n nb_paths
-%!  dim = 1; n = 400; nb_paths = 5;
-%!  model = stk_model('stk_materncov32_iso', dim);
-%!  xt = stk_sampling_regulargrid(n, dim, [-1.0; 1.0]);
+%! dim = 1;  n = 400;  nb_paths = 5;
+%! model = stk_model ('stk_materncov32_iso', dim);
+%! xt = stk_sampling_regulargrid (n, dim, [-1.0; 1.0]);
 
-%!error  zsim = stk_generate_samplepaths();
-%!error  zsim = stk_generate_samplepaths(model);
-%!test   zsim = stk_generate_samplepaths(model, xt);
-%!test   zsim = stk_generate_samplepaths(model, xt, nb_paths);
-%!error  zsim = stk_generate_samplepaths(model, xt, nb_paths, log(2));
-
-%!test
-%!  zsim = stk_generate_samplepaths(model, xt);
-%!  assert(isequal(size(zsim), [n, 1]));
+%!error zsim = stk_generate_samplepaths ();
+%!error zsim = stk_generate_samplepaths (model);
+%!test  zsim = stk_generate_samplepaths (model, xt);
+%!test  zsim = stk_generate_samplepaths (model, xt, nb_paths);
+%!error zsim = stk_generate_samplepaths (model, xt, nb_paths, log (2));
 
 %!test
-%!  zsim = stk_generate_samplepaths(model, xt, nb_paths);
-%!  assert(isequal(size(zsim), [n, nb_paths]));
+%! zsim = stk_generate_samplepaths (model, xt);
+%! assert (isequal (size (zsim), [n, 1]));
+
+%!test
+%! zsim = stk_generate_samplepaths (model, xt, nb_paths);
+%! assert (isequal (size (zsim), [n, nb_paths]));

@@ -99,7 +99,7 @@ if ~isempty(varargin),
     z = vertcat(z, varargin{:});
 end
 
-end % function subsref
+end % function vertcat
 
 
 % IMPORTANT NOTE: [x; y; ...] fails to give the same result as vertcat(x, y, 

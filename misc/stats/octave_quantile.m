@@ -6,7 +6,7 @@
 %
 %    Author: Julien Bect  <julien.bect@supelec.fr>
 %
-%    The function comes from Octave 3.7.6+'s quantile.m, with minor 
+%    The function comes from Octave 3.7.6+'s quantile.m, with minor
 %    modifications. The original copyright notice was:
 %
 %       Copyright (C) 2008-2012 Ben Abbott and Jaroslav Hajek
@@ -168,7 +168,7 @@ if (~ (isnumeric (p) && isvector (p)))
     error ('quantile: P must be a numeric vector');
 end
 
-if (~(isscalar (dim) && dim == fix (dim)) ...
+if (~ (isscalar (dim) && dim == fix (dim)) ...
         || ~(1 <= dim && dim <= ndims (x)))
     error ('quantile: DIM must be an integer and a valid dimension');
 end
@@ -196,7 +196,7 @@ q = reshape (q, [numel(p), sx(2:end)]);
 % Permute the 1st index back to dim.
 q = ipermute (q, perm);
 
-end
+end % function octave_quantile
 
 %!test
 %! p = 0.5;
@@ -307,7 +307,7 @@ end
 %!      -2.551474  -0.571522  -0.067751   0.106855   0.495271
 %!      -2.551474  -0.591566  -0.067751   0.146459   0.495271
 %!      -2.551474  -0.590801  -0.067751   0.140686   0.495271];
-%! for m = [1:2 4:9]  
+%! for m = [1:2 4:9]
 %!   q = octave_quantile (x, p, 1, m).';
 %!   assert (stk_isequal_tolabs (q, a(m,:), 0.0001));
 %! end
@@ -395,7 +395,7 @@ if (any (k))
         inv(k,:) = repmat (x, n, 1);
         return;
     end
-
+    
     % The column-distribution indices.
     pcd = kron (ones (n, 1), xr*(0:xc-1));
     mm = kron (ones (n, 1), m);
@@ -405,13 +405,13 @@ if (any (k))
                 case 1
                     p = max (ceil (kron (p, m)), 1);
                     inv(k,:) = x(p + pcd);
-
+                    
                 case 2
                     p = kron (p, m);
                     p_lr = max (ceil (p), 1);
                     p_rl = min (floor (p + 1), mm);
                     inv(k,:) = (x(p_lr + pcd) + x(p_rl + pcd))/2;
-
+                    
                 case 3
                     % Used by SAS, method PCTLDEF=2.
                     % http://support.sas.com/onlinedoc/913/getDoc/en/statug.hlp/stdize_sect14.htm
@@ -419,40 +419,40 @@ if (any (k))
                     t = roundb (t);
                     inv(k,:) = x(t + pcd);
             end
-
+            
         otherwise
             switch (method)
                 case 4
                     p = kron (p, m);
-
+                    
                 case 5
                     % Used by Matlab.
                     p = kron (p, m) + 0.5;
-
+                    
                 case 6
                     % Used by Minitab and SPSS.
                     p = kron (p, m+1);
-
+                    
                 case 7
                     % Used by S and R.
                     p = kron (p, m-1) + 1;
-
+                    
                 case 8
                     % Median unbiased.
                     p = kron (p, m+1/3) + 1/3;
-
+                    
                 case 9
                     % Approximately unbiased respecting order statistics.
                     p = kron (p, m+0.25) + 0.375;
-
+                    
                 otherwise
                     error ('quantile: Unknown METHOD, ''%d''', method);
             end
-
+            
             % Duplicate single values.
             imm1 = (mm == 1);
             x(2,imm1) = x(1,imm1);
-
+            
             % Interval indices.
             pi = max (min (floor (p), mm-1), 1);
             pr = max (min (p - pi, 1), 0);
@@ -461,5 +461,5 @@ if (any (k))
     end
 end
 
-end
+end % function octave__quantile__
 
