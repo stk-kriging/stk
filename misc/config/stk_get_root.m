@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,7 +26,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function root = stk_get_root()
+function root = stk_get_root ()
 
-% the current root is stored in a persistent variable in stk_set_root()
-root = stk_set_root();
+% the current root is stored in a persistent variable in stk_set_root
+root = stk_set_root ();
+
+end % function stk_get_root

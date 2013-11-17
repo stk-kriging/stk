@@ -48,7 +48,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function k = stk_materncov_iso(param, x, y, diff, pairwise)
+function k = stk_materncov_iso (param, x, y, diff, pairwise)
 
 if nargin > 5,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -57,48 +57,49 @@ end
 persistent x0 y0 param0 pairwise0 D
 
 % process input arguments
-x = double(x);
-y = double(y);
+x = double (x);
+y = double (y);
 if nargin < 4, diff = -1; end
 if nargin < 5, pairwise = false; end
 
 % extract parameters from the "param" vector
-Sigma2 = exp(param(1));
-Nu     = exp(param(2));
-invRho = exp(param(3));
+Sigma2 = exp (param(1));
+Nu     = exp (param(2));
+invRho = exp (param(3));
 
 % check parameter values
-if ~(Sigma2>0) || ~(Nu>0) || ~(invRho>0),
-    error('Incorrect parameter value.');
+if ~ (Sigma2 > 0) || ~ (Nu > 0) || ~ (invRho > 0),
+    error ('Incorrect parameter value.');
 end
 
 % check if all input arguments are the same as before
 % (or if this is the first call to the function)
-if isempty(x0) || isempty(y0) || isempty(param0) || ...
-        ~isequal({x, y, param}, {x0, y0, param0}) || ~isequal(pairwise, pairwise0)
+if isempty (x0) || isempty (y0) || isempty (param0) ...
+        || ~ isequal ({x, y, param}, {x0, y0, param0}) ...
+        || ~ isequal (pairwise, pairwise0)
     % compute the distance matrix
-    D  = invRho * stk_dist(x, y, pairwise);
+    D  = invRho * stk_dist (x, y, pairwise);
     % save arguments for the nex call
-    x0 = x; y0 = y; param0 = param; pairwise0 = pairwise;
+    x0 = x;  y0 = y;  param0 = param;  pairwise0 = pairwise;
 end
 
 if diff == -1,
     %%% compute the value (not a derivative)
-    k = Sigma2 * stk_sf_matern(Nu, D, -1);
+    k = Sigma2 * stk_sf_matern (Nu, D, -1);
 elseif diff == 1,
     %%% diff wrt param(1) = log(Sigma2)
-    k = Sigma2 * stk_sf_matern(Nu, D, -1);
+    k = Sigma2 * stk_sf_matern (Nu, D, -1);
 elseif diff == 2,
     %%% diff wrt param(2) = log(Nu)
-    k = Nu * Sigma2 * stk_sf_matern(Nu, D, 1);
+    k = Nu * Sigma2 * stk_sf_matern (Nu, D, 1);
 elseif diff == 3,
     %%% diff wrt param(3) = - log(invRho)
-    k = D .* (Sigma2 * stk_sf_matern(Nu, D, 2));
+    k = D .* (Sigma2 * stk_sf_matern (Nu, D, 2));
 else
-    error('there must be something wrong here !');
+    error ('there must be something wrong here !');
 end
 
-end % function
+end % function stk_materncov_iso
 
 
 %%

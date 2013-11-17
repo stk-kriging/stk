@@ -90,31 +90,31 @@ else
     error ('index: DIRECTION must be either "first" or "last"');
 end
 
-end
+end % function index
 
 
 %!assert (index ('foobarbaz', 'b') == 4 && index ('foobarbaz', 'z') == 9);
 
-%!assert (isequal(index('astringbstringcstring', 's'), 2))
-%!assert (isequal(index('astringbstringcstring', 'st'), 2))
-%!assert (isequal(index('astringbstringcstring', 'str'), 2))
-%!assert (isequal(index('astringbstringcstring', 'string'), 2))
-%!assert (isequal(index('abc---', 'abc+++'), 0))
+%!assert (isequal (index ('astringbstringcstring', 's'), 2))
+%!assert (isequal (index ('astringbstringcstring', 'st'), 2))
+%!assert (isequal (index ('astringbstringcstring', 'str'), 2))
+%!assert (isequal (index ('astringbstringcstring', 'string'), 2))
+%!assert (isequal (index ('abc---', 'abc+++'), 0))
 
 %% test everything out in reverse
-%!assert (isequal(index('astringbstringcstring', 's', 'last'), 16))
-%!assert (isequal(index('astringbstringcstring', 'st', 'last'), 16))
-%!assert (isequal(index('astringbstringcstring', 'str', 'last'), 16))
-%!assert (isequal(index('astringbstringcstring', 'string', 'last'), 16))
-%!assert (isequal(index('abc---', 'abc+++', 'last'), 0))
+%!assert (isequal (index ('astringbstringcstring', 's', 'last'), 16))
+%!assert (isequal (index ('astringbstringcstring', 'st', 'last'), 16))
+%!assert (isequal (index ('astringbstringcstring', 'str', 'last'), 16))
+%!assert (isequal (index ('astringbstringcstring', 'string', 'last'), 16))
+%!assert (isequal (index ('abc---', 'abc+++', 'last'), 0))
 
 %!test
 %! str = char ('Hello', 'World', 'Goodbye', 'World');
-%! assert(isequal(index(str, 'o'), [5; 2; 2; 2]));
-%! assert(isequal(index(str, 'o', 'last'), [5; 2; 3; 2]));
+%! assert (isequal (index (str, 'o'), [5; 2; 2; 2]));
+%! assert (isequal (index (str, 'o', 'last'), [5; 2; 3; 2]));
 %! str = cellstr (str);
-%! assert(isequal(index(str, 'o'), [5; 2; 2; 2]));
-%! assert(isequal(index(str, 'o', 'last'), [5; 2; 3; 2]));
+%! assert (isequal (index (str, 'o'), [5; 2; 2; 2]));
+%! assert (isequal (index (str, 'o', 'last'), [5; 2; 3; 2]));
 
 %% Test input validation
 %!error index ()

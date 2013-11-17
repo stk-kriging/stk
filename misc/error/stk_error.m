@@ -27,13 +27,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_error(errmsg, mnemonic, stack)
+function stk_error (errmsg, mnemonic, stack)
 
 % second component of error identifier = name of calling function
 % (unless stk_error has been called directly from the base workspace)
 if nargin < 3,
-    stack = dbstack();
-    if length(stack) == 1,
+    stack = dbstack ();
+    if length (stack) == 1,
         caller = 'BaseWorkspace';
     else
         % pretend that the error has been thrown by the caller
@@ -44,30 +44,30 @@ if nargin < 3,
 else
     % if a "stack" has been provided by the user, we use it without asking
     % questions (if it's a struct)
-    if ~isstruct(stack) || ~isfield(stack, 'name'),
+    if ~ isstruct (stack) || ~ isfield (stack, 'name'),
         % We will throw an error, but not the one we were requested to!
         errmsg = 'Argument "stack" should be a valid stack structure.';
         mnemonic = 'InvalidArgument';
-        stack = dbstack();
+        stack = dbstack ();
     end
     caller = stack(1).name;
 end
 
 % keep only subfunction name (Octave)
-gt_pos = strfind(caller, '>');
-if ~isempty(gt_pos),
+gt_pos = strfind (caller, '>');
+if ~ isempty (gt_pos),
     caller = caller((gt_pos + 1):end);
 end
 
 % construct the error structure
-errstruct = struct( ...
+errstruct = struct (...
     'message', errmsg, ...
-    'identifier', sprintf('STK:%s:%s', caller, mnemonic), ...
+    'identifier', sprintf ('STK:%s:%s', caller, mnemonic), ...
     'stack', stack);
 
-error(errstruct);
+error (errstruct);
 
-end % stk_error
+end % function stk_error
 
 
 %!shared errmsg, mnemonic, badstack
@@ -77,8 +77,8 @@ end % stk_error
 
 %!% valid use of stk_error
 %!error <make my day> stk_error(errmsg, mnemonic);
-%!error id=STK:eval_test_code:ClintEastwood stk_error(errmsg, mnemonic);
+%!error id=STK:eval_test_code:ClintEastwood stk_error (errmsg, mnemonic);
 
 %!% use of an incorrect stack structure
-%!error <stack structure> stk_error(errmsg, mnemonic, badstack);
-%!error id=STK:stk_error:InvalidArgument stk_error(errmsg, mnemonic, badstack);
+%!error <stack structure> stk_error (errmsg, mnemonic, badstack);
+%!error id=STK:stk_error:InvalidArgument stk_error (errmsg, mnemonic, badstack);

@@ -47,7 +47,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function k = stk_materncov_aniso(param, x, y, diff, pairwise)
+function k = stk_materncov_aniso (param, x, y, diff, pairwise)
 
 if nargin > 5,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -56,73 +56,76 @@ end
 persistent x0 y0 xs ys param0 pairwise0 D Kx_cache compute_Kx_cache
 
 % process input arguments
-x = double(x);
-y = double(y);
+x = double (x);
+y = double (y);
 if nargin < 4, diff = -1; end
 if nargin < 5, pairwise = false; end
 
 % check size consistency
-dim = size(x, 2);
-if (size(y, 2) ~= dim),
-    stk_error('xi and yi have incompatible sizes.', 'InvalidArgument');
+dim = size (x, 2);
+if (size (y, 2) ~= dim),
+    stk_error ('xi and yi have incompatible sizes.', 'InvalidArgument');
 end
 nb_params = dim + 2;
-if (numel(param) ~= nb_params)
-    stk_error('xi and param have incompatible sizes.', 'InvalidArgument');
+if (numel (param) ~= nb_params)
+    stk_error ('xi and param have incompatible sizes.', 'InvalidArgument');
 end
 
 % extract parameters from the "param" vector
-Sigma2 = exp(param(1));
-Nu     = exp(param(2));
-invRho = exp(param(3:end));
+Sigma2 = exp (param(1));
+Nu     = exp (param(2));
+invRho = exp (param(3:end));
 
 % check parameter values
-if ~(Sigma2>0) || ~(Nu>0) || ~all(invRho>0),
-    error('Incorrect parameter value.');
+if ~ (Sigma2 > 0) || ~ (Nu > 0) || ~ all (invRho > 0),
+    error ('Incorrect parameter value.');
 end
 
-invRho = diag(invRho);
+invRho = diag (invRho);
 
 % check if all input arguments are the same as before
 % (or if this is the first call to the function)
-if isempty(x0) || isempty(y0) || isempty(param0) || ...
-        ~isequal({x, y, param}, {x0, y0, param0}) || ~isequal(pairwise, pairwise0)
+if isempty (x0) || isempty (y0) || isempty (param0) ...
+    || ~ isequal ({x, y, param}, {x0, y0, param0}) ...
+    || ~ isequal (pairwise, pairwise0)
     % compute the distance matrix
-    xs = x * invRho; ys = y * invRho;
-    D = stk_dist(xs, ys, pairwise);
+    xs = x * invRho;  ys = y * invRho;
+    D = stk_dist (xs, ys, pairwise);
     % save arguments for the next call
-    x0 = x; y0 = y; param0 = param; pairwise0 = pairwise;
+    x0 = x;  y0 = y;  param0 = param;  pairwise0 = pairwise;
     % recomputation of Kx_cache is required
     compute_Kx_cache = true;
 end
 
 if diff == -1,
     %%% compute the value (not a derivative)
-    k = Sigma2 * stk_sf_matern(Nu, D, -1);
+    k = Sigma2 * stk_sf_matern (Nu, D, -1);
 elseif diff == 1,
     %%% diff wrt param(1) = log(Sigma2)
-    k = Sigma2 * stk_sf_matern(Nu, D, -1);
+    k = Sigma2 * stk_sf_matern (Nu, D, -1);
 elseif diff == 2,
     %%% diff wrt param(2) = log(Nu)
-    k = Nu * Sigma2 * stk_sf_matern(Nu, D, 1);
+    k = Nu * Sigma2 * stk_sf_matern (Nu, D, 1);
 elseif (diff >= 3) && (diff <= nb_params),
     %%% diff wrt param(diff) = - log(invRho(diff-2))
     ind = diff - 2;
-    if compute_Kx_cache || isempty(Kx_cache)
-        Kx_cache  = 1./(D+eps) .* (Sigma2 * stk_sf_matern(Nu, D, 2));
+    if compute_Kx_cache || isempty (Kx_cache)
+        Kx_cache = 1./(D+eps) .* (Sigma2 * stk_sf_matern (Nu, D, 2));
         compute_Kx_cache = false;
     end
-    nx = size(x,1); ny = size(y,1);
+    nx = size (x,1);  ny = size (y,1);
     if pairwise,
-        k = (xs(:, ind) - ys(:, ind)).^2 .* Kx_cache;
+        k = (xs(:, ind) - ys(:, ind)) .^ 2 .* Kx_cache;
     else
-        k = (repmat(xs(:, ind), 1, ny) - repmat(ys(:, ind)', nx, 1)).^2 .* Kx_cache;
+        k = (repmat (xs(:, ind), 1, ny) ...
+            - repmat(ys(:, ind)', nx, 1)) .^ 2 .* Kx_cache;
     end
 else
-    stk_error('Incorrect value for the ''diff'' parameter.', 'InvalidArgument');
+    stk_error ('Incorrect value for the ''diff'' parameter.', ...
+        'InvalidArgument');
 end
 
-end % function
+end % function stk_materncov_aniso
 
 
 %%

@@ -102,4 +102,4 @@ else
     error ('compilation error ?\n');
 end
 
-end
+end % function stk_compile
