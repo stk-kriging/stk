@@ -27,17 +27,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function out = stk_set_root(root)
+function out = stk_set_root (root)
 
-current_root = find_stk_root();
+current_root = find_stk_root ();
 
 if nargin > 0,
         
-    while ~isempty(current_root) && ~strcmp(current_root, root)                
-        warning(sprintf(['Removing another copy of STK from the ' ...
+    while ~ isempty (current_root) && ~ strcmp (current_root, root)                
+        warning (sprintf (['Removing another copy of STK from the ' ...
             'search path.\n    (%s)\n'], current_root)); %#ok<SPWRN>
-        stk_rmpath(current_root);
-        current_root = find_stk_root();
+        stk_rmpath (current_root);
+        current_root = find_stk_root ();
     end
     
     % NOTE: calling stk_rmpath when root and stkRootFolder are identical
@@ -48,59 +48,59 @@ if nargin > 0,
     current_root = root;
     
     % finally, add STK folders to the path
-    stk_addpath(current_root);
+    stk_addpath (current_root);
     
 end
 
 out = current_root;
 
-end % stk_set_root
+end % function stk_set_root
 
 
 %%%%%%%%%%%%%%%%%%
 %%% stk_rmpath %%%
 %%%%%%%%%%%%%%%%%%
 
-function stk_rmpath(root)
+function stk_rmpath (root)
 
-warning('off','MATLAB:rmpath:DirNotFound');
-path = stk_path(root);
-rmpath( path{:} );
-warning('on','MATLAB:rmpath:DirNotFound');
+warning ('off','MATLAB:rmpath:DirNotFound');
+path = stk_path (root);
+rmpath (path{:});
+warning ('on','MATLAB:rmpath:DirNotFound');
 
-end % stk_rmpath
+end % function stk_rmpath
 
 
 %%%%%%%%%%%%%%%%%%%
 %%% stk_addpath %%%
 %%%%%%%%%%%%%%%%%%%
 
-function stk_addpath(root)
+function stk_addpath (root)
 
-path = stk_path(root);
+path = stk_path (root);
 
-for i = 1:length(path),
-    if exist(path{i},'dir')
-        addpath(path{i});
+for i = 1:length (path),
+    if exist (path{i},'dir')
+        addpath (path{i});
     else
-        error('problem in stk_path ?');
+        error ('problem in stk_path ?');
     end
 end
 
-end % stk_addpath
+end % function stk_addpath
 
 
 %%%%%%%%%%%%%%%%%%%%%
 %%% find_stk_root %%%
 %%%%%%%%%%%%%%%%%%%%%
 
-function root = find_stk_root()
+function root = find_stk_root ()
 
 try
     % This will raise an error if STK is not in the search path
-    s = which('stk_test');
+    s = which ('stk_test');
     % Extract root folder
-    n = length(s) - 1 - length(fullfile('misc', 'test', 'stk_test.m'));
+    n = length (s) - 1 - length (fullfile ('misc', 'test', 'stk_test.m'));
     root = s(1:n);
 catch
     root = [];

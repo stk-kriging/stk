@@ -55,7 +55,7 @@ else % heteroscedastic
     K = diag (exp (lognoisevariance));
 end
 
-end % function
+end % function stk_noisecov
 
 
 %!shared ni, lognoisevariance, diff

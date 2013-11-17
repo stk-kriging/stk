@@ -41,17 +41,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = stk_testfun_braninhoo(x)
+function y = stk_testfun_braninhoo (x)
 
-x = double(x);
+x = double (x);
 
 x1 = x(:, 1);
 x2 = x(:, 2);
 
 a = 5.1 / (4 * pi * pi);
 b = 5 / pi;
-c = 10 * (1 - 1/(8*pi));
+c = 10 * (1 - 1 / (8 * pi));
 
-y = (x2 - a*x1.*x1 + b*x1 - 6).^2 + c*cos(x1) + 10;
+y = (x2 - a * x1 .* x1 + b * x1 - 6) .^ 2 + c * cos (x1) + 10;
 
-end % stk_testfun_braninhoo
+end % function stk_testfun_braninhoo

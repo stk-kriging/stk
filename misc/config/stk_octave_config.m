@@ -26,15 +26,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_octave_config()
+function stk_octave_config ()
 
 % We need to check that the GLPK library is installed. This is the case
 % in most recent releases of Octave, but some older releases do not contain
 % GLPK.
 try
-    stk_test_glpk_();
+    stk_test_glpk_ ();
 catch %#ok<CTCH>
-    error('The GLPK library does not seem to be properly installed');
+    error ('The GLPK library does not seem to be properly installed');
 end
 
 % Note: simply checking that __glpk__.oct is present is not good enough,
@@ -42,11 +42,11 @@ end
 % package, which is in charge of issuing an error message...
 
 % Suppress additional help information in Octave
-suppress_verbose_help_message(true);
+suppress_verbose_help_message (true);
 
 % Perhaps to early to use FLTK as a default choice
-% if ismember('fltk', available_graphics_toolkits())
-%    graphics_toolkit('fltk');
+% if ismember ('fltk', available_graphics_toolkits())
+%    graphics_toolkit ('fltk');
 % end
 
 % So, we keep gnuplot as a graphical backend
@@ -69,14 +69,14 @@ if strcmp (v(1:4), '3.2.')
         (stk_get_root, 'misc', 'dist', 'private'));
 end
 
-end
+end % function stk_octave_config
 
 
 %%%%%%%%%%%%%%%%%%%%%%
 %%% stk_test_glpk_ %%%
 %%%%%%%%%%%%%%%%%%%%%%
 
-function stk_test_glpk_()
+function stk_test_glpk_ ()
 
 % minimize c*x
 % under a*x = b, x >= 0
@@ -86,6 +86,6 @@ c = 1;
 
 % solve this difficult problem using GLPK ;-)
 x = glpk (c, a, b);
-assert(x == 1);
+assert (x == 1);
 
-end
+end % function stk_test_glpk_
