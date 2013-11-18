@@ -1,6 +1,6 @@
 % STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).
 %
-% CALL: [K, P] = stk_make_matcov(MODEL, X0)
+% CALL: [K, P] = stk_make_matcov (MODEL, X0)
 %
 %    computes the covariance matrix K and the design matrix P for the model
 %    MODEL at the set of points X0. For a set of N points on a DIM-dimensional
@@ -10,7 +10,7 @@
 %    the linear part of the model; e.g., L = 1 if MODEL.order is zero (ordinary
 %    kriging).
 %
-% CALL: K = stk_make_matcov(MODEL, X0, X1)
+% CALL: K = stk_make_matcov (MODEL, X0, X1)
 %
 %    computes the covariance matrix K for the model MODEL between the sets of
 %    points X0 and X1. Both X0 and X1 are expected to be structures with an 'a'
@@ -20,7 +20,7 @@
 %
 % BE CAREFUL:
 %
-%    stk_make_matcov(MODEL, X0) and stk_makematcov(MODEL, X0, X0) are NOT
+%    stk_make_matcov (MODEL, X0) and stk_makematcov (MODEL, X0, X0) are NOT
 %    equivalent if model.lognoisevariance exists (in the first case, the
 %    noise variance is added on the diagonal of the covariance matrix).
 
@@ -89,39 +89,39 @@ if nargout > 1,
     P = stk_ortho_func (model, x0);
 end
 
-end
+end % function stk_make_matcov
 
 
 %!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
-%! n0 = 20; n1 = 10; d = 4;
-%! model = stk_model('stk_materncov_aniso', d); model.order = 1;
-%! model2 = model; model2.lognoisevariance = log(0.01);
-%! x0 = stk_sampling_randunif(n0, d);
-%! x1 = stk_sampling_randunif(n1, d);
+%! n0 = 20;  n1 = 10;  d = 4;
+%! model = stk_model ('stk_materncov_aniso', d);  model.order = 1;
+%! model2 = model;  model2.lognoisevariance = log(0.01);
+%! x0 = stk_sampling_randunif (n0, d);
+%! x1 = stk_sampling_randunif (n1, d);
 
-%!error [KK, PP] = stk_make_matcov();
-%!error [KK, PP] = stk_make_matcov(model);
-%!test  [Ka, Pa] = stk_make_matcov(model, x0);           % (1)
-%!test  [Kb, Pb] = stk_make_matcov(model, x0, x0);       % (2)
-%!test  [Kc, Pc] = stk_make_matcov(model, x0, x1);       % (3)
-%!error [KK, PP] = stk_make_matcov(model, x0, x1, pi);
+%!error [KK, PP] = stk_make_matcov ();
+%!error [KK, PP] = stk_make_matcov (model);
+%!test  [Ka, Pa] = stk_make_matcov (model, x0);           % (1)
+%!test  [Kb, Pb] = stk_make_matcov (model, x0, x0);       % (2)
+%!test  [Kc, Pc] = stk_make_matcov (model, x0, x1);       % (3)
+%!error [KK, PP] = stk_make_matcov (model, x0, x1, pi);
 
-%!test  assert(isequal(size(Ka), [n0 n0]));
-%!test  assert(isequal(size(Kb), [n0 n0]));
-%!test  assert(isequal(size(Kc), [n0 n1]));
+%!assert (isequal (size (Ka), [n0 n0]));
+%!assert (isequal (size (Kb), [n0 n0]));
+%!assert (isequal (size (Kc), [n0 n1]));
 
-%!test  assert(isequal(size(Pa), [n0 d + 1]));
-%!test  assert(isequal(size(Pb), [n0 d + 1]));
-%!test  assert(isequal(size(Pc), [n0 d + 1]));
+%!assert (isequal (size (Pa), [n0 d + 1]));
+%!assert (isequal (size (Pb), [n0 d + 1]));
+%!assert (isequal (size (Pc), [n0 d + 1]));
 
 %!% In the noiseless case, (1) and (2) should give the same results
-%!test  assert(isequal(Kb, Ka));
+%!assert (isequal (Kb, Ka));
 
 %!% In the noisy case, however...
-%!test  [Ka, Pa] = stk_make_matcov(model2, x0);           % (1')
-%!test  [Kb, Pb] = stk_make_matcov(model2, x0, x0);       % (2')
-%!error assert(isequal(Kb, Ka));
+%!test  [Ka, Pa] = stk_make_matcov (model2, x0);           % (1')
+%!test  [Kb, Pb] = stk_make_matcov (model2, x0, x0);       % (2')
+%!error assert (isequal (Kb, Ka));
 
 %!% The second output depends on x0 only => should be the same for (1)--(3)
-%!test  assert(isequal(Pa, Pb));
-%!test  assert(isequal(Pa, Pc));
+%!assert (isequal (Pa, Pb));
+%!assert (isequal (Pa, Pc));

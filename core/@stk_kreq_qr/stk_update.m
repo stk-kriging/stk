@@ -33,4 +33,4 @@ kreq_updated = stk_kriging_equation (kreq.model, [kreq.xi; x_new]);
 
 % TODO: implement efficient update equations
 
-end % stk_update
+end % function stk_update
