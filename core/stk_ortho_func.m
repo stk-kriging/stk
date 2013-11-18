@@ -1,6 +1,6 @@
 % STK_ORTHO_FUNC computes the design matrix for the linear part of a model.
 %
-% CALL: P = stk_ortho_func(MODEL, X)
+% CALL: P = stk_ortho_func (MODEL, X)
 %
 %    computes the design matrix for the linear part of model MODEL at the set of
 %    evaluation points X. In general (see special case below), X is expected to
@@ -58,7 +58,7 @@ else
     P = stk_ortho_func_ (model.order, x);    
 end
 
-end
+end % function stk_ortho_func
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -95,35 +95,35 @@ switch order
         
 end
 
-end
+end % function stk_ortho_func_
 
 
 %!shared model, x, n, d
 %! n = 15; d = 4;
-%! model = stk_model('stk_materncov_aniso', d);
-%! x = stk_sampling_randunif(n, d);
+%! model = stk_model ('stk_materncov_aniso', d);
+%! x = stk_sampling_randunif (n, d);
 
-%!error P = stk_ortho_func();
-%!error P = stk_ortho_func(model);
-%!test  P = stk_ortho_func(model, x);
-%!error P = stk_ortho_func(model, x, pi);
-
-%!test
-%! model.order = -1; P = stk_ortho_func(model, x);
-%! assert(isequal(size(P), [n, 0]));
+%!error P = stk_ortho_func ();
+%!error P = stk_ortho_func (model);
+%!test  P = stk_ortho_func (model, x);
+%!error P = stk_ortho_func (model, x, pi);
 
 %!test
-%! model.order =  0; P = stk_ortho_func(model, x);
-%! assert(isequal(size(P), [n, 1]));
+%! model.order = -1;  P = stk_ortho_func (model, x);
+%! assert (isequal (size (P), [n, 0]));
 
 %!test
-%! model.order =  1; P = stk_ortho_func(model, x);
-%! assert(isequal(size(P), [n, d + 1]));
+%! model.order =  0;  P = stk_ortho_func (model, x);
+%! assert (isequal (size (P), [n, 1]));
 
 %!test
-%! model.order =  2; P = stk_ortho_func(model, x);
-%! assert(isequal(size(P), [n, 1 + d * (d + 3) / 2]));
+%! model.order =  1;  P = stk_ortho_func (model, x);
+%! assert (isequal (size (P), [n, d + 1]));
+
+%!test
+%! model.order =  2;  P = stk_ortho_func (model, x);
+%! assert (isequal (size (P), [n, 1 + d * (d + 3) / 2]));
 
 %!error
-%! model.order =  3; P = stk_ortho_func(model, x);
+%! model.order =  3;  P = stk_ortho_func (model, x);
 %! % model.order > 2 is not allowed
