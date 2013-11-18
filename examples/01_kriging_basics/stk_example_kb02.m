@@ -94,7 +94,7 @@ model = stk_model ('stk_materncov_iso');
 %
 
 % Initial guess for the parameters of the Matern covariance
-param0 = stk_param_init (model, xi, zi, BOX, NOISY);
+[param0, lnv0] = stk_param_init (model, xi, zi, BOX, NOISY);
 
 % % Alternative: user-defined initial guess for the parameters
 % % (see "help stk_materncov_iso" for more information)
@@ -105,13 +105,15 @@ param0 = stk_param_init (model, xi, zi, BOX, NOISY);
 
 if ~ NOISY,
     % Noiseless case: set a small "regularization" noise
-    model.lognoisevariance = 2 * log (1e-4);
+    % the (log)variance of which is provided by stk_param_init
+    model.lognoisevariance = lnv0;
 else
-    % Otherwise, set the variance of the noise (assumed to be known)
+    % Otherwise, set the variance of the noise
+    % (assumed to be known, not estimated, in this example)
     model.lognoisevariance = 2 * log (NOISESTD);
 end
 
-% Estimate the paramaters (the noise variance is not estimated)
+% Estimate the parameters
 model.param = stk_param_estim (model, xi, zi, param0);
 
 model  %#ok<NOPTS>

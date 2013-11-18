@@ -94,10 +94,6 @@ model = stk_model ('stk_materncov_aniso', DIM);
 % model.order = 1;  %%% UNCOMMENT TO USE A LINEAR TREND %%%
 % model.order = 2;  %%% UNCOMMENT TO USE A "FULL QUADRATIC" TREND %%%
 
-% Good practice: add a small "regularization noise" (nugget)
-MODEL_NOISE_STD = 1e-5;
-model.lognoisevariance = 2 * log (MODEL_NOISE_STD);
-
 
 %% EVALUATE THE FUNCTION ON A "MAXIMIN LHS" DESIGN
 
@@ -116,16 +112,18 @@ hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
 
 %% ESTIMATE THE PARAMETERS OF THE COVARIANCE FUNCTION
 
-% Initial guess for the parameters of the Matern covariance
-param0 = stk_param_init (model, xi, zi, BOX);
+% Compute an initial guess for the parameters of the Matern covariance (param0)
+% and a reasonable log-variance for a small "regularization noise"
+[param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
 
 % % Alternative: user-defined initial guess for the parameters of
 % % the Matern covariance (see "help stk_materncov_aniso" for more information)
-% SIGMA2 = var(zi);
+% SIGMA2 = var (zi);
 % NU     = 2;
 % RHO1   = (BOX(2,1) - BOX(1,1)) / 10;
 % RHO2   = (BOX(2,2) - BOX(1,2)) / 10;
-% param0 = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
+% param0 = log ([SIGMA2; NU; 1/RHO1; 1/RHO2]);
+% model.lognoisevariance = 2 * log (1e-5);
 
 model.param = stk_param_estim (model, xi, zi, param0);
 
