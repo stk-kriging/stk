@@ -9,8 +9,7 @@
 % default choice can be overridden by means of the model.order property.
 %
 % The function is sampled on a space-filling Latin Hypercube design, and the
-% data is assumed to be noiseless (change TRUE_NOISE_STD to a positive value in
-% order to run the example with noisy data).
+% data is assumed to be noiseless.
 
 % Copyright Notice
 %
@@ -99,12 +98,6 @@ model = stk_model ('stk_materncov_aniso', DIM);
 
 xi = stk_sampling_maximinlhs (NI, DIM, BOX);
 zi = stk_feval (f, xi);
-
-% Simulate noisy evaluations (optional)
-TRUE_NOISE_STD = 0.0;
-if TRUE_NOISE_STD > 0
-    zi = zi + randn (size (zi)) * TRUE_NOISE_STD;
-end
 
 % Add the design points to the first plot
 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
