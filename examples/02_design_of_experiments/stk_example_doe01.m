@@ -43,30 +43,32 @@ N   = 49;          % size of the space-filling designs
 
 stk_figure (sprintf ('stk_exampke_doe01 - Several designs with N = %d', N));
 
+PLOT_OPTIONS = {'ko', 'MarkerSize', 4, 'MarkerFaceColor', 'k'};
+
 
 %% Regular grid
 
 x = stk_sampling_regulargrid (N, DIM, BOX);
-stk_subplot (2, 2, 1);  plot (x(:, 1), x(:, 2), '*');
+stk_subplot (2, 2, 1);  plot (x(:, 1), x(:, 2), PLOT_OPTIONS{:});
 stk_title ('a) Regular grid');
 
 
 %% "Maximin" Latin Hypercube samples
 
 x = stk_sampling_maximinlhs (N, DIM, BOX);
-stk_subplot (2, 2, 2);  plot (x(:, 1), x(:, 2), '*');
+stk_subplot (2, 2, 2);  plot (x(:, 1), x(:, 2), PLOT_OPTIONS{:});
 stk_title ('b) "Maximin" LHS');
 
 
 %% Halton sequence with RR2 scrambling
 
 x = stk_sampling_halton_rr2 (N, DIM, BOX);
-stk_subplot (2, 2, 3);  plot (x(:, 1), x(:, 2), '*');
+stk_subplot (2, 2, 3);  plot (x(:, 1), x(:, 2), PLOT_OPTIONS{:});
 stk_title ('c) Halton-RR2');
 
 
 %% Random (uniform) sampling
 
 x = stk_sampling_randunif (N, DIM, BOX);
-stk_subplot (2, 2, 4);  plot (x(:, 1), x(:, 2), '*');
+stk_subplot (2, 2, 4);  plot (x(:, 1), x(:, 2), PLOT_OPTIONS{:});
 stk_title ('d) Random');
