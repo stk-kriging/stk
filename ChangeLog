@@ -1,5 +1,9 @@
 2013-11-19  Julien Bect  <julien.bect@supelec.fr>
 
+	Change plot options in example 'doe01'.
+
+	* examples/02_design_of_experiments/stk_example_doe01.m: modified
+
 	Add a smoke test of all examples.
 
 	* misc/test/stk_runexamples.m: modified
