@@ -81,3 +81,6 @@ for i = 1:length(s),
 end
 
 end % function stk_runexamples_recurs_
+
+
+%!test stk_runexamples
