@@ -1,3 +1,9 @@
+2013-11-19  Julien Bect  <julien.bect@supelec.fr>
+
+	Add a smoke test of all examples.
+
+	* misc/test/stk_runexamples.m: modified
+
 2013-11-18  Julien Bect  <julien.bect@supelec.fr>
 
 	Remove TRUE_NOISE_STD in example 'kb03'.
