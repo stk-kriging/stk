@@ -1,3 +1,9 @@
+2013-11-22  Julien Bect  <julien.bect@supelec.fr>
+
+	Add a new example.
+
+	* examples/01_kriging_basics/stk_example_kb07.m: new script
+
 2013-11-19  Julien Bect  <julien.bect@supelec.fr>
 
 	Change plot options in example 'doe01'.
