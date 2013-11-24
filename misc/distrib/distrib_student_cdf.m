@@ -88,7 +88,7 @@ end % function distrib_student_cdf
 %!         0.50;                   ... % tcdf (( 0 - 0)/10, 2)
 %!         0.75,                   ... % tcdf (( 1 - 0)/1,  1)
 %!         5.3526728079292996e-01  ... % tcdf (( 1 - 0)/10, 2)
-%!        ], eps))
+%!        ], 4 * eps))
 
 %!test
 %! [p, q] = distrib_student_cdf (1e10, 2);
