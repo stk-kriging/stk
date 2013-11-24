@@ -1,5 +1,9 @@
 2013-11-24  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a typo (missing parenthesis) in stk_rescale.
+
+	* utils/arrays/generic/stk_rescale.m: modified
+
 	Fix a copy-paste typo in stk_path.
 
 	* misc/config/stk_path.m: modified
