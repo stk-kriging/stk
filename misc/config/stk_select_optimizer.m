@@ -1,16 +1,15 @@
-% STK_SELECT_OPTIMIZE selects an optimizer for stk_param_estim()
+% STK_SELECT_OPTIMIZER selects an optimizer for stk_param_estim()
 %
-% FIXME: add documentation
+% CALL: OPTIM_NUM = stk_select_optimizer (BOUNDS_AVAILABLE)
 %
-% Returns
-%   1 for Octave / sqp
-%   2 for Matlab / fminsearch
-%   3 for Matlab / fmincon
-%
+%   returns a number that indicates which optimizer STK should use for
+%   box-constrained (if BOUNDS_AVAILABLE is true or absent) or unconstrained
+%   optimization in its parameter estimation procedure. The result OPTIM_NUM is
+%   equal to 1 for Octave/sqp, 2 for Matlab/fminsearch, or 3 for Matlab/fmincon.
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -47,7 +46,7 @@ if nargin == 0, % invocation with no arguments (typically, in stk_init)
 else % invocation with at least one argument (typically, in stk_param_estim)
     
     if nargin < 2, display = false; end  % default: don't display anything
-    force_recheck = false;                % don't recheck which optimizer to use
+    force_recheck = false;               % don't recheck which optimizer to use
     
 end
 

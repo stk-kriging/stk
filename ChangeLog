@@ -1,3 +1,9 @@
+2013-11-24  Julien Bect  <julien.bect@supelec.fr>
+
+	Add documentation for stk_select_optimizer.
+
+	* misc/config/stk_select_optimizer.m: modified
+
 2013-11-22  Julien Bect  <julien.bect@supelec.fr>
 
 	Add a new example.
