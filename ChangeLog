@@ -1,5 +1,9 @@
 2013-11-24  Julien Bect  <julien.bect@supelec.fr>
 
+	Provide a replacement for graphics_toolkit in Matlab.
+
+	* misc/mole/matlab/graphics_toolkit.m: modified
+
 	Remove the legend in example 'misc02' if using gnuplot.
 
 	* examples/03_miscellaneous/stk_example_misc02.m: modified
