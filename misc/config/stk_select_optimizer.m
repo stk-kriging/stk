@@ -53,17 +53,9 @@ end
 % select an appropriate optimizer
 if isempty (optim_num_con) || isempty (optim_num_unc) || force_recheck,
     if isoctave,
-        % We assume that the 'optim' package is installed, loaded, and
-        % provides the spq() function. But we check anyway (better safe
-        % than sorry) and raise an error if sqp() is nowhere to be found.
-        if exist ('sqp','file') == 2,
-            optim_num_con = 1;
-            optim_num_unc = 1;
-        else
-            disp ('Function sqp not found !!!');
-            error (['Please check that the optim package ', ...
-                'is properly installed.']);
-        end
+        % Use sqp for both unconstrained and box-constrained optimization
+        optim_num_con = 1;
+        optim_num_unc = 1;
     else
         % check if Matlab's fmincon is available
         optim_num_con = 2 + stk_is_fmincon_available();

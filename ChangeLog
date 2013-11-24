@@ -1,5 +1,9 @@
 2013-11-24  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix stk_select_optimizer: sqp is in Octave core.
+
+	* misc/config/stk_select_optimizer.m: modified
+
 	Add documentation for stk_select_optimizer.
 
 	* misc/config/stk_select_optimizer.m: modified
