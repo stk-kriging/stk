@@ -1,5 +1,9 @@
 2013-11-24  Julien Bect  <julien.bect@supelec.fr>
 
+	Remove the legend in example 'misc02' if using gnuplot.
+
+	* examples/03_miscellaneous/stk_example_misc02.m: modified
+
 	Choose a slightly less singular example for 'doe03'.
 
 	* examples/02_design_of_experiments/stk_example_doe03.m: modified
