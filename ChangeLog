@@ -1,5 +1,9 @@
 2013-11-24  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a copy-paste typo in stk_path.
+
+	* misc/config/stk_path.m: modified
+
 	Increase test tolerance.
 
 	* misc/distrib/distrib_student_cdf.m: modified
