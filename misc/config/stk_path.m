@@ -69,7 +69,7 @@ path = [path {...
     fullfile(root, 'examples', 'test_functions'          ) }];
 
 % MOLE: Matlab/Octave common part
-path = [path fullfile(misc, 'mole', 'common')];
+path = [path {fullfile(misc, 'mole', 'common')}];
 
 if ~isoctave,
     % MOLE: Matlab-specific part
