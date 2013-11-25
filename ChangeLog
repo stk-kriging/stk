@@ -1,5 +1,9 @@
 2013-11-25  Julien Bect  <julien.bect@supelec.fr>
 
+	Use a more conservative form of subplot (without options).
+
+	* misc/plot/stk_subplot.m: modified
+
 	Fix a bug in stk_path.
 
 	* misc/config/stk_path.m: modified
