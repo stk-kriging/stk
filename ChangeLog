@@ -1,3 +1,11 @@
+2013-11-28  Julien Bect  <julien.bect@supelec.fr>
+
+	Add a new MOLE function: graphicstoolkit.
+
+	* misc/mole/matlab/graphics_toolkit.m: removed
+	* misc/mole/common/graphicstoolkit.m: new function
+	* examples/03_miscellaneous/stk_example_misc02: modified
+
 2013-11-25  Julien Bect  <julien.bect@supelec.fr>
 
 	Use a more conservative form of subplot (without options).

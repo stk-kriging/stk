@@ -126,7 +126,7 @@ for j = 1:3,
     
 end
 
-if ~ strcmp (graphics_toolkit, 'gnuplot')
+if ~ strcmp (graphicstoolkit, 'octave-gnuplot')
     h1 = legend ('MAP estimates', 'REML estimate', 'mode of the prior');
     h2 = stk_subplot (2, 2, 4);  axis off;
     set (h1, 'Position', get (h2, 'Position'));
