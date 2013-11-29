@@ -1,8 +1,20 @@
-2013-11-28  Julien Bect  <julien.bect@supelec.fr>
+2013-11-29  Julien Bect  <julien.bect@supelec.fr>
+
+	Move octave_quantile to the MOLE.
+
+	* misc/stats: removed
+	* misc/stats/octave_quantile.m: removed
+	* misc/mole/matlab/stats: new directory
+	* misc/mole/matlab/stats/quantile.m: formerly known as
+	misc/stats/octave_quantile
+	* utils/arrays/@stk_dataframe/quantile.m: modified
+	* misc/config/stk_path.m: modified
 
 	Make stk_runexamples fail if at least one example failed.
 
 	* trunk/misc/test/stk_runexamples.m: modified
+
+2013-11-28  Julien Bect  <julien.bect@supelec.fr>
 
 	Add a new MOLE function: graphicstoolkit.
 
