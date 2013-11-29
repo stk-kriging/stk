@@ -1,5 +1,9 @@
 2013-11-28  Julien Bect  <julien.bect@supelec.fr>
 
+	Make stk_runexamples fail if at least one example failed.
+
+	* trunk/misc/test/stk_runexamples.m: modified
+
 	Add a new MOLE function: graphicstoolkit.
 
 	* misc/mole/matlab/graphics_toolkit.m: removed
