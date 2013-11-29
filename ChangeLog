@@ -1,5 +1,9 @@
 2013-11-29  Julien Bect  <julien.bect@supelec.fr>
 
+	Add a new function to the MOLE: corr.
+
+	* misc/mole/matlab/stats/corr.m: new function
+
 	Move octave_quantile to the MOLE.
 
 	* misc/stats: removed
