@@ -49,6 +49,10 @@
 
 function c = corr (x, y)
 
+% Note: the original Octave code has been rewritten to avoid calling cov, since
+% there is a long-standing incompatiblity between Matlab's cov and Octave's cov
+% (see https://savannah.gnu.org/bugs/?40751)
+
 n = size (x, 1);
 
 x = x - repmat (mean (x), n, 1);
