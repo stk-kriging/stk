@@ -74,7 +74,9 @@ if ~ isoctave,
     % MOLE: Matlab-specific part
     path = [path {fullfile(misc, 'mole', 'matlab')}];
     % replacement functions for people that do not have the Statistics toolbox
-    path = [path {fullfile(misc, 'mole', 'matlab', 'stats')}];
+    if isempty (ver ('stats'))
+        path = [path {fullfile(misc, 'mole', 'matlab', 'stats')}];
+    end
 else
     % MOLE: Octave-specific part
     path = [path {fullfile(misc, 'mole', 'octave')}];
