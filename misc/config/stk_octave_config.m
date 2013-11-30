@@ -64,7 +64,7 @@ end
 v = version;
 if strcmp (v(1:4), '3.2.')
     addpath (fullfile ...
-        (stk_get_root, 'utils', '@stk_dataframe', 'private'));
+        (stk_get_root, 'utils', 'arrays', '@stk_dataframe', 'private'));
     addpath (fullfile ...
         (stk_get_root, 'misc', 'dist', 'private'));
 end

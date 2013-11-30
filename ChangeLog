@@ -1,5 +1,9 @@
 2013-11-30  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a bug in stk_octave_config.
+
+	* misc/config/stk_octave_config.m: modified
+
 	Reorganize the MOLE for the sake of flexibility.
 
 	* misc/mole/corr: new folder
