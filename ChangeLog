@@ -1,3 +1,16 @@
+2013-11-30  Julien Bect  <julien.bect@supelec.fr>
+
+	Reorganize the MOLE for the sake of flexibility.
+
+	* misc/mole/corr: new folder
+	* misc/mole/corr/corr.m: moved from misc/mole/matlab/stats
+	* misc/mole/quantile: new folder
+	* misc/mole/quantile/quantile.m: moved from misc/mole/matlab/stat
+	* misc/mole/matlab/stats: removed
+	* misc/mole/matlab/stats/quantile.m: moved to misc/mole/quantile
+	* misc/mole/matlab/stats/corr.m: moved to misc/mole/corr
+	* misc/config/stk_path.m: modified
+
 2013-11-29  Julien Bect  <julien.bect@supelec.fr>
 
 	Add a new function to the MOLE: corr.
