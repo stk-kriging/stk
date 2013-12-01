@@ -1,3 +1,11 @@
+2013-12-01  Julien Bect  <julien.bect@supelec.fr>
+
+	Overload isequal for Octave 3.2.4 support.
+
+	* utils/arrays/@stk_dataframe/isequal.m: new function
+	* core/@stk_kreq_qr/isequal.m: new function
+	* etc/CODING_GUIDELINES: modified
+
 2013-11-30  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a bug in stk_octave_config.
