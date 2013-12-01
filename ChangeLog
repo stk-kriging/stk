@@ -1,5 +1,14 @@
 2013-12-01  Julien Bect  <julien.bect@supelec.fr>
 
+	Reorganize the MOLE. Add linsolve only if necessary.
+
+	* misc/mole/octave: removed
+	* misc/mole/octave/linsolve.m: moved to misc/mole/linsolve
+	* misc/mole/linsolve: new folder
+	* misc/mole/linsolve/linsvoled.m: moved from misc/mole/octave
+	* misc/config/stk_path.m: modified
+	* misc/config/stk_set_root.m: modified
+
 	Overload isequal for Octave 3.2.4 support.
 
 	* utils/arrays/@stk_dataframe/isequal.m: new function
