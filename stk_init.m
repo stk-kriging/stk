@@ -116,11 +116,16 @@ clear here STK_ROOT pct_found fmincon_found octave_in_use s ans
 
 disp ('=====================================================================');
 disp ('                                                                     ');
-disp ('Use the ticket manager on Sourceforge:                               ');
+disp ('Use the "help" mailing-list:                                         ');
+disp ('                                                                     ');
+disp ('   kriging-help@lists.sourceforge.net                                ');
+disp ('   https://sourceforge.net/p/kriging/mailman                         ');
+disp ('                                                                     ');
+disp ('to ask for help on STK, and the ticket manager:                      ');
 disp ('                                                                     ');
 disp ('   https://sourceforge.net/p/kriging/tickets                         ');
 disp ('                                                                     ');
-disp ('to report bugs or ask for new features.                              ');
+disp ('to report bugs or ask for new features.                              ');    
 disp ('                                                                     ');
 disp ('=====================================================================');
 disp ('                                                                     ');

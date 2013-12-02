@@ -136,7 +136,12 @@ D. R. Jones, M. Schonlau, and J. William.  Efficient global optimization
 
 o Ways to get help, report bugs, ask for new features...
 
-    Use the ticket manager on Sourceforge:
+    Use the "help" mailing-list:
+
+       kriging-help@lists.sourceforge.net
+       https://sourceforge.net/p/kriging/mailman
+
+    to ask for help on STK, and the ticket manager:
 
        https://sourceforge.net/p/kriging/tickets
 
