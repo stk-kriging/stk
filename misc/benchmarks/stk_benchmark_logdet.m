@@ -48,7 +48,7 @@ for k = 1:L
     fprintf('Method %d/%d...', k, L);
     tic;
     for i = 1:NREP,
-        kreq = stk_kriging_equation (model, x);
+        kreq = stk_kreq_qr (model, x);
         logdet = get (kreq, propname{k});
     end
     t(k) = toc / NREP;
