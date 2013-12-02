@@ -29,8 +29,9 @@
 function kreq_updated = stk_update (kreq, x_new)
 
 % Poor man's update: we recompute EVERYTHING
-kreq_updated = stk_kriging_equation (kreq.model, [kreq.xi; x_new]);
+kreq_updated = stk_kreq_qr (kreq.model, [kreq.xi; x_new]);
 
+% FIXME: deal with the right-hand side also
 % TODO: implement efficient update equations
 
 end % function stk_update
