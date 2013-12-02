@@ -1,3 +1,10 @@
+2013-12-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Advertise the ticket manager on Sourceforge.
+
+	* stk_init.m: modified
+	* README: modified
+
 2013-12-01  Julien Bect  <julien.bect@supelec.fr>
 
 	Reorganize the MOLE. Add linsolve only if necessary.
