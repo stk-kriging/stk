@@ -112,3 +112,15 @@ fprintf ('\n');
 
 clear here STK_ROOT pct_found fmincon_found octave_in_use s ans
 
+%=== Ways to get help, report bugs, ask for new features...
+
+disp ('=====================================================================');
+disp ('                                                                     ');
+disp ('Use the ticket manager on Sourceforge:                               ');
+disp ('                                                                     ');
+disp ('   https://sourceforge.net/p/kriging/tickets                         ');
+disp ('                                                                     ');
+disp ('to report bugs or ask for new features.                              ');
+disp ('                                                                     ');
+disp ('=====================================================================');
+disp ('                                                                     ');
