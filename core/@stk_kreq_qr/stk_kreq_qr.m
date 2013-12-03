@@ -27,15 +27,13 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function kreq = stk_kreq_qr (model, xi, xt)
-        
+
 [Kii, Pi] = stk_make_matcov (model, xi);
 [n, r] = size (Pi);
 
 % kriging matrix (left-hand side of the kriging equation)
-LS =                              ...
-    [[ Kii, Pi                 ]; ...
-    [  Pi', zeros(size(Pi, 2)) ]];
-        
+LS = [[Kii, Pi]; [Pi', zeros(r)]];
+
 % orthogonal-triangular decomposition
 [Q, R] = qr (LS);
 
