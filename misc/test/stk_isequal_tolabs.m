@@ -99,7 +99,8 @@ elseif iscell (a) && iscell (b)
     
     res = true;
     
-elseif isa (a, 'stk_dataframe') && (strcmp (class (a), class (b)))
+elseif (isa (a, 'stk_dataframe') || isa (a, 'stk_kreq_qr')) ...
+    && (strcmp (class (a), class (b)))
     
     res = stk_isequal_tolabs (struct (a), struct (b), tolabs);
     

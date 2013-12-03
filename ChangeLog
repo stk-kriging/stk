@@ -1,3 +1,11 @@
+2013-12-03  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix @stk_kreq_qr/stk_update. Add tests.
+
+	* core/@stk_kreq_qr/stk_kreq_qr.m: modified
+	* core/@stk_kreq_qr/stk_update.m: modified
+	* misc/test/stk_isequal_tolabs.m: modified
+
 2013-12-02  Julien Bect  <julien.bect@supelec.fr>
 
 	Remove residual occurences of stk_kriging_equations.

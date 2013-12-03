@@ -26,12 +26,49 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq_updated = stk_update (kreq, x_new)
+function kreq = stk_update (kreq, Kjj, Kji, Pj, Ktj)
 
-% Poor man's update: we recompute EVERYTHING
-kreq_updated = stk_kreq_qr (kreq.model, [kreq.xi; x_new]);
+% Poor man's update...
+% TODO: implement efficient update equations (use qrinsert)
 
-% FIXME: deal with the right-hand side also
-% TODO: implement efficient update equations
+LS  = kreq.LS_Q * kreq.LS_R;
+Kii = LS(1:kreq.n, 1:kreq.n);
+Pi  = LS(1:kreq.n, (kreq.n + 1):end);
+
+LS = [[Kii Kji' Pi]; [Kji Kjj Pj]; [Pi' Pj' zeros(kreq.r)]];
+[kreq.LS_Q, kreq.LS_R] = qr (LS);
+
+if ~ isempty (kreq.RS)
+    Kti = kreq.RS(1:kreq.n, :)';
+    Pt  = kreq.RS((kreq.n + 1):end, :)';
+    kreq = stk_set_righthandside (kreq, [Kti Ktj], Pt);
+elseif nargin > 4
+    stk_error ('Too many input arguments: no RS to update', 'TooManyInputArgs');
+end
+
+kreq.n = kreq.n + size (Kjj, 1);
 
 end % function stk_update
+
+
+%!shared model x y
+%! model = stk_model ('stk_materncov32_iso', 1);
+%! x = [1.2; 0.3; -1.9];
+%! y = 0.0;
+
+%!test
+%! kreqA = stk_kreq_qr (model, x);
+%! [Kii, Pi] = stk_make_matcov (model, x);
+%! kreqB = stk_kreq_qr (model, x(1));
+%! kreqB = stk_update (kreqB, Kii(2, 2), Kii(2, 1), Pi(2));
+%! kreqB = stk_update (kreqB, Kii(3, 3), Kii(3, [1 2]), Pi(3));
+%! assert (stk_isequal_tolabs (kreqA, kreqB, 3 * eps))
+
+%!test
+%! kreqA = stk_kreq_qr (model, x, y);
+%! [Kii, Pi] = stk_make_matcov (model, x);
+%! [Kti, Pt] = stk_make_matcov (model, y, x);
+%! kreqB = stk_kreq_qr (model, x(1), y);
+%! kreqB = stk_update (kreqB, Kii(2, 2), Kii(2, 1), Pi(2), Kti(2));
+%! kreqB = stk_update (kreqB, Kii(3, 3), Kii(3, [1 2]), Pi(3), Kti(3));
+%! assert (stk_isequal_tolabs (kreqA, kreqB, 3 * eps))
