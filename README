@@ -118,9 +118,9 @@ o Content
        to  deal with generalized  covariances and  to take  into account
        prior knowledge about the parameters of the covariance.
 
-    c. The third part consists of prediction procedures. In version 1.0,
-       the STK  has been  optimized to deal  with moderately  large data
-       sets.
+    c. The third part consists of prediction procedures.  In its current
+       form,  the STK has been optimized  to deal with  moderately large
+       data sets.
 
 References
 
