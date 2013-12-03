@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of corr</title>
+  <meta name="keywords" content="corr">
+  <meta name="description" content="CORR ...">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="#">mole</a> &gt; <a href="index.html">corr</a> &gt; corr.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/mole/corr&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>corr
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>CORR ...</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function c = corr (x, y) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> CORR ...</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% CORR ...</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author: Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%    This code is looesely based on Octave 3.7.7+'s quantile.m., where</span>
+0010 <span class="comment">%    the original copyright notice was:</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%       ## Copyright (C) 1996-2013 John W. Eaton</span>
+0013 <span class="comment">%       ##</span>
+0014 <span class="comment">%       ## This file is part of Octave.</span>
+0015 <span class="comment">%       ##</span>
+0016 <span class="comment">%       ## Octave is free software; you can redistribute it and/or modify it</span>
+0017 <span class="comment">%       ## under the terms of the GNU General Public License as published by</span>
+0018 <span class="comment">%       ## the Free Software Foundation; either version 3 of the License, or</span>
+0019 <span class="comment">%       ## (at your option) any later version.</span>
+0020 <span class="comment">%       ##</span>
+0021 <span class="comment">%       ## Octave is distributed in the hope that it will be useful, but</span>
+0022 <span class="comment">%       ## WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0023 <span class="comment">%       ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+0024 <span class="comment">%       ## General Public License for more details.</span>
+0025 <span class="comment">%       ##</span>
+0026 <span class="comment">%       ## You should have received a copy of the GNU General Public License</span>
+0027 <span class="comment">%       ## along with Octave; see the file COPYING.  If not, see</span>
+0028 <span class="comment">%       ## &lt;http://www.gnu.org/licenses/&gt;.</span>
+0029 
+0030 <span class="comment">% Copying Permission Statement</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%    This file is part of</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0035 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0038 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0039 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0040 <span class="comment">%    option) any later version.</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0043 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0044 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0045 <span class="comment">%    License for more details.</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0048 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0049 
+0050 <a name="_sub0" href="#_subfunctions" class="code">function c = corr (x, y)</a>
+0051 
+0052 <span class="comment">% Note: the original Octave code has been rewritten to avoid calling cov, since</span>
+0053 <span class="comment">% there is a long-standing incompatiblity between Matlab's cov and Octave's cov</span>
+0054 <span class="comment">% (see https://savannah.gnu.org/bugs/?40751)</span>
+0055 
+0056 n = size (x, 1);
+0057 
+0058 x = x - repmat (mean (x), n, 1);
+0059 sx = std (x, 1);
+0060 sx (sx == 0) = nan;
+0061 
+0062 <span class="keyword">if</span> nargin &lt; 2,
+0063     y = x;
+0064     sy = sx;
+0065 <span class="keyword">else</span>
+0066     assert (size (y, 1) == n);
+0067     y = y - repmat (mean (y), n, 1);
+0068     sy = std (y, 1)
+0069     sy (sy == 0) = nan;
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="comment">% Special case, scalar is always 100% correlated with itself</span>
+0073 <span class="keyword">if</span> isscalar (x)
+0074     <span class="keyword">if</span> isa (x, <span class="string">'single'</span>) &amp;&amp; isa (y, <span class="string">'single'</span>)
+0075         c = single (1.0);
+0076     <span class="keyword">else</span>
+0077         c = 1.0;
+0078     <span class="keyword">end</span>
+0079     <span class="keyword">return</span>;
+0080 <span class="keyword">end</span>
+0081 
+0082 c = x' * y;
+0083 s = sx' * sy;
+0084 c = c ./ (n * s);
+0085 
+0086 <span class="keyword">end</span> <span class="comment">% function corr</span>
+0087 
+0088 
+0089 
+0090 
+0091 
+0092 
+0093 
+0094 
+0095 
+0096 
+0097 
+0098 
+0099 
+0100 
+0101 
+0102 
+0103 
+0104 
+0105 
+0106 
+0107 
+0108 
+0109 
+0110 
+0111 
+0112 
+0113 
+0114 <span class="comment">%% Test input validation</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

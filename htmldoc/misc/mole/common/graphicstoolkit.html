@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of graphicstoolkit</title>
+  <meta name="keywords" content="graphicstoolkit">
+  <meta name="description" content="GRAPHICSTOOLKIT indicates which toolkit is assigned to new figures.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="#">mole</a> &gt; <a href="index.html">common</a> &gt; graphicstoolkit.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/mole/common&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>graphicstoolkit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>GRAPHICSTOOLKIT indicates which toolkit is assigned to new figures.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function name = graphicstoolkit () </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> GRAPHICSTOOLKIT indicates which toolkit is assigned to new figures.
+
+ CALL: NAME = graphicstoolkit ()
+
+   returns:
+    
+    * octave-XXX    if Octave is running with XXX as its default toolkit,
+    * matlab-nojvm  if Matlab is running without the Java Virtual Machine,
+    * matlab-jvm    if Matlab is running with the Java Virtual Machine,</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+<li><a href="isoctave.html" class="code" title="function octave_in_use = isoctave">isoctave</a>	ISOCTAVE returns true if Octave is used as an interpreter, false otherwise</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% GRAPHICSTOOLKIT indicates which toolkit is assigned to new figures.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: NAME = graphicstoolkit ()</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   returns:</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    * octave-XXX    if Octave is running with XXX as its default toolkit,</span>
+0008 <span class="comment">%    * matlab-nojvm  if Matlab is running without the Java Virtual Machine,</span>
+0009 <span class="comment">%    * matlab-jvm    if Matlab is running with the Java Virtual Machine,</span>
+0010 
+0011 <span class="comment">% Copyright Notice</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0016 
+0017 <span class="comment">% Copying Permission Statement</span>
+0018 <span class="comment">%</span>
+0019 <span class="comment">%    This file is part of</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0022 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0025 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0026 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0027 <span class="comment">%    option) any later version.</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0030 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0031 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0032 <span class="comment">%    License for more details.</span>
+0033 <span class="comment">%</span>
+0034 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0035 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0036 
+0037 <a name="_sub0" href="#_subfunctions" class="code">function name = graphicstoolkit ()</a>
+0038 
+0039 <span class="keyword">if</span> <a href="isoctave.html" class="code" title="function octave_in_use = isoctave">isoctave</a>,
+0040 
+0041     <span class="keyword">try</span>
+0042         <span class="comment">% This should work on older versions of Octave, e.g., 3.2.4</span>
+0043         <span class="comment">% (there was no notion of a 'toolkit' at the time, but if gnuplot</span>
+0044         <span class="comment">%  is reported as the backend, then it is also the toolkit)</span>
+0045         b = get(0, <span class="string">'defaultfigure__backend__'</span>);
+0046         <span class="keyword">if</span> strcmp (b, <span class="string">'gnuplot'</span>)
+0047             name = <span class="string">'octave-gnuplot'</span>;
+0048         <span class="keyword">else</span>
+0049             name = <span class="string">'octave-unknown'</span>;
+0050         <span class="keyword">end</span>
+0051     <span class="keyword">catch</span>
+0052         <span class="keyword">try</span>
+0053             <span class="comment">% This should work in modern versions of Octave, e.g., 3.6.2</span>
+0054             <span class="comment">% (when exactly did the transition occur ?)</span>
+0055             name = [<span class="string">'octave-'</span> graphics_toolkit];
+0056         <span class="keyword">catch</span>
+0057             error (<span class="string">'Unable to determine which toolkit is being used.'</span>);
+0058         <span class="keyword">end</span>
+0059     <span class="keyword">end</span>
+0060 
+0061 <span class="keyword">else</span> <span class="comment">% Matlab</span>
+0062 
+0063     <span class="keyword">try</span>
+0064         assert (usejava (<span class="string">'jvm'</span>));
+0065         name = <span class="string">'matlab-jvm'</span>;
+0066     <span class="keyword">catch</span>
+0067         name = <span class="string">'matlab-nojvm'</span>;
+0068     <span class="keyword">end</span>
+0069 
+0070 <span class="keyword">end</span>
+0071 
+0072 <span class="keyword">end</span> <span class="comment">% function graphicstoolkit</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

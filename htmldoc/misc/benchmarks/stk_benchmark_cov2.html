@@ -1,0 +1,177 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_benchmark_cov2</title>
+  <meta name="keywords" content="stk_benchmark_cov2">
+  <meta name="description" content="STK_BENCHMARK_COV2">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">benchmarks</a> &gt; stk_benchmark_cov2.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/benchmarks&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_benchmark_cov2
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_BENCHMARK_COV2</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_BENCHMARK_COV2</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_BENCHMARK_COV2</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 
+0009 <span class="comment">% Copying Permission Statement</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    This file is part of</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0014 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0017 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0018 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0019 <span class="comment">%    option) any later version.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0022 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0023 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0024 <span class="comment">%    License for more details.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0027 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0028 
+0029 <span class="comment">%% Benchmark parameters</span>
+0030 
+0031 DIM  = 1;
+0032 
+0033 N_START = 50;
+0034 N_MAX   = 2000;
+0035 
+0036 covnames = { <span class="keyword">...</span>
+0037     <span class="string">'stk_materncov32_iso'</span>, <span class="keyword">...</span>
+0038     <span class="string">'stk_materncov52_iso'</span>, <span class="keyword">...</span>
+0039     <span class="string">'stk_materncov_iso'</span> };
+0040 
+0041 result = struct(<span class="string">'covname'</span>, [], <span class="string">'t'</span>, [], <span class="string">'n'</span>, []);
+0042 
+0043 stk_figure (<span class="string">'stk_benchmark_cov2'</span>);
+0044 
+0045 
+0046 <span class="comment">%% Main loop</span>
+0047 
+0048 <span class="keyword">for</span> j = 1:4,
+0049     
+0050     <span class="keyword">switch</span> j
+0051         <span class="keyword">case</span> 1
+0052             disp(<span class="string">'Using stk_parallel_engine_none...'</span>);
+0053             stk_parallel_stop();
+0054         <span class="keyword">case</span> 2
+0055             disp(<span class="string">'parallelization on (if available) / msfb = Inf'</span>);
+0056             stk_parallel_start();
+0057             M = stk_options_get(<span class="string">'stk_sf_matern'</span>, <span class="string">'min_size_for_parallelization'</span>);
+0058             stk_options_set(<span class="string">'stk_sf_matern'</span>, <span class="string">'min_size_for_parallelization'</span>, +Inf);
+0059         <span class="keyword">case</span> 3
+0060             disp(<span class="string">'parallelization on (if available) / msfb = 1'</span>);
+0061             stk_options_set(<span class="string">'stk_sf_matern'</span>, <span class="string">'min_size_for_parallelization'</span>, 1);
+0062         <span class="keyword">case</span> 4
+0063             fprintf(<span class="string">'parallelization on (if available) / msfb = %d (default)'</span>, M);
+0064             stk_options_set(<span class="string">'stk_sf_matern'</span>, <span class="string">'min_size_for_parallelization'</span>, M);
+0065     <span class="keyword">end</span>
+0066     
+0067     <span class="keyword">for</span> k = 1:length(covnames), <span class="comment">% loop over covariance functions</span>
+0068         
+0069         result(j, k).covname = covnames{k};
+0070         model = stk_model(covnames{k}, DIM);
+0071         
+0072         REP = 5000;
+0073         n   = N_START;
+0074         
+0075         <span class="keyword">while</span> n &lt;= N_MAX
+0076             
+0077             tic;
+0078             x = stk_sampling_regulargrid(n, DIM);
+0079             <span class="keyword">for</span> i = 1:REP,
+0080                 K = stk_make_matcov(model, x, x);
+0081             <span class="keyword">end</span>
+0082             t = toc / REP;
+0083             
+0084             result(j, k).n(end+1) = n;
+0085             result(j, k).t(end+1) = t;
+0086             
+0087             cla;  loglog(result(j, k).n, result(j, k).t, <span class="string">'o-'</span>);  drawnow;
+0088             
+0089             n = ceil(n * 1.4);
+0090             REP = ceil(1/t);
+0091         <span class="keyword">end</span>
+0092     <span class="keyword">end</span>
+0093 <span class="keyword">end</span>
+0094 
+0095 
+0096 <span class="comment">%% Figure</span>
+0097 
+0098 legtxt = {};  <span class="comment">%#ok&lt;*AGROW&gt;</span>
+0099 
+0100 loglog(vertcat(result(1, :).n)', vertcat(result(1, :).t)', <span class="string">'x:'</span>); hold on;
+0101 <span class="keyword">for</span> k = 1:length(covnames)
+0102     legtxt = [legtxt {sprintf(<span class="string">'%s (par. off)'</span>, covnames{k})}];
+0103 <span class="keyword">end</span>
+0104 
+0105 loglog(vertcat(result(2, :).n)', vertcat(result(2, :).t)', <span class="string">'o-'</span>);
+0106 <span class="keyword">for</span> k = 1:length(covnames)
+0107     legtxt = [legtxt {sprintf(<span class="string">'%s (par. on, msfp=+Inf)'</span>, covnames{k})}];
+0108 <span class="keyword">end</span>
+0109 
+0110 loglog(vertcat(result(3, :).n)', vertcat(result(3, :).t)', <span class="string">'s--'</span>);
+0111 <span class="keyword">for</span> k = 1:length(covnames)
+0112     legtxt = [legtxt {sprintf(<span class="string">'%s (par. on, msfp=1)'</span>, covnames{k})}];
+0113 <span class="keyword">end</span>
+0114 
+0115 loglog(vertcat(result(4, :).n)', vertcat(result(4, :).t)', <span class="string">'d-.'</span>);
+0116 <span class="keyword">for</span> k = 1:length(covnames)
+0117     legtxt = [legtxt {sprintf(<span class="string">'%s (par. on, msfp=%d)'</span>, covnames{k}, M)}];
+0118 <span class="keyword">end</span>
+0119 
+0120 h = legend(legtxt, <span class="string">'Location'</span>, <span class="string">'NorthWest'</span>);
+0121 set(h, <span class="string">'Interpreter'</span>, <span class="string">'none'</span>);
+0122 
+0123 stk_labels (<span class="string">'n'</span>, <span class="string">'computation time'</span>);</pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of bsxfun</title>
+  <meta name="keywords" content="bsxfun">
+  <meta name="description" content="BSXFUN [overloaded base function]">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">utils</a> &gt; <a href="#">arrays</a> &gt; <a href="index.html">@stk_dataframe</a> &gt; bsxfun.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for utils/arrays/@stk_dataframe&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>bsxfun
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>BSXFUN [overloaded base function]</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function y = bsxfun (F, x1, x2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> BSXFUN [overloaded base function]</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+<li><a href="bsxfun.html" class="code" title="function y = bsxfun (F, x1, x2)">bsxfun</a>	BSXFUN [overloaded base function]</li><li><a href="double.html" class="code" title="function xdata = double(x)">double</a>	DOUBLE [overloaded base function]</li><li><a href="end.html" class="code" title="function idx = end (x, k, nb_indices)">end</a>	END implements the the 'end' keyword for indexing</li><li><a href="stk_dataframe.html" class="code" title="function x = stk_dataframe (x0, colnames, rownames)">stk_dataframe</a>	STK_DATAFRAME constructs a dataframe</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+<li><a href="and.html" class="code" title="function y = and(x1, x2)">and</a>	AND [overloaded base function]</li><li><a href="bsxfun.html" class="code" title="function y = bsxfun (F, x1, x2)">bsxfun</a>	BSXFUN [overloaded base function]</li><li><a href="eq.html" class="code" title="function y = eq(x1, x2)">eq</a>	EQ [overloaded base function]</li><li><a href="ge.html" class="code" title="function y = ge(x1, x2)">ge</a>	GE [overloaded base function]</li><li><a href="gt.html" class="code" title="function y = gt(x1, x2)">gt</a>	GT [overloaded base function]</li><li><a href="ldivide.html" class="code" title="function y = ldivide(x1, x2)">ldivide</a>	LDIVIDE [overloaded base function]</li><li><a href="le.html" class="code" title="function y = le(x1, x2)">le</a>	LE [overloaded base function]</li><li><a href="lt.html" class="code" title="function y = lt(x1, x2)">lt</a>	LT [overloaded base function]</li><li><a href="max.html" class="code" title="function z = max(x, y, dim)">max</a>	MAX [overloaded base function]</li><li><a href="min.html" class="code" title="function z = min(x, y, dim)">min</a>	MIN [overloaded base function]</li><li><a href="minus.html" class="code" title="function y = minus(x1, x2)">minus</a>	MINUS [overloaded base function]</li><li><a href="ne.html" class="code" title="function y = ne(x1, x2)">ne</a>	NE [overloaded base function]</li><li><a href="or.html" class="code" title="function y = or(x1, x2)">or</a>	OR [overloaded base function]</li><li><a href="plus.html" class="code" title="function y = plus(x1, x2)">plus</a>	PLUS [overloaded base function]</li><li><a href="power.html" class="code" title="function y = power(x1, x2)">power</a>	POWER [overloaded base function]</li><li><a href="rdivide.html" class="code" title="function y = rdivide(x1, x2)">rdivide</a>	RDIVIDE [overloaded base function]</li><li><a href="realpow.html" class="code" title="function y = realpow(x1, x2)">realpow</a>	REALPOW [overloaded base function]</li><li><a href="times.html" class="code" title="function y = times(x1, x2)">times</a>	TIMES [overloaded base function]</li><li><a href="xor.html" class="code" title="function y = xor(x1, x2)">xor</a>	XOR [overloaded base function]</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% BSXFUN [overloaded base function]</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author: Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 
+0009 <span class="comment">% Copying Permission Statement</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    This file is part of</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0014 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0017 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0018 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0019 <span class="comment">%    option) any later version.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0022 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0023 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0024 <span class="comment">%    License for more details.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0027 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0028 
+0029 <a name="_sub0" href="#_subfunctions" class="code">function y = bsxfun (F, x1, x2)</a>
+0030 
+0031 x1data = <a href="double.html" class="code" title="function xdata = double(x)">double</a> (x1);
+0032 x2data = <a href="double.html" class="code" title="function xdata = double(x)">double</a> (x2);
+0033 
+0034 <span class="keyword">try</span>
+0035     ydata = <a href="bsxfun.html" class="code" title="function y = bsxfun (F, x1, x2)">bsxfun</a> (F, x1data, x2data);
+0036 <span class="keyword">catch</span>
+0037     err = lasterror ();
+0038     <span class="keyword">if</span> strcmp (err.identifier, <span class="string">'MATLAB:bsxfun:unsupportedBuiltin'</span>)
+0039         <span class="comment">% This happens in some old versions of Matlab with realpow, for</span>
+0040         <span class="comment">% instance. Let's try without singleton expansion...</span>
+0041         ydata = feval (F, x1data, x2data);
+0042         <span class="comment">% TODO: manual bsxfun !!!</span>
+0043     <span class="keyword">else</span>
+0044         rethrow (err);
+0045     <span class="keyword">end</span>
+0046 <span class="keyword">end</span>
+0047 
+0048 <span class="comment">% choose if the output type</span>
+0049 <span class="keyword">if</span> isa (x1, <span class="string">'stk_dataframe'</span>),
+0050     y = <a href="stk_dataframe.html" class="code" title="function x = stk_dataframe (x0, colnames, rownames)">stk_dataframe</a> (ydata, x1.colnames);
+0051 <span class="keyword">else</span>
+0052     y = ydata;
+0053 <span class="keyword">end</span>
+0054 
+0055 <span class="keyword">end</span> <span class="comment">% function bsxfun</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

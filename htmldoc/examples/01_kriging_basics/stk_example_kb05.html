@@ -1,0 +1,182 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_example_kb05</title>
+  <meta name="keywords" content="stk_example_kb05">
+  <meta name="description" content="STK_EXAMPLE_KB05  Generation of conditioned sample paths">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; <a href="index.html">01_kriging_basics</a> &gt; stk_example_kb05.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for examples/01_kriging_basics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_example_kb05
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_EXAMPLE_KB05  Generation of conditioned sample paths</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_EXAMPLE_KB05  Generation of conditioned sample paths
+
+ A Matern Gaussian process model is used, with constant but unknown mean
+ (ordinary kriging) and known covariance parameters.
+
+ Given noiseless observations from the unknown function, a batch of conditioned
+ sample paths is drawn using the &quot;conditioning by kriging&quot; technique. In short,
+ this means that unconditioned sample path are simulated first (using
+ stk_generate_samplepaths), and then conditioned on the observations by kriging
+ (using stk_conditioning).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_EXAMPLE_KB05  Generation of conditioned sample paths</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% A Matern Gaussian process model is used, with constant but unknown mean</span>
+0004 <span class="comment">% (ordinary kriging) and known covariance parameters.</span>
+0005 <span class="comment">%</span>
+0006 <span class="comment">% Given noiseless observations from the unknown function, a batch of conditioned</span>
+0007 <span class="comment">% sample paths is drawn using the &quot;conditioning by kriging&quot; technique. In short,</span>
+0008 <span class="comment">% this means that unconditioned sample path are simulated first (using</span>
+0009 <span class="comment">% stk_generate_samplepaths), and then conditioned on the observations by kriging</span>
+0010 <span class="comment">% (using stk_conditioning).</span>
+0011 
+0012 <span class="comment">% Copyright Notice</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0017 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0018 
+0019 <span class="comment">% Copying Permission Statement</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    This file is part of</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0024 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0027 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0028 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0029 <span class="comment">%    option) any later version.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0032 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0033 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0034 <span class="comment">%    License for more details.</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0037 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0038 
+0039 stk_disp_examplewelcome;  stk_figure (<span class="string">'stk_example_kb05'</span>);
+0040 
+0041 
+0042 <span class="comment">%% Define a 1d test function</span>
+0043 
+0044 f = @(x)(- (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
+0045 DIM = 1;            <span class="comment">% dimension of the factor space</span>
+0046 BOX = [-1.0; 1.0];  <span class="comment">% factor space</span>
+0047 
+0048 NT = 400;  <span class="comment">% nb of points in the grid</span>
+0049 xt = stk_sampling_regulargrid (NT, DIM, BOX);
+0050 zt = stk_feval (f, xt);
+0051 
+0052 
+0053 <span class="comment">%% Generate observations</span>
+0054 <span class="comment">%</span>
+0055 <span class="comment">% The objective is to construct an approximation of f and to simulate</span>
+0056 <span class="comment">% conditioned sample paths from NI observations. The observation locations</span>
+0057 <span class="comment">% are chosen as a subset of xt.</span>
+0058 <span class="comment">%</span>
+0059 
+0060 xi_ind = [1 20 90 200 300 350];  <span class="comment">% indices of evaluation points in xt</span>
+0061 xi = xt(xi_ind, 1);              <span class="comment">% evaluation points</span>
+0062 zi = stk_feval (f, xi);          <span class="comment">% evaluation results</span>
+0063 
+0064 
+0065 <span class="comment">%% Specification of the model</span>
+0066 <span class="comment">%</span>
+0067 <span class="comment">% We choose a Matern covariance with &quot;fixed parameters&quot; (in other</span>
+0068 <span class="comment">% words, the parameters of the covariance function are provided by the user</span>
+0069 <span class="comment">% rather than estimated from data).</span>
+0070 <span class="comment">%</span>
+0071 
+0072 <span class="comment">% The following line defines a model with a constant but unknown mean</span>
+0073 <span class="comment">% (ordinary kriging) and a Matern covariance function. (Some default</span>
+0074 <span class="comment">% parameters are also set, but we override them below.)</span>
+0075 model = stk_model (<span class="string">'stk_materncov_iso'</span>);
+0076 
+0077 <span class="comment">% Parameters for the Matern covariance</span>
+0078 <span class="comment">% (&quot;help stk_materncov_iso&quot; for more information)</span>
+0079 SIGMA2 = 1.0;  <span class="comment">% variance parameter</span>
+0080 NU     = 4.0;  <span class="comment">% regularity parameter</span>
+0081 RHO1   = 0.4;  <span class="comment">% scale (range) parameter</span>
+0082 model.param = log ([SIGMA2; NU; 1/RHO1]);
+0083 
+0084 
+0085 <span class="comment">%% Generate (unconditional) sample paths</span>
+0086 
+0087 NB_PATHS = 10;
+0088 
+0089 zsim = stk_generate_samplepaths (model, xt, NB_PATHS);
+0090 
+0091 <span class="comment">% Display the result</span>
+0092 stk_subplot (2, 2, 1);  plot (xt, zsim, <span class="string">'LineWidth'</span>, 2);  legend off;
+0093 stk_title (<span class="string">'Unconditional sample paths'</span>);
+0094 stk_labels (<span class="string">'input variable x'</span>, <span class="string">'response z'</span>);
+0095 
+0096 
+0097 <span class="comment">%% Carry out the kriging prediction and generate conditional sample paths</span>
+0098 
+0099 <span class="comment">% Carry out the kriging prediction at points xt</span>
+0100 [zp, lambda] = stk_predict (model, xi, zi, xt);
+0101 
+0102 <span class="comment">% Condition sample paths on the observations</span>
+0103 zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
+0104 
+0105 <span class="comment">% Display the observations only</span>
+0106 stk_subplot (2, 2, 2);  stk_plot1d (xi, zi);
+0107 stk_title (<span class="string">'Observations'</span>);
+0108 stk_labels (<span class="string">'input variable x'</span>, <span class="string">'response z'</span>);
+0109 
+0110 <span class="comment">% Display the conditional sample paths</span>
+0111 stk_subplot (2, 2, 3);  plot (xt, zsimc, <span class="string">'LineWidth'</span>, 2);  legend off;  hold on;
+0112 plot (xi, zi, <span class="string">'ko'</span>, <span class="string">'MarkerSize'</span>, 6, <span class="string">'MarkerFaceColor'</span>, <span class="string">'k'</span>);
+0113 stk_title (<span class="string">'Conditional sample paths'</span>);
+0114 stk_labels (<span class="string">'input variable x'</span>, <span class="string">'response z'</span>);
+0115 
+0116 <span class="comment">% Display the kriging and credible intervals</span>
+0117 stk_subplot (2, 2, 4);  stk_plot1d (xi, zi, xt, zt, zp, zsimc);
+0118 stk_title (<span class="string">'Prediction and credible intervals'</span>);
+0119 stk_labels (<span class="string">'input variable x'</span>, <span class="string">'response z'</span>);</pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

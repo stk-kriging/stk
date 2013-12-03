@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_example_doe03</title>
+  <meta name="keywords" content="stk_example_doe03">
+  <meta name="description" content="STK_EXAMPLE_DOE03  A simple illustration of 1D Bayesian optimization">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; <a href="index.html">02_design_of_experiments</a> &gt; stk_example_doe03.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for examples/02_design_of_experiments&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_example_doe03
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_EXAMPLE_DOE03  A simple illustration of 1D Bayesian optimization</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_EXAMPLE_DOE03  A simple illustration of 1D Bayesian optimization
+
+ Our goal here is to optimize the one-dimensional function
+
+    x |--&gt; x * sin (x)
+
+ over the interval [0; 4 * pi].
+
+ A Matern 5/2 prior with known parameters is used.
+
+ Evaluations points are chosen sequentially using the Expected Improvement (EI)
+ criterion, starting from an initial design of N0 = 3 points.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_EXAMPLE_DOE03  A simple illustration of 1D Bayesian optimization</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% Our goal here is to optimize the one-dimensional function</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    x |--&gt; x * sin (x)</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% over the interval [0; 4 * pi].</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% A Matern 5/2 prior with known parameters is used.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% Evaluations points are chosen sequentially using the Expected Improvement (EI)</span>
+0012 <span class="comment">% criterion, starting from an initial design of N0 = 3 points.</span>
+0013 
+0014 <span class="comment">% Copyright Notice</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0019 
+0020 <span class="comment">% Copying Permission Statement</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    This file is part of</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0025 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0028 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0029 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0030 <span class="comment">%    option) any later version.</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0033 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0034 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0035 <span class="comment">%    License for more details.</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0038 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0039 
+0040 stk_disp_examplewelcome;  stk_figure (<span class="string">'stk_example_doe03'</span>);
+0041 
+0042 
+0043 <span class="comment">%% Problem definition</span>
+0044 <span class="comment">%</span>
+0045 <span class="comment">% Here we define a one-dimensional optimization problem.</span>
+0046 <span class="comment">%</span>
+0047 <span class="comment">% The goal is to find the maximum of f on the domain BOX.</span>
+0048 <span class="comment">%</span>
+0049 
+0050 <span class="comment">% 1D test function</span>
+0051 f = @(x)(x .* sin (x));  <span class="comment">% Define a 1D test function</span>
+0052 DIM = 1;                 <span class="comment">% Dimension of the factor space</span>
+0053 BOX = [0; 12];           <span class="comment">% Factor space</span>
+0054 
+0055 <span class="comment">% Space discretization</span>
+0056 NT = 400;  <span class="comment">% Number of points in the grid</span>
+0057 x_grid = stk_sampling_regulargrid (NT, DIM, BOX);
+0058 x_grid.colnames = {<span class="string">'x'</span>};
+0059 
+0060 <span class="comment">% Give names explicit names to the points of the grid</span>
+0061 x_grid.rownames = arrayfun <span class="keyword">...</span>
+0062     (@(i)(sprintf (<span class="string">'grid%03d'</span>, i)), 1:NT, <span class="string">'UniformOutput'</span>, false)';
+0063 
+0064 <span class="comment">% Values of the function on the grid</span>
+0065 z_grid = stk_feval (f, x_grid);
+0066 z_grid.colnames = {<span class="string">'z'</span>};
+0067 
+0068 
+0069 <span class="comment">%% Initial design of experiments</span>
+0070 <span class="comment">%</span>
+0071 <span class="comment">% We start with an initial design of N0 points, regularly spaced on the domain.</span>
+0072 <span class="comment">%</span>
+0073 
+0074 <span class="comment">% Size of the initial design</span>
+0075 N0 = 3;
+0076 
+0077 <span class="comment">% Construction of the initial design</span>
+0078 x_init = stk_sampling_regulargrid (N0, DIM, BOX);
+0079 x_init.colnames = {<span class="string">'x'</span>};
+0080 
+0081 <span class="comment">% Give names explicit names to the points in the initial design</span>
+0082 x_init.rownames = arrayfun <span class="keyword">...</span>
+0083     (@(i)(sprintf (<span class="string">'init%03d'</span>, i)), 1:N0, <span class="string">'UniformOutput'</span>, false)';
+0084 
+0085 <span class="comment">% Values of the function on the initial design</span>
+0086 z_init = stk_feval (f, x_init);
+0087 z_init.colnames = {<span class="string">'z'</span>};
+0088 
+0089 
+0090 <span class="comment">%% Specification of the model (Gaussian process prior)</span>
+0091 <span class="comment">%</span>
+0092 <span class="comment">% We choose a Matern 5/2 covariance with &quot;fixed parameters&quot; (in other</span>
+0093 <span class="comment">% words, the variance and range parameters of the covariance function are</span>
+0094 <span class="comment">% provided by the user rather than estimated from data).</span>
+0095 <span class="comment">%</span>
+0096 
+0097 model = stk_model (<span class="string">'stk_materncov52_iso'</span>);
+0098 <span class="comment">% NOTE: the suffix '_iso' indicates an ISOTROPIC covariance function, but the</span>
+0099 <span class="comment">% distinction isotropic / anisotropic is irrelevant here since DIM = 1.</span>
+0100 
+0101 <span class="comment">% Parameters for the Matern covariance function</span>
+0102 <span class="comment">% (&quot;help stk_materncov52_iso&quot; for more information)</span>
+0103 SIGMA2 = 4.0 ^ 2;  <span class="comment">% variance parameter</span>
+0104 RHO1 = 2.0;        <span class="comment">% scale (range) parameter</span>
+0105 model.param = log ([SIGMA2; 1/RHO1]);
+0106 
+0107 <span class="comment">% Play with the parameter of the model to understand their influence on the</span>
+0108 <span class="comment">% behaviour of the algorithm !</span>
+0109 
+0110 
+0111 <span class="comment">%% Sequential design of experiments</span>
+0112 <span class="comment">%</span>
+0113 <span class="comment">% Here, evaluations points are chosen sequentially using the Expected</span>
+0114 <span class="comment">% Improvement (EI) criterion, starting from the initial design defined above.</span>
+0115 <span class="comment">%</span>
+0116 <span class="comment">% The algorithm stops when either the maximum number of iterations is reached or</span>
+0117 <span class="comment">% the maximum of the EI criterion falls below some threshold.</span>
+0118 <span class="comment">%</span>
+0119 
+0120 <span class="comment">% Start with the initial design defined above</span>
+0121 data = horzcat (x_init, z_init);
+0122 
+0123 <span class="comment">% Number of points to be added adaptively</span>
+0124 NB_ITER = 20;
+0125 
+0126 <span class="comment">% Current value of the maximum of the Expected Improvement</span>
+0127 EI_max = +inf;
+0128 
+0129 <span class="comment">% Value of EI_max for the stopping criterion</span>
+0130 EI_max_stop = (max (z_grid) - min (z_grid)) / 1e5;
+0131 
+0132 <span class="comment">% Iteration number</span>
+0133 iter = 0;
+0134 
+0135 <span class="comment">% Plot options</span>
+0136 DOE_STYLE  = {<span class="string">'ko'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'k'</span>};
+0137 NEXT_STYLE = {<span class="string">'ro'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'y'</span>};
+0138 
+0139 <span class="keyword">while</span> (iter &lt; NB_ITER) &amp;&amp; (EI_max &gt; EI_max_stop),
+0140     
+0141     <span class="comment">% Trick: add a small &quot;regularization&quot; noise to our model</span>
+0142     model.lognoisevariance = 2 * log (min (1e-4, EI_max / 1e3));
+0143     
+0144     <span class="comment">% Carry out the kriging prediction</span>
+0145     z_post = stk_predict (model, data.x, data.z, x_grid);
+0146     
+0147     <span class="comment">% Compute the Expected Improvement (EI) criterion</span>
+0148     <span class="comment">% (the fourth argument indicates that we want to MAXIMIZE f)</span>
+0149     EI = distrib_normal_ei (max (data.z), z_post.mean, sqrt (z_post.var), true);
+0150     
+0151     <span class="comment">% Pick the point where the EI is maximum as our next evaluation point</span>
+0152     [EI_max, i_max] = max (EI);
+0153     
+0154     <span class="comment">% Figure: upper panel</span>
+0155     stk_subplot (2, 1, 1);  cla;
+0156     plot (x_grid, z_grid);  xlim (BOX);  hold on;
+0157     plot (x_grid, z_post.mean, <span class="string">'r-'</span>);
+0158     plot (data, DOE_STYLE{:});
+0159     plot (x_grid(i_max), z_grid(i_max), NEXT_STYLE{:});
+0160     
+0161     <span class="comment">% Figure: lower panel</span>
+0162     stk_subplot (2, 1, 2);  cla;
+0163     plot (x_grid, EI); xlim (BOX); hold on;
+0164     plot (x_grid(i_max), EI_max, NEXT_STYLE{:});
+0165     stk_ylabel (<span class="string">'EI'</span>);
+0166     
+0167     <span class="keyword">if</span> EI_max &gt; EI_max_stop,
+0168         <span class="comment">% Add the new evaluation to the DoE</span>
+0169         new_row = horzcat (x_grid(i_max, :), z_grid(i_max));
+0170         data = vertcat (data, new_row); <span class="comment">%#ok&lt;AGROW&gt;</span>
+0171         iter = iter + 1;
+0172     <span class="keyword">end</span>
+0173     
+0174     drawnow;  pause (0.2);
+0175     
+0176 <span class="keyword">end</span>
+0177 
+0178 <span class="comment">% Display the final DoE</span>
+0179 disp (data);
+0180 
+0181 <span class="comment">% Total number of evaluations ?</span>
+0182 fprintf (<span class="string">'\nNumber of evaluations: %d + %d = %d.\n\n'</span>, N0, iter, N0 + iter);</pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

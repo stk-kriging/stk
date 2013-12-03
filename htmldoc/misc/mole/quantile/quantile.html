@@ -1,0 +1,520 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of quantile</title>
+  <meta name="keywords" content="quantile">
+  <meta name="description" content="QUANTILE ...">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="#">mole</a> &gt; <a href="index.html">quantile</a> &gt; quantile.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/mole/quantile&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>quantile
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>QUANTILE ...</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function q = quantile (x, p, dim, method) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> QUANTILE ...</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+<h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+<li><a href="#_sub1" class="code">function inv = octave__quantile__ (x, p, method)</a></li></ul>
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% QUANTILE ...</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author: Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%    The function comes from Octave 3.7.6+'s quantile.m, with minor</span>
+0010 <span class="comment">%    modifications. The original copyright notice was:</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%       Copyright (C) 2008-2012 Ben Abbott and Jaroslav Hajek</span>
+0013 
+0014 <span class="comment">% Copying Permission Statement</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    This file is part of</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0019 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0022 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0023 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0024 <span class="comment">%    option) any later version.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0027 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0028 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0029 <span class="comment">%    License for more details.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0032 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0033 
+0034 <span class="comment">% ## Copyright (C) 2008-2012 Ben Abbott and Jaroslav Hajek</span>
+0035 <span class="comment">% ##</span>
+0036 <span class="comment">% ## This file is part of Octave.</span>
+0037 <span class="comment">% ##</span>
+0038 <span class="comment">% ## Octave is free software; you can redistribute it and/or modify it</span>
+0039 <span class="comment">% ## under the terms of the GNU General Public License as published by</span>
+0040 <span class="comment">% ## the Free Software Foundation; either version 3 of the License, or (at</span>
+0041 <span class="comment">% ## your option) any later version.</span>
+0042 <span class="comment">% ##</span>
+0043 <span class="comment">% ## Octave is distributed in the hope that it will be useful, but</span>
+0044 <span class="comment">% ## WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+0045 <span class="comment">% ## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</span>
+0046 <span class="comment">% ## General Public License for more details.</span>
+0047 <span class="comment">% ##</span>
+0048 <span class="comment">% ## You should have received a copy of the GNU General Public License</span>
+0049 <span class="comment">% ## along with Octave; see the file COPYING.  If not, see</span>
+0050 <span class="comment">% ## &lt;http://www.gnu.org/licenses/&gt;.</span>
+0051 <span class="comment">%</span>
+0052 <span class="comment">% ## -*- texinfo -*-</span>
+0053 <span class="comment">% ## @deftypefn  {Function File} {@var{q} =} quantile (@var{x})</span>
+0054 <span class="comment">% ## @deftypefnx {Function File} {@var{q} =} quantile (@var{x}, @var{p})</span>
+0055 <span class="comment">% ## @deftypefnx {Function File} {@var{q} =} quantile (@var{x}, @var{p}, @var{dim})</span>
+0056 <span class="comment">% ## @deftypefnx {Function File} {@var{q} =} quantile (@var{x}, @var{p}, @var{dim}, @var{method})</span>
+0057 <span class="comment">% ## For a sample, @var{x}, calculate the quantiles, @var{q}, corresponding to</span>
+0058 <span class="comment">% ## the cumulative probability values in @var{p}.  All non-numeric values (NaNs)</span>
+0059 <span class="comment">% ## of @var{x} are ignored.</span>
+0060 <span class="comment">% ##</span>
+0061 <span class="comment">% ## If @var{x} is a matrix, compute the quantiles for each column and</span>
+0062 <span class="comment">% ## return them in a matrix, such that the i-th row of @var{q} contains</span>
+0063 <span class="comment">% ## the @var{p}(i)th quantiles of each column of @var{x}.</span>
+0064 <span class="comment">% ##</span>
+0065 <span class="comment">% ## If @var{p} is unspecified, return the quantiles for</span>
+0066 <span class="comment">% ## @code{[0.00 0.25 0.50 0.75 1.00]}.</span>
+0067 <span class="comment">% ## The optional argument @var{dim} determines the dimension along which</span>
+0068 <span class="comment">% ## the quantiles are calculated.  If @var{dim} is omitted, and @var{x} is</span>
+0069 <span class="comment">% ## a vector or matrix, it defaults to 1 (column-wise quantiles).  If</span>
+0070 <span class="comment">% ## @var{x} is an N-D array, @var{dim} defaults to the first non-singleton</span>
+0071 <span class="comment">% ## dimension.</span>
+0072 <span class="comment">% ##</span>
+0073 <span class="comment">% ## The methods available to calculate sample quantiles are the nine methods</span>
+0074 <span class="comment">% ## used by R (@url{http://www.r-project.org/}).  The default value is</span>
+0075 <span class="comment">% ## @w{METHOD = 5}.</span>
+0076 <span class="comment">% ##</span>
+0077 <span class="comment">% ## Discontinuous sample quantile methods 1, 2, and 3</span>
+0078 <span class="comment">% ##</span>
+0079 <span class="comment">% ## @enumerate 1</span>
+0080 <span class="comment">% ## @item Method 1: Inverse of empirical distribution function.</span>
+0081 <span class="comment">% ##</span>
+0082 <span class="comment">% ## @item Method 2: Similar to method 1 but with averaging at discontinuities.</span>
+0083 <span class="comment">% ##</span>
+0084 <span class="comment">% ## @item Method 3: SAS definition: nearest even order statistic.</span>
+0085 <span class="comment">% ## @end enumerate</span>
+0086 <span class="comment">% ##</span>
+0087 <span class="comment">% ## Continuous sample quantile methods 4 through 9, where p(k) is the linear</span>
+0088 <span class="comment">% ## interpolation function respecting each methods' representative cdf.</span>
+0089 <span class="comment">% ##</span>
+0090 <span class="comment">% ## @enumerate 4</span>
+0091 <span class="comment">% ## @item Method 4: p(k) = k / n.  That is, linear interpolation of the</span>
+0092 <span class="comment">% ## empirical cdf.</span>
+0093 <span class="comment">% ##</span>
+0094 <span class="comment">% ## @item Method 5: p(k) = (k - 0.5) / n.  That is a piecewise linear function</span>
+0095 <span class="comment">% ## where the knots are the values midway through the steps of the empirical</span>
+0096 <span class="comment">% ## cdf.</span>
+0097 <span class="comment">% ##</span>
+0098 <span class="comment">% ## @item Method 6: p(k) = k / (n + 1).</span>
+0099 <span class="comment">% ##</span>
+0100 <span class="comment">% ## @item Method 7: p(k) = (k - 1) / (n - 1).</span>
+0101 <span class="comment">% ##</span>
+0102 <span class="comment">% ## @item Method 8: p(k) = (k - 1/3) / (n + 1/3).  The resulting quantile</span>
+0103 <span class="comment">% ## estimates are approximately median-unbiased regardless of the distribution</span>
+0104 <span class="comment">% ## of @var{x}.</span>
+0105 <span class="comment">% ##</span>
+0106 <span class="comment">% ## @item Method 9: p(k) = (k - 3/8) / (n + 1/4).  The resulting quantile</span>
+0107 <span class="comment">% ## estimates are approximately unbiased for the expected order statistics if</span>
+0108 <span class="comment">% ## @var{x} is normally distributed.</span>
+0109 <span class="comment">% ## @end enumerate</span>
+0110 <span class="comment">% ##</span>
+0111 <span class="comment">% ## Hyndman and Fan (1996) recommend method 8.  Maxima, S, and R</span>
+0112 <span class="comment">% ## (versions prior to 2.0.0) use 7 as their default.  Minitab and SPSS</span>
+0113 <span class="comment">% ## use method 6.  @sc{matlab} uses method 5.</span>
+0114 <span class="comment">% ##</span>
+0115 <span class="comment">% ## References:</span>
+0116 <span class="comment">% ##</span>
+0117 <span class="comment">% ## @itemize @bullet</span>
+0118 <span class="comment">% ## @item Becker, R. A., Chambers, J. M. and Wilks, A. R. (1988) The New</span>
+0119 <span class="comment">% ## S Language.  Wadsworth &amp; Brooks/Cole.</span>
+0120 <span class="comment">% ##</span>
+0121 <span class="comment">% ## @item Hyndman, R. J. and Fan, Y. (1996) Sample quantiles in</span>
+0122 <span class="comment">% ## statistical packages, American Statistician, 50, 361--365.</span>
+0123 <span class="comment">% ##</span>
+0124 <span class="comment">% ## @item R: A Language and Environment for Statistical Computing;</span>
+0125 <span class="comment">% ## @url{http://cran.r-project.org/doc/manuals/fullrefman.pdf}.</span>
+0126 <span class="comment">% ## @end itemize</span>
+0127 <span class="comment">% ##</span>
+0128 <span class="comment">% ## Examples:</span>
+0129 <span class="comment">% ## @c Set example in small font to prevent overfull line</span>
+0130 <span class="comment">% ##</span>
+0131 <span class="comment">% ## @smallexample</span>
+0132 <span class="comment">% ## @group</span>
+0133 <span class="comment">% ## x = randi (1000, [10, 1]);  # Create empirical data in range 1-1000</span>
+0134 <span class="comment">% ## q = quantile (x, [0, 1]);   # Return minimum, maximum of distribution</span>
+0135 <span class="comment">% ## q = quantile (x, [0.25 0.5 0.75]); # Return quartiles of distribution</span>
+0136 <span class="comment">% ## @end group</span>
+0137 <span class="comment">% ## @end smallexample</span>
+0138 <span class="comment">% ## @seealso{prctile}</span>
+0139 <span class="comment">% ## @end deftypefn</span>
+0140 <span class="comment">%</span>
+0141 <span class="comment">% ## Author: Ben Abbott &lt;bpabbott@mac.com&gt;</span>
+0142 <span class="comment">% ## Description: Matlab style quantile function of a discrete/continuous distribution</span>
+0143 
+0144 <a name="_sub0" href="#_subfunctions" class="code">function q = quantile (x, p, dim, method)</a>
+0145 
+0146 <span class="keyword">if</span> nargin &lt; 2,
+0147     p = [];
+0148 <span class="keyword">end</span>
+0149 
+0150 <span class="keyword">if</span> nargin &lt; 3,
+0151     dim = 1;
+0152 <span class="keyword">end</span>
+0153 
+0154 <span class="keyword">if</span> nargin &lt; 4,
+0155     <span class="comment">% Use Matlab compatiblity mode</span>
+0156     method = 5;
+0157 <span class="keyword">end</span>
+0158 
+0159 <span class="keyword">if</span> (~ (isnumeric (x) || islogical (x)))
+0160     error (<span class="string">'quantile: X must be a numeric vector or matrix'</span>);
+0161 <span class="keyword">end</span>
+0162 
+0163 <span class="keyword">if</span> (isempty (p))
+0164     p = [0.00 0.25, 0.50, 0.75, 1.00];
+0165 <span class="keyword">end</span>
+0166 
+0167 <span class="keyword">if</span> (~ (isnumeric (p) &amp;&amp; isvector (p)))
+0168     error (<span class="string">'quantile: P must be a numeric vector'</span>);
+0169 <span class="keyword">end</span>
+0170 
+0171 <span class="keyword">if</span> (~ (isscalar (dim) &amp;&amp; dim == fix (dim)) <span class="keyword">...</span>
+0172         || ~(1 &lt;= dim &amp;&amp; dim &lt;= ndims (x)))
+0173     error (<span class="string">'quantile: DIM must be an integer and a valid dimension'</span>);
+0174 <span class="keyword">end</span>
+0175 
+0176 <span class="comment">% Set the permutation vector.</span>
+0177 perm = 1:ndims (x);
+0178 perm(1) = dim;
+0179 perm(dim) = 1;
+0180 
+0181 <span class="comment">% Permute dim to the 1st index.</span>
+0182 x = permute (x, perm);
+0183 
+0184 <span class="comment">% Save the size of the permuted x N-d array.</span>
+0185 sx = size (x);
+0186 
+0187 <span class="comment">% Reshape to a 2-d array.</span>
+0188 x = reshape (x, [sx(1), prod(sx(2:end))]);
+0189 
+0190 <span class="comment">% Calculate the quantiles.</span>
+0191 q = <a href="#_sub1" class="code" title="subfunction inv = octave__quantile__ (x, p, method)">octave__quantile__</a> (x, p, method);
+0192 
+0193 <span class="comment">% Return the shape to the original N-d array.</span>
+0194 q = reshape (q, [numel(p), sx(2:end)]);
+0195 
+0196 <span class="comment">% Permute the 1st index back to dim.</span>
+0197 q = ipermute (q, perm);
+0198 
+0199 <span class="keyword">end</span> <span class="comment">% function quantile</span>
+0200 
+0201 
+0202 
+0203 
+0204 
+0205 
+0206 
+0207 
+0208 
+0209 
+0210 <span class="comment">% Note: method 3 not available yet because Matlab doesn't have roundb()</span>
+0211 
+0212 
+0213 
+0214 
+0215 
+0216 
+0217 
+0218 
+0219 
+0220 
+0221 
+0222 
+0223 
+0224 
+0225 
+0226 
+0227 
+0228 
+0229 
+0230 
+0231 
+0232 
+0233 
+0234 
+0235 
+0236 
+0237 
+0238 
+0239 
+0240 
+0241 
+0242 
+0243 
+0244 
+0245 
+0246 
+0247 
+0248 
+0249 
+0250 
+0251 
+0252 
+0253 
+0254 
+0255 
+0256 
+0257 
+0258 
+0259 
+0260 
+0261 
+0262 
+0263 
+0264 
+0265 
+0266 
+0267 
+0268 
+0269 
+0270 
+0271 
+0272 
+0273 
+0274 
+0275 
+0276 
+0277 
+0278 
+0279 
+0280 
+0281 
+0282 
+0283 
+0284 
+0285 
+0286 
+0287 
+0288 
+0289 
+0290 
+0291 
+0292 
+0293 
+0294 
+0295 
+0296 
+0297 
+0298 
+0299 
+0300 
+0301 
+0302 
+0303 
+0304 
+0305 
+0306 
+0307 
+0308 
+0309 
+0310 
+0311 
+0312 
+0313 
+0314 
+0315 
+0316 
+0317 
+0318 
+0319 
+0320 
+0321 
+0322 
+0323 
+0324 
+0325 
+0326 
+0327 
+0328 
+0329 
+0330 
+0331 
+0332 
+0333 
+0334 
+0335 
+0336 
+0337 
+0338 
+0339 
+0340 
+0341 
+0342 
+0343 
+0344 
+0345 <span class="comment">%% Test input validation</span>
+0346 
+0347 
+0348 
+0349 <span class="comment">% %!error quantile (1:10, [true, false])</span>
+0350 <span class="comment">% % this test fails in Octave 3.2.x</span>
+0351 
+0352 
+0353 
+0354 
+0355 
+0356 
+0357 
+0358 <span class="comment">% ## For the cumulative probability values in @var{p}, compute the</span>
+0359 <span class="comment">% ## quantiles, @var{q} (the inverse of the cdf), for the sample, @var{x}.</span>
+0360 <span class="comment">% ##</span>
+0361 <span class="comment">% ## The optional input, @var{method}, refers to nine methods available in R</span>
+0362 <span class="comment">% ## (http://www.r-project.org/). The default is @var{method} = 7.</span>
+0363 <span class="comment">% ## @seealso{prctile, quantile, statistics}</span>
+0364 <span class="comment">%</span>
+0365 <span class="comment">% ## Author: Ben Abbott &lt;bpabbott@mac.com&gt;</span>
+0366 <span class="comment">% ## Vectorized version: Jaroslav Hajek &lt;highegg@gmail.com&gt;</span>
+0367 <span class="comment">% ## Description: Quantile function of empirical samples</span>
+0368 
+0369 <a name="_sub1" href="#_subfunctions" class="code">function inv = octave__quantile__ (x, p, method)</a>
+0370 
+0371 <span class="keyword">if</span> (isinteger (x) || islogical (x))
+0372     x = double (x);
+0373 <span class="keyword">end</span>
+0374 
+0375 <span class="comment">% set shape of quantiles to column vector.</span>
+0376 p = p(:);
+0377 
+0378 <span class="comment">% Save length and set shape of samples.</span>
+0379 <span class="comment">% FIXME: does sort guarantee that NaN's come at the end?</span>
+0380 x = sort (x);
+0381 m = sum (~ isnan (x));
+0382 [xr, xc] = size (x);
+0383 
+0384 <span class="comment">% Initialize output values.</span>
+0385 inv = Inf (class (x)) * (-(p &lt; 0) + (p &gt; 1));
+0386 inv = repmat (inv, 1, xc);
+0387 
+0388 <span class="comment">% Do the work.</span>
+0389 k = find ((p &gt;= 0) &amp; (p &lt;= 1));
+0390 <span class="keyword">if</span> (any (k))
+0391     n = length (k);
+0392     p = p(k);
+0393     <span class="comment">% Special case of 1 row.</span>
+0394     <span class="keyword">if</span> (xr == 1)
+0395         inv(k,:) = repmat (x, n, 1);
+0396         <span class="keyword">return</span>;
+0397     <span class="keyword">end</span>
+0398     
+0399     <span class="comment">% The column-distribution indices.</span>
+0400     pcd = kron (ones (n, 1), xr*(0:xc-1));
+0401     mm = kron (ones (n, 1), m);
+0402     <span class="keyword">switch</span> (method)
+0403         <span class="keyword">case</span> {1, 2, 3}
+0404             <span class="keyword">switch</span> (method)
+0405                 <span class="keyword">case</span> 1
+0406                     p = max (ceil (kron (p, m)), 1);
+0407                     inv(k,:) = x(p + pcd);
+0408                     
+0409                 <span class="keyword">case</span> 2
+0410                     p = kron (p, m);
+0411                     p_lr = max (ceil (p), 1);
+0412                     p_rl = min (floor (p + 1), mm);
+0413                     inv(k,:) = (x(p_lr + pcd) + x(p_rl + pcd))/2;
+0414                     
+0415                 <span class="keyword">case</span> 3
+0416                     <span class="comment">% Used by SAS, method PCTLDEF=2.</span>
+0417                     <span class="comment">% http://support.sas.com/onlinedoc/913/getDoc/en/statug.hlp/stdize_sect14.htm</span>
+0418                     t = max (kron (p, m), 1);
+0419                     t = roundb (t);
+0420                     inv(k,:) = x(t + pcd);
+0421             <span class="keyword">end</span>
+0422             
+0423         <span class="keyword">otherwise</span>
+0424             <span class="keyword">switch</span> (method)
+0425                 <span class="keyword">case</span> 4
+0426                     p = kron (p, m);
+0427                     
+0428                 <span class="keyword">case</span> 5
+0429                     <span class="comment">% Used by Matlab.</span>
+0430                     p = kron (p, m) + 0.5;
+0431                     
+0432                 <span class="keyword">case</span> 6
+0433                     <span class="comment">% Used by Minitab and SPSS.</span>
+0434                     p = kron (p, m+1);
+0435                     
+0436                 <span class="keyword">case</span> 7
+0437                     <span class="comment">% Used by S and R.</span>
+0438                     p = kron (p, m-1) + 1;
+0439                     
+0440                 <span class="keyword">case</span> 8
+0441                     <span class="comment">% Median unbiased.</span>
+0442                     p = kron (p, m+1/3) + 1/3;
+0443                     
+0444                 <span class="keyword">case</span> 9
+0445                     <span class="comment">% Approximately unbiased respecting order statistics.</span>
+0446                     p = kron (p, m+0.25) + 0.375;
+0447                     
+0448                 <span class="keyword">otherwise</span>
+0449                     error (<span class="string">'quantile: Unknown METHOD, ''%d'''</span>, method);
+0450             <span class="keyword">end</span>
+0451             
+0452             <span class="comment">% Duplicate single values.</span>
+0453             imm1 = (mm == 1);
+0454             x(2,imm1) = x(1,imm1);
+0455             
+0456             <span class="comment">% Interval indices.</span>
+0457             pi = max (min (floor (p), mm-1), 1);
+0458             pr = max (min (p - pi, 1), 0);
+0459             pi = pi + pcd;
+0460             inv(k,:) = (1-pr) .* x(pi) + pr .* x(pi+1);
+0461     <span class="keyword">end</span>
+0462 <span class="keyword">end</span>
+0463 
+0464 <span class="keyword">end</span> <span class="comment">% function octave__quantile__</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_phipcrit</title>
+  <meta name="keywords" content="stk_phipcrit">
+  <meta name="description" content="STK_PHIPCRIT computes the &quot;phi_p&quot; criterion of Morris &amp; Mitchell.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">design</a> &gt; stk_phipcrit.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/design&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_phipcrit
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_PHIPCRIT computes the &quot;phi_p&quot; criterion of Morris &amp; Mitchell.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function phi = stk_phipcrit (x, p) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_PHIPCRIT computes the &quot;phi_p&quot; criterion of Morris &amp; Mitchell.
+
+ CALL: D = stk_phipcrit (X, P)
+
+    computes the phi_P criterion on the set of points X, which is defined for
+    an n x d array X as
+
+       D = (sum_{1 &lt;= i &lt; j &lt;= n} d_ij ^ (-p)) ^ (-1/p)
+
+    where d_ij is the Euclidean distance in R^d between X(i,:) and X(j,:).
+
+ CALL: D = stk_phipcrit (X)
+
+    computes the phi_P criterion with P = 50.
+
+ NOTES:
+
+    * In the special case P = 2, this criterion has first been introduced by
+      Audze &amp; Eglais (1977).
+
+    * When p -&gt; +Inf, the value of the phi_p criterion tends to the inverse of
+      the mindist criterion. The phi_p criterion with a high value of p is
+      often used in place of the mindist criterion for its being easier to
+      optimize. Morris &amp; Mitchell recommend using p in the range 20-50 for this
+      purpose.
+
+ REFERENCES:
+
+   [1] Max D. Morris and Toby J. Mitchell, &quot;Exploratory Designs for Computer
+       Experiments&quot;, Journal of Statistical Planning and Inference,
+       43(3):381-402, 1995.
+
+   [2] P. Audze and V. Eglais, &quot;New approach for planning out experiments&quot;,
+       Problems of Dynamics and Strengths, 35:104-107, 1977.
+
+   [3] Luc Pronzato and Werner G. Müller, &quot;Design of computer
+       experiments: space filling and beyond&quot;, Statistics and Computing,
+       22(3):681-701, 2012.
+
+   [4] G. Damblin, M. Couplet and B. Iooss, &quot;Numerical studies of space filling
+       designs: optimization of Latin hypercube samples and subprojection
+       properties&quot;, Journal of Simulation, in press.
+
+ See also: stk_mindist, stk_filldist</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_PHIPCRIT computes the &quot;phi_p&quot; criterion of Morris &amp; Mitchell.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: D = stk_phipcrit (X, P)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    computes the phi_P criterion on the set of points X, which is defined for</span>
+0006 <span class="comment">%    an n x d array X as</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%       D = (sum_{1 &lt;= i &lt; j &lt;= n} d_ij ^ (-p)) ^ (-1/p)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    where d_ij is the Euclidean distance in R^d between X(i,:) and X(j,:).</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% CALL: D = stk_phipcrit (X)</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%    computes the phi_P criterion with P = 50.</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">% NOTES:</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    * In the special case P = 2, this criterion has first been introduced by</span>
+0019 <span class="comment">%      Audze &amp; Eglais (1977).</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    * When p -&gt; +Inf, the value of the phi_p criterion tends to the inverse of</span>
+0022 <span class="comment">%      the mindist criterion. The phi_p criterion with a high value of p is</span>
+0023 <span class="comment">%      often used in place of the mindist criterion for its being easier to</span>
+0024 <span class="comment">%      optimize. Morris &amp; Mitchell recommend using p in the range 20-50 for this</span>
+0025 <span class="comment">%      purpose.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">% REFERENCES:</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%   [1] Max D. Morris and Toby J. Mitchell, &quot;Exploratory Designs for Computer</span>
+0030 <span class="comment">%       Experiments&quot;, Journal of Statistical Planning and Inference,</span>
+0031 <span class="comment">%       43(3):381-402, 1995.</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%   [2] P. Audze and V. Eglais, &quot;New approach for planning out experiments&quot;,</span>
+0034 <span class="comment">%       Problems of Dynamics and Strengths, 35:104-107, 1977.</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%   [3] Luc Pronzato and Werner G. Müller, &quot;Design of computer</span>
+0037 <span class="comment">%       experiments: space filling and beyond&quot;, Statistics and Computing,</span>
+0038 <span class="comment">%       22(3):681-701, 2012.</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">%   [4] G. Damblin, M. Couplet and B. Iooss, &quot;Numerical studies of space filling</span>
+0041 <span class="comment">%       designs: optimization of Latin hypercube samples and subprojection</span>
+0042 <span class="comment">%       properties&quot;, Journal of Simulation, in press.</span>
+0043 <span class="comment">%</span>
+0044 <span class="comment">% See also: stk_mindist, stk_filldist</span>
+0045 
+0046 <span class="comment">% Copyright Notice</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0049 <span class="comment">%</span>
+0050 <span class="comment">%    Author:   Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0051 
+0052 <span class="comment">% Copying Permission Statement</span>
+0053 <span class="comment">%</span>
+0054 <span class="comment">%    This file is part of</span>
+0055 <span class="comment">%</span>
+0056 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0057 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0058 <span class="comment">%</span>
+0059 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0060 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0061 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0062 <span class="comment">%    option) any later version.</span>
+0063 <span class="comment">%</span>
+0064 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0065 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0066 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0067 <span class="comment">%    License for more details.</span>
+0068 <span class="comment">%</span>
+0069 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0070 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0071 
+0072 <a name="_sub0" href="#_subfunctions" class="code">function phi = stk_phipcrit (x, p)</a>
+0073 
+0074 <span class="keyword">if</span> nargin &gt; 2
+0075     stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0076 <span class="keyword">end</span>
+0077 
+0078 <span class="keyword">if</span> nargin &lt; 2,
+0079     p = 50;
+0080 <span class="keyword">end</span>
+0081 
+0082 <span class="comment">% compute the distance matrix</span>
+0083 D = stk_dist (x);
+0084 
+0085 <span class="comment">% compute mindist</span>
+0086 D = D + diag (inf (1, size (x, 1)));
+0087 z = min (D(:));
+0088 
+0089 <span class="comment">% compute the value of the criterion</span>
+0090 <span class="keyword">if</span> z &gt; 0
+0091     tmp = triu ((D / z) .^ (-p), 1);
+0092     phi = 1 / z * sum(tmp(:)) .^ (1/p);
+0093 <span class="keyword">else</span>
+0094     phi = Inf;
+0095 <span class="keyword">end</span>
+0096 
+0097 <span class="keyword">end</span> <span class="comment">% function stk_phipcrit</span>
+0098 
+0099 
+0100 
+0101 
+0102 
+0103 
+0104 
+0105 
+0106 
+0107 
+0108 
+0109 
+0110 
+0111 
+0112 
+0113 
+0114 
+0115 
+0116 
+0117 
+0118 <span class="comment">% library (DiceDesign)   # load DiceDesign 1.2</span>
+0119 <span class="comment">% options (digits = 16)  # display 16 significat digits</span>
+0120 <span class="comment">%</span>
+0121 <span class="comment">% x &lt;- data.frame (x1 = c(0, 0.2, 0.4, 0.6, 0.8, 1.0),</span>
+0122 <span class="comment">%                  x2 = c(0, 0.6, 0.8, 1.0, 0.2, 0.4))</span>
+0123 <span class="comment">%</span>
+0124 <span class="comment">% phiP (x, 10)    # 3.946317664423303</span>
+0125 <span class="comment">% phiP (x, 50)    # 3.614077252813102</span>
+0126 <span class="comment">% phiP (x, 100)   # 3.574589859827413</span>
+0127 <span class="comment">% phiP (x, 1000)  # Inf, but we can do better</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

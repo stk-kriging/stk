@@ -1,0 +1,155 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_sampling_randunif</title>
+  <meta name="keywords" content="stk_sampling_randunif">
+  <meta name="description" content="STK_SAMPLING_RANDUNIF generates uniformly distributed points.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">sampling</a> &gt; stk_sampling_randunif.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for sampling&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_sampling_randunif
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_SAMPLING_RANDUNIF generates uniformly distributed points.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function x = stk_sampling_randunif(n, dim, box) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_SAMPLING_RANDUNIF generates uniformly distributed points.
+
+ CALL: X = stk_sampling_randunif(N, DIM)
+
+   generates N points, independent and uniformly distributed in the
+   DIM-dimensional hypercube [0; 1]^DIM.
+
+ CALL: X = stk_sampling_randunif(N, DIM, BOX)
+
+   does the same thing in the DIM-dimensional hyperrectangle specified by the
+   argument BOX, which is a 2 x DIM matrix where BOX(1, j) and BOX(2, j) are
+   the lower- and upper-bound of the interval on the j^th coordinate.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_SAMPLING_RANDUNIF generates uniformly distributed points.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: X = stk_sampling_randunif(N, DIM)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   generates N points, independent and uniformly distributed in the</span>
+0006 <span class="comment">%   DIM-dimensional hypercube [0; 1]^DIM.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% CALL: X = stk_sampling_randunif(N, DIM, BOX)</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%   does the same thing in the DIM-dimensional hyperrectangle specified by the</span>
+0011 <span class="comment">%   argument BOX, which is a 2 x DIM matrix where BOX(1, j) and BOX(2, j) are</span>
+0012 <span class="comment">%   the lower- and upper-bound of the interval on the j^th coordinate.</span>
+0013 
+0014 <span class="comment">% Copyright Notice</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0019 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0020 
+0021 <span class="comment">% Copying Permission Statement</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%    This file is part of</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0026 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0029 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0030 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0031 <span class="comment">%    option) any later version.</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0034 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0035 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0036 <span class="comment">%    License for more details.</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0039 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0040 
+0041 <a name="_sub0" href="#_subfunctions" class="code">function x = stk_sampling_randunif(n, dim, box)</a>
+0042 
+0043 <span class="keyword">if</span> nargin &gt; 3,
+0044    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0045 <span class="keyword">end</span>
+0046 
+0047 <span class="comment">% read argument n</span>
+0048 <span class="keyword">if</span> (length(n) ~=1 ) &amp;&amp; (length(n) ~= dim)
+0049     error(<span class="string">'n should either be a scalar or a vector of length d'</span>);
+0050 <span class="keyword">end</span>
+0051 
+0052 <span class="comment">% read argument box</span>
+0053 <span class="keyword">if</span> (nargin &lt; 3) || isempty(box)
+0054     box = repmat([0; 1], 1, dim);
+0055 <span class="keyword">else</span>
+0056     stk_assert_box(box);
+0057 <span class="keyword">end</span>
+0058 
+0059 <span class="keyword">if</span> n == 0, <span class="comment">% empty sample</span>
+0060     xdata = zeros(0,dim);    
+0061 <span class="keyword">else</span> <span class="comment">% at least one input point</span>
+0062     xdata = stk_rescale(rand(n, dim), [], box);
+0063 <span class="keyword">end</span>
+0064 
+0065 x = stk_dataframe(xdata);
+0066 x.info = <span class="string">'Created by stk_sampling_randunif'</span>;
+0067 
+0068 <span class="keyword">end</span> <span class="comment">% function stk_sampling_randunif</span>
+0069 
+0070 
+0071 <span class="comment">%%</span>
+0072 <span class="comment">% Check error for incorrect number of input arguments</span>
+0073 
+0074 
+0075 
+0076 
+0077 
+0078 
+0079 
+0080 
+0081 
+0082 
+0083 <span class="comment">%%</span>
+0084 <span class="comment">% Check that the output is a dataframe</span>
+0085 <span class="comment">% (all stk_sampling_* functions should behave similarly in this respect)</span>
+0086 
+0087 
+0088 
+0089 <span class="comment">%%</span>
+0090 <span class="comment">% Check output argument</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

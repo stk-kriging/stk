@@ -1,0 +1,206 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_example_kb01</title>
+  <meta name="keywords" content="stk_example_kb01">
+  <meta name="description" content="STK_EXAMPLE_KB01  Ordinary kriging in 1D">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; <a href="index.html">01_kriging_basics</a> &gt; stk_example_kb01.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for examples/01_kriging_basics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_example_kb01
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_EXAMPLE_KB01  Ordinary kriging in 1D</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_EXAMPLE_KB01  Ordinary kriging in 1D
+
+ A Matern covariance function is used for the Gaussian Process (GP) prior. The
+ parameters of this covariance function are assumed to be known (i.e., no
+ parameter estimation is performed here).
+
+ The word 'ordinary' indicates that the mean function of the GP prior is
+ assumed to be constant and unknown.
+
+ The example first performs kriging prediction based on noiseless data (the
+ kriging predictor, which is the posterior mean of the GP model, interpolates
+ the data in this case) and then based on noisy data.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_EXAMPLE_KB01  Ordinary kriging in 1D</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% A Matern covariance function is used for the Gaussian Process (GP) prior. The</span>
+0004 <span class="comment">% parameters of this covariance function are assumed to be known (i.e., no</span>
+0005 <span class="comment">% parameter estimation is performed here).</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">% The word 'ordinary' indicates that the mean function of the GP prior is</span>
+0008 <span class="comment">% assumed to be constant and unknown.</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">% The example first performs kriging prediction based on noiseless data (the</span>
+0011 <span class="comment">% kriging predictor, which is the posterior mean of the GP model, interpolates</span>
+0012 <span class="comment">% the data in this case) and then based on noisy data.</span>
+0013 
+0014 <span class="comment">% Copyright Notice</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0019 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0020 
+0021 <span class="comment">% Copying Permission Statement</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%    This file is part of</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0026 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0029 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0030 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0031 <span class="comment">%    option) any later version.</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0034 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0035 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0036 <span class="comment">%    License for more details.</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0039 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0040 
+0041 stk_disp_examplewelcome
+0042 
+0043 <span class="comment">% Use verbose output for the display of dataframes</span>
+0044 save_verbosity = stk_options_get (<span class="string">'stk_dataframe'</span>, <span class="string">'disp_format'</span>);
+0045 stk_options_set (<span class="string">'stk_dataframe'</span>, <span class="string">'disp_format'</span>, <span class="string">'verbose'</span>);
+0046 
+0047 
+0048 <span class="comment">%% Define a 1d test function</span>
+0049 
+0050 f   = @(x)(- (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
+0051 DIM = 1;            <span class="comment">% dimension of the factor space</span>
+0052 BOX = [-1.0; 1.0];  <span class="comment">% factor space</span>
+0053 
+0054 NT = 400; <span class="comment">% nb of points in the grid</span>
+0055 xt = stk_sampling_regulargrid (NT, DIM, BOX);
+0056 zt = stk_feval (f, xt);
+0057 
+0058 stk_figure (<span class="string">'stk_example_kb01 (a)'</span>);  plot (xt, zt);
+0059 stk_title  (<span class="string">'Function to be approximated'</span>);
+0060 stk_labels (<span class="string">'input variable x'</span>, <span class="string">'response z'</span>);
+0061 
+0062 
+0063 <span class="comment">%% Generate a space-filling design</span>
+0064 <span class="comment">%</span>
+0065 <span class="comment">% The objective is to construct an approximation of f with a budget of NI</span>
+0066 <span class="comment">% evaluations performed on a &quot;space-filling design&quot;.</span>
+0067 <span class="comment">%</span>
+0068 <span class="comment">% A regular grid (i.e., a grid with constant spacing) is constructed using</span>
+0069 <span class="comment">% stk_sampling_regulargrid(), which is equivalent to linspace() in this 1D</span>
+0070 <span class="comment">% example.</span>
+0071 <span class="comment">%</span>
+0072 
+0073 NI = 6;                                        <span class="comment">% number of evaluations</span>
+0074 xi = stk_sampling_regulargrid (NI, DIM, BOX);  <span class="comment">% evaluation points</span>
+0075 zi = stk_feval (f, xi);                        <span class="comment">% evaluation results</span>
+0076 
+0077 
+0078 <span class="comment">%% Specification of the model</span>
+0079 <span class="comment">%</span>
+0080 <span class="comment">% We choose a Matern covariance with &quot;fixed parameters&quot; (in other  words, the</span>
+0081 <span class="comment">% parameters of the covariance function are provided by the user rather than</span>
+0082 <span class="comment">% estimated from data).</span>
+0083 <span class="comment">%</span>
+0084 
+0085 <span class="comment">% The following line defines a model with a constant but unknown mean (ordinary</span>
+0086 <span class="comment">% kriging) and a Matern covariance function. (Some default parameters are also</span>
+0087 <span class="comment">% set, but we override them below.)</span>
+0088 model = stk_model (<span class="string">'stk_materncov_iso'</span>);
+0089 
+0090 <span class="comment">% NOTE: the suffix '_iso' indicates an ISOTROPIC covariance function, but the</span>
+0091 <span class="comment">% distinction isotropic / anisotropic is irrelevant here since DIM = 1.</span>
+0092 
+0093 <span class="comment">% Parameters for the Matern covariance function</span>
+0094 <span class="comment">% (&quot;help stk_materncov_iso&quot; for more information)</span>
+0095 SIGMA2 = 1.0;  <span class="comment">% variance parameter</span>
+0096 NU     = 4.0;  <span class="comment">% regularity parameter</span>
+0097 RHO1   = 0.4;  <span class="comment">% scale (range) parameter</span>
+0098 model.param = log ([SIGMA2; NU; 1/RHO1]);
+0099 
+0100 
+0101 <span class="comment">%% Carry out the kriging prediction and display the result</span>
+0102 <span class="comment">%</span>
+0103 <span class="comment">% The result of a kriging predicition is provided by stk_predict() in an object</span>
+0104 <span class="comment">% zp of type stk_dataframe, with two columns: &quot;zp.mean&quot; (the kriging mean) and</span>
+0105 <span class="comment">% &quot;zp.var&quot; (the kriging variance).</span>
+0106 <span class="comment">%</span>
+0107 
+0108 <span class="comment">% Carry out the kriging prediction at points xt</span>
+0109 zp = stk_predict (model, xi, zi, xt);
+0110 
+0111 <span class="comment">% Display the result</span>
+0112 stk_figure (<span class="string">'stk_example_kb01 (b)'</span>);  stk_plot1d (xi, zi, xt, zt, zp);
+0113 stk_title  (<span class="string">'Kriging prediction based on noiseless observations'</span>);
+0114 stk_labels (<span class="string">'input variable x'</span>, <span class="string">'response z'</span>);
+0115 
+0116 
+0117 <span class="comment">%% Repeat the experiment in a noisy setting</span>
+0118 
+0119 NOISEVARIANCE = (1e-1)^2;
+0120 
+0121 <span class="comment">% Now the observations are perturbed by an additive Gaussian noise</span>
+0122 noise = sqrt (NOISEVARIANCE) * randn (size (zi));
+0123 zi_n = zi + noise;
+0124 
+0125 <span class="comment">% We also include the observation noise in the model</span>
+0126 model_n = model;
+0127 model_n.lognoisevariance = log (NOISEVARIANCE);
+0128 
+0129 <span class="comment">% Carry out the kriging prediction at locations xt</span>
+0130 zp_n = stk_predict (model_n, xi, zi_n, xt);
+0131 
+0132 <span class="comment">% Display the result</span>
+0133 stk_figure (<span class="string">'stk_example_kb01 (c)'</span>);  stk_plot1d (xi, zi_n, xt, zt, zp_n);
+0134 stk_title  (<span class="string">'Kriging prediction based on noisy observations'</span>);
+0135 stk_labels (<span class="string">'input variable x'</span>, <span class="string">'response z'</span>);
+0136 
+0137 
+0138 <span class="comment">%% Cleanup</span>
+0139 
+0140 <span class="comment">% Restore output verbosity</span>
+0141 stk_options_set (<span class="string">'stk_dataframe'</span>, <span class="string">'disp_format'</span>, save_verbosity);</pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

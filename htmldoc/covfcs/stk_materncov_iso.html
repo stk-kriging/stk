@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_materncov_iso</title>
+  <meta name="keywords" content="stk_materncov_iso">
+  <meta name="description" content="STK_MATERNCOV_ISO computes the isotropic Matern covariance">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">covfcs</a> &gt; stk_materncov_iso.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for covfcs&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_materncov_iso
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_MATERNCOV_ISO computes the isotropic Matern covariance</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function k = stk_materncov_iso (param, x, y, diff, pairwise) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_MATERNCOV_ISO computes the isotropic Matern covariance
+
+ CALL: [k]=stk_materncov_iso(param, x, y, diff)
+   param  = vector of parameters of size 3
+   x      = structure whose field 'a' contains the observed points.
+            x is a matrix of size n x d, where n is the number of
+            points and d is the dimension of the
+            factor space
+   y      = same as x
+   diff   = differentiation parameter
+
+ STK_MATERNCOV_ISO computes a Matern covariance between two random vectors
+ specified by the locations of the observations. The isotropic covariance
+ function has three parameters
+    param(1) = log(sigma^2) is the logarithm of the variance of random
+               process
+    param(2) = log(nu) is the logarithm of the regularity parameter of the
+               Matern covariance
+    param(3) = -log(rho) is the logarithm of the inverse of the range
+               parameter
+ If diff ~= -1, the function returns the derivative of the covariance wrt
+ param(diff)</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_MATERNCOV_ISO computes the isotropic Matern covariance</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: [k]=stk_materncov_iso(param, x, y, diff)</span>
+0004 <span class="comment">%   param  = vector of parameters of size 3</span>
+0005 <span class="comment">%   x      = structure whose field 'a' contains the observed points.</span>
+0006 <span class="comment">%            x is a matrix of size n x d, where n is the number of</span>
+0007 <span class="comment">%            points and d is the dimension of the</span>
+0008 <span class="comment">%            factor space</span>
+0009 <span class="comment">%   y      = same as x</span>
+0010 <span class="comment">%   diff   = differentiation parameter</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% STK_MATERNCOV_ISO computes a Matern covariance between two random vectors</span>
+0013 <span class="comment">% specified by the locations of the observations. The isotropic covariance</span>
+0014 <span class="comment">% function has three parameters</span>
+0015 <span class="comment">%    param(1) = log(sigma^2) is the logarithm of the variance of random</span>
+0016 <span class="comment">%               process</span>
+0017 <span class="comment">%    param(2) = log(nu) is the logarithm of the regularity parameter of the</span>
+0018 <span class="comment">%               Matern covariance</span>
+0019 <span class="comment">%    param(3) = -log(rho) is the logarithm of the inverse of the range</span>
+0020 <span class="comment">%               parameter</span>
+0021 <span class="comment">% If diff ~= -1, the function returns the derivative of the covariance wrt</span>
+0022 <span class="comment">% param(diff)</span>
+0023 
+0024 <span class="comment">% Copyright Notice</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0029 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0030 
+0031 <span class="comment">% Copying Permission Statement</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%    This file is part of</span>
+0034 <span class="comment">%</span>
+0035 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0036 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0039 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0040 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0041 <span class="comment">%    option) any later version.</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0044 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0045 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0046 <span class="comment">%    License for more details.</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0049 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0050 
+0051 <a name="_sub0" href="#_subfunctions" class="code">function k = stk_materncov_iso (param, x, y, diff, pairwise)</a>
+0052 
+0053 <span class="keyword">if</span> nargin &gt; 5,
+0054    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0055 <span class="keyword">end</span>
+0056 
+0057 <span class="keyword">persistent</span> x0 y0 param0 pairwise0 D
+0058 
+0059 <span class="comment">% process input arguments</span>
+0060 x = double (x);
+0061 y = double (y);
+0062 <span class="keyword">if</span> nargin &lt; 4, diff = -1; <span class="keyword">end</span>
+0063 <span class="keyword">if</span> nargin &lt; 5, pairwise = false; <span class="keyword">end</span>
+0064 
+0065 <span class="comment">% extract parameters from the &quot;param&quot; vector</span>
+0066 Sigma2 = exp (param(1));
+0067 Nu     = exp (param(2));
+0068 invRho = exp (param(3));
+0069 
+0070 <span class="comment">% check parameter values</span>
+0071 <span class="keyword">if</span> ~ (Sigma2 &gt; 0) || ~ (Nu &gt; 0) || ~ (invRho &gt; 0),
+0072     error (<span class="string">'Incorrect parameter value.'</span>);
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="comment">% check if all input arguments are the same as before</span>
+0076 <span class="comment">% (or if this is the first call to the function)</span>
+0077 <span class="keyword">if</span> isempty (x0) || isempty (y0) || isempty (param0) <span class="keyword">...</span>
+0078         || ~ isequal ({x, y, param}, {x0, y0, param0}) <span class="keyword">...</span>
+0079         || ~ isequal (pairwise, pairwise0)
+0080     <span class="comment">% compute the distance matrix</span>
+0081     D  = invRho * stk_dist (x, y, pairwise);
+0082     <span class="comment">% save arguments for the nex call</span>
+0083     x0 = x;  y0 = y;  param0 = param;  pairwise0 = pairwise;
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="keyword">if</span> diff == -1,
+0087     <span class="comment">%%% compute the value (not a derivative)</span>
+0088     k = Sigma2 * stk_sf_matern (Nu, D, -1);
+0089 <span class="keyword">elseif</span> diff == 1,
+0090     <span class="comment">%%% diff wrt param(1) = log(Sigma2)</span>
+0091     k = Sigma2 * stk_sf_matern (Nu, D, -1);
+0092 <span class="keyword">elseif</span> diff == 2,
+0093     <span class="comment">%%% diff wrt param(2) = log(Nu)</span>
+0094     k = Nu * Sigma2 * stk_sf_matern (Nu, D, 1);
+0095 <span class="keyword">elseif</span> diff == 3,
+0096     <span class="comment">%%% diff wrt param(3) = - log(invRho)</span>
+0097     k = D .* (Sigma2 * stk_sf_matern (Nu, D, 2));
+0098 <span class="keyword">else</span>
+0099     error (<span class="string">'there must be something wrong here !'</span>);
+0100 <span class="keyword">end</span>
+0101 
+0102 <span class="keyword">end</span> <span class="comment">% function stk_materncov_iso</span>
+0103 
+0104 
+0105 <span class="comment">%%</span>
+0106 <span class="comment">% 1D, 5x5</span>
+0107 
+0108 
+0109 
+0110 
+0111 
+0112 
+0113 
+0114 
+0115 
+0116 
+0117 
+0118 
+0119 
+0120 
+0121 
+0122 
+0123 
+0124 
+0125 
+0126 
+0127 
+0128 
+0129 
+0130 
+0131 
+0132 
+0133 <span class="comment">%%</span>
+0134 <span class="comment">% 3D, 4x10</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

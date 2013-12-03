@@ -1,0 +1,200 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_param_relik</title>
+  <meta name="keywords" content="stk_param_relik">
+  <meta name="description" content="STK_REMLQRG computes the restricted likelihood of a model given data.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">paramestim</a> &gt; stk_param_relik.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for paramestim&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_param_relik
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_REMLQRG computes the restricted likelihood of a model given data.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_REMLQRG computes the restricted likelihood of a model given data.
+
+ CALL: [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (MODEL, XI, YI)
+
+   computes the opposite of the restricted likelihood (denoted by ARL for
+   Anti-Restricted Likelihood) of MODEL given the data (XI, YI). The function
+   also returns the gradient dARL_dtheta of ARL with respect to the parameters
+   of the covariance function and the derivative dARL_dLNV of ARL with respect
+   to the logarithm of the noise variance.
+
+ EXAMPLE: see paramestim/stk_param_estim.m</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+<li><a href="stk_param_estim.html" class="code" title="function [paramopt, paramlnvopt] = stk_param_estim(model, xi, yi, param0, param0lnv)">stk_param_estim</a>	STK_PARAM_ESTIM estimates the parameters of a covariance function.</li><li><a href="stk_param_init.html" class="code" title="function [param, lnv] = stk_param_init (model, xi, yi, box, noisy)">stk_param_init</a>	STK_PARAM_INIT provides a starting point for stk_param_estim().</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_REMLQRG computes the restricted likelihood of a model given data.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (MODEL, XI, YI)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   computes the opposite of the restricted likelihood (denoted by ARL for</span>
+0006 <span class="comment">%   Anti-Restricted Likelihood) of MODEL given the data (XI, YI). The function</span>
+0007 <span class="comment">%   also returns the gradient dARL_dtheta of ARL with respect to the parameters</span>
+0008 <span class="comment">%   of the covariance function and the derivative dARL_dLNV of ARL with respect</span>
+0009 <span class="comment">%   to the logarithm of the noise variance.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% EXAMPLE: see paramestim/stk_param_estim.m</span>
+0012 
+0013 <span class="comment">% Copyright Notice</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0018 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0019 
+0020 <span class="comment">% Copying Permission Statement</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    This file is part of</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0025 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0028 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0029 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0030 <span class="comment">%    option) any later version.</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0033 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0034 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0035 <span class="comment">%    License for more details.</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0038 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0039 
+0040 <a name="_sub0" href="#_subfunctions" class="code">function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)</a>
+0041 
+0042 <span class="keyword">if</span> nargin &gt; 3,
+0043    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0044 <span class="keyword">end</span>
+0045 
+0046 <span class="comment">% Ensure that param is a column vector (note: in the case where model.param is</span>
+0047 <span class="comment">% an object, this is actually a call to subsasgn() in disguise).</span>
+0048 param = model.param(:);
+0049 
+0050 PARAMPRIOR = isfield(model, <span class="string">'prior'</span>);
+0051 NOISYOBS   = isfield(model, <span class="string">'lognoisevariance'</span>);
+0052 NOISEPRIOR = isfield(model, <span class="string">'noiseprior'</span>);
+0053 
+0054 <span class="keyword">if</span> ~NOISYOBS,
+0055     <span class="keyword">if</span> NOISEPRIOR,
+0056         error([<span class="string">'Having a prior on the noise variance when there is'</span> <span class="keyword">...</span>
+0057             <span class="string">'no observation noise doesn''t make sense...'</span>]);
+0058     <span class="keyword">else</span>
+0059         <span class="comment">% log(eps) is harmless</span>
+0060         model.lognoisevariance = log(eps);
+0061     <span class="keyword">end</span>
+0062 <span class="keyword">end</span>
+0063 
+0064 n = size(xi, 1);
+0065 
+0066 <span class="comment">%% compute rl</span>
+0067 
+0068 [K, P] = stk_make_matcov(model, xi);
+0069 q = size(P, 2);
+0070 
+0071 [Q, R_ignored] = qr(P); <span class="comment">%#ok&lt;NASGU&gt; %the second argument *must* be here</span>
+0072 W = Q(:, (q+1):n);
+0073 Wyi = W' * double(yi);
+0074 
+0075 G = W' * (K * W);
+0076 
+0077 Ginv = inv(G);
+0078 WKWinv_Wyi = Ginv * Wyi; <span class="comment">%#ok&lt;MINV&gt;</span>
+0079 
+0080 [C, p] = chol(G); <span class="comment">%#ok&lt;NASGU&gt;</span>
+0081 ldetWKW = 2*sum(log(diag(C))); <span class="comment">% log(det(G));</span>
+0082 
+0083 attache = Wyi' * WKWinv_Wyi;
+0084 
+0085 <span class="keyword">if</span> PARAMPRIOR
+0086     delta_p = param - model.prior.mean;
+0087     prior = delta_p' * model.prior.invcov * delta_p;
+0088 <span class="keyword">else</span>
+0089     prior = 0;
+0090 <span class="keyword">end</span>
+0091 
+0092 <span class="keyword">if</span> NOISEPRIOR
+0093     delta_lnv = model.lognoisevariance - model.noiseprior.mean;
+0094     noiseprior = delta_lnv^2 / model.noiseprior.var;
+0095 <span class="keyword">else</span>
+0096     noiseprior = 0;
+0097 <span class="keyword">end</span>
+0098 
+0099 rl = 1/2 * ((n-q) * log(2*pi) + ldetWKW + attache + prior + noiseprior);
+0100 
+0101 <span class="comment">%% compute gradient</span>
+0102 
+0103 <span class="keyword">if</span> nargout &gt;= 2
+0104     
+0105     nbparam = length(param);
+0106     drl_param = zeros(nbparam, 1);
+0107     
+0108     <span class="keyword">for</span> diff = 1:nbparam,
+0109         V = feval(model.covariance_type, model.param, xi, xi, diff);
+0110         WVW = W' * V * W;
+0111         drl_param(diff) = 1/2 * (sum(sum(Ginv .* WVW)) - WKWinv_Wyi' * WVW * WKWinv_Wyi);
+0112     <span class="keyword">end</span>
+0113     
+0114     <span class="keyword">if</span> PARAMPRIOR
+0115         drl_param = drl_param + model.prior.invcov * delta_p;
+0116     <span class="keyword">end</span>
+0117     
+0118     <span class="keyword">if</span> nargout &gt;= 3,
+0119         <span class="keyword">if</span> NOISYOBS,
+0120             diff = 1;
+0121             V = stk_noisecov(n, model.lognoisevariance, diff);
+0122             WVW = W' * V * W;
+0123             drl_lnv = 1/2 * (sum(sum(Ginv .* WVW)) - WKWinv_Wyi' * WVW * WKWinv_Wyi);
+0124             <span class="keyword">if</span> NOISEPRIOR
+0125                 drl_lnv = drl_lnv + delta_lnv / model.noiseprior.var;
+0126             <span class="keyword">end</span>
+0127         <span class="keyword">else</span>
+0128             <span class="comment">% returns NaN for the derivative with respect to the noise</span>
+0129             <span class="comment">% variance in the case of a model without observation noise</span>
+0130             drl_lnv = NaN;
+0131         <span class="keyword">end</span>
+0132     <span class="keyword">end</span>
+0133     
+0134 <span class="keyword">end</span>
+0135 
+0136 <span class="keyword">end</span> <span class="comment">% function stk_param_relik</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

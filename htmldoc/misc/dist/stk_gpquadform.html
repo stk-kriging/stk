@@ -1,0 +1,249 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_gpquadform</title>
+  <meta name="keywords" content="stk_gpquadform">
+  <meta name="description" content="STK_GPQUADFORM computes a Gibbs-Paciorek quadratic form.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">dist</a> &gt; stk_gpquadform.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/dist&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_gpquadform
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_GPQUADFORM computes a Gibbs-Paciorek quadratic form.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function Q = stk_gpquadform(x, y, rx, ry, pairwise) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_GPQUADFORM computes a Gibbs-Paciorek quadratic form.
+
+ CALL: Q = stk_dist(X, Y, RX, RY)
+
+    computes a matrix Q, whose entries Q(i,j) are given by a Gibbs-
+    Paciorek quadratic form 
+
+       Q(i,j) = \sum_{k = 1}^d (X(i,k) - Y(j,k))^2 / R(i,j,k)^2,
+
+    where
+
+       R(i,j,k)^2 = RX(i,k)^2 + RY(i,k)^2,
+
+    assuming that
+
+     * X and RX have size [nX d],
+     * Y and RY have size [nY d].</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_GPQUADFORM computes a Gibbs-Paciorek quadratic form.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: Q = stk_dist(X, Y, RX, RY)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    computes a matrix Q, whose entries Q(i,j) are given by a Gibbs-</span>
+0006 <span class="comment">%    Paciorek quadratic form</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">%       Q(i,j) = \sum_{k = 1}^d (X(i,k) - Y(j,k))^2 / R(i,j,k)^2,</span>
+0009 <span class="comment">%</span>
+0010 <span class="comment">%    where</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%       R(i,j,k)^2 = RX(i,k)^2 + RY(i,k)^2,</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%    assuming that</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%     * X and RX have size [nX d],</span>
+0017 <span class="comment">%     * Y and RY have size [nY d].</span>
+0018 
+0019 <span class="comment">% Copyright Notice</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0024 
+0025 <span class="comment">% Copying Permission Statement</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    This file is part of</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0030 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0033 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0034 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0035 <span class="comment">%    option) any later version.</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0038 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0039 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0040 <span class="comment">%    License for more details.</span>
+0041 <span class="comment">%</span>
+0042 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0043 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0044 
+0045 <a name="_sub0" href="#_subfunctions" class="code">function Q = stk_gpquadform(x, y, rx, ry, pairwise)</a>
+0046 
+0047 <span class="keyword">if</span> nargin &gt; 5,
+0048    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0049 <span class="keyword">end</span>
+0050 
+0051 <span class="comment">% read argument #1</span>
+0052 <span class="keyword">if</span> isstruct(x),
+0053     x = x.a;
+0054 <span class="keyword">end</span>
+0055 
+0056 <span class="comment">% read argument #2</span>
+0057 <span class="keyword">if</span> isstruct(y),
+0058     y = y.a;
+0059 <span class="keyword">end</span>
+0060 
+0061 <span class="comment">% read argument #4</span>
+0062 <span class="keyword">if</span> nargin &lt; 4,
+0063     <span class="keyword">if</span> isempty(y)
+0064         ry = rx;
+0065     <span class="keyword">else</span>
+0066         errmsg = <span class="string">'Not enough input arguments.'</span>;
+0067         stk_error(errmsg, <span class="string">'NotEnoughInputArgs'</span>);
+0068     <span class="keyword">end</span>
+0069 <span class="keyword">else</span>
+0070     <span class="keyword">if</span> isempty(y) &amp;&amp; ~isempty(ry) &amp;&amp; ~isequal(rx, ry)
+0071         errmsg = <span class="string">'ry should be empty or equal to rx'</span>;
+0072         stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
+0073     <span class="keyword">end</span>
+0074 <span class="keyword">end</span>
+0075         
+0076 
+0077 <span class="comment">% read argument #5</span>
+0078 <span class="keyword">if</span> nargin &lt; 5,
+0079     pairwise = false;
+0080 <span class="keyword">else</span>
+0081     <span class="keyword">if</span> ~islogical(pairwise)
+0082         errmsg = <span class="string">'Argument ''pairwise'' should be either true or false.'</span>;
+0083         stk_error(errmsg, <span class="string">'TypeMismatch'</span>);
+0084     <span class="keyword">end</span>
+0085 <span class="keyword">end</span>
+0086 
+0087 <span class="keyword">if</span> pairwise,
+0088     <span class="keyword">if</span> isempty(y),
+0089         Q = zeros(size(x, 1), 1);
+0090     <span class="keyword">else</span>
+0091         Q = stk_gpquadform_pairwise(x, y, rx, ry);
+0092     <span class="keyword">end</span>
+0093 <span class="keyword">else</span>
+0094     <span class="keyword">if</span> isempty(y),
+0095         Q = stk_gpquadform_matrixx(x, rx);
+0096     <span class="keyword">else</span>
+0097         Q = stk_gpquadform_matrixy(x, y, rx, ry);
+0098     <span class="keyword">end</span>
+0099 <span class="keyword">end</span>
+0100 
+0101 <span class="keyword">end</span> <span class="comment">% function stk_gpquadform</span>
+0102 
+0103 
+0104 <span class="comment">%%%%%%%%%</span>
+0105 <span class="comment">% TESTS %</span>
+0106 <span class="comment">%%%%%%%%%</span>
+0107 
+0108 
+0109 
+0110 
+0111 
+0112 
+0113 <span class="comment">%%</span>
+0114 <span class="comment">% Check that an error is raised when sizes are incompatible</span>
+0115 
+0116 
+0117 
+0118 
+0119 
+0120 
+0121 
+0122 <span class="comment">%%</span>
+0123 <span class="comment">% Check that &quot;.a&quot; structures are accepted</span>
+0124 
+0125 
+0126 
+0127 
+0128 
+0129 
+0130 <span class="comment">%%</span>
+0131 <span class="comment">% Tests with r = 1/sqrt(2)</span>
+0132 
+0133 
+0134 
+0135 
+0136 
+0137 
+0138 
+0139 
+0140 
+0141 
+0142 
+0143 
+0144 
+0145 
+0146 
+0147 
+0148 
+0149 
+0150 
+0151 
+0152 
+0153 
+0154 
+0155 
+0156 
+0157 
+0158 <span class="comment">%%</span>
+0159 <span class="comment">% Tests with a random r</span>
+0160 
+0161 
+0162 
+0163 
+0164 
+0165 
+0166 
+0167 
+0168 
+0169 
+0170 
+0171 
+0172 
+0173 
+0174 
+0175 
+0176 
+0177 
+0178 <span class="comment">%%</span>
+0179 <span class="comment">% Tests with r = 2</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

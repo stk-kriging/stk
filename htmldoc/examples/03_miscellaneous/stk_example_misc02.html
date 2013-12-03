@@ -1,0 +1,198 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_example_misc02</title>
+  <meta name="keywords" content="stk_example_misc02">
+  <meta name="description" content="STK_EXAMPLE_MISC02  How to use priors on the covariance parameters">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; <a href="index.html">03_miscellaneous</a> &gt; stk_example_misc02.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for examples/03_miscellaneous&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_example_misc02
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_EXAMPLE_MISC02  How to use priors on the covariance parameters</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_EXAMPLE_MISC02  How to use priors on the covariance parameters
+
+ A Matern covariance in dimension one  is considered as an example.  A Gaussian
+ prior is used for all three parameters: log-variance, log-regularity  and log-
+ inverse-range.  The corresponding parameter estimates are Maximum A Posteriori
+ (MAP) estimates or, more precisely, Restricted MAP (ReMAP) estimates.
+
+ Several values for the variance of the prior  are successively considered,  to
+ illustrate the effect of this prior variance on the parameter estimates.  When
+ the variance is small, the MAP estimate is close to the mode of the prior.  On
+ the other hand, when the variance is large,  the prior becomes &quot;flat&quot;  and the
+ MAP estimate is close to the ReML estimate (see figure b).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_EXAMPLE_MISC02  How to use priors on the covariance parameters</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% A Matern covariance in dimension one  is considered as an example.  A Gaussian</span>
+0004 <span class="comment">% prior is used for all three parameters: log-variance, log-regularity  and log-</span>
+0005 <span class="comment">% inverse-range.  The corresponding parameter estimates are Maximum A Posteriori</span>
+0006 <span class="comment">% (MAP) estimates or, more precisely, Restricted MAP (ReMAP) estimates.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% Several values for the variance of the prior  are successively considered,  to</span>
+0009 <span class="comment">% illustrate the effect of this prior variance on the parameter estimates.  When</span>
+0010 <span class="comment">% the variance is small, the MAP estimate is close to the mode of the prior.  On</span>
+0011 <span class="comment">% the other hand, when the variance is large,  the prior becomes &quot;flat&quot;  and the</span>
+0012 <span class="comment">% MAP estimate is close to the ReML estimate (see figure b).</span>
+0013 
+0014 <span class="comment">% Copyright Notice</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    Copyright (C) 2012, 2013 SUPELEC</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0019 
+0020 <span class="comment">% Copying Permission Statement</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    This file is part of</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0025 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0028 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0029 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0030 <span class="comment">%    option) any later version.</span>
+0031 <span class="comment">%</span>
+0032 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0033 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0034 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0035 <span class="comment">%    License for more details.</span>
+0036 <span class="comment">%</span>
+0037 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0038 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0039 
+0040 stk_disp_examplewelcome
+0041 
+0042 
+0043 <span class="comment">%% DEFINE AN ARTIFICIAL ONE-DIMENSIONAL DATASET</span>
+0044 
+0045 DIM = 1;            <span class="comment">% dimension of the factor space</span>
+0046 BOX = [0.0; 1.0];   <span class="comment">% factor space</span>
+0047 
+0048 xi = [0.25; 0.26; 0.50; 0.60];
+0049 zi = [1.00; 1.10; 0.20; 0.35];
+0050 
+0051 
+0052 <span class="comment">%% SPECIFICATION OF THE MODEL &amp; REML ESTIMATION</span>
+0053 
+0054 model = stk_model (<span class="string">'stk_materncov_iso'</span>);
+0055 
+0056 <span class="comment">% small &quot;regularization noise&quot;.</span>
+0057 model.lognoisevariance = 2 * log (1e-6);
+0058 
+0059 <span class="comment">% Mode of the prior on the parameters of the Matern covariance</span>
+0060 <span class="comment">% (also serves as an initial guess for the optimization)</span>
+0061 SIGMA2 = 1.0;  <span class="comment">% variance parameter</span>
+0062 NU     = 2.0;  <span class="comment">% regularity parameter</span>
+0063 RHO1   = 0.4;  <span class="comment">% scale (range) parameter</span>
+0064 param0 = log ([SIGMA2; NU; 1/RHO1]);
+0065 
+0066 <span class="comment">% Estimate covariance parameters (without prior)</span>
+0067 model.param = stk_param_estim (model, xi, zi, param0);
+0068 param_opt_reml = model.param;
+0069 
+0070 
+0071 <span class="comment">%% EXPERIMENT WITH SEVERAL VALUES FOR PRIOR VARIANCES</span>
+0072 
+0073 std_list = [10 1 0.2 0.01];
+0074 
+0075 NT = 400; <span class="comment">% nb of points in the grid</span>
+0076 xt = stk_sampling_regulargrid (NT, DIM, BOX);
+0077 
+0078 stk_figure (<span class="string">'stk_example_misc02 (a)'</span>);
+0079 
+0080 param_opt = zeros (length (param0), length (std_list));
+0081 <span class="keyword">for</span> k = 1:length (std_list),
+0082     
+0083     <span class="comment">% Prior on the parameters of the Matern covariance</span>
+0084     model.prior.mean = param0;
+0085     model.prior.invcov = eye (length (param0)) ./ (std_list(k)^2);
+0086     
+0087     <span class="comment">% Estimate covariance parameters (with a prior)</span>
+0088     model.param = stk_param_estim (model, xi, zi, param0);
+0089     param_opt(:, k) = model.param;
+0090     
+0091     <span class="comment">% Carry out kriging prediction</span>
+0092     zp = stk_predict (model, xi, zi, xt);
+0093     
+0094     <span class="comment">% Plot predicted values and pointwise confidences intervals</span>
+0095     stk_subplot (2, 2, k);  stk_plot1d (xi, zi, xt, [], zp);
+0096     stk_labels (<span class="string">'input x'</span>, <span class="string">'predicted output z'</span>);
+0097     stk_title (sprintf (<span class="string">'prior std = %.2f'</span>, std_list(k)));
+0098 <span class="keyword">end</span>
+0099 
+0100 
+0101 <span class="comment">%% FIGURE: ESTIMATED PARAMETER VERSUS PRIOR STD</span>
+0102 
+0103 stk_figure (<span class="string">'stk_example_misc02 (b)'</span>);
+0104 
+0105 param_name = {<span class="string">'SIGMA2'</span>, <span class="string">'NU'</span>, <span class="string">'1/RHO'</span>};
+0106 
+0107 <span class="keyword">for</span> j = 1:3,
+0108     
+0109     stk_subplot (2, 2, j);
+0110     
+0111     <span class="comment">% estimated parameter versus prior std</span>
+0112     h = semilogx (std_list, exp (param_opt(j, :)), <span class="string">'ko-'</span>);
+0113     set (h, <span class="string">'LineWidth'</span>, 2, <span class="string">'MarkerFaceColor'</span>, <span class="string">'y'</span>);
+0114     stk_labels (<span class="string">'prior std'</span>, param_name{j});
+0115     
+0116     <span class="comment">% add an horizontal line showing the value of REML estimation</span>
+0117     hold on;  semilogx (xlim, exp (param_opt_reml(j)) * [1 1], <span class="string">'r--'</span>);
+0118     
+0119     <span class="comment">% add a second horizontal line showing the mode of the prior</span>
+0120     hold on;  semilogx (xlim, exp (param0(j)) * [1 1], <span class="string">'b--'</span>);
+0121     
+0122     <span class="comment">% adjust ylim</span>
+0123     yy = exp ([param_opt(j, :) param_opt_reml(j) param0(j)]);
+0124     ylim_min = min (yy);  ylim_max = max (yy);  delta = ylim_max - ylim_min;
+0125     ylim ([ylim_min - 0.05*delta ylim_max + 0.05*delta]);
+0126     
+0127 <span class="keyword">end</span>
+0128 
+0129 <span class="keyword">if</span> ~ strcmp (graphicstoolkit, <span class="string">'octave-gnuplot'</span>)
+0130     h1 = legend (<span class="string">'MAP estimates'</span>, <span class="string">'REML estimate'</span>, <span class="string">'mode of the prior'</span>);
+0131     h2 = stk_subplot (2, 2, 4);  axis off;
+0132     set (h1, <span class="string">'Position'</span>, get (h2, <span class="string">'Position'</span>));
+0133 <span class="keyword">end</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

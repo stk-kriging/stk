@@ -1,0 +1,126 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_plot1d</title>
+  <meta name="keywords" content="stk_plot1d">
+  <meta name="description" content="STK_PLOT1D is a convenient plot function in 1D">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">plot</a> &gt; stk_plot1d.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/plot&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_plot1d
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_PLOT1D is a convenient plot function in 1D</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function stk_plot1d (xi, zi, xt, zt, zp, zsim) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_PLOT1D is a convenient plot function in 1D
+
+ CALL: stk_plot1d (xi, zi, xt, zt, zp)
+
+ STK_PLOT1D plots the result of a 1D approximation</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_plot_shadedci.html" class="code" title="function stk_plot_shadedci (x, z)">stk_plot_shadedci</a>	STK_PLOT_SHADEDCI represents pointwise confidence itervals using a shaded area</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_PLOT1D is a convenient plot function in 1D</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: stk_plot1d (xi, zi, xt, zt, zp)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">% STK_PLOT1D plots the result of a 1D approximation</span>
+0006 
+0007 <span class="comment">% Copyright Notice</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0012 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0013 
+0014 <span class="comment">% Copying Permission Statement</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    This file is part of</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0019 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0022 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0023 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0024 <span class="comment">%    option) any later version.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0027 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0028 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0029 <span class="comment">%    License for more details.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0032 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0033 
+0034 <a name="_sub0" href="#_subfunctions" class="code">function stk_plot1d (xi, zi, xt, zt, zp, zsim)</a>
+0035 
+0036 xi = double (xi);
+0037 zi = double (zi);
+0038 
+0039 <span class="keyword">if</span> nargin &gt; 2
+0040 
+0041     xt = double (xt);
+0042     
+0043     <span class="comment">% shaded area representing pointwise confidence intervals</span>
+0044     <a href="stk_plot_shadedci.html" class="code" title="function stk_plot_shadedci (x, z)">stk_plot_shadedci</a> (xt, zp);  hold on;
+0045     
+0046     <span class="comment">% plot sample paths</span>
+0047     <span class="keyword">if</span> (nargin &gt; 5) &amp;&amp; (~ isempty (zsim))
+0048         plot (xt, zsim, <span class="string">'-'</span>,  <span class="string">'LineWidth'</span>, 1, <span class="string">'Color'</span>, [0.39, 0.47, 0.64])
+0049     <span class="keyword">end</span>
+0050     
+0051     <span class="comment">% ground truth (if available)</span>
+0052     <span class="keyword">if</span> (nargin &gt; 3) &amp;&amp; (~ isempty (zt))
+0053         plot (xt, zt, <span class="string">'--'</span>, <span class="string">'LineWidth'</span>, 3, <span class="string">'Color'</span>, [0.39, 0.47, 0.64]);
+0054     <span class="keyword">end</span>
+0055     
+0056     <span class="comment">% kriging predictor (posterior mean)</span>
+0057     <span class="keyword">if</span> (nargin &gt; 4) &amp;&amp; (~ isempty (zp))
+0058         plot (xt, zp.mean, <span class="string">'LineWidth'</span>, 3, <span class="string">'Color'</span>, [0.95 0.25 0.3]);
+0059     <span class="keyword">end</span>
+0060 
+0061 <span class="keyword">end</span>
+0062 
+0063 <span class="comment">% evaluations</span>
+0064 plot (xi, zi, <span class="string">'ko'</span>, <span class="string">'MarkerSize'</span>, 6, <span class="string">'MarkerFaceColor'</span>, <span class="string">'k'</span>);
+0065 
+0066 hold off;  set (gca, <span class="string">'box'</span>, <span class="string">'off'</span>);
+0067 
+0068 <span class="keyword">end</span> <span class="comment">% function stk_plot1d</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

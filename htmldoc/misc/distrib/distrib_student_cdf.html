@@ -1,0 +1,134 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of distrib_student_cdf</title>
+  <meta name="keywords" content="distrib_student_cdf">
+  <meta name="description" content="DISTRIB_STUDENT_CDF ...">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">distrib</a> &gt; distrib_student_cdf.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/distrib&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>distrib_student_cdf
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>DISTRIB_STUDENT_CDF ...</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [p, q] = distrib_student_cdf (x, nu, mu, sigma) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> DISTRIB_STUDENT_CDF ...</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="distrib_normal_cdf.html" class="code" title="function [p, q] = distrib_normal_cdf (x, mu, sigma)">distrib_normal_cdf</a>	DISTRIB_NORMAL_CDF ...</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="distrib_student_ei.html" class="code" title="function ei = distrib_student_ei (x, nu, mu, sigma, minimize)">distrib_student_ei</a>	DISTRIB_STUDENT_EI ...</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% DISTRIB_STUDENT_CDF ...</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">%    This code is very loosely based on Octave's tcdf function:</span>
+0010 <span class="comment">%       ## Copyright (C) 2013 Julien Bect</span>
+0011 <span class="comment">%       ## Copyright (C) 2012 Rik Wehbring</span>
+0012 <span class="comment">%       ## Copyright (C) 1995-2012 Kurt Hornik</span>
+0013 
+0014 <span class="comment">% Copying Permission Statement</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    This file is part of</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0019 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0022 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0023 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0024 <span class="comment">%    option) any later version.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0027 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0028 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0029 <span class="comment">%    License for more details.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0032 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0033 
+0034 <a name="_sub0" href="#_subfunctions" class="code">function [p, q] = distrib_student_cdf (x, nu, mu, sigma)</a>
+0035 
+0036 <span class="keyword">if</span> nargin &gt; 4,
+0037     stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0038 <span class="keyword">end</span>
+0039 
+0040 <span class="keyword">if</span> nargin &gt; 2,
+0041     x = bsxfun (@minus, x, mu);
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="keyword">if</span> nargin &gt; 3,
+0045     x = bsxfun (@rdivide, x, sigma);
+0046 <span class="keyword">end</span>
+0047 
+0048 xx = x .^ 2;
+0049 [x, xx, nu] = commonsize (x, xx, nu);
+0050 
+0051 <span class="comment">% Return NaN for negative values of nu (or nu == NaN, or x == NaN)</span>
+0052 p = nan (size (x));
+0053 q = nan (size (x));
+0054 k0 = (nu &gt; 0) &amp; (~ isnan (x));
+0055 
+0056 <span class="comment">% Gaussian case (nu = +inf)</span>
+0057 k_inf = isinf (nu);  k = k0 &amp; k_inf;
+0058 [p(k), q(k)] = <a href="distrib_normal_cdf.html" class="code" title="function [p, q] = distrib_normal_cdf (x, mu, sigma)">distrib_normal_cdf</a> (x(k));
+0059 
+0060 k0 = k0 &amp; (~ k_inf);
+0061 kp = (x &gt; 0);
+0062 kn = k0 &amp; (~ kp);
+0063 kp = k0 &amp; kp;
+0064 k_big_abs = (xx &gt; nu);
+0065 
+0066 <span class="comment">% Student case (nu &lt; +inf) for positive x: compute q first, then p = 1 - q</span>
+0067 k = kp &amp; k_big_abs;
+0068 q(k) = betainc (nu(k) ./ (nu(k) + xx(k)), nu(k)/2, 1/2) / 2;
+0069 k = kp &amp; (~ k_big_abs);
+0070 q(k) = 0.5 * (1 - betainc (xx(k) ./ (nu(k) + xx(k)), 1/2, nu(k)/2));
+0071 p(kp) = 1 - q(kp);
+0072 
+0073 <span class="comment">% Student case (nu &lt; +inf) for negative x: compute p first, then q = 1 - p</span>
+0074 k = kn &amp; k_big_abs;
+0075 p(k) = betainc (nu(k) ./ (nu(k) + xx(k)), nu(k)/2, 1/2) / 2;
+0076 k = kn &amp; (~ k_big_abs);
+0077 p(k) = 0.5 * (1 - betainc (xx(k) ./ (nu(k) + xx(k)), 1/2, nu(k)/2));
+0078 q(kn) = 1 - p(kn);
+0079 
+0080 <span class="keyword">end</span> <span class="comment">% function distrib_student_cdf</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>
