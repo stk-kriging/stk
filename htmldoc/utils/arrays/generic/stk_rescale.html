@@ -1,0 +1,129 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_rescale</title>
+  <meta name="keywords" content="stk_rescale">
+  <meta name="description" content="STK_RESCALE rescales a dataset from one box to another">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">utils</a> &gt; <a href="#">arrays</a> &gt; <a href="index.html">generic</a> &gt; stk_rescale.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for utils/arrays/generic&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>stk_rescale
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>STK_RESCALE rescales a dataset from one box to another</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function [y, a, b] = stk_rescale (x, box1, box2) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_RESCALE rescales a dataset from one box to another</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_RESCALE rescales a dataset from one box to another</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2012, 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 
+0009 <span class="comment">% Copying Permission Statement</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    This file is part of</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0014 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0017 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0018 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0019 <span class="comment">%    option) any later version.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0022 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0023 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0024 <span class="comment">%    License for more details.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0027 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0028 
+0029 <a name="_sub0" href="#_subfunctions" class="code">function [y, a, b] = stk_rescale (x, box1, box2)</a>
+0030 
+0031 <span class="keyword">if</span> nargin &gt; 3,
+0032    stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0033 <span class="keyword">end</span>
+0034 
+0035 <span class="comment">% read argument x</span>
+0036 x = double (x);
+0037 [n, d] = size (x);
+0038 
+0039 <span class="comment">% read box1</span>
+0040 <span class="keyword">if</span> ~ isempty (box1),
+0041     stk_assert_box (box1, d);
+0042 <span class="keyword">end</span>
+0043 
+0044 <span class="comment">% read box2</span>
+0045 <span class="keyword">if</span> ~ isempty (box2),
+0046     stk_assert_box (box2, d);
+0047 <span class="keyword">end</span>
+0048 
+0049 <span class="comment">% scale to [0; 1] (xx --&gt; zz)</span>
+0050 <span class="keyword">if</span> ~ isempty (box1),
+0051     xmin = box1 (1, :);
+0052     xmax = box1 (2, :);
+0053     b1 = 1 ./ (xmax - xmin);
+0054     a1 = - xmin .* b1;
+0055 <span class="keyword">else</span>
+0056     b1 = ones (1, d);
+0057     a1 = zeros (1, d);
+0058 <span class="keyword">end</span>
+0059 
+0060 <span class="comment">% scale to box2 (zz --&gt; yy)</span>
+0061 <span class="keyword">if</span> ~ isempty (box2),
+0062     zmin = box2(1, :);
+0063     zmax = box2(2, :);
+0064     b2 = zmax - zmin;
+0065     a2 = zmin;
+0066 <span class="keyword">else</span>
+0067     b2 = ones (1, d);
+0068     a2 = zeros (1, d);    
+0069 <span class="keyword">end</span>
+0070 
+0071 b = b2 .* b1;
+0072 a = a2 + a1 .* b2;
+0073 y = repmat (a, n, 1) + x * diag (b);
+0074 
+0075 <span class="keyword">end</span> <span class="comment">% function stk_rescale</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of index</title>
+  <meta name="keywords" content="index">
+  <meta name="description" content="INDEX finds the first (or last) occurence of one string within another.">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="#">mole</a> &gt; <a href="index.html">matlab</a> &gt; index.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/mole/matlab&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>index
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>INDEX finds the first (or last) occurence of one string within another.</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function n = index (s, t, direction) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> INDEX finds the first (or last) occurence of one string within another.
+
+ CALL: index(S, T)
+ CALL: index(S, T, &quot;first&quot;)
+   Returns the position of the first occurrence of the string T in the
+   string S, or 0 if no occurrence is found. S may also be a cell array
+   of strings.
+
+ CALL: index(S, T, &quot;last&quot;)
+   Returns the position of the last occurrence.
+
+ EXAMPLES:
+   index(&quot;Teststring&quot;, &quot;t&quot;)            returns 4
+   index('Teststring', 't', 'last')    returns 6
+   index({'Hello', 'Toto'}, 'o')        returns [5 2]
+
+ SEE ALSO:
+   strfind</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% INDEX finds the first (or last) occurence of one string within another.</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: index(S, T)</span>
+0004 <span class="comment">% CALL: index(S, T, &quot;first&quot;)</span>
+0005 <span class="comment">%   Returns the position of the first occurrence of the string T in the</span>
+0006 <span class="comment">%   string S, or 0 if no occurrence is found. S may also be a cell array</span>
+0007 <span class="comment">%   of strings.</span>
+0008 <span class="comment">%</span>
+0009 <span class="comment">% CALL: index(S, T, &quot;last&quot;)</span>
+0010 <span class="comment">%   Returns the position of the last occurrence.</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">% EXAMPLES:</span>
+0013 <span class="comment">%   index(&quot;Teststring&quot;, &quot;t&quot;)            returns 4</span>
+0014 <span class="comment">%   index('Teststring', 't', 'last')    returns 6</span>
+0015 <span class="comment">%   index({'Hello', 'Toto'}, 'o')        returns [5 2]</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">% SEE ALSO:</span>
+0018 <span class="comment">%   strfind</span>
+0019 
+0020 <span class="comment">% Copyright Notice</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    Copyright (C) 2012 SUPELEC</span>
+0023 <span class="comment">%</span>
+0024 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
+0025 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    This file has been adapted from index.m in Octave 3.6.2, distributed</span>
+0028 <span class="comment">%    under the GNU General Public Licence version 3 (GPLv3). The original</span>
+0029 <span class="comment">%    copyright notice and authorship statement were as follows:</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%        Copyright (C) 1996-2012 Kurt Hornik</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%        Author: Kurt Hornik &lt;Kurt.Hornik@wu-wien.ac.at&gt;</span>
+0034 <span class="comment">%        Adapted-By: jwe</span>
+0035 
+0036 <span class="comment">% Copying Permission Statement</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%    This file is part of</span>
+0039 <span class="comment">%</span>
+0040 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0041 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0042 <span class="comment">%</span>
+0043 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0044 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0045 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0046 <span class="comment">%    option) any later version.</span>
+0047 <span class="comment">%</span>
+0048 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0049 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0050 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0051 <span class="comment">%    License for more details.</span>
+0052 <span class="comment">%</span>
+0053 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0054 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0055 
+0056 <a name="_sub0" href="#_subfunctions" class="code">function n = index (s, t, direction)</a>
+0057 
+0058 <span class="keyword">if</span> nargin &lt; 3, direction = <span class="string">'first'</span>; <span class="keyword">end</span>
+0059 
+0060 <span class="keyword">if</span> ischar(s)
+0061     <span class="keyword">if</span> size(s, 1) &gt; 1
+0062         s = cellstr (s);  <span class="comment">% Handle string arrays by conversion to cellstr</span>
+0063     <span class="keyword">end</span>
+0064 <span class="keyword">elseif</span> ~iscellstr(s)
+0065     error (<span class="string">'index: S must be a string, string array, or cellstr'</span>);
+0066 <span class="keyword">end</span>
+0067 
+0068 f = strfind (s, t);
+0069 <span class="keyword">if</span> (isempty (f))
+0070     f = 0;
+0071 <span class="keyword">elseif</span> (iscell (f))
+0072     f(cellfun (<span class="string">'isempty'</span>, f)) = {0};
+0073 <span class="keyword">end</span>
+0074 
+0075 direction = lower (direction);
+0076 
+0077 <span class="keyword">if</span> (strcmp (direction, <span class="string">'first'</span>))
+0078     <span class="keyword">if</span> (iscell (f))
+0079         n = cellfun (@min, f);
+0080     <span class="keyword">else</span>
+0081         n = f(1);
+0082     <span class="keyword">end</span>
+0083 <span class="keyword">elseif</span> (strcmp (direction, <span class="string">'last'</span>))
+0084     <span class="keyword">if</span> (iscell (f))
+0085         n = cellfun (@max, f);
+0086     <span class="keyword">else</span>
+0087         n = f(end);
+0088     <span class="keyword">end</span>
+0089 <span class="keyword">else</span>
+0090     error (<span class="string">'index: DIRECTION must be either &quot;first&quot; or &quot;last&quot;'</span>);
+0091 <span class="keyword">end</span>
+0092 
+0093 <span class="keyword">end</span> <span class="comment">% function index</span>
+0094 
+0095 
+0096 
+0097 
+0098 
+0099 
+0100 
+0101 
+0102 
+0103 
+0104 <span class="comment">%% test everything out in reverse</span>
+0105 
+0106 
+0107 
+0108 
+0109 
+0110 
+0111 
+0112 
+0113 
+0114 
+0115 
+0116 
+0117 
+0118 
+0119 <span class="comment">%% Test input validation</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

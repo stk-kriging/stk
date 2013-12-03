@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_make_matcov</title>
+  <meta name="keywords" content="stk_make_matcov">
+  <meta name="description" content="STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../index.html">Home</a> &gt;  <a href="index.html">core</a> &gt; stk_make_matcov.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../index.html"><img alt="<" border="0" src="../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for core&nbsp;<img alt=">" border="0" src="../right.png"></a></td></tr></table>-->
+
+<h1>stk_make_matcov
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="box"><strong>function [K, P] = stk_make_matcov (model, x0, x1, pairwise) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).
+
+ CALL: [K, P] = stk_make_matcov (MODEL, X0)
+
+    computes the covariance matrix K and the design matrix P for the model
+    MODEL at the set of points X0. For a set of N points on a DIM-dimensional
+    space of factors, X0 is expected to be a structure whose field 'a' contains
+    an N x DIM matrix. As a result, a matrix K of size N x N and a matrix P of
+    size N x L are obtained, where L is the number of regression functions in
+    the linear part of the model; e.g., L = 1 if MODEL.order is zero (ordinary
+    kriging).
+
+ CALL: K = stk_make_matcov (MODEL, X0, X1)
+
+    computes the covariance matrix K for the model MODEL between the sets of
+    points X0 and X1. Both X0 and X1 are expected to be structures with an 'a'
+    field, containing the actual numerical data. The resulting K matrix is of
+    size N0 x N1, where N0 is the number of rows of XO and N1 the number of
+    rows of X1.
+
+ BE CAREFUL:
+
+    stk_make_matcov (MODEL, X0) and stk_makematcov (MODEL, X0, X0) are NOT
+    equivalent if model.lognoisevariance exists (in the first case, the
+    noise variance is added on the diagonal of the covariance matrix).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+<li><a href="stk_ortho_func.html" class="code" title="function P = stk_ortho_func (model, x)">stk_ortho_func</a>	STK_ORTHO_FUNC computes the design matrix for the linear part of a model.</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../octave-sombrero.png)">
+<li><a href="stk_predict.html" class="code" title="function [zp, lambda, mu, K] = stk_predict (model, xi, zi, xt)">stk_predict</a>	STK_PREDICT performs a kriging prediction from data</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: [K, P] = stk_make_matcov (MODEL, X0)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    computes the covariance matrix K and the design matrix P for the model</span>
+0006 <span class="comment">%    MODEL at the set of points X0. For a set of N points on a DIM-dimensional</span>
+0007 <span class="comment">%    space of factors, X0 is expected to be a structure whose field 'a' contains</span>
+0008 <span class="comment">%    an N x DIM matrix. As a result, a matrix K of size N x N and a matrix P of</span>
+0009 <span class="comment">%    size N x L are obtained, where L is the number of regression functions in</span>
+0010 <span class="comment">%    the linear part of the model; e.g., L = 1 if MODEL.order is zero (ordinary</span>
+0011 <span class="comment">%    kriging).</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">% CALL: K = stk_make_matcov (MODEL, X0, X1)</span>
+0014 <span class="comment">%</span>
+0015 <span class="comment">%    computes the covariance matrix K for the model MODEL between the sets of</span>
+0016 <span class="comment">%    points X0 and X1. Both X0 and X1 are expected to be structures with an 'a'</span>
+0017 <span class="comment">%    field, containing the actual numerical data. The resulting K matrix is of</span>
+0018 <span class="comment">%    size N0 x N1, where N0 is the number of rows of XO and N1 the number of</span>
+0019 <span class="comment">%    rows of X1.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">% BE CAREFUL:</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%    stk_make_matcov (MODEL, X0) and stk_makematcov (MODEL, X0, X0) are NOT</span>
+0024 <span class="comment">%    equivalent if model.lognoisevariance exists (in the first case, the</span>
+0025 <span class="comment">%    noise variance is added on the diagonal of the covariance matrix).</span>
+0026 
+0027 <span class="comment">% Copyright Notice</span>
+0028 <span class="comment">%</span>
+0029 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0032 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0033 
+0034 <span class="comment">% Copying Permission Statement</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%    This file is part of</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0039 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0040 <span class="comment">%</span>
+0041 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0042 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0043 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0044 <span class="comment">%    option) any later version.</span>
+0045 <span class="comment">%</span>
+0046 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0047 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0048 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0049 <span class="comment">%    License for more details.</span>
+0050 <span class="comment">%</span>
+0051 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0052 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0053 
+0054 <a name="_sub0" href="#_subfunctions" class="code">function [K, P] = stk_make_matcov (model, x0, x1, pairwise)</a>
+0055 
+0056 <span class="comment">%=== process input arguments</span>
+0057 
+0058 <span class="keyword">if</span> nargin &gt; 4,
+0059     stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
+0060 <span class="keyword">end</span>
+0061 
+0062 x0 = double (x0);
+0063 
+0064 <span class="keyword">if</span> (nargin &gt; 2) &amp;&amp; ~isempty(x1)
+0065     x1 = double (x1);
+0066     make_matcov_auto = false;
+0067 <span class="keyword">else</span>
+0068     x1 = x0;
+0069     make_matcov_auto = true;
+0070 <span class="keyword">end</span>
+0071 
+0072 pairwise = (nargin &gt; 3) &amp;&amp; pairwise;
+0073 
+0074 <span class="comment">%=== compute the covariance matrix</span>
+0075 
+0076 K = feval (model.covariance_type, model.param, x0, x1, -1, pairwise);
+0077 
+0078 <span class="keyword">if</span> make_matcov_auto &amp;&amp; isfield (model, <span class="string">'lognoisevariance'</span>),
+0079     <span class="keyword">if</span> ~pairwise,
+0080         K = K + stk_noisecov (size (K,1), model.lognoisevariance);
+0081     <span class="keyword">else</span>
+0082         stk_error(<span class="string">'Not implemented yet.'</span>, <span class="string">'NotImplementedYet'</span>);
+0083     <span class="keyword">end</span>
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="comment">%=== compute the regression functions</span>
+0087 
+0088 <span class="keyword">if</span> nargout &gt; 1,
+0089     P = <a href="stk_ortho_func.html" class="code" title="function P = stk_ortho_func (model, x)">stk_ortho_func</a> (model, x0);
+0090 <span class="keyword">end</span>
+0091 
+0092 <span class="keyword">end</span> <span class="comment">% function stk_make_matcov</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

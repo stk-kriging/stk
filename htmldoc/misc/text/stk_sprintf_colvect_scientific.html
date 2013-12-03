@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_sprintf_colvect_scientific</title>
+  <meta name="keywords" content="stk_sprintf_colvect_scientific">
+  <meta name="description" content="STK_SPRINTF_COLVECT_SCIENTIFIC ...">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">text</a> &gt; stk_sprintf_colvect_scientific.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/text&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_sprintf_colvect_scientific
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_SPRINTF_COLVECT_SCIENTIFIC ...</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function [str, err] = stk_sprintf_colvect_scientific(x, max_width) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_SPRINTF_COLVECT_SCIENTIFIC ...</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_sprintf_colvect.html" class="code" title="function str = stk_sprintf_colvect (x, max_width)">stk_sprintf_colvect</a>	STK_SPRINTF_COLVECT ...</li></ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_SPRINTF_COLVECT_SCIENTIFIC ...</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0008 
+0009 <span class="comment">% Copying Permission Statement</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">%    This file is part of</span>
+0012 <span class="comment">%</span>
+0013 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0014 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0017 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0018 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0019 <span class="comment">%    option) any later version.</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0022 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0023 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0024 <span class="comment">%    License for more details.</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0027 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0028 
+0029 <a name="_sub0" href="#_subfunctions" class="code">function [str, err] = stk_sprintf_colvect_scientific(x, max_width)</a>
+0030 
+0031 <span class="keyword">if</span> isempty(x),
+0032     str = <span class="string">''</span>;
+0033     err = 0;
+0034     <span class="keyword">return</span>;
+0035 <span class="keyword">end</span>
+0036 
+0037 <span class="keyword">if</span> nargin &lt; 2,
+0038     max_width = 10;
+0039 <span class="keyword">end</span>
+0040 
+0041 <span class="comment">% turn x into a column vector</span>
+0042 x = double(x);
+0043 x = x(:);
+0044 
+0045 <span class="comment">% get rid of negative zeros</span>
+0046 b = (x == 0); 
+0047 x(b) = +0.0;
+0048 
+0049 <span class="comment">% compute exponents</span>
+0050 ax = abs(x);
+0051 exponent = zeros(size(x));
+0052 exponent(~b) = floor(log10(ax(~b)));
+0053 
+0054 <span class="comment">% compute mantissae</span>
+0055 mantissa = x .* 10.^(-exponent);
+0056 
+0057 <span class="comment">% maximal absolute exponent</span>
+0058 maxexp = max(abs(exponent));
+0059 
+0060 <span class="comment">% is there any negative element ?</span>
+0061 any_negative = any(x &lt; 0);
+0062 
+0063 <span class="comment">% Start with only one digit for the mantissa (no comma, then)</span>
+0064 n1 = 1;                                 <span class="comment">% nb digits for the mantissa</span>
+0065 n2 = max(2, 1 + floor(log10(maxexp)));  <span class="comment">% nb digits for the exponent</span>
+0066 n3 = any_negative + 2;                  <span class="comment">% nb non-digit characters (+2 for &quot;e+&quot;)</span>
+0067 
+0068 <span class="comment">% Abort this is already too long</span>
+0069 <span class="keyword">if</span> (n1 + n2 + n3) &gt; max_width
+0070     str = repmat(<span class="string">'#'</span>, length(x), max_width);
+0071     err = +inf;
+0072     <span class="keyword">return</span>;
+0073 <span class="keyword">end</span>
+0074 
+0075 <span class="comment">% Otherwise, this is our current best solution</span>
+0076 am = abs(mantissa);
+0077 best_err = max(am - floor(am)); <span class="comment">% maximal error on the matissa</span>
+0078 best_n1  = 1;
+0079 
+0080 <span class="comment">% Should we add a decimal part ?</span>
+0081 <span class="keyword">if</span> (best_err &gt; eps) &amp;&amp; ((n1 + n2 + n3 + 2) &lt;= max_width)
+0082     <span class="comment">% We can add a decimal part, so let's do it...</span>
+0083     <span class="keyword">while</span> (best_err &gt; eps) &amp;&amp; ((n1 + n2 + n3) &lt; max_width)
+0084         n1 = n1 + 1;
+0085         n3 = any_negative + 3;
+0086         <span class="comment">% &quot;+3&quot; for &quot;e&quot;, &quot;.&quot; in the mantissa and &quot;+&quot; in the exponent</span>
+0087         c = 10^(1 - n1);
+0088         mm = round(am ./ c) .* c;
+0089         err = max(abs(am - mm));
+0090         <span class="keyword">if</span> err &lt; best_err - 0.5 * c
+0091             best_err = err;
+0092             best_n1 = n1;
+0093         <span class="keyword">end</span>
+0094     <span class="keyword">end</span>
+0095 <span class="keyword">end</span>
+0096 n1 = best_n1;
+0097 
+0098 <span class="comment">% format specifier for the mantissa</span>
+0099 fmt1 = sprintf(<span class="string">'%%%d.%df'</span>, n1 + (n1 &gt; 1) + any_negative, n1 - 1);
+0100 str1 = arrayfun(@(u)(sprintf(fmt1, u)), mantissa, <span class="string">'UniformOutput'</span>, false);
+0101 
+0102 <span class="comment">% format specifier for the exponent</span>
+0103 fmt2 = sprintf(<span class="string">'e%%+0%dd'</span>, n2 + 1);
+0104 str2 = arrayfun(@(u)(sprintf(fmt2, u)), exponent, <span class="string">'UniformOutput'</span>, false);
+0105 
+0106 str = [char(str1{:}) char(str2{:})];
+0107 
+0108 <span class="comment">% Compute the maximal error</span>
+0109 <span class="keyword">if</span> nargout &gt; 1,
+0110     c = 10^(1 - n1);
+0111     rounded_mantissa = round(mantissa / c) * c;
+0112     err_mantissa = abs(rounded_mantissa - mantissa);
+0113     err = max(err_mantissa .* 10.^(exponent));
+0114 <span class="keyword">end</span>
+0115     
+0116 <span class="keyword">end</span> <span class="comment">% function stk_sprintf_colvect_scientific</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

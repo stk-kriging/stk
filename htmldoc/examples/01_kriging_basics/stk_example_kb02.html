@@ -1,0 +1,209 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_example_kb02</title>
+  <meta name="keywords" content="stk_example_kb02">
+  <meta name="description" content="STK_EXAMPLE_KB02  Ordinary kriging in 1D with parameter estimation">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; <a href="index.html">01_kriging_basics</a> &gt; stk_example_kb02.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for examples/01_kriging_basics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_example_kb02
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_EXAMPLE_KB02  Ordinary kriging in 1D with parameter estimation</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_EXAMPLE_KB02  Ordinary kriging in 1D with parameter estimation
+
+ We consider an ordinary kriging approximation in 1D: the mean function of the
+ Gaussian process prior is assumed to be constant and unknown. A Matern covari-
+ ance function is used, and its parameters are estimated using the Restricted
+ Maximum Likelihood (ReML) method.
+
+ The example can be run either with noisy data  or with noiseless (exact) data,
+ depending on the value of the NOISY flag (the default is false, i.e., noise-
+ less data).</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_EXAMPLE_KB02  Ordinary kriging in 1D with parameter estimation</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% We consider an ordinary kriging approximation in 1D: the mean function of the</span>
+0004 <span class="comment">% Gaussian process prior is assumed to be constant and unknown. A Matern covari-</span>
+0005 <span class="comment">% ance function is used, and its parameters are estimated using the Restricted</span>
+0006 <span class="comment">% Maximum Likelihood (ReML) method.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% The example can be run either with noisy data  or with noiseless (exact) data,</span>
+0009 <span class="comment">% depending on the value of the NOISY flag (the default is false, i.e., noise-</span>
+0010 <span class="comment">% less data).</span>
+0011 
+0012 <span class="comment">% Copyright Notice</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0017 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0018 
+0019 <span class="comment">% Copying Permission Statement</span>
+0020 <span class="comment">%</span>
+0021 <span class="comment">%    This file is part of</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0024 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0025 <span class="comment">%</span>
+0026 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0027 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0028 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0029 <span class="comment">%    option) any later version.</span>
+0030 <span class="comment">%</span>
+0031 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0032 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0033 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0034 <span class="comment">%    License for more details.</span>
+0035 <span class="comment">%</span>
+0036 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0037 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0038 
+0039 stk_disp_examplewelcome
+0040 
+0041 <span class="comment">% Use verbose output</span>
+0042 save_verbosity = stk_options_get (<span class="string">'stk_dataframe'</span>, <span class="string">'disp_format'</span>);
+0043 stk_options_set (<span class="string">'stk_dataframe'</span>, <span class="string">'disp_format'</span>, <span class="string">'verbose'</span>);
+0044 
+0045 
+0046 <span class="comment">%% DEFINE A 1D TEST FUNCTION</span>
+0047 
+0048 f = @(x)(- (0.8 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
+0049 DIM = 1;               <span class="comment">% Dimension of the factor space</span>
+0050 BOX = [-1.0; 1.0];     <span class="comment">% Factor space</span>
+0051 
+0052 NOISY = false;         <span class="comment">% Choose either a noiseless or a noisy demo.</span>
+0053 <span class="keyword">if</span> ~ NOISY             <span class="comment">% NOISELESS DEMO ...</span>
+0054     NI = 6;            <span class="comment">%   NI = nb of evaluations that will be used</span>
+0055 <span class="keyword">else</span>                   <span class="comment">% OR NOISY DEMO ?</span>
+0056     NI = 20;           <span class="comment">%   NI = nb of evaluations that will be used</span>
+0057     NOISESTD = 0.1;    <span class="comment">%   NOISESTD = std deviation of the observation noise</span>
+0058 <span class="keyword">end</span>                    <span class="comment">%</span>
+0059 
+0060 
+0061 <span class="comment">%% &quot;MAXIMIN LHS&quot; SAMPLING PLAN &amp; CORRESPONDING EVALUATIONS</span>
+0062 <span class="comment">%</span>
+0063 <span class="comment">% The objective is to construct an approximation of f with a budget of NI</span>
+0064 <span class="comment">% evaluations performed on a &quot;maximin LHS&quot; design.</span>
+0065 <span class="comment">%</span>
+0066 
+0067 NITER = 5;  <span class="comment">% number of random designs generated in stk_sampling_maximinlhs()</span>
+0068 
+0069 xi = stk_sampling_maximinlhs (NI, DIM, BOX, NITER);  <span class="comment">% evaluation points</span>
+0070 <span class="comment">% xi = stk_sampling_randunif (NI, DIM, BOX);</span>
+0071 zi = stk_feval (f, xi);                              <span class="comment">% evaluation results</span>
+0072 
+0073 <span class="keyword">if</span> NOISY,
+0074     zi = zi + NOISESTD * randn (NI, 1);
+0075 <span class="keyword">end</span>
+0076 
+0077 
+0078 <span class="comment">%% SPECIFICATION OF THE MODEL</span>
+0079 <span class="comment">%</span>
+0080 <span class="comment">% We choose a Matern covariance, the parameters of which will be estimated from</span>
+0081 <span class="comment">% the data.</span>
+0082 <span class="comment">%</span>
+0083 
+0084 <span class="comment">% The following line defines a model with a constant but unknown mean (ordinary</span>
+0085 <span class="comment">% kriging) and a Matern covariance function. (Some default parameters are also</span>
+0086 <span class="comment">% set, but they will be replaced below by estimated parameters.)</span>
+0087 model = stk_model (<span class="string">'stk_materncov_iso'</span>);
+0088 
+0089 
+0090 <span class="comment">%% ESTIMATION OF THE PARAMETERS OF THE COVARIANCE FUNCTION</span>
+0091 <span class="comment">%</span>
+0092 <span class="comment">% Here, the parameters of the Matern covariance function are estimated by the</span>
+0093 <span class="comment">% REML (REstricted Maximum Likelihood) method using stk_param_estim().</span>
+0094 <span class="comment">%</span>
+0095 
+0096 <span class="comment">% Initial guess for the parameters of the Matern covariance</span>
+0097 [param0, lnv0] = stk_param_init (model, xi, zi, BOX, NOISY);
+0098 
+0099 <span class="comment">% % Alternative: user-defined initial guess for the parameters</span>
+0100 <span class="comment">% % (see &quot;help stk_materncov_iso&quot; for more information)</span>
+0101 <span class="comment">% SIGMA2 = 1.0;  % variance parameter</span>
+0102 <span class="comment">% NU     = 4.0;  % regularity parameter</span>
+0103 <span class="comment">% RHO1   = 0.4;  % scale (range) parameter</span>
+0104 <span class="comment">% param0 = log ([SIGMA2; NU; 1/RHO1]);</span>
+0105 
+0106 <span class="keyword">if</span> ~ NOISY,
+0107     <span class="comment">% Noiseless case: set a small &quot;regularization&quot; noise</span>
+0108     <span class="comment">% the (log)variance of which is provided by stk_param_init</span>
+0109     model.lognoisevariance = lnv0;
+0110 <span class="keyword">else</span>
+0111     <span class="comment">% Otherwise, set the variance of the noise</span>
+0112     <span class="comment">% (assumed to be known, not estimated, in this example)</span>
+0113     model.lognoisevariance = 2 * log (NOISESTD);
+0114 <span class="keyword">end</span>
+0115 
+0116 <span class="comment">% Estimate the parameters</span>
+0117 model.param = stk_param_estim (model, xi, zi, param0);
+0118 
+0119 model  <span class="comment">%#ok&lt;NOPTS&gt;</span>
+0120 
+0121 
+0122 <span class="comment">%% CARRY OUT KRIGING PREDICTION AND DISPLAY RESULTS</span>
+0123 
+0124 NT = 400;                                      <span class="comment">% Number of points in the grid</span>
+0125 xt = stk_sampling_regulargrid (NT, DIM, BOX);  <span class="comment">% Generate a regular grid</span>
+0126 zt = stk_feval (f, xt);                        <span class="comment">% Values of f on the grid</span>
+0127 
+0128 <span class="comment">% Compute the kriging predictor (and the kriging variance) on the grid</span>
+0129 zp = stk_predict (model, xi, zi, xt);
+0130 
+0131 
+0132 <span class="comment">%% Visualisation</span>
+0133 
+0134 stk_figure (<span class="string">'stk_example_kb02 (a)'</span>);  plot (xt, zt);
+0135 stk_title  (<span class="string">'Function to be approximated'</span>);
+0136 stk_labels (<span class="string">'input variable x'</span>, <span class="string">'response z'</span>);
+0137 
+0138 stk_figure (<span class="string">'stk_example_kb02 (b)'</span>);  stk_plot1d (xi, zi, xt, zt, zp);
+0139 stk_title  (<span class="string">'Kriging prediction with estimated parameters'</span>);
+0140 stk_labels (<span class="string">'input variable x'</span>, <span class="string">'response z'</span>);
+0141 
+0142 
+0143 <span class="comment">%% Cleanup</span>
+0144 
+0145 <span class="comment">% Restore output verbosity</span>
+0146 stk_options_set (<span class="string">'stk_dataframe'</span>, <span class="string">'disp_format'</span>, save_verbosity);</pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_sprintf_data</title>
+  <meta name="keywords" content="stk_sprintf_data">
+  <meta name="description" content="STK_SPRINTF_DATA prints the content of an array into a string">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../../index.html">Home</a> &gt;  <a href="../../index.html">utils</a> &gt; <a href="#">arrays</a> &gt; <a href="index.html">generic</a> &gt; stk_sprintf_data.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../../index.html"><img alt="<" border="0" src="../../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for utils/arrays/generic&nbsp;<img alt=">" border="0" src="../../../right.png"></a></td></tr></table>-->
+
+<h1>stk_sprintf_data
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>STK_SPRINTF_DATA prints the content of an array into a string</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="box"><strong>function s = stk_sprintf_data (x, max_width, colnames, rownames) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_SPRINTF_DATA prints the content of an array into a string</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_SPRINTF_DATA prints the content of an array into a string</span>
+0002 
+0003 <span class="comment">% Copyright Notice</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%    Copyright (C) 2013 SUPELEC</span>
+0006 <span class="comment">%</span>
+0007 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0008 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0009 
+0010 <span class="comment">% Copying Permission Statement</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    This file is part of</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0015 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0016 <span class="comment">%</span>
+0017 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0018 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0019 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0020 <span class="comment">%    option) any later version.</span>
+0021 <span class="comment">%</span>
+0022 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0023 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0024 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0025 <span class="comment">%    License for more details.</span>
+0026 <span class="comment">%</span>
+0027 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0028 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0029 
+0030 <a name="_sub0" href="#_subfunctions" class="code">function s = stk_sprintf_data (x, max_width, colnames, rownames)</a>
+0031 
+0032 <span class="keyword">if</span> ~ isnumeric (x)
+0033     
+0034     errmsg = sprintf (<span class="string">'Incorrect argument type: %s'</span>, class (x));
+0035     stk_error (errmsg, <span class="string">'IncorrectType'</span>);
+0036     
+0037 <span class="keyword">else</span>
+0038     
+0039     x = double (x);
+0040     [n, d] = size (x);
+0041     
+0042     <span class="keyword">if</span> (n == 0) || (d == 0)
+0043         
+0044         s = <span class="string">'[] (empty)'</span>;
+0045         
+0046     <span class="keyword">else</span>
+0047         
+0048         <span class="keyword">if</span> nargin &lt; 3,
+0049             colnames = {};
+0050         <span class="keyword">end</span>
+0051         
+0052         <span class="keyword">if</span> nargin &lt; 4,
+0053             rownames = {};
+0054         <span class="keyword">end</span>
+0055         
+0056         <span class="keyword">if</span> (nargin &lt; 2) || isempty (max_width)
+0057             <span class="keyword">try</span>
+0058                 <span class="keyword">switch</span> get (0, <span class="string">'Format'</span>)
+0059                     <span class="keyword">case</span> <span class="string">'short'</span>
+0060                         max_width = 6;
+0061                     <span class="keyword">case</span> <span class="string">'long'</span>
+0062                         max_width = 16;
+0063                     <span class="keyword">otherwise</span>
+0064                         <span class="comment">% FIXME: handle other formatting modes...</span>
+0065                         max_width = 10;
+0066                 <span class="keyword">end</span>
+0067             <span class="keyword">catch</span>
+0068                 <span class="comment">% Property 'Format' doesn't exist in Octave 3.2.x</span>
+0069                 max_width = 6;
+0070             <span class="keyword">end</span>
+0071         <span class="keyword">end</span>
+0072         
+0073         nb_spaces_colsep = 2;
+0074         
+0075         has_colnames = ~ isempty (colnames);
+0076         nb_rows = n + has_colnames;
+0077         
+0078         s = repmat (<span class="string">''</span>, nb_rows, 1); <span class="comment">%#ok&lt;*AGROW&gt;</span>
+0079         
+0080         <span class="comment">% first columns: row names</span>
+0081         <span class="keyword">if</span> isempty (rownames)
+0082             rownames = stk_sprintf_colvect (1:n);
+0083         <span class="keyword">else</span>
+0084             rownames = char (rownames);
+0085         <span class="keyword">end</span>
+0086         
+0087         <span class="keyword">if</span> has_colnames
+0088             s = [s [repmat(<span class="string">' '</span>, 1, size(rownames, 2)); rownames]];
+0089         <span class="keyword">else</span>
+0090             s = [s rownames];
+0091         <span class="keyword">end</span>
+0092         
+0093         <span class="comment">% column separator between row names and the first data column</span>
+0094         s = [s repmat(<span class="string">' :'</span>, nb_rows,  1) <span class="keyword">...</span>
+0095             repmat(<span class="string">' '</span>, nb_rows,  nb_spaces_colsep)];
+0096         
+0097         <span class="keyword">for</span> j = 1:d,
+0098             
+0099             xx  = stk_sprintf_colvect (x(:, j), max_width);
+0100             
+0101             <span class="keyword">if</span> ~ has_colnames <span class="comment">% no need for a header row in this case</span>
+0102                 
+0103                 s = [s xx];
+0104                 
+0105             <span class="keyword">else</span>
+0106                 
+0107                 vn = colnames{j};
+0108                 Lxx = size (xx, 2);
+0109                 L = max (length (vn), Lxx);
+0110                 s = [s [sprintf(<span class="string">'% *s'</span>, L, vn);  <span class="comment">% variable name</span>
+0111                     repmat(<span class="string">' '</span>, n, L - Lxx) xx]];    <span class="comment">% formatted data</span>
+0112                 
+0113             <span class="keyword">end</span>
+0114             
+0115             <span class="keyword">if</span> j &lt; d,
+0116                 <span class="comment">% column separator</span>
+0117                 s = [s repmat(<span class="string">' '</span>, nb_rows,  nb_spaces_colsep)];
+0118             <span class="keyword">end</span>
+0119             
+0120         <span class="keyword">end</span> <span class="comment">% for</span>
+0121         
+0122     <span class="keyword">end</span> <span class="comment">% if</span>
+0123     
+0124 <span class="keyword">end</span> <span class="comment">% function stk_sprintf_data</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

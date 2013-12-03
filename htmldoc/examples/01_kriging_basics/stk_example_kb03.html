@@ -1,0 +1,210 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_example_kb03</title>
+  <meta name="keywords" content="stk_example_kb03">
+  <meta name="description" content="STK_EXAMPLE_KB03  Ordinary kriging in 2D">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">examples</a> &gt; <a href="index.html">01_kriging_basics</a> &gt; stk_example_kb03.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for examples/01_kriging_basics&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_example_kb03
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_EXAMPLE_KB03  Ordinary kriging in 2D</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>This is a script file. </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_EXAMPLE_KB03  Ordinary kriging in 2D
+
+ An anisotropic Matern covariance function is used for the Gaussian Process
+ (GP) prior. The parameters of this covariance function (variance, regularity
+ and ranges) are estimated using the Restricted Maximum Likelihood (ReML)
+ method.
+
+ The mean function of the GP prior is assumed to be constant and unknown. This
+ default choice can be overridden by means of the model.order property.
+
+ The function is sampled on a space-filling Latin Hypercube design, and the
+ data is assumed to be noiseless.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_EXAMPLE_KB03  Ordinary kriging in 2D</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% An anisotropic Matern covariance function is used for the Gaussian Process</span>
+0004 <span class="comment">% (GP) prior. The parameters of this covariance function (variance, regularity</span>
+0005 <span class="comment">% and ranges) are estimated using the Restricted Maximum Likelihood (ReML)</span>
+0006 <span class="comment">% method.</span>
+0007 <span class="comment">%</span>
+0008 <span class="comment">% The mean function of the GP prior is assumed to be constant and unknown. This</span>
+0009 <span class="comment">% default choice can be overridden by means of the model.order property.</span>
+0010 <span class="comment">%</span>
+0011 <span class="comment">% The function is sampled on a space-filling Latin Hypercube design, and the</span>
+0012 <span class="comment">% data is assumed to be noiseless.</span>
+0013 
+0014 <span class="comment">% Copyright Notice</span>
+0015 <span class="comment">%</span>
+0016 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    Authors:   Julien Bect       &lt;julien.bect@supelec.fr&gt;</span>
+0019 <span class="comment">%               Emmanuel Vazquez  &lt;emmanuel.vazquez@supelec.fr&gt;</span>
+0020 
+0021 <span class="comment">% Copying Permission Statement</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%    This file is part of</span>
+0024 <span class="comment">%</span>
+0025 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0026 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0029 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0030 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0031 <span class="comment">%    option) any later version.</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0034 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0035 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0036 <span class="comment">%    License for more details.</span>
+0037 <span class="comment">%</span>
+0038 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0039 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0040 
+0041 stk_disp_examplewelcome;  stk_figure (<span class="string">'stk_example_kb03'</span>);
+0042 
+0043 CONTOUR_LINES = 40; <span class="comment">% number of levels in contour plots</span>
+0044 DOT_STYLE = {<span class="string">'ro'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'r'</span>, <span class="string">'MarkerSize'</span>, 4};
+0045 
+0046 
+0047 <span class="comment">%% CHOICE OF A TWO-DIMENSIONAL TEST FUNCTION</span>
+0048 
+0049 CASENUM = 1;
+0050 
+0051 <span class="keyword">switch</span> CASENUM
+0052     
+0053     <span class="keyword">case</span> 1,  <span class="comment">% the classical BRANIN-HOO test function</span>
+0054         f = @stk_testfun_braninhoo;
+0055         DIM = 2;
+0056         BOX = [[-5; 10], [0; 15]];
+0057         NI = 20;
+0058         
+0059     <span class="keyword">case</span> 2,  <span class="comment">% another test function</span>
+0060         f_ = inline ([<span class="string">'exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2'</span> <span class="keyword">...</span>
+0061             <span class="string">'+ 3*sin(4*pi*x1)'</span>], <span class="string">'x1'</span>, <span class="string">'x2'</span>);
+0062         f  = @(x)(f_(x(:, 1), x(:, 2)));
+0063         DIM = 2;
+0064         BOX = [[-1; 1], [-1; 1]];
+0065         NI = 40;  <span class="comment">% this second function is much harder to approximate</span>
+0066         
+0067 <span class="keyword">end</span>
+0068 
+0069 
+0070 <span class="comment">%% COMPUTE AND VISUALIZE THE FUNCTION ON A 80 x 80 REGULAR GRID</span>
+0071 
+0072 <span class="comment">% Size of the regular grid</span>
+0073 NT = 80^2;
+0074 
+0075 <span class="comment">% The function stk_sampling_regulargrid() does the job of creating the grid</span>
+0076 xt = stk_sampling_regulargrid (NT, DIM, BOX);
+0077 
+0078 <span class="comment">% Compute the corresponding responses</span>
+0079 zt = stk_feval (f, xt);
+0080 
+0081 <span class="comment">% Since xt is a regular grid, we can do a contour plot</span>
+0082 stk_subplot (2, 2, 1);  stk_plot2d (@contour, xt, f, CONTOUR_LINES);
+0083 axis (BOX(:));  stk_title (<span class="string">'function to be approximated'</span>);
+0084 
+0085 
+0086 <span class="comment">%% CHOOSE A KRIGING (GAUSSIAN PROCESS) MODEL</span>
+0087 
+0088 <span class="comment">% We start with a generic (anisotropic) Matern covariance function.</span>
+0089 model = stk_model (<span class="string">'stk_materncov_aniso'</span>, DIM);
+0090 
+0091 <span class="comment">% As a default choice, a constant (but unknown) mean is used,</span>
+0092 <span class="comment">% i.e.,  model.order = 0.</span>
+0093 <span class="comment">% model.order = 1;  %%% UNCOMMENT TO USE A LINEAR TREND %%%</span>
+0094 <span class="comment">% model.order = 2;  %%% UNCOMMENT TO USE A &quot;FULL QUADRATIC&quot; TREND %%%</span>
+0095 
+0096 
+0097 <span class="comment">%% EVALUATE THE FUNCTION ON A &quot;MAXIMIN LHS&quot; DESIGN</span>
+0098 
+0099 xi = stk_sampling_maximinlhs (NI, DIM, BOX);
+0100 zi = stk_feval (f, xi);
+0101 
+0102 <span class="comment">% Add the design points to the first plot</span>
+0103 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
+0104 
+0105 
+0106 <span class="comment">%% ESTIMATE THE PARAMETERS OF THE COVARIANCE FUNCTION</span>
+0107 
+0108 <span class="comment">% Compute an initial guess for the parameters of the Matern covariance (param0)</span>
+0109 <span class="comment">% and a reasonable log-variance for a small &quot;regularization noise&quot;</span>
+0110 [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
+0111 
+0112 <span class="comment">% % Alternative: user-defined initial guess for the parameters of</span>
+0113 <span class="comment">% % the Matern covariance (see &quot;help stk_materncov_aniso&quot; for more information)</span>
+0114 <span class="comment">% SIGMA2 = var (zi);</span>
+0115 <span class="comment">% NU     = 2;</span>
+0116 <span class="comment">% RHO1   = (BOX(2,1) - BOX(1,1)) / 10;</span>
+0117 <span class="comment">% RHO2   = (BOX(2,2) - BOX(1,2)) / 10;</span>
+0118 <span class="comment">% param0 = log ([SIGMA2; NU; 1/RHO1; 1/RHO2]);</span>
+0119 <span class="comment">% model.lognoisevariance = 2 * log (1e-5);</span>
+0120 
+0121 model.param = stk_param_estim (model, xi, zi, param0);
+0122 
+0123 
+0124 <span class="comment">%% CARRY OUT KRIGING PREDICITION AND VISUALIZE</span>
+0125 
+0126 <span class="comment">% Here, we compute the kriging prediction on each point of the grid</span>
+0127 zp = stk_predict (model, xi, zi, xt);
+0128 
+0129 <span class="comment">% Display the result using a contour plot, to be compared with the contour</span>
+0130 <span class="comment">% lines of the true function</span>
+0131 stk_subplot (2, 2, 2);  stk_plot2d (@contour, xt, zp.mean, CONTOUR_LINES);
+0132 tsc = sprintf (<span class="string">'approximation from %d points'</span>, NI);  hold on;
+0133 plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
+0134 hold off;  axis (BOX(:));  stk_title (tsc);
+0135 
+0136 
+0137 <span class="comment">%% VISUALIZE THE ACTUAL PREDICTION ERROR AND THE KRIGING STANDARD DEVIATION</span>
+0138 
+0139 stk_subplot (2, 2, 3);  stk_plot2d (@pcolor, xt, log (abs (zp.mean - zt)));
+0140 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
+0141 hold off;  axis (BOX(:));  stk_title (<span class="string">'true approx error (log)'</span>);
+0142 
+0143 stk_subplot (2, 2, 4);  stk_plot2d (@pcolor, xt, 0.5 * log (zp.var));
+0144 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
+0145 hold off;  axis (BOX(:));  stk_title (<span class="string">'kriging std (log)'</span>);</pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>

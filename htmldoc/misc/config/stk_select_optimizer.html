@@ -1,0 +1,167 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+                "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html>
+<head>
+  <title>Description of stk_select_optimizer</title>
+  <meta name="keywords" content="stk_select_optimizer">
+  <meta name="description" content="STK_SELECT_OPTIMIZER selects an optimizer for stk_param_estim()">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta name="generator" content="m2html v1.5 &copy; 2003-2005 Guillaume Flandin">
+  <meta name="robots" content="index, follow">
+  <link type="text/css" rel="stylesheet" href="../../m2html.css">
+</head>
+<body>
+<a name="_top"></a>
+<div><a href="../../index.html">Home</a> &gt;  <a href="#">misc</a> &gt; <a href="index.html">config</a> &gt; stk_select_optimizer.m</div>
+
+<!--<table width="100%"><tr><td align="left"><a href="../../index.html"><img alt="<" border="0" src="../../left.png">&nbsp;Master index</a></td>
+<td align="right"><a href="index.html">Index for misc/config&nbsp;<img alt=">" border="0" src="../../right.png"></a></td></tr></table>-->
+
+<h1>stk_select_optimizer
+</h1>
+
+<h2><a name="_name"></a>PURPOSE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>STK_SELECT_OPTIMIZER selects an optimizer for stk_param_estim()</strong></div>
+
+<h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="box"><strong>function optim_num = stk_select_optimizer (bounds_available, display) </strong></div>
+
+<h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre class="comment"> STK_SELECT_OPTIMIZER selects an optimizer for stk_param_estim()
+
+ CALL: OPTIM_NUM = stk_select_optimizer (BOUNDS_AVAILABLE)
+
+   returns a number that indicates which optimizer STK should use for
+   box-constrained (if BOUNDS_AVAILABLE is true or absent) or unconstrained
+   optimization in its parameter estimation procedure. The result OPTIM_NUM is
+   equal to 1 for Octave/sqp, 2 for Matlab/fminsearch, or 3 for Matlab/fmincon.</pre></div>
+
+<!-- crossreference -->
+<h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+This function calls:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+<li><a href="stk_is_fmincon_available.html" class="code" title="function fmincon_available = stk_is_fmincon_available ()">stk_is_fmincon_available</a>	STK_IS_FMINCON_AVAILABLE returns true if fmincon is available</li></ul>
+This function is called by:
+<ul style="list-style-image:url(../../octave-sombrero.png)">
+</ul>
+<!-- crossreference -->
+
+
+
+<h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
+<div class="fragment"><pre>0001 <span class="comment">% STK_SELECT_OPTIMIZER selects an optimizer for stk_param_estim()</span>
+0002 <span class="comment">%</span>
+0003 <span class="comment">% CALL: OPTIM_NUM = stk_select_optimizer (BOUNDS_AVAILABLE)</span>
+0004 <span class="comment">%</span>
+0005 <span class="comment">%   returns a number that indicates which optimizer STK should use for</span>
+0006 <span class="comment">%   box-constrained (if BOUNDS_AVAILABLE is true or absent) or unconstrained</span>
+0007 <span class="comment">%   optimization in its parameter estimation procedure. The result OPTIM_NUM is</span>
+0008 <span class="comment">%   equal to 1 for Octave/sqp, 2 for Matlab/fminsearch, or 3 for Matlab/fmincon.</span>
+0009 
+0010 <span class="comment">% Copyright Notice</span>
+0011 <span class="comment">%</span>
+0012 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0013 <span class="comment">%</span>
+0014 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
+0015 
+0016 <span class="comment">% Copying Permission Statement</span>
+0017 <span class="comment">%</span>
+0018 <span class="comment">%    This file is part of</span>
+0019 <span class="comment">%</span>
+0020 <span class="comment">%            STK: a Small (Matlab/Octave) Toolbox for Kriging</span>
+0021 <span class="comment">%               (http://sourceforge.net/projects/kriging)</span>
+0022 <span class="comment">%</span>
+0023 <span class="comment">%    STK is free software: you can redistribute it and/or modify it under</span>
+0024 <span class="comment">%    the terms of the GNU General Public License as published by the Free</span>
+0025 <span class="comment">%    Software Foundation,  either version 3  of the License, or  (at your</span>
+0026 <span class="comment">%    option) any later version.</span>
+0027 <span class="comment">%</span>
+0028 <span class="comment">%    STK is distributed  in the hope that it will  be useful, but WITHOUT</span>
+0029 <span class="comment">%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY</span>
+0030 <span class="comment">%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public</span>
+0031 <span class="comment">%    License for more details.</span>
+0032 <span class="comment">%</span>
+0033 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
+0034 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
+0035 
+0036 <a name="_sub0" href="#_subfunctions" class="code">function optim_num = stk_select_optimizer (bounds_available, display)</a>
+0037 
+0038 <span class="keyword">persistent</span> optim_num_con optim_num_unc
+0039 
+0040 <span class="keyword">if</span> nargin == 0, <span class="comment">% invocation with no arguments (typically, in stk_init)</span>
+0041     
+0042     bounds_available = true;             <span class="comment">% in fact we don't care in stk_init...</span>
+0043     display = true;                      <span class="comment">% verbose</span>
+0044     force_recheck = true;                <span class="comment">% recheck which optimizer to use</span>
+0045     
+0046 <span class="keyword">else</span> <span class="comment">% invocation with at least one argument (typically, in stk_param_estim)</span>
+0047     
+0048     <span class="keyword">if</span> nargin &lt; 2, display = false; <span class="keyword">end</span>  <span class="comment">% default: don't display anything</span>
+0049     force_recheck = false;               <span class="comment">% don't recheck which optimizer to use</span>
+0050     
+0051 <span class="keyword">end</span>
+0052 
+0053 <span class="comment">% select an appropriate optimizer</span>
+0054 <span class="keyword">if</span> isempty (optim_num_con) || isempty (optim_num_unc) || force_recheck,
+0055     <span class="keyword">if</span> isoctave,
+0056         <span class="comment">% Use sqp for both unconstrained and box-constrained optimization</span>
+0057         optim_num_con = 1;
+0058         optim_num_unc = 1;
+0059     <span class="keyword">else</span>
+0060         <span class="comment">% check if Matlab's fmincon is available</span>
+0061         optim_num_con = 2 + <a href="stk_is_fmincon_available.html" class="code" title="function fmincon_available = stk_is_fmincon_available ()">stk_is_fmincon_available</a>();
+0062         <span class="comment">% use fminsearch (Nelder-Mead) for unconstrained optimization</span>
+0063         optim_num_unc = 2;
+0064         <span class="comment">% TODO: use fminunc for unconstrained optimization in Matlab</span>
+0065         <span class="comment">%       if the Optimization Toolbox is available (?)</span>
+0066     <span class="keyword">end</span>
+0067     mlock();
+0068 <span class="keyword">end</span>
+0069 
+0070 <span class="comment">% return the selected optimizer</span>
+0071 <span class="keyword">if</span> bounds_available,
+0072     optim_num = optim_num_con;
+0073 <span class="keyword">else</span>
+0074     optim_num = optim_num_unc;
+0075 <span class="keyword">end</span>
+0076 
+0077 <span class="comment">% display</span>
+0078 <span class="keyword">if</span> display,
+0079     
+0080     fprintf (<span class="string">'Constrained optimizer for stk_param_estim: '</span>);
+0081     <span class="keyword">switch</span> optim_num_con
+0082         <span class="keyword">case</span> 1, <span class="comment">% octave / sqp</span>
+0083             fprintf (<span class="string">'sqp.\n'</span>);
+0084         <span class="keyword">case</span> 2, <span class="comment">% Matlab / fminsearch</span>
+0085             fprintf (<span class="string">'NONE.\n'</span>);
+0086             warning ([<span class="string">'Function fmincon not found, '</span>, <span class="keyword">...</span>
+0087                 <span class="string">'falling back on fminsearch.'</span>]); <span class="comment">%#ok&lt;WNTAG&gt;</span>
+0088         <span class="keyword">case</span> 3, <span class="comment">% Matlab / fmincon</span>
+0089             fprintf (<span class="string">'fmincon.\n'</span>);
+0090         <span class="keyword">otherwise</span>
+0091             error (<span class="string">'Unexpected value for optim_num_con'</span>);
+0092     <span class="keyword">end</span>
+0093     
+0094     fprintf (<span class="string">'Unconstrained optimizer for stk_param_estim: '</span>);
+0095     <span class="keyword">switch</span> optim_num_unc
+0096         <span class="keyword">case</span> 1, <span class="comment">% octave / sqp</span>
+0097             fprintf (<span class="string">'sqp.\n'</span>);
+0098         <span class="keyword">case</span> 2, <span class="comment">% Matlab / fminsearch</span>
+0099             fprintf (<span class="string">'fminsearch.\n'</span>);
+0100         <span class="keyword">otherwise</span>
+0101             error (<span class="string">'Unexpected value for optim_num_unc'</span>);
+0102     <span class="keyword">end</span>
+0103     
+0104 <span class="keyword">end</span>
+0105 
+0106 <span class="keyword">end</span> <span class="comment">% function stk_select_optimizer</span></pre></div>
+<hr>
+
+<address>
+   HTML documentation for <strong>STK 2.1</strong>,
+   generated by <strong>
+   <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
+</address>
+
+</body>
+</html>
