@@ -1,0 +1,274 @@
+Changes in version 2.1.0
+========================
+
+* Several ways to get help, report bugs or ask for new features on Sourceforge
+  are now proposed to the user (both in README or stk_init.m)
+
+* Examples
+
+    o Existing examples have been improved: descriptions rewritten; graphical
+      options controlled globally thanks to dedicated plotting functions
+      (stk_figure; stk_subplot, stk_axes, stk_title...); + lots of minor changes
+
+    o New examples
+        - kb06: ordinary kriging VS linear trend
+        - kb07: simulations of Matern sample paths with different various nu
+        - doe03: one-dimensional Bayesian optimization (expected improvement)
+
+* Covariance functions
+
+    o New function: stk_gausscov_iso.m (isotropic Gaussian covariance model)
+
+    o New function: stk_gausscov_aniso.m (anisotropic Gaussian covariance model)
+
+* Special functions
+    
+    o The precision of stk_sf_matern has been improved around 0 for high nu
+
+    o New function: stk_sf_gausscorr (Gaussian correlation function in 1D)
+
+* Design of experiments
+
+    o New function: stk_phipcrit (phi_p criterion for space-filling designs)
+
+    o New function: stk_maxabscorr (maximal pairwise absolute correlation)
+
+* Probability distributions
+  
+    o A new 'probability distributions' module has been initiated
+      (read misc/distrib/README to understand the reasons why)
+
+    o Currently provides: pdf, cdf and expected improvement (EI) for the
+      Gaussian and Student t distributions
+
+* Matlab/Octave compatibility throughout all supported releases has been
+  strengthened, thanks to the creation of a Matlab/Octave Langage Extension
+  (MOLE) module
+
+    o octave_quantile removed; instead, a replacement for quantile() is provided
+      by the MOLE when needed.
+
+    o new function graphicstoolkit(), providing a kind of replacement for
+      graphics_toolkit(), that also work in Matlab and old Octave releases
+
+    o ...
+
+* Miscellaneous
+
+    o stk_plot1dsim has been removed (use stk_plot1d instead)
+
+    o plotting functions now work directly on the current axes
+
+    o An optional 'box' argument has been added to stk_sampling_halton_rr2
+
+    o stk_feval now uses input row names for its output
+
+* Bugfixes
+
+    o @stk_kreq_qr/stk_update is now (inefficient but) working
+
+    o isequal() is now working for stk_dataframe and stk_kreq_qr objects in
+      Octave 3.2.x (explicit overloading was required for these old releases)
+      
+    o and many other tiny little things
+
+Changes in version 2.0.3
+========================
+
+* This is a minor bugfix release.
+
+   o Fix a bug core/stk_predict.m (related to blockwise computations)
+
+Changes in version 2.0.2
+========================
+
+* This is a minor bugfix release.
+
+   o Fix a bug in @stk_dataframe/subsref.m (handle colnames properly when
+     ()-indexing is used to extract a subset of rows).
+
+   o Fix a bug in @stk_dataframe/stk_dataframe.m (make sure that .data contains
+     numerical data) and add a copy constructor.
+
+Changes in version 2.0.1
+========================
+
+* This is a minor bugfix release.
+
+   o Fix a bug in stk_predict (don't compute the optional outputs lambda and mu
+     when they are not requested by the caller).
+
+   o Fix a bug in stk_sampling_olhs (fail neatly when called with n = 2).
+
+
+Changes in version 2.0.0
+========================
+
+* Required Octave version number has been raised to 3.2.2.
+
+* Important changes to the public API
+
+   o New R-like data structures: @stk_dataframe, @stk_factorial_design.
+
+   o The structures previously used everywhere in STK (with a ".a" field) are
+     still supported but should be considered as deprecated (and will probably
+     be completely removed in the next major release).
+
+   o As a result, stk_predict () does not return a ".a/.v" structure any
+     more. Instead, it returns an stk_dataframe object with two variables called
+     "mean" and "var".
+
+   o The function that computes (the opposite of the log of) the restricted
+     likelihood is now called stk_param_relik instead of stk_remlqrg.
+
+* Many improvements in the internal structure of STK, for the sake of clarity
+  (for those who happen to read the code) and efficiency:
+
+   o @stk_kreq_qr: new class for encapsulating basic computations related 
+     to a Gaussian process (kriging) model.
+
+   o The old Kx_cache/Px_cache mechanism, for working efficiently on finite
+     spaces, has been replaced by a new covariance fonction: stk_discretecov.
+
+   o A new framework to encapsulate various approaches to parallel
+     computations. Currently only supporting 'none' or 'parfor' (Mathworks' PCT
+     toolbox parfor loops) engines, more to come later.
+
+* Experimental support for parameter objects.
+
+   o model.param is now allowed to be an object from a user-defined class. This
+     feature is experimental, and not really used currently in the toolbox.
+
+   o A new function stk_param_getdefaultbounds () has appeared in ./param, that
+     was previously hidden in stk_predict (). It can be overridden in the case
+     where model.param is an object from a user-defined class.
+
+* New sampling algorithms and related functions
+
+   o Fill-distance computation: exact (using Pronzato & Müller, Statistics &
+     Computing, 2011) or approximate (using a space-filling reference set).
+
+   o Van Der Corput and Halton RR2-scrambled sequences (quasi-MC)
+
+   o NOLHS designs (Cioppa & Lucs, Technometrics, 2007)
+
+* Miscellaneous
+
+   o misc/options: a new system for managing options
+
+   o octave_quantile(): replacement for the missing quantile() function in base
+     Matlab (Mathworks' Statistics toolbox is not a requirement of STK).
+
+   o Add MEX-files for computing "Gibbs-Paciorek quadratic forms" to support
+     future work on non-stationary covariance functions.
+
+   o AUTHORS: a list of maintainers and contributors can now be found at the
+     root of the source tree.
+
+   o stk_compile_all: now recompiles MEX-files automatically if the source code
+     has changed.
+
+   o Various new utility functions, tiny or not-so-tiny improvements,
+     bugfixes here and there...
+  
+
+Changes in version 1.2
+======================
+
+* stk_predict 
+   o Now offers the possibility to compute the posterior covariance
+     matrix (it is returned as a fourth optional argument).
+   o Has been modified to work with non-stationary covariance functions.
+
+* Added a new "pairwise" option to all covariance functions and also to
+  stk_dist (formerly stk_distance_matrix). This options allows to compute 
+  only the diagonal of the full distance/covariance matrix).
+
+* Space-filling designs
+   o New function (stk_filldist) to compute the (discretized) fill distance.
+   o New function (stk_sampling_olhs) to generate Orthogonal Latin
+     Hypercube (OLH) samples using the algorithm of Ye (1998).
+
+* New (experimental) function to choose automatically the starting point for
+  a parameter estimation optimization procedure (stk_param_init).
+
+* New functions to work with boxes: stk_rescale, stk_normalize.
+
+* More flexible representation of data
+   o Improved the flexibility most functions (stk_predict, stk_param_estim, 
+     ...), which are now accepting both matrices and "data structures" 
+     (with an 'a' field) as input arguments.
+   o New function: stk_datastruct.
+
+* Regular grids
+   o New function stk_plot2d() that serves has a wrapper around 
+     {surf|contour|mesh|pcolor}-type functions, to plot data defined
+     over a two-dimensional regular grid.
+   o stk_sampling_regulargrid now also returns 'ndgrid-style' coordinate 
+     matrices stored in new .coord field.
+
+* Examples
+   o Reorganized the example folder and renamed all example scripts.
+   o New example (stk_example_misc03) to demonstrate the effect of 
+     adding a prior on the covariance parameters.
+   o Improved graphical outputs in stk_example_kb03.
+   o New test function: stk_testfun_braninhoo (Branin-Hoo).
+
+* Miscellaneous
+   o Renamed stk_distancematrix to stk_dist.
+   o Various new utility functions: stk_runexamples, stk_disp_framedtext,
+     stk_disp_examplewelcome, stk_plot_shadedci, stk_octave_config.
+   o Improved Octave-specific configuration.
+   o Lots of bugfixes and improvements.
+
+
+Changes in version 1.1
+======================
+
+* New special functions for the Matern 3/2 and 5/2 correlation
+  functions (stk_sf_matern32, stk_sf_matern52). New covariance
+  functions (stk_materncov32_iso, stk_materncov32_aniso, ...).
+
+* New MEX-file to compute the separation distance (stk_mindist).
+
+* New function to generate random Latin Hypercube Samples
+  (stk_sampling_randomlhs). Renamed stk_sampling_cartesiangrid to
+  stk_sampling_regulargrid, and changed the meaning of the first
+  argument for consistency with other stk_sampling_* functions.
+
+* Improved stk_model function. Now provides default parameters for
+  several families of covariance functions.
+
+* Renamed fields in "model" structures (covariance_cache to Kx_cache
+  and P0 to Px_cache). A new field 'dim' has been added to the 'model'
+  structure.
+
+* Changed the order of the arguments of the functions that use the
+  structure 'model'. Now, 'model' is always the first argument.
+
+* Changed stk_param_estim to make it possible to estimate noise
+  variance.
+
+* Fixed issues in stk_param_estim.m related to the definition of the
+  search domain and the selection of (constrained/unconstrained)
+  optimizer.
+
+* Renamed stk_conditionning to stk_conditioning.
+
+* New functions for a more flexible and efficient management of STK's
+  configuration in stk_init (path, compilation of MEX-file, checking
+  for optional packages, selection of the default optimizer, ...).
+
+* New functions for unit testing, based on Octave's testing system
+  (stk_test, stk_runtests). Tests have been added to most functions in
+  the toolbox.
+
+* Improved documentation & new examples.
+
+* Improved argument checking and error messages.
+
+* Improved compatibility with older versions of Octave and Matlab.
+
+* Lots of minor changes and bug fixes.
+
+* Complete reorganization of the code (better directory structure).
