@@ -48,6 +48,7 @@ stk_compile (dst_dir, src_dir, opts, 'stk_gpquadform_pairwise');
 src_dir = fullfile (root, 'utils', 'arrays', '@stk_dataframe', 'private');
 dst_dir = src_dir;
 stk_compile (dst_dir, src_dir, opts, 'get_column_number');
+stk_compile (dst_dir, src_dir, opts, 'make_numeric_rownames');
 
 src_dir = fullfile (root, 'sampling');
 dst_dir = src_dir;
