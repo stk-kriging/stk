@@ -1,8 +1,12 @@
 2013-12-05  Julien Bect  <julien.bect@supelec.fr>
 
-	@stk_dataframe/subsasgn.m: Use sprintf instead of num2str.
+	Make stk_dataframe row manipulations faster.
 
+	* utils/arrays/@stk_dataframe/private/make_numeric_rownames.c: new
+	* utils/arrays/@stk_dataframe/subsref.m: modified
 	* utils/arrays/@stk_dataframe/subsasgn.m: modified
+	* misc/config/stk_compile_all.m: modified
+	* misc/include/stk_mex.h: modified
 
 	Handle infinities in stk_sprintf_colvect_* functions.
 
