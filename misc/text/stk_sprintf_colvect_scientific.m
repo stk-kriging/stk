@@ -42,17 +42,24 @@ end
 x = double(x);
 x = x(:);
 
+% get rid of infinities
+is_inf = isinf (x);
+is_pos = (x > 0);
+is_pinf = is_inf & is_pos;
+is_minf = is_inf & (~ is_pos);
+x(is_inf) = 0.0;
+
 % get rid of negative zeros
-b = (x == 0); 
-x(b) = +0.0;
+is_zero = (x == 0); 
+x(is_zero) = 0.0;
 
 % compute exponents
 ax = abs(x);
 exponent = zeros(size(x));
-exponent(~b) = floor(log10(ax(~b)));
+exponent(~is_zero) = floor(log10(ax(~is_zero)));
 
 % compute mantissae
-mantissa = x .* 10.^(-exponent);
+mantissa = x .* 10 .^ (- exponent);
 
 % maximal absolute exponent
 maxexp = max(abs(exponent));
@@ -103,7 +110,16 @@ str1 = arrayfun(@(u)(sprintf(fmt1, u)), mantissa, 'UniformOutput', false);
 fmt2 = sprintf('e%%+0%dd', n2 + 1);
 str2 = arrayfun(@(u)(sprintf(fmt2, u)), exponent, 'UniformOutput', false);
 
+% merge mantissa and exponent
 str = [char(str1{:}) char(str2{:})];
+
+% fix infinities
+if any (is_pinf),
+    str(is_pinf, :) = [repmat(' ', 1, max_width - 3) 'Inf'];
+end
+if any (is_minf)
+    str(is_minf, :) = [repmat(' ', 1, max_width - 4) '-Inf'];
+end
 
 % Compute the maximal error
 if nargout > 1,
