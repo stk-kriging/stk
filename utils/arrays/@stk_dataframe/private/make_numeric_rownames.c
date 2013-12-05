@@ -29,6 +29,7 @@
  *                                                                           *
  ****************************************************************************/
 
+#include "stdio.h"
 #include "string.h"
 #include "stk_mex.h"
 
@@ -40,35 +41,35 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     double *rownum;
     size_t n;
     int i, t;
-    char buffer[2048]; /* FIXME: provide our own cross-platform snprintf ? */ 
+    char buffer[2048]; /* FIXME: provide our own cross-platform snprintf ? */
 
-    /*--- Check number of input/output arguments --------------------------------*/
-    
+    /*--- Check number of input/output arguments -----------------------------*/
+
     if (nrhs != 1)
         mexErrMsgTxt ("Incorrect number of input arguments (should be 1).");
-    
+
     if (nlhs > 1)
         mexErrMsgTxt ("Incorrect number of output arguments (should be 1).");
-    
-    /*--- Read row numbers ------------------------------------------------------*/
-    
+
+    /*--- Read row numbers ---------------------------------------------------*/
+
     if (!mxIsDoubleVector (ROWNUM))
         mexErrMsgTxt("Input argument should be a vector of class double.");
-    
+
     rownum = mxGetPr (ROWNUM);
     n = mxGetNumberOfElements (ROWNUM);
 
-    /*--- Which column are we trying to set ? -----------------------------------*/
-    
+    /*--- Which column are we trying to set ? --------------------------------*/
+
     ROWNAMES = mxCreateCellMatrix (n, 1);
-    
+
     for (i = 0; i < n; i ++)
     {
         t = rownum[i];
-	if (((double) t) != rownum[i])
-	  mexErrMsgTxt("Row numbers should be integers.");
-	
-	sprintf (buffer, "%d", t);
-	mxSetCell (ROWNAMES, i, mxCreateString (buffer));
+        if (((double) t) != rownum[i])
+            mexErrMsgTxt("Row numbers should be integers.");
+
+        sprintf (buffer, "%d", t);
+        mxSetCell (ROWNAMES, i, mxCreateString (buffer));
     }
 }
