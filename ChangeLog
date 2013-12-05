@@ -1,5 +1,9 @@
 2013-12-05  Julien Bect  <julien.bect@supelec.fr>
 
+	@stk_dataframe/subsasgn.m: Use sprintf instead of num2str.
+
+	* utils/arrays/@stk_dataframe/subsasgn.m: modified
+
 	Handle infinities in stk_sprintf_colvect_* functions.
 
 	* misc/text/stk_sprintf_colvect_fixedpoint.m: modified
