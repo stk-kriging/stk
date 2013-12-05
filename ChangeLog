@@ -1,3 +1,9 @@
+2013-12-05  Julien Bect  <julien.bect@supelec.fr>
+
+	Add an optional max_width argument to @stk_dataframe/disp.
+
+	* utils/arrays/@stk_dataframe/disp.m: modified
+
 2013-12-03  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix @stk_kreq_qr/stk_update. Add tests.
