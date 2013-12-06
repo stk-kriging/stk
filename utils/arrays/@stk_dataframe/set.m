@@ -102,7 +102,7 @@ switch icol
         if (d1 ~= d2) && ~ isempty (x.colnames)
             if d2 > d1,
                 % silently add columns without a name
-                x.colnames = [x.colnames; repmat({''}, d2 - d1, 1)];
+                x.colnames = [x.colnames; repmat({''}, 1, d2 - d1)];
             else
                 % delete superfluous column names and emit a warning
                 x.colnames = x.colnames(1:d2);

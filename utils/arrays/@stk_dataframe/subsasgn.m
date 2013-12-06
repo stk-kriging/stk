@@ -107,16 +107,29 @@ switch idx(1).type
         end
         
     case '{}'
+        
         errmsg = 'Indexing with curly braces is not allowed.';
         stk_error(errmsg, 'IllegalIndexing');
         
     case '.'
         
-        if length (idx) > 1
-            val = subsasgn (get (x, idx(1).subs), idx(2:end), val);
+        if strcmp (idx(1).subs, 'data') && length (idx) > 1,
+            
+            if strcmp (idx(2).type, '()')
+                x = subsasgn (x, idx(2:end), val);
+            else
+                stk_error('Illegal indexing.', 'IllegalIndexing');
+            end
+            
+        else % other than 'data'
+            
+            if length (idx) > 1
+                val = subsasgn (get (x, idx(1).subs), idx(2:end), val);
+            end
+            
+            x = set (x, idx(1).subs, val);
+            
         end
-        
-        x = set (x, idx(1).subs, val);
         
 end
 
