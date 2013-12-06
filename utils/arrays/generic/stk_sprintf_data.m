@@ -61,28 +61,27 @@ else
                 max_width = 6;
             end
         end
-        
+
+        % column names
         if (nargin < 3) || isempty (colnames)
-            colnames = repmat ({repmat('-', 1, max_width)}, 1, d);
+            colnames = repmat ({''}, 1, d);
         end
         
-        if nargin < 4,
-            rownames = {};
+        % row names
+        if (nargin < 4) || isempty (rownames)
+            rownames = repmat ({''}, n, 1);
         end
+        b = cellfun (@isempty, rownames);
+        rownames(b) = repmat({'*'}, sum (b), 1);
+        rownames = fliplr (char (cellfun ...
+            (@fliplr, rownames, 'UniformOutput', false)));
         
         nb_spaces_colsep = 2;
         
         nb_rows = n + 1;  % + 1 for the header
         
         s = repmat ('', nb_rows, 1); %#ok<*AGROW>
-        
-        % first columns: row names
-        if isempty (rownames)
-            rownames = repmat('*', n, 1);
-        else
-            rownames = char (rownames);
-        end
-        
+                
         s = [s [repmat(' ', 1, size(rownames, 2)); rownames]];
         
         % column separator between row names and the first data column
@@ -91,13 +90,17 @@ else
         
         for j = 1:d,
             
-            xx  = stk_sprintf_colvect (x(:, j), max_width);
+            xx = stk_sprintf_colvect (x(:, j), max_width);
+            Lxx = size (xx, 2);
             
             vn = colnames{j};
-            Lxx = size (xx, 2);
+            if isempty (vn),
+                vn = repmat('-', 1, Lxx);
+            end
+            
             L = max (length (vn), Lxx);
-            s = [s [sprintf('% *s', L, vn);  % variable name
-                repmat(' ', n, L - Lxx) xx]];    % formatted data
+            s = [s [sprintf('% *s', L, vn);   % variable name
+                repmat(' ', n, L - Lxx) xx]]; % formatted data
             
             if j < d,
                 % column separator
