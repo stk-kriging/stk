@@ -38,7 +38,7 @@ switch idx(1).type
             
         else % ok, only one level of indexing
             
-            d = size (x, 2);
+            [n, d] = size (x);
             L = length (idx(1).subs);
             
             if d == 1, % univariate dataframe
@@ -78,8 +78,6 @@ switch idx(1).type
             r = get (x, 'rownames');
             if ~ isempty (r),
                 r = r(I, 1);
-            elseif ~ isequal (I, 1:length(I))
-                r = cellfun (@num2str, num2cell (I(:)), 'UniformOutput', false);
             end
             
             t = stk_dataframe (x.data(I, J), c, r);
@@ -143,7 +141,7 @@ end % function subsref
 
 %!test % select rows and columns
 %! x = stk_dataframe (reshape (1:15, 5, 3), {'u' 'v' 'w'});
-%! assert (isequal (x([3 5], 2), stk_dataframe ([8; 10], {'v'}, {'3'; '5'})));
+%! assert (isequal (x([3 5], 2), stk_dataframe ([8; 10], {'v'})));
 
 %--- tests with a univariate dataframe ----------------------------------------
 

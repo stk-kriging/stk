@@ -55,7 +55,7 @@ NT = 400; % nb of points in the grid
 xt = stk_sampling_regulargrid (NT, DIM, BOX);
 zt = stk_feval (f, xt);
 
-stk_figure ('stk_example_kb01 (a)');  plot (xt, zt);
+stk_figure ('stk_example_kb01 (a)');  plot (xt, zt, 'k', 'LineWidth', 2);
 stk_title  ('Function to be approximated');
 stk_labels ('input variable x', 'response z');
 

@@ -32,7 +32,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function disp (x)
+function disp (x, max_width)
+
+if nargin < 2,
+    max_width = [];
+end
 
 spstr  = stk_options_get ('stk_dataframe', 'disp_spstr');
 format = stk_options_get ('stk_dataframe', 'disp_format');
@@ -45,7 +49,7 @@ if strcmp (format, 'verbose')
     fprintf (' .data\n');
 end
 
-s = stk_sprintf_data (x);
+s = stk_sprintf_data (x, max_width);
 disp ([repmat(spstr, size(s, 1), 1) s]);
 
 end % function disp

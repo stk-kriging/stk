@@ -42,9 +42,16 @@ end
 x = double(x);
 x = x(:);
 
+% get rid of infinities
+is_inf = isinf (x);
+is_pos = (x > 0);
+is_pinf = is_inf & is_pos;
+is_minf = is_inf & (~ is_pos);
+x(is_inf) = 0.0;
+
 % get rid of negative zeros
-b = (x == 0);
-x(b) = +0.0;
+is_zero = (x == 0);
+x(is_zero) = 0.0;
 
 % Is there any negative element ?
 any_negative = any(x < 0);
@@ -87,6 +94,14 @@ n2  = best_n2;
 fmt = sprintf('%%%d.%df', n1 + n2 + n3, n2);
 str = arrayfun(@(u)(sprintf(fmt, u)), x, 'UniformOutput', false);
 str = char(str{:});
+
+% fix infinities
+if any (is_pinf),
+    str(is_pinf, :) = [repmat(' ', 1, max_width - 3) 'Inf'];
+end
+if any (is_minf)
+    str(is_minf, :) = [repmat(' ', 1, max_width - 4) '-Inf'];
+end
 
 end % function stk_sprintf_colvect_fixedpoint
 
