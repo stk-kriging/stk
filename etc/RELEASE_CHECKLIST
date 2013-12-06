@@ -39,8 +39,9 @@ svn commit -m "Update version number to 4.6-dev"
 
 --- Step #3: documentation ------------------------------------------------------
 
-Generate and commit HTML doc (see admin/stk_make_htmldoc.m).
+Generate and commit HTML doc.
 
+matlab -nojvm -r "stk_init; cd admin; stk_make_htmldoc; exit;"
 svn add branches/4.5.x/htmldoc
 svn commit -m "Generate HTML documentation"
 

@@ -46,6 +46,19 @@ int stk_is_realmatrix(const mxArray* x)
   return 1;
 }
 
+int mxIsDoubleVector (const mxArray* x)
+{
+  size_t m, n;
+
+  if (! stk_is_realmatrix (x))
+    return 0;
+  
+  m = mxGetM (x);
+  n = mxGetN (x);
+
+  return ((m == 1) && (n > 0)) || ((n == 1) && (m > 0));
+}  
+
 void mxReplaceField
 (mxArray* S, mwIndex index, const char* fieldname, const mxArray* value)
 {

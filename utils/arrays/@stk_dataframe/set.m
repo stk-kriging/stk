@@ -31,21 +31,83 @@ function x = set (x, propname, value)
 icol = get_column_number (x.colnames, propname);
 
 switch icol
-     
-    case -4 % 'info'
-        x.info = value;
     
+    case -4 % 'info'
+        
+        x.info = value;
+        
     case -3 % 'rownames'
-        x.rownames = value;
+        
+        if isempty (value)
+            x.rownames = {};
+        else
+            n1 = size (x.data, 1);
+            n2 = length (value);
+            if ~ iscell (value) && (isequal (size (value), [1 n2]) ...
+                    || isequal (value, [n2 1])),
+                stk_error ('value should be a vector-shaped cell array.');
+            else
+                value = value(:);
+                b = cellfun (@isempty, value);
+                value(b) = repmat ({''}, sum (b), 1);
+                if n2 <= n1
+                    x.rownames = [value; repmat({''}, n1 - n2, 1)];
+                else
+                    x.rownames = value;
+                    x.data = [x.data; nan(n2 - n1, size(x.data, 2))];
+                end
+            end
+        end
         
     case -2 % 'colnames'
-        x.colnames = value;
-            
-    case - 1 % set entire array
-        if isequal (size(x.data), size(value))
-            x.data = value;
+        
+        if isempty (value)
+            x.colnames = {};
         else
-            error ('Incorrect size');
+            d1 = size (x.data, 2);
+            d2 = length (value);
+            if ~ iscell (value) && (isequal (size (value), [1 d2]) ...
+                    || isequal (value, [d2 1])),
+                stk_error ('value should be a vector-shaped cell array.');
+            else
+                value = reshape (value, 1, d2);
+                b = cellfun (@isempty, value);
+                value(b) = repmat ({''}, 1, sum (b));
+                if d2 <= d1
+                    x.colnames = [value repmat({''}, 1, d1 - d2)];
+                else
+                    x.colnames = value;
+                    x.data = [x.data nan(size(x.data, 1), d2 - d1)];
+                end
+            end
+        end
+        
+    case - 1 % set entire array
+        
+        [n1, d1] = size (x.data);
+        [n2, d2] = size (value);
+        x.data = value;
+        
+        if (n1 ~= n2) && ~ isempty (x.rownames)
+            if n2 > n1,
+                % silently add rows without a name
+                x.rownames = [x.rownames; repmat({''}, n2 - n1, 1)];
+            else
+                % delete superfluous row names and emit a warning
+                x.rownames = x.rownames(1:n2);
+                warning ('Some row names have been deleted.');
+            end
+        end
+        
+        if (d1 ~= d2) && ~ isempty (x.colnames)
+            if d2 > d1,
+                % silently add columns without a name
+                x.colnames = [x.colnames; repmat({''}, 1, d2 - d1)];
+            else
+                % delete superfluous column names and emit a warning
+                x.colnames = x.colnames(1:d2);
+                warning ('Some column names have been deleted.');
+            end
         end
         
     otherwise

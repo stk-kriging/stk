@@ -1,3 +1,42 @@
+2013-12-06  Julien Bect  <julien.bect@supelec.fr>
+
+	Thicker lines in examples kb01 and kb02.
+
+	* examples/01_kriging_basics/stk_example_kb01.m: modified
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+
+	Improve the robustness of @stk_dataframe/set.m.
+
+	* utils/arrays/@stk_dataframe/subsasgn.m: modified
+	* utils/arrays/@stk_dataframe/set.m: modified
+
+	Change the behaviour of dataframes without row or column names.
+
+	* misc/config/stk_compile_all.m: modified
+	* utils/arrays/@stk_dataframe/private/make_numeric_rownames.c: removed
+	* utils/arrays/@stk_dataframe/subsasgn.m: modified
+	* utils/arrays/@stk_dataframe/subsref.m: modified
+	* utils/arrays/generic/stk_sprintf_data.m: modified
+
+2013-12-05  Julien Bect  <julien.bect@supelec.fr>
+
+	Make stk_dataframe row manipulations faster.
+
+	* utils/arrays/@stk_dataframe/private/make_numeric_rownames.c: new
+	* utils/arrays/@stk_dataframe/subsref.m: modified
+	* utils/arrays/@stk_dataframe/subsasgn.m: modified
+	* misc/config/stk_compile_all.m: modified
+	* misc/include/stk_mex.h: modified
+
+	Handle infinities in stk_sprintf_colvect_* functions.
+
+	* misc/text/stk_sprintf_colvect_fixedpoint.m: modified
+	* misc/text/stk_sprintf_colvect_scientific.m: modified
+
+	Add an optional max_width argument to @stk_dataframe/disp.
+
+	* utils/arrays/@stk_dataframe/disp.m: modified
+
 2013-12-03  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix @stk_kreq_qr/stk_update. Add tests.
