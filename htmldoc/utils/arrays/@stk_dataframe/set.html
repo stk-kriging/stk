@@ -33,7 +33,7 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../octave-sombrero.png)">
-<li><a href="end.html" class="code" title="function idx = end (x, k, nb_indices)">end</a>	END implements the the 'end' keyword for indexing</li><li><a href="isequal.html" class="code" title="function b = isequal (x, y)">isequal</a>	ISEQUAL [overloaded base function]</li><li><a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>	SIZE [overloaded base function]</li></ul>
+<li><a href="end.html" class="code" title="function idx = end (x, k, nb_indices)">end</a>	END implements the the 'end' keyword for indexing</li><li><a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>	ISEMPTY [overloaded base function]</li><li><a href="isequal.html" class="code" title="function b = isequal (x, y)">isequal</a>	ISEQUAL [overloaded base function]</li><li><a href="length.html" class="code" title="function N = length (x) %#ok<STOUT>">length</a>	LENGTH [overloaded base function]</li><li><a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>	SIZE [overloaded base function]</li><li><a href="sum.html" class="code" title="function z = sum(x, dim)">sum</a>	SUM [overloaded base function]</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../octave-sombrero.png)">
 <li><a href="stk_dataframe.html" class="code" title="function x = stk_dataframe (x0, colnames, rownames)">stk_dataframe</a>	STK_DATAFRAME constructs a dataframe</li><li><a href="subsasgn.html" class="code" title="function x = subsasgn(x, idx, val)">subsasgn</a>	SUBSASGN [overloaded base function]</li></ul>
@@ -75,37 +75,99 @@ This function is called by:
 0031 icol = get_column_number (x.colnames, propname);
 0032 
 0033 <span class="keyword">switch</span> icol
-0034      
+0034     
 0035     <span class="keyword">case</span> -4 <span class="comment">% 'info'</span>
-0036         x.info = value;
-0037     
-0038     <span class="keyword">case</span> -3 <span class="comment">% 'rownames'</span>
-0039         x.rownames = value;
+0036         
+0037         x.info = value;
+0038         
+0039     <span class="keyword">case</span> -3 <span class="comment">% 'rownames'</span>
 0040         
-0041     <span class="keyword">case</span> -2 <span class="comment">% 'colnames'</span>
-0042         x.colnames = value;
-0043             
-0044     <span class="keyword">case</span> - 1 <span class="comment">% set entire array</span>
-0045         <span class="keyword">if</span> <a href="isequal.html" class="code" title="function b = isequal (x, y)">isequal</a> (<a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(x.data), <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(value))
-0046             x.data = value;
-0047         <span class="keyword">else</span>
-0048             error (<span class="string">'Incorrect size'</span>);
-0049         <span class="keyword">end</span>
-0050         
-0051     <span class="keyword">otherwise</span>
-0052         <span class="keyword">if</span> <a href="isequal.html" class="code" title="function b = isequal (x, y)">isequal</a> (<a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(value), [<a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(x.data, 1) 1])
-0053             x.data(:, icol) = value;
-0054         <span class="keyword">else</span>
-0055             error (<span class="string">'Incorrect size'</span>);
-0056         <span class="keyword">end</span>
-0057         
-0058 <span class="keyword">end</span>
-0059 
-0060 <span class="keyword">end</span> <span class="comment">% function set</span></pre></div>
+0041         <span class="keyword">if</span> <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a> (value)
+0042             x.rownames = {};
+0043         <span class="keyword">else</span>
+0044             n1 = <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a> (x.data, 1);
+0045             n2 = <a href="length.html" class="code" title="function N = length (x) %#ok<STOUT>">length</a> (value);
+0046             <span class="keyword">if</span> ~ iscell (value) &amp;&amp; (<a href="isequal.html" class="code" title="function b = isequal (x, y)">isequal</a> (<a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a> (value), [1 n2]) <span class="keyword">...</span>
+0047                     || <a href="isequal.html" class="code" title="function b = isequal (x, y)">isequal</a> (value, [n2 1])),
+0048                 stk_error (<span class="string">'value should be a vector-shaped cell array.'</span>);
+0049             <span class="keyword">else</span>
+0050                 value = value(:);
+0051                 b = cellfun (@<a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>, value);
+0052                 value(b) = repmat ({<span class="string">''</span>}, <a href="sum.html" class="code" title="function z = sum(x, dim)">sum</a> (b), 1);
+0053                 <span class="keyword">if</span> n2 &lt;= n1
+0054                     x.rownames = [value; repmat({<span class="string">''</span>}, n1 - n2, 1)];
+0055                 <span class="keyword">else</span>
+0056                     x.rownames = value;
+0057                     x.data = [x.data; nan(n2 - n1, <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(x.data, 2))];
+0058                 <span class="keyword">end</span>
+0059             <span class="keyword">end</span>
+0060         <span class="keyword">end</span>
+0061         
+0062     <span class="keyword">case</span> -2 <span class="comment">% 'colnames'</span>
+0063         
+0064         <span class="keyword">if</span> <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a> (value)
+0065             x.colnames = {};
+0066         <span class="keyword">else</span>
+0067             d1 = <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a> (x.data, 2);
+0068             d2 = <a href="length.html" class="code" title="function N = length (x) %#ok<STOUT>">length</a> (value);
+0069             <span class="keyword">if</span> ~ iscell (value) &amp;&amp; (<a href="isequal.html" class="code" title="function b = isequal (x, y)">isequal</a> (<a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a> (value), [1 d2]) <span class="keyword">...</span>
+0070                     || <a href="isequal.html" class="code" title="function b = isequal (x, y)">isequal</a> (value, [d2 1])),
+0071                 stk_error (<span class="string">'value should be a vector-shaped cell array.'</span>);
+0072             <span class="keyword">else</span>
+0073                 value = reshape (value, 1, d2);
+0074                 b = cellfun (@<a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a>, value);
+0075                 value(b) = repmat ({<span class="string">''</span>}, 1, <a href="sum.html" class="code" title="function z = sum(x, dim)">sum</a> (b));
+0076                 <span class="keyword">if</span> d2 &lt;= d1
+0077                     x.colnames = [value repmat({<span class="string">''</span>}, 1, d1 - d2)];
+0078                 <span class="keyword">else</span>
+0079                     x.colnames = value;
+0080                     x.data = [x.data nan(<a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(x.data, 1), d2 - d1)];
+0081                 <span class="keyword">end</span>
+0082             <span class="keyword">end</span>
+0083         <span class="keyword">end</span>
+0084         
+0085     <span class="keyword">case</span> - 1 <span class="comment">% set entire array</span>
+0086         
+0087         [n1, d1] = <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a> (x.data);
+0088         [n2, d2] = <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a> (value);
+0089         x.data = value;
+0090         
+0091         <span class="keyword">if</span> (n1 ~= n2) &amp;&amp; ~ <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a> (x.rownames)
+0092             <span class="keyword">if</span> n2 &gt; n1,
+0093                 <span class="comment">% silently add rows without a name</span>
+0094                 x.rownames = [x.rownames; repmat({<span class="string">''</span>}, n2 - n1, 1)];
+0095             <span class="keyword">else</span>
+0096                 <span class="comment">% delete superfluous row names and emit a warning</span>
+0097                 x.rownames = x.rownames(1:n2);
+0098                 warning (<span class="string">'Some row names have been deleted.'</span>);
+0099             <span class="keyword">end</span>
+0100         <span class="keyword">end</span>
+0101         
+0102         <span class="keyword">if</span> (d1 ~= d2) &amp;&amp; ~ <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a> (x.colnames)
+0103             <span class="keyword">if</span> d2 &gt; d1,
+0104                 <span class="comment">% silently add columns without a name</span>
+0105                 x.colnames = [x.colnames; repmat({<span class="string">''</span>}, 1, d2 - d1)];
+0106             <span class="keyword">else</span>
+0107                 <span class="comment">% delete superfluous column names and emit a warning</span>
+0108                 x.colnames = x.colnames(1:d2);
+0109                 warning (<span class="string">'Some column names have been deleted.'</span>);
+0110             <span class="keyword">end</span>
+0111         <span class="keyword">end</span>
+0112         
+0113     <span class="keyword">otherwise</span>
+0114         <span class="keyword">if</span> <a href="isequal.html" class="code" title="function b = isequal (x, y)">isequal</a> (<a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(value), [<a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(x.data, 1) 1])
+0115             x.data(:, icol) = value;
+0116         <span class="keyword">else</span>
+0117             error (<span class="string">'Incorrect size'</span>);
+0118         <span class="keyword">end</span>
+0119         
+0120 <span class="keyword">end</span>
+0121 
+0122 <span class="keyword">end</span> <span class="comment">% function set</span></pre></div>
 <hr>
 
 <address>
-   HTML documentation for <strong>STK 2.1</strong>,
+   HTML documentation for <strong>STK 2.1.0</strong>,
    generated by <strong>
    <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
 </address>
