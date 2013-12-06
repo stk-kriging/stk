@@ -1,3 +1,13 @@
+2013-12-06  Julien Bect  <julien.bect@supelec.fr>
+
+	Change the behaviour of dataframes without row or column names.
+
+	* misc/config/stk_compile_all.m: modified
+	* utils/arrays/@stk_dataframe/private/make_numeric_rownames.c: removed
+	* utils/arrays/@stk_dataframe/subsasgn.m: modified
+	* utils/arrays/@stk_dataframe/subsref.m: modified
+	* utils/arrays/generic/stk_sprintf_data.m: modified
+
 2013-12-05  Julien Bect  <julien.bect@supelec.fr>
 
 	Make stk_dataframe row manipulations faster.

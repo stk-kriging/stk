@@ -97,12 +97,7 @@ switch idx(1).type
                         
                         x.data(I, :) = [];
                         
-                        if isempty (x.rownames)
-                            nn1 = 1:n;  nn2 = nn1;  nn2(I) = [];
-                            if ~ isequal (nn1, nn2)
-                                x.rownames = make_numeric_rownames (nn2);
-                            end
-                        else
+                        if ~ isempty (x.rownames)
                             x.rownames(I) = [];
                         end
                         
@@ -173,12 +168,13 @@ end % function subsasgn
 %! assert (isequal (size (x), [4 2]))
 %! assert (isequal (double (x), [1 9; 2 10; 3 11; 4 12]))
 %! assert (isequal (get (x, 'colnames'), {'u' 'w'}))
+%! assert (isempty (get (x, 'rownames')))
 
 %!test
 %! x(2, :) = [];
 %! assert (isequal (size (x), [3 2]))
 %! assert (isequal (double (x), [1 9; 3 11; 4 12]))
-%! assert (isequal (get (x, 'rownames'), {'1'; '3'; '4'}))
+%! assert (isempty (get (x, 'rownames')))
 
 %!test
 %! x.rownames = {'a'; 'b'; 'c'};

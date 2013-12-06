@@ -44,15 +44,7 @@ else
         s = '[] (empty)';
         
     else
-        
-        if nargin < 3,
-            colnames = {};
-        end
-        
-        if nargin < 4,
-            rownames = {};
-        end
-        
+                
         if (nargin < 2) || isempty (max_width)
             try
                 switch get (0, 'Format')
@@ -70,25 +62,28 @@ else
             end
         end
         
+        if (nargin < 3) || isempty (colnames)
+            colnames = repmat ({repmat('-', 1, max_width)}, 1, d);
+        end
+        
+        if nargin < 4,
+            rownames = {};
+        end
+        
         nb_spaces_colsep = 2;
         
-        has_colnames = ~ isempty (colnames);
-        nb_rows = n + has_colnames;
+        nb_rows = n + 1;  % + 1 for the header
         
         s = repmat ('', nb_rows, 1); %#ok<*AGROW>
         
         % first columns: row names
         if isempty (rownames)
-            rownames = stk_sprintf_colvect (1:n);
+            rownames = repmat('*', n, 1);
         else
             rownames = char (rownames);
         end
         
-        if has_colnames
-            s = [s [repmat(' ', 1, size(rownames, 2)); rownames]];
-        else
-            s = [s rownames];
-        end
+        s = [s [repmat(' ', 1, size(rownames, 2)); rownames]];
         
         % column separator between row names and the first data column
         s = [s repmat(' :', nb_rows,  1) ...
@@ -98,19 +93,11 @@ else
             
             xx  = stk_sprintf_colvect (x(:, j), max_width);
             
-            if ~ has_colnames % no need for a header row in this case
-                
-                s = [s xx];
-                
-            else
-                
-                vn = colnames{j};
-                Lxx = size (xx, 2);
-                L = max (length (vn), Lxx);
-                s = [s [sprintf('% *s', L, vn);  % variable name
-                    repmat(' ', n, L - Lxx) xx]];    % formatted data
-                
-            end
+            vn = colnames{j};
+            Lxx = size (xx, 2);
+            L = max (length (vn), Lxx);
+            s = [s [sprintf('% *s', L, vn);  % variable name
+                repmat(' ', n, L - Lxx) xx]];    % formatted data
             
             if j < d,
                 % column separator
