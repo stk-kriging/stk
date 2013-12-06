@@ -78,11 +78,6 @@ switch idx(1).type
             r = get (x, 'rownames');
             if ~ isempty (r),
                 r = r(I, 1);
-            else
-                nn1 = 1:n;  nn2 = nn1(I);
-                if ~ isequal (nn1, nn2)
-                    r = make_numeric_rownames (nn2);
-                end
             end
             
             t = stk_dataframe (x.data(I, J), c, r);
@@ -146,7 +141,7 @@ end % function subsref
 
 %!test % select rows and columns
 %! x = stk_dataframe (reshape (1:15, 5, 3), {'u' 'v' 'w'});
-%! assert (isequal (x([3 5], 2), stk_dataframe ([8; 10], {'v'}, {'3'; '5'})));
+%! assert (isequal (x([3 5], 2), stk_dataframe ([8; 10], {'v'})));
 
 %--- tests with a univariate dataframe ----------------------------------------
 
