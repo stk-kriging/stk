@@ -1,5 +1,10 @@
 2013-12-06  Julien Bect  <julien.bect@supelec.fr>
 
+	Thicker lines in examples kb01 and kb02.
+
+	* examples/01_kriging_basics/stk_example_kb01.m: modified
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+
 	Improve the robustness of @stk_dataframe/set.m.
 
 	* utils/arrays/@stk_dataframe/subsasgn.m: modified
