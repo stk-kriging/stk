@@ -31,18 +31,20 @@ function x = set (x, propname, value)
 icol = get_column_number (x.colnames, propname);
 
 switch icol
-     
-    case -4 % 'info'
-        x.info = value;
     
+    case -4 % 'info'
+        
+        x.info = value;
+        
     case -3 % 'rownames'
+        
         if isempty (value)
             x.rownames = {};
         else
             n1 = size (x.data, 1);
             n2 = length (value);
             if ~ iscell (value) && (isequal (size (value), [1 n2]) ...
-                    || isequal (value, [n2 1])),               
+                    || isequal (value, [n2 1])),
                 stk_error ('value should be a vector-shaped cell array.');
             else
                 value = value(:);
@@ -58,6 +60,7 @@ switch icol
         end
         
     case -2 % 'colnames'
+        
         if isempty (value)
             x.colnames = {};
         else
@@ -78,12 +81,33 @@ switch icol
                 end
             end
         end
-            
+        
     case - 1 % set entire array
-        if isequal (size(x.data), size(value))
-            x.data = value;
-        else
-            error ('Incorrect size');
+        
+        [n1, d1] = size (x.data);
+        [n2, d2] = size (value);
+        x.data = value;
+        
+        if (n1 ~= n2) && ~ isempty (x.rownames)
+            if n2 > n1,
+                % silently add rows without a name
+                x.rownames = [x.rownames; repmat({''}, n2 - n1, 1)];
+            else
+                % delete superfluous row names and emit a warning
+                x.rownames = x.rownames(1:n2);
+                warning ('Some row names have been deleted.');
+            end
+        end
+        
+        if (d1 ~= d2) && ~ isempty (x.colnames)
+            if d2 > d1,
+                % silently add columns without a name
+                x.colnames = [x.colnames; repmat({''}, d2 - d1, 1)];
+            else
+                % delete superfluous column names and emit a warning
+                x.colnames = x.colnames(1:d2);
+                warning ('Some column names have been deleted.');
+            end
         end
         
     otherwise
