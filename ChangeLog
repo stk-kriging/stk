@@ -1,5 +1,10 @@
 2013-12-06  Julien Bect  <julien.bect@supelec.fr>
 
+	Improve the robustness of @stk_dataframe/set.m.
+
+	* utils/arrays/@stk_dataframe/subsasgn.m: modified
+	* utils/arrays/@stk_dataframe/set.m: modified
+
 	Change the behaviour of dataframes without row or column names.
 
 	* misc/config/stk_compile_all.m: modified
