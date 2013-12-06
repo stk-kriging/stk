@@ -112,10 +112,11 @@ switch idx(1).type
         
     case '.'
         
-        if length(idx) > 1
-            val = subsasgn(get(x, idx(1).subs), idx(2:end), val);
+        if length (idx) > 1
+            val = subsasgn (get (x, idx(1).subs), idx(2:end), val);
         end
-        x = set(x, idx(1).subs, val);
+        
+        x = set (x, idx(1).subs, val);
         
 end
 
@@ -217,3 +218,13 @@ end % function subsasgn
 %!test % create a new row and a new column through subsasgn()
 %! x = stk_dataframe(rand(5, 2)); x(6, 3) = 7; disp(x)
 %! assert(isequal(size(x), [6, 3]));
+
+%--- tests adding row/columns through row/columns names ------------------------
+
+%!test
+%! x = stk_dataframe ([]);
+%! x.colnames{2} = 'v';
+%! x.rownames{2} = 'b';
+%! assert (isequal (x.rownames, {''; 'b'}));
+%! assert (isequal (x.colnames, {'' 'v'}));
+%! assert (isequalwithequalnans (x.data, nan (2)));
