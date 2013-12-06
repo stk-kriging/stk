@@ -24,7 +24,7 @@
 <div class="box"><strong>DISP [overloaded base function]</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
-<div class="box"><strong>function disp (x) </strong></div>
+<div class="box"><strong>function disp (x, max_width) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> DISP [overloaded base function]
@@ -38,10 +38,10 @@
 <h2><a name="_cross"></a>CROSS-REFERENCE INFORMATION <a href="#_top"><img alt="^" border="0" src="../../../up.png"></a></h2>
 This function calls:
 <ul style="list-style-image:url(../../../octave-sombrero.png)">
-<li><a href="disp.html" class="code" title="function disp (x)">disp</a>	DISP [overloaded base function]</li><li><a href="end.html" class="code" title="function idx = end (x, k, nb_indices)">end</a>	END implements the the 'end' keyword for indexing</li><li><a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>	SIZE [overloaded base function]</li><li><a href="stk_sprintf_colnames.html" class="code" title="function s = stk_sprintf_colnames (x)">stk_sprintf_colnames</a>	STK_SPRINTF_COLNAMES returns the column names of an array</li><li><a href="stk_sprintf_data.html" class="code" title="function s = stk_sprintf_data (x, max_width)">stk_sprintf_data</a>	STK_SPRINTF_DATA prints the content of an array into a string</li><li><a href="stk_sprintf_info.html" class="code" title="function s = stk_sprintf_info (x)">stk_sprintf_info</a>	STK_SPRINTF_INFO returns the 'info' string associated to an array</li><li><a href="stk_sprintf_rownames.html" class="code" title="function s = stk_sprintf_rownames (x)">stk_sprintf_rownames</a>	STK_SPRINTF_ROWNAMES returns the row names of an array</li><li><a href="stk_sprintf_sizetype.html" class="code" title="function s = stk_sprintf_sizetype (x)">stk_sprintf_sizetype</a>	STK_SPRINTF_SIZETYPE prints the size and type into a string</li></ul>
+<li><a href="disp.html" class="code" title="function disp (x, max_width)">disp</a>	DISP [overloaded base function]</li><li><a href="end.html" class="code" title="function idx = end (x, k, nb_indices)">end</a>	END implements the the 'end' keyword for indexing</li><li><a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>	SIZE [overloaded base function]</li><li><a href="stk_sprintf_colnames.html" class="code" title="function s = stk_sprintf_colnames (x)">stk_sprintf_colnames</a>	STK_SPRINTF_COLNAMES returns the column names of an array</li><li><a href="stk_sprintf_data.html" class="code" title="function s = stk_sprintf_data (x, max_width)">stk_sprintf_data</a>	STK_SPRINTF_DATA prints the content of an array into a string</li><li><a href="stk_sprintf_info.html" class="code" title="function s = stk_sprintf_info (x)">stk_sprintf_info</a>	STK_SPRINTF_INFO returns the 'info' string associated to an array</li><li><a href="stk_sprintf_rownames.html" class="code" title="function s = stk_sprintf_rownames (x)">stk_sprintf_rownames</a>	STK_SPRINTF_ROWNAMES returns the row names of an array</li><li><a href="stk_sprintf_sizetype.html" class="code" title="function s = stk_sprintf_sizetype (x)">stk_sprintf_sizetype</a>	STK_SPRINTF_SIZETYPE prints the size and type into a string</li></ul>
 This function is called by:
 <ul style="list-style-image:url(../../../octave-sombrero.png)">
-<li><a href="disp.html" class="code" title="function disp (x)">disp</a>	DISP [overloaded base function]</li><li><a href="display.html" class="code" title="function display (x)">display</a>	DISPLAY [overloaded base function]</li></ul>
+<li><a href="disp.html" class="code" title="function disp (x, max_width)">disp</a>	DISP [overloaded base function]</li><li><a href="display.html" class="code" title="function display (x)">display</a>	DISPLAY [overloaded base function]</li></ul>
 <!-- crossreference -->
 
 
@@ -81,27 +81,31 @@ This function is called by:
 0032 <span class="comment">%    You should  have received a copy  of the GNU  General Public License</span>
 0033 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 0034 
-0035 <a name="_sub0" href="#_subfunctions" class="code">function disp (x)</a>
+0035 <a name="_sub0" href="#_subfunctions" class="code">function disp (x, max_width)</a>
 0036 
-0037 spstr  = stk_options_get (<span class="string">'stk_dataframe'</span>, <span class="string">'disp_spstr'</span>);
-0038 format = stk_options_get (<span class="string">'stk_dataframe'</span>, <span class="string">'disp_format'</span>);
-0039 
-0040 <span class="keyword">if</span> strcmp (format, <span class="string">'verbose'</span>)
-0041     fprintf (<span class="string">'%s\n\n'</span>, <a href="stk_sprintf_sizetype.html" class="code" title="function s = stk_sprintf_sizetype (x)">stk_sprintf_sizetype</a> (x));
-0042     fprintf (<span class="string">' .info:\n%s%s\n'</span>, spstr, <a href="stk_sprintf_info.html" class="code" title="function s = stk_sprintf_info (x)">stk_sprintf_info</a> (x));
-0043     fprintf (<span class="string">' .colnames\n%s%s\n'</span>, spstr, <a href="stk_sprintf_colnames.html" class="code" title="function s = stk_sprintf_colnames (x)">stk_sprintf_colnames</a> (x));
-0044     fprintf (<span class="string">' .rownames\n%s%s\n'</span>, spstr, <a href="stk_sprintf_rownames.html" class="code" title="function s = stk_sprintf_rownames (x)">stk_sprintf_rownames</a> (x));
-0045     fprintf (<span class="string">' .data\n'</span>);
-0046 <span class="keyword">end</span>
-0047 
-0048 s = <a href="stk_sprintf_data.html" class="code" title="function s = stk_sprintf_data (x, max_width)">stk_sprintf_data</a> (x);
-0049 <a href="disp.html" class="code" title="function disp (x)">disp</a> ([repmat(spstr, <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(s, 1), 1) s]);
-0050 
-0051 <span class="keyword">end</span> <span class="comment">% function disp</span></pre></div>
+0037 <span class="keyword">if</span> nargin &lt; 2,
+0038     max_width = [];
+0039 <span class="keyword">end</span>
+0040 
+0041 spstr  = stk_options_get (<span class="string">'stk_dataframe'</span>, <span class="string">'disp_spstr'</span>);
+0042 format = stk_options_get (<span class="string">'stk_dataframe'</span>, <span class="string">'disp_format'</span>);
+0043 
+0044 <span class="keyword">if</span> strcmp (format, <span class="string">'verbose'</span>)
+0045     fprintf (<span class="string">'%s\n\n'</span>, <a href="stk_sprintf_sizetype.html" class="code" title="function s = stk_sprintf_sizetype (x)">stk_sprintf_sizetype</a> (x));
+0046     fprintf (<span class="string">' .info:\n%s%s\n'</span>, spstr, <a href="stk_sprintf_info.html" class="code" title="function s = stk_sprintf_info (x)">stk_sprintf_info</a> (x));
+0047     fprintf (<span class="string">' .colnames\n%s%s\n'</span>, spstr, <a href="stk_sprintf_colnames.html" class="code" title="function s = stk_sprintf_colnames (x)">stk_sprintf_colnames</a> (x));
+0048     fprintf (<span class="string">' .rownames\n%s%s\n'</span>, spstr, <a href="stk_sprintf_rownames.html" class="code" title="function s = stk_sprintf_rownames (x)">stk_sprintf_rownames</a> (x));
+0049     fprintf (<span class="string">' .data\n'</span>);
+0050 <span class="keyword">end</span>
+0051 
+0052 s = <a href="stk_sprintf_data.html" class="code" title="function s = stk_sprintf_data (x, max_width)">stk_sprintf_data</a> (x, max_width);
+0053 <a href="disp.html" class="code" title="function disp (x, max_width)">disp</a> ([repmat(spstr, <a href="size.html" class="code" title="function varargout = size(x, varargin)">size</a>(s, 1), 1) s]);
+0054 
+0055 <span class="keyword">end</span> <span class="comment">% function disp</span></pre></div>
 <hr>
 
 <address>
-   HTML documentation for <strong>STK 2.1</strong>,
+   HTML documentation for <strong>STK 2.1.0</strong>,
    generated by <strong>
    <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
 </address>

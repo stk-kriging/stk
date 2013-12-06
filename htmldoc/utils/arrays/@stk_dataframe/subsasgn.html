@@ -141,43 +141,43 @@ This function is called by:
 0097                         
 0098                         x.data(I, :) = [];
 0099                         
-0100                         <span class="keyword">if</span> <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a> (x.rownames)
-0101                             nn1 = 1:n;  nn2 = nn1;  nn2(I) = [];
-0102                             <span class="keyword">if</span> ~ <a href="isequal.html" class="code" title="function b = isequal (x, y)">isequal</a> (nn1, nn2)
-0103                                 x.rownames = cellfun (@num2str, <span class="keyword">...</span>
-0104                                     num2cell (nn2'), <span class="string">'UniformOutput'</span>, false);
-0105                             <span class="keyword">end</span>
-0106                         <span class="keyword">else</span>
-0107                             x.rownames(I) = [];
-0108                         <span class="keyword">end</span>
-0109                         
-0110                     <span class="keyword">end</span>
-0111                 <span class="keyword">end</span>
-0112             <span class="keyword">end</span>
-0113         <span class="keyword">end</span>
-0114         
-0115     <span class="keyword">case</span> <span class="string">'{}'</span>
-0116         errmsg = <span class="string">'Indexing with curly braces is not allowed.'</span>;
-0117         stk_error(errmsg, <span class="string">'IllegalIndexing'</span>);
-0118         
-0119     <span class="keyword">case</span> <span class="string">'.'</span>
-0120         
-0121         <span class="keyword">if</span> <a href="length.html" class="code" title="function N = length (x) %#ok<STOUT>">length</a>(idx) &gt; 1
-0122             val = <a href="subsasgn.html" class="code" title="function x = subsasgn(x, idx, val)">subsasgn</a>(<a href="get.html" class="code" title="function value = get (x, propname)">get</a>(x, idx(1).subs), idx(2:end), val);
-0123         <span class="keyword">end</span>
-0124         x = <a href="set.html" class="code" title="function x = set (x, propname, value)">set</a>(x, idx(1).subs, val);
-0125         
-0126 <span class="keyword">end</span>
-0127 
-0128 <span class="keyword">end</span> <span class="comment">% function subsasgn</span>
-0129 
-0130 
-0131 
-0132 
-0133 
-0134 
+0100                         <span class="keyword">if</span> ~ <a href="isempty.html" class="code" title="function b = isempty(x)">isempty</a> (x.rownames)
+0101                             x.rownames(I) = [];
+0102                         <span class="keyword">end</span>
+0103                         
+0104                     <span class="keyword">end</span>
+0105                 <span class="keyword">end</span>
+0106             <span class="keyword">end</span>
+0107         <span class="keyword">end</span>
+0108         
+0109     <span class="keyword">case</span> <span class="string">'{}'</span>
+0110         
+0111         errmsg = <span class="string">'Indexing with curly braces is not allowed.'</span>;
+0112         stk_error(errmsg, <span class="string">'IllegalIndexing'</span>);
+0113         
+0114     <span class="keyword">case</span> <span class="string">'.'</span>
+0115         
+0116         <span class="keyword">if</span> strcmp (idx(1).subs, <span class="string">'data'</span>) &amp;&amp; <a href="length.html" class="code" title="function N = length (x) %#ok<STOUT>">length</a> (idx) &gt; 1,
+0117             
+0118             <span class="keyword">if</span> strcmp (idx(2).type, <span class="string">'()'</span>)
+0119                 x = <a href="subsasgn.html" class="code" title="function x = subsasgn(x, idx, val)">subsasgn</a> (x, idx(2:end), val);
+0120             <span class="keyword">else</span>
+0121                 stk_error(<span class="string">'Illegal indexing.'</span>, <span class="string">'IllegalIndexing'</span>);
+0122             <span class="keyword">end</span>
+0123             
+0124         <span class="keyword">else</span> <span class="comment">% other than 'data'</span>
+0125             
+0126             <span class="keyword">if</span> <a href="length.html" class="code" title="function N = length (x) %#ok<STOUT>">length</a> (idx) &gt; 1
+0127                 val = <a href="subsasgn.html" class="code" title="function x = subsasgn(x, idx, val)">subsasgn</a> (<a href="get.html" class="code" title="function value = get (x, propname)">get</a> (x, idx(1).subs), idx(2:end), val);
+0128             <span class="keyword">end</span>
+0129             
+0130             x = <a href="set.html" class="code" title="function x = set (x, propname, value)">set</a> (x, idx(1).subs, val);
+0131             
+0132         <span class="keyword">end</span>
+0133         
+0134 <span class="keyword">end</span>
 0135 
-0136 
+0136 <span class="keyword">end</span> <span class="comment">% function subsasgn</span>
 0137 
 0138 
 0139 
@@ -195,16 +195,16 @@ This function is called by:
 0151 
 0152 
 0153 
-0154 <span class="comment">% %!error x.colnames{1} = 'yy'</span>
-0155 <span class="comment">% %!error x.colnames = {'xx' 'xx'}</span>
+0154 
+0155 
 0156 
 0157 
 0158 
 0159 
 0160 
 0161 
-0162 
-0163 
+0162 <span class="comment">% %!error x.colnames{1} = 'yy'</span>
+0163 <span class="comment">% %!error x.colnames = {'xx' 'xx'}</span>
 0164 
 0165 
 0166 
@@ -248,23 +248,39 @@ This function is called by:
 0204 
 0205 
 0206 
-0207 <span class="comment">%--- tests with a univariate dataframe ----------------------------------------</span>
+0207 
 0208 
 0209 
 0210 
 0211 
-0212 <span class="comment">% linear indexing is allowed for univariate dataframes</span>
+0212 
 0213 
 0214 
 0215 
-0216 <span class="comment">% matrix-style indexing also</span>
+0216 <span class="comment">%--- tests with a univariate dataframe ----------------------------------------</span>
 0217 
 0218 
-0219 <span class="comment">% three indices is not allowed (even if the third is one...)</span></pre></div>
+0219 
+0220 
+0221 <span class="comment">% linear indexing is allowed for univariate dataframes</span>
+0222 
+0223 
+0224 
+0225 <span class="comment">% matrix-style indexing also</span>
+0226 
+0227 
+0228 <span class="comment">% three indices is not allowed (even if the third is one...)</span>
+0229 
+0230 
+0231 
+0232 
+0233 
+0234 
+0235 <span class="comment">%--- tests adding row/columns through row/columns names ------------------------</span></pre></div>
 <hr>
 
 <address>
-   HTML documentation for <strong>STK 2.1</strong>,
+   HTML documentation for <strong>STK 2.1.0</strong>,
    generated by <strong>
    <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
 </address>

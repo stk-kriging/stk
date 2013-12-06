@@ -86,82 +86,98 @@ This function is called by:
 0042 x = double(x);
 0043 x = x(:);
 0044 
-0045 <span class="comment">% get rid of negative zeros</span>
-0046 b = (x == 0); 
-0047 x(b) = +0.0;
-0048 
-0049 <span class="comment">% compute exponents</span>
-0050 ax = abs(x);
-0051 exponent = zeros(size(x));
-0052 exponent(~b) = floor(log10(ax(~b)));
-0053 
-0054 <span class="comment">% compute mantissae</span>
-0055 mantissa = x .* 10.^(-exponent);
-0056 
-0057 <span class="comment">% maximal absolute exponent</span>
-0058 maxexp = max(abs(exponent));
-0059 
-0060 <span class="comment">% is there any negative element ?</span>
-0061 any_negative = any(x &lt; 0);
-0062 
-0063 <span class="comment">% Start with only one digit for the mantissa (no comma, then)</span>
-0064 n1 = 1;                                 <span class="comment">% nb digits for the mantissa</span>
-0065 n2 = max(2, 1 + floor(log10(maxexp)));  <span class="comment">% nb digits for the exponent</span>
-0066 n3 = any_negative + 2;                  <span class="comment">% nb non-digit characters (+2 for &quot;e+&quot;)</span>
-0067 
-0068 <span class="comment">% Abort this is already too long</span>
-0069 <span class="keyword">if</span> (n1 + n2 + n3) &gt; max_width
-0070     str = repmat(<span class="string">'#'</span>, length(x), max_width);
-0071     err = +inf;
-0072     <span class="keyword">return</span>;
-0073 <span class="keyword">end</span>
+0045 <span class="comment">% get rid of infinities</span>
+0046 is_inf = isinf (x);
+0047 is_pos = (x &gt; 0);
+0048 is_pinf = is_inf &amp; is_pos;
+0049 is_minf = is_inf &amp; (~ is_pos);
+0050 x(is_inf) = 0.0;
+0051 
+0052 <span class="comment">% get rid of negative zeros</span>
+0053 is_zero = (x == 0); 
+0054 x(is_zero) = 0.0;
+0055 
+0056 <span class="comment">% compute exponents</span>
+0057 ax = abs(x);
+0058 exponent = zeros(size(x));
+0059 exponent(~is_zero) = floor(log10(ax(~is_zero)));
+0060 
+0061 <span class="comment">% compute mantissae</span>
+0062 mantissa = x .* 10 .^ (- exponent);
+0063 
+0064 <span class="comment">% maximal absolute exponent</span>
+0065 maxexp = max(abs(exponent));
+0066 
+0067 <span class="comment">% is there any negative element ?</span>
+0068 any_negative = any(x &lt; 0);
+0069 
+0070 <span class="comment">% Start with only one digit for the mantissa (no comma, then)</span>
+0071 n1 = 1;                                 <span class="comment">% nb digits for the mantissa</span>
+0072 n2 = max(2, 1 + floor(log10(maxexp)));  <span class="comment">% nb digits for the exponent</span>
+0073 n3 = any_negative + 2;                  <span class="comment">% nb non-digit characters (+2 for &quot;e+&quot;)</span>
 0074 
-0075 <span class="comment">% Otherwise, this is our current best solution</span>
-0076 am = abs(mantissa);
-0077 best_err = max(am - floor(am)); <span class="comment">% maximal error on the matissa</span>
-0078 best_n1  = 1;
-0079 
-0080 <span class="comment">% Should we add a decimal part ?</span>
-0081 <span class="keyword">if</span> (best_err &gt; eps) &amp;&amp; ((n1 + n2 + n3 + 2) &lt;= max_width)
-0082     <span class="comment">% We can add a decimal part, so let's do it...</span>
-0083     <span class="keyword">while</span> (best_err &gt; eps) &amp;&amp; ((n1 + n2 + n3) &lt; max_width)
-0084         n1 = n1 + 1;
-0085         n3 = any_negative + 3;
-0086         <span class="comment">% &quot;+3&quot; for &quot;e&quot;, &quot;.&quot; in the mantissa and &quot;+&quot; in the exponent</span>
-0087         c = 10^(1 - n1);
-0088         mm = round(am ./ c) .* c;
-0089         err = max(abs(am - mm));
-0090         <span class="keyword">if</span> err &lt; best_err - 0.5 * c
-0091             best_err = err;
-0092             best_n1 = n1;
-0093         <span class="keyword">end</span>
-0094     <span class="keyword">end</span>
-0095 <span class="keyword">end</span>
-0096 n1 = best_n1;
-0097 
-0098 <span class="comment">% format specifier for the mantissa</span>
-0099 fmt1 = sprintf(<span class="string">'%%%d.%df'</span>, n1 + (n1 &gt; 1) + any_negative, n1 - 1);
-0100 str1 = arrayfun(@(u)(sprintf(fmt1, u)), mantissa, <span class="string">'UniformOutput'</span>, false);
-0101 
-0102 <span class="comment">% format specifier for the exponent</span>
-0103 fmt2 = sprintf(<span class="string">'e%%+0%dd'</span>, n2 + 1);
-0104 str2 = arrayfun(@(u)(sprintf(fmt2, u)), exponent, <span class="string">'UniformOutput'</span>, false);
-0105 
-0106 str = [char(str1{:}) char(str2{:})];
-0107 
-0108 <span class="comment">% Compute the maximal error</span>
-0109 <span class="keyword">if</span> nargout &gt; 1,
-0110     c = 10^(1 - n1);
-0111     rounded_mantissa = round(mantissa / c) * c;
-0112     err_mantissa = abs(rounded_mantissa - mantissa);
-0113     err = max(err_mantissa .* 10.^(exponent));
-0114 <span class="keyword">end</span>
-0115     
-0116 <span class="keyword">end</span> <span class="comment">% function stk_sprintf_colvect_scientific</span></pre></div>
+0075 <span class="comment">% Abort this is already too long</span>
+0076 <span class="keyword">if</span> (n1 + n2 + n3) &gt; max_width
+0077     str = repmat(<span class="string">'#'</span>, length(x), max_width);
+0078     err = +inf;
+0079     <span class="keyword">return</span>;
+0080 <span class="keyword">end</span>
+0081 
+0082 <span class="comment">% Otherwise, this is our current best solution</span>
+0083 am = abs(mantissa);
+0084 best_err = max(am - floor(am)); <span class="comment">% maximal error on the matissa</span>
+0085 best_n1  = 1;
+0086 
+0087 <span class="comment">% Should we add a decimal part ?</span>
+0088 <span class="keyword">if</span> (best_err &gt; eps) &amp;&amp; ((n1 + n2 + n3 + 2) &lt;= max_width)
+0089     <span class="comment">% We can add a decimal part, so let's do it...</span>
+0090     <span class="keyword">while</span> (best_err &gt; eps) &amp;&amp; ((n1 + n2 + n3) &lt; max_width)
+0091         n1 = n1 + 1;
+0092         n3 = any_negative + 3;
+0093         <span class="comment">% &quot;+3&quot; for &quot;e&quot;, &quot;.&quot; in the mantissa and &quot;+&quot; in the exponent</span>
+0094         c = 10^(1 - n1);
+0095         mm = round(am ./ c) .* c;
+0096         err = max(abs(am - mm));
+0097         <span class="keyword">if</span> err &lt; best_err - 0.5 * c
+0098             best_err = err;
+0099             best_n1 = n1;
+0100         <span class="keyword">end</span>
+0101     <span class="keyword">end</span>
+0102 <span class="keyword">end</span>
+0103 n1 = best_n1;
+0104 
+0105 <span class="comment">% format specifier for the mantissa</span>
+0106 fmt1 = sprintf(<span class="string">'%%%d.%df'</span>, n1 + (n1 &gt; 1) + any_negative, n1 - 1);
+0107 str1 = arrayfun(@(u)(sprintf(fmt1, u)), mantissa, <span class="string">'UniformOutput'</span>, false);
+0108 
+0109 <span class="comment">% format specifier for the exponent</span>
+0110 fmt2 = sprintf(<span class="string">'e%%+0%dd'</span>, n2 + 1);
+0111 str2 = arrayfun(@(u)(sprintf(fmt2, u)), exponent, <span class="string">'UniformOutput'</span>, false);
+0112 
+0113 <span class="comment">% merge mantissa and exponent</span>
+0114 str = [char(str1{:}) char(str2{:})];
+0115 
+0116 <span class="comment">% fix infinities</span>
+0117 <span class="keyword">if</span> any (is_pinf),
+0118     str(is_pinf, :) = [repmat(<span class="string">' '</span>, 1, max_width - 3) <span class="string">'Inf'</span>];
+0119 <span class="keyword">end</span>
+0120 <span class="keyword">if</span> any (is_minf)
+0121     str(is_minf, :) = [repmat(<span class="string">' '</span>, 1, max_width - 4) <span class="string">'-Inf'</span>];
+0122 <span class="keyword">end</span>
+0123 
+0124 <span class="comment">% Compute the maximal error</span>
+0125 <span class="keyword">if</span> nargout &gt; 1,
+0126     c = 10^(1 - n1);
+0127     rounded_mantissa = round(mantissa / c) * c;
+0128     err_mantissa = abs(rounded_mantissa - mantissa);
+0129     err = max(err_mantissa .* 10.^(exponent));
+0130 <span class="keyword">end</span>
+0131     
+0132 <span class="keyword">end</span> <span class="comment">% function stk_sprintf_colvect_scientific</span></pre></div>
 <hr>
 
 <address>
-   HTML documentation for <strong>STK 2.1</strong>,
+   HTML documentation for <strong>STK 2.1.0</strong>,
    generated by <strong>
    <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
 </address>
