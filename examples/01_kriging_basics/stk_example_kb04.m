@@ -1,8 +1,18 @@
-% Example 08 constructs a kriging approximation in 1D from noisy
-% observations (estimates the noise)
-% ===================================================
-%    Construct a kriging approximation in 1D. In this example, the model is
-%    estimated from data.
+% STK_EXAMPLE_KB04 demonstrates how to estimate the variance of the noise.
+%
+% This example constructs an ordinary kriging approximation in 1D, with
+% covariance parameters and noise variance estimated from the data.
+%
+% A Matern covariance function is used for the Gaussian Process (GP) prior. The
+% parameters of this covariance function are estimated using the Restricted
+% Maximum Likelihood (ReML) method.
+%
+% The mean function of the GP prior is assumed to be constant and unknown.
+%
+% In this example, the variance of the observation noise is not assumed to be
+% known, and is instead estimated from the data together the parameters of the
+% covariance function. This is triggered by the used of the fifth (optional)
+% argument in the call to stk_param_estim.
 
 % Copyright Notice
 %
@@ -31,21 +41,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome();
+stk_disp_examplewelcome
 
 
-%% DEFINE A 1D TEST FUNCTION (THE SAME AS IN EXAMPLE01.M)
+%% Define a 1d test function (the same as in example01.m)
 
-f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
-DIM = 1;                                        % dimension of the factor space
-BOX = [-1.0; 1.0];                              % factor space
+f = @(x)(- (0.8 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
+DIM = 1;            % dimension of the factor space
+BOX = [-1.0; 1.0];  % factor space
 
-NT = 400; % nb of points in the grid
-xt = stk_sampling_regulargrid(NT, DIM, BOX);
-zt = stk_feval(f, xt);
+NT = 400;  % nb of points in the grid
+xt = stk_sampling_regulargrid (NT, DIM, BOX);
+zt = stk_feval (f, xt);
 
 
-%% GENERATE A RANDOM SAMPLING PLAN
+%% Generate a random sampling plan
 %
 % The objective is to construct an approximation of f with a budget of NI
 % evaluations performed on a randomly generated (uniform) design.
@@ -56,32 +66,34 @@ zt = stk_feval(f, xt);
 
 NOISEVARIANCE = 0.05;
 
-NI = 30;                                    % nb of evaluations that will be used
-xi = stk_sampling_randunif(NI, DIM, BOX);   % evaluation points
-zi = stk_feval(f, xi);                      % evaluation results
+NI = 30;                                    % nb of evaluations
+xi = stk_sampling_randunif (NI, DIM, BOX);  % evaluation points
+zi = stk_feval (f, xi);                     % evaluation results
 
-zi = zi + sqrt(NOISEVARIANCE) * randn(NI,1);
+zi = zi + sqrt (NOISEVARIANCE) * randn (NI, 1);
 
-obs = stk_makedata(xi, zi);
+obs = stk_makedata (xi, zi);
 
 
-%% SPECIFICATION OF THE MODEL
+%% Specification of the model
 %
-% We choose a Matern covariance, the parameters of which will be estimated from the data.
+% We choose a Matern covariance, the parameters of which will be estimated from
+% the data.
 %
-% The values of the parameters that are provided here, including the noise variance, are
-% only used as an initial point for the optimization algorithm used in stk_param_estim().
+% The values of the parameters that are provided here, including the noise
+% variance, are only used as an initial point for the optimization algorithm
+% used in stk_param_estim().
 %
 
 % The following line defines a model with a constant but unknown mean (ordinary
 % kriging) and a Matern covariance function. (Some default parameters are also
 % set, but they will be replaced below by estimated parameters.)
-model = stk_model('stk_materncov_iso');
-model = stk_setobs(model, obs);
-model.noise.cov = stk_homnoisecov();
+model = stk_model ('stk_materncov_iso');
+model = stk_setobs (model, obs);
+model.noise.cov = stk_homnoisecov (100 * eps);
 
 
-%% ESTIMATE THE PARAMETERS OF THE COVARIANCE FUNCTION
+%% Estimate the parameters of the covariance function
 %
 % Here, the parameters of the Matern covariance function are estimated by the
 % REML (REstricted Maximum Likelihood) method using stk_param_estim().
@@ -92,12 +104,12 @@ model.noise.cov = stk_homnoisecov();
 SIGMA2 = 1.0;  % variance parameter
 NU     = 4.0;  % regularity parameter
 RHO1   = 0.4;  % scale (range) parameter
-param0 = log([SIGMA2; NU; 1/RHO1]);
+param0 = log ([SIGMA2; NU; 1/RHO1]);
 
 % Initial guess for the (log of the) noise variance
-lnv0 = 2 * log(std(zi) / 100);
+lnv0 = 2 * log (std (zi) / 100);
 
-[param, paramlnv] = stk_param_estim(model, param0, lnv0);
+[param, paramlnv] = stk_param_estim (model, param0, lnv0);
 
 model.randomprocess.priorcov.cparam = param;
 model.noise.cov.variance = exp(paramlnv);
@@ -105,9 +117,9 @@ model.noise.cov.variance = exp(paramlnv);
 
 %% CARRY OUT KRIGING PREDICTION & DISPLAY THE RESULT
 
-zp = stk_predict(model, xt);
+zp = stk_predict (model, xt);
 
-stk_plot1d(obs, stk_makedata(xt, zt), stk_makedata(xt, zp))
-xlabel('x'); ylabel('z');
+stk_plot1d (obs, stk_makedata (xt, zt), stk_makedata (xt, zp))
+xlabel ('x');  ylabel ('z');
 
 model %#ok<NOPTS>
