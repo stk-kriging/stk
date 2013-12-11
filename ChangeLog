@@ -1,4 +1,18 @@
+2013-10-28  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite the description of example 'doe02'.
+
+	* examples/02_design_of_experiments/stk_example_doe02.m: modified
+
 2013-10-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite example 'doe01'.
+
+	* examples/02_design_of_experiments/stk_example_doe01.m: modified
+
+	Add an optional 'box' argument to stk_sampling_halton_rr2.
+
+	* sampling/stk_sampling_halton_rr2.m: modified
 
 	Rewrite the description of examples 'kb04' and 'kb05'.
 

@@ -1,6 +1,12 @@
-% Example 04 shows two-dimensional designs
-% ========================================
-%     Examples of two-dimensional designs
+% STK_EXAMPLE_DOE01 displays several two-dimensional designs
+%
+% All designs are constructed on the hyper-rectangle BOX = [0; 2] x [0; 4].
+%
+% Examples of the following designs are shown:
+%  a) Regular grid                         --> stk_sampling_regulargrid,
+%  b) "Maximin" latin hypercube sample     --> stk_sampling_maximinlhs,
+%  c) RR2-scrambled Halton sequence        --> stk_sampling_halton_rr2,
+%  d) Uniformly distributed random sample  --> stk_sampling_randunif.
 
 % Copyright Notice
 %
@@ -29,46 +35,38 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome();
+stk_disp_examplewelcome
+
+DIM = 2;           % dimension of the factor space
+BOX = [0 0; 2 4];  % factor space
+N   = 49;          % size of the space-filling designs
+
+figure;  set (gcf, 'Name', sprintf ('Several designs with N = %d', N));
 
 
-%% PRELIMINARIES
+%% Regular grid
 
-DIM = 2; BOX = [[0 0]; [2 4]]; % xmin, xmax
-N1 = 9; N2 = 200; N1_ = [3 3]; N2_ = [25 8];
-
-figure; set( gcf, 'Name', 'Example 4' );
-nr = 2; nc = 3;
+x = stk_sampling_regulargrid (N, DIM, BOX);
+subplot (2, 2, 1);  plot (x(:, 1), x(:, 2), '*');
+title ('a) Regular grid');
 
 
-%% REGULAR GRID ("FULL FACTORIAL" DESIGN)
+%% "Maximin" Latin Hypercube samples
 
-x = stk_sampling_regulargrid(N1, DIM, BOX);
-subplot(nr, nc, 1); plot(x(:,1), x(:,2), '*');
-title(sprintf('%d x %d regular grid', N1_(1), N1_(2)));
-
-x = stk_sampling_regulargrid(N2_, DIM, BOX);
-subplot(nr, nc, 4); plot(x(:,1), x(:,2), '*');
-title(sprintf('%d x %d regular grid', N2_(1), N2_(2)));
+x = stk_sampling_maximinlhs (N, DIM, BOX);
+subplot (2, 2, 2);  plot (x(:, 1), x(:, 2), '*');
+title ('b) "Maximin" LHS');
 
 
-%% MAXIMIN LHS
+%% Halton sequence with RR2 scrambling
 
-x = stk_sampling_maximinlhs(N1, DIM, BOX);
-subplot(nr, nc, 2); plot(x(:,1), x(:,2), '*');
-title(sprintf('%d-points maximin LHS', N1));
-
-x = stk_sampling_maximinlhs(N2, DIM, BOX);
-subplot(nr, nc, 5); plot(x(:,1), x(:,2), '*');
-title(sprintf('%d-points maximin LHS', N2));
+x = stk_sampling_halton_rr2 (N, DIM, BOX);
+subplot (2, 2, 3);  plot (x(:, 1), x(:, 2), '*');
+title ('c) Halton-RR2');
 
 
-%% RANDOM (UNIFORM) SAMPLING
+%% Random (uniform) sampling
 
-x = stk_sampling_randunif(N1, DIM, BOX);
-subplot(nr, nc, 3); plot(x(:,1), x(:,2), '*');
-title(sprintf('%d-points randunif MCS', N1));
-
-x = stk_sampling_randunif(N2, DIM, BOX);
-subplot(nr, nc, 6); plot(x(:,1), x(:,2), '*');
-title(sprintf('%d-points randunif MCS', N2));
+x = stk_sampling_randunif (N, DIM, BOX);
+subplot (2, 2, 4);  plot (x(:, 1), x(:, 2), '*');
+title ('d) Random');
