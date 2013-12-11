@@ -3,7 +3,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -31,7 +31,7 @@
 stk_disp_examplewelcome();
 
 
-%% DEFINE 1D TEST FUNCTION (THE SAME AS IN EXAMPLE01.M)
+%% Define 1d test function
 
 f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
 DIM = 1;                                        % dimension of the factor space

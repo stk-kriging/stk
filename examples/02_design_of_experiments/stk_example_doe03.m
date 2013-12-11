@@ -1,9 +1,15 @@
-% This example provide a simple illustration of 1D Bayesian optimization.
+% STK_EXAMPLE_DOE03 provides a simple illustration of 1D Bayesian optimization
+%
+% Our goal here is to optimize the one-dimensional function
+%
+%    x |--> x * sin (x)
+%
+% over the interval [0; 4 * pi].
 %
 % A Matern 5/2 prior with known parameters is used.
 %
 % Evaluations points are chosen sequentially using the Expected Improvement (EI)
-% criterion, starting from an initial design of N0 points.
+% criterion, starting from an initial design of N0 = 3 points.
 
 % Copyright Notice
 %
@@ -31,7 +37,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome();
+stk_disp_examplewelcome
 
 
 %% Problem definition
@@ -53,7 +59,7 @@ x_grid.colnames = {'x'};
 
 % Give names explicit names to the points of the grid
 x_grid.rownames = arrayfun ...
-    (@(i)(sprintf('grid%03d', i)), 1:NT, 'UniformOutput', false)';
+    (@(i)(sprintf ('grid%03d', i)), 1:NT, 'UniformOutput', false)';
 
 % Values of the function on the grid
 z_grid = stk_feval (f, x_grid);
@@ -74,7 +80,7 @@ x_init.colnames = {'x'};
 
 % Give names explicit names to the points in the initial design
 x_init.rownames = arrayfun ...
-    (@(i)(sprintf('init%03d', i)), 1:N0, 'UniformOutput', false)';
+    (@(i)(sprintf ('init%03d', i)), 1:N0, 'UniformOutput', false)';
 
 % Values of the function on the initial design
 z_init = stk_feval (f, x_init);
