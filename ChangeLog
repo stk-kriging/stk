@@ -1,3 +1,19 @@
+2013-11-01  Julien Bect  <julien.bect@supelec.fr>
+
+	Add Gaussian isotropic and anisotropic covariance functions.
+
+	* covfcs/stk_gausscov_iso.m: new function
+	* covfcs/stk_gausscov_aniso.m: new function
+	* utils/stk_model.m: modified
+
+	Add the Gaussian correlation function.
+
+	* misc/specfun/stk_sf_gausscorr.m: new function
+
+	Improve the precision of stk_sf_matern around 0 for high nu.
+
+	* misc/specfun/stk_sf_matern.m: modified
+
 2013-10-29  Julien Bect  <julien.bect@supelec.fr>
 
 	Remove obsolete references to example01.m

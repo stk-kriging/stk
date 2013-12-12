@@ -51,13 +51,11 @@ end
 % default: compute the value (not a derivative)
 if (nargin<3), diff = -1; end
 
-BIGNUM = 1e50;
-
 [N,M]=size(h);
 hp = abs(reshape(h,N*M,1));
 t = 2 * sqrt (Nu) * hp;
 z = 2^(Nu - 1) * gamma(Nu) * t.^(-Nu);
-I = (z < BIGNUM);
+I = ~ isinf (z);
 
 if diff == -1
     
