@@ -38,7 +38,7 @@ set (h(2), 'FaceColor', [0.8 0.8 0.8]);
 set (h, 'LineStyle', '-', 'LineWidth', 1, 'EdgeColor', 'none');
 
 % Raise current axis to the top layer, to prevent it
-% from being hidden by the gayed area
+% from being hidden by the grayed area
 set (gca, 'Layer', 'top');
 
 end % function stk_plot_shadedci
