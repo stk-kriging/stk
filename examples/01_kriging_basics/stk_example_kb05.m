@@ -39,7 +39,7 @@
 stk_disp_examplewelcome
 
 
-%% DEFINE A 1D TEST FUNCTION
+%% Define a 1d test function
 
 f = @(x)(- (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
 DIM = 1;            % dimension of the factor space
@@ -50,7 +50,7 @@ xt = stk_sampling_regulargrid (NT, DIM, BOX);
 zt = stk_feval (f, xt);
 
 
-%% GENERATE OBSERVATIONS
+%% Generate observations
 %
 % The objective is to construct an approximation of f and to simulate
 % conditioned sample paths from NI observations. The observation locations
@@ -60,10 +60,10 @@ zt = stk_feval (f, xt);
 xi_ind = [1 20 90 200 300 350];  % indices of evaluation points in xt
 xi = xt(xi_ind, 1);              % evaluation points
 zi = stk_feval (f, xi);          % evaluation results
-xzi = stk_makedata(xi, zi);
+xzi = stk_makedata (xi, zi);
 
 
-%% SPECIFICATION OF THE MODEL
+%% Specification of the model
 %
 % We choose a Matern covariance with "fixed parameters" (in other
 % words, the parameters of the covariance function are provided by the user
@@ -85,20 +85,38 @@ model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
 model = stk_setobs (model, xzi);
 
 
-%% CARRY OUT THE KRIGING PREDICTION & GENERATE CONDITIONAL SAMPLE PATHS
+%% Generate (unconditional) sample paths
+
+NB_PATHS = 10;
+
+zsim = stk_generate_samplepaths (model, xt, NB_PATHS);
+
+% Display the result
+figure;  plot (xt, zsim, 'LineWidth', 2);  legend off;
+t = 'Unconditional sample paths';
+set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');
+
+
+%% Carry out the kriging prediction and generate conditional sample paths
 
 % Carry out the kriging prediction at points xt
 [zp, lambda] = stk_predict (model, xt);
 
-% Generate (unconditional) sample paths according to the model
-NB_PATHS = 10;
-zsim = stk_generate_samplepaths (model, xt, NB_PATHS);
-
 % Condition sample paths on the observations
 zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
 
-% Display the result
+% Display the observations only
+figure;  t = 'Observations';
+plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
+set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');
+
+% Display the conditional sample paths
+figure;  t = 'Conditional sample paths';
+plot (xt, zsimc, 'LineWidth', 2);  legend off;  hold on;
+plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
+set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');
+
+% Display the kriging and credible intervals
 stk_plot1dsim (xi, zi, xt, zt, zp, zsimc);
 t = 'Kriging prediction and conditional sample paths';
-set (gcf, 'Name', t);  title (t);
-xlabel ('x');  ylabel ('z');
+set (gcf, 'Name', t);  title (t);  xlabel ('x');  ylabel ('z');

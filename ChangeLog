@@ -1,4 +1,16 @@
+2013-11-07  Julien Bect  <julien.bect@supelec.fr>
+
+	Add figures in example kb05.
+
+	* examples/01_kriging_basics/stk_example_kb05.m: modified
+
 2013-11-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Remove example misc01, rename misc02 and misc03.
+
+	* stk_example_misc01.m: deleted
+	* stk_example_misc02.m: renamed to misc01
+	* stk_example_misc03.m: renamed to misc02
 
 	Add a new example.
 

@@ -1,5 +1,13 @@
-% Example 06 compares several kriging approximations in 1D
-% ========================================================
+% STK_EXAMPLE_MISC01 plots several correlation functions from the Matern family
+%
+% The Matern 1/2 correlation function is also known as the "exponential correla-
+% tion function". This is the correlation function of an Ornstein-Ulhenbeck pro-
+% cess.
+%
+% The Matern covariance function tends to the Gaussian correlation function when
+% its regularity (smoothness) parameter tends to infinity.
+%
+% See also: stk_sf_matern, stk_materncov_iso, stk_materncov_aniso
 
 % Copyright Notice
 %
@@ -28,96 +36,40 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome();
+stk_disp_examplewelcome
 
 
-%% Define 1d test function
+%% LIST OF CORRELATION FUNCTIONS
 
-f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );  % define a 1D test function
-DIM = 1;                                        % dimension of the factor space
-BOX = [-1.0; 1.0];                              % factor space
-
-NT = 400; % nb of points in the grid
-xt = stk_sampling_regulargrid(NT, DIM, BOX);
-zt = stk_feval(f, xt);
-
-NI = 6;                                      % nb of evaluations that will be used
-xi = stk_sampling_randunif(NI, DIM, BOX);    % evaluation points
-zi = stk_feval(f, xi);                       % evaluation results
-
-obs = stk_makedata(xi, zi);
-
-
-%% SEVERAL MATERN MODELS
-
-NB_MODELS = 6; model = cell(1, NB_MODELS);
-
-% Parameters used as initial values for stk_param_estim()
 SIGMA2 = 1.0;  % variance parameter
-NU     = 2.0;  % regularity parameter
-RHO1   = 0.4;  % scale (range) parameter
-NOISE_VARIANCE = (1e-6)^2; % "rgularisation noise"
+RHO1   = 1.0;  % scale (range) parameter
 
-% First, two Matern models with estimated regularity
-% 1) kriging with constant mean function (ordinary kriging)
-model{1} = stk_model('stk_materncov_iso');
-model{1}.randomprocess.priorcov.cparam = log([SIGMA2; NU; 1/RHO1]);
-model{1}.noise.cov = stk_homnoisecov(NOISE_VARIANCE);
-% 2) kriging with affine mean function
-model{2} = model{1};
-model{2}.randomprocess.priormean = stk_lm('affine');
+% kriging with constant mean function (ordinary kriging)
+list_cov = {...
+    'Matern 1/2', 'stk_materncov_iso',   log([SIGMA2; 0.5; 1/RHO1]); ...
+    'Matern 3/2', 'stk_materncov32_iso', log([SIGMA2;      1/RHO1]); ...
+    'Matern 5/2', 'stk_materncov52_iso', log([SIGMA2;      1/RHO1]); ...
+    'Matern 8.0', 'stk_materncov_iso',   log([SIGMA2; 8.0; 1/RHO1]); ...
+    'Gaussian',   'stk_gausscov_iso',    log([SIGMA2;      1/RHO1])  };
 
-% Two other Matern models with regularity parameter fixed to 3/2
-% 3) kriging with constant mean function ("ordinary kriging)
-model{3} = stk_model('stk_materncov52_iso');
-model{3}.randomprocess.priorcov.cparam = log([SIGMA2; log(1/RHO1)]);
-model{3}.noise.cov = stk_homnoisecov(NOISE_VARIANCE);
-% 4) kriging with affine mean function
-model{4} = model{3};
-model{4}.randomprocess.priormean = stk_lm('affine');
-
-% And two other Matern models with regularity parameter fixed to 5/2
-% 5) kriging with constant mean function ("ordinary kriging)
-model{5} = stk_model('stk_materncov32_iso');
-model{5}.randomprocess.priorcov.cparam = log([SIGMA2; 1/RHO1]);
-model{5}.noise.cov = stk_homnoisecov(NOISE_VARIANCE);
-% 6) kriging with affine mean function
-model{6} = model{5};
-model{6}.randomprocess.priormean = stk_lm('affine');
+NB_COVARIANCE_FUNCTIONS = size (list_cov, 1);
 
 
-%% PARAMETER ESTIMATION AND PREDICTION FOR EACH MODEL
+%% VISUALISATION
 
-zp = cell(1, NB_MODELS);
-nc = floor(sqrt(NB_MODELS));
-nr = ceil(NB_MODELS / nc);
+x1 = 0.0;
+x2 = stk_sampling_regulargrid (1000, 1, [-5; 5]);
 
-for j = 1:NB_MODELS,
-    model{j} = stk_setobs(model{j}, obs);
-    % Estimate the parameters of the covariance
-    model{j}.randomprocess.priorcov.cparam = ...
-        stk_param_estim(model{j}, model{j}.randomprocess.priorcov.cparam);
-    % Carry out kriging prediction
-    zp{j} = stk_predict(model{j}, xt);
-    % Plot the result
-    h_axis = subplot(nr, nc, j);
-    stk_plot1d(obs, stk_makedata(xt, zt), stk_makedata(xt, zp{j}), h_axis);
-    % Title
-    s = [];
-    switch model{j}.randomprocess.priorcov.name,
-        case 'stk_materncov32_iso',
-            s = 'Matern 3/2, ';
-        case 'stk_materncov52_iso',
-            s = 'Matern 5/2, ';
-        case 'stk_materncov_iso',
-            nu = model{j}.randomprocess.priorcov.nu;
-            %%% so ugly... the estimated parameter "nu" is stored in "prior"...
-            s = sprintf('Matern, estimated nu=%.2f, ', nu);
-    end
-    if mod(j, 2) == 0,
-        s = [s 'affine trend'];
-    else
-        s = [s 'constant trend'];
-    end
-    title(s);
+col = {'r', 'b', 'g', 'k', 'm--'};  figure;
+
+for j = 1:NB_COVARIANCE_FUNCTIONS,
+    covfun = list_cov{j, 2};
+    param = list_cov{j, 3};
+    plot (x2, feval (covfun, param, x1, x2 ), col{j});
+    hold on;
 end
+
+xlabel ('x');
+ylabel ('correlation r(x)');
+legend (list_cov{:, 1});
+title ('Some members of the Matern family');

@@ -1,20 +1,10 @@
-% STK_EXAMPLE_MISC02 plots several correlation functions from the Matern family
-%
-% The Matern 1/2 correlation function is also known as the "exponential correla-
-% tion function". This is the correlation function of an Ornstein-Ulhenbeck pro-
-% cess.
-%
-% The Matern covariance function tends to the Gaussian correlation function when
-% its regularity (smoothness) parameter tends to infinity.
-%
-% See also: stk_sf_matern, stk_materncov_iso, stk_materncov_aniso
+% STK_EXAMPLE_MISC02 ... [FIXME: missing documentation]
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2012, 2013 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -36,40 +26,89 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome
+stk_disp_examplewelcome();
+stk_error('I am not ready yet...', 'NotReadyYet');
 
 
-%% LIST OF CORRELATION FUNCTIONS
+%% DEFINE AN ARTIFICIAL ONE-DIMENSIONAL DATASET
 
+DIM = 1;            % dimension of the factor space
+BOX = [0.0; 1.0];   % factor space
+
+xi = [0.25; 0.26; 0.50; 0.60];
+zi = [1.00; 1.10; 0.20; 0.35];
+
+
+%% SPECIFICATION OF THE MODEL & REML ESTIMATION
+
+model = stk_model('stk_materncov_iso');
+
+% small "regularization noise".
+model.lognoisevariance = 2 * log(1e-6);
+
+% Mode of the prior on the parameters of the Matern covariance
+% (also serves as an initial guess for the optimization)
 SIGMA2 = 1.0;  % variance parameter
-RHO1   = 1.0;  % scale (range) parameter
+NU     = 2.0;  % regularity parameter
+RHO1   = 0.4;  % scale (range) parameter
+param0 = log([SIGMA2; NU; 1/RHO1]);
 
-% kriging with constant mean function (ordinary kriging)
-list_cov = {...
-    'Matern 1/2', 'stk_materncov_iso',   log([SIGMA2; 0.5; 1/RHO1]); ...
-    'Matern 3/2', 'stk_materncov32_iso', log([SIGMA2;      1/RHO1]); ...
-    'Matern 5/2', 'stk_materncov52_iso', log([SIGMA2;      1/RHO1]); ...
-    'Matern 8.0', 'stk_materncov_iso',   log([SIGMA2; 8.0; 1/RHO1]); ...
-    'Gaussian',   'stk_gausscov_iso',    log([SIGMA2;      1/RHO1])  };
-
-NB_COVARIANCE_FUNCTIONS = size (list_cov, 1);
+% Estimate covariance parameters (without prior)
+model.param = stk_param_estim(model, xi, zi, param0);
+param_opt_reml = model.param;
 
 
-%% VISUALISATION
+%% EXPERIMENT WITH SEVERAL VALUES FOR PRIOR VARIANCES
 
-x1 = 0.0;
-x2 = stk_sampling_regulargrid (1000, 1, [-5; 5]);
+std_list = [10 1 0.2 0.01];
 
-col = {'r', 'b', 'g', 'k', 'm--'};  figure;
+NT = 400; % nb of points in the grid
+xt = stk_sampling_regulargrid(NT, DIM, BOX);
 
-for j = 1:NB_COVARIANCE_FUNCTIONS,
-    covfun = list_cov{j, 2};
-    param = list_cov{j, 3};
-    plot (x2, feval (covfun, param, x1, x2 ), col{j});
-    hold on;
+figure('InvertHardcopy', 'off', 'Color', [1 1 1]);
+
+param_opt = zeros(length(param0), length(std_list));
+for k = 1:length(std_list),
+    
+    % Prior on the parameters of the Matern covariance
+    model.prior.mean = param0;
+    model.prior.invcov = eye(length(param0)) ./ (std_list(k)^2);
+    
+    % Estimate covariance parameters (with a prior)
+    model.param = stk_param_estim(model, xi, zi, param0);
+    param_opt(:, k) = model.param;
+    
+    % Carry out kriging prediction
+    zp = stk_predict(model, xi, zi, xt);
+    
+    % Plot predicted values and pointwise confidences intervals
+    haxis = subplot(2, 2, k); stk_plot1d(xi, zi, xt, [], zp, haxis);
+    xlabel('input x'); ylabel('predicted output z');
+    h = title(sprintf('prior std = %.2f', std_list(k)));
+    set(h, 'FontWeight', 'bold');
 end
 
-xlabel ('x');
-ylabel ('correlation r(x)');
-legend (list_cov{:, 1});
-title ('Some members of the Matern family');
+
+%% FIGURE: ESTIMATED PARAMETER VERSUS PRIOR STD
+
+figure;
+param_name = {'SIGMA2', 'NU', '1/RHO'};
+for j = 1:3,
+    subplot(2, 2, j);
+    % estimated parameter versus prior std
+    h = semilogx(std_list, exp(param_opt(j, :)), 'ko-');
+    set(h, 'LineWidth', 2, 'MarkerFaceColor', 'y');
+    xlabel('prior std'); ylabel(param_name{j});
+    % add an horizontal line showing the value of REML estimation
+    hold on; semilogx(xlim, exp(param_opt_reml(j))*[1 1], 'r--');
+    % add a second horizontal line showing the mode of the prior
+    hold on; semilogx(xlim, exp(param0(j))*[1 1], 'b--');
+    % adjust ylim
+    yy = exp([param_opt(j, :) param_opt_reml(j) param0(j)]);
+    ylim_min = min(yy); ylim_max = max(yy); delta = ylim_max - ylim_min;
+    ylim([ylim_min - 0.05*delta ylim_max + 0.05*delta]);
+end
+
+h1 = legend('MAP estimates', 'REML estimate', 'mode of the prior');
+h2 = subplot(2, 2, 4); axis off;
+set(h1, 'Position', get(h2, 'Position'));
