@@ -1,5 +1,13 @@
-% Example 07 : illustration of the Matern family of correlation functions
-% =======================================================================
+% STK_EXAMPLE_MISC02 plots several correlation functions from the Matern family
+%
+% The Matern 1/2 correlation function is also known as the "exponential correla-
+% tion function". This is the correlation function of an Ornstein-Ulhenbeck pro-
+% cess.
+%
+% The Matern covariance function tends to the Gaussian correlation function when
+% its regularity (smoothness) parameter tends to infinity.
+%
+% See also: stk_sf_matern, stk_materncov_iso, stk_materncov_aniso
 
 % Copyright Notice
 %
@@ -28,7 +36,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome();
+stk_disp_examplewelcome
 
 
 %% LIST OF CORRELATION FUNCTIONS
@@ -36,31 +44,32 @@ stk_disp_examplewelcome();
 SIGMA2 = 1.0;  % variance parameter
 RHO1   = 1.0;  % scale (range) parameter
 
-% kriging with constant mean function ("ordinary kriging)
+% kriging with constant mean function (ordinary kriging)
 list_cov = {...
-    'Matern 0.5', 'stk_materncov_iso',   log([SIGMA2; 0.5; 1/RHO1]); ...
+    'Matern 1/2', 'stk_materncov_iso',   log([SIGMA2; 0.5; 1/RHO1]); ...
     'Matern 3/2', 'stk_materncov32_iso', log([SIGMA2;      1/RHO1]); ...
     'Matern 5/2', 'stk_materncov52_iso', log([SIGMA2;      1/RHO1]); ...
-    'Matern 8.0', 'stk_materncov_iso',   log([SIGMA2; 8.0; 1/RHO1]);  };
+    'Matern 8.0', 'stk_materncov_iso',   log([SIGMA2; 8.0; 1/RHO1]); ...
+    'Gaussian',   'stk_gausscov_iso',    log([SIGMA2;      1/RHO1])  };
 
-NB_COVARIANCE_FUNCTIONS = size(list_cov, 1);
+NB_COVARIANCE_FUNCTIONS = size (list_cov, 1);
 
 
 %% VISUALISATION
 
 x1 = 0.0;
-x2 = stk_sampling_regulargrid(1000, 1, [-5; 5]);
+x2 = stk_sampling_regulargrid (1000, 1, [-5; 5]);
 
-col = {'r', 'b', 'g', 'k'}; figure;
+col = {'r', 'b', 'g', 'k', 'm--'};  figure;
 
 for j = 1:NB_COVARIANCE_FUNCTIONS,
     covfun = list_cov{j, 2};
     param = list_cov{j, 3};
-    plot(x2, feval(covfun, param, x1, x2 ), 'Color', col{j});
+    plot (x2, feval (covfun, param, x1, x2 ), col{j});
     hold on;
 end
 
-xlabel('x');
-ylabel('correlation r(x)');
-legend(list_cov{:, 1});
-title('Some members of the Matern family');
+xlabel ('x');
+ylabel ('correlation r(x)');
+legend (list_cov{:, 1});
+title ('Some members of the Matern family');

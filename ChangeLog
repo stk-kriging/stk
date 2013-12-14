@@ -1,3 +1,17 @@
+2013-11-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Add a new example.
+
+	* examples/01_kriging_basics/stk_example_kb06.m: new script
+
+	Raise current axis to the top layer in stk_plot_shadedci.
+
+	* misc/plot/stk_plot_shadedci.m: modified
+
+	Add the Gaussian correlation to example 'misc02'.
+
+	* examples/03_miscellaneous/stk_example_misc02.m: modified
+
 2013-11-01  Julien Bect  <julien.bect@supelec.fr>
 
 	Add Gaussian isotropic and anisotropic covariance functions.
