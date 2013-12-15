@@ -1,3 +1,11 @@
+2013-11-15  Julien Bect  <julien.bect@supelec.fr>
+
+	Remove stk_plot1dsim.
+
+	* misc/plot/stk_plot1dsim.m: removed
+	* misc/plot/stk_plot1d.m: modified
+	* examples/01_kriging_basics/stk_example_kb05.m: modified
+
 2013-11-14  Julien Bect  <julien.bect@supelec.fr>
 
 	Rewrite one-line descriptions of all examples.

@@ -26,28 +26,28 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function idx = end(x, k, nb_indices)
+function idx = end (x, k, nb_indices)
 
 if nb_indices == 2,    
     % using two indices (matrix-style indexing)
-    idx = size(x.data, k);    
+    idx = size (x.data, k);    
 else    
     if nb_indices ~= 1,
         errmsg = 'stk_dataframe objects only support linear or matrix-style indexing.';
-        stk_error(errmsg, 'IllegalIndexing');
+        stk_error (errmsg, 'IllegalIndexing');
     else
         % using linear indexing
-        idx = numel(x.data);
+        idx = numel (x.data);
     end
 end
 
-end % function
+end % function end
 
 
 %--- tests with a univariate dataframe ----------------------------------------
 
 %!shared x
-%! x = stk_dataframe([1; 2; 3]);
+%! x = stk_dataframe ([1; 2; 3]);
 %!assert (isequal (double (x(2:end, :)), [2; 3]))
 %!assert (isequal (double (x(2:end)),    [2; 3]))
 %!assert (isequal (double (x(2, 1:end)), 2))
@@ -56,7 +56,7 @@ end % function
 %--- tests with a bivariate dataframe -----------------------------------------
 
 %!shared x
-%! x = stk_dataframe([1 2; 3 4; 5 6]);
+%! x = stk_dataframe ([1 2; 3 4; 5 6]);
 %!assert (isequal (x(2:end, :), x(2:3, :)))
 %!assert (isequal (x(2, 1:end), x(2, :)))
 %!assert (isequal (x(2:end, 2:end), x(2:3, 2)))

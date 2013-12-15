@@ -1,12 +1,12 @@
 % STK_SF_MATERN computes the Matern correlation function.
 %
-% CALL: K = stk_sf_matern(NU, H)
+% CALL: K = stk_sf_matern (NU, H)
 %
 %    computes the value of the Matern correlation function of order NU at
 %    distance H. Note that the Matern correlation function is a valid
 %    correlation function for all dimensions.
 %
-% CALL: K = stk_sf_matern(NU, H, DIFF)
+% CALL: K = stk_sf_matern (NU, H, DIFF)
 %
 %    computes the derivative of the Matern correlation function of order NU, at
 %    distance H, with respect to the order NU if DIFF is equal to 1, or with
@@ -42,55 +42,57 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function k = stk_sf_matern(Nu, h, diff)
+function k = stk_sf_matern (Nu, h, diff)
 
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % default: compute the value (not a derivative)
-if (nargin<3), diff = -1; end
+if nargin < 3,
+    diff = -1;
+end
 
-[N,M]=size(h);
-hp = abs(reshape(h,N*M,1));
+[N, M] = size (h);
+hp = abs (reshape (h, N * M, 1));
 t = 2 * sqrt (Nu) * hp;
-z = 2^(Nu - 1) * gamma(Nu) * t.^(-Nu);
+z = 2 ^ (Nu - 1) * gamma (Nu) * t .^ (-Nu);
 I = ~ isinf (z);
 
 if diff == -1
     
-    k = ones(N*M, 1);
-    k(I) = 1 ./ z(I) .* besselk_(Nu, t(I));
+    k = ones (N * M, 1);
+    k(I) = 1 ./ z(I) .* besselk_ (Nu, t(I));
     
 elseif diff == 1  % numerical derivative wrt Nu
     
     itermax = 2;
     delta = 1e-4;
-    dk = zeros(N*M,itermax);
+    dk = zeros (N * M, itermax);
     for l= 1:itermax
-        Nu_p = Nu + 2^(l-1)*delta;
-        Nu_m = Nu - 2^(l-1)*delta;
+        Nu_p = Nu + 2 ^ (l - 1) * delta;
+        Nu_m = Nu - 2 ^ (l - 1) * delta;
         t_p = 2 * sqrt (Nu_p) * hp;
         t_m = 2 * sqrt (Nu_m) * hp;
-        k_p = 1 / (2^(Nu_p - 1) * gamma(Nu_p)) .* t_p(I).^Nu_p .* ...
-            besselk_(Nu_p, t_p(I));
-        k_m = 1 / (2^(Nu_m - 1) * gamma(Nu_m)) .* t_m(I).^Nu_m .* ...
-            besselk_(Nu_m, t_m(I));
-        dk(I,l) =  k_p - k_m;
+        k_p = 1 / (2 ^ (Nu_p - 1) * gamma (Nu_p)) .* t_p(I) .^ Nu_p .* ...
+            besselk_ (Nu_p, t_p(I));
+        k_m = 1 / (2 ^ (Nu_m - 1) * gamma (Nu_m)) .* t_m(I) .^ Nu_m .* ...
+            besselk_ (Nu_m, t_m(I));
+        dk(I, l) =  k_p - k_m;
     end
-    k = 1/(12 * delta)* (- dk(:,2) + 8*dk(:,1));
+    k = 1 / (12 * delta)* (- dk(:, 2) + 8 * dk(:, 1));
     
 elseif diff == 2  % deriv. wrt h
     
-    k = zeros(N*M,1);
-    dtdh = 2 * sqrt(Nu);
-    k(I)  = - dtdh ./ z(I) .* besselk_( Nu-1, t(I) );
+    k = zeros (N * M, 1);
+    dtdh = 2 * sqrt (Nu);
+    k(I)  = - dtdh ./ z(I) .* besselk_ (Nu - 1, t(I));
     
 end
 
-k = reshape(k, N, M);
+k = reshape (k, N, M);
 
-end % function
+end % function stk_sf_matern
 
 
 function y = besselk_ (nu, x)
@@ -103,20 +105,20 @@ else
     y = stk_parallel_feval(@(t)(besselk(nu, t)), x, true, opts.min_block_size);
 end
 
-end % function
+end % function besselk_
 
 
 %!shared nu, h, diff
-%! nu = 1.0; h = 1.0; diff = -1;
+%! nu = 1.0;  h = 1.0;  diff = -1;
 
-%!error stk_sf_matern();
-%!error stk_sf_matern(nu);
-%!test  stk_sf_matern(nu, h);
-%!test  stk_sf_matern(nu, h, diff);
-%!error stk_sf_matern(nu, h, diff, pi);
+%!error stk_sf_matern ();
+%!error stk_sf_matern (nu);
+%!test  stk_sf_matern (nu, h);
+%!test  stk_sf_matern (nu, h, diff);
+%!error stk_sf_matern (nu, h, diff, pi);
 
 %!test %% h = 0.0 => correlation = 1.0
 %! for nu = 0.1:0.2:5.0,
-%!   x = stk_sf_matern(nu, 0.0);
-%!   assert(stk_isequal_tolrel(x, 1.0, 1e-8));
+%!   x = stk_sf_matern (nu, 0.0);
+%!   assert (stk_isequal_tolrel (x, 1.0, 1e-8));
 %! end

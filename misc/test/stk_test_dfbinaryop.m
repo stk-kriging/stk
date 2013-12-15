@@ -26,22 +26,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_test_dfbinaryop(F, a1, a2)
+function stk_test_dfbinaryop (F, a1, a2)
 
 try
 
-    x1  = stk_dataframe(a1);
-    x2  = stk_dataframe(a2);
-    res = feval(F, a1, a2);
+    x1  = stk_dataframe (a1);
+    x2  = stk_dataframe (a2);
+    res = feval (F, a1, a2);
 
-    x3 = feval(F, x1, x2);
-    assert(isa(x3, 'stk_dataframe') && isequal(double(x3), res));
+    x3 = feval (F, x1, x2);
+    assert (isa (x3, 'stk_dataframe') && isequal (double (x3), res));
 
-    x3 = feval(F, x1, a2);
-    assert(isa(x3, 'stk_dataframe') && isequal(double(x3), res));
+    x3 = feval (F, x1, a2);
+    assert (isa (x3, 'stk_dataframe') && isequal (double (x3), res));
 
-    x3 = feval(F, a1, a2);
-    assert(isequal(x3, res));
+    x3 = feval (F, a1, a2);
+    assert (isequal (x3, res));
 
 catch
 

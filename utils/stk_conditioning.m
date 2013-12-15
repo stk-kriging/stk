@@ -1,6 +1,6 @@
 % STK_CONDITIONING produces conditioned sample paths.
 %
-% CALL: ZSIMC = stk_conditioning(LAMBDA, ZI, ZSIM, XI_IND)
+% CALL: ZSIMC = stk_conditioning (LAMBDA, ZI, ZSIM, XI_IND)
 %
 %    produces conditioned sample paths ZSMIC from the unconditioned sample paths
 %    ZSIM, using the matrix of kriging weights LAMBDA. Conditioning is done with
@@ -14,12 +14,12 @@
 %    Both ZSIM and ZSIMC have size N x NB_PATHS, where NB_PATH is the number 
 %    sample paths to be dealt with. ZI is a column of length NI.
 %
-% CALL: ZSIMC = stk_conditioning(LAMBDA, ZI, ZSIM)
+% CALL: ZSIMC = stk_conditioning (LAMBDA, ZI, ZSIM)
 %
 %    assumes that the oberved values ZI correspond to the first NI evaluation
 %    points.
 %
-% NOTE: stk_conditioning() uses the technique called "conditioning by kriging"
+% NOTE: stk_conditioning uses the technique called "conditioning by kriging"
 %    (see, e.g., Chiles and Delfiner, Geostatistics: Modeling Spatial
 %    Uncertainty, Wiley, 1999)
 %
@@ -54,17 +54,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function zsimc = stk_conditioning(lambda, zi, zsim, xi_ind)
+function zsimc = stk_conditioning (lambda, zi, zsim, xi_ind)
 
 if nargin > 4,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-zi = double(zi);
-zsim = double(zsim);
+zi = double (zi);
+zsim = double (zsim);
 
-[ni, n] = size(lambda);
-m = size(zsim, 2);
+[ni, n] = size (lambda);
+m = size (zsim, 2);
 
 if nargin < 4,
     xi_ind = (1:ni)';
@@ -72,62 +72,61 @@ else
     xi_ind = xi_ind(:);
 end
 
-if ~isequal(size(zi), [ni 1])
-    stk_error('lambda and zi have incompatible sizes.', 'InvalidArgument');
+if ~ isequal (size (zi), [ni 1])
+    stk_error ('lambda and zi have incompatible sizes.', 'InvalidArgument');
 end
 
-if ~isequal(size(zsim), [n m])
-    stk_error('lambda and zsim have incompatible sizes.', 'InvalidArgument');
+if ~ isequal (size (zsim), [n m])
+    stk_error ('lambda and zsim have incompatible sizes.', 'InvalidArgument');
 end
 
-if ~isequal(size(xi_ind), [ni 1])
-    stk_error('lambda and xi_ind have incompatible sizes.', 'InvalidArgument');
+if ~ isequal (size (xi_ind), [ni 1])
+    stk_error ('lambda and xi_ind have incompatible sizes.', 'InvalidArgument');
 end
 
-delta = repmat(zi, 1, m) - zsim(xi_ind, :);
-zsimc = stk_dataframe(zsim + lambda' * delta);
+delta = repmat (zi, 1, m) - zsim (xi_ind, :);
+zsimc = stk_dataframe (zsim + lambda' * delta);
 
-end
+end % function stk_conditioning
 
 
 %!shared n m ni xi_ind lambda zsim zi
 %!
-%! n = 50; m = 5; ni = 10; xi_ind = 1:ni;
-%! lambda = 1/ni * ones(ni, n);                % prediction == averaging
-%! zsim = ones(n, m);                          % const unconditioned samplepaths
-%! zi = zeros(ni, 1);                          % conditioning by zeros
+%! n = 50;  m = 5;  ni = 10;  xi_ind = 1:ni;
+%! lambda = 1/ni * ones (ni, n);            % prediction == averaging
+%! zsim = ones (n, m);                      % const unconditioned samplepaths
+%! zi = zeros (ni, 1);                      % conditioning by zeros
 
-%!error  zsimc = stk_conditioning();
-%!error  zsimc = stk_conditioning(lambda);
-%!error  zsimc = stk_conditioning(lambda, zi);
-%!test   zsimc = stk_conditioning(lambda, zi, zsim);
-%!test   zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);
-%!error  zsimc = stk_conditioning(lambda, zi, zsim, xi_ind, pi^2);
-
-%!test
-%! zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);
-%! assert(stk_isequal_tolabs(double(zsimc), zeros(n, m)));
+%!error  zsimc = stk_conditioning ();
+%!error  zsimc = stk_conditioning (lambda);
+%!error  zsimc = stk_conditioning (lambda, zi);
+%!test   zsimc = stk_conditioning (lambda, zi, zsim);
+%!test   zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
+%!error  zsimc = stk_conditioning (lambda, zi, zsim, xi_ind, pi^2);
 
 %!test
-%! zi = 2 * ones(ni, 1);          % conditioning by twos
-%! zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);
-%! assert(stk_isequal_tolabs(double(zsimc), 2 * ones(n, m)));
+%! zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
+%! assert (stk_isequal_tolabs (double (zsimc), zeros (n, m)));
 
 %!test
-%!
+%! zi = 2 * ones (ni, 1);          % conditioning by twos
+%! zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
+%! assert (stk_isequal_tolabs (double (zsimc), 2 * ones (n, m)));
+
+%!test
 %! DIM = 1; nt = 400;
-%! xt = stk_sampling_regulargrid(nt, DIM, [-1.0; 1.0]);
+%! xt = stk_sampling_regulargrid (nt, DIM, [-1.0; 1.0]);
 %!
-%! NI = 6; xi_ind  = [1 20 90 200 300 350];
+%! NI = 6;  xi_ind  = [1 20 90 200 300 350];
 %! xi = xt(xi_ind, 1);
 %! zi = (1:NI)';  % linear response ;-)
 %!
 %! % Carry out the kriging prediction at points xt
-%! model = stk_model('stk_materncov_iso', DIM);
-%! model = stk_setobs(model, xi, []);
-%! [ignore_zp, lambda] = stk_predict(model, xt);
+%! model = stk_model ('stk_materncov_iso', DIM);
+%! model = stk_setobs (model, xi, []);
+%! [ignore_zp, lambda] = stk_predict (model, xt);
 %!
 %! % Generate (unconditional) sample paths according to the model
 %! NB_PATHS = 10;
-%! zsim = stk_generate_samplepaths(model, xt, NB_PATHS);
-%! zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);
+%! zsim = stk_generate_samplepaths (model, xt, NB_PATHS);
+%! zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);

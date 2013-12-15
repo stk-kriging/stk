@@ -48,6 +48,7 @@ BOX = [-1.0; 1.0];  % factor space
 NT = 400;  % nb of points in the grid
 xt = stk_sampling_regulargrid (NT, DIM, BOX);
 zt = stk_feval (f, xt);
+xzt = stk_makedata (xt, zt);
 
 
 %% Generate observations
@@ -101,23 +102,23 @@ stk_labels ('input variable x', 'response z');
 
 % Carry out the kriging prediction at points xt
 [zp, lambda] = stk_predict (model, xt);
+xzp = stk_makedata (xt, zp);
 
 % Condition sample paths on the observations
 zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
 
 % Display the observations only
-stk_subplot (2, 2, 2);
-plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
+stk_subplot (2, 2, 2);  stk_plot1d (xzi);
 stk_title ('Observations');
 stk_labels ('input variable x', 'response z');
 
 % Display the conditional sample paths
 stk_subplot (2, 2, 3);  plot (xt, zsimc, 'LineWidth', 2);  legend off;  hold on;
-plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
+plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
 stk_title ('Conditional sample paths');
 stk_labels ('input variable x', 'response z');
 
 % Display the kriging and credible intervals
-stk_subplot (2, 2, 4);  stk_plot1dsim (xi, zi, xt, zt, zp, zsimc);
+stk_subplot (2, 2, 4);  stk_plot1d (xzi, xzt, xzp, zsimc);
 stk_title ('Prediction and credible intervals');
 stk_labels ('input variable x', 'response z');
