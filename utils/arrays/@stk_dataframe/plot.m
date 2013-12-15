@@ -77,21 +77,21 @@ if ~ isempty (colnames)
     ylab = colnames(2:end);
 else
     xlab = '';
-    if nb_outputs == 1,
-        ylab = {''};
-    else
-        ylab = {};
-    end
+    ylab = {};
 end
 
 plot (xx, yy, opts{:});
 
-xlabel (xlab, 'FontWeight', 'bold');
+if ~ isempty (xlab),
+    stk_xlabel (xlab);
+end
 
-if nb_outputs == 1,
-    ylabel (ylab{1}, 'FontWeight', 'bold');
-elseif ~ isempty (ylab)
-    legend (ylab{:});
+if ~ isempty (ylab)
+    if nb_outputs == 1,
+        stk_ylabel (ylab{1});
+    else
+        legend (ylab{:});
+    end
 end
 
 end % function plot

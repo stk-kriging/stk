@@ -1,4 +1,4 @@
-% STK_EXAMPLE_KB01 constructs an ordinary kriging approximation in 1D.
+% STK_EXAMPLE_KB01  Ordinary kriging in 1D
 %
 % A Matern covariance function is used for the Gaussian Process (GP) prior. The
 % parameters of this covariance function are assumed to be known (i.e., no
@@ -57,7 +57,8 @@ zt = stk_feval (f, xt);
 xzt = stk_makedata (xt, zt); % data structure containing (factors, response) pairs
 
 stk_figure ('stk_example_kb01 (a)');  plot (xt, zt);
-title ('Function to be approximated');  xlabel ('x');  ylabel ('z');
+stk_title  ('Function to be approximated');
+stk_labels ('input variable x', 'response z');
 
 
 %% Generate a space-filling design
@@ -116,8 +117,8 @@ xzp = stk_makedata (xt, zp);
 
 % Display the result
 stk_figure ('stk_example_kb01 (b)');  stk_plot1d (xzi, xzt, xzp);
-title ('Kriging prediction based on noiseless observations');
-xlabel ('x');  ylabel ('z');
+stk_title  ('Kriging prediction based on noiseless observations');
+stk_labels ('input variable x', 'response z');
 
 
 %% Repeat the experiment in a noisy setting
@@ -151,8 +152,8 @@ xzp_noisy = stk_makedata (xt, zp_noisy);
 
 % Display the result
 stk_figure ('stk_example_kb01 (c)');  stk_plot1d (xzi_noisy, xzt, xzp_noisy);
-title ('Kriging prediction based on noisy observations');
-xlabel ('x');  ylabel ('z');
+stk_title  ('Kriging prediction based on noisy observations');
+stk_labels ('input variable x', 'response z');
 
 
 %% Cleanup

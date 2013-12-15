@@ -1,4 +1,15 @@
-% STK_EXAMPLE_MISC02 ... [FIXME: missing documentation]
+% STK_EXAMPLE_MISC02  How to use priors on the covariance parameters
+%
+% A Matern covariance in dimension one  is considered as an example.  A Gaussian
+% prior is used for all three parameters: log-variance, log-regularity  and log-
+% inverse-range.  The corresponding parameter estimates are Maximum A Posteriori
+% (MAP) estimates or, more precisely, Restricted MAP (ReMAP) estimates.
+%
+% Several values for the variance of the prior  are successively considered,  to
+% illustrate the effect of this prior variance on the parameter estimates.  When
+% the variance is small, the MAP estimate is close to the mode of the prior.  On
+% the other hand, when the variance is large,  the prior becomes "flat"  and the
+% MAP estimate is close to the ReML estimate (see figure b).
 
 % Copyright Notice
 %
@@ -82,10 +93,9 @@ for k = 1:length (std_list),
     zp = stk_predict (model, xi, zi, xt);
     
     % Plot predicted values and pointwise confidences intervals
-    haxis = subplot (2, 2, k);  stk_plot1d (xi, zi, xt, [], zp);
-    xlabel ('input x');  ylabel ('predicted output z');
-    h = title (sprintf ('prior std = %.2f', std_list(k)));
-    set (h, 'FontWeight', 'bold');
+    stk_subplot (2, 2, k);  stk_plot1d (xi, zi, xt, [], zp);
+    stk_labels ('input x', 'predicted output z');
+    stk_title (sprintf ('prior std = %.2f', std_list(k)));
 end
 
 
@@ -95,11 +105,11 @@ stk_figure ('stk_example_misc02 (b)');
 
 param_name = {'SIGMA2', 'NU', '1/RHO'};
 for j = 1:3,
-    subplot (2, 2, j);
+    stk_subplot (2, 2, j);
     % estimated parameter versus prior std
     h = semilogx (std_list, exp (param_opt(j, :)), 'ko-');
     set (h, 'LineWidth', 2, 'MarkerFaceColor', 'y');
-    xlabel ('prior std');  ylabel (param_name{j});
+    stk_labels ('prior std', param_name{j});
     % add an horizontal line showing the value of REML estimation
     hold on;  semilogx (xlim, exp (param_opt_reml(j)) * [1 1], 'r--');
     % add a second horizontal line showing the mode of the prior
@@ -111,5 +121,5 @@ for j = 1:3,
 end
 
 h1 = legend ('MAP estimates', 'REML estimate', 'mode of the prior');
-h2 = subplot (2, 2, 4); axis off;
+h2 = stk_subplot (2, 2, 4);  axis off;
 set (h1, 'Position', get (h2, 'Position'));

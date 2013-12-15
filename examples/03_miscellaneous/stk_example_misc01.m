@@ -1,4 +1,4 @@
-% STK_EXAMPLE_MISC01 plots several correlation functions from the Matern family
+% STK_EXAMPLE_MISC01  Several correlation functions from the Matern family
 %
 % The Matern 1/2 correlation function is also known as the "exponential correla-
 % tion function". This is the correlation function of an Ornstein-Ulhenbeck pro-
@@ -69,7 +69,5 @@ for j = 1:NB_COVARIANCE_FUNCTIONS,
     hold on;
 end
 
-xlabel ('x');
-ylabel ('correlation r(x)');
-legend (list_cov{:, 1});
-title ('Some members of the Matern family');
+stk_labels ('x', 'correlation r(x)');  legend (list_cov{:, 1});
+stk_title ('Some members of the Matern family');

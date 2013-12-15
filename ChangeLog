@@ -1,3 +1,77 @@
+2013-11-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite one-line descriptions of all examples.
+
+	* examples/01_kriging_basics/stk_example_kb01.m: modified
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+	* examples/01_kriging_basics/stk_example_kb03.m: modified
+	* examples/01_kriging_basics/stk_example_kb04.m: modified
+	* examples/01_kriging_basics/stk_example_kb05.m: modified
+	* examples/01_kriging_basics/stk_example_kb06.m: modified
+	* examples/02_design_of_experiments/stk_example_doe01.m: modified
+	* examples/02_design_of_experiments/stk_example_doe02.m: modified
+	* examples/02_design_of_experiments/stk_example_doe03.m: modified
+	* examples/03_miscellaneous/stk_example_misc01.m: modified
+	* examples/03_miscellaneous/stk_example_misc02.m: modified
+
+	Rewrite the description of example 'kb02'.
+
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+
+2013-11-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite the description of example 'misc02'.
+
+	* examples/03_miscellaneous/stk_example_misc02.m: modified
+
+2013-11-11  Julien Bect  <julien.bect@supelec.fr>
+
+	New functions: stk_axes, stk_subplot, stk_title.
+
+	* misc/plot/stk_subplot.m: new function
+	* misc/plot/stk_axes.m: new function
+	* misc/plot/stk_title.m: new function
+	* misc/options/stk_options_set.m: modified
+	* misc/plot/stk_figure.m: modified
+	* examples/01_kriging_basics/stk_example_kb01.m: modified
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+	* examples/01_kriging_basics/stk_example_kb03.m: modified
+	* examples/01_kriging_basics/stk_example_kb04.m: modified
+	* examples/01_kriging_basics/stk_example_kb05.m: modified
+	* examples/01_kriging_basics/stk_example_kb06.m: modified
+	* examples/02_design_of_experiments/stk_example_doe01.m: modified
+	* examples/02_design_of_experiments/stk_example_doe02.m: modified
+	* examples/02_design_of_experiments/stk_example_doe03.m: modified
+	* examples/03_miscellaneous/stk_example_misc01.m: modified
+	* examples/03_miscellaneous/stk_example_misc02.m: modified
+
+2013-11-10  Julien Bect  <julien.bect@supelec.fr>
+
+	Change plot labels in several examples.
+
+	* examples/01_kriging_basics/stk_example_kb01.m: modified
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+	* examples/01_kriging_basics/stk_example_kb04.m: modified
+	* examples/01_kriging_basics/stk_example_kb05.m: modified
+
+	New functions to create labels with options.
+
+	* misc/plot/stk_xlabel.m: new function
+	* misc/plot/stk_ylabel.m: new function
+	* misc/plot/stk_labels.m: new function
+	* examples/01_kriging_basics/stk_example_kb01.m: modified
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+	* examples/01_kriging_basics/stk_example_kb04.m: modified
+	* examples/01_kriging_basics/stk_example_kb05.m: modified
+	* examples/02_design_of_experiments/stk_example_doe03.m: modified
+	* examples/03_miscellaneous/stk_example_misc01.m: modified
+	* examples/03_miscellaneous/stk_example_misc02.m: modified
+	* misc/benchmarks/stk_benchmark_cov2.m: modified
+	* misc/plot/stk_figure.m: modified
+	* misc/plot/stk_plot2d.m: modified
+	* misc/options/stk_options_set.m: modified
+	* utils/arrays/@stk_dataframe/plot.m: modified
+
 2013-11-07  Julien Bect  <julien.bect@supelec.fr>
 
 	New function to create figures for the examples.

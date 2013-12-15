@@ -1,15 +1,13 @@
-% STK_EXAMPLE_KB02 constructs an ordinary kriging approximation in 1D, with
-% covariance parameters estimated from the data.
+% STK_EXAMPLE_KB02  Ordinary kriging in 1D with parameter estimation
 %
-% A Matern covariance function is used for the Gaussian Process (GP) prior. The
-% parameters of this covariance function are estimated using the Restricted
+% We consider an ordinary kriging approximation in 1D: the mean function of the
+% Gaussian process prior is assumed to be constant and unknown. A Matern covari-
+% ance function is used, and its parameters are estimated using the Restricted
 % Maximum Likelihood (ReML) method.
 %
-% The mean function of the GP prior is assumed to be constant and unknown.
-%
-% The example can be run either with noisy data or with noiseless data,
-% depending on the value of the NOISY flag (the default is false, i.e.,
-% noiseless data).
+% The example can be run either with noisy data  or with noiseless (exact) data,
+% depending on the value of the NOISY flag (the default is false, i.e., noise-
+% less data).
 
 % Copyright Notice
 %
@@ -139,11 +137,12 @@ xzp = stk_makedata (xt, zp);
 %% Visualisation
 
 stk_figure ('stk_example_kb02 (a)');  plot (xt, zt);
-title ('Function to be approximated');  xlabel ('x');  ylabel ('z');
+stk_title  ('Function to be approximated');
+stk_labels ('input variable x', 'response z');
 
 stk_figure ('stk_example_kb02 (b)');  stk_plot1d (xzi, ot, xzp);
-title ('Kriging prediction with estimated parameters');
-xlabel ('x');  ylabel ('z');
+stk_title  ('Kriging prediction with estimated parameters');
+stk_labels ('input variable x', 'response z');
 
 
 %% Cleanup

@@ -1,4 +1,4 @@
-% STK_EXAMPLE_KB03 constructs an ordinary kriging approximation in 2D.
+% STK_EXAMPLE_KB03  Ordinary kriging in 2D
 %
 % An anisotropic Matern covariance function is used for the Gaussian Process
 % (GP) prior. The parameters of this covariance function (variance, regularity
@@ -80,8 +80,8 @@ xt = stk_sampling_regulargrid (NT, DIM, BOX);
 zt = stk_feval (f, xt);
 
 % Since xt is a regular grid, we can do a contour plot
-subplot (2, 2, 1);  stk_plot2d (@contour, xt, f, CONTOUR_LINES);
-axis (BOX(:));  title ('function to be approximated');
+stk_subplot (2, 2, 1);  stk_plot2d (@contour, xt, f, CONTOUR_LINES);
+axis (BOX(:));  stk_title ('function to be approximated');
 
 
 %% CHOOSE A KRIGING (GAUSSIAN PROCESS) MODEL
@@ -138,18 +138,18 @@ zp = stk_predict(model, xt);
 
 % Display the result using a contour plot, to be compared with the contour
 % lines of the true function
-subplot (2, 2, 2);  stk_plot2d (@contour, xt, zp.mean, CONTOUR_LINES);
+stk_subplot (2, 2, 2);  stk_plot2d (@contour, xt, zp.mean, CONTOUR_LINES);
 tsc = sprintf ('approximation from %d points', NI);  hold on;
 plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
-hold off;  axis (BOX(:));  title (tsc);
+hold off;  axis (BOX(:));  stk_title (tsc);
 
 
 %% VISUALIZE THE ACTUAL PREDICTION ERROR AND THE KRIGING STANDARD DEVIATION
 
-subplot (2, 2, 3);  stk_plot2d (@pcolor, xt, log (abs (zp.mean - zt)));
+stk_subplot (2, 2, 3);  stk_plot2d (@pcolor, xt, log (abs (zp.mean - zt)));
 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
-hold off;  axis (BOX(:));  title ('true approx error (log)');
+hold off;  axis (BOX(:));  stk_title ('true approx error (log)');
 
-subplot (2, 2, 4);  stk_plot2d (@pcolor, xt, 0.5 * log (zp.var));
+stk_subplot (2, 2, 4);  stk_plot2d (@pcolor, xt, 0.5 * log (zp.var));
 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
-hold off;  axis (BOX(:));  title ('kriging std (log)');
+hold off;  axis (BOX(:));  stk_title ('kriging std (log)');

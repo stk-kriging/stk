@@ -1,4 +1,4 @@
-% STK_EXAMPLE_KB06 compares ordinary kriging and kriging with a linear trend
+% STK_EXAMPLE_KB06  Ordinary kriging VS kriging with a linear trend
 %
 % The same dataset is analyzed using two variants of kriging.
 %
@@ -77,9 +77,8 @@ model1.randomprocess.priorcov.param = stk_param_estim (model1);
 zp = stk_predict (model1, xt);
 
 % Plot the result
-figure;  subplot (1, 2, 1);
-stk_plot1d (xzi, [], stk_makedata (xt, zp));
-title ('Ordinary kriging');  ylim ([-5 5]);
+stk_subplot (1, 2, 1);  stk_plot1d (xzi, [], stk_makedata (xt, zp));
+stk_title ('Ordinary kriging');  ylim ([-5 5]);
 
 
 %% Linear trend (aka "universal kriging")
@@ -92,5 +91,5 @@ model2.randomprocess.priorcov.param = stk_param_estim (model2);
 zp = stk_predict (model, xt);
 
 % Plot the result
-subplot (1, 2, 2);  stk_plot1d (xzi, [], stk_makedata (xt, zp));
-title ('Kriging with linear trend');  ylim ([-5 5]);
+stk_subplot (1, 2, 2);  stk_plot1d (xzi, [], stk_makedata (xt, zp));
+stk_title ('Kriging with linear trend');  ylim ([-5 5]);

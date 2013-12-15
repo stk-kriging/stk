@@ -65,5 +65,9 @@ opts.stk_dataframe.disp_format = 'basic'; % 'basic' or 'verbose'
 opts.stk_dataframe.disp_spstr = '    ';
 
 opts.stk_figure.properties = {'InvertHardcopy', 'off', 'Color', [1 1 1]};
+opts.stk_xlabel.properties = {'FontSize', 10, 'Color', [0.2 0 1]};
+opts.stk_ylabel.properties = opts.stk_xlabel.properties;
+opts.stk_title.properties = {'FontSize', 10, 'FontWeight', 'bold'};
+opts.stk_axes.properties = {'FontSize', 8}; 
 
 end % function init_options

@@ -1,4 +1,4 @@
-% STK_EXAMPLE_KB04 demonstrates how to estimate the variance of the noise.
+% STK_EXAMPLE_KB04  Estimating the variance of the noise
 %
 % This example constructs an ordinary kriging approximation in 1D, with
 % covariance parameters and noise variance estimated from the data.
@@ -124,6 +124,7 @@ zp = stk_predict (model, xt);
 
 % Visualisation
 stk_plot1d (obs, stk_makedata (xt, zt), stk_makedata (xt, zp))
-title ('Kriging prediction');  xlabel ('x');  ylabel ('z');
+stk_title  ('Kriging prediction');
+stk_labels ('input variable x', 'response z');
 
 model %#ok<NOPTS>

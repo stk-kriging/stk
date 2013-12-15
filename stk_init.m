@@ -33,28 +33,28 @@
 
 %=== Turn output pagination OFF
 
-more off;
+more off
 
 %=== Displaying the Copying Permission Statement
 
-disp( '                                                                     ' );
-disp( '=====================================================================' );
-disp( '                                                                     ' );
-disp( 'STK is free software: you can redistribute it and/or modify          ' );
-disp( 'it under the terms of the GNU General Public License as published by ' );
-disp( 'the Free Software Foundation, either version 3 of the License, or    ' );
-disp( '(at your option) any later version.                                  ' );
-disp( '                                                                     ' );
-disp( 'STK is distributed in the hope that it will be useful,               ' );
-disp( 'but WITHOUT ANY WARRANTY; without even the implied warranty of       ' );
-disp( 'MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        ' );
-disp( 'GNU General Public License for more details.                         ' );
-disp( '                                                                     ' );
-disp( 'You should have received a copy of the GNU General Public License    ' );
-disp( 'along with STK.  If not, see <http://www.gnu.org/licenses/>.         ' );
-disp( '                                                                     ' );
-disp( '=====================================================================' );
-disp( '                                                                     ' );
+disp ('                                                                     ');
+disp ('=====================================================================');
+disp ('                                                                     ');
+disp ('STK is free software: you can redistribute it and/or modify          ');
+disp ('it under the terms of the GNU General Public License as published by ');
+disp ('the Free Software Foundation, either version 3 of the License, or    ');
+disp ('(at your option) any later version.                                  ');
+disp ('                                                                     ');
+disp ('STK is distributed in the hope that it will be useful,               ');
+disp ('but WITHOUT ANY WARRANTY; without even the implied warranty of       ');
+disp ('MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        ');
+disp ('GNU General Public License for more details.                         ');
+disp ('                                                                     ');
+disp ('You should have received a copy of the GNU General Public License    ');
+disp ('along with STK.  If not, see <http://www.gnu.org/licenses/>.         ');
+disp ('                                                                     ');
+disp ('=====================================================================');
+disp ('                                                                     ');
 
 %=== Add STK folders to the path
 

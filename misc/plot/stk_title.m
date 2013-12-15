@@ -1,4 +1,4 @@
-% STK_FIGURE ...
+% STK_TITLE ...
 
 % Copyright Notice
 %
@@ -26,34 +26,25 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function h = stk_figure (varargin)
+function h = stk_title (varargin)
 
-if mod (length (varargin), 2) ~= 0
-    figname = varargin{1};
+if ischar (varargin{1})
+    args = varargin(1);  % title
     user_options = varargin(2:end);
 else
-    figname = '';
-    user_options = varargin;
+    args = varargin(1:2);  % axes handle + title
+    user_options = varargin(3:end);
 end
 
 % Get global STK options
-options = stk_options_get ('stk_figure', 'properties');
+stk_options = stk_options_get ('stk_title', 'properties');
 
-% Create figure
-h = figure (options{:});
-
-% Create axes
-stk_axes;
+% Display title with STK options
+h = title (args{:}, stk_options{:});
 
 % Apply user-provided options
 if ~ isempty (user_options)
     set (h, user_options{:});
 end
 
-% Set figure name and title
-if ~ isempty (figname)
-    set (h, 'Name', figname);
-    stk_title (figname);
-end
-
-end % function stk_figure
+end % function stk_title

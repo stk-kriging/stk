@@ -1,4 +1,4 @@
-% STK_EXAMPLE_KB05 show how to generate conditioned sample paths
+% STK_EXAMPLE_KB05  Generation of conditioned sample paths
 %
 % A Matern Gaussian process model is used, with constant but unknown mean
 % (ordinary kriging) and known covariance parameters.
@@ -92,8 +92,9 @@ NB_PATHS = 10;
 zsim = stk_generate_samplepaths (model, xt, NB_PATHS);
 
 % Display the result
-subplot (2, 2, 1);  plot (xt, zsim, 'LineWidth', 2);  legend off;
-title ('Unconditional sample paths');  xlabel ('x');  ylabel ('z');
+stk_subplot (2, 2, 1);  plot (xt, zsim, 'LineWidth', 2);  legend off;
+stk_title ('Unconditional sample paths');
+stk_labels ('input variable x', 'response z');
 
 
 %% Carry out the kriging prediction and generate conditional sample paths
@@ -105,16 +106,18 @@ title ('Unconditional sample paths');  xlabel ('x');  ylabel ('z');
 zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
 
 % Display the observations only
-subplot (2, 2, 2);
+stk_subplot (2, 2, 2);
 plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
-title ('Observations');  xlabel ('x');  ylabel ('z');
+stk_title ('Observations');
+stk_labels ('input variable x', 'response z');
 
 % Display the conditional sample paths
-subplot (2, 2, 3);  plot (xt, zsimc, 'LineWidth', 2);  legend off;  hold on;
+stk_subplot (2, 2, 3);  plot (xt, zsimc, 'LineWidth', 2);  legend off;  hold on;
 plot (xi, zi, 'ko', 'LineWidth', 3, 'MarkerSize', 4, 'MarkerFaceColor', 'k');
-title ('Conditional sample paths');  xlabel ('x');  ylabel ('z');
+stk_title ('Conditional sample paths');
+stk_labels ('input variable x', 'response z');
 
 % Display the kriging and credible intervals
-subplot (2, 2, 4);  stk_plot1dsim (xi, zi, xt, zt, zp, zsimc);
-title ('Kriging prediction and conditional sample paths');
-xlabel ('x');  ylabel ('z');
+stk_subplot (2, 2, 4);  stk_plot1dsim (xi, zi, xt, zt, zp, zsimc);
+stk_title ('Prediction and credible intervals');
+stk_labels ('input variable x', 'response z');

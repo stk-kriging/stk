@@ -1,4 +1,4 @@
-% STK_EXAMPLE_DOE02 shows how to build a "sequential maximin" design
+% STK_EXAMPLE_DOE02  "Sequential Maximin" design
 %
 % In this example, a two-dimensional space-filling design is progressively
 % enriched with new points using a "sequential maximin" approach. More
@@ -77,7 +77,7 @@ for i = 1:NB_ITER,
     % plot
     cla;  plot (x(:, 1), x(:, 2), STYLE_CURRENT{:});
     hold on;  plot (next_x(:, 1), next_x(:, 2), STYLE_NEXT{:});
-    title (sprintf ('n = %d,  fd = %.2e\n', size (x, 1), fd));
+    stk_title (sprintf ('n = %d,  fd = %.2e\n', size (x, 1), fd));
     drawnow;  pause (0.5);
     % enrich the DoE
     x = vertcat (x, next_x);
