@@ -54,15 +54,13 @@ BOX = [-1.0; 1.0];  % factor space
 NT = 400; % nb of points in the grid
 xt = stk_sampling_regulargrid (NT, DIM, BOX);
 zt = stk_feval (f, xt);
-xzt = stk_makedata(xt, zt); % data structure containing (factors, response) pairs
+xzt = stk_makedata (xt, zt); % data structure containing (factors, response) pairs
 
-stk_plot1d ([], xzt, []);
-t = 'Kriging prediction based on noiseless observations';
-set (gcf, 'Name', t);  title (t);
-xlabel('x');  ylabel('z');
+stk_figure ('stk_example_kb01 (a)');  plot (xt, zt);
+title ('Function to be approximated');  xlabel ('x');  ylabel ('z');
 
 
-%% GENERATE A SPACE-FILLING DESIGN
+%% Generate a space-filling design
 %
 % The objective is to construct an approximation of f with a budget of NI
 % evaluations performed on a "space-filling design".
@@ -75,10 +73,10 @@ xlabel('x');  ylabel('z');
 NI = 6;                                        % number of evaluations
 xi = stk_sampling_regulargrid (NI, DIM, BOX);  % evaluation points
 zi = stk_feval (f, xi);                        % evaluation results
-xzi = stk_makedata(xi, zi);
+xzi = stk_makedata (xi, zi);
 
 
-%% SPECIFICATION OF THE MODEL
+%% Specification of the model
 %
 % We choose a Matern covariance with "fixed parameters" (in other  words, the
 % parameters of the covariance function are provided by the user rather than
@@ -102,10 +100,10 @@ model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
 % Set observations for the model. NB: We consider that observations are part
 % of the model (the model is actualy a Gaussian process conditioned on a set of
 % observations)
-model = stk_setobs(model, xzi);
+model = stk_setobs (model, xzi);
 
 
-%% CARRY OUT THE KRIGING PREDICTION AND DISPLAY THE RESULT
+%% Carry out the kriging prediction and display the result
 %
 % The result of a kriging predicition is provided by stk_predict() in an object
 % zp of type stk_dataframe, with two columns: "zp.mean" (the kriging mean) and
@@ -117,20 +115,19 @@ zp = stk_predict (model, xt);
 xzp = stk_makedata (xt, zp);
 
 % Display the result
-stk_plot1d (xzi, xzt, xzp);
-t = 'Kriging prediction based on noiseless observations';
-set (gcf, 'Name', t);  title (t);
+stk_figure ('stk_example_kb01 (b)');  stk_plot1d (xzi, xzt, xzp);
+title ('Kriging prediction based on noiseless observations');
 xlabel ('x');  ylabel ('z');
 
 
-%% REPEAT THE EXPERIMENT IN A NOISY SETTING
+%% Repeat the experiment in a noisy setting
 
 NOISEVARIANCE = (1e-1)^2;
 
 % Now the observations are perturbed by an additive Gaussian noise
 noise = sqrt (NOISEVARIANCE) * randn (size (zi));
-xzi_noisy = xzi;
-xzi_noisy.z = xzi.z + noise;
+zi_n = zi + noise;
+xzi_noisy =  stk_makedata (xi, zi_n);
 
 %=== There are two ways for specifying noisy observations in the model
 %
@@ -142,10 +139,10 @@ xzi_noisy.z = xzi.z + noise;
 % (2) information about the noise is carried by the noise struture
 %
 %     model_noisy.noise.type = 'swn';
-%     model_noisy.noise.lognoisevariance = log(NOISEVARIANCE);
+%     model_noisy.noise.lognoisevariance = log (NOISEVARIANCE);
 
 model_noisy = model;
-model_noisy.noise.cov = stk_homnoisecov(NOISEVARIANCE); % homoscedastic white noise
+model_noisy.noise.cov = stk_homnoisecov (NOISEVARIANCE);  % homoscedastic white noise
 
 % Carry out the kriging prediction at locations xt
 model_noisy = stk_setobs (model_noisy, xzi_noisy);
@@ -153,10 +150,9 @@ zp_noisy = stk_predict (model_noisy, xt);
 xzp_noisy = stk_makedata (xt, zp_noisy);
 
 % Display the result
-stk_plot1d (xzi_noisy, xzt, xzp_noisy);
-t = 'Kriging prediction based on noisy observations';
-set(gcf, 'Name', t);  title(t);
-xlabel('x');  ylabel('z');
+stk_figure ('stk_example_kb01 (c)');  stk_plot1d (xzi_noisy, xzt, xzp_noisy);
+title ('Kriging prediction based on noisy observations');
+xlabel ('x');  ylabel ('z');
 
 
 %% Cleanup

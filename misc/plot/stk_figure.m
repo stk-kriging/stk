@@ -1,4 +1,4 @@
-% STK_OPTIONS_SET sets the value of one or all STK options.
+% STK_FIGURE ...
 
 % Copyright Notice
 %
@@ -26,44 +26,31 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function opts = stk_options_set(varargin)
+function h = stk_figure (varargin)
 
-persistent options
-
-if isempty(options)    
-    options = init_options();    
+if mod (length (varargin), 2) ~= 0
+    figname = varargin{1};
+    user_options = varargin(2:end);
+else
+    figname = '';
+    user_options = varargin;
 end
 
-switch nargin
-    
-    case 0, % nothing to do, just return the output
-        
-    case 2,
-        options.(varargin{1}) = varargin{2};
+% Get global STK options
+options = stk_options_get ('stk_figure', 'properties');
 
-    case 3,
-        options.(varargin{1}).(varargin{2}) = varargin{3};
-        
-    otherwise
-        stk_error('Incorrect number of input arguments.', 'SyntaxError');
-        
+% Create figure
+h = figure (options{:});
+
+% Apply user-provided options
+if ~ isempty (user_options)
+    set (h, user_options{:});
 end
 
-opts = options;
+% Set figure name and title
+if ~ isempty (figname)
+    set (h, 'Name', figname);
+    title (h);
+end
 
-end % function stk_options_set
-
-
-function opts = init_options()
-
-opts = struct();
-
-opts.stk_sf_matern.min_size_for_parallelization = 1e5;
-opts.stk_sf_matern.min_block_size = 1e3;
-
-opts.stk_dataframe.disp_format = 'basic'; % 'basic' or 'verbose'
-opts.stk_dataframe.disp_spstr = '    ';
-
-opts.stk_figure.properties = {'InvertHardcopy', 'off', 'Color', [1 1 1]};
-
-end % function init_options
+end % stk_figure

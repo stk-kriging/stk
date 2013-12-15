@@ -36,7 +36,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome
+stk_disp_examplewelcome;  stk_figure ('stk_example_misc01');
 
 
 %% LIST OF CORRELATION FUNCTIONS
@@ -60,7 +60,7 @@ NB_COVARIANCE_FUNCTIONS = size (list_cov, 1);
 x1 = 0.0;
 x2 = stk_sampling_regulargrid (1000, 1, [-5; 5]);
 
-col = {'r', 'b', 'g', 'k', 'm--'};  figure;
+col = {'r', 'b', 'g', 'k', 'm--'};
 
 for j = 1:NB_COVARIANCE_FUNCTIONS,
     covfun = list_cov{j, 2};

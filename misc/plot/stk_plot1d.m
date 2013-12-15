@@ -31,22 +31,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_plot1d(obsi, obst, pred, h_axis)
+function stk_plot1d(obsi, obst, pred)
 
-if nargin > 4,
+if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if nargin < 4,
-    % Create figure
-    figure1 = figure('InvertHardcopy', 'off', 'Color', [1 1 1]);
-    % Create axes
-    h_axis = axes('Parent', figure1, 'FontSize', 12);
-end
-
-axes(h_axis);
-
-%=== checking arguments
 plot_obsi = ~isempty(obsi);
 plot_obst = ~isempty(obst);
 plot_pred = ~isempty(pred);
@@ -73,6 +63,6 @@ if plot_obsi
          'MarkerEdgeColor', [0.95 0.25 0.3], 'MarkerFaceColor', [0.8 0.8 0.8]);
 end
 
-hold off; set(h_axis, 'box', 'off');
+hold off;  set (gca, 'box', 'off');
 
 end % stk_plot1d

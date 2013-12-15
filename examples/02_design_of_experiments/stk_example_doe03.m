@@ -37,7 +37,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome
+stk_disp_examplewelcome;  stk_figure ('stk_example_doe03');
 
 
 %% Problem definition
@@ -134,8 +134,6 @@ iter = 0;
 % Plot options
 DOE_STYLE  = {'ko', 'MarkerFaceColor', 'k'};
 NEXT_STYLE = {'ro', 'MarkerFaceColor', 'y'};
-
-figure;
 
 while (iter < NB_ITER) && (EI_max > EI_max_stop),
     

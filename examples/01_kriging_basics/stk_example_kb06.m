@@ -37,7 +37,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome
+stk_disp_examplewelcome;  stk_figure ('stk_example_kb06');
 
 
 %% Preliminaries
@@ -78,7 +78,7 @@ zp = stk_predict (model1, xt);
 
 % Plot the result
 figure;  subplot (1, 2, 1);
-stk_plot1d (xzi, [], stk_makedata (xt, zp), gca);
+stk_plot1d (xzi, [], stk_makedata (xt, zp));
 title ('Ordinary kriging');  ylim ([-5 5]);
 
 
@@ -87,11 +87,10 @@ title ('Ordinary kriging');  ylim ([-5 5]);
 model2 = model;
 model2.randomprocess.priormean = stk_lm ('affine');
 model2.randomprocess.priorcov.param = stk_param_estim (model2);
-   
+
 % Carry out kriging prediction
 zp = stk_predict (model, xt);
 
 % Plot the result
-subplot (1, 2, 2);
-stk_plot1d (xzi, [], stk_makedata (xt, zp), gca);
+subplot (1, 2, 2);  stk_plot1d (xzi, [], stk_makedata (xt, zp));
 title ('Kriging with linear trend');  ylim ([-5 5]);

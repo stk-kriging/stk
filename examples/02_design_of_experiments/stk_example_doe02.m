@@ -47,7 +47,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome
+stk_disp_examplewelcome;  stk_figure ('stk_example_doe02');
 
 
 %% Preliminaries
@@ -75,7 +75,7 @@ for i = 1:NB_ITER,
     % & the point where the maximum is attained
     [fd, next_x] = stk_filldist (x, BOX);
     % plot
-    figure(1);  cla;  plot (x(:, 1), x(:, 2), STYLE_CURRENT{:});
+    cla;  plot (x(:, 1), x(:, 2), STYLE_CURRENT{:});
     hold on;  plot (next_x(:, 1), next_x(:, 2), STYLE_NEXT{:});
     title (sprintf ('n = %d,  fd = %.2e\n', size (x, 1), fd));
     drawnow;  pause (0.5);

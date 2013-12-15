@@ -39,7 +39,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome
+stk_disp_examplewelcome;  stk_figure ('stk_example_kb03');
 
 CONTOUR_LINES = 40; % number of levels in contour plots
 DOT_STYLE = {'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 4};
@@ -59,7 +59,7 @@ switch CASENUM
         
     case 2,  % another test function
         f_ = inline (['exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2' ...
-                      '+ 3*sin(4*pi*x1)'], 'x1', 'x2');
+            '+ 3*sin(4*pi*x1)'], 'x1', 'x2');
         f  = @(x)(f_(x(:, 1), x(:, 2)));
         DIM = 2;
         BOX = [[-1; 1], [-1; 1]];
@@ -80,7 +80,7 @@ xt = stk_sampling_regulargrid (NT, DIM, BOX);
 zt = stk_feval (f, xt);
 
 % Since xt is a regular grid, we can do a contour plot
-figure;  h1 = subplot (2, 2, 1);  stk_plot2d (@contour, xt, f, CONTOUR_LINES);
+subplot (2, 2, 1);  stk_plot2d (@contour, xt, f, CONTOUR_LINES);
 axis (BOX(:));  title ('function to be approximated');
 
 
@@ -138,7 +138,7 @@ zp = stk_predict(model, xt);
 
 % Display the result using a contour plot, to be compared with the contour
 % lines of the true function
-h2 = subplot (2, 2, 2);  stk_plot2d (@contour, xt, zp.mean, CONTOUR_LINES);
+subplot (2, 2, 2);  stk_plot2d (@contour, xt, zp.mean, CONTOUR_LINES);
 tsc = sprintf ('approximation from %d points', NI);  hold on;
 plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
 hold off;  axis (BOX(:));  title (tsc);
@@ -146,10 +146,10 @@ hold off;  axis (BOX(:));  title (tsc);
 
 %% VISUALIZE THE ACTUAL PREDICTION ERROR AND THE KRIGING STANDARD DEVIATION
 
-h3 = subplot (2, 2, 3);  stk_plot2d (@pcolor, xt, log (abs (zp.mean - zt)));
+subplot (2, 2, 3);  stk_plot2d (@pcolor, xt, log (abs (zp.mean - zt)));
 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
 hold off;  axis (BOX(:));  title ('true approx error (log)');
 
-h4 = subplot (2, 2, 4);  stk_plot2d (@pcolor, xt, 0.5 * log (zp.var));
+subplot (2, 2, 4);  stk_plot2d (@pcolor, xt, 0.5 * log (zp.var));
 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
 hold off;  axis (BOX(:));  title ('kriging std (log)');

@@ -41,7 +41,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome
+stk_disp_examplewelcome;  stk_figure ('stk_example_kb04');
 
 
 %% Define a 1d test function
@@ -90,7 +90,10 @@ obs = stk_makedata (xi, zi);
 % set, but they will be replaced below by estimated parameters.)
 model = stk_model ('stk_materncov_iso');
 model = stk_setobs (model, obs);
+
+% Noise variance
 model.noise.cov = stk_homnoisecov (100 * eps);
+% (this is not the true value of the noise variance !)
 
 
 %% Estimate the parameters of the covariance function
@@ -112,14 +115,15 @@ lnv0 = 2 * log (std (zi) / 100);
 [param, paramlnv] = stk_param_estim (model, param0, lnv0);
 
 model.randomprocess.priorcov.cparam = param;
-model.noise.cov.variance = exp(paramlnv);
+model.noise.cov.variance = exp (paramlnv);
 
 
-%% CARRY OUT KRIGING PREDICTION & DISPLAY THE RESULT
+%% Carry out kriging prediction
 
 zp = stk_predict (model, xt);
 
+% Visualisation
 stk_plot1d (obs, stk_makedata (xt, zt), stk_makedata (xt, zp))
-xlabel ('x');  ylabel ('z');
+title ('Kriging prediction');  xlabel ('x');  ylabel ('z');
 
 model %#ok<NOPTS>

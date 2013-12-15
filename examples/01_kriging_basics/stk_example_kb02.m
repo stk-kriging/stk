@@ -10,8 +10,6 @@
 % The example can be run either with noisy data or with noiseless data,
 % depending on the value of the NOISY flag (the default is false, i.e.,
 % noiseless data).
-%
-% See also: stk_example_kb01, stk_example_kb03
 
 % Copyright Notice
 %
@@ -56,7 +54,6 @@ BOX = [-1.0; 1.0];     % Factor space
 NOISY = false;         % Choose either a noiseless or a noisy demo.
 if ~ NOISY             % NOISELESS DEMO ...
     NI = 6;            %   NI = nb of evaluations that will be used
-    NOISESTD = 0.0;    %      noiseless!
 else                   % OR NOISY DEMO ?
     NI = 20;           %   NI = nb of evaluations that will be used
     NOISESTD = 0.1;    %   NOISESTD = std deviation of the observation noise
@@ -94,7 +91,7 @@ xzi = stk_makedata(xi, zi);
 model = stk_model ('stk_materncov_iso');
 
 % Set observations for the model
-model = stk_setobs(model, xzi);
+model = stk_setobs (model, xzi);
 
 
 %% ESTIMATION OF THE PARAMETERS OF THE COVARIANCE
@@ -103,18 +100,19 @@ model = stk_setobs(model, xzi);
 % REML (REstricted Maximum Likelihood) method using stk_param_estim().
 %
 
-% % Initial guess for the parameters of the Matern covariance
+% Initial guess for the parameters of the Matern covariance
+% (not working yet on branch 'objectify_me')
 % param0 = stk_param_init(model, BOX, NOISY);
 
-% Alternative: user-defined initial guess for the parameters of the Matern covariance
-% (see "help stk_materncov_iso" for more information)
+% % Alternative: user-defined initial guess for the parameters
+% % (see "help stk_materncov_iso" for more information)
 model.randomprocess.priorcov.sigma2 = 1.0;  % variance parameter
 model.randomprocess.priorcov.nu     = 4.0;  % regularity parameter
 model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
 
 if ~ NOISY,
     % Noiseless case: set a small "regularization" noise	
-    model.noise.cov = stk_homnoisecov (1e-6 ^ 2);
+    model.noise.cov = stk_homnoisecov (1e-4 ^ 2);
 else
     % Otherwise, set the variance of the noise (assumed to be known)
 	model.noise.cov = stk_homnoisecov (NOISESTD ^ 2);
@@ -137,10 +135,14 @@ ot = stk_makedata(xt, zt);
 zp  = stk_predict (model, xt);
 xzp = stk_makedata (xt, zp);
 
-% Visualisation
-stk_plot1d (xzi, ot, xzp);
-t = sprintf('%s %.3e', 'Kriging prediction with noise std', NOISESTD);
-title(t);  set(gcf, 'Name', t);
+
+%% Visualisation
+
+stk_figure ('stk_example_kb02 (a)');  plot (xt, zt);
+title ('Function to be approximated');  xlabel ('x');  ylabel ('z');
+
+stk_figure ('stk_example_kb02 (b)');  stk_plot1d (xzi, ot, xzp);
+title ('Kriging prediction with estimated parameters');
 xlabel ('x');  ylabel ('z');
 
 
