@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,10 +25,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_nullcov()
+function cov = stk_nullcov ()
 
-cov = struct('prop', [], 'aux', []);
-cov = class(cov, 'stk_nullcov', stk_homnoisecov());
-cov = set(cov, 'name', 'stk_nullcov');
+cov = struct ('prop', [], 'aux', []);
+cov = class (cov, 'stk_nullcov', stk_homnoisecov ());
+cov = set (cov, 'name', 'stk_nullcov');
 
 end % function stk_nullcov

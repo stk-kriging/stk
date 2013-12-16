@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,28 +25,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = feval(cov, varargin)
-[x, y, diff, pairwise] = process_feval_inputs(cov, varargin{:});
+function K = feval (cov, varargin)
+
+[x, y, diff, pairwise] = process_feval_inputs (cov, varargin{:});
 
 % only cov(x, x) is supported for this class of covariance objects !
-if ~isempty(y) && ~isequal(x, y)
-    stk_error('cov(x, y) is not implemented yet.', 'NotImplementedYet');
+if ~ isempty(y) && ~ isequal (x, y)
+    stk_error ('cov(x, y) is not implemented yet.', 'NotImplementedYet');
 end
 
-nx = size(x, 1);
+nx = size (x, 1);
 
 switch diff,
     
     case {-1, 1}, % value or derivative wrt logvariance
         
         if pairwise,
-            K = cov.prop.variance * ones(nx, 1);
+            K = cov.prop.variance * ones (nx, 1);
         else
-            K = cov.prop.variance * speye(nx, nx);
+            K = cov.prop.variance * speye (nx, nx);
         end
         
     otherwise
-        stk_error('Incorrect diff argument.', 'IncorrectArgument');
+        stk_error ('Incorrect diff argument.', 'IncorrectArgument');
 
 end % switch diff
 

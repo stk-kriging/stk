@@ -88,7 +88,7 @@ end
 % end
 
 % TODO: allow user-defined bounds
-[lb, ub] = stk_get_defaultbounds( ...
+[lb, ub] = stk_get_defaultbounds ( ...
     model.randomprocess.priorcov, cparam0, model.observations.z);
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
@@ -234,7 +234,7 @@ empirical_variance = var(model.observations.z);
 lblnv = log(eps);
 ublnv = log(empirical_variance) + TOLVAR;
 
-end % function get_default_bounds_lnv -----------------------------------------
+end % function get_defaultbounds_lnv ------------------------------------------
 
 
 %!shared f, xi, zi, NI, param0, model

@@ -46,7 +46,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function k = stk_materncov52_iso(param, x, y, diff, pairwise)
+function k = stk_materncov52_iso (param, x, y, diff, pairwise)
 
 if nargin > 5,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -71,8 +71,9 @@ end
 
 % check if all input arguments are the same as before
 % (or if this is the first call to the function)
-if isempty(x0) || isempty(y0) || isempty(param0) || ...
-        ~isequal({x, y, param}, {x0, y0, param0}) || ~isequal(pairwise, pairwise0)
+if isempty(x0) || isempty(y0) || isempty(param0) ...
+        || ~ isequal ({x, y, param}, {x0, y0, param0}) ...
+        || ~ isequal (pairwise, pairwise0)
     % compute the distance matrix
     D  = invRho * stk_dist(x, y, pairwise);
     % save arguments for the nex call
@@ -92,7 +93,7 @@ else
     error('there must be something wrong here !');
 end
 
-end % function
+end % function stk_materncov52_iso
 
 
 %%

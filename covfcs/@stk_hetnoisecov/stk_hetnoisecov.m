@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,34 +25,34 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_hetnoisecov(arg)
+function cov = stk_hetnoisecov (arg)
 
-prop = struct();
+prop = struct ();
 
 if nargin == 0, % default constructor
     
     prop.varfun = @(x)(1.0);
-    prop.x   = [];
-    prop.v   = [];
+    prop.x = [];
+    prop.v = [];
     
 else
     
-    if isstruct(arg),
+    if isstruct (arg),
         prop.varfun = [];
-        prop.x   = arg.x;
-        prop.v   = arg.v;
-    elseif isa(arg, 'function_handle')
+        prop.x = arg.x;
+        prop.v = arg.v;
+    elseif isa (arg, 'function_handle')
         prop.varfun = arg;
-        prop.x   = [];
-        prop.v   = [];
+        prop.x = [];
+        prop.v = [];
     else
-        stk_error('Incorrect variance argument.', 'IncorrectArgument');
+        stk_error ('Incorrect variance argument.', 'IncorrectArgument');
     end
     
 end
 
-cov = struct('prop', prop, 'aux', []);
-cov = class(cov, 'stk_hetnoisecov', stk_cov());
-cov = set(cov, 'name', 'stk_hetnoisecov');
+cov = struct ('prop', prop, 'aux', []);
+cov = class (cov, 'stk_hetnoisecov', stk_cov ());
+cov = set (cov, 'name', 'stk_hetnoisecov');
 
 end % function stk_hetnoisecov

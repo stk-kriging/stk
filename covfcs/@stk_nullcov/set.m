@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,29 +25,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = set(cov, propname, value)
+function cov = set (cov, propname, value)
 
 switch propname,        
         
     case {'cparam', 'x', 'v'}
         if ~isempty(value)
-            errmsg = sprintf('Property ''%s'' is immutable.', propname);
-            stk_error(errmsg, 'SettingImmutableProperty');
+            errmsg = sprintf ('Property ''%s'' is immutable.', propname);
+            stk_error (errmsg, 'SettingImmutableProperty');
         end        
         
     case 'variance'
         if value ~= 0.0,
             errmsg = 'Property ''variance'' is immutable.';
-            stk_error(errmsg, 'SettingImmutableProperty');
+            stk_error (errmsg, 'SettingImmutableProperty');
         end
 
     case 'varfun'
         errmsg = 'Property ''varfun'' is immutable.';
-        stk_error(errmsg, 'SettingReadOnlyProperty');
+        stk_error (errmsg, 'SettingReadOnlyProperty');
 
     otherwise % name
-        cov.stk_homnoisecov = set(cov.stk_homnoisecov, propname, value);
+        cov.stk_homnoisecov = set (cov.stk_homnoisecov, propname, value);
         
 end % switch
 
-end
+end % function set

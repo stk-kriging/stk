@@ -51,7 +51,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [K, P] = stk_make_matcov(model, x0, x1, pairwise)
+function [K, P] = stk_make_matcov (model, x0, x1, pairwise)
 
 %=== process input arguments
 
@@ -59,10 +59,10 @@ if nargin == 1,
     x0 = model.observations.x;
 end
 
-x0 = double(x0);
+x0 = double (x0);
 
-if (nargin > 2) && ~isempty(x1)
-    x1 = double(x1);
+if (nargin > 2) && ~ isempty (x1)
+    x1 = double (x1);
     make_matcov_auto = false;
 else
     x1 = x0;
@@ -73,56 +73,56 @@ pairwise = (nargin > 3) && pairwise;
 
 %=== compute the covariance matrix
 
-K = feval(model.randomprocess.priorcov, x0, x1, -1, pairwise);
+K = feval (model.randomprocess.priorcov, x0, x1, -1, pairwise);
 
-if make_matcov_auto && ~isa (model.noise.cov, 'stk_nullcov')
-    if ~pairwise,
-        K = K + feval(model.noise.cov, x0, x0, -1, pairwise);
+if make_matcov_auto && ~ isa (model.noise.cov, 'stk_nullcov')
+    if ~ pairwise,
+        K = K + feval (model.noise.cov, x0, x0, -1, pairwise);
     else
-        stk_error('Not implemented yet.', 'NotImplementedYet');
+        stk_error ('Not implemented yet.', 'NotImplementedYet');
     end
 end
 
 %=== compute the regression functions
 
 if nargout > 1,
-    P = feval(model.randomprocess.priormean, x0);
+    P = feval (model.randomprocess.priormean, x0);
 end
 
-end
+end % function stk_make_matcov
 
 
 %!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
-%! n0 = 20; n1 = 10; d = 4;
-%! model = stk_model('stk_materncov_aniso', d);
-%! model.randomprocess.priormean = stk_lm('affine');
+%! n0 = 20;  n1 = 10;  d = 4;
+%! model = stk_model ('stk_materncov_aniso', d);
+%! model.randomprocess.priormean = stk_lm ('affine');
 %! model2 = model;
-%! model2.noise.cov = stk_homnoisecov(0.1^2); % std 0.1
-%! x0 = stk_sampling_randunif(n0, d);
-%! x1 = stk_sampling_randunif(n1, d);
+%! model2.noise.cov = stk_homnoisecov (0.1 ^ 2);  % std 0.1
+%! x0 = stk_sampling_randunif (n0, d);
+%! x1 = stk_sampling_randunif (n1, d);
 
-%!test  [KK, PP] = stk_make_matcov(model);
-%!test  [Ka, Pa] = stk_make_matcov(model, x0);           % (1)
-%!test  [Kb, Pb] = stk_make_matcov(model, x0, x0);       % (2)
-%!test  [Kc, Pc] = stk_make_matcov(model, x0, x1);       % (3)
-%!error [KK, PP] = stk_make_matcov(model, x0, x1, pi);
+%!test [KK, PP] = stk_make_matcov (model);
+%!test [Ka, Pa] = stk_make_matcov (model, x0);           % (1)
+%!test [Kb, Pb] = stk_make_matcov (model, x0, x0);       % (2)
+%!test [Kc, Pc] = stk_make_matcov (model, x0, x1);       % (3)
+%!error [KK, PP] = stk_make_matcov (model, x0, x1, pi);
 
-%!test  assert(isequal(size(Ka), [n0 n0]));
-%!test  assert(isequal(size(Kb), [n0 n0]));
-%!test  assert(isequal(size(Kc), [n0 n1]));
+%!assert (isequal (size (Ka), [n0 n0]));
+%!assert (isequal (size (Kb), [n0 n0]));
+%!assert (isequal (size (Kc), [n0 n1]));
 
-%!test  assert(isequal(size(Pa), [n0 d + 1]));
-%!test  assert(isequal(size(Pb), [n0 d + 1]));
-%!test  assert(isequal(size(Pc), [n0 d + 1]));
+%!assert (isequal (size (Pa), [n0 d + 1]));
+%!assert (isequal (size (Pb), [n0 d + 1]));
+%!assert (isequal (size (Pc), [n0 d + 1]));
 
 %!% In the noiseless case, (1) and (2) should give the same results
-%!test  assert(isequal(Kb, Ka));
+%!assert (isequal(Kb, Ka));
 
 %!% In the noisy case, however...
-%!test  [Ka, Pa] = stk_make_matcov(model2, x0);           % (1')
-%!test  [Kb, Pb] = stk_make_matcov(model2, x0, x0);       % (2')
-%!error assert(isequal(Kb, Ka));
+%!test [Ka, Pa] = stk_make_matcov (model2, x0);           % (1')
+%!test [Kb, Pb] = stk_make_matcov (model2, x0, x0);       % (2')
+%!error assert (isequal (Kb, Ka));
 
 %!% The second output depends on x0 only => should be the same for (1)--(3)
-%!test  assert(isequal(Pa, Pb));
-%!test  assert(isequal(Pa, Pc));
+%!assert (isequal (Pa, Pb));
+%!assert (isequal (Pa, Pc));

@@ -29,10 +29,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function path = stk_path(root)
+function path = stk_path (root)
 
 if nargin == 0,
-    root = stk_get_root();
+    root = stk_get_root ();
 end
 
 % main function folders
@@ -48,7 +48,7 @@ path = { ...
     fullfile(root, 'utils', 'arrays', 'generic' ) };
 
 % 'misc' folder and its subfolders
-misc = fullfile(root, 'misc');
+misc = fullfile (root, 'misc');
 path = [path {...
     fullfile(misc            ) ...
     fullfile(misc, 'config'  ) ...
@@ -82,4 +82,4 @@ else
     path = [path {fullfile(misc, 'mole', 'octave')}];
 end
 
-end % stk_path
+end % function stk_path

@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,7 +25,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = set(cov, propname, value)
+function cov = set (cov, propname, value)
 
 switch propname
        
@@ -33,8 +33,8 @@ switch propname
         cov.(propname) = value;
         
     otherwise % name, cparam
-        cov.stk_cov = set(cov.stk_cov, propname, value);
+        cov.stk_cov = set (cov.stk_cov, propname, value);
         
 end
 
-end
+end % function set

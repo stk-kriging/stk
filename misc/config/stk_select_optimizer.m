@@ -34,7 +34,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function optim_num = stk_select_optimizer(bounds_available, display)
+function optim_num = stk_select_optimizer (bounds_available, display)
 
 persistent optim_num_con optim_num_unc
 
@@ -52,17 +52,17 @@ else % invocation with at least one argument (typically, in stk_param_estim)
 end
 
 % select an appropriate optimizer
-if isempty(optim_num_con) || isempty(optim_num_unc) || force_recheck,
+if isempty (optim_num_con) || isempty (optim_num_unc) || force_recheck,
     if isoctave,
         % We assume that the 'optim' package is installed, loaded, and
         % provides the spq() function. But we check anyway (better safe
         % than sorry) and raise an error if sqp() is nowhere to be found.
-        if exist('sqp','file') == 2,
+        if exist ('sqp','file') == 2,
             optim_num_con = 1;
             optim_num_unc = 1;
         else
-            disp('Function sqp not found !!!');
-            error(['Please check that the optim package ', ...
+            disp ('Function sqp not found !!!');
+            error (['Please check that the optim package ', ...
                 'is properly installed.']);
         end
     else
@@ -86,28 +86,30 @@ end
 % display
 if display,
     
-    fprintf('Constrained optimizer for stk_param_estim: ');
+    fprintf ('Constrained optimizer for stk_param_estim: ');
     switch optim_num_con
         case 1, % octave / sqp
-            fprintf('sqp.\n');
+            fprintf ('sqp.\n');
         case 2, % Matlab / fminsearch
-            fprintf('NONE.\n');
-            warning(['Function fmincon not found, ', ...
+            fprintf ('NONE.\n');
+            warning (['Function fmincon not found, ', ...
                 'falling back on fminsearch.']); %#ok<WNTAG>
         case 3, % Matlab / fmincon
-            fprintf('fmincon.\n');
+            fprintf ('fmincon.\n');
         otherwise
-            error('Unexpected value for optim_num_con');
+            error ('Unexpected value for optim_num_con');
     end
     
-    fprintf('Unconstrained optimizer for stk_param_estim: ');
+    fprintf ('Unconstrained optimizer for stk_param_estim: ');
     switch optim_num_unc
         case 1, % octave / sqp
-            fprintf('sqp.\n');
+            fprintf ('sqp.\n');
         case 2, % Matlab / fminsearch
-            fprintf('fminsearch.\n');
+            fprintf ('fminsearch.\n');
         otherwise
-            error('Unexpected value for optim_num_unc');
+            error ('Unexpected value for optim_num_unc');
     end
     
 end
+
+end % function stk_select_optimizer

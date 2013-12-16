@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,22 +25,23 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function k = feval(cov, varargin)
-[x, y, diff, pairwise] = process_feval_inputs(cov, varargin{:});
+function k = feval (cov, varargin)
 
-nx = size(x, 1);
-ny = size(y, 1);
+[x, y, diff, pairwise] = process_feval_inputs (cov, varargin{:});
+
+nx = size (x, 1);
+ny = size (y, 1);
 
 % check diff argument
 if diff ~= -1
     errmsg = 'diff can only be equal to -1 for stk_nullcov objects.';
-    stk_error(errmsg, 'IncorrectArgument');
+    stk_error (errmsg, 'IncorrectArgument');
 end
 
 if ~pairwise,
-    k = sparse(nx, ny);
+    k = sparse (nx, ny);
 else
-    k = sparse(nx, 1);
+    k = sparse (nx, 1);
 end
 
 end % function feval

@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,7 +25,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = get(cov, propname)
+function t = get (cov, propname)
 
 switch propname
     
@@ -36,9 +36,10 @@ switch propname
         t = [];
         
     otherwise
-        errmsg = sprintf('No property %s to get in class %s.', propname, class(cov));
-        stk_error(errmsg, 'NonExistentProperty');
+        errmsg = sprintf ('No property %s to get in class %s.', ...
+            propname, class (cov));
+        stk_error (errmsg, 'NonExistentProperty');
         
 end % switch
 
-end % function set
+end % function get

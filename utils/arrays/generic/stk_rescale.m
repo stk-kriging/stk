@@ -78,7 +78,7 @@ end % function stk_rescale
 %!shared x
 %! x = rand (10, 4);
 %! y = stk_rescale (x, [], []);
-%! assert stk_isequal_tolabs (x, y));
+%! assert (stk_isequal_tolabs (x, y));
 
 %!test
 %! y = stk_rescale(0.5, [], [0; 2]);

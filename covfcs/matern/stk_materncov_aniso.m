@@ -47,7 +47,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function k = stk_materncov_aniso(param, x, y, diff, pairwise)
+function k = stk_materncov_aniso (param, x, y, diff, pairwise)
 
 if nargin > 5,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -85,8 +85,9 @@ invRho = diag(invRho);
 
 % check if all input arguments are the same as before
 % (or if this is the first call to the function)
-if isempty(x0) || isempty(y0) || isempty(param0) || ...
-        ~isequal({x, y, param}, {x0, y0, param0}) || ~isequal(pairwise, pairwise0)
+if isempty(x0) || isempty(y0) || isempty(param0) ...
+        || ~ isequal ({x, y, param}, {x0, y0, param0}) ...
+        || ~ isequal (pairwise, pairwise0)
     % compute the distance matrix
     xs = x * invRho; ys = y * invRho;
     D = stk_dist(xs, ys, pairwise);
@@ -116,13 +117,15 @@ elseif (diff >= 3) && (diff <= nb_params),
     if pairwise,
         k = (xs(:, ind) - ys(:, ind)).^2 .* Kx_cache;
     else
-        k = (repmat(xs(:, ind), 1, ny) - repmat(ys(:, ind)', nx, 1)).^2 .* Kx_cache;
+        k = (repmat(xs(:, ind), 1, ny) ...
+            - repmat(ys(:, ind)', nx, 1)).^2 .* Kx_cache;
     end
 else
-    stk_error('Incorrect value for the ''diff'' parameter.', 'InvalidArgument');
+    stk_error ('Incorrect value for the ''diff'' parameter.', ...
+        'InvalidArgument');
 end
 
-end % function
+end % function stk_materncov_aniso
 
 
 %%

@@ -65,4 +65,4 @@ end
 
 v = version_number;
 
-end % stk_version
+end % function stk_version

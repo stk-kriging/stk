@@ -25,40 +25,39 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = subsref(model, idx)
+function t = subsref (model, idx)
 
 switch idx(1).type
     
     case {'()', '{}'}
-        stk_error('Syntax error', 'SyntaxError');
+        stk_error ('Syntax error', 'SyntaxError');
         
     case '.'
-        t = subsref_(model, idx(1).subs, idx(2:end));
+        t = subsref_ (model, idx(1).subs, idx(2:end));
         
     otherwise % unexpected indexing type
-        stk_error('Syntax error', 'SyntaxError');
+        stk_error ('Syntax error', 'SyntaxError');
         
 end
 
 end % function subsref
 
 
-
-function t = subsref_(model, field, idx)
+function t = subsref_ (model, field, idx)
 
 switch field,
     
     case {'randomprocess', 'noise', 'observations', 'domain'}
         
-        if ~isempty(idx),
-            t = subsref(model.(field), idx);
+        if ~ isempty (idx),
+            t = subsref (model.(field), idx);
         else
             t = model.(field);
         end
         
     otherwise
-        msg = sprintf('There is no field named %s.', field);
-        stk_error(msg, 'UnknownField');
+        msg = sprintf ('There is no field named %s.', field);
+        stk_error (msg, 'UnknownField');
         
 end
 

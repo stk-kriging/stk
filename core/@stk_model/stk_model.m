@@ -1,6 +1,6 @@
 % STK_MODEL generates a model with default parameters
 %
-% CALL: MODEL = stk_model(COVARIANCE_TYPE)
+% CALL: MODEL = stk_model (COVARIANCE_TYPE)
 %
 %   returns a structure MODEL (see below for a description of the fields in such
 %   a structure) corresponding to a Gaussian process prior with a
@@ -154,7 +154,7 @@ model.observations.z = zeros (0, 1);
 model.randomprocess.priormean = stk_lm ('constant'); % default: ordinary kriging
 model.randomprocess.priorcov = stk_cov (covariance_type, 'dim', dim);
 
-end
+end % function stk_model_
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -185,7 +185,7 @@ model         = struct('domain',        domain,        ...
                        'noise',         noise,         ...
                        'observations',  observations   );
 
-end
+end % function prepare_empty_model_struct
 
 
 %!test model = stk_model();

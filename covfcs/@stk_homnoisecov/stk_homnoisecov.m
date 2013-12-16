@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,20 +25,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_homnoisecov(variance)
+function cov = stk_homnoisecov (variance)
 
-cov = struct('prop', [], 'aux', []);
+cov = struct ('prop', [], 'aux', []);
 
 if nargin == 0, % default
     cov.prop.variance = 1.0;
 else
-    if (numel(variance) ~= 1) || ~(variance > 0),
-        stk_error('Incorrect variance argument.', 'IncorrectArgument');
+    if (numel (variance) ~= 1) || ~ (variance > 0),
+        stk_error ('Incorrect variance argument.', 'IncorrectArgument');
     end
     cov.prop.variance = variance;
 end
 
-cov = class(cov, 'stk_homnoisecov', stk_hetnoisecov());
-cov = set(cov, 'name', 'stk_homnoisecov');
+cov = class (cov, 'stk_homnoisecov', stk_hetnoisecov ());
+cov = set (cov, 'name', 'stk_homnoisecov');
 
 end % function stk_homnoisecov

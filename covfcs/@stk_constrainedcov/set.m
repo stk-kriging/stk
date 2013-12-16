@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,63 +25,63 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = set(cov, propname, value)
+function cov = set (cov, propname, value)
 
 switch propname
     
     case 'cparam'
-        cov = set_cparam_(cov, value);
+        cov = set_cparam_ (cov, value);
         
     case 'base_cov'
         errmsg = 'Property basecov is read-only.';
-        stk_error(errmsg, 'SettingReadOnlyProperty');
+        stk_error (errmsg, 'SettingReadOnlyProperty');
         
     case 'clist'
-        cov = set_clist_(cov, value);
+        cov = set_clist_ (cov, value);
         
     otherwise % name
-        cov.stk_cov = set(cov.stk_cov, propname, value);
+        cov.stk_cov = set (cov.stk_cov, propname, value);
         
 end
 
-end
+end % function set
 
 
-function cov = set_cparam_(cov, value)
+function cov = set_cparam_ (cov, value)
 
 % check arg #2
-nb_groups = length(cov.aux.idxfree);
-if ~isa(value, 'double') || (length(value) ~= nb_groups)
-    stk_error('Incorrect ''value'' argument.', 'IncorrectArgument');
+nb_groups = length (cov.aux.idxfree);
+if ~ isa (value, 'double') || (length (value) ~= nb_groups)
+    stk_error ('Incorrect ''value'' argument.', 'IncorrectArgument');
 end
 
 % build a "full" cparam vector
 clist = cov.prop.clist;
-t = zeros(length([clist{:}]), 1);
+t = zeros (length ([clist{:}]), 1);
 for j = 1:nb_groups
-    t(clist{j}) = value(j);
+    t (clist{j}) = value(j);
 end
 
 % set the "full" cparam vector
-cov.prop.basecov = set(cov.prop.basecov, 'cparam', t);
+cov.prop.basecov = set (cov.prop.basecov, 'cparam', t);
 
-end
+end % function set_cparam_
 
 
-function cov = set_clist_(cov, clist)
+function cov = set_clist_ (cov, clist)
 
 basecov = cov.prop.basecov;
 
 % indices of free parameters
-nbgroups = length(clist);
-idxfree = zeros(1, nbgroups);
+nbgroups = length (clist);
+idxfree = zeros (1, nbgroups);
 for j = 1:nbgroups,
-    idxfree(j) = clist{j}(1);
+    idxfree (j) = clist{j}(1);
 end
 
 % enforce equality constraints in basecov
 for j = 1:nbgroups,
-    L = length(clist{j}); 
+    L = length (clist{j}); 
     if L > 1,
         for k = 2:L,
             basecov.cparam(clist{j}(k)) = basecov.cparam(clist{j}(1));
@@ -94,4 +94,4 @@ cov.prop.basecov = basecov;
 cov.prop.clist   = clist;
 cov.aux.idxfree  = idxfree;
 
-end
+end % function set_clist_

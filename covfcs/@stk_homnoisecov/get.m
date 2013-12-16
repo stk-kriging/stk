@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,19 +25,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = get(cov, propname)
+function t = get (cov, propname)
 
 switch propname,
     
     case 'cparam'
-        t = log(cov.prop.variance);
+        t = log (cov.prop.variance);
 
     case 'variance'
         t = cov.prop.variance;
         
     otherwise % name, varfun, x, v
-        t = get(cov.stk_hetnoisecov, propname);
+        t = get (cov.stk_hetnoisecov, propname);
         
 end % switch
 
-end % function stk_get_param
+end % function get

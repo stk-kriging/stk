@@ -51,13 +51,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function S = stk_makedata(x, z, noisevariance)
+function S = stk_makedata (x, z, noisevariance)
 
 %--- handle first input argument ----------------------------------------------
 
-if isstruct(x)   
-    if isfield(x, 'v'),
-        stk_error('This kind of .v field is not supported anymore.', ...
+if isstruct (x)   
+    if isfield (x, 'v'),
+        stk_error ('This kind of .v field is not supported anymore.', ...
             'ObsoleteFeature');
     else
         % (try to) get the data from an old-style STK structure
@@ -65,23 +65,23 @@ if isstruct(x)
     end
 end
 
-n = size(x, 1);
+n = size (x, 1);
 
 %--- handle second input argument ---------------------------------------------
 
-if isstruct(z)
+if isstruct (z)
     % (try to) get the data from an old-style STK structure
     z = z.a;
 end
 
-if ~isempty(z) && (size(z, 1) ~= n),
+if ~ isempty (z) && (size (z, 1) ~= n),
     errmsg = 'x and z should have the same number of rows.';
-    stk_error(errmsg, 'IncorrectArgument');
+    stk_error (errmsg, 'IncorrectArgument');
 end
 
 %--- create the output structure ----------------------------------------------
 
-S = struct('x', x, 'z', z, 'n', n);
+S = struct ('x', x, 'z', z, 'n', n);
 
 if nargin == 3,
     if noisevariance > 0,
@@ -97,4 +97,4 @@ else
     S.noisy_obs = '?';
 end
 
-end
+end % function stk_makedata

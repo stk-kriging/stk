@@ -25,11 +25,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function param = stk_gausscov_iso_defaultparam(dim) %#ok<INUSD>
+function param = stk_gausscov_iso_defaultparam (dim) %#ok<INUSD>
 
 VAR0 = 1;
 RHO  = 0.3;   % range parameter (spatial scale)
 
-param = log([VAR0; 1/RHO]);
+param = log ([VAR0; 1/RHO]);
 
-end
+end % function stk_gausscov_iso_defaultparam

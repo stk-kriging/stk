@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -27,7 +27,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [x, y, diff, pairwise] = process_feval_inputs(cov, x, y, diff, pairwise)
+function [x, y, diff, pairwise] = process_feval_inputs ...
+    (cov, x, y, diff, pairwise)
 
 if nargin > 5,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -39,7 +40,7 @@ if nargin < 2,
 end
 
 % arg #3: y = x if y is missing or empty
-if (nargin < 3) || isempty(y),
+if (nargin < 3) || isempty (y),
     y = x;
 end
 
@@ -57,15 +58,15 @@ x = double (x);
 y = double (y);
 
 % sanity check
-if pairwise && (size(x, 1) ~= size(y, 1))
+if pairwise && (size (x, 1) ~= size (y, 1))
     errmsg = 'x and y should have the same number of rows.';
-    stk_error(errmsg, 'InconsistentDimensions');
+    stk_error (errmsg, 'InconsistentDimensions');
 end
 
 % sanity check
-if size(x, 2) ~= size(y, 2)
+if size (x, 2) ~= size (y, 2)
     errmsg = 'x and y should have the same number of columns.';
-    stk_error(errmsg, 'InconsistentDimensions');
+    stk_error (errmsg, 'InconsistentDimensions');
 end
 
-end % function process_feval_input_args
+end % function process_feval_inputs

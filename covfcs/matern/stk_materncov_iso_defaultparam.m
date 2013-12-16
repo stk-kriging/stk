@@ -25,7 +25,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function param = stk_materncov_iso_defaultparam(dim)
+function param = stk_materncov_iso_defaultparam (dim)
 
 VAR0 = 1;
 NU0  = 2.0;   % smoothness (regularity) parameter
@@ -33,4 +33,4 @@ RHO  = 0.3;   % range parameter (spatial scale)
 
 param = log([VAR0; NU0; 1/RHO]);
 
-end
+end % function stk_materncov_iso_defaultparam

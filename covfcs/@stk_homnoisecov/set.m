@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,29 +25,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = set(cov, propname, value)
+function cov = set (cov, propname, value)
 
 switch propname,
     
     case 'cparam' % FIXME: check
-        cov.prop.variance = exp(value);
+        cov.prop.variance = exp (value);
         
     case 'variance',
         cov.prop.variance = value;
         
     case 'varfun'
         errmsg = 'Property varfun cannot be set directly.';
-        stk_error(errmsg, 'SettingReadOnlyProperty');
+        stk_error (errmsg, 'SettingReadOnlyProperty');
         
     case {'x', 'v'}
-        if ~isempty(value)
-            errmsg = sprintf('Property ''%s'' is immutable.', propname);
-            stk_error(errmsg, 'SettingImmutableProperty');
+        if ~ isempty (value)
+            errmsg = sprintf ('Property ''%s'' is immutable.', propname);
+            stk_error (errmsg, 'SettingImmutableProperty');
         end
         
     otherwise, % name
-        cov.stk_hetnoisecov = set(cov.stk_hetnoisecov, propname, value);
+        cov.stk_hetnoisecov = set (cov.stk_hetnoisecov, propname, value);
         
 end % switch
 
-end % stk_homnoisecov.stk_set_param
+end % function set

@@ -25,7 +25,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function param = stk_materncov_iso_setparam(param, idx, value)
+function param = stk_materncov_iso_setparam (param, idx, value)
 
 switch class(idx),
     
@@ -51,4 +51,4 @@ switch class(idx),
         
 end
 
-end % function stk_materncov_iso_getparam
+end % function stk_materncov_iso_setparam

@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,27 +25,27 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [lb, ub] = stk_get_defaultbounds(cov, cparam0, z)
+function [lb, ub] = stk_get_defaultbounds (cov, cparam0, z)
 
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if nargin > 1 && ~isempty(cparam0)
-    cov = set(cov, 'cparam', cparam0); % raise an error
+if nargin > 1 && ~ isempty (cparam0)
+    cov = set (cov, 'cparam', cparam0); % raise an error
 end
 
-if nargin < 3 || isempty(z)
+if nargin < 3 || isempty (z)
     empirical_variance = 1.0;
 else
-    empirical_variance = var(double(z));
+    empirical_variance = var (double (z));
 end
 
 TOLVAR = 5.0;
 
 % bounds for the logvariance parameter
-lnv0 = log(cov.prop.variance);
-lb = min(log(empirical_variance), lnv0) - TOLVAR;
-ub = max(log(empirical_variance), lnv0) + TOLVAR;
+lnv0 = log (cov.prop.variance);
+lb = min (log (empirical_variance), lnv0) - TOLVAR;
+ub = max (log (empirical_variance), lnv0) + TOLVAR;
 
 end % function stk_get_defaultbounds

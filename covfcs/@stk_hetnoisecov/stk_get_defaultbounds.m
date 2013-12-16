@@ -1,6 +1,6 @@
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -25,14 +25,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [lb, ub] = stk_get_defaultbounds(cov, cparam0, z) %#ok<INUSD>
+function [lb, ub] = stk_get_defaultbounds (cov, cparam0, z) %#ok<INUSD>
 
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if nargin > 1 && ~isempty(cparam0)
-    set(cov, 'cparam', cparam0); % raise an error
+if nargin > 1 && ~ isempty (cparam0)
+    set (cov, 'cparam', cparam0); % raise an error
 end
 
 lb = [];

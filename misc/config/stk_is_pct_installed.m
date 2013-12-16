@@ -4,7 +4,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -28,16 +28,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function pct_found = stk_is_pct_installed()
+function pct_found = stk_is_pct_installed ()
 
 persistent b;
 
-if isempty(b),
+if isempty (b),
     
-    b = ~isempty(ver('distcomp')) && (exist('matlabpool','file')==2);
+    b = ~ isempty (ver ('distcomp')) && (exist ('matlabpool','file') == 2);
     
-    mlock();
+    mlock ();
     
 end
 
 pct_found = b;
+
+end % function stk_is_pct_installed
