@@ -1,5 +1,11 @@
 2013-12-19  Julien Bect  <julien.bect@supelec.fr>
 
+	Minimalist support for linear indexing on dataframes.
+
+	* utils/arrays/@stk_dataframe/subsref.m: modified
+	* utils/arrays/@stk_dataframe/subsasgn.m: modified
+	* examples/02_design_of_experiments/stk_example_doe03.m: modified
+
 	Overload reshape for stk_dataframe objects.
 
 	* utils/arrays/@stk_dataframe/reshape.m: new function
