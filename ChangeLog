@@ -1,3 +1,9 @@
+2013-12-19  Julien Bect  <julien.bect@supelec.fr>
+
+	Set row names on the output of stk_generate_samplepaths.
+
+	* utils/stk_generate_samplepaths.m: modified
+
 2013-12-06  Julien Bect  <julien.bect@supelec.fr>
 
 	Thicker lines in examples kb01 and kb02.
