@@ -50,28 +50,37 @@
 function zsim = stk_generate_samplepaths (model, xt, nb_paths)
 
 if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 if nargin < 3,
     nb_paths = 1;
 end
 
-% covariance matrix
+% Cholesky factorization of the covariance matrix
 K = stk_make_matcov (model, xt);
-
-% Cholesky factorization, once and for all
 V = chol (K);
 
 % generates samplepaths
 zsim_data = V' * randn (size (K, 1), nb_paths);
 
-% store the result in a dataframe
-zsim_varnames = arrayfun (@(i)(...
+% output column names
+zsim_colnames = arrayfun (@(i)(...
     sprintf ('z%d', i)), 1:nb_paths, 'UniformOutput', false);
-zsim = stk_dataframe (zsim_data, zsim_varnames);
+
+% output row names
+try
+    zsim_rownames = xt.rownames;
+catch
+    zsim_rownames = {};
+end
+
+% store the result in a dataframe
+zsim = stk_dataframe (zsim_data, zsim_colnames, zsim_rownames);
 
 end % function stk_generate_samplepaths
+
+%#ok<*CTCH>
 
 
 %!shared model xt n nb_paths
