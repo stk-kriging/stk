@@ -221,6 +221,18 @@ end % function subsasgn
 
 %!assert (isequal (double (x(:, :)), [1 13; 4 12]));
 
+%!test  % assignment to a variable that doesn't exist
+%! A = stk_dataframe (7.1);
+%! clear B;  B(2) = A;
+%! assert (strcmp (class (B), 'stk_dataframe'))
+%! assert (isequal (B.data, [0 7.1]));
+
+%!test  % repmat
+%! x = stk_dataframe (1);
+%! y = repmat (x, 2, 3);
+%! assert (isa (y, 'stk_dataframe'));
+%! assert (isequal (y.data, ones (2, 3)));
+
 %!test
 %! x(:, :) = [];
 %! assert (isempty (x));
