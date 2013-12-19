@@ -1,5 +1,9 @@
 2013-12-19  Julien Bect  <julien.bect@supelec.fr>
 
+	Overload reshape for stk_dataframe objects.
+
+	* utils/arrays/@stk_dataframe/reshape.m: new function
+
 	Set row names on the output of stk_generate_samplepaths.
 
 	* utils/stk_generate_samplepaths.m: modified
