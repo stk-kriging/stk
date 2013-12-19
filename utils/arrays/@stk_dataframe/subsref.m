@@ -34,53 +34,36 @@ switch idx(1).type
         
         if length(idx) ~= 1
             
-            stk_error('Illegal indexing.', 'IllegalIndexing');
+            stk_error ('Illegal indexing.', 'IllegalIndexing');
             
         else % ok, only one level of indexing
             
-            [n, d] = size (x);
             L = length (idx(1).subs);
             
-            if d == 1, % univariate dataframe
+            if L == 1,  % linear indexing
                 
-                if L == 1,
-                    % linear indexing allowed for univariate dataframes
-                    I = idx(1).subs{1};
-                    J = 1;
-                else
-                    % general case: matrix-style indexing expected
-                    if L ~= 2,
-                        stk_error(['Illegal indexing for a univariate ' ...
-                            'stk_dataframe object.'], 'IllegalIndexing');
-                    else
-                        I = idx(1).subs{1};
-                        J = idx(1).subs{2};
-                    end
+                t = subsref (x.data, idx);
+                
+            elseif L == 2,  % matrix-style indexing
+                
+                I = idx(1).subs{1};
+                J = idx(1).subs{2};
+                
+                c = get (x, 'colnames');
+                if ~ isempty (c),
+                    c = c(1, J);
                 end
                 
-            else % multivariate dataframe: matrix-style indexing expected
-                
-                if L ~= 2,
-                    stk_error(['multivariate stk_dataframe objects only ' ...
-                        'support matrix-style indexing.'], 'IllegalIndexing');
-                else
-                    I = idx(1).subs{1};
-                    J = idx(1).subs{2};
+                r = get (x, 'rownames');
+                if ~ isempty (r),
+                    r = r(I, 1);
                 end
                 
+                t = stk_dataframe (x.data(I, J), c, r);
+                
+            else
+                stk_error ('Illegal indexing.', 'IllegalIndexing');
             end
-            
-            c = get (x, 'colnames');
-            if ~ isempty (c),
-                c = c(1, J);
-            end
-            
-            r = get (x, 'rownames');
-            if ~ isempty (r),
-                r = r(I, 1);
-            end
-            
-            t = stk_dataframe (x.data(I, J), c, r);
             
         end
         

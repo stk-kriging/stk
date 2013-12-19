@@ -28,6 +28,19 @@
 
 function x = subsasgn(x, idx, val)
 
+if ~ isa (x, 'stk_dataframe')
+    if isempty (x)
+        % this is required to support B(idx) = D if B does not exist and D is
+        % an stk_dataframe (which, in turn, is required to make repmat work...)
+        x_data = subsasgn ([], idx, val.data);
+        x = stk_dataframe (x_data);
+    else
+        % we're assigning a dataframe (val) to something else
+        x = subsasgn(x, idx, val.data);
+    end
+    return
+end
+
 switch idx(1).type
     
     case '()'
@@ -38,70 +51,69 @@ switch idx(1).type
             
         else % ok, only one level of indexing
             
-            [n, d] = size(x.data);
-            L = length(idx(1).subs);
+            [n, d] = size (x.data);
             
-            if (d == 1) && ~((L == 1) || (L == 2))
+            % one or two indices, but not more than that
+            L = length (idx(1).subs);
+            if L > 2
+                stk_error('Illegal indexing.', 'IllegalIndexing');
+            end
+            
+            val = double (val);
+            
+            if ~ isempty (val)  % assignment
                 
-                stk_error(['Illegal indexing for a univariate stk_dataframe' ...
-                    'object.'], 'IllegalIndexing');
+                x.data = subsasgn(x.data, idx, val);
                 
-            elseif (d > 1) && (L ~= 2)
+                [n1, d1] = size(x.data);
+                if (n1 > n) && ~ isempty (x.rownames)
+                    x.rownames = vertcat(x.rownames, repmat({''}, n1 - n, 1));
+                end
+                if (d1 > d) && ~ isempty (x.colnames)
+                    x.colnames = horzcat(x.colnames, repmat({''}, 1, d1 - d));
+                end
                 
-                stk_error(['multivariate stk_dataframe objects only support ' ...
-                    'matrix-style indexing.'], 'IllegalIndexing');
+            else  % assignment rhs is empty: deletion
                 
-            else % ok, legal indexing
-                
-                val = double(val);
-                
-                if ~isempty(val)
-                    
-                    x.data = subsasgn(x.data, idx, val);
-                    
-                    [n1, d1] = size(x.data);
-                    if (n1 > n) && ~ isempty (x.rownames)
-                        x.rownames = vertcat(x.rownames, repmat({''}, n1 - n, 1));
-                    end
-                    if (d1 > d) && ~ isempty (x.colnames)
-                        x.colnames = horzcat(x.colnames, repmat({''}, 1, d1 - d));
-                    end
-                    
-                else % assignment rhs is empty
-                    
-                    I = idx(1).subs{1};
-                    
-                    if L > 1
-                        J = idx(1).subs{2};
-                    else
+                if L == 1,  % linear indexing
+                    if d == 1,
+                        I = idx(1).subs{1};
                         J = 1;
-                    end
-                    
-                    remove_columns = (strcmp(I, ':') ...
-                        || ((n == 1) && isequal(I, 1)));
-                    remove_rows = (strcmp(J, ':') ...
-                        || ((d == 1) && isequal(J, 1)));
-                    
-                    if ~ (remove_columns || remove_rows)
-                        
+                    elseif n == 1,
+                        I = 1;
+                        J = idx(1).subs{1};
+                    else
                         stk_error('Illegal indexing.', 'IllegalIndexing');
-                        
-                    elseif remove_columns
-                        
-                        x.data(:, J) = [];
-                        if ~ isempty(x.colnames)
-                            x.colnames(J) = [];
-                        end
-                        
-                    else % remove_rows
-                        
-                        x.data(I, :) = [];
-                        
-                        if ~ isempty (x.rownames)
-                            x.rownames(I) = [];
-                        end
-                        
                     end
+                else
+                    I = idx(1).subs{1};
+                    J = idx(1).subs{2};
+                end
+                
+                remove_columns = (strcmp(I, ':') ...
+                    || ((n == 1) && isequal(I, 1)));
+                remove_rows = (strcmp(J, ':') ...
+                    || ((d == 1) && isequal(J, 1)));
+                
+                if ~ (remove_columns || remove_rows)
+                    
+                    stk_error('Illegal indexing.', 'IllegalIndexing');
+                    
+                elseif remove_columns
+                    
+                    x.data(:, J) = [];
+                    if ~ isempty(x.colnames)
+                        x.colnames(J) = [];
+                    end
+                    
+                else % remove_rows
+                    
+                    x.data(I, :) = [];
+                    
+                    if ~ isempty (x.rownames)
+                        x.rownames(I) = [];
+                    end
+                    
                 end
             end
         end
@@ -197,12 +209,17 @@ end % function subsasgn
 %! assert (isequal (double (x), [1 9; 4 12]))
 %! assert (isequal (x.rownames, {'a'; 'c'}))
 
-%!test
+%!test  % change one value with matrix-style indexing
 %! x(1, 2) = 11;
 %! assert (isequal (size (x), [2 2]))
 %! assert (isequal (double (x), [1 11; 4 12]))
 
-%!assert (isequal (double (x(:, :)), [1 11; 4 12]));
+%!test  % change one value with linear indexing
+%! x(3) = 13;
+%! assert (isequal (size (x), [2 2]))
+%! assert (isequal (double (x), [1 13; 4 12]))
+
+%!assert (isequal (double (x(:, :)), [1 13; 4 12]));
 
 %!test
 %! x(:, :) = [];
@@ -211,7 +228,6 @@ end % function subsasgn
 %!error x{1} = 2;
 %!error x(1, 2) = [];
 %!error x(1, 2).a = 3;
-%!error x(3) = 2;
 
 %--- tests with a univariate dataframe ----------------------------------------
 
