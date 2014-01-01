@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -68,23 +68,10 @@ stk_set_root (STK_ROOT);
 if isoctave,
     fprintf ('Using Octave %s\n', OCTAVE_VERSION);
     % some Octave-specific configuration
-    stk_octave_config;
+    stk_configure_octave;
 else
     fprintf ('Using Matlab %s\n', version);
-end
-
-%=== Check for presence of the Parallel Computing Toolbox
-
-fprintf ('Parallel Computing toolbox... ');
-if isoctave,
-    fprintf ('not available in Octave.\n');
-else
-    pct_found = stk_is_pct_installed;
-    if pct_found,
-        fprintf ('found.\n');
-    else
-        fprintf ('not found.\n');
-    end
+    stk_configure_matlab;
 end
 
 %=== Select optimizers for stk_param_estim

@@ -1,8 +1,8 @@
-% STK_OCTAVECONFIG_CHECKGLPK checks that the GLPK library is installed.
+% STK_CONFIGURE_OCTAVE performs some Octave-specific configuration of STK
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,7 +26,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_octave_config ()
+function stk_configure_octave ()
+
+if ~ isoctave,
+    error ('This function is for use with Octave only');
+end
 
 % We need to check that the GLPK library is installed. This is the case
 % in most recent releases of Octave, but some older releases do not contain
@@ -69,7 +73,7 @@ if strcmp (v(1:4), '3.2.')
         (stk_get_root, 'misc', 'dist', 'private'));
 end
 
-end % function stk_octave_config
+end % function stk_configure_octave
 
 
 %%%%%%%%%%%%%%%%%%%%%%
