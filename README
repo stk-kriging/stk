@@ -124,14 +124,14 @@ o Content
 
 References
 
-J. Bect, D. Ginsbourger, L. Li, V. Picheny, and E. Vazquez.   Sequential
+J. Bect, D. Ginsbourger, L. Li, V. Picheny, and E. Vazquez.  Sequential
    design of computer experiments for the estimation of a probability of
-   failure. Statistics and Computing, pages 1-21, 2011. DOI:
+   failure.  Statistics and Computing, pages 1-21, 2011.  DOI:
    10.1007/s11222-011-9241-4.
 
-D. R. Jones, M. Schonlau, and J. William.  Efficient global optimization
-   of expensive black-box functions. Journal of Global Optimization,
-   13(4):455-492, 1998.
+D. R. Jones, M. Schonlau, and William J. Welch.  Efficient global
+   optimization of expensive black-box functions.  Journal of Global
+   Optimization, 13(4):455-492, 1998.
 
 
 o Ways to get help, report bugs, ask for new features...
