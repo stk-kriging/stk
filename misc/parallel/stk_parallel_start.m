@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,21 +26,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function eng = stk_parallel_start()
+function eng = stk_parallel_start ()
 
-eng = stk_parallel_engine_get();
+eng = stk_parallel_engine_get ();
 
-if strcmp(class(eng), 'stk_parallel_engine_none') %#ok<STISA>
+if strcmp (class (eng), 'stk_parallel_engine_none') %#ok<STISA>
     
     % use Mathworks' PCT if available
-    if stk_is_pct_installed()        
-        eng = stk_parallel_engine_parfor();
-        stk_parallel_engine_set(eng);
+    if stk_parallel_haspct ()
+        eng = stk_parallel_engine_parfor ();
+        stk_parallel_engine_set (eng);
     end
     
 else
     
-    warning('A parallel computing engine is already started (or so it seems).');
+    warning (['A parallel computing engine ' ...
+        'is already started (or so it seems).']);
     
 end
 

@@ -1,10 +1,11 @@
-% STK_GET_ROOT retrieves STK's root folder
+% STK_CONFIG_GETROOT returns STK's root folder
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:   Julien Bect        <julien.bect@supelec.fr>
+%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,9 +27,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function root = stk_get_root ()
+function root = stk_config_getroot ()
 
-% the current root is stored in a persistent variable in stk_set_root
-root = stk_set_root ();
+try
+    
+    % This will raise an error if STK is not in the search path
+    root = fileparts (which ('stk_test'));
+    
+    % Extract root folder
+    while ~ exist (fullfile (root, 'stk_init.m'), 'file')
+        root = fileparts (root);
+    end
+    
+catch
+    
+    root = [];
+    
+end
 
-end % function stk_get_root
+end % function stk_config_getroot

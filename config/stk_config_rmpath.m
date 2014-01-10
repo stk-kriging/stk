@@ -1,10 +1,11 @@
-% STK_CONFIGURE_MATLAB performs some Matlab-specific configuration of STK
+% STK_CONFIG_RMPATH removes a copy of STK from the search path
 
 % Copyright Notice
 %
-%    Copyright (C) 2014 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:   Julien Bect        <julien.bect@supelec.fr>
+%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,19 +27,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_configure_matlab ()
+function stk_config_rmpath (root)
 
-if ~ ismatlab,
-    error ('This function is for use with Matlab only');
+if nargin == 0,
+    root = stk_config_getroot ();
 end
 
-% Check for presence of the Parallel Computing Toolbox
-fprintf ('Parallel Computing toolbox... ');
-pct_found = stk_is_pct_installed ();
-if pct_found,
-    fprintf ('found.\n');
-else
-    fprintf ('not found.\n');
-end
+warning ('off','MATLAB:rmpath:DirNotFound');
+path = stk_config_path (root);
+rmpath (path{:});
+warning ('on','MATLAB:rmpath:DirNotFound');
 
-end % function stk_configure_matlab
+end % function stk_config_rmpath

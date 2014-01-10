@@ -1,3 +1,67 @@
+2014-01-10  Julien Bect  <julien.bect@supelec.fr>
+
+	First draft for the automatic generation of an Octave package.
+
+	* admin/make_octave_package.py: new script
+	* etc/octave-pkg: new folder
+	* etc/octave-pkg/pre_install.m: new function
+	* etc/octave-pkg/PKG_DEL.m: new function
+	* etc/octave-pkg/PKG_ADD.m: new function
+
+	Create a misc folder for optimization related functions.
+
+	* misc/optim: new folder
+	* config/stk_select_optimizer.m: moved to misc/optim
+	* config/stk_config_addpath.m: modified
+
+	Rename stk_configure -> stk_config_setup
+
+	* misc/stk_configure.m: renamed
+	* misc/stk_config_setup.m: formerly known as stk_configure.m
+
+	Move 'config' up one level and rewrite part of the configuration system.
+
+	* config: formerly known as misc/config
+	* config/stk_configure.m: new function
+	* config/stk_config_addpath.m: replacement for stk_set_root.m
+	* config/stk_config_getroot.m: replacement for stk_get_root.m
+	* config/stk_config_path.m: replacement for stk_path.m
+	* config/stk_config_rmpath.m: new function
+	* misc/config: moved to config
+	* misc/config/stk_set_root.m: moved/renamed/modified
+	* misc/config/stk_get_root.m: moved/renamed/modified
+	* misc/config/stk_path.m: moved/renamed/modified
+	* misc/config/stk_configure_octave.m: moved/modified
+	* misc/config/stk_version.m: moved/modified
+	* misc/config/stk_configure_matlab.m: removed/merged in stk_configure
+	* misc/config/stk_configure_octave.m: removed/merged in stk_configure
+	* misc/config/stk_select_optimizer.m: moved
+	* stk_init.m: modified
+	* stk_build.m: modified
+	* misc/test/stk_runexamples.m: modified
+	* misc/test/stk_runtests.m: modified
+	* misc/mole/matlab/page_screen_output.m: new function
+	* admin/stk_make_htmldoc.m: modified
+
+	Rename stk_compile_all -> stk_build.
+
+	* config/stk_compile_all.m: moved/renamed
+	* stk_build: formerly known as stk_compile_all.m
+
+	Rename stk_is_fmincon_available -> stk_optim_hasfmincon.
+
+	* misc/config/stk_is_fmincon_available.m: moved/renamed
+	* misc/optim/stk_optim_hasfmincon.m: formerly known as stk_is_fmincon_available.m
+
+	Rename stk_is_pct_installed -> stk_parallel_haspct.
+
+	* misc/config/stk_is_pct_installed.m: moved/renamed
+	* misc/parallel/stk_parallel_haspct.m: formerly known as stk_is_pct_installed.m
+
+	Remove obsolete function stk_is_octave_in_use.
+
+	* misc/config/stk_is_octave_in_use.m: deleted
+
 2014-01-01  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_init: move some Matlab-specific configuration to a dedicated function.
