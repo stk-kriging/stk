@@ -31,12 +31,16 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%=== Turn output pagination OFF
+% Add STK folders to the path
+root = fileparts (mfilename ('fullpath'));
+addpath (fullfile (root, 'config'));
+addpath (fullfile (root, 'misc', 'mole', 'common'));
+stk_config_addpath (root);  clear root;
 
-more off
+% Turn output pagination OFF
+pso_state = page_screen_output (0);
 
-%=== Displaying the Copying Permission Statement
-
+% Display the Copying Permission Statement
 disp ('                                                                     ');
 disp ('=====================================================================');
 disp ('                                                                     ');
@@ -55,52 +59,23 @@ disp ('along with STK.  If not, see <http://www.gnu.org/licenses/>.         ');
 disp ('                                                                     ');
 disp ('=====================================================================');
 disp ('                                                                     ');
+fflush (stdout);
 
-%=== Add STK folders to the path
-
-STK_ROOT = fileparts (mfilename ('fullpath'));
-addpath (fullfile (STK_ROOT, 'misc', 'config'));
-addpath (fullfile (STK_ROOT, 'misc', 'mole', 'common'));
-stk_set_root (STK_ROOT);
-
-%=== Check which of Matlab or Octave is in use
-
-if isoctave,
-    fprintf ('Using Octave %s\n', OCTAVE_VERSION);
-    % some Octave-specific configuration
-    stk_configure_octave;
-else
-    fprintf ('Using Matlab %s\n', version);
-    stk_configure_matlab;
+% Build MEX-files
+if ~ (exist ('STK_SKIP_BUILDMEX', 'var') && STK_SKIP_BUILDMEX)
+    % To force recompilation of all MEX-files, use stk_build (true);
+    stk_build;
 end
 
-%=== Select optimizers for stk_param_estim
-
-stk_select_optimizer;
-
-%=== Build MEX-files (if necessary)
-
-% to force recompilation of all MEX-files, use stk_compile_all(true);
-stk_compile_all;
-
-%=== Disable a warning in stk_predict
-
-warning ('off', 'STK:stk_predict:NegativeVariancesSetToZero');
-
-%=== Options
+% Configure STK with default settings
+stk_config_setup;
 
 % Uncomment this line if you want to see a lot of details about the internals
 % of stk_dataframe and stk_factorialdesign objects:
 % stk_options_set ('stk_dataframe', 'disp_format', 'verbose');
 
-%=== Cleanup
-
-fprintf ('\n');
-
-clear here STK_ROOT pct_found fmincon_found octave_in_use s ans
-
-%=== Ways to get help, report bugs, ask for new features...
-
+% Ways to get help, report bugs, ask for new features...
+disp ('                                                                     ');
 disp ('=====================================================================');
 disp ('                                                                     ');
 disp ('Use the "help" mailing-list:                                         ');
@@ -112,7 +87,11 @@ disp ('to ask for help on STK, and the ticket manager:                      ');
 disp ('                                                                     ');
 disp ('   https://sourceforge.net/p/kriging/tickets                         ');
 disp ('                                                                     ');
-disp ('to report bugs or ask for new features.                              ');    
+disp ('to report bugs or ask for new features.                              ');
 disp ('                                                                     ');
 disp ('=====================================================================');
 disp ('                                                                     ');
+fflush (stdout);
+
+% Restore PSO state
+page_screen_output (pso_state);  clear pso_state ans;

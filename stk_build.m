@@ -1,8 +1,8 @@
-% STK_COMPILE_ALL compile all MEX-files in the STK toolbox
+% STK_BUILD compiles all MEX-files in the STK
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,43 +26,56 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_compile_all (force_recompile)
+function stk_build (force_recompile, src, dst)
 
-root = stk_get_root ();
+if nargin < 1,
+    force_recompile = false;
+end
+
+if nargin < 2,
+    % default: assume that STK's root has been set, and build from there
+    src = stk_config_getroot ();
+end
+
+if nargin < 3,
+    % default: build in place
+    dst = src;
+end
+
 here = pwd ();
 
-opts.force_recompile = ~((nargin == 0) || ~force_recompile);
-opts.include_dir = fullfile(root, 'misc', 'include');
+opts.force_recompile = force_recompile;
+opts.include_dir = fullfile (src, 'misc', 'include');
 
-src_dir = fullfile (root, 'misc', 'dist', 'private');
-dst_dir = src_dir;
-stk_compile (dst_dir, src_dir, opts, 'stk_dist_matrixx');
-stk_compile (dst_dir, src_dir, opts, 'stk_dist_matrixy');
-stk_compile (dst_dir, src_dir, opts, 'stk_dist_pairwise');
-stk_compile (dst_dir, src_dir, opts, 'stk_filldist_discr_mex');
-stk_compile (dst_dir, src_dir, opts, 'stk_mindist_mex');
-stk_compile (dst_dir, src_dir, opts, 'stk_gpquadform_matrixy');
-stk_compile (dst_dir, src_dir, opts, 'stk_gpquadform_matrixx');
-stk_compile (dst_dir, src_dir, opts, 'stk_gpquadform_pairwise');
+relpath = fullfile ('misc', 'dist', 'private');
+stk_compile (dst, src, relpath, opts, 'stk_dist_matrixx');
+stk_compile (dst, src, relpath, opts, 'stk_dist_matrixy');
+stk_compile (dst, src, relpath, opts, 'stk_dist_pairwise');
+stk_compile (dst, src, relpath, opts, 'stk_filldist_discr_mex');
+stk_compile (dst, src, relpath, opts, 'stk_mindist_mex');
+stk_compile (dst, src, relpath, opts, 'stk_gpquadform_matrixy');
+stk_compile (dst, src, relpath, opts, 'stk_gpquadform_matrixx');
+stk_compile (dst, src, relpath, opts, 'stk_gpquadform_pairwise');
 
-src_dir = fullfile (root, 'utils', 'arrays', '@stk_dataframe', 'private');
-dst_dir = src_dir;
-stk_compile (dst_dir, src_dir, opts, 'get_column_number');
+relpath = fullfile ('utils', 'arrays', '@stk_dataframe', 'private');
+stk_compile (dst, src, relpath, opts, 'get_column_number');
 
-src_dir = fullfile (root, 'sampling');
-dst_dir = src_dir;
-stk_compile (dst_dir, src_dir, opts, 'stk_sampling_vdc_rr2');
+relpath = 'sampling';
+stk_compile (dst, src, relpath, opts, 'stk_sampling_vdc_rr2');
 
 % add other MEX-files to be compiled here
 
 cd (here);
 
-end % function stk_compile_all
+end % function stk_build
 
 
-function stk_compile (dst_dir, src_dir, opts, mexname, varargin)
+function stk_compile (dst, src, relpath, opts, mexname, varargin)
 
-fprintf ('MEX-file %s... ', mexname);
+fprintf ('[stk_build] MEX-file %s... ', mexname);
+
+src_dir = fullfile (src, relpath);
+dst_dir = fullfile (dst, relpath);
 
 mex_filename = [mexname '.' mexext];
 mex_fullpath = fullfile (dst_dir, mex_filename);
@@ -84,10 +97,13 @@ if compile,
     
     cd (src_dir);
     
-    include = sprintf('-I%s', opts.include_dir);
+    include = sprintf ('-I%s', opts.include_dir);
     mex (src_filename, include, varargin{:});
     
-    if ~strcmp (src_dir, dst_dir)
+    if ~ strcmp (src_dir, dst_dir)
+        if ~ exist (dst_dir, 'dir')
+            mkdir (dst_dir);
+        end
         movefile (fullfile (src_dir, mex_filename), dst_dir);
     end
     
@@ -98,8 +114,9 @@ if fid ~= -1,
     fprintf ('ok.\n');
     fclose (fid);
 else
-    fprintf ('not found.\n\n');
-    error ('compilation error ?\n');
+    error ('compilation error ?');
 end
+
+fflush (stdout);
 
 end % function stk_compile

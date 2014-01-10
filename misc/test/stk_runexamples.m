@@ -29,7 +29,7 @@
 function stk_runexamples()
 
 % run all examples, recursively
-example_dir = fullfile(stk_get_root(), 'examples');
+example_dir = fullfile (stk_config_getroot (), 'examples');
 [scriptname, err] = stk_runexamples_recurs_(example_dir);
 
 % display a summary

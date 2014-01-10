@@ -49,7 +49,7 @@ function stk_runtests (directory)
 
 if nargin == 0
     % scan all STK directories if no input argument is provided
-    dirs = stk_path();
+    dirs = stk_config_path ();
 else
     % otherwise, directory is expected to be a valid directory name
     if ~exist(directory, 'dir')

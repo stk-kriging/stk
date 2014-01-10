@@ -1,12 +1,10 @@
-% STK_IS_FMINCON_AVAILABLE returns true if fmincon is available
-%
-% CALL: fmincon_available = stk_is_fmincon_available()
+% PAGE_SCREEN_OUTPUT controls the state of the pager
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -28,18 +26,23 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function fmincon_available = stk_is_fmincon_available ()
+function old_val = page_screen_output (new_val)
 
-persistent b;
-
-if isempty (b),
-    
-    b = (exist ('fmincon','file') == 2);
-    
-    mlock ();
-    
+switch get (0, 'More')
+    case 'on',
+        old_val = 1;
+    case 'off',
+        old_val = 0;
+    otherwise
+        error ('Unexpected value returned by get (0, ''More'').');
 end
 
-fmincon_available = b;
-
-end % function stk_is_fmincon_available
+if nargin > 0,
+    if new_val,
+        more on;
+    else
+        more off;
+    end
+end
+        
+end % function page_screen_output

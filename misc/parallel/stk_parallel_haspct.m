@@ -1,8 +1,10 @@
-% STK_MAKE_HTMLDOC generates the HTML documentation for the STK.
+% STK_PARALLEL_HASPCT returns true if the Mathworks' PCT is available
+%
+% CALL: pct_found = stk_parallel_haspct ()
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,21 +28,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-STK_ROOT = stk_config_getroot ();
+function pct_found = stk_parallel_haspct ()
 
-addpath (fullfile (STK_ROOT, 'admin', 'm2html'));
+persistent b;
 
-% Check that we are running the script from Matlab
-if isoctave,
-    error ('M2HTML is not (yet) working with GNU Octave...');
+if isempty (b),
+    
+    b = ~ isempty (ver ('distcomp')) && (exist ('matlabpool','file') == 2);
+    
+    mlock ();
+    
 end
 
-% Ensure that we are at the root of STK
-cd (STK_ROOT);
+pct_found = b;
 
-% Output directory
-DOC_FOLDER = fullfile (STK_ROOT, 'htmldoc');
-
-% Generate HTML documentation
-m2html ('htmlDir', DOC_FOLDER, 'recursive', 'on', 'graph', 'off', ...
-    'template', 'stk', 'ignoredDir', {'htmldoc', 'matlab', 'admin', 'etc'});
+end % function stk_parallel_haspct
