@@ -135,7 +135,8 @@ try
     assert (isequal (size (D), [n n]));
 catch
     err = lasterror ();
-    if strcmp (err.identifier, 'Octave:undefined-function')
+    if (~ isempty (regexp (err.message, 'stk_dist_matrixx'))) ...
+        && (~ isempty (regexp (err.message, 'undefined')))
         fprintf ('\n\n');
         error (sprintf (['\n\n' ...
             '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n' ...
