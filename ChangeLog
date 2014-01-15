@@ -1,3 +1,9 @@
+2014-01-15  Julien Bect  <julien.bect@supelec.fr>
+
+	Warn Octave users about the problem with MEX-files in privates folders.
+
+	* stk_build.m: modified
+
 2014-01-10  Julien Bect  <julien.bect@supelec.fr>
 
 	First draft for the automatic generation of an Octave package.

@@ -67,6 +67,10 @@ stk_compile (dst, src, relpath, opts, 'stk_sampling_vdc_rr2');
 
 cd (here);
 
+% Octave must be restarted when MEX-files are compiled in private folders
+% (see https://savannah.gnu.org/bugs/?40824)
+if isoctave, warn_about_mexfiles_in_private_folders; end
+
 end % function stk_build
 
 
@@ -120,3 +124,38 @@ end
 fflush (stdout);
 
 end % function stk_compile
+
+
+function warn_about_mexfiles_in_private_folders ()
+
+try
+    n = 5;  d = 2;
+    x = rand (n, n);
+    D = stk_dist (x);  % calls a MEX-file internally
+    assert (isequal (size (D), [n n]));
+catch
+    err = lasterror ();
+    if strcmp (err.identifier, 'Octave:undefined-function')
+        fprintf ('\n\n');
+        error (sprintf (['\n\n' ...
+            '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n' ...
+            '!                                                    !\n' ...
+            '! Some STK functions implemented as MEX-files have   !\n' ...
+            '! just been compiled, but will not be detected until !\n' ...
+            '! Octave is restarted.                               !\n' ...
+            '!                                                    !\n' ...
+            '! We apologize for this inconvenience, which is      !\n' ...
+            '! related to a known Octave bug (bug #40824), that   !\n' ...
+            '! that will hopefully be fixed in the near future.   !\n' ...
+            '! (see https://savannah.gnu.org/bugs/?40824)         !\n' ...
+            '!                                                    !\n' ...          
+            '! Please restart Octave before actually using STK.   !\n' ...
+            '!                                                    !\n' ...
+            '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n' ...
+            '\n']));
+    else
+        rethrow (err);
+    end
+end
+    
+end % function warn_about_mexfiles_in_private_folders
