@@ -1,3 +1,11 @@
+2014-01-16  Julien Bect  <julien.bect@supelec.fr>
+
+	Add size checks to several functions.
+
+	* core/stk_predict.m: modified
+	* paramestim/stk_param_init.m: modified
+	* paramestim/stk_param_estim.m: modified
+
 2014-01-15  Julien Bect  <julien.bect@supelec.fr>
 
 	Warn Octave users about the problem with MEX-files in privates folders.
