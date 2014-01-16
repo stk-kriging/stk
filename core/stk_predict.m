@@ -94,16 +94,21 @@ xt = double (xt);
 
 if strcmp (model.covariance_type, 'stk_discretecov') % use indices
     if isempty (xt)
-        m = size (model.param.K, 1);
-        xt = (1:m)';
+        nt = size (model.param.K, 1);
+        xt = (1:nt)';
     elseif ~ iscolumn (xt)
         warning ('STK:stk_predict:IncorrectSize', 'xt should be a column.');
         xt = xt(:);
+        nt = size (xt, 1);
+    end
+else
+    nt = size (xt, 1);
+    if ~ isequal (size (xt), [nt, size(xi, 2)]),
+        errmsg = 'The size of xt is not correct.';
+        stk_error (errmsg, 'IncorrectSize');
     end
 end
-
-nt = size (xt, 1);
-
+    
 %--- Prepare the output arguments ----------------------------------------------
 
 zp_v = zeros (nt, 1);
