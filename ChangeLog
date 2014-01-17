@@ -1,3 +1,9 @@
+2014-01-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a bug in stk_param_init.
+
+	* paramestim/stk_param_init.m: modified
+
 2014-01-16  Julien Bect  <julien.bect@supelec.fr>
 
 	Add size checks to several functions.
