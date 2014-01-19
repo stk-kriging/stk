@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -57,6 +57,10 @@ stk_compile (dst_dir, src_dir, opts, 'stk_sampling_vdc_rr2');
 
 cd (here);
 
+% Octave must be restarted when MEX-files are compiled in private folders
+% (see https://savannah.gnu.org/bugs/?40824)
+if isoctave, warn_about_mexfiles_in_private_folders; end
+
 end % function stk_compile_all
 
 
@@ -103,3 +107,37 @@ else
 end
 
 end % function stk_compile
+
+
+function warn_about_mexfiles_in_private_folders ()
+
+try
+    n = 5;  d = 2;
+    x = rand (n, n);
+    D = stk_dist (x);  % calls a MEX-file internally
+    assert (isequal (size (D), [n n]));
+catch
+    err = lasterror ();
+    if (~ isempty (regexp (err.message, 'stk_dist_matrixx'))) ...
+        && (~ isempty (regexp (err.message, 'undefined')))
+        fprintf ('\n\n');
+        error (sprintf (['\n\n' ...
+            '!>>>>>> PLEASE RESTART OCTAVE BEFORE USING STK <<<<<<!\n' ...
+            '!                                                    !\n' ...
+            '! Some STK functions implemented as MEX-files have   !\n' ...
+            '! just been compiled, but will not be detected until !\n' ...
+            '! Octave is restarted.                               !\n' ...
+            '!                                                    !\n' ...
+            '! We apologize for this inconvenience, which is      !\n' ...
+            '! related to a known Octave bug (bug #40824), that   !\n' ...
+            '! will hopefully be fixed in the near future.        !\n' ...
+            '! (see https://savannah.gnu.org/bugs/?40824)         !\n' ...
+            '!                                                    !\n' ...          
+            '!>>>>>> PLEASE RESTART OCTAVE BEFORE USING STK <<<<<<!\n' ...
+            '\n']));
+    else
+        rethrow (err);
+    end
+end
+    
+end % function warn_about_mexfiles_in_private_folders

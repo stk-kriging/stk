@@ -20,7 +20,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -46,20 +46,16 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [paramopt, paramlnvopt] = stk_param_estim ...
-    (model, xi, yi, param0, param0lnv)
+    (model, xi, zi, param0, param0lnv)
 
 if nargin > 5,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% size checking: xi, yi
-if size(yi, 1) ~= size(xi, 1),
-    errmsg = 'xi and yi should have the same number of rows.';
-    stk_error(errmsg, 'IncorrectArgument');
-end
-if size(yi, 2) ~= 1,
-    errmsg = 'yi should be a column vector.';
-    stk_error(errmsg, 'IncorrectArgument');
+% size checking: xi, zi
+if ~ isequal (size (zi), [size(xi, 1) 1]),
+    errmsg = 'zi should be a column, with the same number of rows as xi.';
+    stk_error (errmsg, 'IncorrectSize');
 end
 
 % TODO: turn param0 into an optional argument
@@ -88,10 +84,10 @@ else
 end
 
 % TODO: allow user-defined bounds
-[lb, ub] = stk_param_getdefaultbounds(model.covariance_type, param0, xi, yi);
+[lb, ub] = stk_param_getdefaultbounds(model.covariance_type, param0, xi, zi);
 
 if NOISEESTIM
-    [lblnv, ublnv] = get_default_bounds_lnv(model, param0lnv, xi, yi);
+    [lblnv, ublnv] = get_default_bounds_lnv(model, param0lnv, xi, zi);
     lb = [lb ; lblnv];
     ub = [ub ; ublnv];
     u0 = [param0(:); param0lnv];
@@ -101,12 +97,12 @@ end
 
 switch NOISEESTIM
     case false,
-        f = @(u)(f_(model, u, xi, yi));
-        nablaf = @(u)(nablaf_ (model, u, xi, yi));
+        f = @(u)(f_(model, u, xi, zi));
+        nablaf = @(u)(nablaf_ (model, u, xi, zi));
         % note: currently, nablaf is only used with sqp in Octave
     case true,
-        f = @(u)(f_with_noise_(model, u, xi, yi));
-        nablaf = @(u)(nablaf_with_noise_ (model, u, xi, yi));
+        f = @(u)(f_with_noise_(model, u, xi, zi));
+        nablaf = @(u)(nablaf_with_noise_ (model, u, xi, zi));
 end
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
@@ -173,61 +169,61 @@ end % function stk_param_estim ------------------------------------------------
 
 %--- The objective function and its gradient ----------------------------------
 
-function [l, dl] = f_ (model, u, xi, yi)
+function [l, dl] = f_ (model, u, xi, zi)
 
 model.param(:) = u;
 
 if nargout == 1,
-    l = stk_param_relik (model, xi, yi);
+    l = stk_param_relik (model, xi, zi);
 else
-    [l, dl] = stk_param_relik (model, xi, yi);
+    [l, dl] = stk_param_relik (model, xi, zi);
 end
 
 end % function f_
 
 
-function dl = nablaf_ (model, u, xi, yi)
+function dl = nablaf_ (model, u, xi, zi)
 
 model.param(:) = u;
-[l_ignored, dl] = stk_param_relik (model, xi, yi); %#ok<ASGLU>
+[l_ignored, dl] = stk_param_relik (model, xi, zi); %#ok<ASGLU>
 
 end % function nablaf_
 
 
-function [l, dl] = f_with_noise_ (model, u, xi, yi)
+function [l, dl] = f_with_noise_ (model, u, xi, zi)
 
 model.param(:) = u(1:end-1);
 model.lognoisevariance  = u(end);
 
 if nargout == 1,
-    l = stk_param_relik (model, xi, yi);
+    l = stk_param_relik (model, xi, zi);
 else
-    [l, dl, dln] = stk_param_relik (model, xi, yi);
+    [l, dl, dln] = stk_param_relik (model, xi, zi);
     dl = [dl; dln];
 end
 
 end % function f_with_noise_
 
 
-function dl = nablaf_with_noise_ (model, u, xi, yi)
+function dl = nablaf_with_noise_ (model, u, xi, zi)
 
 model.param(:) = u(1:end-1);
 model.lognoisevariance  = u(end);
-[l_ignored, dl, dln] = stk_param_relik (model, xi, yi); %#ok<ASGLU>
+[l_ignored, dl, dln] = stk_param_relik (model, xi, zi); %#ok<ASGLU>
 dl = [dl; dln];
 
 end % function nablaf_with_noise_
 
 
 function [lblnv,ublnv] = get_default_bounds_lnv ... % -------------------------
-    (model, param0lnv, xi, yi) %#ok<INUSL>
+    (model, param0lnv, xi, zi) %#ok<INUSL>
 
 % assume NOISEESTIM
 % constants
 TOLVAR = 0.5;
 
 % bounds for the variance parameter
-empirical_variance = var(yi);
+empirical_variance = var(zi);
 lblnv = log(eps);
 ublnv = log(empirical_variance) + TOLVAR;
 
