@@ -87,7 +87,7 @@ o Content
     Matlab(TM), and  can be automatically configured  with both software
     products. However,  some optional features, such  as the possibility
     to use  parallel computing in  some functions, are not yet available
-    using Octave.
+    when using Octave.
 
     The STK is free software and  is released under the terms of the GNU
     General Public License, version 3, as published by the Free Software
