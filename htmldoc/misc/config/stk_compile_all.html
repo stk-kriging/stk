@@ -41,14 +41,14 @@ This function is called by:
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <ul style="list-style-image:url(../../octave-sombrero.png)">
-<li><a href="#_sub1" class="code">function stk_compile (dst_dir, src_dir, opts, mexname, varargin)</a></li></ul>
+<li><a href="#_sub1" class="code">function stk_compile (dst_dir, src_dir, opts, mexname, varargin)</a></li><li><a href="#_sub2" class="code">function warn_about_mexfiles_in_private_folders ()</a></li></ul>
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../../up.png"></a></h2>
 <div class="fragment"><pre>0001 <span class="comment">% STK_COMPILE_ALL compile all MEX-files in the STK toolbox</span>
 0002 
 0003 <span class="comment">% Copyright Notice</span>
 0004 <span class="comment">%</span>
-0005 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0005 <span class="comment">%    Copyright (C) 2011-2014 SUPELEC</span>
 0006 <span class="comment">%</span>
 0007 <span class="comment">%    Author:  Julien Bect  &lt;julien.bect@supelec.fr&gt;</span>
 0008 
@@ -103,56 +103,94 @@ This function is called by:
 0057 
 0058 cd (here);
 0059 
-0060 <span class="keyword">end</span> <span class="comment">% function stk_compile_all</span>
-0061 
-0062 
-0063 <a name="_sub1" href="#_subfunctions" class="code">function stk_compile (dst_dir, src_dir, opts, mexname, varargin)</a>
-0064 
-0065 fprintf (<span class="string">'MEX-file %s... '</span>, mexname);
+0060 <span class="comment">% Octave must be restarted when MEX-files are compiled in private folders</span>
+0061 <span class="comment">% (see https://savannah.gnu.org/bugs/?40824)</span>
+0062 <span class="keyword">if</span> isoctave, <a href="#_sub2" class="code" title="subfunction warn_about_mexfiles_in_private_folders ()">warn_about_mexfiles_in_private_folders</a>; <span class="keyword">end</span>
+0063 
+0064 <span class="keyword">end</span> <span class="comment">% function stk_compile_all</span>
+0065 
 0066 
-0067 mex_filename = [mexname <span class="string">'.'</span> mexext];
-0068 mex_fullpath = fullfile (dst_dir, mex_filename);
-0069 
-0070 src_filename = [mexname <span class="string">'.c'</span>];
-0071 src_fullpath = fullfile (src_dir, src_filename);
-0072 
-0073 dir_src = dir (src_fullpath);
-0074 dir_mex = dir (mex_fullpath);
-0075 
-0076 <span class="keyword">if</span> isempty (dir_src)
-0077     stk_error (sprintf (<span class="string">'File %s not found'</span>, src_filename), <span class="string">'FileNotFound'</span>);
-0078 <span class="keyword">end</span>
+0067 <a name="_sub1" href="#_subfunctions" class="code">function stk_compile (dst_dir, src_dir, opts, mexname, varargin)</a>
+0068 
+0069 fprintf (<span class="string">'MEX-file %s... '</span>, mexname);
+0070 
+0071 mex_filename = [mexname <span class="string">'.'</span> mexext];
+0072 mex_fullpath = fullfile (dst_dir, mex_filename);
+0073 
+0074 src_filename = [mexname <span class="string">'.c'</span>];
+0075 src_fullpath = fullfile (src_dir, src_filename);
+0076 
+0077 dir_src = dir (src_fullpath);
+0078 dir_mex = dir (mex_fullpath);
 0079 
-0080 compile = opts.force_recompile || (isempty(dir_mex)) <span class="keyword">...</span>
-0081     || (dir_mex.datenum &lt; dir_src.datenum);
-0082 
-0083 <span class="keyword">if</span> compile,
-0084     
-0085     cd (src_dir);
-0086     
-0087     include = sprintf(<span class="string">'-I%s'</span>, opts.include_dir);
-0088     mex (src_filename, include, varargin{:});
-0089     
-0090     <span class="keyword">if</span> ~strcmp (src_dir, dst_dir)
-0091         movefile (fullfile (src_dir, mex_filename), dst_dir);
-0092     <span class="keyword">end</span>
+0080 <span class="keyword">if</span> isempty (dir_src)
+0081     stk_error (sprintf (<span class="string">'File %s not found'</span>, src_filename), <span class="string">'FileNotFound'</span>);
+0082 <span class="keyword">end</span>
+0083 
+0084 compile = opts.force_recompile || (isempty(dir_mex)) <span class="keyword">...</span>
+0085     || (dir_mex.datenum &lt; dir_src.datenum);
+0086 
+0087 <span class="keyword">if</span> compile,
+0088     
+0089     cd (src_dir);
+0090     
+0091     include = sprintf(<span class="string">'-I%s'</span>, opts.include_dir);
+0092     mex (src_filename, include, varargin{:});
 0093     
-0094 <span class="keyword">end</span>
-0095 
-0096 fid = fopen (mex_fullpath, <span class="string">'r'</span>);
-0097 <span class="keyword">if</span> fid ~= -1,
-0098     fprintf (<span class="string">'ok.\n'</span>);
-0099     fclose (fid);
-0100 <span class="keyword">else</span>
-0101     fprintf (<span class="string">'not found.\n\n'</span>);
-0102     error (<span class="string">'compilation error ?\n'</span>);
-0103 <span class="keyword">end</span>
-0104 
-0105 <span class="keyword">end</span> <span class="comment">% function stk_compile</span></pre></div>
+0094     <span class="keyword">if</span> ~strcmp (src_dir, dst_dir)
+0095         movefile (fullfile (src_dir, mex_filename), dst_dir);
+0096     <span class="keyword">end</span>
+0097     
+0098 <span class="keyword">end</span>
+0099 
+0100 fid = fopen (mex_fullpath, <span class="string">'r'</span>);
+0101 <span class="keyword">if</span> fid ~= -1,
+0102     fprintf (<span class="string">'ok.\n'</span>);
+0103     fclose (fid);
+0104 <span class="keyword">else</span>
+0105     fprintf (<span class="string">'not found.\n\n'</span>);
+0106     error (<span class="string">'compilation error ?\n'</span>);
+0107 <span class="keyword">end</span>
+0108 
+0109 <span class="keyword">end</span> <span class="comment">% function stk_compile</span>
+0110 
+0111 
+0112 <a name="_sub2" href="#_subfunctions" class="code">function warn_about_mexfiles_in_private_folders ()</a>
+0113 
+0114 <span class="keyword">try</span>
+0115     n = 5;  d = 2;
+0116     x = rand (n, n);
+0117     D = stk_dist (x);  <span class="comment">% calls a MEX-file internally</span>
+0118     assert (isequal (size (D), [n n]));
+0119 <span class="keyword">catch</span>
+0120     err = lasterror ();
+0121     <span class="keyword">if</span> (~ isempty (regexp (err.message, <span class="string">'stk_dist_matrixx'</span>))) <span class="keyword">...</span>
+0122         &amp;&amp; (~ isempty (regexp (err.message, <span class="string">'undefined'</span>)))
+0123         fprintf (<span class="string">'\n\n'</span>);
+0124         error (sprintf ([<span class="string">'\n\n'</span> <span class="keyword">...</span>
+0125             <span class="string">'!&gt;&gt;&gt;&gt;&gt;&gt; PLEASE RESTART OCTAVE BEFORE USING STK &lt;&lt;&lt;&lt;&lt;&lt;!\n'</span> <span class="keyword">...</span>
+0126             <span class="string">'!                                                    !\n'</span> <span class="keyword">...</span>
+0127             <span class="string">'! Some STK functions implemented as MEX-files have   !\n'</span> <span class="keyword">...</span>
+0128             <span class="string">'! just been compiled, but will not be detected until !\n'</span> <span class="keyword">...</span>
+0129             <span class="string">'! Octave is restarted.                               !\n'</span> <span class="keyword">...</span>
+0130             <span class="string">'!                                                    !\n'</span> <span class="keyword">...</span>
+0131             <span class="string">'! We apologize for this inconvenience, which is      !\n'</span> <span class="keyword">...</span>
+0132             <span class="string">'! related to a known Octave bug (bug #40824), that   !\n'</span> <span class="keyword">...</span>
+0133             <span class="string">'! will hopefully be fixed in the near future.        !\n'</span> <span class="keyword">...</span>
+0134             <span class="string">'! (see https://savannah.gnu.org/bugs/?40824)         !\n'</span> <span class="keyword">...</span>
+0135             <span class="string">'!                                                    !\n'</span> <span class="keyword">...</span><span class="comment">          </span>
+0136             <span class="string">'!&gt;&gt;&gt;&gt;&gt;&gt; PLEASE RESTART OCTAVE BEFORE USING STK &lt;&lt;&lt;&lt;&lt;&lt;!\n'</span> <span class="keyword">...</span>
+0137             <span class="string">'\n'</span>]));
+0138     <span class="keyword">else</span>
+0139         rethrow (err);
+0140     <span class="keyword">end</span>
+0141 <span class="keyword">end</span>
+0142     
+0143 <span class="keyword">end</span> <span class="comment">% function warn_about_mexfiles_in_private_folders</span></pre></div>
 <hr>
 
 <address>
-   HTML documentation for <strong>STK 2.1.0</strong>,
+   HTML documentation for <strong>STK 2.1.1</strong>,
    generated by <strong>
    <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
 </address>
