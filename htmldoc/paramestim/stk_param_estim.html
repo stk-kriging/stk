@@ -24,7 +24,7 @@
 <div class="box"><strong>STK_PARAM_ESTIM estimates the parameters of a covariance function.</strong></div>
 
 <h2><a name="_synopsis"></a>SYNOPSIS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
-<div class="box"><strong>function [paramopt, paramlnvopt] = stk_param_estim(model, xi, yi, param0, param0lnv) </strong></div>
+<div class="box"><strong>function [paramopt, paramlnvopt] = stk_param_estim(model, xi, zi, param0, param0lnv) </strong></div>
 
 <h2><a name="_description"></a>DESCRIPTION <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="fragment"><pre class="comment"> STK_PARAM_ESTIM estimates the parameters of a covariance function.
@@ -59,7 +59,7 @@ This function is called by:
 
 <h2><a name="_subfunctions"></a>SUBFUNCTIONS <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <ul style="list-style-image:url(../octave-sombrero.png)">
-<li><a href="#_sub1" class="code">function [l, dl] = f_ (model, u, xi, yi)</a></li><li><a href="#_sub2" class="code">function dl = nablaf_ (model, u, xi, yi)</a></li><li><a href="#_sub3" class="code">function [l, dl] = f_with_noise_ (model, u, xi, yi)</a></li><li><a href="#_sub4" class="code">function dl = nablaf_with_noise_ (model, u, xi, yi)</a></li><li><a href="#_sub5" class="code">function [lblnv,ublnv] = get_default_bounds_lnv</a></li></ul>
+<li><a href="#_sub1" class="code">function [l, dl] = f_ (model, u, xi, zi)</a></li><li><a href="#_sub2" class="code">function dl = nablaf_ (model, u, xi, zi)</a></li><li><a href="#_sub3" class="code">function [l, dl] = f_with_noise_ (model, u, xi, zi)</a></li><li><a href="#_sub4" class="code">function dl = nablaf_with_noise_ (model, u, xi, zi)</a></li><li><a href="#_sub5" class="code">function [lblnv,ublnv] = get_default_bounds_lnv</a></li></ul>
 
 <h2><a name="_source"></a>SOURCE CODE <a href="#_top"><img alt="^" border="0" src="../up.png"></a></h2>
 <div class="fragment"><pre>0001 <span class="comment">% STK_PARAM_ESTIM estimates the parameters of a covariance function.</span>
@@ -84,7 +84,7 @@ This function is called by:
 0020 
 0021 <span class="comment">% Copyright Notice</span>
 0022 <span class="comment">%</span>
-0023 <span class="comment">%    Copyright (C) 2011-2013 SUPELEC</span>
+0023 <span class="comment">%    Copyright (C) 2011-2014 SUPELEC</span>
 0024 <span class="comment">%</span>
 0025 <span class="comment">%    Authors:   Julien Bect        &lt;julien.bect@supelec.fr&gt;</span>
 0026 <span class="comment">%               Emmanuel Vazquez   &lt;emmanuel.vazquez@supelec.fr&gt;</span>
@@ -110,196 +110,192 @@ This function is called by:
 0046 <span class="comment">%    along with STK.  If not, see &lt;http://www.gnu.org/licenses/&gt;.</span>
 0047 
 0048 <a name="_sub0" href="#_subfunctions" class="code">function [paramopt, paramlnvopt] = stk_param_estim </a><span class="keyword">...</span>
-0049     (model, xi, yi, param0, param0lnv)
+0049     (model, xi, zi, param0, param0lnv)
 0050 
 0051 <span class="keyword">if</span> nargin &gt; 5,
 0052     stk_error (<span class="string">'Too many input arguments.'</span>, <span class="string">'TooManyInputArgs'</span>);
 0053 <span class="keyword">end</span>
 0054 
-0055 <span class="comment">% size checking: xi, yi</span>
-0056 <span class="keyword">if</span> size(yi, 1) ~= size(xi, 1),
-0057     errmsg = <span class="string">'xi and yi should have the same number of rows.'</span>;
-0058     stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
+0055 <span class="comment">% size checking: xi, zi</span>
+0056 <span class="keyword">if</span> ~ isequal (size (zi), [size(xi, 1) 1]),
+0057     errmsg = <span class="string">'zi should be a column, with the same number of rows as xi.'</span>;
+0058     stk_error (errmsg, <span class="string">'IncorrectSize'</span>);
 0059 <span class="keyword">end</span>
-0060 <span class="keyword">if</span> size(yi, 2) ~= 1,
-0061     errmsg = <span class="string">'yi should be a column vector.'</span>;
-0062     stk_error(errmsg, <span class="string">'IncorrectArgument'</span>);
-0063 <span class="keyword">end</span>
-0064 
-0065 <span class="comment">% TODO: turn param0 into an optional argument</span>
-0066 <span class="comment">%       =&gt; provide a reasonable default choice</span>
-0067 
-0068 <span class="comment">% TODO: think of a better way to tell we want to estimate the noise variance</span>
-0069 NOISEESTIM = (nargin == 5);
+0060 
+0061 <span class="comment">% TODO: turn param0 into an optional argument</span>
+0062 <span class="comment">%       =&gt; provide a reasonable default choice</span>
+0063 
+0064 <span class="comment">% TODO: think of a better way to tell we want to estimate the noise variance</span>
+0065 NOISEESTIM = (nargin == 5);
+0066 
+0067 <span class="keyword">if</span> NOISEESTIM &amp;&amp; ~isfield(model, <span class="string">'lognoisevariance'</span>)
+0068     model.lognoisevariance = param0lnv;
+0069 <span class="keyword">end</span>
 0070 
-0071 <span class="keyword">if</span> NOISEESTIM &amp;&amp; ~isfield(model, <span class="string">'lognoisevariance'</span>)
-0072     model.lognoisevariance = param0lnv;
-0073 <span class="keyword">end</span>
-0074 
-0075 <span class="comment">% Cast param0 into an object of the appropriate type and size</span>
-0076 <span class="comment">% and set model.param to the same value</span>
-0077 <span class="keyword">if</span> isfloat(param0)
-0078     <span class="comment">% Note: if model.param is an object, this is actually a call to subsasgn() in</span>
-0079     <span class="comment">% disguise =&gt; parameter classes *must* support this form of indexing.</span>
-0080     model.param(:) = param0;
-0081     param0 = model.param;
-0082 <span class="keyword">else</span>
-0083     <span class="keyword">if</span> ~strcmp(class(param0), class(model.param))
-0084         stk_error(<span class="string">'Incorrect type for param0.'</span>, <span class="string">'TypeMismatch'</span>);
-0085     <span class="keyword">else</span>
-0086         model.param = param0;
-0087     <span class="keyword">end</span>
-0088 <span class="keyword">end</span>
-0089 
-0090 <span class="comment">% TODO: allow user-defined bounds</span>
-0091 [lb, ub] = <a href="stk_param_getdefaultbounds.html" class="code" title="function [lb,ub] = stk_param_getdefaultbounds(covariance_type, param0, xi, yi)">stk_param_getdefaultbounds</a>(model.covariance_type, param0, xi, yi);
-0092 
-0093 <span class="keyword">if</span> NOISEESTIM
-0094     [lblnv, ublnv] = <a href="#_sub5" class="code" title="subfunction [lblnv,ublnv] = get_default_bounds_lnv ">get_default_bounds_lnv</a>(model, param0lnv, xi, yi);
-0095     lb = [lb ; lblnv];
-0096     ub = [ub ; ublnv];
-0097     u0 = [param0(:); param0lnv];
-0098 <span class="keyword">else</span>
-0099     u0 = param0(:);
-0100 <span class="keyword">end</span>
-0101 
-0102 <span class="keyword">switch</span> NOISEESTIM
-0103     <span class="keyword">case</span> false,
-0104         f = @(u)(<a href="#_sub1" class="code" title="subfunction [l, dl] = f_ (model, u, xi, yi)">f_</a>(model, u, xi, yi));
-0105         nablaf = @(u)(<a href="#_sub2" class="code" title="subfunction dl = nablaf_ (model, u, xi, yi)">nablaf_</a> (model, u, xi, yi));
-0106         <span class="comment">% note: currently, nablaf is only used with sqp in Octave</span>
-0107     <span class="keyword">case</span> true,
-0108         f = @(u)(<a href="#_sub3" class="code" title="subfunction [l, dl] = f_with_noise_ (model, u, xi, yi)">f_with_noise_</a>(model, u, xi, yi));
-0109         nablaf = @(u)(<a href="#_sub4" class="code" title="subfunction dl = nablaf_with_noise_ (model, u, xi, yi)">nablaf_with_noise_</a> (model, u, xi, yi));
-0110 <span class="keyword">end</span>
-0111 
-0112 bounds_available = ~isempty(lb) &amp;&amp; ~isempty(ub);
-0113 
-0114 <span class="comment">% switch according to preferred optimizer</span>
-0115 <span class="keyword">switch</span> stk_select_optimizer(bounds_available)
-0116     
-0117     <span class="keyword">case</span> 1, <span class="comment">% Octave / sqp</span>
-0118         u_opt = sqp(u0, {f,nablaf}, [], [], lb, ub, [], 1e-5);
-0119         
-0120     <span class="keyword">case</span> 2, <span class="comment">% Matlab / fminsearch (Nelder-Mead)</span>
-0121         options = optimset( <span class="string">'Display'</span>, <span class="string">'iter'</span>,                <span class="keyword">...</span>
-0122             <span class="string">'MaxFunEvals'</span>, 300, <span class="string">'TolFun'</span>, 1e-5, <span class="string">'TolX'</span>, 1e-6  );
-0123         u_opt = fminsearch(f, u0, options);
-0124         
-0125     <span class="keyword">case</span> 3, <span class="comment">% Matlab / fmincon</span>
-0126         <span class="keyword">try</span>
-0127             <span class="comment">% We first try to use the interior-point algorithm, which has</span>
-0128             <span class="comment">% been found to provide satisfactory results in many cases</span>
-0129             options = optimset(<span class="string">'Display'</span>, <span class="string">'iter'</span>, <span class="keyword">...</span>
-0130                 <span class="string">'Algorithm'</span>, <span class="string">'interior-point'</span>, <span class="string">'GradObj'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
-0131                 <span class="string">'MaxFunEvals'</span>, 300, <span class="string">'TolFun'</span>, 1e-5, <span class="string">'TolX'</span>, 1e-6);
-0132         <span class="keyword">catch</span>
-0133             <span class="comment">% The 'Algorithm' option does not exist in some old versions of</span>
-0134             <span class="comment">% Matlab (e.g., version 3.1.1 provided with R2007a)...</span>
-0135             err = lasterror();
-0136             <span class="keyword">if</span> strcmp(err.identifier, <span class="string">'MATLAB:optimset:InvalidParamName'</span>)
-0137                 options = optimset(<span class="string">'Display'</span>, <span class="string">'iter'</span>, <span class="string">'GradObj'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
-0138                     <span class="string">'MaxFunEvals'</span>, 300, <span class="string">'TolFun'</span>, 1e-5, <span class="string">'TolX'</span>, 1e-6);
-0139             <span class="keyword">else</span>
-0140                 rethrow(err);
-0141             <span class="keyword">end</span>
-0142         <span class="keyword">end</span>
-0143         u_opt = fmincon(f, u0, [], [], [], [], lb, ub, [], options);
-0144         
-0145     <span class="keyword">otherwise</span>
-0146         error(<span class="string">'Unexpected value returned by stk_select_optimizer.'</span>);
-0147         
-0148 <span class="keyword">end</span> <span class="comment">% switch</span>
-0149 
-0150 <span class="keyword">if</span> NOISEESTIM
-0151     paramlnvopt = u_opt(end);
-0152     u_opt(end) = [];
-0153 <span class="keyword">else</span>
-0154     paramlnvopt = [];
-0155 <span class="keyword">end</span>
-0156 
-0157 <span class="keyword">if</span> isfloat(param0)
-0158     <span class="comment">% if a floating-point array was provided, return one also</span>
-0159     paramopt = u_opt;
-0160 <span class="keyword">else</span>
-0161     <span class="comment">% if an object of some user-defined class was provided, try to return an</span>
-0162     <span class="comment">% object of the same class</span>
-0163     <span class="keyword">try</span>
-0164         paramopt = param0;
-0165         paramopt(:) = u_opt;
-0166     <span class="keyword">catch</span>
-0167         paramopt = u_opt;
-0168     <span class="keyword">end</span>
-0169 <span class="keyword">end</span> <span class="comment">% if</span>
-0170 
-0171 <span class="keyword">end</span> <span class="comment">% function stk_param_estim ------------------------------------------------</span>
-0172 
+0071 <span class="comment">% Cast param0 into an object of the appropriate type and size</span>
+0072 <span class="comment">% and set model.param to the same value</span>
+0073 <span class="keyword">if</span> isfloat(param0)
+0074     <span class="comment">% Note: if model.param is an object, this is actually a call to subsasgn() in</span>
+0075     <span class="comment">% disguise =&gt; parameter classes *must* support this form of indexing.</span>
+0076     model.param(:) = param0;
+0077     param0 = model.param;
+0078 <span class="keyword">else</span>
+0079     <span class="keyword">if</span> ~strcmp(class(param0), class(model.param))
+0080         stk_error(<span class="string">'Incorrect type for param0.'</span>, <span class="string">'TypeMismatch'</span>);
+0081     <span class="keyword">else</span>
+0082         model.param = param0;
+0083     <span class="keyword">end</span>
+0084 <span class="keyword">end</span>
+0085 
+0086 <span class="comment">% TODO: allow user-defined bounds</span>
+0087 [lb, ub] = <a href="stk_param_getdefaultbounds.html" class="code" title="function [lb,ub] = stk_param_getdefaultbounds(covariance_type, param0, xi, yi)">stk_param_getdefaultbounds</a>(model.covariance_type, param0, xi, zi);
+0088 
+0089 <span class="keyword">if</span> NOISEESTIM
+0090     [lblnv, ublnv] = <a href="#_sub5" class="code" title="subfunction [lblnv,ublnv] = get_default_bounds_lnv ">get_default_bounds_lnv</a>(model, param0lnv, xi, zi);
+0091     lb = [lb ; lblnv];
+0092     ub = [ub ; ublnv];
+0093     u0 = [param0(:); param0lnv];
+0094 <span class="keyword">else</span>
+0095     u0 = param0(:);
+0096 <span class="keyword">end</span>
+0097 
+0098 <span class="keyword">switch</span> NOISEESTIM
+0099     <span class="keyword">case</span> false,
+0100         f = @(u)(<a href="#_sub1" class="code" title="subfunction [l, dl] = f_ (model, u, xi, zi)">f_</a>(model, u, xi, zi));
+0101         nablaf = @(u)(<a href="#_sub2" class="code" title="subfunction dl = nablaf_ (model, u, xi, zi)">nablaf_</a> (model, u, xi, zi));
+0102         <span class="comment">% note: currently, nablaf is only used with sqp in Octave</span>
+0103     <span class="keyword">case</span> true,
+0104         f = @(u)(<a href="#_sub3" class="code" title="subfunction [l, dl] = f_with_noise_ (model, u, xi, zi)">f_with_noise_</a>(model, u, xi, zi));
+0105         nablaf = @(u)(<a href="#_sub4" class="code" title="subfunction dl = nablaf_with_noise_ (model, u, xi, zi)">nablaf_with_noise_</a> (model, u, xi, zi));
+0106 <span class="keyword">end</span>
+0107 
+0108 bounds_available = ~isempty(lb) &amp;&amp; ~isempty(ub);
+0109 
+0110 <span class="comment">% switch according to preferred optimizer</span>
+0111 <span class="keyword">switch</span> stk_select_optimizer(bounds_available)
+0112     
+0113     <span class="keyword">case</span> 1, <span class="comment">% Octave / sqp</span>
+0114         u_opt = sqp(u0, {f,nablaf}, [], [], lb, ub, [], 1e-5);
+0115         
+0116     <span class="keyword">case</span> 2, <span class="comment">% Matlab / fminsearch (Nelder-Mead)</span>
+0117         options = optimset( <span class="string">'Display'</span>, <span class="string">'iter'</span>,                <span class="keyword">...</span>
+0118             <span class="string">'MaxFunEvals'</span>, 300, <span class="string">'TolFun'</span>, 1e-5, <span class="string">'TolX'</span>, 1e-6  );
+0119         u_opt = fminsearch(f, u0, options);
+0120         
+0121     <span class="keyword">case</span> 3, <span class="comment">% Matlab / fmincon</span>
+0122         <span class="keyword">try</span>
+0123             <span class="comment">% We first try to use the interior-point algorithm, which has</span>
+0124             <span class="comment">% been found to provide satisfactory results in many cases</span>
+0125             options = optimset(<span class="string">'Display'</span>, <span class="string">'iter'</span>, <span class="keyword">...</span>
+0126                 <span class="string">'Algorithm'</span>, <span class="string">'interior-point'</span>, <span class="string">'GradObj'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0127                 <span class="string">'MaxFunEvals'</span>, 300, <span class="string">'TolFun'</span>, 1e-5, <span class="string">'TolX'</span>, 1e-6);
+0128         <span class="keyword">catch</span>
+0129             <span class="comment">% The 'Algorithm' option does not exist in some old versions of</span>
+0130             <span class="comment">% Matlab (e.g., version 3.1.1 provided with R2007a)...</span>
+0131             err = lasterror();
+0132             <span class="keyword">if</span> strcmp(err.identifier, <span class="string">'MATLAB:optimset:InvalidParamName'</span>)
+0133                 options = optimset(<span class="string">'Display'</span>, <span class="string">'iter'</span>, <span class="string">'GradObj'</span>, <span class="string">'on'</span>, <span class="keyword">...</span>
+0134                     <span class="string">'MaxFunEvals'</span>, 300, <span class="string">'TolFun'</span>, 1e-5, <span class="string">'TolX'</span>, 1e-6);
+0135             <span class="keyword">else</span>
+0136                 rethrow(err);
+0137             <span class="keyword">end</span>
+0138         <span class="keyword">end</span>
+0139         u_opt = fmincon(f, u0, [], [], [], [], lb, ub, [], options);
+0140         
+0141     <span class="keyword">otherwise</span>
+0142         error(<span class="string">'Unexpected value returned by stk_select_optimizer.'</span>);
+0143         
+0144 <span class="keyword">end</span> <span class="comment">% switch</span>
+0145 
+0146 <span class="keyword">if</span> NOISEESTIM
+0147     paramlnvopt = u_opt(end);
+0148     u_opt(end) = [];
+0149 <span class="keyword">else</span>
+0150     paramlnvopt = [];
+0151 <span class="keyword">end</span>
+0152 
+0153 <span class="keyword">if</span> isfloat(param0)
+0154     <span class="comment">% if a floating-point array was provided, return one also</span>
+0155     paramopt = u_opt;
+0156 <span class="keyword">else</span>
+0157     <span class="comment">% if an object of some user-defined class was provided, try to return an</span>
+0158     <span class="comment">% object of the same class</span>
+0159     <span class="keyword">try</span>
+0160         paramopt = param0;
+0161         paramopt(:) = u_opt;
+0162     <span class="keyword">catch</span>
+0163         paramopt = u_opt;
+0164     <span class="keyword">end</span>
+0165 <span class="keyword">end</span> <span class="comment">% if</span>
+0166 
+0167 <span class="keyword">end</span> <span class="comment">% function stk_param_estim ------------------------------------------------</span>
+0168 
+0169 
+0170 <span class="comment">%--- The objective function and its gradient ----------------------------------</span>
+0171 
+0172 <a name="_sub1" href="#_subfunctions" class="code">function [l, dl] = f_ (model, u, xi, zi)</a>
 0173 
-0174 <span class="comment">%--- The objective function and its gradient ----------------------------------</span>
+0174 model.param(:) = u;
 0175 
-0176 <a name="_sub1" href="#_subfunctions" class="code">function [l, dl] = f_ (model, u, xi, yi)</a>
-0177 
-0178 model.param(:) = u;
-0179 
-0180 <span class="keyword">if</span> nargout == 1,
-0181     l = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
-0182 <span class="keyword">else</span>
-0183     [l, dl] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
-0184 <span class="keyword">end</span>
-0185 
-0186 <span class="keyword">end</span> <span class="comment">% function f_</span>
-0187 
-0188 
-0189 <a name="_sub2" href="#_subfunctions" class="code">function dl = nablaf_ (model, u, xi, yi)</a>
-0190 
-0191 model.param(:) = u;
-0192 [l_ignored, dl] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi); <span class="comment">%#ok&lt;ASGLU&gt;</span>
-0193 
-0194 <span class="keyword">end</span> <span class="comment">% function nablaf_</span>
-0195 
-0196 
-0197 <a name="_sub3" href="#_subfunctions" class="code">function [l, dl] = f_with_noise_ (model, u, xi, yi)</a>
-0198 
-0199 model.param(:) = u(1:end-1);
-0200 model.lognoisevariance  = u(end);
-0201 
-0202 <span class="keyword">if</span> nargout == 1,
-0203     l = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
-0204 <span class="keyword">else</span>
-0205     [l, dl, dln] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi);
-0206     dl = [dl; dln];
-0207 <span class="keyword">end</span>
-0208 
-0209 <span class="keyword">end</span> <span class="comment">% function f_with_noise_</span>
-0210 
-0211 
-0212 <a name="_sub4" href="#_subfunctions" class="code">function dl = nablaf_with_noise_ (model, u, xi, yi)</a>
-0213 
-0214 model.param(:) = u(1:end-1);
-0215 model.lognoisevariance  = u(end);
-0216 [l_ignored, dl, dln] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, yi); <span class="comment">%#ok&lt;ASGLU&gt;</span>
-0217 dl = [dl; dln];
-0218 
-0219 <span class="keyword">end</span> <span class="comment">% function nablaf_with_noise_</span>
+0176 <span class="keyword">if</span> nargout == 1,
+0177     l = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, zi);
+0178 <span class="keyword">else</span>
+0179     [l, dl] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, zi);
+0180 <span class="keyword">end</span>
+0181 
+0182 <span class="keyword">end</span> <span class="comment">% function f_</span>
+0183 
+0184 
+0185 <a name="_sub2" href="#_subfunctions" class="code">function dl = nablaf_ (model, u, xi, zi)</a>
+0186 
+0187 model.param(:) = u;
+0188 [l_ignored, dl] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, zi); <span class="comment">%#ok&lt;ASGLU&gt;</span>
+0189 
+0190 <span class="keyword">end</span> <span class="comment">% function nablaf_</span>
+0191 
+0192 
+0193 <a name="_sub3" href="#_subfunctions" class="code">function [l, dl] = f_with_noise_ (model, u, xi, zi)</a>
+0194 
+0195 model.param(:) = u(1:end-1);
+0196 model.lognoisevariance  = u(end);
+0197 
+0198 <span class="keyword">if</span> nargout == 1,
+0199     l = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, zi);
+0200 <span class="keyword">else</span>
+0201     [l, dl, dln] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, zi);
+0202     dl = [dl; dln];
+0203 <span class="keyword">end</span>
+0204 
+0205 <span class="keyword">end</span> <span class="comment">% function f_with_noise_</span>
+0206 
+0207 
+0208 <a name="_sub4" href="#_subfunctions" class="code">function dl = nablaf_with_noise_ (model, u, xi, zi)</a>
+0209 
+0210 model.param(:) = u(1:end-1);
+0211 model.lognoisevariance  = u(end);
+0212 [l_ignored, dl, dln] = <a href="stk_param_relik.html" class="code" title="function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)">stk_param_relik</a> (model, xi, zi); <span class="comment">%#ok&lt;ASGLU&gt;</span>
+0213 dl = [dl; dln];
+0214 
+0215 <span class="keyword">end</span> <span class="comment">% function nablaf_with_noise_</span>
+0216 
+0217 
+0218 <a name="_sub5" href="#_subfunctions" class="code">function [lblnv,ublnv] = get_default_bounds_lnv </a><span class="keyword">...</span><span class="comment"> % -------------------------</span>
+0219     (model, param0lnv, xi, zi) <span class="comment">%#ok&lt;INUSL&gt;</span>
 0220 
-0221 
-0222 <a name="_sub5" href="#_subfunctions" class="code">function [lblnv,ublnv] = get_default_bounds_lnv </a><span class="keyword">...</span><span class="comment"> % -------------------------</span>
-0223     (model, param0lnv, xi, yi) <span class="comment">%#ok&lt;INUSL&gt;</span>
+0221 <span class="comment">% assume NOISEESTIM</span>
+0222 <span class="comment">% constants</span>
+0223 TOLVAR = 0.5;
 0224 
-0225 <span class="comment">% assume NOISEESTIM</span>
-0226 <span class="comment">% constants</span>
-0227 TOLVAR = 0.5;
-0228 
-0229 <span class="comment">% bounds for the variance parameter</span>
-0230 empirical_variance = var(yi);
-0231 lblnv = log(eps);
-0232 ublnv = log(empirical_variance) + TOLVAR;
-0233 
-0234 <span class="keyword">end</span> <span class="comment">% function get_default_bounds_lnv -----------------------------------------</span></pre></div>
+0225 <span class="comment">% bounds for the variance parameter</span>
+0226 empirical_variance = var(zi);
+0227 lblnv = log(eps);
+0228 ublnv = log(empirical_variance) + TOLVAR;
+0229 
+0230 <span class="keyword">end</span> <span class="comment">% function get_default_bounds_lnv -----------------------------------------</span></pre></div>
 <hr>
 
 <address>
-   HTML documentation for <strong>STK 2.1.0</strong>,
+   HTML documentation for <strong>STK 2.1.1</strong>,
    generated by <strong>
    <a href="http://www.artefact.tk/software/matlab/m2html/" title="M2HTML website">M2HTML 1.5</a></strong>
 </address>
