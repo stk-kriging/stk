@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,10 +26,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [param, lnv] = stk_param_init (model, xi, yi, box, noisy)
+function [param, lnv] = stk_param_init (model, xi, zi, box, noisy)
 
 if nargin > 5,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
+if ~ isequal (size (zi), [size(xi, 1) 1]),
+    errmsg = 'zi should be a column, with the same number of rows as xi.';
+    stk_error (errmsg, 'IncorrectSize');
 end
 
 %--- first, default values for arguments 'box' and 'noisy' ---------------------
@@ -55,30 +60,30 @@ switch model.covariance_type
     
     case 'stk_materncov_iso'
         nu = 5/2 * size (xi, 2);
-        [param, lnv] = paraminit_ (xi, yi, box, nu, model.order, noisy);
+        [param, lnv] = paraminit_ (xi, zi, box, nu, model.order, noisy);
         
     case 'stk_materncov_aniso'
         nu = 5/2 * size (xi, 2);
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, yi, [], nu, model.order, noisy);
+        [param, lnv] = paraminit_ (xi, zi, [], nu, model.order, noisy);
         param = [param(1:2); param(3) - log(diff(box, [], 1))'];
         
     case 'stk_materncov32_iso'
-        [param, lnv] = paraminit_ (xi, yi, box, 3/2, model.order, noisy);
+        [param, lnv] = paraminit_ (xi, zi, box, 3/2, model.order, noisy);
         param = [param(1); param(3)];
         
     case 'stk_materncov32_aniso'
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, yi, [], 3/2, model.order, noisy);
+        [param, lnv] = paraminit_ (xi, zi, [], 3/2, model.order, noisy);
         param = [param(1); param(3) - log(diff(box, [], 1))'];
         
     case 'stk_materncov52_iso'
-        [param, lnv] = paraminit_ (xi, yi, box, 5/2, model.order, noisy);
+        [param, lnv] = paraminit_ (xi, zi, box, 5/2, model.order, noisy);
         param = [param(1); param(3)];
         
     case 'stk_materncov52_aniso'
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, yi, [], 5/2, model.order, noisy);
+        [param, lnv] = paraminit_ (xi, zi, [], 5/2, model.order, noisy);
         param = [param(1); param(3) - log(diff(box, [], 1))'];
         
     otherwise
@@ -89,7 +94,7 @@ end
 end % function stk_param_init
 
 
-function [param, lnv] = paraminit_ (xi, yi, box, nu, order, noisy)
+function [param, lnv] = paraminit_ (xi, zi, box, nu, order, noisy)
 
 [ni d] = size (xi);
 
@@ -122,21 +127,19 @@ aLL_best    = +Inf;
 for eta = eta_list
     for rho = rho_list
         fprintf ('[stk_param_init] eta = %.3e, rho = %.3e...\n', eta, rho);
-        % first use sigma2 = 1
+        % first use sigma2 = 1.0
         model.param = log ([1.0; nu; 1/rho]);
         model.lognoisevariance = log (eta);
         [K, P] = stk_make_matcov (model, xi);
         % estimate sigma2
-        % (TODO: use Cholesky ?)
-        yi_ = double (yi);
-        beta = (P' * (K \ P)) \ (P' * yi_);
-        zi = yi_ - P * beta;
-        sigma2 = 1 / (ni - length (beta)) * zi' * (K \ zi);
+        zi = double (zi);  L = chol (K, 'lower');  W = L \ P;
+        beta = (W' * W) \ (W' * (L \ zi));
+        sigma2 = 1 / (ni - length (beta)) * sum ((L \ (zi - P * beta)) .^ 2);
         % now compute the antilog-likelihood
         if sigma2 > 0
             model.param(1) = log (sigma2);
             model.lognoisevariance = log  (eta * sigma2);
-            aLL = stk_param_relik (model, xi, yi);
+            aLL = stk_param_relik (model, xi, zi);
             if ~isnan(aLL) && (aLL < aLL_best)
                 eta_best    = eta;
                 rho_best    = rho;
@@ -166,3 +169,13 @@ end % function paraminit_
 %! xt = (1:9)' + 0.5;  zt = sin (xt);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (sum ((zt - zp.mean) .^ 2) < 1e-3);
+
+%!test  % check equivariance of parameter estimates
+% f = @(x) sin (x); 
+% xi = stk_sampling_regulargrid (10, 1);  zi = stk_feval (f, xi);
+% shift = 1000;  scale = 0.01;
+% model = stk_model ('stk_materncov32_iso');
+% p1 = stk_param_init (model, xi, zi);
+% p2 = stk_param_init (model, xi, shift + scale .* zi);
+% assert (stk_isequal_tolabs (p2(1), p1(1) + log (scale^2), 1e-10))
+% assert (stk_isequal_tolabs (p2(2), p1(2), eps))
