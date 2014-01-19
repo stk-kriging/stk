@@ -1,3 +1,16 @@
+Changes in version 2.1.1
+========================
+
+* This is a minor bugfix release.
+
+   o Fix a bug in stk_param_init.
+
+   o Add size checks to several functions.
+
+   o Warn Octave users about the problem with MEX-files in privates folders:
+     Octave must be restarted when stk_init is run for the first time.
+
+
 Changes in version 2.1.0
 ========================
 
@@ -72,12 +85,14 @@ Changes in version 2.1.0
       
     o and many other tiny little things
 
+
 Changes in version 2.0.3
 ========================
 
 * This is a minor bugfix release.
 
    o Fix a bug core/stk_predict.m (related to blockwise computations)
+
 
 Changes in version 2.0.2
 ========================
@@ -89,6 +104,7 @@ Changes in version 2.0.2
 
    o Fix a bug in @stk_dataframe/stk_dataframe.m (make sure that .data contains
      numerical data) and add a copy constructor.
+
 
 Changes in version 2.0.1
 ========================
