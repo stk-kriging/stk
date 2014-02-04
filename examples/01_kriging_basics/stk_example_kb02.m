@@ -100,7 +100,7 @@ model = stk_setobs (model, xzi);
 
 % Initial guess for the parameters of the Matern covariance
 % (not working yet on branch 'objectify_me')
-% param0 = stk_param_init(model, BOX, NOISY);
+% [param0, lnv0] = stk_param_init (model, BOX, NOISY);
 
 % % Alternative: user-defined initial guess for the parameters
 % % (see "help stk_materncov_iso" for more information)
@@ -110,13 +110,16 @@ model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
 
 if ~ NOISY,
     % Noiseless case: set a small "regularization" noise	
+    % the (log)variance of which is provided by stk_param_init
+    % model.noise.cov = stk_homnoisecov (exp (lnv0));
     model.noise.cov = stk_homnoisecov (1e-4 ^ 2);
 else
-    % Otherwise, set the variance of the noise (assumed to be known)
+    % Otherwise, set the variance of the noise
+    % (assumed to be known, not estimated, in this example)
 	model.noise.cov = stk_homnoisecov (NOISESTD ^ 2);
 end
 
-% Estimate the paramaters (the noise variance is not estimated)
+% Estimate the parameters
 model.randomprocess.priorcov.param = stk_param_estim (model);
 
 model  %#ok<NOPTS>

@@ -9,8 +9,7 @@
 % default choice can be overridden by means of the model.order property.
 %
 % The function is sampled on a space-filling Latin Hypercube design, and the
-% data is assumed to be noiseless (change TRUE_NOISE_STD to a positive value in
-% order to run the example with noisy data).
+% data is assumed to be noiseless.
 
 % Copyright Notice
 %
@@ -93,21 +92,11 @@ model = stk_model ('stk_materncov_aniso', DIM);
 % model.randomprocess.priormean = stk_lm('affine');     % AFFINE TREND
 % model.randomprocess.priormean = stk_lm('quadratic');  % "FULL QUADRATIC" TREND
 
-% Good practice: add a small "regularization noise" (nugget)
-MODEL_NOISE_STD = 1e-5;
-model.noise.cov = stk_homnoisecov (MODEL_NOISE_STD^2);
-
 
 %% EVALUATE THE FUNCTION ON A "MAXIMIN LHS" DESIGN
 
 xi = stk_sampling_maximinlhs (NI, DIM, BOX);
 zi = stk_feval (f, xi);
-
-% Simulate noisy evaluations (optional)
-TRUE_NOISE_STD = 0.0;
-if TRUE_NOISE_STD > 0
-    zi = zi + randn (size (zi)) * TRUE_NOISE_STD;
-end
 
 % Add the design points to the first plot
 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
@@ -117,8 +106,11 @@ hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
 
 model = stk_setobs(model, stk_makedata(xi, zi));
 
-% % Initial guess for the parameters of the Matern covariance
-% param0 = stk_param_init(model, BOX);
+% Compute an initial guess for the parameters of the Matern covariance (param0)
+% and a reasonable log-variance for a small "regularization noise"
+% [param0, model.lognoisevariance] = stk_param_init (model, BOX);
+MODEL_NOISE_STD = 1e-5;
+model.noise.cov = stk_homnoisecov (MODEL_NOISE_STD^2);
 
 % Alternative: user-defined initial guess for the parameters of the Matern
 % covariance (see "help stk_materncov_aniso" for more information)

@@ -1,3 +1,20 @@
+2013-11-19  Julien Bect  <julien.bect@supelec.fr>
+
+	Add a smoke test of all examples.
+
+	* misc/test/stk_runexamples.m: modified
+
+2013-11-18  Julien Bect  <julien.bect@supelec.fr>
+
+	Remove TRUE_NOISE_STD in example 'kb03'.
+
+	* examples/01_kriging_basics/stk_example_kb03.m: modified
+
+	Use the variance returned by stk_param_init for noiseless data.
+
+	* examples/01_kriging_basics/stk_example_kb02.m: modified
+	* examples/01_kriging_basics/stk_example_kb03.m: modified
+
 2013-11-15  Julien Bect  <julien.bect@supelec.fr>
 
 	Remove stk_plot1dsim.
