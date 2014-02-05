@@ -50,7 +50,7 @@ stk_disp_examplewelcome;  stk_figure ('stk_example_doe03');
 % 1D test function
 f = @(x)(x .* sin (x));  % Define a 1D test function
 DIM = 1;                 % Dimension of the factor space
-BOX = [0; 4 * pi];       % Factor space
+BOX = [0; 12];           % Factor space
 
 % Space discretization
 NT = 400;  % Number of points in the grid
@@ -126,7 +126,7 @@ NB_ITER = 20;
 EI_max = +inf;
 
 % Value of EI_max for the stopping criterion
-EI_max_stop = (max (z_grid) - min (z_grid)) / 1e4;
+EI_max_stop = (max (z_grid) - min (z_grid)) / 1e5;
 
 % Iteration number
 iter = 0;

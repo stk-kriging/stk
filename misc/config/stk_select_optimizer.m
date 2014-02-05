@@ -1,16 +1,15 @@
-% STK_SELECT_OPTIMIZE selects an optimizer for stk_param_estim()
+% STK_SELECT_OPTIMIZER selects an optimizer for stk_param_estim()
 %
-% FIXME: add documentation
+% CALL: OPTIM_NUM = stk_select_optimizer (BOUNDS_AVAILABLE)
 %
-% Returns
-%   1 for Octave / sqp
-%   2 for Matlab / fminsearch
-%   3 for Matlab / fmincon
-%
+%   returns a number that indicates which optimizer STK should use for
+%   box-constrained (if BOUNDS_AVAILABLE is true or absent) or unconstrained
+%   optimization in its parameter estimation procedure. The result OPTIM_NUM is
+%   equal to 1 for Octave/sqp, 2 for Matlab/fminsearch, or 3 for Matlab/fmincon.
 
 % Copyright Notice
 %
-%    Copyright (C) 2011, 2012 SUPELEC
+%    Copyright (C) 2011-2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -47,24 +46,16 @@ if nargin == 0, % invocation with no arguments (typically, in stk_init)
 else % invocation with at least one argument (typically, in stk_param_estim)
     
     if nargin < 2, display = false; end  % default: don't display anything
-    force_recheck = false;                % don't recheck which optimizer to use
+    force_recheck = false;               % don't recheck which optimizer to use
     
 end
 
 % select an appropriate optimizer
 if isempty (optim_num_con) || isempty (optim_num_unc) || force_recheck,
     if isoctave,
-        % We assume that the 'optim' package is installed, loaded, and
-        % provides the spq() function. But we check anyway (better safe
-        % than sorry) and raise an error if sqp() is nowhere to be found.
-        if exist ('sqp','file') == 2,
-            optim_num_con = 1;
-            optim_num_unc = 1;
-        else
-            disp ('Function sqp not found !!!');
-            error (['Please check that the optim package ', ...
-                'is properly installed.']);
-        end
+        % Use sqp for both unconstrained and box-constrained optimization
+        optim_num_con = 1;
+        optim_num_unc = 1;
     else
         % check if Matlab's fmincon is available
         optim_num_con = 2 + stk_is_fmincon_available();

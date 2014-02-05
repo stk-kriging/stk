@@ -104,22 +104,31 @@ end
 stk_figure ('stk_example_misc02 (b)');
 
 param_name = {'SIGMA2', 'NU', '1/RHO'};
+
 for j = 1:3,
+    
     stk_subplot (2, 2, j);
+    
     % estimated parameter versus prior std
     h = semilogx (std_list, exp (param_opt(j, :)), 'ko-');
     set (h, 'LineWidth', 2, 'MarkerFaceColor', 'y');
     stk_labels ('prior std', param_name{j});
+    
     % add an horizontal line showing the value of REML estimation
     hold on;  semilogx (xlim, exp (param_opt_reml(j)) * [1 1], 'r--');
+    
     % add a second horizontal line showing the mode of the prior
     hold on;  semilogx (xlim, exp (param0(j)) * [1 1], 'b--');
+    
     % adjust ylim
     yy = exp ([param_opt(j, :) param_opt_reml(j) param0(j)]);
     ylim_min = min (yy);  ylim_max = max (yy);  delta = ylim_max - ylim_min;
     ylim ([ylim_min - 0.05*delta ylim_max + 0.05*delta]);
+    
 end
 
-h1 = legend ('MAP estimates', 'REML estimate', 'mode of the prior');
-h2 = stk_subplot (2, 2, 4);  axis off;
-set (h1, 'Position', get (h2, 'Position'));
+if ~ (isoctave && strcmp (graphics_toolkit, 'gnuplot'))
+    h1 = legend ('MAP estimates', 'REML estimate', 'mode of the prior');
+    h2 = stk_subplot (2, 2, 4);  axis off;
+    set (h1, 'Position', get (h2, 'Position'));
+end
