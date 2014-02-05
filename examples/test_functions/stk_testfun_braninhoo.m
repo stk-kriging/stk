@@ -3,7 +3,7 @@
 % The Branin-Hoo function (Branin and Hoo, 1972) is a classical test function
 % for global optimization algorithms, which belongs to the well-known
 % Dixon-Szego test set (Dixon and Szego, 1978). It is usually minimized over
-% [-5; 10] x [10; 15].
+% [-5; 10] x [0; 15].
 %
 %
 % REFERENCES
