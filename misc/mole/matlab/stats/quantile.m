@@ -141,7 +141,7 @@
 % ## Author: Ben Abbott <bpabbott@mac.com>
 % ## Description: Matlab style quantile function of a discrete/continuous distribution
 
-function q = octave_quantile (x, p, dim, method)
+function q = quantile (x, p, dim, method)
 
 if nargin < 2,
     p = [];
@@ -196,15 +196,15 @@ q = reshape (q, [numel(p), sx(2:end)]);
 % Permute the 1st index back to dim.
 q = ipermute (q, perm);
 
-end % function octave_quantile
+end % function quantile
 
 %!test
 %! p = 0.5;
 %! x = sort (rand (11));
-%! q = octave_quantile (x, p);
+%! q = quantile (x, p);
 %! assert (isequal (q, x(6,:)));
 %! x = x.';
-%! q = octave_quantile (x, p, 2);
+%! q = quantile (x, p, 2);
 %! assert (isequal (q, x(:,6)));
 
 % Note: method 3 not available yet because Matlab doesn't have roundb()
@@ -222,7 +222,7 @@ end % function octave_quantile
 %!      1.0000   1.4167   2.5000   3.5833   4.0000
 %!      1.0000   1.4375   2.5000   3.5625   4.0000];
 %! for m = [1:2 4:9]
-%!   q = octave_quantile (x, p, 1, m).';
+%!   q = quantile (x, p, 1, m).';
 %!   assert (stk_isequal_tolabs (q, a(m,:), 0.0001));
 %! end
 
@@ -239,7 +239,7 @@ end % function octave_quantile
 %!      1.0000   1.6667   3.0000   4.3333   5.0000
 %!      1.0000   1.6875   3.0000   4.3125   5.0000];
 %! for m = [1:2 4:9]
-%!   q = octave_quantile (x, p, 1, m).';
+%!   q = quantile (x, p, 1, m).';
 %!   assert (stk_isequal_tolabs (q, a(m,:), 0.0001));
 %! end
 
@@ -256,7 +256,7 @@ end % function octave_quantile
 %!      1.0000   1.4167   3.5000   7.3333   9.0000
 %!      1.0000   1.4375   3.5000   7.2500   9.0000];
 %! for m = [1:2 4:9]
-%!   q = octave_quantile (x, p, 1, m).';
+%!   q = quantile (x, p, 1, m).';
 %!   assert (stk_isequal_tolabs (q, a(m,:), 0.0001));
 %! end
 
@@ -273,7 +273,7 @@ end % function octave_quantile
 %!      1.0000    1.6667    5.0000    9.6667   11.0000
 %!      1.0000    1.6875    5.0000    9.6250   11.0000];
 %! for m = [1:2 4:9]
-%!   q = octave_quantile (x, p, 1, m).';
+%!   q = quantile (x, p, 1, m).';
 %!   assert (stk_isequal_tolabs (q, a(m,:), 0.0001));
 %! end
 
@@ -290,7 +290,7 @@ end % function octave_quantile
 %!      6.0000    9.8333   11.5000   15.0000   16.0000
 %!      6.0000    9.8750   11.5000   15.0000   16.0000];
 %! for m = [1:2 4:9]
-%!   q = octave_quantile (x, p, 1, m).';
+%!   q = quantile (x, p, 1, m).';
 %!   assert (stk_isequal_tolabs (q, a(m,:), 0.0001));
 %! end
 
@@ -308,7 +308,7 @@ end % function octave_quantile
 %!      -2.551474  -0.591566  -0.067751   0.146459   0.495271
 %!      -2.551474  -0.590801  -0.067751   0.140686   0.495271];
 %! for m = [1:2 4:9]
-%!   q = octave_quantile (x, p, 1, m).';
+%!   q = quantile (x, p, 1, m).';
 %!   assert (stk_isequal_tolabs (q, a(m,:), 0.0001));
 %! end
 
@@ -322,15 +322,15 @@ end % function octave_quantile
 %! tol = 0.00001;
 %! x(5,5) = NaN;
 %! assert (stk_isequal_tolabs ...
-%!           (octave_quantile (x, p, 1), ...
+%!           (quantile (x, p, 1), ...
 %!            [0.27950, 0.79780, 0.32960, 0.55670, 0.44460], tol));
 %! x(1,1) = NaN;
 %! assert (stk_isequal_tolabs ...
-%!           (octave_quantile (x, p, 1), ...
+%!           (quantile (x, p, 1), ...
 %!            [0.35415, 0.79780, 0.32960, 0.55670, 0.44460], tol));
 %! x(3,3) = NaN;
 %! assert (stk_isequal_tolabs ...
-%!           (octave_quantile (x, p, 1), ...
+%!           (quantile (x, p, 1), ...
 %!            [0.35415, 0.79780, 0.42590, 0.55670, 0.44460], tol));
 
 %!test
@@ -338,22 +338,22 @@ end % function octave_quantile
 %! x = rand (sx);
 %! dim = 2;
 %! p = 0.5;
-%! yobs = octave_quantile (x, p, dim);
+%! yobs = quantile (x, p, dim);
 %! yexp = median (x, dim);
 %! assert (isequal (yobs, yexp));
 
 %% Test input validation
-%!error octave_quantile ()
-%!error octave_quantile (1, 2, 3, 4, 5)
-%!error octave_quantile (['A'; 'B'], 10)
-% %!error octave_quantile (1:10, [true, false])
+%!error quantile ()
+%!error quantile (1, 2, 3, 4, 5)
+%!error quantile (['A'; 'B'], 10)
+% %!error quantile (1:10, [true, false])
 % % this test fails in Octave 3.2.x
-%!error octave_quantile (1:10, ones (2,2))
-%!error octave_quantile (1, 1, 1.5)
-%!error octave_quantile (1, 1, 0)
-%!error octave_quantile (1, 1, 3)
-%!error octave_quantile ((1:5)', 0.5, 1, 0)
-%!error octave_quantile ((1:5)', 0.5, 1, 10)
+%!error quantile (1:10, ones (2,2))
+%!error quantile (1, 1, 1.5)
+%!error quantile (1, 1, 0)
+%!error quantile (1, 1, 3)
+%!error quantile ((1:5)', 0.5, 1, 0)
+%!error quantile ((1:5)', 0.5, 1, 10)
 
 % ## For the cumulative probability values in @var{p}, compute the
 % ## quantiles, @var{q} (the inverse of the cdf), for the sample, @var{x}.

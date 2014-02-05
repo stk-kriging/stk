@@ -1,4 +1,36 @@
+2013-11-29  Julien Bect  <julien.bect@supelec.fr>
+
+	Add a new function to the MOLE: corr.
+
+	* misc/mole/matlab/stats/corr.m: new function
+
+	Move octave_quantile to the MOLE.
+
+	* misc/stats: removed
+	* misc/stats/octave_quantile.m: removed
+	* misc/mole/matlab/stats: new directory
+	* misc/mole/matlab/stats/quantile.m: formerly known as
+	misc/stats/octave_quantile
+	* utils/arrays/@stk_dataframe/quantile.m: modified
+	* misc/config/stk_path.m: modified
+
+	Make stk_runexamples fail if at least one example failed.
+
+	* trunk/misc/test/stk_runexamples.m: modified
+
+2013-11-28  Julien Bect  <julien.bect@supelec.fr>
+
+	Add a new MOLE function: graphicstoolkit.
+
+	* misc/mole/matlab/graphics_toolkit.m: removed
+	* misc/mole/common/graphicstoolkit.m: new function
+	* examples/03_miscellaneous/stk_example_misc02: modified
+
 2013-11-25  Julien Bect  <julien.bect@supelec.fr>
+
+	Use a more conservative form of subplot (without options).
+
+	* misc/plot/stk_subplot.m: modified
 
 	Fix a bug in stk_path.
 

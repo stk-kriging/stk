@@ -26,20 +26,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function z = quantile(x, p, dim)
+function z = quantile (x, p, dim)
 
 if nargin < 3,
     dim = 1;
 end
 
-z = apply(x, dim, @octave_quantile, p);
+z = apply (x, dim, @quantile, p);
 
 end % function quantile
 
 %!shared x1 df1 p
-%! x1 = rand(9, 3);
-%! df1 = stk_dataframe(x1, {'a', 'b', 'c'});
+%! x1 = rand (9, 3);
+%! df1 = stk_dataframe (x1, {'a', 'b', 'c'});
 %! p = 0.95;
-%!assert (isequal (quantile(df1, p),    octave_quantile(x1, p)))
-%!assert (isequal (quantile(df1, p, 1), octave_quantile(x1, p)))
-%!assert (isequal (quantile(df1, p, 2), octave_quantile(x1, p, 2)))
+%!assert (isequal (quantile (df1, p),    quantile (x1, p)))
+%!assert (isequal (quantile (df1, p, 1), quantile (x1, p)))
+%!assert (isequal (quantile (df1, p, 2), quantile (x1, p, 2)))

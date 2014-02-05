@@ -32,7 +32,12 @@ function h = stk_subplot (m, n, p, varargin)
 stk_options = stk_options_get ('stk_axes', 'properties');
 
 % Create axes
-h = subplot (m, n, p, stk_options{:});
+h = subplot (m, n, p);
+
+% Apply STK options first
+if ~ isempty (stk_options)
+  set (h, stk_options{:});
+end
 
 % Apply user-provided options
 if ~ isempty (varargin)

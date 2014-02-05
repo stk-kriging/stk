@@ -52,6 +52,10 @@ end
 
 assignin('base', 'stkRunExamplesErrors', err);
 
+if ~ all (cellfun (@isempty, err))
+    error ('Some examples failed to run properly.');
+end
+    
 fprintf('\n');
 
 end % function stk_runexamples
