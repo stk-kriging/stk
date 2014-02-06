@@ -1,3 +1,22 @@
+2013-12-05  Julien Bect  <julien.bect@supelec.fr>
+
+	Make stk_dataframe row manipulations faster.
+
+	* utils/arrays/@stk_dataframe/private/make_numeric_rownames.c: new
+	* utils/arrays/@stk_dataframe/subsref.m: modified
+	* utils/arrays/@stk_dataframe/subsasgn.m: modified
+	* misc/config/stk_compile_all.m: modified
+	* misc/include/stk_mex.h: modified
+
+	Handle infinities in stk_sprintf_colvect_* functions.
+
+	* misc/text/stk_sprintf_colvect_fixedpoint.m: modified
+	* misc/text/stk_sprintf_colvect_scientific.m: modified
+
+	Add an optional max_width argument to @stk_dataframe/disp.
+
+	* utils/arrays/@stk_dataframe/disp.m: modified
+
 2013-12-03  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix @stk_kreq_qr/stk_update. Add tests.

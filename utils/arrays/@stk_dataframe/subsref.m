@@ -38,7 +38,7 @@ switch idx(1).type
             
         else % ok, only one level of indexing
             
-            d = size (x, 2);
+            [n, d] = size (x);
             L = length (idx(1).subs);
             
             if d == 1, % univariate dataframe
@@ -78,8 +78,11 @@ switch idx(1).type
             r = get (x, 'rownames');
             if ~ isempty (r),
                 r = r(I, 1);
-            elseif ~ isequal (I, 1:length(I))
-                r = cellfun (@num2str, num2cell (I(:)), 'UniformOutput', false);
+            else
+                nn1 = 1:n;  nn2 = nn1(I);
+                if ~ isequal (nn1, nn2)
+                    r = make_numeric_rownames (nn2);
+                end
             end
             
             t = stk_dataframe (x.data(I, J), c, r);

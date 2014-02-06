@@ -4,7 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright  (C) 2012, 2013 SUPELEC                                      *
+ *    Copyright  (C) 2013 SUPELEC                                            *
  *    Author:    Julien Bect <julien.bect@supelec.fr>                        *
  *                                                                           *
  * Copying Permission Statement                                              *
@@ -29,73 +29,46 @@
  *                                                                           *
  ****************************************************************************/
 
-#ifndef ___STK_MEX_H___
-#define ___STK_MEX_H___
+#include "string.h"
+#include "stk_mex.h"
 
-#include <math.h>
-#include "mex.h"
+#define ROWNUM   prhs[0]
+#define ROWNAMES plhs[0]
 
-int stk_is_realmatrix(const mxArray* x)
+void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
-  if (mxIsComplex(x) || !mxIsDouble(x))
-    return 0;
+    double *rownum;
+    size_t n;
+    int i, t;
+    char buffer[2048]; /* FIXME: provide our own cross-platform snprintf ? */ 
 
-  if (mxGetNumberOfDimensions(x) != 2)
-    return 0;
+    /*--- Check number of input/output arguments --------------------------------*/
+    
+    if (nrhs != 1)
+        mexErrMsgTxt ("Incorrect number of input arguments (should be 1).");
+    
+    if (nlhs > 1)
+        mexErrMsgTxt ("Incorrect number of output arguments (should be 1).");
+    
+    /*--- Read row numbers ------------------------------------------------------*/
+    
+    if (!mxIsDoubleVector (ROWNUM))
+        mexErrMsgTxt("Input argument should be a vector of class double.");
+    
+    rownum = mxGetPr (ROWNUM);
+    n = mxGetNumberOfElements (ROWNUM);
 
-  return 1;
+    /*--- Which column are we trying to set ? -----------------------------------*/
+    
+    ROWNAMES = mxCreateCellMatrix (n, 1);
+    
+    for (i = 0; i < n; i ++)
+    {
+        t = rownum[i];
+	if (((double) t) != rownum[i])
+	  mexErrMsgTxt("Row numbers should be integers.");
+	
+	sprintf (buffer, "%d", t);
+	mxSetCell (ROWNAMES, i, mxCreateString (buffer));
+    }
 }
-
-int mxIsDoubleVector (const mxArray* x)
-{
-  size_t m, n;
-
-  if (! stk_is_realmatrix (x))
-    return 0;
-  
-  m = mxGetM (x);
-  n = mxGetN (x);
-
-  return ((m == 1) && (n > 0)) || ((n == 1) && (m > 0));
-}  
-
-void mxReplaceField
-(mxArray* S, mwIndex index, const char* fieldname, const mxArray* value)
-{
-  mxArray *tmp, *value_copy;
-
-  tmp = mxGetField(S, index, fieldname);
-  if (tmp != NULL)
-    mxDestroyArray(tmp);
-
-  value_copy = mxDuplicateArray(value);
-  if (value_copy == NULL)
-    mexErrMsgTxt("mxDuplicateArray: not enough free heap "
-		 "space to create the mxArray");
-  
-  mxSetField(S, index, fieldname, value_copy);
-}
-
-#define  STK_OK                0
-#define  STK_ERROR            -1
-#define  STK_ERROR_DOMAIN      1
-#define  STK_ERROR_OOM         2
-#define  STK_ERROR_SANITY      3
-
-int mxReadScalar_int(const mxArray* x, int* n)
-{
-  double t;
-
-  if (mxGetNumberOfElements(x) != 1)
-    return STK_ERROR;
-  
-  if (mxIsComplex(x) || !mxIsDouble(x))
-    return STK_ERROR;
-
-  t = mxGetScalar(x);
-  *n = (int) t;
-
-  return ((((double) *n) == t) ? STK_OK : STK_ERROR);
-}
-
-#endif

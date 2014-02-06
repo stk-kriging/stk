@@ -100,8 +100,7 @@ switch idx(1).type
                         if isempty (x.rownames)
                             nn1 = 1:n;  nn2 = nn1;  nn2(I) = [];
                             if ~ isequal (nn1, nn2)
-                                x.rownames = cellfun (@num2str, ...
-                                    num2cell (nn2'), 'UniformOutput', false);
+                                x.rownames = make_numeric_rownames (nn2);
                             end
                         else
                             x.rownames(I) = [];
