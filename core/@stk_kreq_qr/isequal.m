@@ -1,10 +1,10 @@
-% STK_BENCHMARK_LOGDET1
+% ISEQUAL [overloaded base function]
 
 % Copyright Notice
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author: Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,35 +26,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-% NREP = 1000; n = 20; % test on small matrices
-NREP = 100; n = 200; % test on large matrices
+function b = isequal (x, y)
 
-d = 2;
-x = stk_sampling_maximinlhs (n, d, [], 10);
-model = stk_model ('stk_materncov52_aniso', d);
+b = strcmp (class (x), class (y)) ...
+    && isequal (struct (x), struct (y));
 
-propname = {                       ...
-    'log_det_covariance_matrix_a', ...
-    'log_det_covariance_matrix_b', ...
-    'log_det_covariance_matrix_c', ...
-    'log_det_covariance_matrix_d', ...
-    'log_det_covariance_matrix_e'  };
+end % function isequal
 
-L = length (propname);
-t = zeros (L, 1);
-v = zeros (L, 1);
-
-for k = 1:L
-    fprintf('Method %d/%d...', k, L);
-    tic;
-    for i = 1:NREP,
-        kreq = stk_kreq_qr (model, x);
-        logdet = get (kreq, propname{k});
-    end
-    t(k) = toc / NREP;
-    v(k) = logdet;
-    fprintf('\n');
-end
-
-display (t)
-display (v)

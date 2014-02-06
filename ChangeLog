@@ -1,3 +1,57 @@
+2013-12-03  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix @stk_kreq_qr/stk_update. Add tests.
+
+	* core/@stk_kreq_qr/stk_kreq_qr.m: modified
+	* core/@stk_kreq_qr/stk_update.m: modified
+	* misc/test/stk_isequal_tolabs.m: modified
+
+2013-12-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Remove residual occurences of stk_kriging_equations.
+
+	* core/@stk_kreq_qr/stk_update.m: modified
+	* misc/benchmarks/stk_benchmark_logdet.m: modified
+
+	Advertise the mailing-list and the ticket manager on Sourceforge.
+
+	* stk_init.m: modified
+	* README: modified
+
+2013-12-01  Julien Bect  <julien.bect@supelec.fr>
+
+	Reorganize the MOLE. Add linsolve only if necessary.
+
+	* misc/mole/octave: removed
+	* misc/mole/octave/linsolve.m: moved to misc/mole/linsolve
+	* misc/mole/linsolve: new folder
+	* misc/mole/linsolve/linsvoled.m: moved from misc/mole/octave
+	* misc/config/stk_path.m: modified
+	* misc/config/stk_set_root.m: modified
+
+	Overload isequal for Octave 3.2.4 support.
+
+	* utils/arrays/@stk_dataframe/isequal.m: new function
+	* core/@stk_kreq_qr/isequal.m: new function
+	* etc/CODING_GUIDELINES: modified
+
+2013-11-30  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a bug in stk_octave_config.
+
+	* misc/config/stk_octave_config.m: modified
+
+	Reorganize the MOLE for the sake of flexibility.
+
+	* misc/mole/corr: new folder
+	* misc/mole/corr/corr.m: moved from misc/mole/matlab/stats
+	* misc/mole/quantile: new folder
+	* misc/mole/quantile/quantile.m: moved from misc/mole/matlab/stat
+	* misc/mole/matlab/stats: removed
+	* misc/mole/matlab/stats/quantile.m: moved to misc/mole/quantile
+	* misc/mole/matlab/stats/corr.m: moved to misc/mole/corr
+	* misc/config/stk_path.m: modified
+
 2013-11-29  Julien Bect  <julien.bect@supelec.fr>
 
 	Add a new function to the MOLE: corr.

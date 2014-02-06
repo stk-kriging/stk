@@ -132,3 +132,17 @@ J. Bect, D. Ginsbourger, L. Li, V. Picheny, and E. Vazquez.   Sequential
 D. R. Jones, M. Schonlau, and J. William.  Efficient global optimization
    of expensive black-box functions. Journal of Global Optimization,
    13(4):455-492, 1998.
+
+
+o Ways to get help, report bugs, ask for new features...
+
+    Use the "help" mailing-list:
+
+       kriging-help@lists.sourceforge.net
+       https://sourceforge.net/p/kriging/mailman
+
+    to ask for help on STK, and the ticket manager:
+
+       https://sourceforge.net/p/kriging/tickets
+
+    to report bugs or ask for new features.

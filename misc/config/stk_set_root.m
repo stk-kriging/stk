@@ -80,10 +80,11 @@ function stk_addpath (root)
 path = stk_path (root);
 
 for i = 1:length (path),
-    if exist (path{i},'dir')
+    if exist (path{i}, 'dir')
         addpath (path{i});
     else
-        error ('problem in stk_path ?');
+        error (sprintf (['Directory %s does not exist.\n' ...
+            'Is there a problem in stk_path ?'], path{i}));
     end
 end
 
