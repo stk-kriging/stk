@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -133,16 +133,14 @@ aLL_best    = +Inf;
 for eta = eta_list
     for rho = rho_list
         fprintf ('[stk_param_init] eta = %.3e, rho = %.3e...\n', eta, rho);
-        % first use sigma2 = 1
+        % first use sigma2 = 1.0
         model.param = log ([1.0; nu; 1/rho]);
         model.lognoisevariance = log (eta);
         [K, P] = stk_make_matcov (model, xi);
         % estimate sigma2
-        % (TODO: use Cholesky ?)
-        zi_ = double (zi);
-        beta = (P' * (K \ P)) \ (P' * zi_);
-        zi = zi_ - P * beta;
-        sigma2 = 1 / (ni - length (beta)) * zi' * (K \ zi);
+        zi = double (zi);  L = chol (K, 'lower');  W = L \ P;
+        beta = (W' * W) \ (W' * (L \ zi));
+        sigma2 = 1 / (ni - length (beta)) * sum ((L \ (zi - P * beta)) .^ 2);
         % now compute the antilog-likelihood
         if sigma2 > 0
             model.param(1) = log (sigma2);
@@ -177,3 +175,13 @@ end % function paraminit_
 % %! xt = (1:9)' + 0.5;  zt = sin (xt);
 % %! zp = stk_predict (model, xi, zi, xt);
 % %! assert (sum ((zt - zp.mean) .^ 2) < 1e-3);
+
+% %!test  % check equivariance of parameter estimates
+% % f = @(x) sin (x); 
+% % xi = stk_sampling_regulargrid (10, 1);  zi = stk_feval (f, xi);
+% % shift = 1000;  scale = 0.01;
+% % model = stk_model ('stk_materncov32_iso');
+% % p1 = stk_param_init (model, xi, zi);
+% % p2 = stk_param_init (model, xi, shift + scale .* zi);
+% % assert (stk_isequal_tolabs (p2(1), p1(1) + log (scale^2), 1e-10))
+% % assert (stk_isequal_tolabs (p2(2), p1(2), eps))

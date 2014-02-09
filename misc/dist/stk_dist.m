@@ -69,7 +69,8 @@ if pairwise,
     if isempty(y),
         D = zeros(size(x, 1), 1);
     else
-        D = stk_dist_pairwise(x, y);
+        D = stk_dist_pairwise (x, y);
+        %D = sqrt (sum ((x - y) .^ 2, 2));  % The MEX-file is usually faster
     end
 else
     if isempty(y),
