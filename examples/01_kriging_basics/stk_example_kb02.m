@@ -139,7 +139,7 @@ xzp = stk_makedata (xt, zp);
 
 %% Visualisation
 
-stk_figure ('stk_example_kb02 (a)');  plot (xt, zt);
+stk_figure ('stk_example_kb02 (a)');  plot (xt, zt, 'k', 'LineWidth', 2);
 stk_title  ('Function to be approximated');
 stk_labels ('input variable x', 'response z');
 

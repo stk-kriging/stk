@@ -97,12 +97,7 @@ switch idx(1).type
                         
                         x.data(I, :) = [];
                         
-                        if isempty (x.rownames)
-                            nn1 = 1:n;  nn2 = nn1;  nn2(I) = [];
-                            if ~ isequal (nn1, nn2)
-                                x.rownames = make_numeric_rownames (nn2);
-                            end
-                        else
+                        if ~ isempty (x.rownames)
                             x.rownames(I) = [];
                         end
                         
@@ -112,15 +107,29 @@ switch idx(1).type
         end
         
     case '{}'
+        
         errmsg = 'Indexing with curly braces is not allowed.';
         stk_error(errmsg, 'IllegalIndexing');
         
     case '.'
         
-        if length(idx) > 1
-            val = subsasgn(get(x, idx(1).subs), idx(2:end), val);
+        if strcmp (idx(1).subs, 'data') && length (idx) > 1,
+            
+            if strcmp (idx(2).type, '()')
+                x = subsasgn (x, idx(2:end), val);
+            else
+                stk_error('Illegal indexing.', 'IllegalIndexing');
+            end
+            
+        else % other than 'data'
+            
+            if length (idx) > 1
+                val = subsasgn (get (x, idx(1).subs), idx(2:end), val);
+            end
+            
+            x = set (x, idx(1).subs, val);
+            
         end
-        x = set(x, idx(1).subs, val);
         
 end
 
@@ -173,12 +182,13 @@ end % function subsasgn
 %! assert (isequal (size (x), [4 2]))
 %! assert (isequal (double (x), [1 9; 2 10; 3 11; 4 12]))
 %! assert (isequal (get (x, 'colnames'), {'u' 'w'}))
+%! assert (isempty (get (x, 'rownames')))
 
 %!test
 %! x(2, :) = [];
 %! assert (isequal (size (x), [3 2]))
 %! assert (isequal (double (x), [1 9; 3 11; 4 12]))
-%! assert (isequal (get (x, 'rownames'), {'1'; '3'; '4'}))
+%! assert (isempty (get (x, 'rownames')))
 
 %!test
 %! x.rownames = {'a'; 'b'; 'c'};
@@ -221,3 +231,13 @@ end % function subsasgn
 %!test % create a new row and a new column through subsasgn()
 %! x = stk_dataframe(rand(5, 2)); x(6, 3) = 7; disp(x)
 %! assert(isequal(size(x), [6, 3]));
+
+%--- tests adding row/columns through row/columns names ------------------------
+
+%!test
+%! x = stk_dataframe ([]);
+%! x.colnames{2} = 'v';
+%! x.rownames{2} = 'b';
+%! assert (isequal (x.rownames, {''; 'b'}));
+%! assert (isequal (x.colnames, {'' 'v'}));
+%! assert (isequalwithequalnans (x.data, nan (2)));

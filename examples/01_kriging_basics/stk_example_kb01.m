@@ -56,7 +56,7 @@ xt = stk_sampling_regulargrid (NT, DIM, BOX);
 zt = stk_feval (f, xt);
 xzt = stk_makedata (xt, zt); % data structure containing (factors, response) pairs
 
-stk_figure ('stk_example_kb01 (a)');  plot (xt, zt);
+stk_figure ('stk_example_kb01 (a)');  plot (xt, zt, 'k', 'LineWidth', 2);
 stk_title  ('Function to be approximated');
 stk_labels ('input variable x', 'response z');
 

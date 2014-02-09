@@ -1,11 +1,13 @@
-% STK_PLOT_SHADEDCI represents pointwise confidence itervals using a shaded area
+% RESHAPE [overloaded base function]
+%
+% Note : the result of reshaping a dataframe is again a dataframe, but all row
+% and columns names are lost in the process.
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Author: Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,18 +29,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_plot_shadedci (x, z)
+function y = reshape (x, varargin)
 
-x = double (x);
+% Silently assume that x is a dataframe
+% (this can go wrong if a dataframe is hidden in varargin, but hey...)
 
-delta = 1.96 * sqrt (abs (z.var));
-h = area (x, [z.mean - delta, 2 * delta]);
-set (h(1), 'FaceColor', 'none');
-set (h(2), 'FaceColor', [0.8 0.8 0.8]);
-set (h, 'LineStyle', '-', 'LineWidth', 1, 'EdgeColor', 'none');
+y = stk_dataframe (reshape (x.data, varargin{:}));
 
-% Raise current axis to the top layer, to prevent it
-% from being hidden by the grayed area
-set (gca, 'Layer', 'top');
+end % function reshape
 
-end % function stk_plot_shadedci
+
+%!test
+%! x = stk_dataframe (randn (10, 3));
+%! y = reshape (x, 5, 6);
+%! assert (isa (y, 'stk_dataframe') && isequal (size (y), [5 6]))
