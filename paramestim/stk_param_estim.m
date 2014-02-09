@@ -51,6 +51,15 @@ if nargin > 3,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
+% size checking: xi, zi
+%if ~ isequal (size (zi), [size(xi, 1) 1]),
+%    errmsg = 'zi should be a column, with the same number of rows as xi.';
+%    stk_error (errmsg, 'IncorrectSize');
+%end
+
+% TODO: turn param0 into an optional argument
+%       => provide a reasonable default choice
+
 % TODO: think of a better way to tell we want to estimate the noise variance
 NOISEESTIM = (nargin == 3);
 

@@ -101,24 +101,27 @@ switch model.domain.type
         
         if isempty (xt)
             % default: predict the response at all possible locations
-            m = size (model.domain.nt, 1);
-            xt = (1:m)';
-        elseif ~iscolumn (xt)
+            nt = size (model.domain.nt, 1);
+            xt = (1:nt)';
+        elseif ~ iscolumn (xt)
             warning ('STK:stk_predict:IncorrectSize', 'xt should be a column.');
             xt = xt(:);
+            nt = size (xt, 1);
         end
         
     case 'continuous',
         
-        assert (~isempty (xt));
+        nt = size (xt, 1);
+        if ~ isequal (size (xt), [nt, size(xi, 2)]),
+            errmsg = 'The size of xt is not correct.';
+            stk_error (errmsg, 'IncorrectSize');
+        end
         
     otherwise
         
         error ('model.domain.type should be either "continuous" or "discrete"');
         
 end
-
-nt = size (xt, 1);
 
 %--- Prepare the output arguments ----------------------------------------------
 
