@@ -166,7 +166,7 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     if EI_max > EI_max_stop,
         % Add the new evaluation to the DoE
-        new_row = horzcat (x_grid(i_max, :), z_grid(i_max));
+        new_row = horzcat (x_grid(i_max, :), z_grid(i_max, :));
         data = vertcat (data, new_row); %#ok<AGROW>
         iter = iter + 1;
     end

@@ -1,4 +1,19 @@
+2014-01-01  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_init: move some Matlab-specific configuration to a dedicated function.
+
+	* misc/config/stk_octave_config.m: renamed to stk_configure_octave
+	* misc/config/stk_configure_octave.m: formerly known as stk_octave_config
+	* misc/config/stk_configure_matlab.m: new function
+	* stk_init.m: modified
+
 2013-12-19  Julien Bect  <julien.bect@supelec.fr>
+
+	Minimalist support for linear indexing on dataframes.
+
+	* utils/arrays/@stk_dataframe/subsref.m: modified
+	* utils/arrays/@stk_dataframe/subsasgn.m: modified
+	* examples/02_design_of_experiments/stk_example_doe03.m: modified
 
 	Overload reshape for stk_dataframe objects.
 
