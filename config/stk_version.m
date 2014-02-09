@@ -1,10 +1,8 @@
-% STK_IS_PCT_INSTALLED returns true if the Parallel Toolbox is available
-%
-% CALL: pct_found = stk_is_pct_installed()
+% STK_VERSION returns STK's version number, as defined in README.
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -28,18 +26,43 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function pct_found = stk_is_pct_installed ()
+function v = stk_version ()
 
-persistent b;
+persistent version_number
 
-if isempty (b),
+if isempty (version_number)
     
-    b = ~ isempty (ver ('distcomp')) && (exist ('matlabpool','file') == 2);
+    % open README
+    filename = fullfile (stk_config_getroot (), 'README');
+    fid = fopen (filename, 'rt');
+    if fid == -1,
+        stk_error ('Unable to open the README file.', 'FOpenFailed');
+    end
     
-    mlock ();
+    % what we're looking for
+    t = 'Version: ';
     
+    while 1
+        
+        % read a new line
+        s = fgetl (fid);
+        if s == -1,
+            fclose (fid);
+            stk_error ('Unable to read STK''s version number.', 'Unexpected');
+        end
+        
+        % look for the pattern
+        i = strfind (s, t);
+        if ~isempty (i)
+            version_number = strtrim (s((i + length(t)):end));
+            fclose (fid);
+            break
+        end
+        
+    end
+        
 end
 
-pct_found = b;
+v = version_number;
 
-end % function stk_is_pct_installed
+end % function stk_version

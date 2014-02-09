@@ -9,7 +9,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -58,7 +58,7 @@ if isempty (optim_num_con) || isempty (optim_num_unc) || force_recheck,
         optim_num_unc = 1;
     else
         % check if Matlab's fmincon is available
-        optim_num_con = 2 + stk_is_fmincon_available();
+        optim_num_con = 2 + stk_optim_hasfmincon ();
         % use fminsearch (Nelder-Mead) for unconstrained optimization
         optim_num_unc = 2;
         % TODO: use fminunc for unconstrained optimization in Matlab

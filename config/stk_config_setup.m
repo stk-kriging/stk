@@ -1,10 +1,8 @@
-% STK_IS_OCTAVE_IN_USE returns true if the STK runs in Octave
-%
-% CALL: octave_in_use = isoctave
+% STK_CONFIG_SETUP initializes the STK
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -28,11 +26,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function octave_in_use = stk_is_octave_in_use ()
+function stk_config_setup ()
 
-warning ('STK:stk_is_octave_in_use:obsolete', ...
-    'This function is obsolete, use isoctave instead.');
+% Set default options
+stk_options_set;
 
-octave_in_use = isoctave;
+if ismatlab
+    % Check for presence of the Parallel Computing Toolbox
+    fprintf ('Parallel Computing toolbox... ');
+    pct_found = stk_parallel_haspct ();
+    if pct_found,
+        fprintf ('found.\n');
+    else
+        fprintf ('not found.\n');
+    end
+end
 
-end % function stk_is_octave_in_use
+% Select optimizers for stk_param_estim
+stk_select_optimizer;
+
+% Disable a warning in stk_predict
+warning ('off', 'STK:stk_predict:NegativeVariancesSetToZero');
+
+end % function stk_config_setup
