@@ -1,3 +1,13 @@
+2014-02-12  Julien Bect  <julien.bect@supelec.fr>
+
+	@stk_kreq_qr: heuristic improvement of numerical conditioning.
+
+	* core/@stk_kreq_qr/private: new folder
+	* core/@stk_kreq_qr/private/compute_P_scaling.m: new function
+	* core/@stk_kreq_qr/stk_update.m: modified
+	* core/@stk_kreq_qr/stk_kreq_qr.m: modified
+	* core/@stk_kreq_qr/stk_set_righthandside.m: modified
+
 2014-02-05  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_testfun_braninhoo.m: Fix domain bound in the documentation.

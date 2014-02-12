@@ -31,13 +31,16 @@ function kreq = stk_kreq_qr (model, xi, xt)
 [Kii, Pi] = stk_make_matcov (model, xi);
 [n, r] = size (Pi);
 
+% heuristics: scale Pi to (try to) avoid conditioning issues later
+P_scaling = compute_P_scaling (Kii, Pi);
+Pi = bsxfun (@times, Pi, P_scaling);
+
 % kriging matrix (left-hand side of the kriging equation)
 LS = [[Kii, Pi]; [Pi', zeros(r)]];
 
 % orthogonal-triangular decomposition
 [Q, R] = qr (LS);
-
-kreq = struct ('n', n, 'r', r, ...
+kreq = struct ('n', n, 'r', r, 'P_scaling', P_scaling, ...
     'LS_Q', Q, 'LS_R', R, 'RS', [], 'lambda_mu', []);
 kreq = class (kreq, 'stk_kreq_qr');
 
