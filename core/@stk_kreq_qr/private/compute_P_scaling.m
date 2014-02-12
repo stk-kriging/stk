@@ -1,10 +1,10 @@
-% STK_SET_RIGHTHANDSIDE [STK internal]
+% COMPUTE_P_SCALING [STK internal]
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,17 +26,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = stk_set_righthandside (kreq, Kti, Pt)
+function s = compute_P_scaling (Kii, Pi)
 
-% This class implements GREEDY EVALUATION: computations are made as soon as the
-% required inputs are made available.
+t = sum (Pi .^ 2);
 
-% prepare the right-hand side of the kriging equation
-Pt = bsxfun (@times, Pt, kreq.P_scaling);
-kreq.RS = [Kti Pt]';
+s = ones (1, size (Pi, 2));
+s(t > 0) = sqrt ((max (sum (Kii .^ 2))) ./ t(t > 0));
 
-% Solve the kriging equation to get the extended
-% kriging weights vector (weights + Lagrange multipliers)
-kreq.lambda_mu = linsolve (kreq);
-
-end % function stk_set_righthandside
+end % function compute_P_scaling

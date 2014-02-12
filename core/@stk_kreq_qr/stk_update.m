@@ -33,14 +33,21 @@ function kreq = stk_update (kreq, Kjj, Kji, Pj, Ktj)
 
 LS  = kreq.LS_Q * kreq.LS_R;
 Kii = LS(1:kreq.n, 1:kreq.n);
-Pi  = LS(1:kreq.n, (kreq.n + 1):end);
+Pi  = bsxfun (@rdivide, LS(1:kreq.n, (kreq.n + 1):end), kreq.P_scaling);
 
-LS = [[Kii Kji' Pi]; [Kji Kjj Pj]; [Pi' Pj' zeros(kreq.r)]];
+Kii = [[Kii Kji']; [Kji Kjj]];
+Pi  = [Pi; Pj];
+
+old_scaling = kreq.P_scaling;
+kreq.P_scaling = compute_P_scaling (Kii, Pi);
+Pi = bsxfun (@times, Pi, kreq.P_scaling);
+
+LS = [[Kii Pi]; [Pi' zeros(kreq.r)]];
 [kreq.LS_Q, kreq.LS_R] = qr (LS);
 
 if ~ isempty (kreq.RS)
     Kti = kreq.RS(1:kreq.n, :)';
-    Pt  = kreq.RS((kreq.n + 1):end, :)';
+    Pt  = bsxfun (@rdivide, kreq.RS((kreq.n + 1):end, :)', old_scaling);
     kreq = stk_set_righthandside (kreq, [Kti Ktj], Pt);
 elseif nargin > 4
     stk_error ('Too many input arguments: no RS to update', 'TooManyInputArgs');
