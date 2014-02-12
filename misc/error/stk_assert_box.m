@@ -59,7 +59,7 @@ if d == 0,
 end
 
 if (nargin == 2) && (d ~= dim)
-    errmsg = sprintf ('%s should exactly %d columns.', boxname, dim);
+    errmsg = sprintf ('%s should have exactly %d columns.', boxname, dim);
     stk_error (errmsg, mnemonic, stack);
 end
 
