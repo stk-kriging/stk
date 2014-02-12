@@ -81,15 +81,17 @@ end % function stk_sampling_maximinlhs
 
 function x = lhsdesign_ (n, d, niter)
 
-bestscore = 0;
-x = [];
+x = generatedesign_ (n, d);
 
-for j = 1:niter
-    y = generatedesign_ (n, d);
-    score = stk_mindist (y);
-    if isempty (x) || (score > bestscore)
-        x = y;
-        bestscore = score;
+if niter > 1,
+    bestscore = stk_mindist (x);
+    for j = 2:niter
+        y = generatedesign_ (n, d);
+        score = stk_mindist (y);
+        if isempty (x) || (score > bestscore)
+            x = y;
+            bestscore = score;
+        end
     end
 end
 

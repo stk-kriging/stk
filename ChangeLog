@@ -1,5 +1,9 @@
 2014-02-12  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_sampling_maximinlhs.m: Do not compute the criterion if niter == 1.
+
+	* stk_sampling_maximinlhs.m: modified
+
 	@stk_kreq_qr: heuristic improvement of numerical conditioning.
 
 	* core/@stk_kreq_qr/private: new folder
