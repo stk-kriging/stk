@@ -16,7 +16,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -41,17 +41,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_sampling_randomlhs(n, dim, box)
+function x = stk_sampling_randomlhs (n, dim, box)
 
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % read argument box
-if (nargin < 3) || isempty(box)
-    box = repmat([0; 1], 1, dim);
-else
-    stk_assert_box(box);
+if (nargin < 3) || isempty (box)
+    box = stk_setobj_box (dim);
 end
 
 niter = 1;

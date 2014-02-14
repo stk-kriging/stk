@@ -1,3 +1,23 @@
+2014-02-14  Julien Bect  <julien.bect@supelec.fr>
+
+	A new class to represent boxes.
+
+	* config/stk_config_path.m: modified
+	* misc/test/stk_is_lhs.m: modified
+	* sampling/stk_sampling_maximinlhs.m: modified
+	* sampling/stk_sampling_olhs.m: modified
+	* sampling/stk_sampling_randomlhs.m: modified
+	* sampling/stk_sampling_randunif.m: modified
+	* sampling/stk_sampling_regulargrid.m: modified
+	* utils/arrays/generic/stk_rescale.m: modified
+	* utils/setobj/@stk_setobj_box/disp.m: new function
+	* utils/setobj/@stk_setobj_box/display.m: new function
+	* utils/setobj/@stk_setobj_box/get.m: new function
+	* utils/setobj/@stk_setobj_box/set.m: new function
+	* utils/setobj/@stk_setobj_box/stk_setobj_box.m: new function
+	* utils/setobj/@stk_setobj_box/subsasgn.m: new function
+	* utils/setobj/@stk_setobj_box/subsref.m: new function
+
 2014-02-12  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_sampling_maximinlhs.m: Do not compute the criterion if niter == 1.
