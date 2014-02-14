@@ -17,7 +17,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -42,37 +42,36 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_sampling_regulargrid(n, dim, box)
+function x = stk_sampling_regulargrid (n, dim, box)
 
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % read argument box
-if (nargin < 3) || isempty(box)
-    box = repmat([0; 1], 1, dim);
+if (nargin < 3) || isempty (box)
+    box = stk_setobj_box (dim);
 else
-    stk_assert_box(box);
+    box = stk_setobj_box (box);
 end
 
-if length(n) == 1
-    n_coord = round(n^(1/dim));
-    if n_coord^dim ~= n,
-        stk_error('n^(1/dim) should be an integer', 'InvalidArgument');
+if length (n) == 1
+    n_coord = round (n^(1/dim));
+    if n_coord ^ dim ~= n,
+        stk_error ('n^(1/dim) should be an integer', 'InvalidArgument');
     end
-    n = n_coord * ones(1, dim);
+    n = n_coord * ones (1, dim);
 else
-    if length(n) ~= dim
-        stk_error( ...
-            'n should either be a scalar or a vector of length d', ...
-            'IncorrectSize');
+    if length (n) ~= dim
+        errmsg = 'n should either be a scalar or a vector of length d';
+        stk_error (errmsg, 'IncorrectSize');
     end
 end
 
 % levels
-levels = cell(1, dim);
+levels = cell (1, dim);
 for j = 1:dim,
-    levels{j} = linspace(box(1, j), box(2, j), n(j));
+    levels{j} = linspace (box.lb(j), box.ub(j), n(j));
 end
 
 x = stk_factorialdesign (levels);

@@ -21,7 +21,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -53,9 +53,7 @@ if nargin > 4,
 end
 
 if (nargin < 3) || isempty (box)
-    box = repmat ([0; 1], 1, d);
-else
-    stk_assert_box (box);
+    box = stk_setobj_box (d);  % [0; 1]^d
 end
 
 if nargin < 4,

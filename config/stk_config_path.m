@@ -5,7 +5,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:   Julien Bect  <julien.bect@supelec.fr>
 
@@ -44,7 +44,8 @@ path = {...
     fullfile(root, 'sampling'                   ) ...
     fullfile(root, 'utils'                      ) ...
     fullfile(root, 'utils', 'arrays'            ) ...
-    fullfile(root, 'utils', 'arrays', 'generic' ) };
+    fullfile(root, 'utils', 'arrays', 'generic' ) ...
+    fullfile(root, 'utils', 'setobj'            ) };
 
 % 'misc' folder and its subfolders
 misc = fullfile (root, 'misc');

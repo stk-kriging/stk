@@ -13,7 +13,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -38,31 +38,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_sampling_randunif(n, dim, box)
+function x = stk_sampling_randunif (n, dim, box)
 
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % read argument n
-if (length(n) ~=1 ) && (length(n) ~= dim)
+if (length (n) ~=1 ) && (length (n) ~= dim)
     error('n should either be a scalar or a vector of length d');
 end
 
 % read argument box
-if (nargin < 3) || isempty(box)
-    box = repmat([0; 1], 1, dim);
-else
-    stk_assert_box(box);
+if (nargin < 3) || isempty (box)
+    box = stk_setobj_box (dim);
 end
 
 if n == 0, % empty sample    
-    xdata = zeros(0,dim);    
+    xdata = zeros (0, dim);    
 else % at least one input point          
-    xdata = stk_rescale(rand(n, dim), [], box);
+    xdata = stk_rescale (rand(n, dim), [], box);
 end
 
-x = stk_dataframe(xdata);
+x = stk_dataframe (xdata);
 x.info = 'Created by stk_sampling_randunif';
 
 end % function stk_sampling_randunif
