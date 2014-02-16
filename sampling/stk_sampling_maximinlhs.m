@@ -86,7 +86,7 @@ if niter > 1,
     for j = 2:niter
         y = generatedesign_ (n, d);
         score = stk_mindist (y);
-        if isempty (x) || (score > bestscore)
+        if score > bestscore
             x = y;
             bestscore = score;
         end
