@@ -1,3 +1,10 @@
+2014-02-16  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_sampling_maximinlhs.m: minor change
+
+	* stk_sampling_maximinlhs.m (lhsdesign_): No need to check if x is
+	empty since we start the loop at j == 2, now.
+
 2014-02-12  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_sampling_maximinlhs.m: Do not compute the criterion if niter == 1.
