@@ -29,19 +29,23 @@
 
 function root = stk_config_getroot ()
 
-try
+root = fileparts (which ('stk_test'));
+
+if isempty (root),
     
-    % This will raise an error if STK is not in the search path
-    root = fileparts (which ('stk_test'));
+    % STK is not in the search path -> Return the path to the copy of STK
+    % that contains this specific version stk_config_getroot
     
-    % Extract root folder
+    root = fileparts (fileparts (mfilename ('fullpath')));
+    
+else
+    
+    % STK is already in the search path -> Deduce the path of STK's root
+    % from the full path of stk_test.
+    
     while ~ exist (fullfile (root, 'stk_init.m'), 'file')
         root = fileparts (root);
     end
-    
-catch
-    
-    root = [];
     
 end
 
