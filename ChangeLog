@@ -1,3 +1,10 @@
+2014-02-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve stk_config_getroot.
+
+	* config/stk_config_getroot.m: Make it work even if STK has not
+	been added to the search path.
+
 2014-02-16  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_sampling_maximinlhs.m: minor change
