@@ -1,5 +1,12 @@
 2014-02-24  Julien Bect  <julien.bect@supelec.fr>
 
+	Rewrite Octave packaging script in Octave (instead of Python).
+
+	* admin/make_octave_package.m: Translation to the Octave langage
+	of make_octave_package.py . Version number now properly set in
+	DESCRIPTION based on the one returned by stk_version ().
+	* admin/make_octave_package.py: deleted
+
 	Try to solve the problem with MEX-files in private directories.
 
 	* stk_init.m: Build the MEX-files *before* adding STK's
