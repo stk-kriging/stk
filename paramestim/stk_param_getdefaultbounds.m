@@ -27,9 +27,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [lb,ub] = stk_param_getdefaultbounds(covariance_type, param0, xi, yi)
+function [lb, ub] = stk_param_getdefaultbounds (covariance_type, param0, xi, zi)
 
-if ~isfloat(param0)
+if ~ isfloat (param0)
     
     stk_error('Incorrect type for param0.', 'TypeMismatch');
     
@@ -40,18 +40,18 @@ else
     TOLSCALE = 5.0;
     
     % bounds for the variance parameter
-    empirical_variance = var(double(yi));
-    logvar_lb = min(log(empirical_variance), param0(1)) - TOLVAR;
-    logvar_ub = max(log(empirical_variance), param0(1)) + TOLVAR;
+    log_empirical_variance = log (var (double (zi)));
+    logvar_lb = min (log_empirical_variance, param0(1)) - TOLVAR;
+    logvar_ub = max (log_empirical_variance, param0(1)) + TOLVAR;
     
-    dim = size(xi, 2);
+    dim = size (xi, 2);
     
     switch covariance_type,
         
         case {'stk_materncov_aniso', 'stk_materncov_iso'}
             
-            nu_lb = min(log(0.5), param0(2));
-            nu_ub = max(log(min(50, 10*dim)), param0(2));
+            nu_lb = min (log (0.5), param0(2));
+            nu_ub = max (log (min (50, 10 * dim)), param0(2));
             
             range_mid = param0(3:end);
             range_lb  = range_mid(:) - TOLSCALE;
@@ -61,7 +61,8 @@ else
             ub = [logvar_ub; nu_ub; range_ub];
             
         case {'stk_materncov32_aniso', 'stk_materncov32_iso', ...
-                'stk_materncov52_aniso', 'stk_materncov52_iso'}
+              'stk_materncov52_aniso', 'stk_materncov52_iso', ...
+              'stk_gausscov_aniso',    'stk_gausscov_iso'}
             
             range_mid = param0(2:end);
             range_lb  = range_mid(:) - TOLSCALE;
@@ -72,7 +73,7 @@ else
             
         otherwise
             
-            warning(sprintf(['Unknown covariance type: %s, ' ...
+            warning (sprintf (['Unknown covariance type: %s, ' ...
                 'returning empty bounds.'], covariance_type)); %#ok<WNTAG,SPWRN>
                 
             lb = [];
