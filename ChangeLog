@@ -1,3 +1,10 @@
+2014-02-18  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_getdefaultbounds.m: Handle Gaussian covariance functions.
+
+	* paramestim/stk_param_getdefaultbounds.m: Handle the case of
+	Gaussian isotropic and anisotropic covariance functions.
+
 2014-02-17  Julien Bect  <julien.bect@supelec.fr>
 
 	Improve stk_config_getroot.
