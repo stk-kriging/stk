@@ -1,5 +1,10 @@
 2014-02-22  Julien Bect  <julien.bect@supelec.fr>
 
+	Rewrite stk_config_rmpath without a call to stk_config_path.
+
+	* config/stk_config_rmpath.m: Rewrite without a call to
+	stk_config_path, in prevision of forthcoming changes.
+
 	Rewrite stk_config_addpath in a cleaner way.
 
 	* config/stk_config_addpath.m: Rewrite the function in a cleaner
