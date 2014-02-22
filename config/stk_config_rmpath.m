@@ -33,9 +33,13 @@ if nargin == 0,
     root = stk_config_getroot ();
 end
 
-warning ('off','MATLAB:rmpath:DirNotFound');
-path = stk_config_path (root);
-rmpath (path{:});
-warning ('on','MATLAB:rmpath:DirNotFound');
+s = path ();
+
+while ~ isempty (s)
+    [d, s] = strtok (s, ':');  %#ok<STTOK>
+    if (~ isempty (regexp (d, ['^' root], 'once'))) && (~ strcmp (d, root))
+        rmpath (d);
+    end
+end
 
 end % function stk_config_rmpath
