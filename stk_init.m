@@ -37,10 +37,6 @@ root = fileparts (mfilename ('fullpath'));
 % Activate the MOLE (this needs to be done FIRST)
 run (fullfile (root, 'misc', 'mole', 'PKG_ADD.m'));
 
-% Add STK folders to the path
-addpath (fullfile (root, 'config'));
-stk_config_addpath (root);  clear root;
-
 % Turn output pagination OFF
 pso_state = page_screen_output (0);
 
@@ -67,9 +63,16 @@ fflush (stdout);
 
 % Build MEX-files
 if ~ (exist ('STK_SKIP_BUILDMEX', 'var') && STK_SKIP_BUILDMEX)
-    % To force recompilation of all MEX-files, use stk_build (true);
-    stk_build;
+    stk_build (false, root, root);  % Build "in-place"
+    % To force recompilation of all MEX-files, use stk_build (true, ...);
 end
+
+% Add STK folders to the path (note: doing this ATFER building the MEX-files seems to
+% solve the problem related to having MEX-files in private folders)
+addpath (fullfile (root, 'config'));  stk_config_addpath (root);  clear root;
+
+% Check that MEX-files located in private folders are properly detected
+if isoctave,  stk_config_testprivatemex ();  end
 
 % Configure STK with default settings
 stk_config_setup;
