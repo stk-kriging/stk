@@ -1,3 +1,12 @@
+2014-02-22  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite stk_config_addpath in a cleaner way.
+
+	* config/stk_config_addpath.m: Rewrite the function in a cleaner
+	way, without the useless output argument.
+	* config/stk_config_getroot.m: Add an additional output argument,
+	to indicate if STK is present in the path.
+
 2014-02-18  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_param_getdefaultbounds.m: Handle Gaussian covariance functions.
