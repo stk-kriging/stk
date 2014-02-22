@@ -27,38 +27,33 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function out = stk_config_addpath (root)
+function stk_config_addpath (root)
 
-current_root = stk_config_getroot ();
-
-if nargin > 0,
+while 1,  % Remove other copies of STK from the search path
     
-    % Remove other copies of STK from the search path
-    while (~ isempty (current_root)) && (~ strcmp (current_root, root))
-        
-        warning (sprintf (['Removing another copy of STK from the ' ...
-            'search path.\n    (%s)\n'], current_root));  %#ok<SPWRN>
-        
-        stk_config_rmpath (current_root);
-        current_root = stk_config_getroot ();
-        
+    [current_root, found_in_path] = stk_config_getroot ();
+    if (~ found_in_path) || (strcmp (current_root, root))
+        break;
     end
     
-    current_root = root;
+    warning (sprintf (['Removing another copy of STK from the ' ...
+        'search path.\n    (%s)\n'], current_root));
     
-    % finally, add STK folders to the path
-    path = stk_config_path (current_root);
-    for i = 1:length (path),
-        if exist (path{i}, 'dir')
-            addpath (path{i});
-        else
-            error (sprintf (['Directory %s does not exist.\n' ...
-                'Is there a problem in stk_config_path ?'], path{i}));
-        end
-    end
+    stk_config_rmpath (current_root);
     
 end
 
-out = current_root;
+% Add STK folders to the path
+path = stk_config_path (root);
+for i = 1:length (path),
+    if exist (path{i}, 'dir')
+        addpath (path{i});
+    else
+        error (sprintf (['Directory %s does not exist.\n' ...
+            'Is there a problem in stk_config_path ?'], path{i}));
+    end
+end
 
 end % function stk_config_addpath
+
+%#ok<*NODEF,*WNTAG,*SPERR,*SPWRN>
