@@ -27,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function root = stk_config_getroot ()
+function [root, found_in_path] = stk_config_getroot ()
 
 root = fileparts (which ('stk_test'));
 
@@ -38,6 +38,8 @@ if isempty (root),
     
     root = fileparts (fileparts (mfilename ('fullpath')));
     
+    found_in_path = false;
+    
 else
     
     % STK is already in the search path -> Deduce the path of STK's root
@@ -46,6 +48,8 @@ else
     while ~ exist (fullfile (root, 'stk_init.m'), 'file')
         root = fileparts (root);
     end
+    
+    found_in_path = true;
     
 end
 
