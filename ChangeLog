@@ -1,5 +1,14 @@
 2014-02-24  Julien Bect  <julien.bect@supelec.fr>
 
+	Try to solve the problem with MEX-files in private directories.
+
+	* stk_init.m: Build the MEX-files *before* adding STK's
+	subdirectories to the path. Finger crossed.
+	* stk_build.m: Don't test if MEX-files located in private
+	directories are found (not at this point).
+	* config/stk_config_testprivatemex.m: New function to test if
+	MEX-files located in private directories are found.
+
 	Add load/unload scripts for the MOLE.
 
 	* misc/mole/PKG_ADD.m: New initialization script, that adds
