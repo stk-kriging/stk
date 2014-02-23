@@ -1,3 +1,17 @@
+2014-02-24  Julien Bect  <julien.bect@supelec.fr>
+
+	Add load/unload scripts for the MOLE.
+
+	* misc/mole/PKG_ADD.m: New initialization script, that adds
+	selected subdirectories of the MOLE to the path.
+	* misc/mole/PKG_DEL.m: Remove MOLE subdirectories from the path.
+	* config/stk_config_path.m: Remove the part that is now handled by
+	the new script (misc/mole/PKG_ADD.m).
+	* etc/octave-pkg/pre_install.m: Run misc/mole/PKG_ADD.m first and
+	PKG_DEL.m at the end (otherwise the load path would contain
+	deleted temp directories after the installation).
+	* stk_init.m: Run misc/mole/PKG_ADD.m first.
+
 2014-02-22  Julien Bect  <julien.bect@supelec.fr>
 
 	Rewrite stk_config_rmpath without a call to stk_config_path.

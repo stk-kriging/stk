@@ -31,10 +31,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-% Add STK folders to the path
+% Deduce the root of STK from the path to this script
 root = fileparts (mfilename ('fullpath'));
+
+% Activate the MOLE (this needs to be done FIRST)
+run (fullfile (root, 'misc', 'mole', 'PKG_ADD.m'));
+
+% Add STK folders to the path
 addpath (fullfile (root, 'config'));
-addpath (fullfile (root, 'misc', 'mole', 'common'));
 stk_config_addpath (root);  clear root;
 
 % Turn output pagination OFF

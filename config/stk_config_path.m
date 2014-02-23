@@ -5,7 +5,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:   Julien Bect  <julien.bect@supelec.fr>
 
@@ -69,36 +69,6 @@ path = [path {...
     fullfile(root, 'examples', '02_design_of_experiments') ...
     fullfile(root, 'examples', '03_miscellaneous'        ) ...
     fullfile(root, 'examples', 'test_functions'          ) }];
-
-mole_dir = fullfile (misc, 'mole');
-
-% MOLE: Matlab/Octave common part
-path = [path {fullfile(mole_dir, 'common')}];
-
-if ~ isoctave,  % MOLE: Matlab-specific part
-    
-    path = [path {fullfile(mole_dir, 'matlab')}];
-    
-    % replacement functions for people that do not have the Statistics toolbox
-    if isempty (ver ('stats'))
-        path = [path {...
-            fullfile(mole_dir, 'corr')     ...
-            fullfile(mole_dir, 'quantile') }];
-    end
-    
-else  % MOLE: Octave-specific part
-    
-    % corr is missing in Octave 3.2.4 (when was it added ?)
-    if ~ exist ('corr', 'file')
-        path = [path {fullfile(mole_dir, 'corr')}];
-    end
-    
-    % linsolve is missing in Octave, up to 3.6.4
-    if ~ exist ('linsolve', 'file')
-        path = [path {fullfile(mole_dir, 'linsolve')}];
-    end
-    
-end
 
 % Fix a problem with private folders in Octave 3.2.x
 if isoctave,
