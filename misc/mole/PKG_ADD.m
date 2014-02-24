@@ -72,3 +72,6 @@ end
 if isempty (which ('quantile'))
     addpath (fullfile (mole_dir, 'quantile'));
 end
+
+
+clear mole_dir

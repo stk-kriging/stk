@@ -2,3 +2,5 @@
 STK_SKIP_BUILDMEX = true;
 
 stk_init;
+
+clear STK_SKIP_BUILDMEX
