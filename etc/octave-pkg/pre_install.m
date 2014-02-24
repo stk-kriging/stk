@@ -10,12 +10,6 @@ function pre_install (desc)
   cd (inst_dir);  
   stk_build (true, src_dir, inst_dir);
   
-  ## copy AUTHORS and README to inst (this makes them available
-  ## in the installation directory for future reference)
-  cd (pkg_dir);
-  copyfile (fullfile (pkg_dir, "AUTHORS"), inst_dir);
-  copyfile (fullfile (pkg_dir, "README"), inst_dir);
-
   run (fullfile (inst_dir, 'misc', 'mole', 'PKG_DEL.m'));
 
 endfunction

@@ -25,7 +25,11 @@ mkdir (build_dir);
 package_dir = fullfile (build_dir, 'stk')
 mkdir (package_dir);
 
-% List of files or directories that must be ignored
+% doc: an optional directory containing documentation for the package
+doc_dir = fullfile (package_dir, 'doc');
+mkdir (doc_dir);
+
+% List of files or directories that must be ignored by process_directory ()
 ignore_list = {'.hg', 'admin', 'etc', 'misc/mole/matlab', build_dir};
 
 % Process directories recursively
@@ -143,11 +147,8 @@ if isempty (regexp (s, '(~|\.(hgtags|mexglx|mex|o|tmp))$', 'once'))
         
     elseif (strcmp (s, 'README')) || (strcmp (s, 'AUTHORS'))
         
-        % README & AUTHORS: these two are placed at the root of the
-        % package directory and will be moved to inst during install
-        % (see pre_install.m)
-        
-        copyfile (s, package_dir);
+        % Put README and AUTHORS in the documentation directory        
+        copyfile (s, fullfile (package_dir, 'doc'));
         
     elseif ~ isempty (regexp (s, '/README$', 'once'))
         
