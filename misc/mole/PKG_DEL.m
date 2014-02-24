@@ -39,3 +39,5 @@ while ~ isempty (s)
         rmpath (d);
     end
 end
+
+clear mole_dir
