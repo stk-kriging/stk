@@ -50,6 +50,8 @@ fprintf (fid, ' and Emmanuel VAZQUEZ <emmanuel.vazquez@supelec.fr>\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Description: blah blah blah\n');
 fprintf (fid, '#\n');
+fprintf (fid, 'Url: https://sourceforge.net/projects/kriging/\n');
+fprintf (fid, '#\n');
 fprintf (fid, 'Categories: Kriging\n');  % optional if an INDEX file is provided
 fclose (fid);
 
