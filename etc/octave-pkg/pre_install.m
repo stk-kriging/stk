@@ -1,6 +1,6 @@
 function pre_install (desc)
 
-  pkg_dir = pwd;
+  pkg_dir = fileparts (mfilename ('fullpath'));
   src_dir = fullfile (pkg_dir, "src");
   inst_dir = fullfile (pkg_dir, "inst");
 
