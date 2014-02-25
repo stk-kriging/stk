@@ -1,5 +1,12 @@
 2014-02-25  Julien Bect  <julien.bect@supelec.fr>
 
+	Rename graphicstoolkit to stk_config_graphicstoolkit.
+
+	* misc/mole/common/graphicstoolkit.m: removed
+	* config/stk_config_graphicstoolkit.m: new function (formerly
+	known as graphicstoolkit)
+	* examples/03_miscellaneous/stk_example_misc02.m: modified
+
 	Rename commonsize () to stk_commonsize ().
 
 	* misc/mole/common/commonsize.m: renamed to...

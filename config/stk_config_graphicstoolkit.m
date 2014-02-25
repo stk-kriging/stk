@@ -1,6 +1,6 @@
 % GRAPHICSTOOLKIT indicates which toolkit is assigned to new figures.
 %
-% CALL: NAME = graphicstoolkit ()
+% CALL: NAME = stk_config_graphicstoolkit ()
 %
 %   returns:
 %    
@@ -10,7 +10,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -34,7 +34,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function name = graphicstoolkit ()
+function name = stk_config_graphicstoolkit ()
 
 if isoctave,
 
@@ -69,4 +69,4 @@ else % Matlab
 
 end
 
-end % function graphicstoolkit
+end % function stk_config_graphicstoolkit
