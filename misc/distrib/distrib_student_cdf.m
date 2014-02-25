@@ -46,7 +46,7 @@ if nargin > 3,
 end
 
 xx = x .^ 2;
-[x, xx, nu] = commonsize (x, xx, nu);
+[x, xx, nu] = stk_commonsize (x, xx, nu);
 
 % Return NaN for negative values of nu (or nu == NaN, or x == NaN)
 p = nan (size (x));

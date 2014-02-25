@@ -57,7 +57,7 @@ if isscalar (nu)
         density = exp (- 0.5 * (nu + 1) * log (1 + x .^ 2 / nu)) / C;
     end
 else
-    [x, nu, C] = commonsize (x, nu, C);
+    [x, nu, C] = stk_commonsize (x, nu, C);
     density = nan (size (x));
     % Gaussian case (nu = +inf)
     k = (nu == +inf);

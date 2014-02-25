@@ -1,8 +1,10 @@
-% COMMONSIZE ...
+% STK_COMMONSIZE ...
+%
+% TODO: describe differences with Octave's common_size function.
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,7 +28,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function varargout = commonsize (varargin)
+function varargout = stk_commonsize (varargin)
 
 n = length (varargin);
 
@@ -69,4 +71,4 @@ else
     
 end
 
-end % function commonsize
+end % function stk_commonsize
