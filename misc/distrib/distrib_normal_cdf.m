@@ -37,7 +37,7 @@ if nargin > 1,
 end
 
 if nargin > 2,
-    [x, sigma] = commonsize (x, sigma);
+    [x, sigma] = stk_commonsize (x, sigma);
     x = x ./ sigma;
     k0 = (sigma > 0);
 else

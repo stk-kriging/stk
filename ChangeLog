@@ -1,5 +1,17 @@
 2014-02-25  Julien Bect  <julien.bect@supelec.fr>
 
+	Rename commonsize () to stk_commonsize ().
+
+	* misc/mole/common/commonsize.m: renamed to...
+	* utils/arrays/generic/stk_commonsize.m: ...this
+	* misc/distrib/distrib_normal_cdf.m: modified
+	* misc/distrib/distrib_normal_ei.m: modified
+	* misc/distrib/distrib_normal_pdf.m: modified
+	* misc/distrib/distrib_student_cdf.m: modified
+	* misc/distrib/distrib_student_ei.m: modified
+	* misc/distrib/distrib_student_pdf.m: modified
+	* misc/mole/README: modified
+
 	doc: update some help texts (script names have changed)
 
 	* paramestim/stk_param_estim.m: fix doc
