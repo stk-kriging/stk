@@ -18,16 +18,7 @@ STK. Therefore, here, functions DO NOT have their name prefixed by stk_.
 Directories
 ===========
 
-./common
-
-   contains functions that exist neither in Matlab nor in Octave (but should, in
-   our opinion). The function names must be chosen to avoid conflicts with all
-   supported releases of both Octave and Matlab, which (currently) means Octave
-   >= 3.2.4 and Matlab >= 2007a.
-
-./matlab
-
-   contains functions that are missing in Matlab:
+./matlab contains functions that are missing in Matlab:
 
       o fflush
       o file_in_loadpath
@@ -36,3 +27,9 @@ Directories
       o page_screen_output
       o stdout
 
+Other functions are provided in single-function subdirectories:
+
+      o isoctave
+      o corr
+      o linsolve
+      o quantile

@@ -1,3 +1,37 @@
+2014-02-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve building and Octave packaging.
+
+	* admin/make_octave_package.m: modified
+	* stk_build.m: renamed...
+	* config/stk_config_buildmex.m: ...to this; modified.
+	* config/stk_config_makeinfo.m: new function
+	* config/stk_config_rmpath.m: modified
+	* config/stk_config_testprivatemex.m: modified
+	* etc/octave-pkg/Makefile: new file
+	* etc/octave-pkg/PKG_ADD.m: modified
+	* etc/octave-pkg/PKG_DEL.m: modified
+	* etc/octave-pkg/pre_install.m: deleted
+	* etc/octave-pkg/post_install.m: new script
+	* stk_init.m: modified
+
+	Reorganize the MOLE.
+
+	* misc/mole/PKG_ADD.m: Renamed to init.m
+	* misc/mole/init.m: Renamed from PKG_ADD.m. Add variables
+	MOLE_DO_ADDPATH and MOLE_PRUNE_ADDPATH to control the behaviour of
+	the script.
+	* misc/mole/PKG_DEL.m: Remove (was not needed after all).
+	* etc/octave-pkg/pre_install.m: Call init.m (renamed from
+	PKG_ADD.m) with MOLE_DO_ADDPATH = false and MOLE_PRUNE_ADDPATH =
+	true. Remove call to PKG_DEL.m (was not needed, after all).
+	* misc/mole/README: Bring up to date with the new organization of
+	the MOLE.
+	* misc/mole/common/isoctave.m: Moved to ../isoctave.
+	* misc/mole/isoctave/isoctave.m: Moved from ../common.
+	* misc/mole/install_mole_function.m: Helper function for init.m.
+	* stk_init.m: Modified (call init.m instead of PKG_ADD.m).
+
 2014-02-25  Julien Bect  <julien.bect@supelec.fr>
 
 	Get rid of ismatlab (). Just use ~ isoctave () instead.

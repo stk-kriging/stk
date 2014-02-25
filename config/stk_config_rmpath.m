@@ -35,11 +35,32 @@ end
 
 s = path ();
 
+regex1 = ['^' root];
+
+% Safer than calling isoctave directly (this allows stk_config_rmpath to work
+% even if STK has already been partially uninstalled or is not properly installed)
+isoctave_ = (exist ('OCTAVE_VERSION', 'builtin') == 5);
+
+if isoctave_,
+    regex2 = strrep ([octave_config_info("api_version") '$'], '+', '\+');
+end
+
 while ~ isempty (s)
+    
     [d, s] = strtok (s, ':');  %#ok<STTOK>
-    if (~ isempty (regexp (d, ['^' root], 'once'))) && (~ strcmp (d, root))
+    
+    if (~ isempty (regexp (d,  regex1, 'once'))) ...
+        && ((~ isoctave_) || isempty (regexp (d,  regex2, 'once'))) ...
+        && (~ strcmp (d, root))  % See note below
+        
         rmpath (d);
+        
     end
 end
+
+% Note: it is important NOT to remove STK's root folder at this point. Indeed,
+% in the case where STK is used as an Octave package, this would result in
+% calling PKG_DEL, and therefore stk_config_rmpath again, causing an infinite
+% loop.
 
 end % function stk_config_rmpath

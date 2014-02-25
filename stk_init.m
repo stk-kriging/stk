@@ -35,7 +35,7 @@
 root = fileparts (mfilename ('fullpath'));
 
 % Activate the MOLE (this needs to be done FIRST)
-run (fullfile (root, 'misc', 'mole', 'PKG_ADD.m'));
+run (fullfile (root, 'misc', 'mole', 'init.m'));
 
 % Turn output pagination OFF
 pso_state = page_screen_output (0);
@@ -61,18 +61,29 @@ disp ('=====================================================================');
 disp ('                                                                     ');
 fflush (stdout);
 
-% Build MEX-files
-if ~ (exist ('STK_SKIP_BUILDMEX', 'var') && STK_SKIP_BUILDMEX)
-    stk_build (false, root, root);  % Build "in-place"
-    % To force recompilation of all MEX-files, use stk_build (true, ...);
+% Are we using STK installed as an octave package ?
+if ~ exist ('STK_OCTAVE_PACKAGE', 'var')
+    STK_OCTAVE_PACKAGE = false;
+end
+
+% config contains stk_config_buildmex and stk_config_addpath, used below
+addpath (fullfile (root, 'config'));
+
+% Build MEX-files "in-place" (unless STK is used as an Octave package)
+if ~ STK_OCTAVE_PACKAGE
+    stk_config_buildmex ();
+    % To force recompilation of all MEX-files, use stk_config_buildmex (true);
 end
 
 % Add STK folders to the path (note: doing this ATFER building the MEX-files seems to
 % solve the problem related to having MEX-files in private folders)
-addpath (fullfile (root, 'config'));  stk_config_addpath (root);  clear root;
+stk_config_addpath (root);  clear root;
 
-% Check that MEX-files located in private folders are properly detected
-if isoctave,  stk_config_testprivatemex ();  end
+% Check that MEX-files located in private folders are properly detected (note: 
+% there are no MEX-files in private folders if STK is used as an Octave package)
+if isoctave && (~ STK_OCTAVE_PACKAGE),
+    stk_config_testprivatemex ();
+end
 
 % Configure STK with default settings
 stk_config_setup;
