@@ -27,10 +27,12 @@ Directories
 
 ./matlab
 
-   contains functions that are Matlab-specific (typically, Octave functions that
-   are missing in Matlab, such as stdout, index, fflush...).
+   contains functions that are missing in Matlab:
 
-./octave
+      o fflush
+      o file_in_loadpath
+      o file_in_path
+      o index
+      o page_screen_output
+      o stdout
 
-   contains functions that are Octave-specific (typically, Matlab functions that
-   are missing in Octave, such as linsolve, evalc...).

@@ -57,7 +57,7 @@ if nargin > 4,
     end
 end
 
-[delta, nu, sigma] = commonsize (delta, nu, sigma);
+[delta, nu, sigma] = stk_commonsize (delta, nu, sigma);
 
 ei = nan (size (delta));
 
