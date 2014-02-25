@@ -1,5 +1,10 @@
 2014-02-25  Julien Bect  <julien.bect@supelec.fr>
 
+	Get rid of ismatlab (). Just use ~ isoctave () instead.
+
+	* config/stk_config_setup.m: Replace ismatlab -> ~isoctave.
+	* misc/mole/common/ismatlab.m: Removed.
+
 	Rename graphicstoolkit to stk_config_graphicstoolkit.
 
 	* misc/mole/common/graphicstoolkit.m: removed
