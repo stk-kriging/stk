@@ -16,11 +16,12 @@
 % variance of the observation noise is assumed to be known (and given by
 % MODEL.noise.cov.variance).
 %
-% EXAMPLES: see example02.m, example03.m, example08.m
+% EXAMPLES: see, e.g., stk_example_kb02, stk_example_kb03, stk_example_kb04,
+%           stk_example_kb06, stk_example_misc02
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -79,7 +80,7 @@ end
 
 if (nargin < 2) || isempty(cparam0),
     cparam0 = model.randomprocess.priorcov.cparam;
-end
+    end
 
 % % Cast param0 into an object of the appropriate type and size
 % % and set model.param to the same value

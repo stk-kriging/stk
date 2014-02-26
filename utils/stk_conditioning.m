@@ -19,17 +19,19 @@
 %    assumes that the oberved values ZI correspond to the first NI evaluation
 %    points.
 %
-% NOTE: stk_conditioning uses the technique called "conditioning by kriging"
+% NOTE: conditioning by kriging
+%
+%    stk_conditioning uses the technique called "conditioning by kriging"
 %    (see, e.g., Chiles and Delfiner, Geostatistics: Modeling Spatial
 %    Uncertainty, Wiley, 1999)
 %
-% EXAMPLE: see STK/examples/example05.m
+% EXAMPLE: stk_example_kb05
 %
 % See also stk_generate_samplepaths, stk_predict
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>

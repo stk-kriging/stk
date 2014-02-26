@@ -1,3 +1,11 @@
+2014-02-25  Julien Bect  <julien.bect@supelec.fr>
+
+	doc: update some help texts (script names have changed)
+
+	* paramestim/stk_param_estim.m: fix doc
+	* utils/stk_conditioning.m: fix doc
+	* utils/stk_generate_samplepaths.m: fix doc
+
 2014-02-24  Julien Bect  <julien.bect@supelec.fr>
 
 	Rewrite Octave packaging script in Octave (instead of Python).
