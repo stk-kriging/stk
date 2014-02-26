@@ -16,13 +16,13 @@
 %    factorization of the covariance matrix, and is therefore restricted to
 %    moderate values of the number of evaluation points.
 %
-% EXAMPLE: see STK/examples/example05.m
+% EXAMPLES: see stk_example_kb05, stk_example_kb07
 %
 % See also stk_conditioning, chol
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>

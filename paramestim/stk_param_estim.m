@@ -12,15 +12,18 @@
 %   to the case where the observations are assumed noisy. A starting point
 %   (PARAM0, LNV0) has to be provided.
 %
-% NOTE: the first form can be used with noisy observations, in which case the
-% variance of the observation noise is assumed to be known (and given by
-% exp(MODEL.lognoisevariance).
+% NOTE: known noise variance
 %
-% EXAMPLES: see example02.m, example03.m, example08.m
+%   The first form can be used with noisy observations, in which case the
+%   variance of the observation noise is assumed to be known (and given by
+%   exp (MODEL.lognoisevariance).
+%
+% EXAMPLES: see, e.g., stk_example_kb02, stk_example_kb03, stk_example_kb04,
+%           stk_example_kb06, stk_example_misc02
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
