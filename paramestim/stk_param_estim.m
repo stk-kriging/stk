@@ -131,18 +131,18 @@ switch stk_select_optimizer(bounds_available)
         catch
             % The 'Algorithm' option does not exist in some old versions of
             % Matlab (e.g., version 3.1.1 provided with R2007a)...
-            err = lasterror();
-            if strcmp(err.identifier, 'MATLAB:optimset:InvalidParamName')
-                options = optimset('Display', 'iter', 'GradObj', 'on', ...
+            err = lasterror ();
+            if strcmp (err.identifier, 'MATLAB:optimset:InvalidParamName')
+                options = optimset ('Display', 'iter', 'GradObj', 'on', ...
                     'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
             else
-                rethrow(err);
+                rethrow (err);
             end
         end
-        u_opt = fmincon(f, u0, [], [], [], [], lb, ub, [], options);
+        u_opt = fmincon (f, u0, [], [], [], [], lb, ub, [], options);
         
     otherwise
-        error('Unexpected value returned by stk_select_optimizer.');
+        error ('Unexpected value returned by stk_select_optimizer.');
         
 end % switch
 
@@ -168,6 +168,8 @@ else
 end % if
 
 end % function stk_param_estim ------------------------------------------------
+
+%#ok<*CTCH,*LERR>
 
 
 %--- The objective function and its gradient ----------------------------------
