@@ -57,6 +57,17 @@ if ~ ((isscalar (nu)) && (nu > 0))
     stk_error ('nu should be a positive scalar.', 'IncorrectSize');
 end
 
+% Handle the case of VERY large nu
+if nu > 1e305,
+    % nu = 1e306 is so large thatn even gammaln (nu) is not defined !
+    if diff <= 0,
+        k = stk_sf_gausscorr (h);  return;
+    else
+        % Cannot compute or approximate the derivative for such a large nu
+        k = nan (size (h)); return;
+    end
+end
+        
 % Tolerance for the detection of half-integer values of nu
 TOL = 10 * eps;
 
@@ -71,11 +82,7 @@ if diff ~= 1,
     elseif abs (nu - 2.5) < TOL,
         
         k = stk_sf_matern52 (h, diff - 1);  return;
-        
-    elseif isinf (nu)
-        
-        k = stk_sf_gausscorr (h, diff - 1);  return;
-        
+               
     end
     
 end
@@ -83,13 +90,19 @@ end
 [N, M] = size (h);
 hp = abs (reshape (h, N * M, 1));
 t = 2 * sqrt (nu) * hp;
-z = 2 ^ (nu - 1) * gamma (nu) * t .^ (-nu);
+z = 0.5 * exp (gammaln (nu) - nu * log (0.5 * t));
 I = ~ isinf (z);
 
 if diff <= 0
     
-    k = ones (N * M, 1);
+    k = zeros (N * M, 1);
+    
+    % When z < +Inf, compute using the modified Bessel function of the second kind
     k(I) = 1 ./ z(I) .* besselk_ (nu, t(I));
+    
+    % When z == +Inf, it means nu is large and/or t is close to zero.
+    % We approximate the result with the upper bound provided by the Gaussian case.
+    k(~I) = stk_sf_gausscorr (h(~I));
     
 elseif diff == 1  % numerical derivative wrt Nu
     
