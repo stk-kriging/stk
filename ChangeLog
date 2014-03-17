@@ -1,3 +1,16 @@
+2014-03-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Handle large values of nu better in stk_sf_matern.
+
+	* misc/specfun/stk_sf_matern.m: Handle large values of nu better.
+
+2014-03-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Handle Gaussian covariance functions in stk_param_init.
+
+	* paramestim/stk_param_init.m: Handle Gaussian covariance functions.
+	* paramestim/stk_param_estim.m: Source formatting.
+
 2014-03-14  Julien Bect  <julien.bect@supelec.fr>
 
 	Handle special cases in stk_sf_matern.
@@ -1457,7 +1470,7 @@
 
 	* sampling/stk_sampling_olhs.m: The function now has an additional
 	hidden option to trigger the construction of an extended (N)OLHS
-	following the paper by Cioppa & Lucas (Technometrics, 2007).
+	following the paper by Cioppa & Lucs (Technometrics, 2007).
 
 	Fixed a bug in stk_rescale() and added regression tests.
 
@@ -1639,11 +1652,6 @@
 
 2012-12-16  Julien Bect  <julien.bect@supelec.fr>
 
-	Fixed some tests.
-
-	* core/@stk_model/stk_ortho_func.m: modified
-	* core/@stk_model/stk_make_matcov.m: modified
-
 	Modified stk_runtests() to browse through private folders and
 	class(@) folders.
 
@@ -1652,17 +1660,6 @@
 	Fixed a typo.
 
 	* misc/test/stk_runtests.m: modified
-
-2012-12-15  Julien Bect  <julien.bect@supelec.fr>
-
-	Fixed tests.
-
-	* paramestim/stk_reml.m: modified
-	* paramestim/stk_param_estim.m: modified
-
-	Added a second syntax to stk_setobs().
-
-	* core/@stk_model/stk_setobs.m: modified
 
 2012-12-14  Benoit Jan  <benoit.jan@supelec.fr>
 
