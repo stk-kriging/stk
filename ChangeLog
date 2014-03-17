@@ -1,9 +1,15 @@
+2014-03-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Handle large values of nu better in stk_sf_matern.
+
+	* misc/specfun/stk_sf_matern.m: Handle large values of nu better.
+
 2014-03-14  Julien Bect  <julien.bect@supelec.fr>
 
 	Handle Gaussian covariance functions in stk_param_init.
 
-	* stk_param_init.m: Handle Gaussian covariance functions.
-	* stk_param_estim.m: Source formatting.
+	* paramestim/stk_param_init.m: Handle Gaussian covariance functions.
+	* paramestim/stk_param_estim.m: Source formatting.
 
 2014-03-14  Julien Bect  <julien.bect@supelec.fr>
 
