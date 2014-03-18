@@ -1,6 +1,6 @@
 README Copyright Notice
 
-    Copyright (C) 2013 SUPELEC
+    Copyright (C) 2013, 2014 SUPELEC
 
     Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -34,19 +34,11 @@ This directory contains replacements for the cdf/pdf/rnd/... functions.
 To avoid name clashes, a different naming scheme is used for the replacement
 functions provided here. For instance:
 
- * distrib_normal_cdf is a replacement for normcdf
- * distrib_normal_pdf -------------------- normpdf
- * distrib_student_cdf ------------------- tcdf
- * distrib_student_pdf ------------------- tpdf
+ * stk_distrib_normal_cdf is a replacement for normcdf
+ * stk_distrib_normal_pdf -------------------- normpdf
+ * stk_distrib_student_cdf ------------------- tcdf
+ * stk_distrib_student_pdf ------------------- tpdf
  * ...
-
-
-Long term goal
-==============
-
-These functions are general purpose statistical functions, that are not
-inherently part of STK and might one day be released as an independent
-package. This is why they do not have their name prefixed by stk_.
 
 
 Why we want/need these functions
@@ -60,7 +52,7 @@ that STK runs properly on all supported releases of GNU Octave and Matlab, we
 need to provide replacement for the faulty functions.
 
 Second, we want to avoid having a depency on Mathworks' Statistical Toolbox,
-which where these functions live for Matlab users (the situation is different
+which is where these functions live for Matlab users (the situation is different
 with GNU Octave, since these functions are shipped with Octave itself, not in a
 separate package).
 
