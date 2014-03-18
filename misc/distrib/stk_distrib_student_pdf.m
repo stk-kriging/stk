@@ -1,8 +1,8 @@
-% DISTRIB_STUDENT_PDF ...
+% STK_DISTRIB_STUDENT_PDF ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 %
@@ -30,7 +30,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function density = distrib_student_pdf (x, nu, mu, sigma)
+function density = stk_distrib_student_pdf (x, nu, mu, sigma)
 
 if nargin > 4,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -69,17 +69,17 @@ end
 
 density = bsxfun (@rdivide, density, sigma);
 
-end % function distrib_student_pdf
+end % function stk_distrib_student_pdf
 
 
 %!assert (stk_isequal_tolrel ( ...
-%!                 distrib_student_pdf ([1; 3], [1; 2], [0 1], [1 10]), ...
+%!                 stk_distrib_student_pdf ([1; 3], [1; 2], [0 1], [1 10]), ...
 %!                 [0.50 / pi              ...  % tpdf ((1 - 1) / 10, 1)
 %!                  0.10 / pi;             ...  % tpdf ((1 - 1) / 10, 1) / 10
 %!                  1 / (11 * sqrt(11))    ...  % tpdf ((3 - 0) /  1, 2) /  1
 %!                  3.4320590294804165e-02 ...  % tpdf ((3 - 1) / 10, 2) / 10
 %!                 ], eps));
 
-%!assert (isequal (distrib_student_pdf ( inf, 1.0), 0.0));
-%!assert (isequal (distrib_student_pdf (-inf, 1.0), 0.0));
-%!assert (isnan   (distrib_student_pdf ( nan, 1.0)));
+%!assert (isequal (stk_distrib_student_pdf ( inf, 1.0), 0.0));
+%!assert (isequal (stk_distrib_student_pdf (-inf, 1.0), 0.0));
+%!assert (isnan   (stk_distrib_student_pdf ( nan, 1.0)));

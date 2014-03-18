@@ -1,8 +1,8 @@
-% DISTRIB_NORMAL_EI ...
+% STK_DISTRIB_NORMAL_EI ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:   Julien Bect     <julien.bect@supelec.fr>
 %               Romain Benassi  <romain.benassi@gmail.com>
@@ -27,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function ei = distrib_normal_ei (x, mu, sigma, minimize)
+function ei = stk_distrib_normal_ei (x, mu, sigma, minimize)
 
 if nargin > 4,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -65,7 +65,7 @@ b1 = (sigma > 0);
 % Compute the EI where sigma > 0
 b = b0 & b1;
 u = delta(b) ./ sigma(b);
-ei(b) = sigma(b) .* (distrib_normal_pdf (u) + u .* distrib_normal_cdf (u));
+ei(b) = sigma(b) .* (stk_distrib_normal_pdf (u) + u .* stk_distrib_normal_cdf (u));
 
 % Compute the EI where sigma == 0
 b = b0 & (~ b1);
@@ -74,19 +74,19 @@ ei(b) = max (0, delta(b));
 % Correct numerical inaccuracies
 ei(ei < 0) = 0;
 
-end % function distrib_normal_ei
+end % function stk_distrib_normal_ei
 
 
-%!assert (stk_isequal_tolrel (distrib_normal_ei (0.0), 1 / sqrt (2 * pi), eps))
+%!assert (stk_isequal_tolrel (stk_distrib_normal_ei (0.0), 1 / sqrt (2 * pi), eps))
 
 %!test % decreasing as a function of x
-%! ei = distrib_normal_ei (linspace (-10, 10, 200));
+%! ei = stk_distrib_normal_ei (linspace (-10, 10, 200));
 %! assert (all (diff (ei) < 0))
 
 %!test % size and positivity of the result
 %! M = randn (1, 10);
 %! mu = randn (5, 1);
 %! sigma = 1 + rand (1, 1, 7);
-%! ei = distrib_normal_ei (M, mu, sigma);
+%! ei = stk_distrib_normal_ei (M, mu, sigma);
 %! assert (isequal (size (ei), [5, 10, 7]))
 %! assert (all (ei(:) >= 0))

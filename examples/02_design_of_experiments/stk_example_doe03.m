@@ -13,7 +13,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -146,7 +146,7 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     % Compute the Expected Improvement (EI) criterion
     % (the fourth argument indicates that we want to MAXIMIZE f)
-    EI = distrib_normal_ei (max (data.z), z_post.mean, sqrt (z_post.var), true);
+    EI = stk_distrib_normal_ei (max (data.z), z_post.mean, sqrt (z_post.var), true);
     
     % Pick the point where the EI is maximum as our next evaluation point
     [EI_max, i_max] = max (EI);
