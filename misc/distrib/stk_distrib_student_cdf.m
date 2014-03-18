@@ -1,8 +1,8 @@
-% DISTRIB_STUDENT_CDF ...
+% STK_DISTRIB_STUDENT_CDF ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 %
@@ -31,7 +31,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [p, q] = distrib_student_cdf (x, nu, mu, sigma)
+function [p, q] = stk_distrib_student_cdf (x, nu, mu, sigma)
 
 if nargin > 4,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -55,7 +55,7 @@ k0 = (nu > 0) & (~ isnan (x));
 
 % Gaussian case (nu = +inf)
 k_inf = isinf (nu);  k = k0 & k_inf;
-[p(k), q(k)] = distrib_normal_cdf (x(k));
+[p(k), q(k)] = stk_distrib_normal_cdf (x(k));
 
 k0 = k0 & (~ k_inf);
 kp = (x > 0);
@@ -77,11 +77,11 @@ k = kn & (~ k_big_abs);
 p(k) = 0.5 * (1 - betainc (xx(k) ./ (nu(k) + xx(k)), 1/2, nu(k)/2));
 q(kn) = 1 - p(kn);
 
-end % function distrib_student_cdf
+end % function stk_distrib_student_cdf
 
 
 %!assert (stk_isequal_tolrel ( ...
-%!        distrib_student_cdf ([-1; 0; 1], [1 2], 0, [1 10]), ...
+%!        stk_distrib_student_cdf ([-1; 0; 1], [1 2], 0, [1 10]), ...
 %!        [0.25,                   ... % tcdf ((-1 - 0)/1,  1)
 %!         4.6473271920707004e-01; ... % tcdf ((-1 - 0)/10, 2)
 %!         0.50,                   ... % tcdf (( 0 - 0)/1,  1)
@@ -91,11 +91,11 @@ end % function distrib_student_cdf
 %!        ], 4 * eps))
 
 %!test
-%! [p, q] = distrib_student_cdf (1e10, 2);
+%! [p, q] = stk_distrib_student_cdf (1e10, 2);
 %! assert (isequal (p, 1.0));
 %! assert (stk_isequal_tolrel (q, 4.999999999999999999925e-21, 10 * eps));
 
-%!assert (isequal (distrib_student_cdf (0.0, 1), 0.5));
-%!assert (isequal (distrib_student_cdf (inf, 1), 1.0));
-%!assert (isequal (distrib_student_cdf (-inf, 1), 0.0));
-%!assert (isnan   (distrib_student_cdf (nan, 1)));
+%!assert (isequal (stk_distrib_student_cdf (0.0, 1), 0.5));
+%!assert (isequal (stk_distrib_student_cdf (inf, 1), 1.0));
+%!assert (isequal (stk_distrib_student_cdf (-inf, 1), 0.0));
+%!assert (isnan   (stk_distrib_student_cdf (nan, 1)));

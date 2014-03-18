@@ -1,3 +1,22 @@
+2014-03-18  Julien Bect  <julien.bect@supelec.fr>
+
+	Restore the stk_ prefix for distrib_* functions.
+
+	* misc/distrib/distrib_normal_cdf.m: renamed (from)
+	* misc/distrib/distrib_normal_ei.m: renamed (from)
+	* misc/distrib/distrib_normal_pdf.m: renamed (from)
+	* misc/distrib/distrib_student_cdf.m: renamed (from)
+	* misc/distrib/distrib_student_ei.m: renamed (from)
+	* misc/distrib/distrib_student_pdf.m: renamed (from)
+	* misc/distrib/stk_distrib_normal_cdf.m: rename (to)
+	* misc/distrib/stk_distrib_normal_ei.m: rename (to)
+	* misc/distrib/stk_distrib_normal_pdf.m: rename (to)
+	* misc/distrib/stk_distrib_student_cdf.m: rename (to)
+	* misc/distrib/stk_distrib_student_ei.m: rename (to)
+	* misc/distrib/stk_distrib_student_pdf.m: rename (to)
+	* examples/02_design_of_experiments/stk_example_doe03.m: modified
+	* misc/distrib/README: modified
+
 2014-03-17  Julien Bect  <julien.bect@supelec.fr>
 
 	Handle large values of nu better in stk_sf_matern.
