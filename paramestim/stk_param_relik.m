@@ -1,4 +1,4 @@
-% STK_REMLQRG computes the restricted likelihood of a model given data.
+% STK_PARAM_RELIK computes the restricted likelihood of a model given data.
 %
 % CALL: [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (MODEL, XI, YI)
 %
@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>

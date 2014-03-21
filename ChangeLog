@@ -1,3 +1,9 @@
+2014-03-21  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_relik: Fix help text.
+
+	* paramestim/stk_param_relik.m: Fix help text.
+
 2014-03-18  Julien Bect  <julien.bect@supelec.fr>
 
 	Restore the stk_ prefix for distrib_* functions.
