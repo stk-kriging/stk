@@ -37,15 +37,14 @@ function optim_num = stk_select_optimizer (bounds_available, display)
 
 persistent optim_num_con optim_num_unc
 
-if nargin == 0, % invocation with no arguments (typically, in stk_init)
+if nargin == 0, % invocation with no arguments (setup)
     
-    bounds_available = true;             % in fact we don't care in stk_init...
     display = true;                      % verbose
     force_recheck = true;                % recheck which optimizer to use
     
 else % invocation with at least one argument (typically, in stk_param_estim)
     
-    if nargin < 2, display = false; end  % default: don't display anything
+    display = (nargin > 1) && display;   % default: don't display anything
     force_recheck = false;               % don't recheck which optimizer to use
     
 end
@@ -68,10 +67,14 @@ if isempty (optim_num_con) || isempty (optim_num_unc) || force_recheck,
 end
 
 % return the selected optimizer
-if bounds_available,
-    optim_num = optim_num_con;
+if nargin > 0
+    if bounds_available,
+        optim_num = optim_num_con;
+    else
+        optim_num = optim_num_unc;
+    end
 else
-    optim_num = optim_num_unc;
+    optim_num = [];
 end
 
 % display
