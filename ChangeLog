@@ -1,5 +1,13 @@
 2014-03-23  Julien Bect  <julien.bect@supelec.fr>
 
+	Remove stk_init.m from the Octave package.
+
+	* admin/make_octave_package.m: Create PKG_ADD.m (later renamed to
+	PKG_ADD) by renaming stk_init. Therefore, we don't need the
+	existing PKG_ADD.m anymore.
+	* stk_init.m: Set STK_OCTAVE_PACKAGE to false.
+	* etc/octave-pkg/PKG_ADD.m: Removed.
+
 	Minor changes in stk_select_optimizer.
 
 	* misc/optim/stk_select_optimizer.m: Minor changes.

@@ -41,7 +41,7 @@ if ~ isempty (pos)
     warning (sprintf ('Truncating version numbers %s -> %s', ...
         original_version_number, version_number));
 end
-    
+
 % From now on, we use relative paths wrt repo_dir
 cd (repo_dir);
 
@@ -93,7 +93,12 @@ fprintf (fid, 'Categories: Kriging\n');  % optional if an INDEX file is provided
 fclose (fid);
 
 % PKG_ADD: commands that are run when the package is added to the path
-copyfile (fullfile ('etc', 'octave-pkg', 'PKG_ADD.m'), fullfile (package_dir, 'inst'));
+PKG_ADD = fullfile (package_dir, 'inst', 'PKG_ADD.m');
+movefile (fullfile (package_dir, 'inst', 'stk_init.m'), PKG_ADD);
+cmd = 'sed -i "s/STK_OCTAVE_PACKAGE = false/STK_OCTAVE_PACKAGE = true/" %s';
+system (sprintf (cmd, PKG_ADD));
+cmd = 'sed -i "s/fullfile (root, ''stk_init.m'')/fullfile (root, ''PKG_ADD'')/" %s';
+system (sprintf (cmd, fullfile (package_dir, 'inst', 'config', 'stk_config_getroot.m')));
 
 % PKG_DEL: commands that are run when the package is removed from the path
 copyfile (fullfile ('etc', 'octave-pkg', 'PKG_DEL.m'), fullfile (package_dir, 'inst'));
@@ -160,13 +165,13 @@ if ~ isempty (regexp (s, regex_ignore, 'once')) ...
         || strcmp (s, 'config/stk_config_makeinfo.m') ...
         || strcmp (s, 'misc/mole/README') ...
         || strcmp (s, 'misc/distrib/README')
-
+    
     fprintf ('Ignoring file %s\n', s);
-
+    
 else
-
+    
     fprintf ('Processing file %s\n', s);
-
+    
     if ~ isempty (regexp (s, regex_mfile, 'once'))
         
         dst = fullfile (package_dir, 'inst', s);
@@ -194,7 +199,7 @@ else
         
     elseif (strcmp (s, 'README')) || (strcmp (s, 'AUTHORS'))
         
-        % Put README and AUTHORS in the documentation directory        
+        % Put README and AUTHORS in the documentation directory
         copyfile (s, fullfile (package_dir, 'doc'));
         
     else

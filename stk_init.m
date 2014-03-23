@@ -62,9 +62,7 @@ disp ('                                                                     ');
 fflush (stdout);
 
 % Are we using STK installed as an octave package ?
-if ~ exist ('STK_OCTAVE_PACKAGE', 'var')
-    STK_OCTAVE_PACKAGE = false;
-end
+STK_OCTAVE_PACKAGE = false;
 
 % config contains stk_config_buildmex and stk_config_addpath, used below
 addpath (fullfile (root, 'config'));
@@ -112,4 +110,4 @@ disp ('                                                                     ');
 fflush (stdout);
 
 % Restore PSO state
-page_screen_output (pso_state);  clear pso_state ans;
+page_screen_output (pso_state);  clear pso_state STK_OCTAVE_PACKAGE ans;
