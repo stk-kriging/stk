@@ -68,6 +68,9 @@ end
 
 n = model.observations.n;
 
+yi = model.observations.z;
+
+
 %% compute rl
 
 [K, P] = stk_make_matcov(model);
@@ -75,17 +78,14 @@ q = size(P, 2);
 
 [Q, R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
 W = Q(:, (q+1):n);
-Wz = W' * double(model.observations.z);
-
 G = W' * (K * W);
 
-Ginv = inv(G);
-WKWinv_Wz = Ginv * Wz; %#ok<MINV>
-
-[C,p] = chol(G); %#ok<NASGU>
+[C, p] = chol (G); %#ok<NASGU> % G = C' * C, with upper-triangular C
 ldetWKW = 2*sum(log(diag(C))); % log(det(G));
 
-attache = Wz' * WKWinv_Wz;
+% Compute (W' yi)' * G^(-1) * (W' yi) as u' * u, with u = C' \ (W' * yi)
+u = linsolve (C, W' * double(yi), struct ('UT', true, 'TRANSA', true));
+attache = sum (u .^ 2);
 
 priorcov = model.randomprocess.priorcov; % GP prior
 
@@ -95,17 +95,19 @@ rl = 0.5 * ((n-q) * log(2*pi) + ldetWKW + attache);
 if PARAMPRIOR, rl = rl - priorcov.logpdf; end
 if NOISEPRIOR, rl = rl - model.noise.cov.logpdf; end
 
-
-%% compute rl gradient
+%% compute gradient
 
 if nargout >= 2
     
-    drl_param = zeros(length(priorcov.cparam), 1);
+    drl_param = zeros (length (priorcov.cparam), 1);
     
+    F = linsolve (C, W', struct ('UT', true, 'TRANSA', true));
+    H = F' * F;
+    z = H * double (yi);
+
     for diff = 1:size(drl_param, 1),
         V = priorcov(model.observations.x, model.observations.x, diff);
-        WVW = W'*V*W;
-        drl_param(diff) = 1/2*(sum(sum(Ginv .* WVW)) - WKWinv_Wz' * WVW * WKWinv_Wz);
+        drl_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
     end
     
     if PARAMPRIOR
@@ -116,8 +118,7 @@ if nargout >= 2
         if NOISYOBS,
             diff = 1;
             V = feval(model.noise.cov, model.observations.x, [], diff);
-            WVW = W'*V*W;
-            drl_lnv = 1/2*(sum(sum(Ginv.*WVW)) - WKWinv_Wz'*WVW*WKWinv_Wz);
+            drl_lnv = 1/2 * (sum (sum (H .* V)) - z' * V * z);
             if NOISEPRIOR
                 drl_lnv = drl_lnv - model.noise.logpdfgrad;
             end
@@ -133,11 +134,11 @@ end
 end % function stk_param_relik
 
 
-%!shared f, xi, zi, NI, model
+%!shared f, xi, zi, NI, model, J, dJ1, dJ2
 %!
 %! f = @(x)( -(0.8*x(1)+sin(5*x(2)+1)+0.1*sin(10*x(3))) );
 %! DIM = 3; NI = 20; box = repmat([-1.0; 1.0], 1, DIM);
-%! xi = stk_sampling_maximinlhs(NI, DIM, box, 1);
+%! xi = stk_sampling_halton_rr2 (NI, DIM, box);
 %! zi = stk_feval(f, xi);
 %!
 %! SIGMA2 = 1.0;  % variance parameter
@@ -151,3 +152,20 @@ end % function stk_param_relik
 %!error [J, dJ1, dJ2] = stk_param_relik ();
 %!test  [J, dJ1, dJ2] = stk_param_relik (model);
 %!error [J, dJ1, dJ2] = stk_param_relik (model, pi^2);
+
+%!test  % Another simple 1D check
+%!
+%! xi = [-1 -.6 -.2 .2 .6 1]';
+%! zi = [-0.11 1.30 0.23 -1.14 0.36 -0.37]';
+%!
+%! model = stk_model ('stk_materncov_iso');
+%! model = stk_setobs(model, xi, zi);
+%! model.randomprocess.priorcov.param = log([1.0 4.0 2.5]);
+%! model.noise.cov = stk_homnoisecov (0.01);
+%! [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (model);
+%!
+%! TOL_REL = 0.01;
+%! assert (stk_isequal_tolrel (ARL, 6.327, TOL_REL));
+%! assert (stk_isequal_tolrel (dARL_dtheta, [0.268 0.0149 -0.636]', TOL_REL));
+%! assert (stk_isequal_tolrel (dARL_dLNV, -1.581e-04, TOL_REL));
+

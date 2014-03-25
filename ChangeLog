@@ -1,5 +1,11 @@
 2014-03-25  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_param_relik: Improved implementation, or so I hope.
+
+	* paramestim/stk_param_relik.m: Several modifications, that seem
+	to reduce the number of warnings related to bad conditioning, and
+	also improve the performance for large n (about 1000, say).
+
 	Fix minor problems in stk_config_rmpath and stk_config_path.
 
 	* config/stk_config_path.m: modified
