@@ -1,5 +1,15 @@
 2014-03-25  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_version: Simpler is better.
+
+	* config/stk_version.m: Moved...
+	* stk_version.m: ...here. STK's version number is now hard-coded
+	in this file, and read from README anymore.
+	* README: Refer to stk_version.m for the version number.
+	* config/stk_config_path.m: Add STK's root to the path unless STK
+	is used as an Octave package.
+	* etc/RELEASE_CHECKLIST: Related changes.
+
 	stk_config_getroot: Simpler is better.
 
 	* config/stk_config_getroot.m: Simplify the way we locate STK's
