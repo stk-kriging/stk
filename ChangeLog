@@ -1,5 +1,10 @@
 2014-03-25  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix minor problems in stk_config_rmpath and stk_config_path.
+
+	* config/stk_config_path.m: modified
+	* config/stk_config_rmpath.m: modified
+
 	Test examples using stk_runtests instead of stk_runexamples.
 
 	* examples/01_kriging_basics/stk_example_kb01.m: add %!test
