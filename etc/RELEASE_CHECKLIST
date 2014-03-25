@@ -26,13 +26,13 @@ svn update  # to get our freshly created release branch
 
 --- Step #2: update version numbers ---------------------------------------------
 
-In branches/4.5.x/README, update version number to "4.5.0" and modify copyright
-years if appropriate. Commit.
+In branches/4.5.x/stk_version.m, update version number to "4.5.0" and modify
+copyright years if appropriate. Commit.
 
 svn commit -m "Update version number to 4.5.0"
 
-In trunk/README, update version number to "4.6-dev" (or "5.0-dev") and modify
-copyright years if appropriate. Commit.
+In trunk/stk_version.m, update version number to "4.6-dev" (or "5.0-dev") and
+modify copyright years if appropriate. Commit.
 
 svn commit -m "Update version number to 4.6-dev"
 

@@ -35,8 +35,23 @@ if nargin == 0,
     root = stk_config_getroot ();
 end
 
+% Safer than calling isoctave directly (this allows stk_config_path to work
+% even if STK has already been partially uninstalled or is not properly installed)
+isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
+
+% Are we using STK installed as an octave package ?
+if (exist (fullfile (root, 'stk_init.m'), 'file') == 2)
+    STK_OCTAVE_PACKAGE = false;
+    path = {root};
+elseif isoctave && (exist (fullfile (root, 'PKG_ADD'), 'file') == 2)
+    STK_OCTAVE_PACKAGE = true;
+    path = {};
+else
+    error ('Either stk_init.m or PKG_ADD should be present... What the hell ?');
+end
+
 % main function folders
-path = {...
+path = [path {...
     fullfile(root, 'config'                     ) ...
     fullfile(root, 'core'                       ) ...
     fullfile(root, 'covfcs'                     ) ...
@@ -46,7 +61,7 @@ path = {...
     fullfile(root, 'sampling'                   ) ...
     fullfile(root, 'utils'                      ) ...
     fullfile(root, 'utils', 'arrays'            ) ...
-    fullfile(root, 'utils', 'arrays', 'generic' ) };
+    fullfile(root, 'utils', 'arrays', 'generic' ) }];
 
 % 'misc' folder and its subfolders
 misc = fullfile (root, 'misc');
@@ -70,12 +85,8 @@ path = [path {...
     fullfile(root, 'examples', '03_miscellaneous'        ) ...
     fullfile(root, 'examples', 'test_functions'          ) }];
 
-% Safer than calling isoctave directly (this allows stk_config_path to work
-% even if STK has already been partially uninstalled or is not properly installed)
-isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
-
 % Fix a problem with private folders in Octave 3.2.x
-if isoctave,
+if isoctave && (~ STK_OCTAVE_PACKAGE),
     v = version;
     if strcmp (v(1:4), '3.2.')
         path = [path {...

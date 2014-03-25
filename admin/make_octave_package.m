@@ -32,7 +32,9 @@ repo_dir  = fileparts (fileparts (mfilename ('fullpath')));
 
 here = pwd ();
 
-cd (fullfile (repo_dir, 'config'))
+% From now on, we use relative paths wrt repo_dir
+cd (repo_dir);
+
 version_number = stk_version ()
 pos = regexp (version_number, '[^\d\.]', 'once');
 if ~ isempty (pos)
@@ -41,9 +43,6 @@ if ~ isempty (pos)
     warning (sprintf ('Truncating version numbers %s -> %s', ...
         original_version_number, version_number));
 end
-
-% From now on, we use relative paths wrt repo_dir
-cd (repo_dir);
 
 % Build dir
 build_dir = 'octave-build'
