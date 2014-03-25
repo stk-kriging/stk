@@ -40,10 +40,10 @@
 function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)
 
 if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% Ensure that param is a column vector (note: in the case where model.param is 
+% Ensure that param is a column vector (note: in the case where model.param is
 % an object, this is actually a call to subsasgn() in disguise).
 param = model.param(:);
 
@@ -70,17 +70,14 @@ q = size(P, 2);
 
 [Q, R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
 W = Q(:, (q+1):n);
-Wyi = W' * double(yi);
-
 G = W' * (K * W);
 
-Ginv = inv(G);
-WKWinv_Wyi = Ginv * Wyi; %#ok<MINV>
-
-[C, p] = chol(G); %#ok<NASGU>
+[C, p] = chol (G); %#ok<NASGU> % G = C' * C, with upper-triangular C
 ldetWKW = 2*sum(log(diag(C))); % log(det(G));
 
-attache = Wyi' * WKWinv_Wyi;
+% Compute (W' yi)' * G^(-1) * (W' yi) as u' * u, with u = C' \ (W' * yi)
+u = linsolve (C, W' * double(yi), struct ('UT', true, 'TRANSA', true));
+attache = sum (u .^ 2);
 
 if PARAMPRIOR
     delta_p = param - model.prior.mean;
@@ -105,10 +102,13 @@ if nargout >= 2
     nbparam = length(param);
     drl_param = zeros(nbparam, 1);
     
+    F = linsolve (C, W', struct ('UT', true, 'TRANSA', true));
+    H = F' * F;
+    z = H * double (yi);
+    
     for diff = 1:nbparam,
-        V = feval(model.covariance_type, model.param, xi, xi, diff);
-        WVW = W' * V * W;
-        drl_param(diff) = 1/2 * (sum(sum(Ginv .* WVW)) - WKWinv_Wyi' * WVW * WKWinv_Wyi);
+        V = feval (model.covariance_type, model.param, xi, xi, diff);
+        drl_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
     end
     
     if PARAMPRIOR
@@ -118,9 +118,8 @@ if nargout >= 2
     if nargout >= 3,
         if NOISYOBS,
             diff = 1;
-            V = stk_noisecov(n, model.lognoisevariance, diff);
-            WVW = W' * V * W;
-            drl_lnv = 1/2 * (sum(sum(Ginv .* WVW)) - WKWinv_Wyi' * WVW * WKWinv_Wyi);
+            V = stk_noisecov (n, model.lognoisevariance, diff);
+            drl_lnv = 1/2 * (sum (sum (H .* V)) - z' * V * z);
             if NOISEPRIOR
                 drl_lnv = drl_lnv + delta_lnv / model.noiseprior.var;
             end
@@ -136,12 +135,13 @@ end
 end % function stk_param_relik
 
 
-%!shared f, xi, zi, NI, model
+
+%!shared f, xi, zi, NI, model, J, dJ1, dJ2
 %!
-%! f = @(x)( -(0.8*x(1)+sin(5*x(2)+1)+0.1*sin(10*x(3))) );
-%! DIM = 3; NI = 20; box = repmat([-1.0; 1.0], 1, DIM);
-%! xi = stk_sampling_maximinlhs(NI, DIM, box, 1);
-%! zi = stk_feval(f, xi);
+%! f = @(x)(- (0.8 * x(1) + sin (5 * x(2) + 1) + 0.1 * sin (10 * x(3))));
+%! DIM = 3;  NI = 20;  box = repmat ([-1.0; 1.0], 1, DIM);
+%! xi = stk_sampling_halton_rr2 (NI, DIM, box);
+%! zi = stk_feval (f, xi);
 %!
 %! SIGMA2 = 1.0;  % variance parameter
 %! NU     = 4.0;  % regularity parameter
@@ -156,3 +156,23 @@ end % function stk_param_relik
 %!test  [J, dJ1, dJ2] = stk_param_relik (model, xi, zi);
 %!error [J, dJ1, dJ2] = stk_param_relik (model, xi, zi, pi);
 
+%!test
+%! TOL_REL = 0.01;
+%! assert (stk_isequal_tolrel (J, 21.6, TOL_REL));
+%! assert (stk_isequal_tolrel (dJ1, [4.387 -0.1803 0.7917 0.1392 2.580]', TOL_REL));
+%! assert (isnan (dJ2));
+
+%!test  % Another simple 1D check
+%!
+%! xi = [-1 -.6 -.2 .2 .6 1]';
+%! zi = [-0.11 1.30 0.23 -1.14 0.36 -0.37]';
+%!
+%! model = stk_model ('stk_materncov_iso');
+%! model.param = log ([1.0 4.0 2.5]);
+%! model.lognoisevariance = log (0.01);
+%! [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (model, xi, zi);
+%!
+%! TOL_REL = 0.01;
+%! assert (stk_isequal_tolrel (ARL, 6.327, TOL_REL));
+%! assert (stk_isequal_tolrel (dARL_dtheta, [0.268 0.0149 -0.636]', TOL_REL));
+%! assert (stk_isequal_tolrel (dARL_dLNV, -1.581e-04, TOL_REL));
