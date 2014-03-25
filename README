@@ -34,7 +34,7 @@ README Copying Permission Statement
 
 o General information
 
-    Version:      2.2-dev
+    Version:      See stk_version.m
 
     Authors:      Julien Bect        <julien.bect@supelec.fr>
                   Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
