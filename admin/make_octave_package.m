@@ -97,8 +97,6 @@ PKG_ADD = fullfile (package_dir, 'inst', 'PKG_ADD.m');
 movefile (fullfile (package_dir, 'inst', 'stk_init.m'), PKG_ADD);
 cmd = 'sed -i "s/STK_OCTAVE_PACKAGE = false/STK_OCTAVE_PACKAGE = true/" %s';
 system (sprintf (cmd, PKG_ADD));
-cmd = 'sed -i "s/fullfile (root, ''stk_init.m'')/fullfile (root, ''PKG_ADD'')/" %s';
-system (sprintf (cmd, fullfile (package_dir, 'inst', 'config', 'stk_config_getroot.m')));
 
 % PKG_DEL: commands that are run when the package is removed from the path
 copyfile (fullfile ('etc', 'octave-pkg', 'PKG_DEL.m'), fullfile (package_dir, 'inst'));

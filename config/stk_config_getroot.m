@@ -29,7 +29,7 @@
 
 function [root, found_in_path] = stk_config_getroot ()
 
-root = fileparts (which ('stk_test'));
+root = fileparts (which ('stk_param_relik'));
 
 if isempty (root),
     
@@ -43,11 +43,9 @@ if isempty (root),
 else
     
     % STK is already in the search path -> Deduce the path of STK's root
-    % from the full path of stk_test.
+    % from the full path of stk_param_relik.
     
-    while ~ exist (fullfile (root, 'stk_init.m'), 'file')
-        root = fileparts (root);
-    end
+    root = fileparts (root);  % One level upper in the hierarchy
     
     found_in_path = true;
     
