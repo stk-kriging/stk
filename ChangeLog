@@ -1,5 +1,12 @@
 2014-03-25  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_config_getroot: Simpler is better.
+
+	* config/stk_config_getroot.m: Simplify the way we locate STK's
+	root. Use stk_param_relik instead of stk_test as a reference, as
+	stk_test will probably not be included in the Octave package.
+	* admin/make_octave_package.m: Modified.
+
 	stk_make_htmldoc: Remove dependency on stk_config_getroot.
 
 	* admin/stk_make_htmldoc.m: modified.
