@@ -38,7 +38,8 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 stk_disp_examplewelcome
-stk_error('I am not ready yet...', 'NotReadyYet');
+
+warning ('I am not ready yet...', 'NotReadyYet');  return;
 
 
 %% DEFINE AN ARTIFICIAL ONE-DIMENSIONAL DATASET
