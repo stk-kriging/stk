@@ -54,6 +54,12 @@ for i = 1:length (path),
     end
 end
 
+% Selectively add MOLE subdirectories to compensate for missing functions
+% (note that stk_init.m/PKG_ADD also does that, but it is necessary to do it again here,
+% just in case some functions were provided by another copy of STK that has been removed
+% from the path by stk_config_addpath (see above))
+run (fullfile (root, 'misc', 'mole', 'init.m'));
+
 end % function stk_config_addpath
 
 %#ok<*NODEF,*WNTAG,*SPERR,*SPWRN>

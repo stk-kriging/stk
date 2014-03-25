@@ -1,5 +1,9 @@
 2014-03-25  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_config_addpath: Add MOLE subdirectories to the path.
+
+	* config/stk_config_addpath.m: modified
+
 	stk_version: Simpler is better.
 
 	* config/stk_version.m: Moved...
