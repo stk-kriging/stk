@@ -180,3 +180,6 @@ disp (data);
 
 % Total number of evaluations ?
 fprintf ('\nNumber of evaluations: %d + %d = %d.\n\n', N0, iter, N0 + iter);
+
+
+%!test stk_example_doe03;  close all;
