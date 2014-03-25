@@ -70,6 +70,10 @@ path = [path {...
     fullfile(root, 'examples', '03_miscellaneous'        ) ...
     fullfile(root, 'examples', 'test_functions'          ) }];
 
+% Safer than calling isoctave directly (this allows stk_config_path to work
+% even if STK has already been partially uninstalled or is not properly installed)
+isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
+
 % Fix a problem with private folders in Octave 3.2.x
 if isoctave,
     v = version;
