@@ -1,5 +1,9 @@
 2014-03-25  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_make_htmldoc: Remove dependency on stk_config_getroot.
+
+	* admin/stk_make_htmldoc.m: modified.
+
 	stk_param_relik: Improved implementation, or so I hope.
 
 	* paramestim/stk_param_relik.m: Several modifications, that seem
