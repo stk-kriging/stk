@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -66,3 +66,6 @@ for k = 1:4,
     stk_labels ('input variable x', 'response z', 'FontWeight', 'bold');
     
 end
+
+
+%!test stk_example_kb07;  close all;
