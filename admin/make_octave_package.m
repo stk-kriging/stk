@@ -34,7 +34,7 @@ here = pwd ();
 
 cd (fullfile (repo_dir, 'config'))
 version_number = stk_version ()
-pos = regexp ('2.2-dev', '[^\d\.]', 'once');
+pos = regexp (version_number, '[^\d\.]', 'once');
 if ~ isempty (pos)
     original_version_number = version_number;
     version_number (pos:end) = [];
