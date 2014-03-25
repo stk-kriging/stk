@@ -10,7 +10,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -72,3 +72,6 @@ stk_title ('c) Halton-RR2');
 x = stk_sampling_randunif (N, DIM, BOX);
 stk_subplot (2, 2, 4);  plot (x(:, 1), x(:, 2), PLOT_OPTIONS{:});
 stk_title ('d) Random');
+
+
+%!test stk_example_doe01;  close all;

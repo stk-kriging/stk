@@ -23,7 +23,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -82,3 +82,6 @@ for i = 1:NB_ITER,
     % enrich the DoE
     x = vertcat (x, next_x);
 end
+
+
+%!test stk_example_doe02;  close all;

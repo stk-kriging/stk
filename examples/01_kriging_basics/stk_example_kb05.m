@@ -11,7 +11,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -122,3 +122,6 @@ stk_labels ('input variable x', 'response z');
 stk_subplot (2, 2, 4);  stk_plot1d (xzi, xzt, xzp, zsimc);
 stk_title ('Prediction and credible intervals');
 stk_labels ('input variable x', 'response z');
+
+
+%!test stk_example_kb05;  close all;

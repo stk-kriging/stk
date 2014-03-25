@@ -13,7 +13,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -160,3 +160,6 @@ stk_labels ('input variable x', 'response z');
 
 % Restore output verbosity
 stk_options_set ('stk_dataframe', 'disp_format', save_verbosity);
+
+
+%!test stk_example_kb01;  close all;

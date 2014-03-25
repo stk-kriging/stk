@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -93,3 +93,6 @@ zp = stk_predict (model, xt);
 % Plot the result
 stk_subplot (1, 2, 2);  stk_plot1d (xzi, [], stk_makedata (xt, zp));
 stk_title ('Kriging with linear trend');  ylim ([-5 5]);
+
+
+%!test stk_example_kb06;  close all;

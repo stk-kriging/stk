@@ -132,3 +132,6 @@ if ~ strcmp (stk_config_graphicstoolkit (), 'octave-gnuplot')
     h2 = stk_subplot (2, 2, 4);  axis off;
     set (h1, 'Position', get (h2, 'Position'));
 end
+
+
+%!test stk_example_misc02;  close all;
