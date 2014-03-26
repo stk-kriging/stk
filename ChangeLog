@@ -1,3 +1,13 @@
+2014-03-26  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_relik: Adding a little bit of noise to help chol succeed.
+
+	* paramestim/stk_param_relik.m: Add a little bit of noise to help
+	chol succeed, when the first factorization returned by chol is not
+	complete. Emit a warning when doing so.
+	* config/stk_config_setup.m: By default, hide the warning emitted
+	by stk_param_relik.
+
 2014-03-25  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_config_addpath: Add MOLE subdirectories to the path.

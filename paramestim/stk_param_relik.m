@@ -80,8 +80,21 @@ q = size(P, 2);
 W = Q(:, (q+1):n);
 G = W' * (K * W);
 
-[C, p] = chol (G); %#ok<NASGU> % G = C' * C, with upper-triangular C
-ldetWKW = 2*sum(log(diag(C))); % log(det(G));
+% Cholesky factorization: G = C' * C, with upper-triangular C
+[C, p] = chol (G);
+if p > 0,
+    epsi = eps;
+    DDD = diag (diag (G));
+    while p > 0,
+        epsi = epsi * 10;
+        warning ('STK:stk_param_relik:AddingRegularizationNoise', sprintf ...
+            ('Adding a little bit of noise to help chol succeed (epsi = %.2e)', epsi));
+        [C, p] = chol (G + epsi * DDD);        
+    end
+end
+
+% Compute log (det (G)) using the Cholesky factor
+ldetWKW = 2 * sum (log (diag (C)));
 
 % Compute (W' yi)' * G^(-1) * (W' yi) as u' * u, with u = C' \ (W' * yi)
 u = linsolve (C, W' * double(yi), struct ('UT', true, 'TRANSA', true));
