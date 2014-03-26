@@ -1,12 +1,18 @@
-% GRAPHICSTOOLKIT indicates which toolkit is assigned to new figures.
+% GRAPHICS_TOOLKIT indicates which toolkit is assigned to new figures.
 %
-% CALL: NAME = stk_config_graphicstoolkit ()
+% This is a (partial) replacement for the graphics_toolkit function that is missing both
+% from Matlab and from some old version f Octave.
+%
+% CALL: NAME = graphics_toolkit ()
 %
 %   returns:
 %    
-%    * octave-XXX    if Octave is running with XXX as its default toolkit,
-%    * matlab-nojvm  if Matlab is running without the Java Virtual Machine,
-%    * matlab-jvm    if Matlab is running with the Java Virtual Machine,
+%    * the result of get (0, 'defaultfigure__backend__') if you're running an old version
+%      of Octave that does not have graphics_toolkit,
+%
+%    * 'matlab-nojvm' if running Matlab without the Java Virtual Machine,
+%
+%    * 'matlab-jvm' if running Matlab with the Java Virtual Machine.
 
 % Copyright Notice
 %
@@ -34,7 +40,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function name = stk_config_graphicstoolkit ()
+function name = graphics_toolkit ()
 
 if isoctave,
 
@@ -42,20 +48,9 @@ if isoctave,
         % This should work on older versions of Octave, e.g., 3.2.4
         % (there was no notion of a 'toolkit' at the time, but if gnuplot
         %  is reported as the backend, then it is also the toolkit)
-        b = get(0, 'defaultfigure__backend__');
-        if strcmp (b, 'gnuplot')
-            name = 'octave-gnuplot';
-        else
-            name = 'octave-unknown';
-        end
+        name = get (0, 'defaultfigure__backend__');
     catch
-        try
-            % This should work in modern versions of Octave, e.g., 3.6.2
-            % (when exactly did the transition occur ?)
-            name = ['octave-' graphics_toolkit];
-        catch
-            error ('Unable to determine which toolkit is being used.');
-        end
+        error ('Unable to determine which toolkit is being used.');
     end
 
 else % Matlab
@@ -69,4 +64,6 @@ else % Matlab
 
 end
 
-end % function stk_config_graphicstoolkit
+end % function graphics_toolkit
+
+%#ok<*CTCH>
