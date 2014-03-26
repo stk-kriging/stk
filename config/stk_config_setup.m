@@ -45,7 +45,8 @@ end
 % Select optimizers for stk_param_estim
 stk_select_optimizer;
 
-% Disable a warning in stk_predict
+% Hide some warnings
 warning ('off', 'STK:stk_predict:NegativeVariancesSetToZero');
+warning ('off', 'STK:stk_param_relik:AddingRegularizationNoise');
 
 end % function stk_config_setup
