@@ -1,5 +1,15 @@
 2014-03-26  Julien Bect  <julien.bect@supelec.fr>
 
+	Rename stk_config_graphicstoolkit tp graphics_toolkit.
+
+	* config/stk_config_graphicstoolkit.m: Renamed.
+	* misc/mole/graphics_toolkit/graphics_toolkit.m: Formerly known as
+	stk_config_graphicstoolkit. Modified to be a (partial) replacement
+	of the Octave function with the same name.
+	* misc/mole/init.m: Add graphics_toolkit to the path only when
+	needed, i.e., when using Matlab or an old version of Octave.
+	* examples/03_miscellaneous/stk_example_misc02.m: Modified.
+
 	stk_param_relik: Adding a little bit of noise to help chol succeed.
 
 	* paramestim/stk_param_relik.m: Add a little bit of noise to help
