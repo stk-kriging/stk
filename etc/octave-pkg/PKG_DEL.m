@@ -26,10 +26,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-root = fileparts (mfilename ("fullpath"));
+root = fileparts (mfilename ('fullpath'));
 here = pwd ();
 
 cd (fullfile (root, 'config'));
 stk_config_rmpath (root);
 
 cd (here);
+
+clear root here
