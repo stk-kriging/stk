@@ -1,3 +1,14 @@
+2014-03-29  Julien Bect  <julien.bect@supelec.fr>
+
+	Do not add config to in the path.
+
+	* config/stk_config_path.m: Remove config from the list of STK
+	subdirectories to be added to the path.
+	* stk_init.m: Remove config from the path at the end of
+	initialization.
+	* misc/test/stk_runtests.m: Do not assume that config is in the
+	path.
+
 2014-03-26  Julien Bect  <julien.bect@supelec.fr>
 
 	Rename stk_config_graphicstoolkit tp graphics_toolkit.

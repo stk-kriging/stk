@@ -75,7 +75,7 @@ end
 
 % Add STK folders to the path (note: doing this ATFER building the MEX-files seems to
 % solve the problem related to having MEX-files in private folders)
-stk_config_addpath (root);  clear root;
+stk_config_addpath (root);
 
 % Check that MEX-files located in private folders are properly detected (note: 
 % there are no MEX-files in private folders if STK is used as an Octave package)
@@ -110,4 +110,9 @@ disp ('                                                                     ');
 fflush (stdout);
 
 % Restore PSO state
-page_screen_output (pso_state);  clear pso_state STK_OCTAVE_PACKAGE ans;
+page_screen_output (pso_state);
+
+% Remove config from the path
+rmpath (fullfile (root, 'config'));
+
+clear pso_state root STK_OCTAVE_PACKAGE ans;

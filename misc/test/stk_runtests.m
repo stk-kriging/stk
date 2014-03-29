@@ -1,11 +1,8 @@
 % STK_RUNTESTS runs all tests in a given directory (or in STK's searchpath).
-%
-% FIXME: missing doc
-%
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 %
@@ -47,19 +44,23 @@
 
 function stk_runtests (directory)
 
+here = pwd ();
+
 if nargin == 0
     % scan all STK directories if no input argument is provided
+    root = fileparts (fileparts (fileparts (mfilename ('fullpath'))));
+    cd (fullfile (root, 'config'));
     dirs = stk_config_path ();
 else
     % otherwise, directory is expected to be a valid directory name
-    if ~exist(directory, 'dir')
-        error('Directory not found.');
+    if ~ exist (directory, 'dir')
+        error ('Directory not found.');
     end
-    here = pwd();
-    cd(directory);
-    dirs = {pwd()}; % get absolute path
-    cd(here);
+    cd (directory);
+    dirs = {pwd()}; % get absolute path    
 end
+
+cd (here);
 
 % number of directories to be explored
 nb_topdirs = numel(dirs);
