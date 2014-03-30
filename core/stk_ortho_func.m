@@ -19,7 +19,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -52,10 +52,19 @@ end
 
 x = double (x);
 
-if strcmp (model.covariance_type, 'stk_discretecov')    
-    P = model.param.P(x, :);    
-else    
-    P = stk_ortho_func_ (model.order, x);    
+if strcmp (model.covariance_type, 'stk_discretecov')
+    P = model.param.P(x, :);
+else
+    if isfield (model, 'lm')
+        %--- BEGIN EXPERIMENTAL FEATURE: linear model ------------------------------------
+        if ~ isnan (model.order)
+            error ('To use the EXPERIMENTAL "lm" feature, please set model.order to NaN');
+        end
+        P = feval (model.lm, x);
+        %--- END EXPERIMENTAL FEATURE: linear model --------------------------------------
+    else
+        P = stk_ortho_func_ (model.order, x);
+    end
 end
 
 end % function stk_ortho_func
