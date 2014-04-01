@@ -25,7 +25,7 @@
 %
 %    * randomprocess: [1x1 struct]
 %                         type: 'GP'
-%                    priormean: [object of class stk_lm]
+%                    priormean: a linear model [object of class stk_lm_* or handle]
 %                     priorcov: [1x1 struct]
 %    * noise: [1x1 struct]
 %                         type: 'none', 'swn'
@@ -151,7 +151,7 @@ model.observations.x = zeros (0, dim);
 model.observations.z = zeros (0, 1);
 
 % mean and covariance functions
-model.randomprocess.priormean = stk_lm ('constant'); % default: ordinary kriging
+model.randomprocess.priormean = stk_lm_constant; % default: ordinary kriging
 model.randomprocess.priorcov = stk_cov (covariance_type, 'dim', dim);
 
 end % function stk_model_

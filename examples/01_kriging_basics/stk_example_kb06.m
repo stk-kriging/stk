@@ -70,7 +70,7 @@ model.noise.cov = stk_homnoisecov (1e-10 ^ 2);
 %% Ordinary kriging (constant mean)
 
 model1 = model;
-model1.randomprocess.priormean = stk_lm ('constant');
+model1.randomprocess.priormean = stk_lm_constant;
 model1.randomprocess.priorcov.param = stk_param_estim (model1);
 
 % Carry out kriging prediction
@@ -84,7 +84,7 @@ stk_title ('Ordinary kriging');  ylim ([-5 5]);
 %% Linear trend (aka "universal kriging")
 
 model2 = model;
-model2.randomprocess.priormean = stk_lm ('affine');
+model2.randomprocess.priormean = stk_lm_affine;
 model2.randomprocess.priorcov.param = stk_param_estim (model2);
 
 % Carry out kriging prediction

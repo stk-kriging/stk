@@ -89,8 +89,8 @@ axis (BOX(:));  stk_title ('function to be approximated');
 model = stk_model ('stk_materncov_aniso', DIM);
 
 % As a default choice, a constant (but unknown) mean is used.
-% model.randomprocess.priormean = stk_lm('affine');     % AFFINE TREND
-% model.randomprocess.priormean = stk_lm('quadratic');  % "FULL QUADRATIC" TREND
+% model.randomprocess.priormean = stk_lm_affine;     % AFFINE TREND
+% model.randomprocess.priormean = stk_lm_quadratic;  % "FULL QUADRATIC" TREND
 
 
 %% EVALUATE THE FUNCTION ON A "MAXIMIN LHS" DESIGN

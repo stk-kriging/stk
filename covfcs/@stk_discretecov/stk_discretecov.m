@@ -47,7 +47,7 @@ end % function stk_discretecov
 %! x0 = stk_sampling_randunif (n0, dim);
 %! x1 = stk_sampling_randunif (n1, dim);
 %! model = stk_model ('stk_materncov_aniso', dim);
-%! model.randomprocess.priormean = stk_lm ('linear');
+%! model.randomprocess.priormean = stk_lm_affine;
 
 %!test % without noise, pairwise = false
 %! model.noise.cov = stk_nullcov ();

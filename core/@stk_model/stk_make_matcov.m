@@ -95,7 +95,7 @@ end % function stk_make_matcov
 %!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
 %! n0 = 20;  n1 = 10;  d = 4;
 %! model = stk_model ('stk_materncov_aniso', d);
-%! model.randomprocess.priormean = stk_lm ('affine');
+%! model.randomprocess.priormean = stk_lm_affine;
 %! model2 = model;
 %! model2.noise.cov = stk_homnoisecov (0.1 ^ 2);  % std 0.1
 %! x0 = stk_sampling_randunif (n0, d);

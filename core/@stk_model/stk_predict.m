@@ -243,9 +243,9 @@ end % function stk_predict -----------------------------------------------------
 %! z_obs = sin (double (x_obs));
 %! x_prd = x0(idx_prd);
 %!
-%! model = stk_model('stk_materncov32_iso');
-%! model = stk_setobs(model, x_obs, z_obs);
-%! model.randomprocess.priormean = stk_lm('constant');
+%! model = stk_model ('stk_materncov32_iso');
+%! model = stk_setobs (model, x_obs, z_obs);
+%! model.randomprocess.priormean = stk_lm_constant;
 %! % this is currently the default, but better safe than sorry
 
 %!error y_prd1 = stk_predict();
