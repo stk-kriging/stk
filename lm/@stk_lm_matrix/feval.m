@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,13 +26,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function z = feval(lm, x)
+function z = feval (lm, x)
 
-x = double(x);
+x = double (x);
 
-if isempty(lm.data),
-    n = size(x, 1);
-    z = zeros(n, 1);
+if isempty (lm.data),
+    n = size (x, 1);
+    z = zeros (n, 0);
 else
     z = lm.data(x, :);
 end

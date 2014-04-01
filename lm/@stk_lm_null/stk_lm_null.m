@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,12 +26,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function lm = stk_lm_null()
+function lm = stk_lm_null ()
 
-lm = class(struct(), 'stk_lm_null', stk_lm());
+lm = class (struct (), 'stk_lm_null');
 
 end % function stk_lm_null
 
 
 % Default constructor
-%!test lm = stk_lm_null(); assert(isa(lm, 'stk_lm_null'));
+%!test
+%! lm = stk_lm_null ();
+%! assert (isa (lm, 'stk_lm_null'));

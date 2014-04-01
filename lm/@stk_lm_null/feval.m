@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,10 +26,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function z = feval(lm, x) %#ok<INUSL>
+function z = feval (lm, x) %#ok<INUSL>
 
-x = double(x);
-n = size(x, 1);
-z = zeros(n, 1);
+n = size (x, 1);
+z = zeros (n, 0);
 
 end % function feval
+
+%!test
+%! n = 15; d = 4;
+%! x = stk_sampling_randunif (n, d);
+%! P = feval (stk_lm_null (), x);
+%! assert (isequal (size (P), [n, 0]));

@@ -1,4 +1,4 @@
-% STK_LM_CONSTANT ... [FIXME: missing documentation]
+% STK_LM_AFFINE ... [FIXME: missing documentation]
 
 % Copyright Notice
 %
@@ -26,14 +26,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function lm = stk_lm_constant ()
+function lm = stk_lm_affine ()
 
-lm = class (struct (), 'stk_lm_constant');
+lm = class (struct (), 'stk_lm_affine');
 
-end % function stk_lm_constant
+end  % function stk_lm_affine
 
 
 % Default constructor
 %!test
-%! lm = stk_lm_constant ();
-%! assert (isa (lm, 'stk_lm_constant'));
+%! lm = stk_lm_affine ();
+%! assert (isa (lm, 'stk_lm_affine'));

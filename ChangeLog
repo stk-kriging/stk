@@ -1,3 +1,22 @@
+2014-03-31  Julien Bect  <julien.bect@supelec.fr>
+
+	Introduce a new (experimental) feature: linear models.
+
+	* core/stk_ortho_func.m: Modified to handle model.order == NaN.
+	* paramestim/stk_param_init.m: Modified to handle model.order == NaN.
+	* config/stk_config_path.m: Add lm to the path.
+	* lm/@stk_lm_affine/stk_lm_affine.m: New function
+	* lm/@stk_lm_affine/feval.m: New function
+	* lm/@stk_lm_constant/stk_lm_constant.m: New function
+	* lm/@stk_lm_constant/feval.m: New function
+	* lm/@stk_lm_matrix/stk_lm_matrix.m: New function
+	* lm/@stk_lm_matrix/feval.m: New function
+	* lm/@stk_lm_null/stk_lm_null.m: New function
+	* lm/@stk_lm_null/feval.m: New function
+	* lm/@stk_lm_quadratic/stk_lm_quadratic.m: New function
+	* lm/@stk_lm_quadratic/feval.m: New function
+	* examples/03_miscellaneous/stk_example_misc03.m: New example script.
+
 2014-03-29  Julien Bect  <julien.bect@supelec.fr>
 
 	Do not add config to in the path.

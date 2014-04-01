@@ -1,4 +1,4 @@
-% STK_LM_CONSTANT ... [FIXME: missing documentation]
+% FEVAL ... [FIXME: missing documentation]
 
 % Copyright Notice
 %
@@ -26,14 +26,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function lm = stk_lm_constant ()
+function z = feval (lm, x) %#ok<INUSL>
 
-lm = class (struct (), 'stk_lm_constant');
+x = double (x);
 
-end % function stk_lm_constant
+[n, d] = size (x);
+
+z = [ones(n, 1) x zeros(n, d * (d + 1) / 2)];
+k = d + 2;
+for i = 1:d
+    for j = i:d
+        z(:,k) = x(:, i) .* x(:, j);
+        k = k + 1;
+    end
+end
+
+end % function feval
 
 
-% Default constructor
 %!test
-%! lm = stk_lm_constant ();
-%! assert (isa (lm, 'stk_lm_constant'));
+%! n = 15; d = 4;
+%! x = stk_sampling_randunif (n, d);
+%! P = feval (stk_lm_quadratic (), x);
+%! assert (isequal (size (P), [n, 1 + d * (d + 3) / 2]));
