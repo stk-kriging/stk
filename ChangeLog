@@ -1,3 +1,11 @@
+2014-04-03  Julien Bect  <julien.bect@supelec.fr>
+
+	Add (multivariate) cubic linear models.
+
+	* lm/@stk_lm_cubic: New class
+	* lm/@stk_lm_cubic/stk_lm_cubic.m: New function (constructor)
+	* lm/@stk_lm_cubic/feval.m: New function
+
 2014-03-31  Julien Bect  <julien.bect@supelec.fr>
 
 	Introduce a new (experimental) feature: linear models.
