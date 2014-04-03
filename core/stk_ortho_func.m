@@ -13,7 +13,7 @@
 % NOTE:
 %
 %    At the present time, stk_ortho_func() only handles polynomial regressions,
-%    up to order 2.
+%    up to order 3.
 %
 % See also stk_make_matcov
 
@@ -76,7 +76,7 @@ end % function stk_ortho_func
 
 function P = stk_ortho_func_ (order, x)
 
-[n, d] = size (x);
+n = size (x, 1);
 
 switch order
     
@@ -86,21 +86,17 @@ switch order
     case 0, % 'ordinary' kriging
         P = ones (n, 1);
         
-    case 1, % linear trend
+    case 1, % affine trend
         P = [ones(n, 1) x];
         
     case 2, % quadratic trend
-        P = [ones(n, 1) x zeros(n, d*(d+1)/2)];
-        k = d + 2;
-        for i = 1:d
-            for j = i:d
-                P(:,k) = x(:, i) .* x(:, j);
-                k = k + 1;
-            end
-        end
+        P = feval (stk_lm_quadratic, x);
+        
+    case 3, % cubic trend
+        P = feval (stk_lm_cubic, x);
         
     otherwise, % syntax error
-        error ('order should be in {-1,0,1,2}');
+        error ('order should be in {-1, 0, 1, 2, 3}');
         
 end
 
@@ -133,6 +129,10 @@ end % function stk_ortho_func_
 %! model.order =  2;  P = stk_ortho_func (model, x);
 %! assert (isequal (size (P), [n, 1 + d * (d + 3) / 2]));
 
-%!error
+%!test
 %! model.order =  3;  P = stk_ortho_func (model, x);
-%! % model.order > 2 is not allowed
+%! assert (isequal (size (P), [n, 1 + d * (11 + d * (6 + d)) / 6]));
+
+%!error
+%! model.order =  4;  P = stk_ortho_func (model, x);
+%! % model.order > 3 is not allowed
