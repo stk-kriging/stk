@@ -1,5 +1,10 @@
 2014-04-03  Julien Bect  <julien.bect@supelec.fr>
 
+	Simplify the code in stk_ortho_func ().
+
+	* core/stk_ortho_func.m: Call feval (stk_lm_quadratic, x) instead
+	of duplicating the code. And add the cubic case.
+
 	Add (multivariate) cubic linear models.
 
 	* lm/@stk_lm_cubic: New class
