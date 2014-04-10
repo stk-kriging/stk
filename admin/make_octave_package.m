@@ -87,8 +87,6 @@ fprintf (fid, '#\n');
 fprintf (fid, 'Description: blah blah blah\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Url: https://sourceforge.net/projects/kriging/\n');
-fprintf (fid, '#\n');
-fprintf (fid, 'Categories: Kriging\n');  % optional if an INDEX file is provided
 fclose (fid);
 
 % PKG_ADD: commands that are run when the package is added to the path
@@ -98,17 +96,30 @@ cmd = 'sed -i "s/STK_OCTAVE_PACKAGE = false/STK_OCTAVE_PACKAGE = true/" %s';
 system (sprintf (cmd, PKG_ADD));
 
 % PKG_DEL: commands that are run when the package is removed from the path
-copyfile (fullfile ('etc', 'octave-pkg', 'PKG_DEL.m'), fullfile (package_dir, 'inst'));
+copyfile (fullfile ('etc', 'octave-pkg', 'PKG_DEL.m'), ...
+          fullfile (package_dir, 'inst'));
 
 % post_install: a function that is run after the installation of the package
 copyfile (fullfile ('etc', 'octave-pkg', 'post_install.m'), package_dir);
 
 % Makefile
-copyfile (fullfile ('etc', 'octave-pkg', 'Makefile'), fullfile (package_dir, 'src'));
+copyfile (fullfile ('etc', 'octave-pkg', 'Makefile'), ...
+          fullfile (package_dir, 'src'));
+
+% INDEX
+copyfile (fullfile ('etc', 'octave-pkg', 'INDEX'), package_dir);
 
 % Create tar.gz archive
-cd (build_dir);
-system (sprintf ('tar --create --gzip --file stk-%s.tar.gz stk', version_number));
+cd (build_dir);  
+tarball_name = sprintf ('stk-%s.tar.gz', version_number);
+system (sprintf ('tar --create --gzip --file %s stk', tarball_name));
+
+% a script to help admins test quickly that the tarball is ok
+cd (repo_dir);
+script_name = 'pkg_install_stk_and_generate_doc.m';
+copyfile (fullfile ('etc', 'octave-pkg', script_name), build_dir);
+cmd = 'sed -i "s/stk-XX\\.YY\\.ZZ\\.tar\\.gz/%s/" %s';
+system (sprintf (cmd, tarball_name, fullfile (build_dir, script_name)));
 
 cd (here)
 
