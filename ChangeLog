@@ -1,3 +1,10 @@
+2014-04-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Move stk_feval.m to utils/arrays/generic.
+
+	* utils/stk_feval.m: moved (from)
+	* utils/arrays/generic/stk_feval.m: moved (to)
+
 2014-04-10  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a bug in stk_predict ().
