@@ -1,3 +1,11 @@
+2014-04-13  Julien Bect  <julien.bect@supelec.fr>
+
+	Generation of conditioned sample paths made easy (ticket #3).
+
+	* utils/stk_generate_samplepaths.m: Generate conditioned sample
+	paths if additional (xi, zi) arguments are provided.
+	* examples/01_kriging_basics/stk_example_kb08.m: New example.
+
 2014-04-12  Julien Bect  <julien.bect@supelec.fr>
 
 	Move stk_feval.m to utils/arrays/generic.

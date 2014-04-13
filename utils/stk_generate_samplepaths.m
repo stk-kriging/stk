@@ -10,6 +10,15 @@
 %
 %    generates NB_PATHS sample paths at once.
 %
+% CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT)
+%
+%    generates one sample path ZSIM, using the kriging model MODEL and the
+%    evaluation points XT, conditional on the evaluations (XI, ZI).
+%
+% CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT, NB_PATHS)
+%
+%    generates NB_PATHS conditional sample paths at once.
+%
 % NOTE:
 %
 %    This function generates (discretized) sample paths using a Cholesky
@@ -47,15 +56,46 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function zsim = stk_generate_samplepaths (model, xt, nb_paths)
+function zsim = stk_generate_samplepaths (model, varargin)
 
-if nargin > 3,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+switch nargin,
+    case {0, 1},
+        stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+    case 2,
+        xt = varargin{1};
+        nb_paths = 1;
+        conditional = false;
+    case 3,
+        xt = varargin{1};
+        nb_paths = varargin{2};
+        conditional = false;
+    case 4,
+        xi = varargin{1};
+        zi = varargin{2};
+        xt = varargin{3};
+        nb_paths = 1;
+        conditional = true;
+    case 5
+        xi = varargin{1};
+        zi = varargin{2};
+        xt = varargin{3};
+        nb_paths = varargin{4};
+        conditional = true;
+    otherwise
+        stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if nargin < 3,
-    nb_paths = 1;
+% Prepare extended dataset for conditioning, if required
+% (notes/FIXME: it can happen that some points are duplicated after this
+%  operation... we will have to take care of this if we do not want chol
+%  to fail)
+if conditional,
+    xt = [xi; xt];
+    xi_ind = 1:(size (xt, 1));    
 end
+
+
+%--- Generate unconditional sample paths --------------------------------------
 
 % Cholesky factorization of the covariance matrix
 K = stk_make_matcov (model, xt);
@@ -74,6 +114,22 @@ try
 catch
     zsim_rownames = {};
 end
+
+
+%--- Generate conditional sample paths ----------------------------------------
+
+if conditional,
+    
+    % Carry out the kriging prediction at points xt
+    [zp_ignore, lambda] = stk_predict (model, xi, zi, xt);  %#ok<ASGLU>
+    
+    % Condition sample paths on the observations
+    zsim_data = stk_conditioning (lambda, zi, zsim_data, xi_ind);
+
+end
+
+
+%--- The end ------------------------------------------------------------------
 
 % store the result in a dataframe
 zsim = stk_dataframe (zsim_data, zsim_colnames, zsim_rownames);
