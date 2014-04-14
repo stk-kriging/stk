@@ -1,8 +1,16 @@
-% STK_CONFIG_SETUP initializes the STK
+% STK_CHOLCOV computes the Cholesky factorization of a covariance matrix
+%
+% CALL: C = stk_cholcov (A, ...)
+%
+%   returns the result of chol (A, ...) when this succeeds. If chol fails,
+%   then a small amount of "regularization noise" is added to the diagonal
+%   of A, in order to make chol succeed (see the code for details).
+%
+% See also: chol
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2014 SUPELEC
+%    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,27 +34,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_config_setup ()
+function C = stk_cholcov (A, varargin)
 
-% Set default options
-stk_options_set;
+% try to use a plain "chol"
+[C, p] = chol (A, varargin{:});
 
-if ~ isoctave,
-    % Check for presence of the Parallel Computing Toolbox
-    fprintf ('Parallel Computing toolbox... ');
-    pct_found = stk_parallel_haspct ();
-    if pct_found,
-        fprintf ('found.\n');
-    else
-        fprintf ('not found.\n');
+if p > 0,
+    
+    epsi = eps;
+    u = diag (diag (A));
+    
+    while p > 0,
+    
+        epsi = epsi * 10;
+        
+        warning ('STK:stk_cholcov:AddingRegularizationNoise', sprintf ...
+            ('Adding a little bit of noise to help chol succeed (epsi = %.2e)', epsi));
+        
+        [C, p] = chol (A + epsi * u);
+        
     end
+    
 end
 
-% Select optimizers for stk_param_estim
-stk_select_optimizer;
+end % function stk_cholcov
 
-% Hide some warnings
-warning ('off', 'STK:stk_predict:NegativeVariancesSetToZero');
-warning ('off', 'STK:stk_cholcov:AddingRegularizationNoise');
-
-end % function stk_config_setup
+%#ok<*SPWRN>

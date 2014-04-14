@@ -47,7 +47,7 @@ model.randomprocess.priorcov.nu     = NaN;  % regularity parameter
 model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
 
 % Several values for nu
-nu_list = [0.5 1.5 2.5 4.0];
+nu_list = [0.5 1.5 2.5 10.0];
 
 
 %% Generate (unconditional) sample paths

@@ -83,9 +83,6 @@ zsimc1 = stk_conditioning (lambda, zi, zsim, xi_ind);
 
 zsimc2 = stk_generate_samplepaths (model, xi, zi, xt, NB_PATHS);
 
-% FIXME: this currently fails because of the duplicated points in xi and xt
-%   (the problem is with chol; wee also http://sourceforge.net/p/kriging/tickets/4)
-
 
 %% Method 3: let STK take care of the details (bis)
 
@@ -102,12 +99,12 @@ zsimc2 = stk_generate_samplepaths (model, xi, zi, xt, NB_PATHS);
 
 stk_subplot (1, 2, 1); plot (xt, zsimc1, 'LineWidth', 2);  legend off;  hold on;
 plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
-stk_title ('Conditional sample paths');
+stk_title (sprintf ('%d conditional sample paths', NB_PATHS));
 stk_labels ('input variable x', 'response z');
 
 stk_subplot (1, 2, 2); plot (xt, zsimc2, 'LineWidth', 2);  legend off;  hold on;
 plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
-stk_title ('Conditional sample paths');
+stk_title (sprintf ('another set of %d sample paths', NB_PATHS));
 stk_labels ('input variable x', 'response z');
 
 
