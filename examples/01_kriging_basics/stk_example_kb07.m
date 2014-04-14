@@ -47,7 +47,7 @@ RHO1   = 0.4;  % scale (range) parameter
 model.param = log ([SIGMA2; NU; 1/RHO1]);
 
 % Several values for nu
-nu_list = [0.5 1.5 2.5 4.0];
+nu_list = [0.5 1.5 2.5 10.0];
 
 
 %% Generate (unconditional) sample paths

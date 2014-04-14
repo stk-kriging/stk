@@ -73,17 +73,7 @@ W = Q(:, (q+1):n);
 G = W' * (K * W);
 
 % Cholesky factorization: G = C' * C, with upper-triangular C
-[C, p] = chol (G);
-if p > 0,
-    epsi = eps;
-    DDD = diag (diag (G));
-    while p > 0,
-        epsi = epsi * 10;
-        warning ('STK:stk_param_relik:AddingRegularizationNoise', sprintf ...
-            ('Adding a little bit of noise to help chol succeed (epsi = %.2e)', epsi));
-        [C, p] = chol (G + epsi * DDD);        
-    end
-end
+C = stk_cholcov (G);
 
 % Compute log (det (G)) using the Cholesky factor
 ldetWKW = 2 * sum (log (diag (C)));

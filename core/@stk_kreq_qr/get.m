@@ -62,7 +62,7 @@ catch
             n = kreq.n;
             Q11 = kreq.LS_Q(1:n, 1:n);
             R11 = kreq.LS_R(1:n, 1:n);
-            Kchol = chol (Q11 * R11); % K = Q11 * R11
+            Kchol = stk_cholcov (Q11 * R11); % K = Q11 * R11
             value = 2 * sum (log (diag (Kchol)));
             
         case 'log_det_covariance_matrix_c'

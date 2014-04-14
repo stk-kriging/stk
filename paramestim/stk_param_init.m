@@ -164,7 +164,7 @@ for eta = eta_list
         model.lognoisevariance = log (eta);
         [K, P] = stk_make_matcov (model, xi);
         % estimate sigma2
-        zi = double (zi);  L = chol (K, 'lower');  W = L \ P;
+        zi = double (zi);  L = stk_cholcov (K, 'lower');  W = L \ P;
         beta = (W' * W) \ (W' * (L \ zi));
         sigma2 = 1 / (ni - length (beta)) * sum ((L \ (zi - P * beta)) .^ 2);
         % now compute the antilog-likelihood

@@ -1,3 +1,20 @@
+2014-04-14  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_cholcov: new function, chol + regularization noise
+
+	* core/stk_cholcov.m: New function.
+	* config/stk_config_setup.m: Change the name of a warning.
+	* paramestim/stk_param_init.m: Use stk_colcov instead of chol.
+	* core/@stk_kreq_qr/get.m: Use stk_colcov instead of chol.
+	* paramestim/stk_param_relik.m: Use stk_cholcov.
+	* examples/01_kriging_basics/stk_example_kb07.m: Increase
+	regularity for the forth subplot. Now we can, so why not?
+	* examples/01_kriging_basics/stk_example_kb08.m: Remove FIXME
+	comment. Change subplot titles.
+	* utils/stk_generate_samplepaths.m: Use stk_colcov instead of
+	chol. Remove FIXME comment. Remove observations points from the
+	result when generating conditional sample paths (bugfix).
+
 2014-04-13  Julien Bect  <julien.bect@supelec.fr>
 
 	Generation of conditioned sample paths made easy (ticket #3).
