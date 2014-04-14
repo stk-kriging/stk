@@ -27,7 +27,7 @@
 %
 % EXAMPLES: see stk_example_kb05, stk_example_kb07
 %
-% See also stk_conditioning, chol
+% See also stk_conditioning, stk_cholcov
 
 % Copyright Notice
 %
@@ -86,12 +86,9 @@ switch nargin,
 end
 
 % Prepare extended dataset for conditioning, if required
-% (notes/FIXME: it can happen that some points are duplicated after this
-%  operation... we will have to take care of this if we do not want chol
-%  to fail)
 if conditional,
     xt = [xi; xt];
-    xi_ind = 1:(size (xt, 1));    
+    xi_ind = 1:(size (xi, 1));    
 end
 
 
@@ -99,7 +96,7 @@ end
 
 % Cholesky factorization of the covariance matrix
 K = stk_make_matcov (model, xt);
-V = chol (K);
+V = stk_cholcov (K);
 
 % generates samplepaths
 zsim_data = V' * randn (size (K, 1), nb_paths);
@@ -126,6 +123,7 @@ if conditional,
     % Condition sample paths on the observations
     zsim_data = stk_conditioning (lambda, zi, zsim_data, xi_ind);
 
+    zsim_data(xi_ind, :) = [];
 end
 
 
