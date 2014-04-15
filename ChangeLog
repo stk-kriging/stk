@@ -1,5 +1,9 @@
 2014-04-15  Julien Bect  <julien.bect@supelec.fr>
 
+	Don't include stk_optim_hasfmincon in the Octave package.
+
+	* admin/make_octave_package.m: modified
+
 	Some functions are not part of the public API.
 
 	* core/ortho_func.m: modified (doc)
