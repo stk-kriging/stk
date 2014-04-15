@@ -1,5 +1,13 @@
 2014-04-15  Julien Bect  <julien.bect@supelec.fr>
 
+	Add an INDEX file to the Octave package.
+
+	* etc/octave-pkg/INDEX: INDEX file for the Octave package
+	* etc/octave-pkg/pkg_install_stk_and_generate_doc.m: new script to
+	test quickly that the tarball can be installed and to inspect how
+	the corresponding Octave-forge documentation will look.
+	* admin/make_octave_package: copy INDEX to the package.
+
 	Don't include stk_optim_hasfmincon in the Octave package.
 
 	* admin/make_octave_package.m: modified
