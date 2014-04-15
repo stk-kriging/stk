@@ -1,10 +1,15 @@
-% STK_SQUARED_SEMINORM [STK internal]
+% STK_SQUARED_SEMINORM  [STK internal function, not part of public API... UAYOR!]
+%
+% CALL: s = stk_squared_seminorm (kreq, zi)
+%
+%    computes the squared semi-norm associated to the left-hand side of an
+%    stk_kreq_qr object.
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %

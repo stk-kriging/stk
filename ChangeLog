@@ -1,3 +1,19 @@
+2014-04-15  Julien Bect  <julien.bect@supelec.fr>
+
+	Some functions are not part of the public API.
+
+	* core/ortho_func.m: modified (doc)
+	* core/stk_cholcov.m: modified (doc)
+	* core/@stk_kreq_qr/get.m: modified (doc)
+	* core/@stk_kreq_qr/isequal.m: modified (doc)
+	* core/@stk_kreq_qr/linsolve.m: modified (doc)
+	* core/@stk_kreq_qr/stk_kreq_qr.m: modified (doc)
+	* core/@stk_kreq_qr/stk_set_righthandside.m: modified (doc)
+	* core/@stk_kreq_qr/stk_squared_seminorm.m: modified (doc)
+	* core/@stk_kreq_qr/stk_update.m: modified (doc)
+	* core/@stk_kreq_qr/subsref.m: modified (doc)
+	* misc/dist/stk_gpquadform.m: modified (doc)
+
 2014-04-14  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_cholcov: new function, chol + regularization noise

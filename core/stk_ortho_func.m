@@ -1,4 +1,4 @@
-% STK_ORTHO_FUNC computes the design matrix for the linear part of a model.
+% STK_ORTHO_FUNC  [STK internal function, not part of public API... UAYOR!]
 %
 % CALL: P = stk_ortho_func (MODEL, X)
 %
@@ -10,10 +10,16 @@
 %    where L is the number of regression functions in the linear part of the
 %    model; e.g., L = 1 if MODEL.order is zero (ordinary kriging).
 %
-% NOTE:
+% DEPRECATED:
 %
 %    At the present time, stk_ortho_func() only handles polynomial regressions,
-%    up to order 3.
+%    up to order 3 through the "historical" mechanism based on model.order.
+%
+%    An experimental mechanisme that uses "linear model" objects is already
+%    available (see the code for details on how to activate this feature).
+%
+%    stk_orth_func is deprecated and will be removed from future versions of
+%    STK (http://sourceforge.net/p/kriging/tickets/12).
 %
 % See also stk_make_matcov
 

@@ -1,8 +1,12 @@
-% GET  [overloaded base function]
+% GET  [STK internal function, not part of public API... UAYOR!]
+%
+% CALL: value = get (kreq, propname)
+%
+%    implements 'get' for stk_kreq_qr objects.
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 

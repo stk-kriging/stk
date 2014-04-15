@@ -1,11 +1,15 @@
-% LINSOLVE [overloaded base function]
+% LINSOLVE  [STK internal function, not part of public API... UAYOR!]
+%
+% CALL: w = linsolve (kreq, rs)
+%
+%    Overload base function 'linsolve' for stk_kreq_qr objects.
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %

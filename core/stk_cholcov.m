@@ -1,10 +1,21 @@
-% STK_CHOLCOV computes the Cholesky factorization of a covariance matrix
+% STK_CHOLCOV   [STK internal function, not part of public API... UAYOR!]
 %
 % CALL: C = stk_cholcov (A, ...)
 %
-%   returns the result of chol (A, ...) when this succeeds. If chol fails,
-%   then a small amount of "regularization noise" is added to the diagonal
-%   of A, in order to make chol succeed (see the code for details).
+%    returns the result of chol (A, ...) when this succeeds. If chol fails,
+%    then a small amount of "regularization noise" is added to the diagonal
+%    of A, in order to make chol succeed (see the code for details).
+%
+% NOTE: why this function ?
+%
+%    This is a first (rough) attempt at solving numerical problems that 
+%    arise when chol is used with a covariance matrix that is semi-positive
+%    definite, or positive definite with some very small eigenvalues. See
+%    tickets #3, #4 and #13 on Sourceforge:
+%
+%       https://sourceforge.net/p/kriging/tickets/3/
+%       https://sourceforge.net/p/kriging/tickets/4/
+%       https://sourceforge.net/p/kriging/tickets/13/
 %
 % See also: chol
 
