@@ -1,8 +1,12 @@
-% STK_UPDATE [STK internal]
+% STK_UPDATE  [STK internal function, not part of public API... UAYOR!]
+%
+% CALL: kreq = stk_update (kreq, Kjj, Kji, Pj, Ktj)
+%
+%    Experimental...
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:  Julien Bect  <julien.bect@supelec.fr>
 
