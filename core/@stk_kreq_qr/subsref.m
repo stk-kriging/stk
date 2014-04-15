@@ -1,10 +1,16 @@
-% SUBSREF [overloaded base function]
+% SUBSREF  [STK internal function, not part of public API... UAYOR!]
+%
+% CALL: value = subsref (kreq, idx)
+%
+%    implements 'subsref' for stk_kreq_qr objects.
+%
+% See also: subsref
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
