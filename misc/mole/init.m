@@ -29,6 +29,7 @@
 mole_dir = fileparts (mfilename ('fullpath'));
 
 % Change directory to make install_mole_function available
+% (note: this is, in fact, useless if the script is called by run ())
 here = pwd ();  cd (mole_dir);
 
 % MOLE_DO_ADDPATH: Do we want to add the subdirectories to the path ?
