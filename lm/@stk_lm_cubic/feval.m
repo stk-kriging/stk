@@ -50,7 +50,7 @@ for i = 1:d
     end
 end
 
-z = [z2 z3];
+z = horzcat (z2, z3);
 
 end % function feval
 
