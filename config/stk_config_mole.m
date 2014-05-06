@@ -28,8 +28,7 @@
 
 mole_dir = fileparts (mfilename ('fullpath'));
 
-% Change directory to make install_mole_function available
-here = pwd ();  cd (mole_dir);
+mole_dir = fullfile (root, 'misc', 'mole');
 
 % MOLE_DO_ADDPATH: Do we want to add the subdirectories to the path ?
 % (MOLE_DO_ADDPATH = false is used in pre_install.m for octave packages)
