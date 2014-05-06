@@ -1,5 +1,10 @@
 2014-05-06  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_config_path: Fix a private folder problem in Octave 3.2.x
+
+	* config/stk_config_path.m: Fix a private folder problem in Octave
+	3.2.x (a new private folder has been recently created).
+
 	Use horzcat instead of [,].
 
 	* lm/@stk_lm_affine/feval.m: modified
