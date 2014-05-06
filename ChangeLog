@@ -1,5 +1,11 @@
 2014-05-06  Julien Bect  <julien.bect@supelec.fr>
 
+	Use horzcat instead of [,].
+
+	* lm/@stk_lm_affine/feval.m: modified
+	* lm/@stk_lm_cubic/feval.m: modified
+	* lm/@stk_lm_quadratic/feval.m: modified
+
 	Change the way the MOLE is installed.
 
 	* config/stk_config_mole.m: New function, that takes the place of
