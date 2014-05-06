@@ -33,9 +33,13 @@
 
 % Deduce the root of STK from the path to this script
 root = fileparts (mfilename ('fullpath'));
+config = fullfile (root, 'config');
 
-% Activate the MOLE (this needs to be done FIRST)
-run (fullfile (root, 'misc', 'mole', 'init.m'));
+% Add config to the path. It will be removed at the end of this script.
+addpath (config);
+
+% Activate the MOLE
+stk_config_mole (root);
 
 % Turn output pagination OFF
 pso_state = page_screen_output (0);
@@ -63,9 +67,6 @@ fflush (stdout);
 
 % Are we using STK installed as an octave package ?
 STK_OCTAVE_PACKAGE = false;
-
-% config contains stk_config_buildmex and stk_config_addpath, used below
-addpath (fullfile (root, 'config'));
 
 % Build MEX-files "in-place" (unless STK is used as an Octave package)
 if ~ STK_OCTAVE_PACKAGE
@@ -113,6 +114,6 @@ fflush (stdout);
 page_screen_output (pso_state);
 
 % Remove config from the path
-rmpath (fullfile (root, 'config'));
+rmpath (config);
 
-clear pso_state root STK_OCTAVE_PACKAGE ans;
+clear pso_state root config STK_OCTAVE_PACKAGE ans;

@@ -1,3 +1,17 @@
+2014-05-06  Julien Bect  <julien.bect@supelec.fr>
+
+	Change the way the MOLE is installed.
+
+	* config/stk_config_mole.m: New function, that takes the place of
+	misc/mole/init.m and misc/mole/install_mole_function.m.
+	* misc/mole/init.m: removed
+	* misc/mole/install_mole_function.m: removed
+	* config/stk_config_addpath.m: Modified, to call stk_config_mole,
+	thus avoiding the use of "run" which seems to be causing problems
+	in Octave 3.2.x.
+	* etc/octave-pkg/post_install.m: idem
+	* stk_init.m: idem
+
 2014-04-15  Julien Bect  <julien.bect@supelec.fr>
 
 	Add an INDEX file to the Octave package.
