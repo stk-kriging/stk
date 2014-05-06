@@ -32,7 +32,7 @@ x = double (x);
 
 [n, d] = size (x);
 
-z = [ones(n, 1) x zeros(n, d * (d + 1) / 2)];
+z = horzcat (ones (n, 1), x, zeros (n, d * (d + 1) / 2));
 k = d + 2;
 for i = 1:d
     for j = i:d

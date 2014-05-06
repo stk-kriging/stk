@@ -29,7 +29,7 @@
 function z = feval (lm, x)  %#ok<INUSL>
 
 n = size (x, 1);
-z = [ones(n, 1) x];
+z = horzcat (ones (n, 1), x);
 
 end % function feval
 
