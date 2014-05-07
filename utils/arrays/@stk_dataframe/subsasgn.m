@@ -2,9 +2,9 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -39,6 +39,12 @@ if ~ isa (x, 'stk_dataframe')
         x = subsasgn(x, idx, val.data);
     end
     return
+end
+
+if all (builtin ('size', x) == 0)
+    % This happens in Octave 3.2.x when doing B(idx) = D if B does not exist and
+    % D is an stk_dataframe. In this case, x is a 0x0 stk_dataframe object.
+    x = stk_dataframe ();
 end
 
 switch idx(1).type
