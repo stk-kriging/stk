@@ -44,23 +44,21 @@
 
 function stk_runtests (directory)
 
-here = pwd ();
-
 if nargin == 0
     % scan all STK directories if no input argument is provided
     root = fileparts (fileparts (fileparts (mfilename ('fullpath'))));
-    cd (fullfile (root, 'config'));
-    dirs = stk_config_path ();
+    config = fullfile (root, 'config');
+    addpath (config);  dirs = stk_config_path ();  rmpath (config);
 else
     % otherwise, directory is expected to be a valid directory name
     if ~ exist (directory, 'dir')
         error ('Directory not found.');
     end
+    here = pwd ();
     cd (directory);
-    dirs = {pwd()}; % get absolute path    
+    dirs = {pwd()}; % get absolute path
+    cd (here);
 end
-
-cd (here);
 
 % number of directories to be explored
 nb_topdirs = numel(dirs);
