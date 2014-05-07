@@ -1,3 +1,10 @@
+2014-05-07  Julien Bect  <julien.bect@supelec.fr>
+
+	Avoid changing the current dir to make a function available.
+
+	* misc/test/stk_runtests.m: Avoid changing the current dir to make
+	stk_config_path available. Use addpath/rmpath instead.
+
 2014-05-06  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_config_path: Fix a private folder problem in Octave 3.2.x
