@@ -1,5 +1,10 @@
 2014-05-07  Julien Bect  <julien.bect@supelec.fr>
 
+	@stk_dataframe/subsasgn: Solve a problem with Octave 3.2.x
+
+	* utils/arrays/@stk_dataframe/subsasgn.m: solve a problem with
+	Octave 3.2.x (0x0 stk_dataframe objects).
+
 	Avoid changing the current dir to make a function available.
 
 	* misc/test/stk_runtests.m: Avoid changing the current dir to make
