@@ -1,3 +1,12 @@
+2014-05-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Move utils/arrays one level up.
+
+	* utils/arrays: deleted
+	* arrays: formerly known as utils/arrays
+	* config/stk_config_makeinfo.m: modified
+	* config/stk_config_path.m: modified
+
 2014-05-07  Julien Bect  <julien.bect@supelec.fr>
 
 	@stk_dataframe/subsasgn: Solve a problem with Octave 3.2.x
