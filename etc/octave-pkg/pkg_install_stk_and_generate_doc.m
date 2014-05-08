@@ -1,4 +1,4 @@
-#!octave
+#!/usr/bin/env octave
 
 build_dir = fileparts (mfilename ('fullpath'));
 
