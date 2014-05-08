@@ -1,9 +1,14 @@
 2014-05-08  Julien Bect  <julien.bect@supelec.fr>
 
+	Move stk_model to core.
+
+	* core/stk_model.m: formerly known as utils/stk_model.m
+	* utils/stk_model.m: deleted
+
 	Move utils/arrays one level up.
 
-	* utils/arrays: deleted
 	* arrays: formerly known as utils/arrays
+	* utils/arrays: deleted
 	* config/stk_config_makeinfo.m: modified
 	* config/stk_config_path.m: modified
 
