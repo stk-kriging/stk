@@ -26,34 +26,36 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-mole_dir = fileparts (mfilename ('fullpath'));
+function stk_config_mole (root, do_addpath, prune_unused)
 
 mole_dir = fullfile (root, 'misc', 'mole');
 
-% MOLE_DO_ADDPATH: Do we want to add the subdirectories to the path ?
-% (MOLE_DO_ADDPATH = false is used in pre_install.m for octave packages)
-if ~ exist ('MOLE_DO_ADDPATH', 'var')
-    MOLE_DO_ADDPATH = true;
+% do_addpath: Do we want to add the subdirectories to the path ?
+%   Defaults to true, for use in stk_init.m, typically.
+%   do_appath = false is used in post_install.m, for octave packages.
+if nargin < 2
+    do_addpath = true;
 end
 
-% MOLE_PRUNE_UNUSED: Do we want to remove unused subdirectories ?
-% (MOLE_PRUNE_UNUSED = true is used in pre_install.m for octave packages)
-if ~ exist ('MOLE_PRUNE_UNUSED', 'var')
-    MOLE_PRUNE_UNUSED = false;
+% prune_unused: Do we want to remove unused subdirectories ?
+%   Defaults to false, for use in stk_init.m, typically.
+%   prune_unused = true is used in post_install.m, for octave packages.
+if nargin < 3
+    prune_unused = false;
 end
 
 if (exist ('OCTAVE_VERSION', 'builtin') == 5), % if Octave
     recursive_rmdir_state = confirm_recursive_rmdir (0);
 end
 
-opts = {MOLE_DO_ADDPATH, MOLE_PRUNE_UNUSED};
+opts = {mole_dir, do_addpath, prune_unused};
 
 
 %--- isoctave -----------------------------------------------------------------
 
-install_mole_function ('isoctave', mole_dir, opts{:});
+install_mole_function ('isoctave', opts{:});
 
-% Note: if MOLE_DO_ADDPATH is false, isoctave is not added to the search
+% Note: if do_addpath is false, isoctave is not added to the search
 % path. Therefore, it cannot be assumed below that isoctave is defined.
 
 
@@ -63,10 +65,10 @@ install_mole_function ('isoctave', mole_dir, opts{:});
 %       and get rid of the others !
 
 if (exist ('OCTAVE_VERSION', 'builtin') ~= 5), % if Matlab
-    if MOLE_DO_ADDPATH,
+    if do_addpath,
         addpath (fullfile (mole_dir, 'matlab'));
     end
-elseif MOLE_PRUNE_UNUSED,
+elseif prune_unused,
     rmdir (fullfile (mole_dir, 'matlab'), 's');
 end
 
@@ -78,7 +80,7 @@ end
 % For Matlab users: there is no function named graphics_toolkit in Matlab. Our
 % implementation returns either 'matlab-jvm' or 'matlab-nojvm'.
 
-install_mole_function ('graphics_toolkit', mole_dir, opts{:});
+install_mole_function ('graphics_toolkit', opts{:});
 
 
 %--- corr ---------------------------------------------------------------------
@@ -89,7 +91,7 @@ install_mole_function ('graphics_toolkit', mole_dir, opts{:});
 % For Matlab users: corr is missing from Matlab itself, but it provided by the
 % Statistics toolbox if you're rich enough to afford it.
 
-install_mole_function ('corr', mole_dir, opts{:});
+install_mole_function ('corr', opts{:});
 
 
 %--- linsolve -----------------------------------------------------------------
@@ -97,7 +99,7 @@ install_mole_function ('corr', mole_dir, opts{:});
 % For Octave users: linsolve has been missing in Octave for a long time
 % (up to 3.6.4)
 
-install_mole_function ('linsolve', mole_dir, opts{:});
+install_mole_function ('linsolve', opts{:});
 
 
 %--- quantile -----------------------------------------------------------------
@@ -105,15 +107,45 @@ install_mole_function ('linsolve', mole_dir, opts{:});
 % For Matlab users: quantile is missing from Matlab itself, but it provided by
 % the Statistics toolbox if you're rich enough to afford it.
 
-install_mole_function ('quantile', mole_dir, opts{:});
+install_mole_function ('quantile', opts{:});
 
 
 %--- CLEANUP ------------------------------------------------------------------
-
-cd (here);
 
 if (exist ('OCTAVE_VERSION', 'builtin') == 5), % is octave
     confirm_recursive_rmdir (recursive_rmdir_state);
 end
 
-clear mole_dir here MOLE_PRUNE_UNUSED MOLE_DO_ADDPATH recursive_rmdir_state opts
+end % function stk_config_mole
+
+
+function install_mole_function (function_name, mole_dir, do_addpath, prune_unused)
+
+function_dir = fullfile (mole_dir, function_name);
+
+if isempty (which (function_name)),  % if the function is absent
+    
+    function_mfile = fullfile (function_dir, [function_name '.m']);
+    
+    if exist (function_dir, 'dir') && exist (function_mfile, 'file')
+        
+        % fprintf ('[MOLE]  Providing function %s\n', function_name);
+        if do_addpath,
+            addpath (function_dir);
+        end
+        
+    else
+        
+        warning (sprintf ('[MOLE]  Missing function: %s\n', function_name));
+        
+    end
+    
+elseif prune_unused && (exist (function_dir, 'dir'))
+        
+    rmdir (function_dir, 's');
+        
+end
+
+end % function install_mole_function
+
+%#ok<*SPWRN,*WNTAG>
