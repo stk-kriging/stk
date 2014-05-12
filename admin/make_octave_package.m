@@ -110,7 +110,7 @@ copyfile (fullfile ('etc', 'octave-pkg', 'Makefile'), ...
 copyfile (fullfile ('etc', 'octave-pkg', 'INDEX'), package_dir);
 
 % Create tar.gz archive
-cd (build_dir);  
+cd (build_dir);
 tarball_name = sprintf ('stk-%s.tar.gz', version_number);
 system (sprintf ('tar --create --gzip --file %s stk', tarball_name));
 
@@ -162,7 +162,7 @@ end % function process_directory
 function process_file (s, package_dir, sed_program)
 
 % Regular expressions
-regex_ignore = '(~|\.(hgignore|hgtags|mexglx|mex|o|tmp))$';
+regex_ignore = '(~|\.(hgignore|hgtags|mexglx|mex|mexa64|o|tmp))$';
 regex_mfile = '\.m$';
 regex_copy_src = '\.[ch]$';
 
