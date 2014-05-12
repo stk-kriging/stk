@@ -59,47 +59,71 @@
 function zsim = stk_generate_samplepaths (model, varargin)
 
 switch nargin,
+    
     case {0, 1},
         stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
-    case 2,
+        
+    case 2,  % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT)
         xt = varargin{1};
         nb_paths = 1;
         conditional = false;
-    case 3,
+        
+    case 3,  % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT, NB_PATHS)
         xt = varargin{1};
         nb_paths = varargin{2};
         conditional = false;
-    case 4,
+        
+    case 4,  % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT)
         xi = varargin{1};
         zi = varargin{2};
         xt = varargin{3};
         nb_paths = 1;
         conditional = true;
-    case 5
+        
+    case 5,  % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT, NB_PATHS)
         xi = varargin{1};
         zi = varargin{2};
         xt = varargin{3};
         nb_paths = varargin{4};
         conditional = true;
+        
     otherwise
         stk_error ('Too many input arguments.', 'TooManyInputArgs');
+        
 end
 
 % Prepare extended dataset for conditioning, if required
+% (TODO: avoid duplicating observations points if xi is a subset of xt)
 if conditional,
     xt = [xi; xt];
-    xi_ind = 1:(size (xi, 1));    
+    xi_ind = 1:(size (xi, 1));
 end
 
 
 %--- Generate unconditional sample paths --------------------------------------
 
+% Pick unique simulation points
+[xt_unique, ~, j] = unique (double (xt), 'rows');
+
+% Did we actually find duplicates in xt ?
+duplicates_detected = (size (xt_unique, 1) < size (xt, 1));
+
+% Compute the covariance matrix
+% (even if there no duplicates, it is not guaranteed that xt_unique and xt are equal)
+if duplicates_detected,
+    K = stk_make_matcov (model, xt_unique);
+else
+    K = stk_make_matcov (model, xt);
+end
+
 % Cholesky factorization of the covariance matrix
-K = stk_make_matcov (model, xt);
 V = stk_cholcov (K);
 
-% generates samplepaths
+% Generates samplepaths
 zsim_data = V' * randn (size (K, 1), nb_paths);
+
+% Duplicate simulated values, if necessary
+if duplicates_detected,  zsim_data = zsim_data(j, :);  end
 
 % output column names
 zsim_colnames = arrayfun (@(i)(...
@@ -122,7 +146,7 @@ if conditional,
     
     % Condition sample paths on the observations
     zsim_data = stk_conditioning (lambda, zi, zsim_data, xi_ind);
-
+    
     zsim_data(xi_ind, :) = [];
 end
 
@@ -138,7 +162,7 @@ end % function stk_generate_samplepaths
 
 
 %!shared model xt n nb_paths
-%! dim = 1;  n = 400;  nb_paths = 5;
+%! dim = 1;  n = 50;  nb_paths = 5;
 %! model = stk_model ('stk_materncov32_iso', dim);
 %! xt = stk_sampling_regulargrid (n, dim, [-1.0; 1.0]);
 
@@ -155,3 +179,8 @@ end % function stk_generate_samplepaths
 %!test
 %! zsim = stk_generate_samplepaths (model, xt, nb_paths);
 %! assert (isequal (size (zsim), [n, nb_paths]));
+
+%!test  % duplicate simulation points
+%! zsim = stk_generate_samplepaths (model, [xt; xt], nb_paths);
+%! assert (isequal (size (zsim), [2 * n, nb_paths]));
+%! assert (isequal (zsim(1:n, :), zsim((n + 1):end, :)));
