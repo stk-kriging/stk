@@ -161,16 +161,19 @@ end % function stk_generate_samplepaths
 %#ok<*CTCH>
 
 
-%!shared model xt n nb_paths
+%!shared model xi zi xt n nb_paths
 %! dim = 1;  n = 50;  nb_paths = 5;
 %! model = stk_model ('stk_materncov32_iso', dim);
 %! xt = stk_sampling_regulargrid (n, dim, [-1.0; 1.0]);
+%! xi = [xt(1, :); xt(end, :)];  zi = [0; 0];
 
 %!error zsim = stk_generate_samplepaths ();
 %!error zsim = stk_generate_samplepaths (model);
 %!test  zsim = stk_generate_samplepaths (model, xt);
 %!test  zsim = stk_generate_samplepaths (model, xt, nb_paths);
-%!error zsim = stk_generate_samplepaths (model, xt, nb_paths, log (2));
+%!test  zsim = stk_generate_samplepaths (model, xi, zi, xt);
+%!test  zsim = stk_generate_samplepaths (model, xi, zi, xt, nb_paths);
+%!error zsim = stk_generate_samplepaths (model, xi, zi, xt, nb_paths, log (2));
 
 %!test
 %! zsim = stk_generate_samplepaths (model, xt);
