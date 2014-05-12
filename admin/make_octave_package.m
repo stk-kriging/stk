@@ -162,7 +162,7 @@ end % function process_directory
 function process_file (s, package_dir, sed_program)
 
 % Regular expressions
-regex_ignore = '(~|\.(hgignore|hgtags|mexglx|mex|mexa64|o|tmp))$';
+regex_ignore = '(~|\.(hgignore|hgtags|mexglx|mex|mexa64|mexw64|o|tmp|orig))$';
 regex_mfile = '\.m$';
 regex_copy_src = '\.[ch]$';
 
