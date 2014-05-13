@@ -1,5 +1,9 @@
 2014-07-01  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_figure.m: Do not set the axis title.
+
+	* misc/plot/stk_figure.m: Do not set the axis title.
+
 	stk_plot2d.m: Create labels only if column names are available.
 
 	* misc/plot/stk_plot2d.m: Create labels only if column names are
