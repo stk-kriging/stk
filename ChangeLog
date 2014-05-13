@@ -1,3 +1,10 @@
+2014-05-13  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
+	Add a stk_length function
+
+	* arrays/generic/stk_length.m: returns the length of an array
+	* arrays/@stk_dataframe/stk_length.m: idem
+
 2014-05-12  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_generate_samplepaths.m: Deal with duplicates in xt.
