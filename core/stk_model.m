@@ -54,6 +54,12 @@
 
 function model = stk_model (covariance_type, varargin)
 
+% Accept a handle instead of a function name
+% (completion works when typing @stk_... not when typing 'stk_...)
+if ishandle (covariance_type)
+    covariance_type = func2str (covariance_type);
+end
+
 if nargin < 1,
     
     % use the (isotropic, 1D) Matern covariance function as a default choice

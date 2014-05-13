@@ -1,3 +1,9 @@
+2014-05-13  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_model.m: Accept function handles for covariance_type.
+
+	* core/stk_model.m: Accept function handles for covariance_type.
+
 2014-05-13  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 	Add a stk_length function
