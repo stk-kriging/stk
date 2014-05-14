@@ -1,0 +1,1 @@
+The Small (Matlab/GNU Octave) Toolbox for Kriging is a convenient and efficient research tool for working with kriging-based methods/Gaussian processes, which are are powerful modeling tools in the domain of design and analysis of computer experiments.
