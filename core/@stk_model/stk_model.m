@@ -69,7 +69,7 @@ function model = stk_model (covariance_type, varargin)
 
 % Accept a handle instead of a function name
 % (completion works when typing @stk_... not when typing 'stk_...)
-if isa (covariance_type, 'function_handle')
+if (nargin > 0) && (isa (covariance_type, 'function_handle'))
     covariance_type = func2str (covariance_type);
 end
 
