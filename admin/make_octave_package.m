@@ -28,7 +28,10 @@
 
 function make_octave_package ()
 
-repo_dir  = fileparts (fileparts (mfilename ('fullpath')));
+repo_dir = fileparts (fileparts (mfilename ('fullpath')));
+
+% A directory that contains various files, which are useful to create the package
+pkg_bits_dir = fullfile ('admin', 'octave-pkg');
 
 here = pwd ();
 
@@ -59,7 +62,7 @@ mkdir (fullfile (package_dir, 'src'));
 mkdir (fullfile (package_dir, 'doc'));
 
 % List of files or directories that must be ignored by process_directory ()
-ignore_list = {'.hg', 'admin', 'etc', 'misc/mole/matlab', build_dir};
+ignore_list = {'.hg', 'admin', 'misc/mole/matlab', build_dir};
 
 % Prepare sed program for renaming MEX-functions (prefix/suffix by __)
 sed_program = prepare_sed_rename_mex (repo_dir, build_dir);
@@ -84,8 +87,7 @@ fprintf (fid, '#\n');
 fprintf (fid, 'Maintainer: Julien BECT <julien.bect@supelec.fr>\n');
 fprintf (fid, ' and Emmanuel VAZQUEZ <emmanuel.vazquez@supelec.fr>\n');
 fprintf (fid, '#\n');
-description_file = fullfile (here, 'description.txt');
-description_text = fileread (description_file);
+description_text = fileread (fullfile (pkg_bits_dir, 'description.txt'));
 fprintf (fid, 'Description: %s\n', description_text);
 fprintf (fid, '#\n');
 fprintf (fid, 'Url: https://sourceforge.net/projects/kriging/\n');
@@ -98,18 +100,18 @@ cmd = 'sed -i "s/STK_OCTAVE_PACKAGE = false/STK_OCTAVE_PACKAGE = true/" %s';
 system (sprintf (cmd, PKG_ADD));
 
 % PKG_DEL: commands that are run when the package is removed from the path
-copyfile (fullfile ('etc', 'octave-pkg', 'PKG_DEL.m'), ...
+copyfile (fullfile (pkg_bits_dir, 'PKG_DEL.m'), ...
           fullfile (package_dir, 'inst'));
 
 % post_install: a function that is run after the installation of the package
-copyfile (fullfile ('etc', 'octave-pkg', 'post_install.m'), package_dir);
+copyfile (fullfile (pkg_bits_dir, 'post_install.m'), package_dir);
 
 % Makefile
-copyfile (fullfile ('etc', 'octave-pkg', 'Makefile'), ...
+copyfile (fullfile (pkg_bits_dir, 'Makefile'), ...
           fullfile (package_dir, 'src'));
 
 % INDEX
-copyfile (fullfile ('etc', 'octave-pkg', 'INDEX'), package_dir);
+copyfile (fullfile (pkg_bits_dir, 'INDEX'), package_dir);
 
 % Create tar.gz archive
 cd (build_dir);
@@ -119,7 +121,7 @@ system (sprintf ('tar --create --gzip --file %s stk', tarball_name));
 % a script to help admins test quickly that the tarball is ok
 cd (repo_dir);
 script_name = 'pkg_install_stk_and_generate_doc.m';
-copyfile (fullfile ('etc', 'octave-pkg', script_name), build_dir);
+copyfile (fullfile (pkg_bits_dir, script_name), build_dir);
 cmd = 'sed -i "s/stk-XX\\.YY\\.ZZ\\.tar\\.gz/%s/" %s';
 system (sprintf (cmd, tarball_name, fullfile (build_dir, script_name)));
 
