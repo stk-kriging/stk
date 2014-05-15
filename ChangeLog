@@ -1,5 +1,10 @@
 2014-05-15  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_model.m: Fix a fresh bug (my mistake).
+
+	* core/stk_model.m: Restore proper default behaviour when
+	nargin == 0.
+
 	Merge /etc into /admin
 
 	* etc/CODING_GUIDELINES: moved from
