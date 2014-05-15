@@ -67,9 +67,9 @@ svn update  # to get our freshly created release tag
 
 cd tags/4.5.0
 
-Export (svn export). Remove ./etc and ./admin. Create targz archive.
+Export (svn export). Remove ./admin. Create targz archive.
 
-Use etc/make_release_targz.sh script to automate these steps.
+Use admin/make_release_targz.sh script to automate these steps.
 
 Upload on Sourceforge.
 http://sourceforge.net/projects/kriging/files/
