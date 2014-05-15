@@ -1,3 +1,27 @@
+2014-05-15  Julien Bect  <julien.bect@supelec.fr>
+
+	Merge /etc into /admin
+
+	* etc/CODING_GUIDELINES: moved from
+	* admin/CODING_GUIDELINES: moved to
+	* etc/RELEASE_CHECKLIST: moved from
+	* admin/RELEASE_CHECKLIST: moved to + modified
+	* etc/octave-pkg/INDEX: moved from
+	* admin/octave-pkg/INDEX: moved to
+	* etc/octave-pkg/Makefile: moved from
+	* admin/octave-pkg/Makefile: moved to
+	* etc/octave-pkg/PKG_DEL.m: moved from
+	* admin/octave-pkg/PKG_DEL.m: moved to
+	* etc/octave-pkg/pkg_install_stk_and_generate_doc.m: moved from
+	* admin/octave-pkg/pkg_install_stk_and_generate_doc.m: moved to
+	* etc/octave-pkg/post_install.m: moved from
+	* admin/octave-pkg/post_install.m: moved to
+	* admin/description.txt: moved from
+	* admin/octave-pkg/description.txt: moved to
+	* admin/make_octave_package.m: modified
+	* admin/make_release_targz.sh: modified
+	* admin/stk_make_htmldoc.m: modified
+
 2014-05-13  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_model.m: Accept function handles for covariance_type.
