@@ -27,10 +27,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -56,7 +56,7 @@ function model = stk_model (covariance_type, varargin)
 
 % Accept a handle instead of a function name
 % (completion works when typing @stk_... not when typing 'stk_...)
-if isa (covariance_type, 'function_handle')
+if (nargin > 0) && (isa (covariance_type, 'function_handle'))
     covariance_type = func2str (covariance_type);
 end
 
