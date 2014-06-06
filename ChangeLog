@@ -1,3 +1,10 @@
+2014-06-19   Ashwin Ravisankar  <ashwinr1993@gmail.com>
+
+	stk_param_gls.m: A new function to compute the GLS estimator.
+
+	* paramestim/stk_param_gls.m: new function
+	* paramestim/stk_param_init.m: modified
+
 2014-06-16  Julien Bect  <julien.bect@supelec.fr>
 
 	make_octave_package.m: Parse 'Description' field from README.
