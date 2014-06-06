@@ -128,7 +128,7 @@ end % function stk_param_init
 
 function [param, lnv] = paraminit_ (xi, zi, box, nu, lm, noisy)
 
-[ni d] = size (xi);
+d = size (xi, 2);
 
 model = stk_model ('stk_materncov_iso');
 model.order = nan;  model.lm = lm;
@@ -162,11 +162,8 @@ for eta = eta_list
         % first use sigma2 = 1.0
         model.param = log ([1.0; nu; 1/rho]);
         model.lognoisevariance = log (eta);
-        [K, P] = stk_make_matcov (model, xi);
         % estimate sigma2
-        zi = double (zi);  L = stk_cholcov (K, 'lower');  W = L \ P;
-        beta = (W' * W) \ (W' * (L \ zi));
-        sigma2 = 1 / (ni - length (beta)) * sum ((L \ (zi - P * beta)) .^ 2);
+        [beta, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU>
         % now compute the antilog-likelihood
         if sigma2 > 0
             model.param(1) = log (sigma2);
