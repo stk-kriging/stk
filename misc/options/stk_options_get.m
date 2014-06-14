@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,9 +26,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function argout = stk_options_get(varargin)
+function argout = stk_options_get (varargin)
 
-opts = stk_options_set();
+opts = stk_options_set ();
 
 switch nargin
     
@@ -42,7 +42,7 @@ switch nargin
         argout = opts.(varargin{1}).(varargin{2});
         
     otherwise
-        stk_error('Too many input arguments.', 'TooManyInputArgs');
+        stk_error ('Too many input arguments.', 'TooManyInputArgs');
         
 end
 
