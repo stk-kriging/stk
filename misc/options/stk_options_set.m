@@ -30,8 +30,9 @@ function opts = stk_options_set(varargin)
 
 persistent options
 
-if isempty(options)    
-    options = init_options();    
+if isempty (options)
+    options = init_options ();
+    mlock;
 end
 
 switch nargin
@@ -40,7 +41,7 @@ switch nargin
         
     case 2,
         options.(varargin{1}) = varargin{2};
-
+        
     case 3,
         options.(varargin{1}).(varargin{2}) = varargin{3};
         
@@ -68,6 +69,6 @@ opts.stk_figure.properties = {'InvertHardcopy', 'off', 'Color', [1 1 1]};
 opts.stk_xlabel.properties = {'FontSize', 10, 'Color', [0.2 0 1]};
 opts.stk_ylabel.properties = opts.stk_xlabel.properties;
 opts.stk_title.properties = {'FontSize', 10, 'FontWeight', 'bold'};
-opts.stk_axes.properties = {'FontSize', 8}; 
+opts.stk_axes.properties = {'FontSize', 8};
 
 end % function init_options
