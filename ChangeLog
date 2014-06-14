@@ -1,3 +1,10 @@
+2014-06-14  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_options_set.m: Prevent persistent from being cleared.
+
+	* misc/options/stk_options_set.m: Add a call to mlock to prevent
+	the persistent variable from being cleared.
+
 2014-05-15  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_model.m: Fix a fresh bug (my mistake).
