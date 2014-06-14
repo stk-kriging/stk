@@ -43,6 +43,12 @@ o General information
     Maintainers:  Julien Bect        <julien.bect@supelec.fr>
                   Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
 
+    Description:  The Small (Matlab/GNU Octave) Toolbox for Kriging is a
+                  convenient and efficient research tool for working with
+                  kriging-based methods/Gaussian processes, which are
+                  powerful modeling tools for the design and analysis of
+                  computer experiments.
+
     Copyright:    Large portions are Copyright (C) 2011-2014 SUPELEC.
                   See individual copyright notices for more details.
 
