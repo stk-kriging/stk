@@ -1,5 +1,11 @@
 2014-06-14  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_options_set.m: Add a reset feature.
+
+	* misc/options/stk_options_set.m: Add a reset feature using a
+	special case when nargin == 1.
+	* misc/options/stk_options_get.m: Just fix spacing.
+
 	stk_options_set.m: Prevent persistent from being cleared.
 
 	* misc/options/stk_options_set.m: Add a call to mlock to prevent
