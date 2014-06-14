@@ -1,5 +1,10 @@
 2014-06-14  Julien Bect  <julien.bect@supelec.fr>
 
+	README: Include a short description.
+
+	* README: Include a short description (from description.txt)
+	* admin/octave-pkg/description.txt: Line-wrapping.
+
 	stk_options_set.m: Add a reset feature.
 
 	* misc/options/stk_options_set.m: Add a reset feature using a
