@@ -29,7 +29,6 @@
 function info = stk_config_makeinfo ()
 
 relpath = fullfile ('misc', 'dist', 'private');
-
 info = register_mex ([],   relpath, 'stk_dist_matrixx');
 info = register_mex (info, relpath, 'stk_dist_matrixy');
 info = register_mex (info, relpath, 'stk_dist_pairwise');
@@ -40,12 +39,13 @@ info = register_mex (info, relpath, 'stk_gpquadform_matrixx');
 info = register_mex (info, relpath, 'stk_gpquadform_pairwise');
 
 relpath = fullfile ('arrays', '@stk_dataframe', 'private');
-
 info = register_mex (info, relpath, 'get_column_number');
 
 relpath = 'sampling';
-
 info = register_mex (info, relpath, 'stk_sampling_vdc_rr2', {'primes.h'});
+
+relpath = fullfile ('arrays', 'generic', 'private');
+info = register_mex (info, relpath, 'stk_paretofind_mex', {'pareto.h'});
 
 end % function stk_config_makeinfo
 

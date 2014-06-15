@@ -1,3 +1,14 @@
+2014-06-15  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_paretofind.m: New function to find non-dominated points.
+
+	* arrays/generic/stk_paretofind.m: new function
+	* arrays/generic/private/stk_paretofind_mex.c: new mex-function
+	* misc/include/pareto.h: new C header
+	* config/stk_config_makeinfo.m: modified
+	* config/stk_config_path.m: modified
+	* admin/octave-pkg/Makefile: modified
+
 2014-06-14  Julien Bect  <julien.bect@supelec.fr>
 
 	README: Include a short description.
