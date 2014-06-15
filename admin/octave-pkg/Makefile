@@ -9,10 +9,12 @@ all: \
  __stk_dist_pairwise__.mex \
  __stk_gpquadform_matrixx__.mex \
  __stk_gpquadform_pairwise__.mex \
+ __stk_paretofind_mex__.mex \
  __stk_sampling_vdc_rr2__.mex
 
 __stk_sampling_vdc_rr2__.mex: primes.h
 
+__stk_paretofind_mex__.mex: pareto.h
+
 __%__.mex: %.c stk_mex.h
 	mkoctfile --mex --output $@ $<
-
