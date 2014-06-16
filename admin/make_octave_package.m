@@ -87,8 +87,7 @@ fprintf (fid, '#\n');
 fprintf (fid, 'Maintainer: Julien BECT <julien.bect@supelec.fr>\n');
 fprintf (fid, ' and Emmanuel VAZQUEZ <emmanuel.vazquez@supelec.fr>\n');
 fprintf (fid, '#\n');
-description_text = fileread (fullfile (pkg_bits_dir, 'description.txt'));
-fprintf (fid, 'Description: %s\n', description_text);
+fprintf (fid, '%s', parse_description_field (repo_dir));
 fprintf (fid, '#\n');
 fprintf (fid, 'Url: https://sourceforge.net/projects/kriging/\n');
 fclose (fid);
@@ -129,7 +128,7 @@ cd (here)
 
 end % function make_octave_package
 
-%#ok<*NOPRT,*SPWRN,*WNTAG,*SPERR>
+%#ok<*NOPRT,*SPWRN,*WNTAG,*SPERR,*AGROW>
 
 
 function process_directory (d, package_dir, ignore_list, sed_program)
@@ -261,3 +260,72 @@ end
 fclose (fid);
 
 end % function rename_mex_functions
+
+
+function descr = parse_description_field (repo_dir)
+
+fid = fopen (fullfile (repo_dir, 'README'));
+
+s = [];
+
+%--- Step 1: find first description line ---------------------------------
+
+while 1,
+    
+    L = fgetl (fid);
+    if ~ ischar (L),
+        error ('Corrupted README file ?');
+    end
+    
+    L = strtrim (L);
+    idx = strfind (L, 'Description:');
+    if (~ isempty (idx)) && (idx(1) == 1)
+        s = L;
+        break;
+    end
+    
+end
+
+%--- Step 2: get other description lines ---------------------------------
+
+while 1,
+    
+    L = fgetl (fid);
+    if ~ ischar (L),
+        error ('Corrupted README file ?');
+    end
+    
+    L = strtrim (L);
+    if isempty (L),  break;  end
+    s = [s ' ' L];
+    
+end
+
+fclose (fid);
+
+%--- Step 3: line wrapping -----------------------------------------------
+
+max_length = 75;
+descr = [];
+
+while 1,
+    
+    % last line
+    if length (s) <= max_length,
+        descr = [descr sprintf(' %s\n', s)];
+        break;
+    end
+    
+    i = find (s == ' ');
+    j = find (i <= max_length + 1, 1, 'last');
+    i = i(j);
+    if isempty (descr),
+        descr = sprintf ('%s\n', s(1:(i - 1)));
+    else
+        descr = [descr sprintf(' %s\n', s(1:(i - 1)))];
+    end
+    s = s((i + 1):end);
+    
+end
+
+end

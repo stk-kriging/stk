@@ -1,3 +1,11 @@
+2014-06-16  Julien Bect  <julien.bect@supelec.fr>
+
+	make_octave_package.m: Parse 'Description' field from README.
+
+	* admin/make_octave_package.m: Modified to parse 'Description'
+	field directly from README (avoids text duplication).
+	* admin/octave-pkg/description.txt: Deleted.
+
 2014-06-15  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_paretofind.m: New function to find non-dominated points.
