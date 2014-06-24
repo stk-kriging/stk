@@ -83,24 +83,24 @@ end % end function stk_param_gls
 %!shared xi zi model beta sigma2
 %! xi = (1:10)';  zi = sin (xi);
 %! model = stk_model ('stk_materncov52_iso');
-%! model.param = [0.0 0.0];
-%! model.order = 0;  % this is the default
+%! model.randomprocess.priorcov.param = [0.0 0.0];
+%! model.randomprocess.priormean = stk_lm_constant;
 
-%!test [beta, sigma2] = stk_param_gls (model, xi, zi);
+%!test [beta, sigma2] = stk_param_gls (model, xi, zi)
 
 %!assert (stk_isequal_tolabs (beta, 0.1346064, 1e-6))
 %!assert (stk_isequal_tolabs (sigma2,  0.4295288, 1e-6))
 
 %!test
-%! model.order = 1;
+%! model.randomprocess.priormean = stk_lm_affine;
 %! [beta, sigma2] = stk_param_gls (model, xi, zi);
 
 %!assert (stk_isequal_tolabs (beta, [0.4728342; -0.0614960], 1e-6))
 %!assert (stk_isequal_tolabs (sigma2, 0.4559431, 1e-6))
 
 %!test
-%! model.order = -1;
-%! [beta, sigma2] = stk_param_gls (model, xi, zi)
+%! model.randomprocess.priormean = stk_lm_null;
+%! [beta, sigma2] = stk_param_gls (model, xi, zi);
 
 %!assert (isequal (beta, zeros (0, 1)))
 %!assert (stk_isequal_tolabs (sigma2, 0.3977993, 1e-6))
