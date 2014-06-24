@@ -1,16 +1,21 @@
 % STK_PARAM_ESTIM estimates the parameters of a covariance function.
 %
-% CALL: PARAM = stk_param_estim(MODEL, XI, YI, PARAM0)
+% CALL: PARAM = stk_param_estim (MODEL, XI, YI, PARAM0)
 %
-%   estimates the parameters PARAM of the covariance function in MODEL from the
-%   data (XI, YI) using the restricted maximum likelihood (ReML) method. A
-%   starting point PARAM0 has to be provided.
+%   estimates the parameters PARAM of the covariance function in MODEL
+%   from the data (XI, YI) using the restricted maximum likelihood (ReML)
+%   method. A starting point PARAM0 must be provided.
 %
-% CALL: [PARAM, LNV] = stk_param_estim(MODEL, XI, YI, PARAM0, LNV0)
+% CALL: [PARAM, LNV] = stk_param_estim (MODEL, XI, YI, PARAM0, LNV0)
 %
-%   also estimate the (logarithm of the) noise variance. This form only applies
-%   to the case where the observations are assumed noisy. A starting point
-%   (PARAM0, LNV0) has to be provided.
+%   also estimate the (logarithm of the) noise variance. This form only
+%   applies to the case where the observations are assumed noisy. A starting
+%   point (PARAM0, LNV0) has to be provided.
+%
+% CALL: PARAM = stk_param_estim (MODEL, XI, YI, PARAM0, [], CRIT)
+% CALL: [PARAM, LNV] = stk_param_estim (MODEL, XI, YI, PARAM0, LNV0, CRIT)
+%
+%   uses the estimation criterion CRIT instead of the default ReML criterion.
 %
 % NOTE: known noise variance
 %
@@ -23,10 +28,12 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2014 SUPELEC
+%    Copyright (C) 2014 SUPELEC & A. Ravisankar
+%    Copyright (C) 2011-2013 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@supelec.fr>
+%              Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
 %
@@ -49,9 +56,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [paramopt, paramlnvopt] = stk_param_estim ...
-    (model, xi, zi, param0, param0lnv)
+    (model, xi, zi, param0, param0lnv, criterion)
 
-if nargin > 5,
+if nargin > 6,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
@@ -65,10 +72,14 @@ end
 %       => provide a reasonable default choice
 
 % TODO: think of a better way to tell we want to estimate the noise variance
-NOISEESTIM = (nargin == 5);
+NOISEESTIM = (nargin > 4) && (~ isempty (param0lnv));
 
 if NOISEESTIM && ~isfield(model, 'lognoisevariance')
     model.lognoisevariance = param0lnv;
+end
+
+if nargin < 6,
+    criterion = @stk_param_relik;
 end
 
 % Cast param0 into an object of the appropriate type and size
@@ -100,12 +111,12 @@ end
 
 switch NOISEESTIM
     case false,
-        f = @(u)(f_(model, u, xi, zi));
-        nablaf = @(u)(nablaf_ (model, u, xi, zi));
+        f = @(u)(f_(model, u, xi, zi, criterion));
+        nablaf = @(u)(nablaf_ (model, u, xi, zi, criterion));
         % note: currently, nablaf is only used with sqp in Octave
     case true,
-        f = @(u)(f_with_noise_(model, u, xi, zi));
-        nablaf = @(u)(nablaf_with_noise_ (model, u, xi, zi));
+        f = @(u)(f_with_noise_(model, u, xi, zi, criterion));
+        nablaf = @(u)(nablaf_with_noise_ (model, u, xi, zi, criterion));
 end
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
@@ -174,47 +185,47 @@ end % function stk_param_estim ------------------------------------------------
 
 %--- The objective function and its gradient ----------------------------------
 
-function [l, dl] = f_ (model, u, xi, zi)
+function [l, dl] = f_ (model, u, xi, zi, criterion)
 
 model.param(:) = u;
 
 if nargout == 1,
-    l = stk_param_relik (model, xi, zi);
+    l = criterion (model, xi, zi);
 else
-    [l, dl] = stk_param_relik (model, xi, zi);
+    [l, dl] = criterion (model, xi, zi);
 end
 
 end % function f_
 
 
-function dl = nablaf_ (model, u, xi, zi)
+function dl = nablaf_ (model, u, xi, zi, criterion)
 
 model.param(:) = u;
-[l_ignored, dl] = stk_param_relik (model, xi, zi); %#ok<ASGLU>
+[l_ignored, dl] = criterion (model, xi, zi);  %#ok<ASGLU>
 
 end % function nablaf_
 
 
-function [l, dl] = f_with_noise_ (model, u, xi, zi)
+function [l, dl] = f_with_noise_ (model, u, xi, zi, criterion)
 
 model.param(:) = u(1:end-1);
 model.lognoisevariance  = u(end);
 
 if nargout == 1,
-    l = stk_param_relik (model, xi, zi);
+    l = criterion (model, xi, zi);
 else
-    [l, dl, dln] = stk_param_relik (model, xi, zi);
+    [l, dl, dln] = criterion (model, xi, zi);
     dl = [dl; dln];
 end
 
 end % function f_with_noise_
 
 
-function dl = nablaf_with_noise_ (model, u, xi, zi)
+function dl = nablaf_with_noise_ (model, u, xi, zi, criterion)
 
 model.param(:) = u(1:end-1);
 model.lognoisevariance  = u(end);
-[l_ignored, dl, dln] = stk_param_relik (model, xi, zi); %#ok<ASGLU>
+[l_ignored, dl, dln] = criterion (model, xi, zi);  %#ok<ASGLU>
 dl = [dl; dln];
 
 end % function nablaf_with_noise_
@@ -250,7 +261,11 @@ end % function get_default_bounds_lnv -----------------------------------------
 
 %!test  % noiseless
 %! zi = stk_feval(f, xi);
-%! param = stk_param_estim(model, xi, zi, param0);
+%! param1 = stk_param_estim (model, xi, zi, param0);
+%! param2 = stk_param_estim (model, xi, zi, param0, [], @stk_param_relik);
+%! % We cannot assume a DETERMINISTIC optimization algorithm
+%! % (for some reason, Octave's sqp is not exactly deterministic)
+%! assert (stk_isequal_tolrel (param1, param2, 1e-2))
 
 %!test  % noisy
 %! NOISE_STD_TRUE = 0.1;
@@ -265,4 +280,4 @@ end % function get_default_bounds_lnv -----------------------------------------
 %!error param = stk_param_estim(model);
 %!error param = stk_param_estim(model, xi);
 %!error param = stk_param_estim(model, xi, zi);
-%!error param = stk_param_estim(model, xi, zi, param0, log(eps), pi);
+%!error param = stk_param_estim(model, xi, zi, param0, log(eps), @stk_param_relik, pi);

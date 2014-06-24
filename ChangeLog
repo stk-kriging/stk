@@ -1,5 +1,11 @@
 2014-06-25  Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
+	stk_param_estim.m: Add an optional 'criterion' argument.
+
+	* paramestim/stk_param_estim.m: added new input argument
+	criterion that will make it possible, in the future, to select
+	which estimation criterion to use.
+
 	stk_param_relik.m: Add a unit test to check the gradient.
 
 	* paramestim/stk_param_relik.m: Add a unit test.
