@@ -179,3 +179,24 @@ end % function stk_param_relik
 %! assert (stk_isequal_tolrel (ARL, 6.327, TOL_REL));
 %! assert (stk_isequal_tolrel (dARL_dtheta, [0.268 0.0149 -0.636]', TOL_REL));
 %! assert (stk_isequal_tolrel (dARL_dLNV, -1.581e-04, TOL_REL));
+
+%!test  % Check the gradient on a 2D test case
+%!
+%! f = @stk_testfun_braninhoo;
+%! DIM = 2;
+%! BOX = [[-5; 10], [0; 15]];
+%! NI = 20;
+%! TOL_REL = 1e-2;
+%! DELTA = 1e-6;
+%!
+%! model = stk_model ('stk_materncov52_iso', DIM);
+%! xi = stk_sampling_halton_rr2 (NI, DIM, BOX);
+%! zi = stk_feval (f, xi);
+%!
+%! model.param = [1 1];
+%! [r1 dr] = stk_param_relik (model, xi, zi);
+%!
+%! model.param = model.param + DELTA * [0 1];
+%! r2 = stk_param_relik (model, xi, zi);
+%!
+%! assert (stk_isequal_tolrel (dr(2), (r2 - r1) / DELTA, TOL_REL));
