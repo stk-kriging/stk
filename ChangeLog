@@ -1,4 +1,10 @@
-2014-06-19   Ashwin Ravisankar  <ashwinr1993@gmail.com>
+2014-06-25  Ashwin Ravisankar  <ashwinr1993@gmail.com>
+
+	stk_param_relik.m: Add a unit test to check the gradient.
+
+	* paramestim/stk_param_relik.m: Add a unit test.
+
+2014-06-19  Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 	stk_param_gls.m: A new function to compute the GLS estimator.
 
