@@ -184,11 +184,12 @@ end % function stk_param_relik
 %! model = stk_model ('stk_materncov52_iso', DIM);
 %! xi = stk_sampling_halton_rr2 (NI, DIM, BOX);
 %! zi = stk_feval (f, xi);
+%! model = stk_setobs (model, xi, zi);
 %!
-%! model.param = [1 1];
-%! [r1 dr] = stk_param_relik (model, xi, zi);
+%! model.randomprocess.priorcov.param = [1 1];
+%! [r1 dr] = stk_param_relik (model);
 %!
-%! model.param = model.param + DELTA * [0 1];
-%! r2 = stk_param_relik (model, xi, zi);
+%! model.randomprocess.priorcov.param = [1 1] + DELTA * [0 1];
+%! r2 = stk_param_relik (model);
 %!
 %! assert (stk_isequal_tolrel (dr(2), (r2 - r1) / DELTA, TOL_REL));
