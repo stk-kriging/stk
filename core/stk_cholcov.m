@@ -57,6 +57,15 @@ if p > 0,
     
     while p > 0,
     
+        if epsi > 1,  % avoids infinite while loops
+            if ~ all (isfinite (A(:)))
+                errmsg = 'A contains NaNs or Infs.';
+            else
+                errmsg = 'A is not even close to positive definite';
+            end
+            stk_error (errmsg, 'InvalidArgument');
+        end
+        
         epsi = epsi * 10;
         
         warning ('STK:stk_cholcov:AddingRegularizationNoise', sprintf ...
