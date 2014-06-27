@@ -12,19 +12,28 @@
 %   to the case where the observations are assumed noisy. A starting point
 %   (PARAM0, LNV0) has to be provided.
 %
-% NOTE: the first form can be used with noisy observations, in which case the
-% variance of the observation noise is assumed to be known (and given by
-% MODEL.noise.cov.variance).
+% CALL: PARAM = stk_param_estim (MODEL, PARAM0, [], CRIT)
+% CALL: [PARAM, LNV] = stk_param_estim (MODEL, PARAM0, LNV0, CRIT)
+%
+%   uses the estimation criterion CRIT instead of the default ReML criterion.
+%
+% NOTE: known noise variance
+%
+%   The first form can be used with noisy observations, in which case the
+%   variance of the observation noise is assumed to be known (and given by
+%   MODEL.noise.cov.variance).
 %
 % EXAMPLES: see, e.g., stk_example_kb02, stk_example_kb03, stk_example_kb04,
 %           stk_example_kb06, stk_example_misc02
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2014 SUPELEC
+%    Copyright (C) 2014 SUPELEC & A. Ravisankar
+%    Copyright (C) 2011-2013 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@supelec.fr>
+%              Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
 %
@@ -46,9 +55,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [paramopt, paramlnvopt] = stk_param_estim (model, cparam0, param0lnv)
+function [paramopt, paramlnvopt] = stk_param_estim (model, cparam0, param0lnv, criterion)
 
-if nargin > 3,
+if nargin > 4,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
@@ -62,7 +71,7 @@ end
 %       => provide a reasonable default choice
 
 % TODO: think of a better way to tell we want to estimate the noise variance
-NOISEESTIM = (nargin == 3);
+NOISEESTIM = (nargin > 2) && (~ isempty (param0lnv));
 
 if NOISEESTIM,
     % check if estimating the noise variance is possible
@@ -78,9 +87,13 @@ if NOISEESTIM,
     end
 end
 
+if nargin < 4,
+    criterion = @stk_param_relik;
+end
+
 if (nargin < 2) || isempty(cparam0),
     cparam0 = model.randomprocess.priorcov.cparam;
-    end
+end
 
 % % Cast param0 into an object of the appropriate type and size
 % % and set model.param to the same value
@@ -101,8 +114,6 @@ if (nargin < 2) || isempty(cparam0),
 [lb, ub] = stk_get_defaultbounds ( ...
     model.randomprocess.priorcov, cparam0, model.observations.z);
 
-bounds_available = ~isempty(lb) && ~isempty(ub);
-
 if NOISEESTIM % optimize wrt to an "extended" vector of parameters
     [lblnv, ublnv] = get_defaultbounds_lnv(model, param0lnv);
     w_lb = [lb; lblnv];
@@ -116,13 +127,15 @@ end
 
 switch NOISEESTIM
     case false,
-        f = @(w)(f_(model, w));
-        nablaf = @(w)(nablaf_ (model, w));
+        f = @(w)(f_(model, w, criterion));
+        nablaf = @(w)(nablaf_ (model, w, criterion));
         % note: currently, nablaf is only used with sqp in Octave
     case true,
-        f = @(w)(f_with_noise_(model, w));
-        nablaf = @(w)(nablaf_with_noise_ (model, w));
+        f = @(w)(f_with_noise_(model, w, criterion));
+        nablaf = @(w)(nablaf_with_noise_ (model, w, criterion));
 end
+
+bounds_available = ~isempty(lb) && ~isempty(ub);
 
 % switch according to preferred optimizer
 switch stk_select_optimizer(bounds_available)
@@ -145,24 +158,24 @@ switch stk_select_optimizer(bounds_available)
         catch
             % The 'Algorithm' option does not exist in some old versions of
             % Matlab (e.g., version 3.1.1 provided with R2007a)...
-            err = lasterror(); %#ok<LERR>
-            if strcmp(err.identifier, 'MATLAB:optimset:InvalidParamName')
-                options = optimset('Display', 'iter', 'GradObj', 'on', ...
+            err = lasterror ();
+            if strcmp (err.identifier, 'MATLAB:optimset:InvalidParamName')
+                options = optimset ('Display', 'iter', 'GradObj', 'on', ...
                     'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
             else
-                rethrow(err);
+                rethrow (err);
             end
         end
         w_opt = fmincon(f, w0, [], [], [], [], w_lb, w_ub, [], options);
         
     otherwise
-        error('Unexpected value returned by stk_select_optimizer.');
+        error ('Unexpected value returned by stk_select_optimizer.');
         
 end % switch
 
 if NOISEESTIM
     paramlnvopt = w_opt(end);
-    w_opt = w_opt(1:end-1);
+    w_opt(end) = [];
 else
     paramlnvopt = [];
 end
@@ -176,64 +189,66 @@ else
     try
         paramopt = cparam0;
         paramopt(:) = w_opt;
-    catch %#ok<CTCH>
+    catch
         paramopt = w_opt;
     end
 end % if
 
 end % function stk_param_estim ------------------------------------------------
 
+%#ok<*CTCH,*LERR>
+
 
 %--- The objective function and its gradient ----------------------------------
 
-function [l, dl] = f_ (model, w)
+function [l, dl] = f_ (model, w, criterion)
 
 model.randomprocess.priorcov.cparam = w;
 
 if nargout == 1,
-    l = stk_param_relik (model);
+    l = criterion (model);
 else
-	[l, dl] = stk_param_relik (model);
+    [l, dl] = criterion (model);
 end
 
 end % function f_
 
 
-function dl = nablaf_ (model, w)
+function dl = nablaf_ (model, w, criterion)
 
 model.randomprocess.priorcov.cparam = w;
-[l_ignored, dl] = stk_param_relik (model); %#ok<ASGLU>
+[l_ignored, dl] = criterion (model);  %#ok<ASGLU>
 
 end % function nablaf_
 
 
-function [l, dl] = f_with_noise_ (model, w)
+function [l, dl] = f_with_noise_ (model, w, criterion)
 
 model.randomprocess.priorcov.cparam = w(1:end-1);
 model.noise.cov.variance = exp(w(end));
 
 if nargout == 1,
-    l = stk_param_relik (model);
+    l = criterion (model);
 else
-    [l, dl, dln] = stk_param_relik (model);
+    [l, dl, dln] = criterion (model);
     dl = [dl; dln];
 end
 
 end % function f_with_noise_
 
 
-function dl = nablaf_with_noise_ (model, w)
+function dl = nablaf_with_noise_ (model, w, criterion)
 
 model.randomprocess.priorcov.cparam = w(1:end-1);
 model.noise.cov.variance = exp(w(end));
-[l_ignored, dl, dln] = stk_param_relik (model); %#ok<ASGLU>
+[l_ignored, dl, dln] = criterion (model);  %#ok<ASGLU>
 dl = [dl; dln];
 
 end % function nablaf_with_noise_
 
 
 function [lblnv, ublnv] = get_defaultbounds_lnv ... %--------------------------
-    (model, param0lnv) %#ok<INUSD>
+    (model, param0lnv)  %#ok<INUSD>
 
 % assume NOISEESTIM
 % constants
@@ -252,7 +267,6 @@ end % function get_defaultbounds_lnv ------------------------------------------
 %! f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );
 %! DIM = 1; NI = 20; box = [-1.0; 1.0];
 %! xi = stk_sampling_regulargrid(NI, DIM, box);
-%! zi = stk_feval(f, xi);
 %!
 %! SIGMA2 = 1.0;  % variance parameter
 %! NU     = 4.0;  % regularity parameter
@@ -262,13 +276,13 @@ end % function get_defaultbounds_lnv ------------------------------------------
 %! model = stk_model('stk_materncov_iso');
 
 %!test  % noiseless
+%! zi = stk_feval(f, xi);
 %! model = stk_setobs(model, xi, zi);
-%! param = stk_param_estim(model, param0);
-
-%!test  % noiseless
-%! model = stk_setobs(model, xi, stk_feval(f, xi));
-%! model.randomprocess.priorcov.param = param0;
-%! param = stk_param_estim(model);
+%! param1 = stk_param_estim (model, param0);
+%! param2 = stk_param_estim (model, param0, [], @stk_param_relik);
+%! % We cannot assume a DETERMINISTIC optimization algorithm
+%! % (for some reason, Octave's sqp is not exactly deterministic)
+%! assert (stk_isequal_tolrel (param1, param2, 1e-2))
 
 %!test  % noisy
 %! NOISE_STD_TRUE = 0.1;
@@ -280,4 +294,4 @@ end % function get_defaultbounds_lnv ------------------------------------------
 
 %!% incorrect number of input arguments
 %!error param = stk_param_estim()
-%!error param = stk_param_estim(model, param0, log(eps), pi);
+%!error param = stk_param_estim(model, param0, log(eps), @stk_param_relik, pi);
