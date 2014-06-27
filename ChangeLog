@@ -1,3 +1,11 @@
+2014-06-27  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_cholcov.m: Prevent infinite while loops.
+
+	* core/stk_cholcov.m: Prevent infinite while loops, that could
+	occur in the case of matrices that either contained NaNs or Infs,
+	or were really far from from positive definite.
+
 2014-06-25  Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 	stk_param_estim.m: Add an optional 'criterion' argument.
