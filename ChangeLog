@@ -1,3 +1,10 @@
+2014-07-02  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_generate_samplepaths.m: Use model.response_name if available.
+
+	* utils/stk_generate_samplepaths.m: Use model.response_name if
+	available.
+
 2014-07-01  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_isdominated.m: New function, returns true for dominated rows.

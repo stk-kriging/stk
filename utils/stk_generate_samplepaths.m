@@ -126,8 +126,21 @@ zsim_data = V' * randn (size (K, 1), nb_paths);
 if duplicates_detected,  zsim_data = zsim_data(j, :);  end
 
 % output column names
-zsim_colnames = arrayfun (@(i)(...
-    sprintf ('z%d', i)), 1:nb_paths, 'UniformOutput', false);
+try
+    response_name = model.response_name;
+    assert (isempty (response_name) || ischar (response_name));
+    if ~ isempty (response_name)
+        if nb_paths == 1,
+            zsim_colnames = {response_name};
+        else
+            zsim_colnames = arrayfun ( ...
+                @(i)(sprintf ('%s_%d', response_name, i)), ...
+                1:nb_paths, 'UniformOutput', false);
+        end
+    end
+catch
+    zsim_colnames = {};
+end
 
 % output row names
 try
