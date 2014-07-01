@@ -2,5 +2,8 @@ syntax: glob
 octave-build
 *.mex
 *.mexa64
+*.mexglx
 *.mexw64
 *.o
+*~
+*orig
