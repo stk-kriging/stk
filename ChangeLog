@@ -1,5 +1,15 @@
 2014-07-01  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_isdominated.m: New function, returns true for dominated rows.
+
+	* arrays/generic/stk_isdominated.m: New function
+	* arrays/generic/private/stk_isdominated_mex.c: New MEX-function
+	* misc/include/pareto.h: Add new function is_dominated
+	* config/stk_config_makeinfo.m: Compile the new MEX-function
+	* admin/octave-pkg/Makefile: Compile the new MEX-function
+	* arrays/generic/private/stk_paretofind_mex.c: Modified
+	* arrays/generic/stk_paretofind.m: Modified
+
 	stk_figure.m: Do not set the axis title.
 
 	* misc/plot/stk_figure.m: Do not set the axis title.
