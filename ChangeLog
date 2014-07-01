@@ -1,3 +1,12 @@
+2014-07-01  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_plot2d.m: Create labels only if column names are available.
+
+	* misc/plot/stk_plot2d.m: Create labels only if column names are
+	available.
+	* examples/01_kriging_basics/stk_example_kb03.m: Provide explicit
+	column names for the 2d array used in this script.
+
 2014-06-27  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_cholcov.m: Prevent infinite while loops.
