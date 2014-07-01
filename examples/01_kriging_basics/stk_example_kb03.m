@@ -74,6 +74,7 @@ NT = 80^2;
 
 % The function stk_sampling_regulargrid() does the job of creating the grid
 xt = stk_sampling_regulargrid (NT, DIM, BOX);
+xt.colnames = {'x_1', 'x_2'};
 
 % Compute the corresponding responses
 zt = stk_feval (f, xt);

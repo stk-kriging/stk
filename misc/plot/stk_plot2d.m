@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Authors:  Julien Bect           <julien.bect@supelec.fr>
 %              Valentin Resseguier   <valentin.resseguier@gmail.com>
@@ -64,7 +64,12 @@ end
 
 plotfun(xx1, xx2, reshape(z, size(xx1)), varargin{:});
 
-stk_labels ('x_1', 'x_2');
+% Create labels if x provides column names
+try  %#ok<TRYNC>
+    c = x.colnames;
+    assert (iscell (c) && isequal (size (c), [1 2]));
+    stk_labels (c{1}, c{2});
+end
 
 if ismember(func2str(plotfun), {'surf', 'pcolor'}),
     shading('interp');
