@@ -46,6 +46,7 @@ info = register_mex (info, relpath, 'stk_sampling_vdc_rr2', {'primes.h'});
 
 relpath = fullfile ('arrays', 'generic', 'private');
 info = register_mex (info, relpath, 'stk_paretofind_mex', {'pareto.h'});
+info = register_mex (info, relpath, 'stk_isdominated_mex', {'pareto.h'});
 
 end % function stk_config_makeinfo
 

@@ -36,9 +36,14 @@ typedef double SCALAR;
 typedef mxLogical LOGICAL;
 #include "pareto.h"
 
-#define ARGIN_X       prhs[0]
-#define ARGOUT_NDPOS  plhs[0]
-#define ARGOUT_DRANK  plhs[1]
+/* mimic ismember's syntax */
+#define ARGIN_A       prhs[0]  /* n x d, double  */
+#define ARGIN_B       prhs[1]  /* k x d, double  */
+#define ARGOUT_ISDOM  plhs[0]  /* n x 1, logical */
+#define ARGOUT_DRANK  plhs[1]  /* n x 1, double  */
+
+/* IMPORTANT: the rows of B are assumed to be    */
+/*            SORTED in the LEXICAL ORDER        */
 
 void mexFunction
 (
@@ -46,38 +51,51 @@ void mexFunction
     int nrhs, const mxArray *prhs[]
 )
 {
-    int i, k, n, d, *tmp_ndpos, *tmp_drank;
-    double *x, *ndpos, *drank;
+    int i, n, k, d, *tmp_drank;
+    double *xa, *xb, *drank;
+    mxLogical *isdom;
 
-    if (nrhs != 1)  /* Check number of input arguments */
+    /*--- Check number of input/output arguments --------------------*/
+
+    if (nrhs != 2)  /* Check number of input arguments */
         mexErrMsgTxt ("Incorrect number of input arguments.");
 
-    if (nlhs > 3)   /* Check number of output arguments */
+    if (nlhs > 2)   /* Check number of output arguments */
         mexErrMsgTxt ("Too many output arguments.");
 
-    if (! stk_is_realmatrix (ARGIN_X))
-        mexErrMsgTxt ("The input should be a real-valued "
-                      "double-precision array.");
+    /*--- Check input types -----------------------------------------*/
 
-    /* Read input argument */
-    n = mxGetM (ARGIN_X);
-    d = mxGetN (ARGIN_X);
-    x = mxGetPr (ARGIN_X);
+    if (! stk_is_realmatrix (ARGIN_A))
+        mexErrMsgTxt ("The first input argument should be a "
+                      "real-valued double-precision array.");
+    xa = mxGetPr (ARGIN_A);
 
-    /* Create a temporary arrays */
-    tmp_ndpos = (int *) mxCalloc (n, sizeof (int));
+    if (! stk_is_realmatrix (ARGIN_B))
+        mexErrMsgTxt ("The second input argument should be a "
+                      "real-valued double-precision array.");
+    xb = mxGetPr (ARGIN_B);
+
+    /*--- Read dimensions -------------------------------------------*/
+
+    n = (int) mxGetM (ARGIN_A);
+    d = (int) mxGetN (ARGIN_A);
+    k = (int) mxGetM (ARGIN_B);
+
+    if (d != mxGetN (ARGIN_B))
+        mexErrMsgTxt ("The two input arguments should have the "
+                      "same number of columns");
+
+    /*--- Create arrays ---------------------------------------------*/
+
+    ARGOUT_ISDOM = mxCreateLogicalMatrix (n, 1);
+    isdom = mxGetLogicals (ARGOUT_ISDOM);
+
     tmp_drank = (int *) mxCalloc (n, sizeof (int));
 
-    /* PRUNE */
-    k = pareto_find (x, tmp_ndpos, tmp_drank, n, d);
+    /*--- Find dominated rows ---------------------------------------*/
 
-    /* ARGOUT #1: position of non-dominated points, in lexical order */
-    ARGOUT_NDPOS = mxCreateDoubleMatrix (k, 1, mxREAL);
-    ndpos = mxGetPr (ARGOUT_NDPOS);
-    for (i = 0; i < k; i++)
-        ndpos[i] = (double) (1 + tmp_ndpos[i]);
+    is_dominated (xa, xb, isdom, tmp_drank, n, k, d);
 
-    /* ARGOUT #2: rank of first dominating point */
     if (nlhs > 1) {
         ARGOUT_DRANK = mxCreateDoubleMatrix (n, 1, mxREAL);
         drank = mxGetPr (ARGOUT_DRANK);
@@ -85,7 +103,7 @@ void mexFunction
             drank[i] = (double) (1 + tmp_drank[i]);
     }
 
-    /* Cleanup */
-    mxFree (tmp_ndpos);
+    /*--- Cleanup --------------------------------------------------*/
+
     mxFree (tmp_drank);
 }

@@ -17,7 +17,7 @@
 %    dominated, and equal to the smallest j such that X(i, :) is dominated
 %    by X(NDPOS(j), :) otherwise.
 %
-% See also: sortrows
+% See also: sortrows, stk_isdominated
 
 % Copyright Notice
 %
