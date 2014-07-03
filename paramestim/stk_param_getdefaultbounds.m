@@ -36,8 +36,9 @@ if ~ isfloat (param0)
 else
     
     % constants
-    TOLVAR = 5.0;
-    TOLSCALE = 5.0;
+    opts = stk_options_get ('stk_param_getdefaultbounds');
+    TOLVAR = opts.tolvar;
+    TOLSCALE = opts.tolscale;
     
     % bounds for the variance parameter
     log_empirical_variance = log (var (double (zi)));
