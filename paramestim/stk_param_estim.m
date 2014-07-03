@@ -55,7 +55,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [paramopt, paramlnvopt] = stk_param_estim (model, cparam0, param0lnv, criterion)
+function [paramopt, paramlnvopt, info] = stk_param_estim ...
+	(model, cparam0, param0lnv, criterion)
 
 if nargin > 4,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -93,7 +94,7 @@ end
 
 if (nargin < 2) || isempty(cparam0),
     cparam0 = model.randomprocess.priorcov.cparam;
-end
+    end
 
 % % Cast param0 into an object of the appropriate type and size
 % % and set model.param to the same value
@@ -141,18 +142,18 @@ bounds_available = ~isempty(lb) && ~isempty(ub);
 switch stk_select_optimizer(bounds_available)
     
     case 1, % Octave / sqp
-        w_opt = sqp(w0, {f, nablaf}, [], [], w_lb, w_ub, [], 1e-5);
+        [w_opt, crit_opt] = sqp (w0, {f, nablaf}, [], [], w_lb, w_ub, [], 1e-5);
         
     case 2, % Matlab / fminsearch (Nelder-Mead)
-        options = optimset( 'Display', 'iter',                ...
-            'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6  );
-        w_opt = fminsearch(f, w0, options);
+        options = optimset ('Display', 'iter', ...
+            'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
+        [w_opt, crit_opt] = fminsearch (f, w0, options);
         
     case 3, % Matlab / fmincon
         try
             % We first try to use the interior-point algorithm, which has
             % been found to provide satisfactory results in many cases
-            options = optimset('Display', 'iter', ...
+            options = optimset ('Display', 'iter', ...
                 'Algorithm', 'interior-point', 'GradObj', 'on', ...
                 'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
         catch
@@ -166,7 +167,7 @@ switch stk_select_optimizer(bounds_available)
                 rethrow (err);
             end
         end
-        w_opt = fmincon(f, w0, [], [], [], [], w_lb, w_ub, [], options);
+        [w_opt, crit_opt] = fmincon(f, w0, [], [], [], [], w_lb, w_ub, [], options);
         
     otherwise
         error ('Unexpected value returned by stk_select_optimizer.');
@@ -193,6 +194,14 @@ else
         paramopt = w_opt;
     end
 end % if
+
+% Create 'info' structure, if requested
+if nargout > 2,
+    info.criterion = criterion;
+    info.crit_opt = crit_opt;
+    info.lower_bounds = lb;
+    info.upper_bounds = ub;
+end
 
 end % function stk_param_estim ------------------------------------------------
 
@@ -264,19 +273,19 @@ end % function get_defaultbounds_lnv ------------------------------------------
 
 %!shared f, xi, zi, NI, param0, model
 %!
-%! f = @(x)( -(0.8*x+sin(5*x+1)+0.1*sin(10*x)) );
-%! DIM = 1; NI = 20; box = [-1.0; 1.0];
-%! xi = stk_sampling_regulargrid(NI, DIM, box);
+%! f = @(x)(- (0.8 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)) );
+%! DIM = 1;  NI = 20;  box = [-1.0; 1.0];
+%! xi = stk_sampling_regulargrid (NI, DIM, box);
 %!
 %! SIGMA2 = 1.0;  % variance parameter
 %! NU     = 4.0;  % regularity parameter
 %! RHO1   = 0.4;  % scale (range) parameter
-%! param0 = log([SIGMA2; NU; 1/RHO1]);
+%! param0 = log ([SIGMA2; NU; 1/RHO1]);
 %!
-%! model = stk_model('stk_materncov_iso');
+%! model = stk_model ('stk_materncov_iso');
 
 %!test  % noiseless
-%! zi = stk_feval(f, xi);
+%! zi = stk_feval (f, xi);
 %! model = stk_setobs(model, xi, zi);
 %! param1 = stk_param_estim (model, param0);
 %! param2 = stk_param_estim (model, param0, [], @stk_param_relik);
@@ -293,5 +302,5 @@ end % function get_defaultbounds_lnv ------------------------------------------
 %! [param, lnv] = stk_param_estim(model, param0, 2 * log(NOISE_STD_INIT));
 
 %!% incorrect number of input arguments
-%!error param = stk_param_estim()
+%!error param = stk_param_estim ()
 %!error param = stk_param_estim(model, param0, log(eps), @stk_param_relik, pi);
