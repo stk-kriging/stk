@@ -38,8 +38,9 @@ else
 end
 
 % constants
-TOLVAR = 5.0;
-TOLSCALE = 5.0;
+opts = stk_options_get ('stk_param_getdefaultbounds');
+TOLVAR = opts.tolvar;
+TOLSCALE = opts.tolscale;
 
 % bounds for the variance parameter
 lbv = min(log(empirical_variance) - TOLVAR, param0(1));
