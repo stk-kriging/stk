@@ -55,7 +55,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [paramopt, paramlnvopt] = stk_param_estim ...
+function [paramopt, paramlnvopt, info] = stk_param_estim ...
     (model, xi, zi, param0, param0lnv, criterion)
 
 if nargin > 6,
@@ -125,12 +125,12 @@ bounds_available = (~ isempty(lb)) && (~ isempty(ub));
 switch stk_select_optimizer(bounds_available)
     
     case 1, % Octave / sqp
-        u_opt = sqp (u0, {f, nablaf}, [], [], lb, ub, [], 1e-5);
+        [u_opt, crit_opt] = sqp (u0, {f, nablaf}, [], [], lb, ub, [], 1e-5);
         
     case 2, % Matlab / fminsearch (Nelder-Mead)
         options = optimset ('Display', 'iter', ...
             'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
-        u_opt = fminsearch (f, u0, options);
+        [u_opt, crit_opt] = fminsearch (f, u0, options);
         
     case 3, % Matlab / fmincon
         try
@@ -150,7 +150,7 @@ switch stk_select_optimizer(bounds_available)
                 rethrow (err);
             end
         end
-        u_opt = fmincon (f, u0, [], [], [], [], lb, ub, [], options);
+        [u_opt, crit_opt] = fmincon (f, u0, [], [], [], [], lb, ub, [], options);
         
     otherwise
         error ('Unexpected value returned by stk_select_optimizer.');
@@ -178,6 +178,14 @@ else
     end
 end % if
 
+% Create 'info' structure, if requested
+if nargout > 2,
+    info.criterion = criterion;
+    info.crit_opt = crit_opt;
+    info.lower_bounds = lb;
+    info.upper_bounds = ub;
+end
+    
 end % function stk_param_estim ------------------------------------------------
 
 %#ok<*CTCH,*LERR>
