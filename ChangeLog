@@ -1,5 +1,10 @@
 2014-07-03  Julien Bect  <julien.bect@supelec.fr>
 
+	Global options to control upper/lower bounds for param estim.
+
+	* misc/options/stk_options_set.m: Add new options.
+	* paramestim/stk_param_getdefaultbounds.m: Read global options.
+
 	stk_param_estim.m: Return an additional 'info' structure.
 
 	* paramestim/stk_param_estim.m: Return an additional 'info'
