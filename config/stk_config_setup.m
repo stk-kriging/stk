@@ -31,7 +31,7 @@ function stk_config_setup ()
 % Set default options
 stk_options_set;
 
-if ismatlab
+if ~ isoctave,
     % Check for presence of the Parallel Computing Toolbox
     fprintf ('Parallel Computing toolbox... ');
     pct_found = stk_parallel_haspct ();
@@ -45,7 +45,8 @@ end
 % Select optimizers for stk_param_estim
 stk_select_optimizer;
 
-% Disable a warning in stk_predict
+% Hide some warnings
 warning ('off', 'STK:stk_predict:NegativeVariancesSetToZero');
+warning ('off', 'STK:stk_cholcov:AddingRegularizationNoise');
 
 end % function stk_config_setup

@@ -13,7 +13,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -126,8 +126,11 @@ for j = 1:3,
     
 end
 
-if ~ strcmp (graphicstoolkit, 'octave-gnuplot')
+if ~ strcmp (graphics_toolkit (), 'gnuplot')
     h1 = legend ('MAP estimates', 'REML estimate', 'mode of the prior');
     h2 = stk_subplot (2, 2, 4);  axis off;
     set (h1, 'Position', get (h2, 'Position'));
 end
+
+
+%!test stk_example_misc02;  close all;

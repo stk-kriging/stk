@@ -60,20 +60,18 @@ if nargin < 2,
     diff = -1;
 end
 
-switch diff,
+if diff <= 0,  % value of the covariance function
     
-    case -1, % value of the covariance function
-        
-        k = exp (- h .^ 2);
-        
-    case 1, % derivative wrt h
-        
-        k = - 2 * h .* exp (- h .^ 2);
-        
-    otherwise
-        
-        error ('incorrect value for diff.');
-        
+    k = exp (- h .^ 2);
+    
+elseif diff == 1,  % derivative wrt h
+    
+    k = - 2 * h .* exp (- h .^ 2);
+    
+else
+    
+    error ('incorrect value for diff.');
+    
 end
 
 end % function stk_sf_gausscorr

@@ -11,7 +11,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -71,3 +71,6 @@ end
 
 stk_labels ('x', 'correlation r(x)');  legend (list_cov{:, 1});
 stk_title ('Some members of the Matern family');
+
+
+%!test stk_example_misc01;  close all;

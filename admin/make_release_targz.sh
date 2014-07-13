@@ -10,7 +10,6 @@ cd  $SUBBASEDIR
 svn export --force $VERSION stk-$VERSION
 
 echo "Creating archive.."
-rm -Rf stk-$VERSION/etc
 rm -Rf stk-$VERSION/admin
 
 tar czf stk-$VERSION.tar.gz stk-$VERSION

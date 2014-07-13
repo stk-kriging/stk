@@ -31,11 +31,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-% Add STK folders to the path
+% Deduce the root of STK from the path to this script
 root = fileparts (mfilename ('fullpath'));
-addpath (fullfile (root, 'config'));
-addpath (fullfile (root, 'misc', 'mole', 'common'));
-stk_config_addpath (root);  clear root;
+config = fullfile (root, 'config');
+
+% Add config to the path. It will be removed at the end of this script.
+addpath (config);
+
+% Activate the MOLE
+stk_config_mole (root);
 
 % Turn output pagination OFF
 pso_state = page_screen_output (0);
@@ -61,10 +65,23 @@ disp ('=====================================================================');
 disp ('                                                                     ');
 fflush (stdout);
 
-% Build MEX-files
-if ~ (exist ('STK_SKIP_BUILDMEX', 'var') && STK_SKIP_BUILDMEX)
-    % To force recompilation of all MEX-files, use stk_build (true);
-    stk_build;
+% Are we using STK installed as an octave package ?
+STK_OCTAVE_PACKAGE = false;
+
+% Build MEX-files "in-place" (unless STK is used as an Octave package)
+if ~ STK_OCTAVE_PACKAGE
+    stk_config_buildmex ();
+    % To force recompilation of all MEX-files, use stk_config_buildmex (true);
+end
+
+% Add STK folders to the path (note: doing this ATFER building the MEX-files seems to
+% solve the problem related to having MEX-files in private folders)
+stk_config_addpath (root);
+
+% Check that MEX-files located in private folders are properly detected (note: 
+% there are no MEX-files in private folders if STK is used as an Octave package)
+if isoctave && (~ STK_OCTAVE_PACKAGE),
+    stk_config_testprivatemex ();
 end
 
 % Configure STK with default settings
@@ -94,4 +111,9 @@ disp ('                                                                     ');
 fflush (stdout);
 
 % Restore PSO state
-page_screen_output (pso_state);  clear pso_state ans;
+page_screen_output (pso_state);
+
+% Remove config from the path
+rmpath (config);
+
+clear pso_state root config STK_OCTAVE_PACKAGE ans;

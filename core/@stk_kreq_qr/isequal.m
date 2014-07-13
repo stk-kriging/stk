@@ -1,8 +1,12 @@
-% ISEQUAL [overloaded base function]
+% ISEQUAL  [STK internal function, not part of public API... UAYOR!]
+%
+% CALL: b = isequal (x, y)
+%
+%    Overload base function 'isequal' for stk_kreq_qr objects.
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author: Julien Bect  <julien.bect@supelec.fr>
 

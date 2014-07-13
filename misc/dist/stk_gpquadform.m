@@ -1,6 +1,6 @@
-% STK_GPQUADFORM computes a Gibbs-Paciorek quadratic form.
+% STK_GPQUADFORM   [experimental, not part of public API yet... UAYOR!]
 %
-% CALL: Q = stk_dist(X, Y, RX, RY)
+% CALL: Q = stk_gpquadform (X, Y, RX, RY)
 %
 %    computes a matrix Q, whose entries Q(i,j) are given by a Gibbs-
 %    Paciorek quadratic form 
@@ -18,7 +18,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -42,34 +42,34 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function Q = stk_gpquadform(x, y, rx, ry, pairwise)
+function Q = stk_gpquadform (x, y, rx, ry, pairwise)
 
 if nargin > 5,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % read argument #1
-if isstruct(x),
+if isstruct (x),
     x = x.a;
 end
 
 % read argument #2
-if isstruct(y),
+if isstruct (y),
     y = y.a;
 end
 
 % read argument #4
 if nargin < 4,
-    if isempty(y)
+    if isempty (y)
         ry = rx;
     else
         errmsg = 'Not enough input arguments.';
-        stk_error(errmsg, 'NotEnoughInputArgs');
+        stk_error (errmsg, 'NotEnoughInputArgs');
     end
 else
-    if isempty(y) && ~isempty(ry) && ~isequal(rx, ry)
+    if (isempty (y)) && (~ isempty (ry)) && (~ isequal (rx, ry))
         errmsg = 'ry should be empty or equal to rx';
-        stk_error(errmsg, 'IncorrectArgument');
+        stk_error (errmsg, 'IncorrectArgument');
     end
 end
         
@@ -78,23 +78,23 @@ end
 if nargin < 5,
     pairwise = false;
 else
-    if ~islogical(pairwise)
+    if ~ islogical (pairwise)
         errmsg = 'Argument ''pairwise'' should be either true or false.';
-        stk_error(errmsg, 'TypeMismatch');
+        stk_error (errmsg, 'TypeMismatch');
     end
 end
 
 if pairwise,
-    if isempty(y),
-        Q = zeros(size(x, 1), 1);
+    if isempty (y),
+        Q = zeros (size (x, 1), 1);
     else
-        Q = stk_gpquadform_pairwise(x, y, rx, ry);
+        Q = stk_gpquadform_pairwise (x, y, rx, ry);
     end
 else
-    if isempty(y),
-        Q = stk_gpquadform_matrixx(x, rx);
+    if isempty (y),
+        Q = stk_gpquadform_matrixx (x, rx);
     else
-        Q = stk_gpquadform_matrixy(x, y, rx, ry);
+        Q = stk_gpquadform_matrixy (x, y, rx, ry);
     end
 end
 

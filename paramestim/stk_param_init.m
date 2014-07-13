@@ -29,7 +29,7 @@
 function [param, lnv] = stk_param_init (model, xi, zi, box, noisy)
 
 if nargin > 5,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 if ~ isequal (size (zi), [size(xi, 1) 1]),
@@ -54,36 +54,68 @@ if isfield (model, 'lognoisevariance') && ~ isempty (model.lognoisevariance)
         model.lognoisevariance), 'IgnoringLogNoiseVariance');
 end
 
+%--- linear model --------------------------------------------------------------
+
+if isnan (model.order),
+    
+    lm = model.lm;
+    
+else
+    
+    switch model.order
+        case -1, % 'simple' kriging
+            lm = stk_lm_null;
+        case 0, % 'ordinary' kriging
+            lm = stk_lm_constant;
+        case 1, % affine trend
+            lm = stk_lm_affine;
+        case 2, % quadratic trend
+            lm = stk_lm_quadratic;
+        otherwise, % syntax error
+            error ('model.order should be in {-1,0,1,2}');
+    end
+    
+end
+
 %--- then, each type of covariance is dealt with specifically ------------------
 
 switch model.covariance_type
     
     case 'stk_materncov_iso'
         nu = 5/2 * size (xi, 2);
-        [param, lnv] = paraminit_ (xi, zi, box, nu, model.order, noisy);
+        [param, lnv] = paraminit_ (xi, zi, box, nu, lm, noisy);
         
     case 'stk_materncov_aniso'
         nu = 5/2 * size (xi, 2);
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, zi, [], nu, model.order, noisy);
+        [param, lnv] = paraminit_ (xi, zi, [], nu, lm, noisy);
         param = [param(1:2); param(3) - log(diff(box, [], 1))'];
         
     case 'stk_materncov32_iso'
-        [param, lnv] = paraminit_ (xi, zi, box, 3/2, model.order, noisy);
+        [param, lnv] = paraminit_ (xi, zi, box, 3/2, lm, noisy);
         param = [param(1); param(3)];
         
     case 'stk_materncov32_aniso'
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, zi, [], 3/2, model.order, noisy);
+        [param, lnv] = paraminit_ (xi, zi, [], 3/2, lm, noisy);
         param = [param(1); param(3) - log(diff(box, [], 1))'];
         
     case 'stk_materncov52_iso'
-        [param, lnv] = paraminit_ (xi, zi, box, 5/2, model.order, noisy);
+        [param, lnv] = paraminit_ (xi, zi, box, 5/2, lm, noisy);
         param = [param(1); param(3)];
         
     case 'stk_materncov52_aniso'
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, zi, [], 5/2, model.order, noisy);
+        [param, lnv] = paraminit_ (xi, zi, [], 5/2, lm, noisy);
+        param = [param(1); param(3) - log(diff(box, [], 1))'];
+        
+    case 'stk_gausscov_iso'
+        [param, lnv] = paraminit_ (xi, zi, box, +Inf, lm, noisy);
+        param = [param(1); param(3)];
+        
+    case 'stk_gausscov_aniso'
+        xi = stk_normalize (xi, box);
+        [param, lnv] = paraminit_ (xi, zi, [], +Inf, lm, noisy);
         param = [param(1); param(3) - log(diff(box, [], 1))'];
         
     otherwise
@@ -94,12 +126,12 @@ end
 end % function stk_param_init
 
 
-function [param, lnv] = paraminit_ (xi, zi, box, nu, order, noisy)
+function [param, lnv] = paraminit_ (xi, zi, box, nu, lm, noisy)
 
-[ni d] = size (xi);
+d = size (xi, 2);
 
 model = stk_model ('stk_materncov_iso');
-model.order = order;
+model.order = nan;  model.lm = lm;
 
 % list of possible values for the ratio eta = sigma2_noise / sigma2
 if noisy,
@@ -130,11 +162,8 @@ for eta = eta_list
         % first use sigma2 = 1.0
         model.param = log ([1.0; nu; 1/rho]);
         model.lognoisevariance = log (eta);
-        [K, P] = stk_make_matcov (model, xi);
         % estimate sigma2
-        zi = double (zi);  L = chol (K, 'lower');  W = L \ P;
-        beta = (W' * W) \ (W' * (L \ zi));
-        sigma2 = 1 / (ni - length (beta)) * sum ((L \ (zi - P * beta)) .^ 2);
+        [beta, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU>
         % now compute the antilog-likelihood
         if sigma2 > 0
             model.param(1) = log (sigma2);
@@ -171,11 +200,80 @@ end % function paraminit_
 %! assert (sum ((zt - zp.mean) .^ 2) < 1e-3);
 
 %!test  % check equivariance of parameter estimates
-% f = @(x) sin (x); 
-% xi = stk_sampling_regulargrid (10, 1);  zi = stk_feval (f, xi);
-% shift = 1000;  scale = 0.01;
-% model = stk_model ('stk_materncov32_iso');
-% p1 = stk_param_init (model, xi, zi);
-% p2 = stk_param_init (model, xi, shift + scale .* zi);
-% assert (stk_isequal_tolabs (p2(1), p1(1) + log (scale^2), 1e-10))
-% assert (stk_isequal_tolabs (p2(2), p1(2), eps))
+%! f = @(x) sin (x);
+%! xi = stk_sampling_regulargrid (10, 1);  zi = stk_feval (f, xi);
+%! shift = 1000;  scale = 0.01;
+%! model = stk_model ('stk_materncov32_iso');
+%! p1 = stk_param_init (model, xi, zi);
+%! p2 = stk_param_init (model, xi, shift + scale .* zi);
+%! assert (stk_isequal_tolabs (p2(1), p1(1) + log (scale^2), 1e-10))
+%! assert (stk_isequal_tolabs (p2(2), p1(2), eps))
+
+%!shared xi zi BOX xt zt
+%!
+%! f = @(x)(- (0.8 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
+%! DIM = 1;               % Dimension of the factor space
+%! BOX = [-1.0; 1.0];     % Factor space
+%!
+%! xi = stk_sampling_regulargrid (20, DIM, BOX);  % Evaluation points
+%! zi = stk_feval (f, xi);                        % Evaluation results
+%!
+%! NT = 400;                                      % Number of points in the grid
+%! xt = stk_sampling_regulargrid (NT, DIM, BOX);  % Generate a regular grid
+%! zt = stk_feval (f, xt);                        % Values of f on the grid
+
+%!test
+%! model = stk_model ('stk_materncov_iso');
+%! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
+%! model.param = stk_param_estim (model, xi, zi, param0);
+%! zp = stk_predict (model, xi, zi, xt);
+%! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
+
+%!test
+%! model = stk_model ('stk_materncov_aniso');
+%! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
+%! model.param = stk_param_estim (model, xi, zi, param0);
+%! zp = stk_predict (model, xi, zi, xt);
+%! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
+
+%!test
+%! model = stk_model ('stk_materncov32_iso');
+%! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
+%! model.param = stk_param_estim (model, xi, zi, param0);
+%! zp = stk_predict (model, xi, zi, xt);
+%! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
+
+%!test
+%! model = stk_model ('stk_materncov32_aniso');
+%! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
+%! model.param = stk_param_estim (model, xi, zi, param0);
+%! zp = stk_predict (model, xi, zi, xt);
+%! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
+
+%!test
+%! model = stk_model ('stk_materncov52_iso');
+%! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
+%! model.param = stk_param_estim (model, xi, zi, param0);
+%! zp = stk_predict (model, xi, zi, xt);
+%! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
+
+%!test
+%! model = stk_model ('stk_materncov52_aniso');
+%! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
+%! model.param = stk_param_estim (model, xi, zi, param0);
+%! zp = stk_predict (model, xi, zi, xt);
+%! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
+
+%!test
+%! model = stk_model ('stk_gausscov_iso');
+%! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
+%! model.param = stk_param_estim (model, xi, zi, param0);
+%! zp = stk_predict (model, xi, zi, xt);
+%! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
+
+%!test
+%! model = stk_model ('stk_gausscov_aniso');
+%! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
+%! model.param = stk_param_estim (model, xi, zi, param0);
+%! zp = stk_predict (model, xi, zi, xt);
+%! assert (max ((zp.mean - zt) .^ 2) < 1e-3)

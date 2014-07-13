@@ -13,7 +13,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -74,6 +74,7 @@ NT = 80^2;
 
 % The function stk_sampling_regulargrid() does the job of creating the grid
 xt = stk_sampling_regulargrid (NT, DIM, BOX);
+xt.colnames = {'x_1', 'x_2'};
 
 % Compute the corresponding responses
 zt = stk_feval (f, xt);
@@ -143,3 +144,6 @@ hold off;  axis (BOX(:));  stk_title ('true approx error (log)');
 stk_subplot (2, 2, 4);  stk_plot2d (@pcolor, xt, 0.5 * log (zp.var));
 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
 hold off;  axis (BOX(:));  stk_title ('kriging std (log)');
+
+
+%!test stk_example_kb03;  close all;

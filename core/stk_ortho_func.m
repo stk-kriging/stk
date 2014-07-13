@@ -1,4 +1,4 @@
-% STK_ORTHO_FUNC computes the design matrix for the linear part of a model.
+% STK_ORTHO_FUNC  [STK internal function, not part of public API... UAYOR!]
 %
 % CALL: P = stk_ortho_func (MODEL, X)
 %
@@ -10,16 +10,22 @@
 %    where L is the number of regression functions in the linear part of the
 %    model; e.g., L = 1 if MODEL.order is zero (ordinary kriging).
 %
-% NOTE:
+% DEPRECATED:
 %
 %    At the present time, stk_ortho_func() only handles polynomial regressions,
-%    up to order 2.
+%    up to order 3 through the "historical" mechanism based on model.order.
+%
+%    An experimental mechanisme that uses "linear model" objects is already
+%    available (see the code for details on how to activate this feature).
+%
+%    stk_orth_func is deprecated and will be removed from future versions of
+%    STK (http://sourceforge.net/p/kriging/tickets/12).
 %
 % See also stk_make_matcov
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -52,10 +58,19 @@ end
 
 x = double (x);
 
-if strcmp (model.covariance_type, 'stk_discretecov')    
-    P = model.param.P(x, :);    
-else    
-    P = stk_ortho_func_ (model.order, x);    
+if strcmp (model.covariance_type, 'stk_discretecov')
+    P = model.param.P(x, :);
+else
+    if isfield (model, 'lm')
+        %--- BEGIN EXPERIMENTAL FEATURE: linear model ------------------------------------
+        if ~ isnan (model.order)
+            error ('To use the EXPERIMENTAL "lm" feature, please set model.order to NaN');
+        end
+        P = feval (model.lm, x);
+        %--- END EXPERIMENTAL FEATURE: linear model --------------------------------------
+    else
+        P = stk_ortho_func_ (model.order, x);
+    end
 end
 
 end % function stk_ortho_func
@@ -67,7 +82,7 @@ end % function stk_ortho_func
 
 function P = stk_ortho_func_ (order, x)
 
-[n, d] = size (x);
+n = size (x, 1);
 
 switch order
     
@@ -77,21 +92,17 @@ switch order
     case 0, % 'ordinary' kriging
         P = ones (n, 1);
         
-    case 1, % linear trend
+    case 1, % affine trend
         P = [ones(n, 1) x];
         
     case 2, % quadratic trend
-        P = [ones(n, 1) x zeros(n, d*(d+1)/2)];
-        k = d + 2;
-        for i = 1:d
-            for j = i:d
-                P(:,k) = x(:, i) .* x(:, j);
-                k = k + 1;
-            end
-        end
+        P = feval (stk_lm_quadratic, x);
+        
+    case 3, % cubic trend
+        P = feval (stk_lm_cubic, x);
         
     otherwise, % syntax error
-        error ('order should be in {-1,0,1,2}');
+        error ('order should be in {-1, 0, 1, 2, 3}');
         
 end
 
@@ -124,6 +135,10 @@ end % function stk_ortho_func_
 %! model.order =  2;  P = stk_ortho_func (model, x);
 %! assert (isequal (size (P), [n, 1 + d * (d + 3) / 2]));
 
-%!error
+%!test
 %! model.order =  3;  P = stk_ortho_func (model, x);
-%! % model.order > 2 is not allowed
+%! assert (isequal (size (P), [n, 1 + d * (11 + d * (6 + d)) / 6]));
+
+%!error
+%! model.order =  4;  P = stk_ortho_func (model, x);
+%! % model.order > 3 is not allowed

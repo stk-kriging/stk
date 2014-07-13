@@ -44,7 +44,7 @@
 function k = stk_sf_matern52 (h, diff)
 
 if nargin > 2,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % default: compute the value (not a derivative)
@@ -56,20 +56,18 @@ Nu = 5/2;
 C  = 2 * sqrt (Nu);   % dt/dh
 t  = C * abs (h);
 
-switch diff,
+if diff <= 0,  % value of the covariance function
     
-    case -1, % value of the covariance function
-        
-        k = (1 + t + t.^2/3) .* exp (-t);
-        
-    case 1, % derivative wrt h
-        
-        k = C * -t/3 .* (1 + t) .* exp (-t);
-        
-    otherwise
-        
-        error ('incorrect value for diff.');
-        
+    k = (1 + t + t.^2/3) .* exp (-t);
+    
+elseif diff == 1,  % derivative wrt h
+    
+    k = C * -t/3 .* (1 + t) .* exp (-t);
+    
+else
+    
+    error ('incorrect value for diff.');
+    
 end
 
 end % function stk_sf_matern52
