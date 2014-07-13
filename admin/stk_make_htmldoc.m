@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-STK_ROOT = stk_config_getroot ();
+STK_ROOT = fileparts (fileparts (mfilename ('fullpath')));
 
 addpath (fullfile (STK_ROOT, 'admin', 'm2html'));
 
@@ -43,4 +43,4 @@ DOC_FOLDER = fullfile (STK_ROOT, 'htmldoc');
 
 % Generate HTML documentation
 m2html ('htmlDir', DOC_FOLDER, 'recursive', 'on', 'graph', 'off', ...
-    'template', 'stk', 'ignoredDir', {'htmldoc', 'matlab', 'admin', 'etc'});
+    'template', 'stk', 'ignoredDir', {'htmldoc', 'matlab', 'admin'});

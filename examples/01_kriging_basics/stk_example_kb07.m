@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -47,7 +47,7 @@ RHO1   = 0.4;  % scale (range) parameter
 model.param = log ([SIGMA2; NU; 1/RHO1]);
 
 % Several values for nu
-nu_list = [0.5 1.5 2.5 4.0];
+nu_list = [0.5 1.5 2.5 10.0];
 
 
 %% Generate (unconditional) sample paths
@@ -66,3 +66,6 @@ for k = 1:4,
     stk_labels ('input variable x', 'response z', 'FontWeight', 'bold');
     
 end
+
+
+%!test stk_example_kb07;  close all;

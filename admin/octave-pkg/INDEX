@@ -1,0 +1,278 @@
+stk >> STK, a Small Toolbox for Kriging
+
+Core STK functions
+## Why not group all these functions in the same folder ?
+## Currently, some of them are in ./core/ and some others in ./utils/
+ stk_model
+ stk_make_matcov
+ stk_predict
+ stk_conditioning
+ stk_generate_samplepaths
+#stk_ortho_func  [deprecated, don't document it]
+#stk_cholcov  [STK internal function, not part of public API... UAYOR!]
+
+Parameter estimation
+ stk_param_estim
+ stk_param_getdefaultbounds
+ stk_param_init
+ stk_param_relik
+
+## The stk_kre_qr class -> not ready to be exposed
+#@stk_kreq_qr/get
+#@stk_kreq_qr/isequal
+#@stk_kreq_qr/linsolve
+#@stk_kreq_qr/stk_kreq_qr
+#@stk_kreq_qr/stk_set_righthandside
+#@stk_kreq_qr/stk_squared_seminorm
+#@stk_kreq_qr/stk_update
+#@stk_kreq_qr/subsref
+#@stk_kreq_qr/private/compute_P_scaling
+
+Modeling: Covariance functions
+ stk_discretecov
+ stk_gausscov_aniso
+ stk_gausscov_iso
+ stk_materncov32_aniso
+ stk_materncov32_iso
+ stk_materncov52_aniso
+ stk_materncov52_iso
+ stk_materncov_aniso
+ stk_materncov_iso
+ stk_noisecov
+
+Modeling: One-dimensional correlation functions
+## The prefix 'sf' for 'special functions' is not appropriate, since the
+## expression 'special function' refers to specific rather specific in the
+## traditional math vocabulary...
+ stk_sf_gausscorr
+ stk_sf_matern
+ stk_sf_matern32
+ stk_sf_matern52
+
+Modeling: Linear models
+ @stk_lm_affine/stk_lm_affine
+ @stk_lm_affine/feval
+ @stk_lm_constant/stk_lm_constant
+ @stk_lm_constant/feval
+ @stk_lm_cubic/stk_lm_cubic
+ @stk_lm_cubic/feval
+ @stk_lm_matrix/stk_lm_matrix
+ @stk_lm_matrix/feval
+ @stk_lm_null/stk_lm_null
+ @stk_lm_null/feval
+ @stk_lm_quadratic/stk_lm_quadratic
+ @stk_lm_quadratic/feval
+
+Design of experiments (non-sequential): sampling
+ stk_sampling_halton_rr2
+ stk_sampling_maximinlhs
+ stk_sampling_olhs
+ stk_sampling_randomlhs
+ stk_sampling_randunif
+ stk_sampling_regulargrid
+ stk_sampling_vdc_rr2
+
+Design of experiments (non-sequential): criterions
+## note: some are in misc/design, others in misc/dist...
+## Shouldn't they all be in sampling/criterions ?
+ stk_filldist
+ stk_filldist_discretized
+ stk_filldist_exact
+ stk_maxabscorr
+ stk_mindist
+ stk_phipcrit
+
+## config/ is not in the path
+#stk_config_addpath
+#stk_config_buildmex
+#stk_config_getroot
+#stk_config_makeinfo
+#stk_config_rmpath
+#stk_config_testprivatemex
+#stk_config_graphicstoolkit
+#stk_config_path
+#stk_config_setup
+
+Examples: kriging basics
+ stk_example_kb01
+ stk_example_kb02
+ stk_example_kb03
+ stk_example_kb04
+ stk_example_kb05
+ stk_example_kb06
+ stk_example_kb07
+ stk_example_kb08
+
+Examples: design of experiments
+ stk_example_doe01
+ stk_example_doe02
+ stk_example_doe03
+
+#stk_example_misc01
+#stk_example_misc02
+#stk_example_misc03
+#stk_testfun_braninhoo
+
+Probability distributions: cdf, pdf and expected improvement
+ stk_distrib_normal_cdf
+ stk_distrib_normal_ei
+ stk_distrib_normal_pdf
+ stk_distrib_student_cdf
+ stk_distrib_student_ei
+ stk_distrib_student_pdf
+
+Arrays: generic functions for arrays
+## Well, perhaps 'generic' isn't entirely appropriate...
+ stk_commonsize
+ stk_feval
+ stk_normalize
+ stk_rescale
+## The prefix sprintf might be misleading, since these function
+## have very little in common with the usual sprintf function in C
+ stk_sprintf_colnames
+ stk_sprintf_data
+ stk_sprintf_info
+ stk_sprintf_rownames
+ stk_sprintf_sizetype
+
+Arrays: @stk_dataframe
+#@stk_dataframe/private/get_column_number
+#@stk_dataframe/private/reserved_field_names
+ @stk_dataframe/and
+ @stk_dataframe/apply
+ @stk_dataframe/bsxfun
+ @stk_dataframe/cat
+ @stk_dataframe/ctranspose
+ @stk_dataframe/disp
+ @stk_dataframe/display
+ @stk_dataframe/double
+ @stk_dataframe/end
+ @stk_dataframe/eq
+ @stk_dataframe/fieldnames
+ @stk_dataframe/ge
+ @stk_dataframe/get
+ @stk_dataframe/gt
+ @stk_dataframe/horzcat
+ @stk_dataframe/isempty
+ @stk_dataframe/isequal
+ @stk_dataframe/ldivide
+ @stk_dataframe/le
+ @stk_dataframe/length
+ @stk_dataframe/lt
+ @stk_dataframe/max
+ @stk_dataframe/mean
+ @stk_dataframe/median
+ @stk_dataframe/min
+ @stk_dataframe/minus
+ @stk_dataframe/mode
+ @stk_dataframe/ne
+ @stk_dataframe/or
+ @stk_dataframe/plot
+ @stk_dataframe/plus
+ @stk_dataframe/power
+ @stk_dataframe/prod
+ @stk_dataframe/quantile
+ @stk_dataframe/rdivide
+ @stk_dataframe/realpow
+ @stk_dataframe/reshape
+ @stk_dataframe/set
+ @stk_dataframe/size
+ @stk_dataframe/std
+ @stk_dataframe/stk_dataframe
+ @stk_dataframe/stk_normalize
+ @stk_dataframe/stk_rescale
+ @stk_dataframe/stk_sprintf_colnames
+ @stk_dataframe/stk_sprintf_data
+ @stk_dataframe/stk_sprintf_info
+ @stk_dataframe/stk_sprintf_rownames
+ @stk_dataframe/stk_sprintf_sizetype
+ @stk_dataframe/subsasgn
+ @stk_dataframe/subsref
+ @stk_dataframe/sum
+ @stk_dataframe/times
+ @stk_dataframe/transpose
+ @stk_dataframe/var
+ @stk_dataframe/vertcat
+ @stk_dataframe/xor
+
+Arrays: @stk_factorialdesign (factorial design, regular grids) 
+ @stk_factorialdesign/disp
+ @stk_factorialdesign/get
+ @stk_factorialdesign/ndgrid
+ @stk_factorialdesign/set
+ @stk_factorialdesign/stk_factorialdesign
+ @stk_factorialdesign/stk_normalize
+ @stk_factorialdesign/stk_rescale
+ @stk_factorialdesign/stk_sprintf_levels
+
+## This one is for legacy support of .a data structures
+## (will be completely removed in the 3.x series)
+#@struct/double
+
+Miscellaneous
+ stk_assert_box
+ stk_dist
+#stk_gpquadform  [experimental, don't make it public
+ stk_options_get
+ stk_options_set
+ stk_select_optimizer
+ stk_version
+
+## error/warning 
+#stk_error [internal, not for public use]
+##stk_warning does not exist yet, but it should (?)
+
+## misc/text
+#stk_disp_examplewelcome
+#stk_sprintf_colvect
+#stk_sprintf_colvect_fixedpoint
+#stk_sprintf_colvect_scientific
+#stk_sprintf_framed
+
+## the MOLE...
+#corr
+#graphics_toolkit
+#isoctave
+#linsolve
+#quantile
+
+## testing STK
+#stk_isequal_tolabs
+#stk_isequal_tolrel
+#stk_is_lhs
+#stk_runtests
+#stk_test
+#stk_test_dfbinaryop
+
+## (embryonic) parallelization engine
+#@stk_parallel_engine_none/stk_parallel_engine_none
+#@stk_parallel_engine_none/stk_parallel_feval
+#@stk_parallel_engine_none/stk_parallel_stop
+#@stk_parallel_engine_parfor/stk_parallel_engine_parfor
+#@stk_parallel_engine_parfor/stk_parallel_feval
+#@stk_parallel_engine_parfor/stk_parallel_stop
+#stk_parallel_cutblocks
+#stk_parallel_engine_get
+#stk_parallel_engine_set
+#stk_parallel_feval
+#stk_parallel_haspct
+#stk_parallel_start
+#stk_parallel_stop
+
+## plotting function... perhaps should we advertise some of these ?
+#stk_axes
+#stk_figure
+#stk_labels
+#stk_plot1d
+#stk_plot2d
+#stk_plot_shadedci
+#stk_subplot
+#stk_title
+#stk_xlabel
+#stk_ylabel
+
+## misc/benchmarking scripts
+#stk_benchmark_cov1
+#stk_benchmark_cov2
+#stk_benchmark_logdet
+

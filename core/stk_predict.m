@@ -36,7 +36,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -96,10 +96,13 @@ if strcmp (model.covariance_type, 'stk_discretecov') % use indices
     if isempty (xt)
         nt = size (model.param.K, 1);
         xt = (1:nt)';
-    elseif ~ iscolumn (xt)
-        warning ('STK:stk_predict:IncorrectSize', 'xt should be a column.');
-        xt = xt(:);
-        nt = size (xt, 1);
+    else
+        if ~ iscolumn (xt)
+            warning ('STK:stk_predict:IncorrectSize', sprintf(['xt should be ' ...
+                'a column.\n --> Trying to continue with xt = xt(:) ...']));
+            xt = xt(:);
+        end        
+        nt = size (xt, 1);     
     end
 else
     nt = size (xt, 1);
@@ -212,6 +215,8 @@ if nargout > 3,
 end
 
 end % function stk_predict -----------------------------------------------------
+
+%#ok<*SPWRN>
 
 
 %!shared n, m, model, x0, x_obs, z_obs, x_prd, y_prd1, idx_obs, idx_prd

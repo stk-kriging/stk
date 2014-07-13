@@ -16,7 +16,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -125,3 +125,6 @@ stk_title  ('Kriging prediction');
 stk_labels ('input variable x', 'response z');
 
 model %#ok<NOPTS>
+
+
+%!test stk_example_kb04;  close all;

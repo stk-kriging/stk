@@ -1,8 +1,12 @@
-% STK_KREQ_QR [STK internal]
+% STK_KREQ_QR  [STK internal function, not part of public API... UAYOR!]
+%
+% CALL: kreq = stk_kreq_qr (model, xi, xt)
+%
+%    constructs an stk_kreq_qr object.
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 

@@ -1,29 +1,584 @@
+2014-07-03  Julien Bect  <julien.bect@supelec.fr>
+
+	Global options to control upper/lower bounds for param estim.
+
+	* misc/options/stk_options_set.m: Add new options.
+	* paramestim/stk_param_getdefaultbounds.m: Read global options.
+
+	stk_param_estim.m: Return an additional 'info' structure.
+
+	* paramestim/stk_param_estim.m: Return an additional 'info'
+	structure, which currently contains the criterion that has been
+	used, the criterion value at the optimum, and the bounds.
+
+2014-07-02  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_generate_samplepaths.m: Use model.response_name if available.
+
+	* utils/stk_generate_samplepaths.m: Use model.response_name if
+	available.
+
+2014-07-01  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_isdominated.m: New function, returns true for dominated rows.
+
+	* arrays/generic/stk_isdominated.m: New function
+	* arrays/generic/private/stk_isdominated_mex.c: New MEX-function
+	* misc/include/pareto.h: Add new function is_dominated
+	* config/stk_config_makeinfo.m: Compile the new MEX-function
+	* admin/octave-pkg/Makefile: Compile the new MEX-function
+	* arrays/generic/private/stk_paretofind_mex.c: Modified
+	* arrays/generic/stk_paretofind.m: Modified
+
+	stk_figure.m: Do not set the axis title.
+
+	* misc/plot/stk_figure.m: Do not set the axis title.
+
+	stk_plot2d.m: Create labels only if column names are available.
+
+	* misc/plot/stk_plot2d.m: Create labels only if column names are
+	available.
+	* examples/01_kriging_basics/stk_example_kb03.m: Provide explicit
+	column names for the 2d array used in this script.
+
+2014-06-27  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_cholcov.m: Prevent infinite while loops.
+
+	* core/stk_cholcov.m: Prevent infinite while loops, that could
+	occur in the case of matrices that either contained NaNs or Infs,
+	or were really far from from positive definite.
+
+2014-06-25  Ashwin Ravisankar  <ashwinr1993@gmail.com>
+
+	stk_param_estim.m: Add an optional 'criterion' argument.
+
+	* paramestim/stk_param_estim.m: added new input argument
+	criterion that will make it possible, in the future, to select
+	which estimation criterion to use.
+
+	stk_param_relik.m: Add a unit test to check the gradient.
+
+	* paramestim/stk_param_relik.m: Add a unit test.
+
+2014-06-19  Ashwin Ravisankar  <ashwinr1993@gmail.com>
+
+	stk_param_gls.m: A new function to compute the GLS estimator.
+
+	* paramestim/stk_param_gls.m: new function
+	* paramestim/stk_param_init.m: modified
+
+2014-06-16  Julien Bect  <julien.bect@supelec.fr>
+
+	make_octave_package.m: Parse 'Description' field from README.
+
+	* admin/make_octave_package.m: Modified to parse 'Description'
+	field directly from README (avoids text duplication).
+	* admin/octave-pkg/description.txt: Deleted.
+
+2014-06-15  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_paretofind.m: New function to find non-dominated points.
+
+	* arrays/generic/stk_paretofind.m: new function
+	* arrays/generic/private/stk_paretofind_mex.c: new mex-function
+	* misc/include/pareto.h: new C header
+	* config/stk_config_makeinfo.m: modified
+	* config/stk_config_path.m: modified
+	* admin/octave-pkg/Makefile: modified
+
+2014-06-14  Julien Bect  <julien.bect@supelec.fr>
+
+	README: Include a short description.
+
+	* README: Include a short description (from description.txt)
+	* admin/octave-pkg/description.txt: Line-wrapping.
+
+	stk_options_set.m: Add a reset feature.
+
+	* misc/options/stk_options_set.m: Add a reset feature using a
+	special case when nargin == 1.
+	* misc/options/stk_options_get.m: Just fix spacing.
+
+	stk_options_set.m: Prevent persistent from being cleared.
+
+	* misc/options/stk_options_set.m: Add a call to mlock to prevent
+	the persistent variable from being cleared.
+
+2014-05-15  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_model.m: Fix a fresh bug (my mistake).
+
+	* core/stk_model.m: Restore proper default behaviour when
+	nargin == 0.
+
+	Merge /etc into /admin
+
+	* etc/CODING_GUIDELINES: moved from
+	* admin/CODING_GUIDELINES: moved to
+	* etc/RELEASE_CHECKLIST: moved from
+	* admin/RELEASE_CHECKLIST: moved to + modified
+	* etc/octave-pkg/INDEX: moved from
+	* admin/octave-pkg/INDEX: moved to
+	* etc/octave-pkg/Makefile: moved from
+	* admin/octave-pkg/Makefile: moved to
+	* etc/octave-pkg/PKG_DEL.m: moved from
+	* admin/octave-pkg/PKG_DEL.m: moved to
+	* etc/octave-pkg/pkg_install_stk_and_generate_doc.m: moved from
+	* admin/octave-pkg/pkg_install_stk_and_generate_doc.m: moved to
+	* etc/octave-pkg/post_install.m: moved from
+	* admin/octave-pkg/post_install.m: moved to
+	* admin/description.txt: moved from
+	* admin/octave-pkg/description.txt: moved to
+	* admin/make_octave_package.m: modified
+	* admin/make_release_targz.sh: modified
+	* admin/stk_make_htmldoc.m: modified
+
+2014-05-13  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_model.m: Accept function handles for covariance_type.
+
+	* core/stk_model.m: Accept function handles for covariance_type.
+
+2014-05-13  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
+	Add a stk_length function
+
+	* arrays/generic/stk_length.m: returns the length of an array
+	* arrays/@stk_dataframe/stk_length.m: idem
+
+2014-05-12  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_generate_samplepaths.m: Deal with duplicates in xt.
+
+	* utils/stk_generate_samplepaths.m: Deal with duplicates in xt.
+
+2014-05-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Move stk_model to core.
+
+	* core/stk_model.m: formerly known as utils/stk_model.m
+	* utils/stk_model.m: deleted
+
+	Move utils/arrays one level up.
+
+	* arrays: formerly known as utils/arrays
+	* utils/arrays: deleted
+	* config/stk_config_makeinfo.m: modified
+	* config/stk_config_path.m: modified
+
+2014-05-07  Julien Bect  <julien.bect@supelec.fr>
+
+	@stk_dataframe/subsasgn: Solve a problem with Octave 3.2.x
+
+	* utils/arrays/@stk_dataframe/subsasgn.m: solve a problem with
+	Octave 3.2.x (0x0 stk_dataframe objects).
+
+	Avoid changing the current dir to make a function available.
+
+	* misc/test/stk_runtests.m: Avoid changing the current dir to make
+	stk_config_path available. Use addpath/rmpath instead.
+
+2014-05-06  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_config_path: Fix a private folder problem in Octave 3.2.x
+
+	* config/stk_config_path.m: Fix a private folder problem in Octave
+	3.2.x (a new private folder has been recently created).
+
+	Use horzcat instead of [,].
+
+	* lm/@stk_lm_affine/feval.m: modified
+	* lm/@stk_lm_cubic/feval.m: modified
+	* lm/@stk_lm_quadratic/feval.m: modified
+
+	Change the way the MOLE is installed.
+
+	* config/stk_config_mole.m: New function, that takes the place of
+	misc/mole/init.m and misc/mole/install_mole_function.m.
+	* misc/mole/init.m: removed
+	* misc/mole/install_mole_function.m: removed
+	* config/stk_config_addpath.m: Modified, to call stk_config_mole,
+	thus avoiding the use of "run" which seems to be causing problems
+	in Octave 3.2.x.
+	* etc/octave-pkg/post_install.m: idem
+	* stk_init.m: idem
+
+2014-04-15  Julien Bect  <julien.bect@supelec.fr>
+
+	Add an INDEX file to the Octave package.
+
+	* etc/octave-pkg/INDEX: INDEX file for the Octave package
+	* etc/octave-pkg/pkg_install_stk_and_generate_doc.m: new script to
+	test quickly that the tarball can be installed and to inspect how
+	the corresponding Octave-forge documentation will look.
+	* admin/make_octave_package: copy INDEX to the package.
+
+	Don't include stk_optim_hasfmincon in the Octave package.
+
+	* admin/make_octave_package.m: modified
+
+	Some functions are not part of the public API.
+
+	* core/ortho_func.m: modified (doc)
+	* core/stk_cholcov.m: modified (doc)
+	* core/@stk_kreq_qr/get.m: modified (doc)
+	* core/@stk_kreq_qr/isequal.m: modified (doc)
+	* core/@stk_kreq_qr/linsolve.m: modified (doc)
+	* core/@stk_kreq_qr/stk_kreq_qr.m: modified (doc)
+	* core/@stk_kreq_qr/stk_set_righthandside.m: modified (doc)
+	* core/@stk_kreq_qr/stk_squared_seminorm.m: modified (doc)
+	* core/@stk_kreq_qr/stk_update.m: modified (doc)
+	* core/@stk_kreq_qr/subsref.m: modified (doc)
+	* misc/dist/stk_gpquadform.m: modified (doc)
+
+2014-04-14  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_cholcov: new function, chol + regularization noise
+
+	* core/stk_cholcov.m: New function.
+	* config/stk_config_setup.m: Change the name of a warning.
+	* paramestim/stk_param_init.m: Use stk_colcov instead of chol.
+	* core/@stk_kreq_qr/get.m: Use stk_colcov instead of chol.
+	* paramestim/stk_param_relik.m: Use stk_cholcov.
+	* examples/01_kriging_basics/stk_example_kb07.m: Increase
+	regularity for the forth subplot. Now we can, so why not?
+	* examples/01_kriging_basics/stk_example_kb08.m: Remove FIXME
+	comment. Change subplot titles.
+	* utils/stk_generate_samplepaths.m: Use stk_colcov instead of
+	chol. Remove FIXME comment. Remove observations points from the
+	result when generating conditional sample paths (bugfix).
+
+2014-04-13  Julien Bect  <julien.bect@supelec.fr>
+
+	Generation of conditioned sample paths made easy (ticket #3).
+
+	* utils/stk_generate_samplepaths.m: Generate conditioned sample
+	paths if additional (xi, zi) arguments are provided.
+	* examples/01_kriging_basics/stk_example_kb08.m: New example.
+
+2014-04-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Move stk_feval.m to utils/arrays/generic.
+
+	* utils/stk_feval.m: moved (from)
+	* utils/arrays/generic/stk_feval.m: moved (to)
+
+2014-04-10  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a bug in stk_predict ().
+
+	* core/stk_predict.m: Fix a bug
+
+2014-04-03  Julien Bect  <julien.bect@supelec.fr>
+
+	Simplify the code in stk_ortho_func ().
+
+	* core/stk_ortho_func.m: Call feval (stk_lm_quadratic, x) instead
+	of duplicating the code. And add the cubic case.
+
+	Add (multivariate) cubic linear models.
+
+	* lm/@stk_lm_cubic: New class
+	* lm/@stk_lm_cubic/stk_lm_cubic.m: New function (constructor)
+	* lm/@stk_lm_cubic/feval.m: New function
+
+2014-03-31  Julien Bect  <julien.bect@supelec.fr>
+
+	Introduce a new (experimental) feature: linear models.
+
+	* core/stk_ortho_func.m: Modified to handle model.order == NaN.
+	* paramestim/stk_param_init.m: Modified to handle model.order == NaN.
+	* config/stk_config_path.m: Add lm to the path.
+	* lm/@stk_lm_affine/stk_lm_affine.m: New function
+	* lm/@stk_lm_affine/feval.m: New function
+	* lm/@stk_lm_constant/stk_lm_constant.m: New function
+	* lm/@stk_lm_constant/feval.m: New function
+	* lm/@stk_lm_matrix/stk_lm_matrix.m: New function
+	* lm/@stk_lm_matrix/feval.m: New function
+	* lm/@stk_lm_null/stk_lm_null.m: New function
+	* lm/@stk_lm_null/feval.m: New function
+	* lm/@stk_lm_quadratic/stk_lm_quadratic.m: New function
+	* lm/@stk_lm_quadratic/feval.m: New function
+	* examples/03_miscellaneous/stk_example_misc03.m: New example script.
+
+2014-03-29  Julien Bect  <julien.bect@supelec.fr>
+
+	Do not add config to in the path.
+
+	* config/stk_config_path.m: Remove config from the list of STK
+	subdirectories to be added to the path.
+	* stk_init.m: Remove config from the path at the end of
+	initialization.
+	* misc/test/stk_runtests.m: Do not assume that config is in the
+	path.
+
+2014-03-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Rename stk_config_graphicstoolkit tp graphics_toolkit.
+
+	* config/stk_config_graphicstoolkit.m: Renamed.
+	* misc/mole/graphics_toolkit/graphics_toolkit.m: Formerly known as
+	stk_config_graphicstoolkit. Modified to be a (partial) replacement
+	of the Octave function with the same name.
+	* misc/mole/init.m: Add graphics_toolkit to the path only when
+	needed, i.e., when using Matlab or an old version of Octave.
+	* examples/03_miscellaneous/stk_example_misc02.m: Modified.
+
+	stk_param_relik: Adding a little bit of noise to help chol succeed.
+
+	* paramestim/stk_param_relik.m: Add a little bit of noise to help
+	chol succeed, when the first factorization returned by chol is not
+	complete. Emit a warning when doing so.
+	* config/stk_config_setup.m: By default, hide the warning emitted
+	by stk_param_relik.
+
+2014-03-25  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_config_addpath: Add MOLE subdirectories to the path.
+
+	* config/stk_config_addpath.m: modified
+
+	stk_version: Simpler is better.
+
+	* config/stk_version.m: Moved...
+	* stk_version.m: ...here. STK's version number is now hard-coded
+	in this file, and read from README anymore.
+	* README: Refer to stk_version.m for the version number.
+	* config/stk_config_path.m: Add STK's root to the path unless STK
+	is used as an Octave package.
+	* etc/RELEASE_CHECKLIST: Related changes.
+
+	stk_config_getroot: Simpler is better.
+
+	* config/stk_config_getroot.m: Simplify the way we locate STK's
+	root. Use stk_param_relik instead of stk_test as a reference, as
+	stk_test will probably not be included in the Octave package.
+	* admin/make_octave_package.m: Modified.
+
+	stk_make_htmldoc: Remove dependency on stk_config_getroot.
+
+	* admin/stk_make_htmldoc.m: modified.
+
+	stk_param_relik: Improved implementation, or so I hope.
+
+	* paramestim/stk_param_relik.m: Several modifications, that seem
+	to reduce the number of warnings related to bad conditioning, and
+	also improve the performance for large n (about 1000, say).
+
+	Fix minor problems in stk_config_rmpath and stk_config_path.
+
+	* config/stk_config_path.m: modified
+	* config/stk_config_rmpath.m: modified
+
+	Test examples using stk_runtests instead of stk_runexamples.
+
+	* examples/01_kriging_basics/stk_example_kb01.m: add %!test
+	* examples/01_kriging_basics/stk_example_kb02.m: add %!test
+	* examples/01_kriging_basics/stk_example_kb03.m: add %!test
+	* examples/01_kriging_basics/stk_example_kb04.m: add %!test
+	* examples/01_kriging_basics/stk_example_kb05.m: add %!test
+	* examples/01_kriging_basics/stk_example_kb06.m: add %!test
+	* examples/01_kriging_basics/stk_example_kb07.m: add %!test
+	* examples/02_design_of_experiments/stk_example_doe01.m: add %!test
+	* examples/02_design_of_experiments/stk_example_doe02.m: add %!test
+	* examples/02_design_of_experiments/stk_example_doe03.m: add %!test
+	* examples/03_miscellaneous/stk_example_misc01.m: add %!test
+	* examples/03_miscellaneous/stk_example_misc02.m: add %!test
+	* misc/test/stk_runexamples.m: removed
+	* misc/test/stk_runscript.m: removed
+
+2014-03-23  Julien Bect  <julien.bect@supelec.fr>
+
+	Remove stk_init.m from the Octave package.
+
+	* admin/make_octave_package.m: Create PKG_ADD.m (later renamed to
+	PKG_ADD) by renaming stk_init. Therefore, we don't need the
+	existing PKG_ADD.m anymore.
+	* stk_init.m: Set STK_OCTAVE_PACKAGE to false.
+	* etc/octave-pkg/PKG_ADD.m: Removed.
+
+	Minor changes in stk_select_optimizer.
+
+	* misc/optim/stk_select_optimizer.m: Minor changes.
+
+2014-03-21  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_relik: Fix help text.
+
+	* paramestim/stk_param_relik.m: Fix help text.
+
+2014-03-18  Julien Bect  <julien.bect@supelec.fr>
+
+	Restore the stk_ prefix for distrib_* functions.
+
+	* misc/distrib/distrib_normal_cdf.m: renamed (from)
+	* misc/distrib/distrib_normal_ei.m: renamed (from)
+	* misc/distrib/distrib_normal_pdf.m: renamed (from)
+	* misc/distrib/distrib_student_cdf.m: renamed (from)
+	* misc/distrib/distrib_student_ei.m: renamed (from)
+	* misc/distrib/distrib_student_pdf.m: renamed (from)
+	* misc/distrib/stk_distrib_normal_cdf.m: rename (to)
+	* misc/distrib/stk_distrib_normal_ei.m: rename (to)
+	* misc/distrib/stk_distrib_normal_pdf.m: rename (to)
+	* misc/distrib/stk_distrib_student_cdf.m: rename (to)
+	* misc/distrib/stk_distrib_student_ei.m: rename (to)
+	* misc/distrib/stk_distrib_student_pdf.m: rename (to)
+	* examples/02_design_of_experiments/stk_example_doe03.m: modified
+	* misc/distrib/README: modified
+
+2014-03-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Handle large values of nu better in stk_sf_matern.
+
+	* misc/specfun/stk_sf_matern.m: Handle large values of nu better.
+
+2014-03-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Handle Gaussian covariance functions in stk_param_init.
+
+	* paramestim/stk_param_init.m: Handle Gaussian covariance functions.
+	* paramestim/stk_param_estim.m: Source formatting.
+
+2014-03-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Handle special cases in stk_sf_matern.
+
+	* misc/specfun/stk_sf_gausscorr.m: modified
+	* misc/specfun/stk_sf_matern.m: modified
+	* misc/specfun/stk_sf_matern32.m: modified
+	* misc/specfun/stk_sf_matern52.m: modified
+
+2014-02-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve building and Octave packaging.
+
+	* admin/make_octave_package.m: modified
+	* stk_build.m: renamed...
+	* config/stk_config_buildmex.m: ...to this; modified.
+	* config/stk_config_makeinfo.m: new function
+	* config/stk_config_rmpath.m: modified
+	* config/stk_config_testprivatemex.m: modified
+	* etc/octave-pkg/Makefile: new file
+	* etc/octave-pkg/PKG_ADD.m: modified
+	* etc/octave-pkg/PKG_DEL.m: modified
+	* etc/octave-pkg/pre_install.m: deleted
+	* etc/octave-pkg/post_install.m: new script
+	* stk_init.m: modified
+
+	Reorganize the MOLE.
+
+	* misc/mole/PKG_ADD.m: Renamed to init.m
+	* misc/mole/init.m: Renamed from PKG_ADD.m. Add variables
+	MOLE_DO_ADDPATH and MOLE_PRUNE_ADDPATH to control the behaviour of
+	the script.
+	* misc/mole/PKG_DEL.m: Remove (was not needed after all).
+	* etc/octave-pkg/pre_install.m: Call init.m (renamed from
+	PKG_ADD.m) with MOLE_DO_ADDPATH = false and MOLE_PRUNE_ADDPATH =
+	true. Remove call to PKG_DEL.m (was not needed, after all).
+	* misc/mole/README: Bring up to date with the new organization of
+	the MOLE.
+	* misc/mole/common/isoctave.m: Moved to ../isoctave.
+	* misc/mole/isoctave/isoctave.m: Moved from ../common.
+	* misc/mole/install_mole_function.m: Helper function for init.m.
+	* stk_init.m: Modified (call init.m instead of PKG_ADD.m).
+
+2014-02-25  Julien Bect  <julien.bect@supelec.fr>
+
+	Get rid of ismatlab (). Just use ~ isoctave () instead.
+
+	* config/stk_config_setup.m: Replace ismatlab -> ~isoctave.
+	* misc/mole/common/ismatlab.m: Removed.
+
+	Rename graphicstoolkit to stk_config_graphicstoolkit.
+
+	* misc/mole/common/graphicstoolkit.m: removed
+	* config/stk_config_graphicstoolkit.m: new function (formerly
+	known as graphicstoolkit)
+	* examples/03_miscellaneous/stk_example_misc02.m: modified
+
+	Rename commonsize () to stk_commonsize ().
+
+	* misc/mole/common/commonsize.m: renamed to...
+	* utils/arrays/generic/stk_commonsize.m: ...this
+	* misc/distrib/distrib_normal_cdf.m: modified
+	* misc/distrib/distrib_normal_ei.m: modified
+	* misc/distrib/distrib_normal_pdf.m: modified
+	* misc/distrib/distrib_student_cdf.m: modified
+	* misc/distrib/distrib_student_ei.m: modified
+	* misc/distrib/distrib_student_pdf.m: modified
+	* misc/mole/README: modified
+
+	doc: update some help texts (script names have changed)
+
+	* paramestim/stk_param_estim.m: fix doc
+	* utils/stk_conditioning.m: fix doc
+	* utils/stk_generate_samplepaths.m: fix doc
+
+2014-02-24  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite Octave packaging script in Octave (instead of Python).
+
+	* admin/make_octave_package.m: Translation to the Octave langage
+	of make_octave_package.py . Version number now properly set in
+	DESCRIPTION based on the one returned by stk_version ().
+	* admin/make_octave_package.py: deleted
+
+	Try to solve the problem with MEX-files in private directories.
+
+	* stk_init.m: Build the MEX-files *before* adding STK's
+	subdirectories to the path. Finger crossed.
+	* stk_build.m: Don't test if MEX-files located in private
+	directories are found (not at this point).
+	* config/stk_config_testprivatemex.m: New function to test if
+	MEX-files located in private directories are found.
+
+	Add load/unload scripts for the MOLE.
+
+	* misc/mole/PKG_ADD.m: New initialization script, that adds
+	selected subdirectories of the MOLE to the path.
+	* misc/mole/PKG_DEL.m: Remove MOLE subdirectories from the path.
+	* config/stk_config_path.m: Remove the part that is now handled by
+	the new script (misc/mole/PKG_ADD.m).
+	* etc/octave-pkg/pre_install.m: Run misc/mole/PKG_ADD.m first and
+	PKG_DEL.m at the end (otherwise the load path would contain
+	deleted temp directories after the installation).
+	* stk_init.m: Run misc/mole/PKG_ADD.m first.
+
+2014-02-22  Julien Bect  <julien.bect@supelec.fr>
+
+	Rewrite stk_config_rmpath without a call to stk_config_path.
+
+	* config/stk_config_rmpath.m: Rewrite without a call to
+	stk_config_path, in prevision of forthcoming changes.
+
+	Rewrite stk_config_addpath in a cleaner way.
+
+	* config/stk_config_addpath.m: Rewrite the function in a cleaner
+	way, without the useless output argument.
+	* config/stk_config_getroot.m: Add an additional output argument,
+	to indicate if STK is present in the path.
+
+2014-02-18  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_getdefaultbounds.m: Handle Gaussian covariance functions.
+
+	* paramestim/stk_param_getdefaultbounds.m: Handle the case of
+	Gaussian isotropic and anisotropic covariance functions.
+
+2014-02-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve stk_config_getroot.
+
+	* config/stk_config_getroot.m: Make it work even if STK has not
+	been added to the search path.
+
 2014-02-16  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_sampling_maximinlhs.m: minor change
 
 	* stk_sampling_maximinlhs.m (lhsdesign_): No need to check if x is
 	empty since we start the loop at j == 2, now.
-
-2014-02-14  Julien Bect  <julien.bect@supelec.fr>
-
-	A new class to represent boxes.
-
-	* config/stk_config_path.m: modified
-	* misc/test/stk_is_lhs.m: modified
-	* sampling/stk_sampling_maximinlhs.m: modified
-	* sampling/stk_sampling_olhs.m: modified
-	* sampling/stk_sampling_randomlhs.m: modified
-	* sampling/stk_sampling_randunif.m: modified
-	* sampling/stk_sampling_regulargrid.m: modified
-	* utils/arrays/generic/stk_rescale.m: modified
-	* utils/setobj/@stk_setobj_box/disp.m: new function
-	* utils/setobj/@stk_setobj_box/display.m: new function
-	* utils/setobj/@stk_setobj_box/get.m: new function
-	* utils/setobj/@stk_setobj_box/set.m: new function
-	* utils/setobj/@stk_setobj_box/stk_setobj_box.m: new function
-	* utils/setobj/@stk_setobj_box/subsasgn.m: new function
-	* utils/setobj/@stk_setobj_box/subsref.m: new function
 
 2014-02-12  Julien Bect  <julien.bect@supelec.fr>
 

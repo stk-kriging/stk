@@ -1,7 +1,4 @@
 % STK_CONFIG_PATH returns the searchpath of STK
-%
-% FIXME: missing doc
-%
 
 % Copyright Notice
 %
@@ -35,17 +32,32 @@ if nargin == 0,
     root = stk_config_getroot ();
 end
 
+% Safer than calling isoctave directly (this allows stk_config_path to work
+% even if STK has already been partially uninstalled or is not properly installed)
+isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
+
+% Are we using STK installed as an octave package ?
+if (exist (fullfile (root, 'stk_init.m'), 'file') == 2)
+    STK_OCTAVE_PACKAGE = false;
+    path = {root};
+elseif isoctave && (exist (fullfile (root, 'PKG_ADD'), 'file') == 2)
+    STK_OCTAVE_PACKAGE = true;
+    path = {};
+else
+    error ('Either stk_init.m or PKG_ADD should be present... What the hell ?');
+end
+
 % main function folders
-path = {...
-    fullfile(root, 'config'                     ) ...
-    fullfile(root, 'core'                       ) ...
-    fullfile(root, 'covfcs'                     ) ...
-    fullfile(root, 'paramestim'                 ) ...
-    fullfile(root, 'sampling'                   ) ...
-    fullfile(root, 'utils'                      ) ...
-    fullfile(root, 'utils', 'arrays'            ) ...
-    fullfile(root, 'utils', 'arrays', 'generic' ) ...
-    fullfile(root, 'utils', 'setobj'            ) };
+path = [path {...
+    fullfile(root, 'arrays'            ) ...
+    fullfile(root, 'arrays', 'generic' ) ...
+    fullfile(root, 'core'              ) ...
+    fullfile(root, 'covfcs'            ) ...
+    fullfile(root, 'lm'                ) ...    
+    fullfile(root, 'paramestim'        ) ...
+    fullfile(root, 'sampling'          ) ...
+    fullfile(root, 'utils'             ) ...    
+    fullfile(root, 'utils', 'setobj'   ) }];
 
 % 'misc' folder and its subfolders
 misc = fullfile (root, 'misc');
@@ -69,43 +81,15 @@ path = [path {...
     fullfile(root, 'examples', '03_miscellaneous'        ) ...
     fullfile(root, 'examples', 'test_functions'          ) }];
 
-mole_dir = fullfile (misc, 'mole');
-
-% MOLE: Matlab/Octave common part
-path = [path {fullfile(mole_dir, 'common')}];
-
-if ~ isoctave,  % MOLE: Matlab-specific part
-    
-    path = [path {fullfile(mole_dir, 'matlab')}];
-    
-    % replacement functions for people that do not have the Statistics toolbox
-    if isempty (ver ('stats'))
-        path = [path {...
-            fullfile(mole_dir, 'corr')     ...
-            fullfile(mole_dir, 'quantile') }];
-    end
-    
-else  % MOLE: Octave-specific part
-    
-    % corr is missing in Octave 3.2.4 (when was it added ?)
-    if ~ exist ('corr', 'file')
-        path = [path {fullfile(mole_dir, 'corr')}];
-    end
-    
-    % linsolve is missing in Octave, up to 3.6.4
-    if ~ exist ('linsolve', 'file')
-        path = [path {fullfile(mole_dir, 'linsolve')}];
-    end
-    
-end
-
 % Fix a problem with private folders in Octave 3.2.x
-if isoctave,
+if isoctave && (~ STK_OCTAVE_PACKAGE),
     v = version;
     if strcmp (v(1:4), '3.2.')
         path = [path {...
-            fullfile(root, 'utils', 'arrays', '@stk_dataframe', 'private') ...
-            fullfile(root, 'misc', 'dist', 'private')}];
+            fullfile(root, 'arrays', '@stk_dataframe', 'private') ...
+            fullfile(root, 'core', '@stk_kreq_qr', 'private') ...
+            fullfile(root, 'misc', 'dist', 'private') ...
+            fullfile(root, 'arrays', 'generic', 'private')}];
     end
 end
 

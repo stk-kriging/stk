@@ -27,21 +27,27 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function root = stk_config_getroot ()
+function [root, found_in_path] = stk_config_getroot ()
 
-try
+root = fileparts (which ('stk_param_relik'));
+
+if isempty (root),
     
-    % This will raise an error if STK is not in the search path
-    root = fileparts (which ('stk_test'));
+    % STK is not in the search path -> Return the path to the copy of STK
+    % that contains this specific version stk_config_getroot
     
-    % Extract root folder
-    while ~ exist (fullfile (root, 'stk_init.m'), 'file')
-        root = fileparts (root);
-    end
+    root = fileparts (fileparts (mfilename ('fullpath')));
     
-catch
+    found_in_path = false;
     
-    root = [];
+else
+    
+    % STK is already in the search path -> Deduce the path of STK's root
+    % from the full path of stk_param_relik.
+    
+    root = fileparts (root);  % One level upper in the hierarchy
+    
+    found_in_path = true;
     
 end
 

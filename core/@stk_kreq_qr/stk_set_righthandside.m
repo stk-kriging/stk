@@ -1,8 +1,12 @@
-% STK_SET_RIGHTHANDSIDE [STK internal]
+% STK_SET_RIGHTHANDSIDE  [STK internal function, not part of public API... UAYOR!]
+%
+% CALL: kreq = stk_set_righthandside (kreq, Kti, Pt)
+%
+%    sets the right-hand side for an stk_kreq_qr object.
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 

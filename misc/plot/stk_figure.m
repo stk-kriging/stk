@@ -53,7 +53,6 @@ end
 % Set figure name and title
 if ~ isempty (figname)
     set (h, 'Name', figname);
-    stk_title (figname);
 end
 
 end % function stk_figure
