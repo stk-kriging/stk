@@ -1,15 +1,15 @@
 % STK_PLOT1D is a convenient plot function in 1D
 %
-% CALL: stk_plot1d (obsi, obst, preds)
+% CALL: stk_plot1d (obsi, obst, pred)
 %
 % STK_PLOT1D plots the result of a 1D approximation
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -37,39 +37,35 @@ if nargin > 4,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-plot_obsi = ~ isempty (obsi);
-plot_obst = (nargin > 1) && (~ isempty (obst));
-plot_pred = (nargin > 2) && (~ isempty (pred));
-
-% shaded area representing pointwise confidence intervals
-if plot_pred,
+% Shaded area representing pointwise confidence intervals
+if (nargin > 2) && (~ isempty (pred)),
     stk_plot_shadedci (pred.x, pred.z);
     hold on;
 end
-
-% plot sample paths
+    
+% Plot sample paths
 if (nargin > 3) && (~ isempty (zsim))
     plot (pred.x, zsim, '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64])
     hold on;
 end
-
-% ground truth (if available)
-if plot_obst
+    
+% Ground truth
+if (nargin > 1) && (~ isempty (obst))
     plot (obst.x, obst.z, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
     hold on;
 end
-
-% kriging predictor (posterior mean)
-if plot_pred
+    
+% Kriging predictor (posterior mean)
+if (nargin > 2) && (~ isempty (pred))
     plot (pred.x, pred.z.mean, 'LineWidth', 4, 'Color', [0.95 0.25 0.3]);
     hold on;
 end
 
-% evaluations
-if plot_obsi
+% Evaluations
+if ~ isempty (obsi)
     plot (obsi.x, obsi.z, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
 end
 
-hold off;  set (gca, 'box', 'off');
+hold off;  set (gca, 'box', 'off');  legend off;
 
 end % function stk_plot1d

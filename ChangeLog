@@ -1,3 +1,10 @@
+2014-07-14  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_plot1d.m: Improved flexibility in argument handling.
+
+	* misc/plot/stk_plot1d.m: Improved flexibility in the way input
+	arguments are handled.
+
 2014-07-03  Julien Bect  <julien.bect@supelec.fr>
 
 	Global options to control upper/lower bounds for param estim.
