@@ -1,4 +1,4 @@
-% DISP [overloaded base function]
+% DISPLAY [overloaded base function]
 
 % Copyright Notice
 %
@@ -26,13 +26,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function disp (box)
+function display (x)
 
-d = size (box.lb, 2);
+fprintf ( ...
+    '\n%s = %d-dimensional hyper-rectangle (stk_hrect object):\n\n', ...
+    inputname (1), size (x.stk_dataframe, 2));
 
-rownames = {'lb', 'ub'};
-colnames = cellfun (@num2str, num2cell (1:d), 'UniformOutput', 0);
+disp (x);
 
-disp (stk_dataframe ([box.lb; box.ub], colnames, rownames));
+fprintf ('\n');
 
-end % function disp
+end % function display

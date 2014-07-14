@@ -66,14 +66,15 @@ else % nargin > 2
     end
 end
 
+% read argument 'box'
 if (nargin < 4) || isempty (box)
-    box = stk_setobj_box (dim);
+    xmin = zeros (1, dim);
+    xmax = ones (1, dim);
 else
-    box = stk_setobj_box (box);
+    box = stk_hrect (box);
+    xmin = box.data(1, :);
+    xmax = box.data(2, :);
 end
-
-xmin = box.lb;
-xmax = box.ub;
 
 for j = 1:dim,
     

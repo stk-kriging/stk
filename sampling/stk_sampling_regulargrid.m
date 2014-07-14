@@ -48,11 +48,11 @@ if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% read argument box
+% read argument 'box'
 if (nargin < 3) || isempty (box)
-    box = stk_setobj_box (dim);
+    box = stk_hrect (dim);  % build a default box    
 else
-    box = stk_setobj_box (box);
+    box = stk_hrect (box);  % convert input argument to a proper box
 end
 
 if length (n) == 1
@@ -70,14 +70,18 @@ end
 
 % levels
 levels = cell (1, dim);
+xmin = box.data(1, :);
+xmax = box.data(2, :);
 for j = 1:dim,
-    levels{j} = linspace (box.lb(j), box.ub(j), n(j));
+    levels{j} = linspace (xmin(j), xmax(j), n(j));
 end
 
-x = stk_factorialdesign (levels);
+x = stk_factorialdesign (levels, box.colnames);
 x.info = 'Created by stk_sampling_regulargrid';
 
 end % function stk_sampling_regulargrid
+
+%#ok<*TRYNC>
 
 
 %%
@@ -93,10 +97,22 @@ end % function stk_sampling_regulargrid
 %!error x = stk_sampling_regulargrid(n, dim, box, pi);
 
 %% 
-% Check that the output is an stk_factorialdesign (special king of dataframe)
-% (all stk_sampling_* functions should behave similarly in this respect)
+% Check that the output is an stk_dataframe
+%   (all stk_sampling_* functions should behave similarly in this respect)
+% and an stk_factorialdesign (special kind of stk_dataframe)
 
-%!assert (isa(x, 'stk_factorialdesign'));
+%!assert (isa (x, 'stk_dataframe'));
+%!assert (isa (x, 'stk_factorialdesign'));
+
+%%
+% Check that column names are properly set, if available in box
+
+%!assert (isequal (x.colnames, {}));
+
+%!test
+%! cn = {'W', 'H'};  box = stk_hrect (box, cn);
+%! x = stk_sampling_regulargrid (n, dim, box);
+%! assert (isequal (x.colnames, cn));
 
 %%
 % Check output argument

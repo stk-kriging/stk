@@ -1,8 +1,8 @@
-% SUBSREF [overloaded base function]
+% SUBSASGN [overloaded base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2014 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author: Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,28 +26,16 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function value = subsref (box, idx)
+function x = subsasgn (x, idx, value)
 
-switch idx(1).type
+if isa (x, 'stk_hrect')
+
+    x.stk_dataframe = subsasgn (x.stk_dataframe, idx, value);
+
+else % value must be an stk_hrect object
     
-    case '()'  % accessing the underlying 2 x d matrix
-        
-        box = [box.lb; box.ub];        
-        value = subsref (box, idx);
-        
-    case '{}'
-        
-        errmsg = 'Indexing with curly braces is not allowed.';
-        stk_error (errmsg, 'IllegalIndexing');
-        
-    case '.'
-        
-        value = get (box, idx(1).subs);
-        
-        if length (idx) > 1,
-            value = subsref (value, idx(2:end));
-        end
-        
+    x = subsasgn (x, idx, x.stk_dataframe.data);
+    
 end
 
-end % function subsref
+end % function subsasgn
