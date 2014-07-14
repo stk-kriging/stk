@@ -26,9 +26,24 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [x, a, b] = stk_rescale(x, varargin)
+function [x, a, b] = stk_rescale (x, varargin)
 
-[x.data, a, b] = stk_rescale(x.data, varargin{:});
+if isa (x, 'stk_dataframe')
+
+    [x.data, a, b] = stk_rescale (x.data, varargin{:});
+
+else % there is an stk_dataframe object in varargin...
+    
+    % make sure that box1 is an stk_hrect object
+    if isempty (varargin{1}),
+        box1 = stk_hrect (size (x, 2));
+    else
+        box1 = stk_hrect (varargin{1});
+    end
+    
+    [x, a, b] = stk_rescale (x, box1, varargin{2:end});
+    
+end
 
 end % function stk_rescale
 

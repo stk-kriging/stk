@@ -47,13 +47,20 @@ if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-xdata = zeros (n, d);
+% read argument 'box'
+if (nargin < 3) || isempty (box)
+    colnames = {};
+else
+    box = stk_hrect (box);  % convert input argument to a proper box
+    colnames = box.colnames;
+end
 
+xdata = zeros (n, d);
 for j = 1:d,
     xdata(:, j) = double (stk_sampling_vdc_rr2 (n, j));
 end
 
-x = stk_dataframe (xdata);
+x = stk_dataframe (xdata, colnames);
 x.info = 'Created by stk_sampling_halton_rr2';
 
 if nargin > 2,
@@ -78,8 +85,21 @@ end % function stk_sampling_halton_rr2
 %! yref = [0.9052734375 0.028349336991312 0.74848];
 %! assert(stk_isequal_tolrel(y, yref, 1e-13));
 
+%%
+% Check that column names are properly set, if available in box
 
-%% Comparison with Scilab+lowdisc
+%!test
+%! dim = 2;  box = stk_hrect (dim);
+%! x = stk_sampling_halton_rr2 (5, dim, box);
+%! assert (isequal (x.colnames, {}));
+
+%!test
+%! dim = 2;  cn = {'W', 'H'};  box = stk_hrect (dim, cn);
+%! x = stk_sampling_halton_rr2 (5, dim, box);
+%! assert (isequal (x.colnames, cn));
+
+%%
+% Comparison with Scilab+lowdisc
 
 % % Matlab/Octave STK test script
 % 

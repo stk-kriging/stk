@@ -112,9 +112,11 @@ end
 % number of "positive levels"
 q = 2^r; % = (n - 1)/2
 
-% box
-if (nargin < 3) || isempty (box),
-    box = stk_setobj_box (repmat ([-1; 1], 1, d));
+% read argument 'box'
+if (nargin < 3) || isempty (box)
+    box = stk_hrect (repmat ([-1; 1], 1, d));  % build a default box    
+else
+    box = stk_hrect (box);  % convert input argument to a proper box
 end
 
 % permutation
@@ -206,7 +208,7 @@ x = x_integer_levels + q + 1;
 x = (2*x - 1) / (2*n);
 
 % And, finally, convert to box
-x = stk_dataframe (stk_rescale (x, [], box));
+x = stk_dataframe (stk_rescale (x, [], box), box.colnames);
 x.info = 'Created by stk_sampling_olhs';
 
 % Note: the results reported in Cioppa & Lucas correspond to the scaling
@@ -238,7 +240,17 @@ end % function stk_sampling_olhs
 % Check that the output is a dataframe
 % (all stk_sampling_* functions should behave similarly in this respect)
 
-%!assert (isa(x, 'stk_dataframe'));
+%!assert (isa (x, 'stk_dataframe'));
+
+%%
+% Check that column names are properly set, if available in box
+
+%!assert (isequal (x.colnames, {}));
+
+%!test
+%! cn = {'W', 'H'};  box = stk_hrect (box, cn);
+%! x = stk_sampling_olhs (n, d, box);
+%! assert (isequal (x.colnames, cn));
 
 %%
 % Check output argument

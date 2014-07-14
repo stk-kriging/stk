@@ -32,17 +32,60 @@ if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% make sure that box1 is an stk_hrect object
-if isempty (box1)
-    box1 = stk_hrect (size (x, 2));
-else
-    box1 = stk_hrect (box1);
+% read argument x
+x = double (x);
+[n, d] = size (x);
+
+% convert box1 to a double-precision 2xd array
+try
+    box1 = double (ensure_hrect (box1, d));
+catch
+    errmsg = sprintf ('box1 should be an array of size 2 x %d', d);
+    stk_error (errmsg, 'IncorrectSize');
 end
 
-% call @stk_hrect/stk_rescale
-[y, a, b] = stk_rescale (x, box1, box2);
+% convert box2 to a double-precision 2xd array
+try
+    box2 = double (ensure_hrect (box2, d));
+catch
+    errmsg = sprintf ('box2 should be an array of size 2 x %d', d);
+    stk_error (errmsg, 'IncorrectSize');
+end
+
+% scale to [0; 1] (xx --> zz)
+xmin = box1(1, :);
+xmax = box1(2, :);
+b1 = 1 ./ (xmax - xmin);
+a1 = - xmin .* b1;
+
+% scale to box2 (zz --> yy)
+ymin = box2(1, :);
+ymax = box2(2, :);
+b2 = ymax - ymin;
+a2 = ymin;
+
+b = b2 .* b1;
+a = a2 + a1 .* b2;
+y = repmat (a, n, 1) + x * diag (b);
 
 end % function stk_rescale
+
+%#ok<*CTCH>
+
+
+function box = ensure_hrect (box, d)
+
+if ~ isa (box, 'stk_hrect')
+    if isempty (box), 
+        box = stk_hrect (d);
+    else
+        box = stk_hrect (box);
+    end
+end
+
+assert (size (box, 2) == d);
+
+end
 
 
 %!shared x

@@ -1,4 +1,4 @@
-% GET [overloaded base function]
+% DISP [overloaded base function]
 
 % Copyright Notice
 %
@@ -26,23 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function value = get (x, propname)
+function disp (hr)
 
-switch propname
-    
-    case 'lb'
-        value = x.lb;
-        
-    case 'ub'
-        value = x.ub;
-        
-    case 'dim'
-        value = size (x.lb);
-        
-    otherwise
-        errmsg = sprintf ('Unknown property: %s', propnam);
-        stk_error (errmsg, 'UnknownProperty');
-        
-end
+disp (hr.stk_dataframe);
 
-end % function get
+end % function disp

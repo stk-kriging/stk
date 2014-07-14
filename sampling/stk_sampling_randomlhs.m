@@ -49,7 +49,7 @@ end
 
 % read argument box
 if (nargin < 3) || isempty (box)
-    box = stk_setobj_box (dim);
+    box = stk_hrect (dim);
 end
 
 niter = 1;
@@ -77,6 +77,16 @@ end % function stk_sampling_randomlhs
 % (all stk_sampling_* functions should behave similarly in this respect)
 
 %!assert (isa(x, 'stk_dataframe'));
+
+%%
+% Check that column names are properly set, if available in box
+
+%!assert (isequal (x.colnames, {}));
+
+%!test
+%! cn = {'W', 'H'};  box = stk_hrect (box, cn);
+%! x = stk_sampling_randomlhs (n, dim, box);
+%! assert (isequal (x.colnames, cn));
 
 %%
 % Check output argument
