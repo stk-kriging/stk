@@ -1,3 +1,12 @@
+2014-07-18  Julien Bect  <julien.bect@supelec.fr>
+
+	Add an option to control the verbosity fmincon/fminsearch.
+
+	* misc/options/stk_options_set.m: Add new option
+	'optim_display_level' with default value 'off'.
+	* paramestim/stk_param_estim.m: Use the new option.
+	* paramestim/stk_param_init.m: Don't display debugging info.
+
 2014-07-14  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_plot1d.m: Improved flexibility in argument handling.

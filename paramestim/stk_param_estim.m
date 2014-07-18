@@ -138,38 +138,53 @@ end
 
 bounds_available = ~isempty(lb) && ~isempty(ub);
 
+optim_display_level = stk_options_get ('stk_param_estim', 'optim_display_level');
+
 % switch according to preferred optimizer
-switch stk_select_optimizer(bounds_available)
+optim_num = stk_select_optimizer (bounds_available);
+switch optim_num,
     
     case 1, % Octave / sqp
+        
+        if ~ strcmp (optim_display_level, 'off')
+            warning (sprintf (['Ignoring option: ' ...
+                'optim_display_level = %s'], optim_display_level));
+        end
+        
         [w_opt, crit_opt] = sqp (w0, {f, nablaf}, [], [], w_lb, w_ub, [], 1e-5);
         
-    case 2, % Matlab / fminsearch (Nelder-Mead)
-        options = optimset ('Display', 'iter', ...
+    case {2, 3}, % Matlab
+
+        options = optimset ('Display', optim_display_level, ...
             'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
-        [w_opt, crit_opt] = fminsearch (f, w0, options);
+
+        if optim_num == 2,  % Matlab / fminsearch (Nelder-Mead)
         
-    case 3, % Matlab / fmincon
+        	[w_opt, crit_opt] = fminsearch (f, w0, options);
+        
+        else  % Matlab / fmincon
+            
+            options = optimset (options, 'GradObj', 'on');
+            
         try
-            % We first try to use the interior-point algorithm, which has
-            % been found to provide satisfactory results in many cases
-            options = optimset ('Display', 'iter', ...
-                'Algorithm', 'interior-point', 'GradObj', 'on', ...
-                'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
+                % try to use the interior-point algorithm, which has been
+                % found to provide satisfactory results in many cases
+                options = optimset (options, 'algorithm', 'interior-point');
         catch
-            % The 'Algorithm' option does not exist in some old versions of
-            % Matlab (e.g., version 3.1.1 provided with R2007a)...
+                % the 'algorithm' option does not exist in some old versions of
+                % matlab (e.g., version 3.1.1 provided with r2007a)...
             err = lasterror ();
-            if strcmp (err.identifier, 'MATLAB:optimset:InvalidParamName')
-                options = optimset ('Display', 'iter', 'GradObj', 'on', ...
-                    'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
-            else
+                if ~ strcmp (err.identifier, 'matlab:optimset:invalidparamname')
                 rethrow (err);
             end
         end
-        [w_opt, crit_opt] = fmincon(f, w0, [], [], [], [], w_lb, w_ub, [], options);
+            
+        	[w_opt, crit_opt] = fmincon (f, w0, [], [], [], [], w_lb, w_ub, [], options);
         
-    otherwise
+        end
+        
+    otherwise,
+        
         error ('Unexpected value returned by stk_select_optimizer.');
         
 end % switch
@@ -202,10 +217,10 @@ if nargout > 2,
     info.lower_bounds = lb;
     info.upper_bounds = ub;
 end
-
+    
 end % function stk_param_estim ------------------------------------------------
 
-%#ok<*CTCH,*LERR>
+%#ok<*CTCH,*LERR,*SPWRN,*WNTAG>
 
 
 %--- The objective function and its gradient ----------------------------------
