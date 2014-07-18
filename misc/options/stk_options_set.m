@@ -75,6 +75,8 @@ opts.stk_dataframe.disp_spstr = '    ';
 opts.stk_param_getdefaultbounds.tolvar = 5.0;
 opts.stk_param_getdefaultbounds.tolscale = 5.0;
 
+opts.stk_param_estim.optim_display_level = 'off';
+
 opts.stk_figure.properties = {'InvertHardcopy', 'off', 'Color', [1 1 1]};
 opts.stk_xlabel.properties = {'FontSize', 10, 'Color', [0.2 0 1]};
 opts.stk_ylabel.properties = opts.stk_xlabel.properties;
