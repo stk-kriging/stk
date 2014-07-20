@@ -34,6 +34,9 @@ stk_options_set;
 % Select optimizers for stk_param_estim
 stk_select_optimizer;
 
+% Select default "parallelization engine"
+stk_parallel_engine_set;
+
 % Hide some warnings
 warning ('off', 'STK:stk_predict:NegativeVariancesSetToZero');
 warning ('off', 'STK:stk_cholcov:AddingRegularizationNoise');

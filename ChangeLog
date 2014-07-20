@@ -1,5 +1,9 @@
 2014-07-20  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_config_setup.m: Call stk_parallel_engine_set.
+
+	* config/stk_config_setup.m: Call stk_parallel_engine_set.
+
 	Get rid of stk_parallel_haspct.
 
 	* misc/parallel/stk_parallel_haspct.m: Deleted.
