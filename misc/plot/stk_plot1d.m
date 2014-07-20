@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -33,36 +33,31 @@
 
 function stk_plot1d (xi, zi, xt, zt, zp, zsim)
 
-xi = double (xi);
-zi = double (zi);
-
-if nargin > 2
-
-    xt = double (xt);
-    
-    % shaded area representing pointwise confidence intervals
+% Shaded area representing pointwise confidence intervals
+if (nargin > 4) && (~ isempty (zp))
     stk_plot_shadedci (xt, zp);  hold on;
-    
-    % plot sample paths
-    if (nargin > 5) && (~ isempty (zsim))
-        plot (xt, zsim, '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64])
-    end
-    
-    % ground truth (if available)
-    if (nargin > 3) && (~ isempty (zt))
-        plot (xt, zt, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
-    end
-    
-    % kriging predictor (posterior mean)
-    if (nargin > 4) && (~ isempty (zp))
-        plot (xt, zp.mean, 'LineWidth', 3, 'Color', [0.95 0.25 0.3]);
-    end
-
 end
 
-% evaluations
-plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
+% Plot sample paths
+if (nargin > 5) && (~ isempty (zsim))
+    plot (xt, zsim, '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64]);  hold on;
+end
 
-hold off;  set (gca, 'box', 'off');
+% Ground truth
+if (nargin > 3) && (~ isempty (zt))
+    plot (xt, zt, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);  hold on;
+end
+
+% Kriging predictor (posterior mean)
+if (nargin > 4) && (~ isempty (zp))
+    plot (xt, zp.mean, 'LineWidth', 3, 'Color', [0.95 0.25 0.3]);  hold on;
+end
+
+% Evaluations
+if ~ isempty (zi)
+    plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
+end
+
+hold off;  set (gca, 'box', 'off');  legend off;
 
 end % function stk_plot1d
