@@ -1,5 +1,11 @@
 2014-07-20  Julien Bect  <julien.bect@supelec.fr>
 
+	Get rid of stk_parallel_haspct.
+
+	* misc/parallel/stk_parallel_haspct.m: Deleted.
+	* admin/octave-pkg/INDEX: Modified.
+	* misc/parallel/stk_parallel_start.m: Modified.
+
 	stk_config_setup.m: Don't bother checking if the PCT is installed.
 
 	* config/stk_config_setup.m: in Matlab, don't bother checking if
