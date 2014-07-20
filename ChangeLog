@@ -1,3 +1,10 @@
+2014-07-20  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_config_setup.m: Don't bother checking if the PCT is installed.
+
+	* config/stk_config_setup.m: in Matlab, don't bother checking if
+	the PCT is installed.
+
 2014-07-19  Julien Bect  <julien.bect@supelec.fr>
 
 	New example script illustrating random Pareto fronts.
