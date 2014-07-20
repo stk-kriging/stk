@@ -255,7 +255,6 @@ Miscellaneous
 #stk_parallel_engine_get
 #stk_parallel_engine_set
 #stk_parallel_feval
-#stk_parallel_haspct
 #stk_parallel_start
 #stk_parallel_stop
 
