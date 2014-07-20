@@ -31,17 +31,6 @@ function stk_config_setup ()
 % Set default options
 stk_options_set;
 
-if ~ isoctave,
-    % Check for presence of the Parallel Computing Toolbox
-    fprintf ('Parallel Computing toolbox... ');
-    pct_found = stk_parallel_haspct ();
-    if pct_found,
-        fprintf ('found.\n');
-    else
-        fprintf ('not found.\n');
-    end
-end
-
 % Select optimizers for stk_param_estim
 stk_select_optimizer;
 
