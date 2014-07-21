@@ -1,5 +1,9 @@
 2014-07-21  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_config_buildmex.m: Run silently when doing nothing.
+
+	* config/stk_config_buildmex.m: Run silently when doing nothing.
+
 	Remove page_screen_output (not needed anymore).
 
 	* misc/mole/matlab/page_screen_output.m: Deleted (not needed
