@@ -37,20 +37,12 @@ function optim_num = stk_select_optimizer (bounds_available, display)
 
 persistent optim_num_con optim_num_unc
 
-if nargin == 0, % invocation with no arguments (setup)
-    
-    display = true;                      % verbose
-    force_recheck = true;                % recheck which optimizer to use
-    
-else % invocation with at least one argument (typically, in stk_param_estim)
-    
-    display = (nargin > 1) && display;   % default: don't display anything
-    force_recheck = false;               % don't recheck which optimizer to use
-    
-end
+% Invocation with no arguments (setup) =>  recheck which optimizer to use
+force_recheck = (nargin == 0);
 
-% select an appropriate optimizer
+% Select an appropriate optimizer
 if isempty (optim_num_con) || isempty (optim_num_unc) || force_recheck,
+    
     if isoctave,
         % Use sqp for both unconstrained and box-constrained optimization
         optim_num_con = 1;
@@ -63,10 +55,18 @@ if isempty (optim_num_con) || isempty (optim_num_unc) || force_recheck,
         % TODO: use fminunc for unconstrained optimization in Matlab
         %       if the Optimization Toolbox is available (?)
     end
-    mlock();
+    
+    mlock;
+    
+    % In Matlab, warn if fmincon is not present
+    if (~ isoctave) && (optim_num_con == 2)
+        warning (['Function fmincon not found, ', ...
+            'falling back on fminsearch.']); %#ok<WNTAG>
+    end
+    
 end
 
-% return the selected optimizer
+% Return the selected optimizer
 if nargin > 0
     if bounds_available,
         optim_num = optim_num_con;
@@ -77,8 +77,8 @@ else
     optim_num = [];
 end
 
-% display
-if display,
+% Display status
+if (nargin > 1) && display,
     
     fprintf ('Constrained optimizer for stk_param_estim: ');
     switch optim_num_con
@@ -86,8 +86,6 @@ if display,
             fprintf ('sqp.\n');
         case 2, % Matlab / fminsearch
             fprintf ('NONE.\n');
-            warning (['Function fmincon not found, ', ...
-                'falling back on fminsearch.']); %#ok<WNTAG>
         case 3, % Matlab / fmincon
             fprintf ('fmincon.\n');
         otherwise

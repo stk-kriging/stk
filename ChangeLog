@@ -1,5 +1,13 @@
 2014-07-20  Julien Bect  <julien.bect@supelec.fr>
 
+	Don't display selected optimizers at startup.
+
+	* misc/optim/stk_select_optimizer.m: Don't display selected
+	optimizers when called without input arguments (typically, during
+	startup).
+
+2014-07-20  Julien Bect  <julien.bect@supelec.fr>
+
 	stk_config_setup.m: Call stk_parallel_engine_set.
 
 	* config/stk_config_setup.m: Call stk_parallel_engine_set.
