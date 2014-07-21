@@ -55,8 +55,6 @@ end % function stk_config_buildmex
 
 function stk_compile (d, opts, mexname, includes)
 
-fprintf ('[stk_config_buildmex] MEX-file %s... ', mexname);
-
 mex_filename = [mexname '.' mexext];
 mex_fullpath = fullfile (d, mex_filename);
 
@@ -87,6 +85,8 @@ end
 
 if compile,
     
+    fprintf ('[stk_config_buildmex] Compiling MEX-file %s... ', mexname);
+    
     cd (d);
     
     include = sprintf ('-I%s', opts.include_dir);
@@ -99,14 +99,8 @@ if compile,
         movefile (fullfile (d, mex_filename), d);
     end
     
-end
-
-fid = fopen (mex_fullpath, 'r');
-if fid ~= -1,
     fprintf ('ok.\n');
-    fclose (fid);
-else
-    error ('compilation error ?');
+    
 end
 
 end % function stk_compile
