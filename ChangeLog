@@ -1,5 +1,10 @@
 2014-07-21  Julien Bect  <julien.bect@supelec.fr>
 
+	Remove page_screen_output (not needed anymore).
+
+	* misc/mole/matlab/page_screen_output.m: Deleted (not needed
+	anymore).
+
 	Stop bothering users at startup.
 
 	* stk_init.m: Stop bothering users at startup with information
