@@ -1,4 +1,9 @@
-2014-07-20  Julien Bect  <julien.bect@supelec.fr>
+2014-07-21  Julien Bect  <julien.bect@supelec.fr>
+
+	Stop bothering users at startup.
+
+	* stk_init.m: Stop bothering users at startup with information
+	that they can find in the README file anyway.
 
 	Don't display selected optimizers at startup.
 

@@ -41,30 +41,6 @@ addpath (config);
 % Activate the MOLE
 stk_config_mole (root);
 
-% Turn output pagination OFF
-pso_state = page_screen_output (0);
-
-% Display the Copying Permission Statement
-disp ('                                                                     ');
-disp ('=====================================================================');
-disp ('                                                                     ');
-disp ('STK is free software: you can redistribute it and/or modify          ');
-disp ('it under the terms of the GNU General Public License as published by ');
-disp ('the Free Software Foundation, either version 3 of the License, or    ');
-disp ('(at your option) any later version.                                  ');
-disp ('                                                                     ');
-disp ('STK is distributed in the hope that it will be useful,               ');
-disp ('but WITHOUT ANY WARRANTY; without even the implied warranty of       ');
-disp ('MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the        ');
-disp ('GNU General Public License for more details.                         ');
-disp ('                                                                     ');
-disp ('You should have received a copy of the GNU General Public License    ');
-disp ('along with STK.  If not, see <http://www.gnu.org/licenses/>.         ');
-disp ('                                                                     ');
-disp ('=====================================================================');
-disp ('                                                                     ');
-fflush (stdout);
-
 % Are we using STK installed as an octave package ?
 STK_OCTAVE_PACKAGE = false;
 
@@ -78,7 +54,7 @@ end
 % solve the problem related to having MEX-files in private folders)
 stk_config_addpath (root);
 
-% Check that MEX-files located in private folders are properly detected (note: 
+% Check that MEX-files located in private folders are properly detected (note:
 % there are no MEX-files in private folders if STK is used as an Octave package)
 if isoctave && (~ STK_OCTAVE_PACKAGE),
     stk_config_testprivatemex ();
@@ -91,29 +67,7 @@ stk_config_setup;
 % of stk_dataframe and stk_factorialdesign objects:
 % stk_options_set ('stk_dataframe', 'disp_format', 'verbose');
 
-% Ways to get help, report bugs, ask for new features...
-disp ('                                                                     ');
-disp ('=====================================================================');
-disp ('                                                                     ');
-disp ('Use the "help" mailing-list:                                         ');
-disp ('                                                                     ');
-disp ('   kriging-help@lists.sourceforge.net                                ');
-disp ('   https://sourceforge.net/p/kriging/mailman                         ');
-disp ('                                                                     ');
-disp ('to ask for help on STK, and the ticket manager:                      ');
-disp ('                                                                     ');
-disp ('   https://sourceforge.net/p/kriging/tickets                         ');
-disp ('                                                                     ');
-disp ('to report bugs or ask for new features.                              ');
-disp ('                                                                     ');
-disp ('=====================================================================');
-disp ('                                                                     ');
-fflush (stdout);
-
-% Restore PSO state
-page_screen_output (pso_state);
-
 % Remove config from the path
 rmpath (config);
 
-clear pso_state root config STK_OCTAVE_PACKAGE ans;
+clear root config STK_OCTAVE_PACKAGE ans;
