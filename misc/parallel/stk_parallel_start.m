@@ -30,10 +30,10 @@ function eng = stk_parallel_start ()
 
 eng = stk_parallel_engine_get ();
 
-if strcmp (class (eng), 'stk_parallel_engine_none') %#ok<STISA>
+if strcmp (class (eng), 'stk_parallel_engine_none')  %#ok<STISA>
     
     % use Mathworks' PCT if available
-    if stk_parallel_haspct ()
+    if (~ isoctave) && (exist ('matlabpool','file'))
         eng = stk_parallel_engine_parfor ();
         stk_parallel_engine_set (eng);
     end
@@ -41,7 +41,7 @@ if strcmp (class (eng), 'stk_parallel_engine_none') %#ok<STISA>
 else
     
     warning (['A parallel computing engine ' ...
-        'is already started (or so it seems).']);
+        'is already started (or so it seems).']);  %#ok<WNTAG>
     
 end
 

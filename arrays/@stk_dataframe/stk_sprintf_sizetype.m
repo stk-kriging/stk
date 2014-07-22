@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -31,6 +31,6 @@ function s = stk_sprintf_sizetype (x)
 
 [n, d] = size (x);
 
-s = sprintf ('%d x %d %s array', n, d, class (x));
+s = sprintf ('%dx%d %s array', n, d, class (x));
 
 end % function stk_sprintf_sizetype

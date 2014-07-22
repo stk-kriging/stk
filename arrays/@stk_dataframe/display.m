@@ -7,7 +7,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -32,15 +32,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function display (x)
+function display (x, varargin)
 
-fprintf ('\n%s = ', inputname (1));
+fprintf ('\n%s = <%s>', inputname (1), stk_sprintf_sizetype (x));
 
 if strcmp ('basic', stk_options_get ('stk_dataframe', 'disp_format'))
     fprintf ('\n\n');
 end
 
-disp (x);
+disp (x, varargin{:});
 
 fprintf ('\n');
 

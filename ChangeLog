@@ -1,3 +1,86 @@
+2014-07-22  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve the implementation of stk_dataframe objects display.
+
+	* arrays/@stk_dataframe/disp.m: Modified.
+	* arrays/@stk_dataframe/display.m: Modified.
+	* arrays/@stk_factorialdesign/stk_sprintf_levels.m: Modified.
+	* arrays/@stk_dataframe/stk_sprintf.m: New function.
+	* arrays/@stk_factorialdesign/stk_sprintf.m: New function.
+	* arrays/generic/stk_sprintf.m: New function.
+	* arrays/@stk_dataframe/stk_sprintf_data.m: Removed.
+	* arrays/@stk_factorialdesign/disp.m: Removed.
+	* arrays/generic/stk_sprintf_data.m: Removed.
+
+	Implement stk_sprintf_sizetype for cell arrays.
+
+	* arrays/@cell/stk_sprintf_sizetype.m: Implement
+	stk_sprintf_sizetype for cell arrays.
+	* arrays/@stk_dataframe/stk_sprintf_sizetype.m: Minor formatting
+	change in the output string (remove spaces).
+	* arrays/generic/stk_sprintf_sizetype.m: Idem.
+
+2014-07-21  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_config_buildmex.m: Run silently when doing nothing.
+
+	* config/stk_config_buildmex.m: Run silently when doing nothing.
+
+	Remove page_screen_output (not needed anymore).
+
+	* misc/mole/matlab/page_screen_output.m: Deleted (not needed
+	anymore).
+
+	Stop bothering users at startup.
+
+	* stk_init.m: Stop bothering users at startup with information
+	that they can find in the README file anyway.
+
+	Don't display selected optimizers at startup.
+
+	* misc/optim/stk_select_optimizer.m: Don't display selected
+	optimizers when called without input arguments (typically, during
+	startup).
+
+2014-07-20  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_config_setup.m: Call stk_parallel_engine_set.
+
+	* config/stk_config_setup.m: Call stk_parallel_engine_set.
+
+	Get rid of stk_parallel_haspct.
+
+	* misc/parallel/stk_parallel_haspct.m: Deleted.
+	* admin/octave-pkg/INDEX: Modified.
+	* misc/parallel/stk_parallel_start.m: Modified.
+
+	stk_config_setup.m: Don't bother checking if the PCT is installed.
+
+	* config/stk_config_setup.m: in Matlab, don't bother checking if
+	the PCT is installed.
+
+2014-07-19  Julien Bect  <julien.bect@supelec.fr>
+
+	New example script illustrating random Pareto fronts.
+
+	* examples/03_miscellaneous/stk_example_misc04.m: New script.
+
+2014-07-18  Julien Bect  <julien.bect@supelec.fr>
+
+	Add an option to control the verbosity fmincon/fminsearch.
+
+	* misc/options/stk_options_set.m: Add new option
+	'optim_display_level' with default value 'off'.
+	* paramestim/stk_param_estim.m: Use the new option.
+	* paramestim/stk_param_init.m: Don't display debugging info.
+
+2014-07-14  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_plot1d.m: Improved flexibility in argument handling.
+
+	* misc/plot/stk_plot1d.m: Improved flexibility in the way input
+	arguments are handled.
+
 2014-07-03  Julien Bect  <julien.bect@supelec.fr>
 
 	Global options to control upper/lower bounds for param estim.

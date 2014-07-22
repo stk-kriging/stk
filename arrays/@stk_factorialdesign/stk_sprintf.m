@@ -1,4 +1,4 @@
-% STK_SPRINTF_SIZETYPE prints the size and type into a string
+% STK_PRETTYPRINT ...
 
 % Copyright Notice
 %
@@ -27,23 +27,34 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function s = stk_sprintf_sizetype (x)
+function s = stk_sprintf (x, verbosity, data_col_width)
 
-if ~ isnumeric (x)
+if (nargin < 2) || (isempty (verbosity)),
+    verbosity = stk_options_get ('stk_dataframe', 'disp_format');
+end
+if ~ ismember (verbosity, {'basic', 'verbose'})
+    errmsg = 'verbosity should be ''basic'' or ''verbose''.';
+    stk_error (errmsg, 'InvalidArgument');
+end
+
+if (nargin < 3) || (isempty (data_col_width)),
+    data_col_width = [];
+end
+
+% Print the stk_dataframe
+s = stk_sprintf (x.stk_dataframe, verbosity, data_col_width);
+
+% Print the levels first, if in verbose mode
+if strcmp (verbosity, 'verbose'),
+
+    spstr = stk_options_get ('stk_dataframe', 'disp_spstr');
+             
+    s1 = sprintf ('.levels = <%s>', stk_sprintf_sizetype (x.levels));    
+    s2 = stk_sprintf_levels (x);
     
-    errmsg = sprintf ('Incorrect argument type: %s', class (x));
-    stk_error (errmsg, 'IncorrectType');
-    
-else
-    
-    t = size (x);
-    
-    s = '';
-    for i = 1:(length(t) - 1),
-        s = [s sprintf('%dx', t(i))]; %#ok<AGROW>
-    end
-    s = [s sprintf('%d %s array', t(end), class (x))];
+    s = char (s1, horzcat (repmat (spstr, size (s2, 1), 1), s2), ...
+        '.stk_dataframe =', horzcat (repmat (spstr, size (s, 1), 1), s));
     
 end
 
-end % function stk_sprintf_sizetype
+end % function stk_sprintf
