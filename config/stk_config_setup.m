@@ -37,8 +37,9 @@ stk_select_optimizer;
 % Select default "parallelization engine"
 stk_parallel_engine_set;
 
-% Hide some warnings
+% Hide some warnings about numerical accuracy
 warning ('off', 'STK:stk_predict:NegativeVariancesSetToZero');
 warning ('off', 'STK:stk_cholcov:AddingRegularizationNoise');
+warning ('off', 'STK:stk_param_relik:NumericalAccuracyProblem');
 
 end % function stk_config_setup
