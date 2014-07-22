@@ -1,9 +1,4 @@
-% DISPLAY [overloaded base function]
-%
-% Example:
-%    format short
-%    x = [1 1e6 rand; 10 -1e10 rand; 100 1e-22 rand];
-%    stk_dataframe(x)  % implicitely calls display()
+% STK_PRETTYPRINT ...
 
 % Copyright Notice
 %
@@ -32,19 +27,34 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function display (x, varargin)
+function s = stk_sprintf (x, verbosity, data_col_width)
 
-fprintf ('\n%s = <%s>', inputname (1), stk_sprintf_sizetype (x));
-
-if strcmp ('basic', stk_options_get ('stk_dataframe', 'disp_format'))
-    fprintf ('\n\n');
+if (nargin < 2) || (isempty (verbosity)),
+    verbosity = stk_options_get ('stk_dataframe', 'disp_format');
+end
+if ~ ismember (verbosity, {'basic', 'verbose'})
+    errmsg = 'verbosity should be ''basic'' or ''verbose''.';
+    stk_error (errmsg, 'InvalidArgument');
 end
 
-disp (x, varargin{:});
+if (nargin < 3) || (isempty (data_col_width)),
+    data_col_width = [];
+end
 
-fprintf ('\n');
+% Print the stk_dataframe
+s = stk_sprintf (x.stk_dataframe, verbosity, data_col_width);
 
-end % function display
+% Print the levels first, if in verbose mode
+if strcmp (verbosity, 'verbose'),
 
+    spstr = stk_options_get ('stk_dataframe', 'disp_spstr');
+             
+    s1 = sprintf ('.levels = <%s>', stk_sprintf_sizetype (x.levels));    
+    s2 = stk_sprintf_levels (x);
+    
+    s = char (s1, horzcat (repmat (spstr, size (s2, 1), 1), s2), ...
+        '.stk_dataframe =', horzcat (repmat (spstr, size (s, 1), 1), s));
+    
+end
 
-%!test display (stk_dataframe (rand (3, 2)));
+end % function stk_sprintf
