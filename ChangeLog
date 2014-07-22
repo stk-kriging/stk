@@ -1,3 +1,14 @@
+2014-09-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Rename WHATSNEW to NEWS.
+
+	* NEWS: Formerly known as WHATSNEW. This version is for release
+	2.1.1 (we still have to update it to 2.2.0). From now on, we will
+	always keep a version of this file in the default branch.
+	* admin/build_tools/build_forgedoc.m: No need to rename WHATSNEW
+	to NEWS anymore.
+	* admin/build_tools/build_octpkg.m: Same thing.
+
 2014-08-20  Julien Bect  <julien.bect@supelec.fr>
 
 	Add CITATION file.
