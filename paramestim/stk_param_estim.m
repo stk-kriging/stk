@@ -120,10 +120,10 @@ bounds_available = (~ isempty (lb)) && (~ isempty (ub));
 
 if bounds_available
     A = stk_options_get ('stk_param_estim', 'stk_minimize_boxconstrained');
-    u_opt = stk_minimize_boxconstrained (A, f, u0, lb, ub);
+    [u_opt, crit_opt] = stk_minimize_boxconstrained (A, f, u0, lb, ub);
 else
     A = stk_options_get ('stk_param_estim', 'stk_minimize_unconstrained');
-    u_opt = stk_minimize_unconstrained (A, f, u0);
+    [u_opt, crit_opt] = stk_minimize_unconstrained (A, f, u0);
 end
 
 if NOISEESTIM
