@@ -2,9 +2,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2014 SUPELEC & A. Ravisankar
+%    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@supelec.fr>
+%              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
 %
