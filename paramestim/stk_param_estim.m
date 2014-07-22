@@ -111,24 +111,19 @@ end
 
 switch NOISEESTIM
     case false,
-        f = @(u)(f_(model, u, xi, zi, criterion));
+        f = @(u)(f_ (model, u, xi, zi, criterion));
     case true,
-        f = @(u)(f_with_noise_(model, u, xi, zi, criterion));
+        f = @(u)(f_with_noise_ (model, u, xi, zi, criterion));
 end
 
-bounds_available = (~ isempty(lb)) && (~ isempty(ub));
-
+bounds_available = (~ isempty (lb)) && (~ isempty (ub));
 
 if bounds_available
-    
-    A = stk_options_get('stk_param_estim','stk_minimize_boxconstrained');
-    u_opt = stk_minimize_boxconstrained(A,f,u0,lb,ub);
-    
+    A = stk_options_get ('stk_param_estim', 'stk_minimize_boxconstrained');
+    u_opt = stk_minimize_boxconstrained (A, f, u0, lb, ub);
 else
-    
-    A = stk_options_get('stk_param_estim','stk_minimize_unconstrained');
-    u_opt = stk_minimize_unconstrained(A,f,u0);
-    
+    A = stk_options_get ('stk_param_estim', 'stk_minimize_unconstrained');
+    u_opt = stk_minimize_unconstrained (A, f, u0);
 end
 
 if NOISEESTIM
@@ -159,7 +154,7 @@ if nargout > 2,
     info.lower_bounds = lb;
     info.upper_bounds = ub;
 end
-    
+
 end % function stk_param_estim ------------------------------------------------
 
 %#ok<*CTCH,*LERR>
