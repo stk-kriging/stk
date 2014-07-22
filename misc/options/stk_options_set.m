@@ -41,7 +41,7 @@ switch nargin
     
     case 0, % nothing to do, just return the output
         
-    case 1, % reset        
+    case 1, % reset
         if (ischar (varargin{1})) && strcmp (varargin{1}, 'default')
             options = init_options ();
         else
