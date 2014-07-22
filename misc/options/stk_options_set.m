@@ -2,9 +2,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2014 SUPELEC & A. Ravisankar
+%    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@supelec.fr>
+%              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
 %
@@ -39,7 +41,7 @@ switch nargin
     
     case 0, % nothing to do, just return the output
         
-    case 1, % reset        
+    case 1, % reset
         if (ischar (varargin{1})) && strcmp (varargin{1}, 'default')
             options = init_options ();
         else
@@ -82,5 +84,13 @@ opts.stk_xlabel.properties = {'FontSize', 10, 'Color', [0.2 0 1]};
 opts.stk_ylabel.properties = opts.stk_xlabel.properties;
 opts.stk_title.properties = {'FontSize', 10, 'FontWeight', 'bold'};
 opts.stk_axes.properties = {'FontSize', 8};
-  
+
+if isoctave
+    opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_octavesqp();
+    opts.stk_param_estim.stk_minimize_unconstrained = stk_optim_octavesqp();
+else
+    opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_fmincon();
+    opts.stk_param_estim.stk_minimize_unconstrained = stk_optim_fminsearch();
+end
+
 end % function init_options

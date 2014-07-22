@@ -112,65 +112,19 @@ end
 switch NOISEESTIM
     case false,
         f = @(u)(f_ (model, u, xi, zi, criterion));
-        nablaf = @(u)(nablaf_ (model, u, xi, zi, criterion));
-        % note: currently, nablaf is only used with sqp in Octave
     case true,
         f = @(u)(f_with_noise_ (model, u, xi, zi, criterion));
-        nablaf = @(u)(nablaf_with_noise_ (model, u, xi, zi, criterion));
 end
 
-bounds_available = (~ isempty(lb)) && (~ isempty(ub));
+bounds_available = (~ isempty (lb)) && (~ isempty (ub));
 
-optim_display_level = stk_options_get ('stk_param_estim', 'optim_display_level');
-
-% switch according to preferred optimizer
-optim_num = stk_select_optimizer (bounds_available);
-switch optim_num,
-    
-    case 1, % Octave / sqp
-        
-        if ~ strcmp (optim_display_level, 'off')
-            warning (sprintf (['Ignoring option: ' ...
-                'optim_display_level = %s'], optim_display_level));
-        end
-        
-        [u_opt, crit_opt] = sqp (u0, {f, nablaf}, [], [], lb, ub, [], 1e-5);
-        
-    case {2, 3}, % Matlab
-
-        options = optimset ('Display', optim_display_level, ...
-            'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
-
-        if optim_num == 2,  % Matlab / fminsearch (Nelder-Mead)
-        
-            [u_opt, crit_opt] = fminsearch (f, u0, options);
-        
-        else  % Matlab / fmincon
-            
-            options = optimset (options, 'GradObj', 'on');
-            
-            try
-                % try to use the interior-point algorithm, which has been
-                % found to provide satisfactory results in many cases
-                options = optimset (options, 'algorithm', 'interior-point');
-            catch
-                % the 'algorithm' option does not exist in some old versions of
-                % matlab (e.g., version 3.1.1 provided with r2007a)...
-                err = lasterror ();
-                if ~ strcmp (err.identifier, 'matlab:optimset:invalidparamname')
-                    rethrow (err);
-                end
-            end
-            
-            [u_opt, crit_opt] = fmincon (f, u0, [], [], [], [], lb, ub, [], options);
-            
-        end
-        
-    otherwise,
-        
-        error ('Unexpected value returned by stk_select_optimizer.');
-        
-end % switch
+if bounds_available
+    A = stk_options_get ('stk_param_estim', 'stk_minimize_boxconstrained');
+    [u_opt, crit_opt] = stk_minimize_boxconstrained (A, f, u0, lb, ub);
+else
+    A = stk_options_get ('stk_param_estim', 'stk_minimize_unconstrained');
+    [u_opt, crit_opt] = stk_minimize_unconstrained (A, f, u0);
+end
 
 if NOISEESTIM
     paramlnvopt = u_opt(end);
@@ -200,13 +154,13 @@ if nargout > 2,
     info.lower_bounds = lb;
     info.upper_bounds = ub;
 end
-    
+
 end % function stk_param_estim ------------------------------------------------
 
 %#ok<*CTCH,*LERR,*SPWRN,*WNTAG>
 
 
-%--- The objective function and its gradient ----------------------------------
+%--- The objective function ---------------------------------------------------
 
 function [l, dl] = f_ (model, u, xi, zi, criterion)
 
@@ -219,14 +173,6 @@ else
 end
 
 end % function f_
-
-
-function dl = nablaf_ (model, u, xi, zi, criterion)
-
-model.param(:) = u;
-[l_ignored, dl] = criterion (model, xi, zi);  %#ok<ASGLU>
-
-end % function nablaf_
 
 
 function [l, dl] = f_with_noise_ (model, u, xi, zi, criterion)
@@ -242,16 +188,6 @@ else
 end
 
 end % function f_with_noise_
-
-
-function dl = nablaf_with_noise_ (model, u, xi, zi, criterion)
-
-model.param(:) = u(1:end-1);
-model.lognoisevariance  = u(end);
-[l_ignored, dl, dln] = criterion (model, xi, zi);  %#ok<ASGLU>
-dl = [dl; dln];
-
-end % function nablaf_with_noise_
 
 
 function [lblnv,ublnv] = get_default_bounds_lnv ... % -------------------------
