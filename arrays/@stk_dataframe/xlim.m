@@ -1,8 +1,8 @@
-% STK_RESCALE [overloaded STK function]
+% XLIM [overloaded base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,29 +26,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [x, a, b] = stk_rescale (x, varargin)
+function varargout = xlim (arg1, arg2)
 
-if isa (x, 'stk_dataframe')
+varargout = cell (1, nargout);
 
-    [x.data, a, b] = stk_rescale (x.data, varargin{:});
-
-else % there is an stk_dataframe object in varargin...
-    
-    % make sure that box1 is an stk_hrect object
-    if isempty (varargin{1}),
-        box1 = stk_hrect (size (x, 2));
-    else
-        box1 = stk_hrect (varargin{1});
-    end
-    
-    [x, a, b] = stk_rescale (x, box1, varargin{2:end});
-    
+if nargin == 1, 
+    [varargout{:}] = xlim (double (arg1));
+    return
 end
 
-end % function stk_rescale
+if isa (arg1, 'stk_dataframe'),  arg1 = double (arg1);  end
+if isa (arg2, 'stk_dataframe'),  arg2 = double (arg2);  end
 
-%!test
-%! u = rand(5, 1) * 2;
-%! x = stk_dataframe(u);
-%! y = stk_rescale(x, [0; 2], [0; 3]);
-%! assert (isa (y, 'stk_dataframe') && isequal(double(y), u * 3/2))
+[varargout{:}] = xlim (arg1, arg2);
+
+end % function xlim
