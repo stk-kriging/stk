@@ -1,5 +1,9 @@
 2014-07-22  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_param_init.m: Warn about constant-response data.
+
+	* paramestim/stk_param_init.m: Warn about constant-response data.
+
 	stk_param_relik.m: Check symmetry of G = W' * K * W.
 
 	* paramestim/stk_param_relik.m: Check if G = W' * K * W and apply

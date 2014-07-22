@@ -115,6 +115,13 @@ end % function stk_param_init
 
 function [param, lnv] = paraminit_ (xi, zi, box, nu, lm, noisy)
 
+% Check for special case: constant response
+if (std (double (zi)) == 0)
+    warning ('STK:stk_param_init:ConstantResponse', ...
+        'Parameter estimation is impossible with constant-response data.');
+    param = [0 log(nu) 0];  lnv = 0;  return  % Return some default values
+end
+
 d = size (xi, 2);
 
 model = stk_model ('stk_materncov_iso');
@@ -264,3 +271,10 @@ end % function paraminit_
 % %! model.param = stk_param_estim (model, xi, zi, param0);
 % %! zp = stk_predict (model, xi, zi, xt);
 % %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
+
+% %!test % Constant response
+% %! model = stk_model ('stk_materncov52_iso');
+% %! n = 10;  x = stk_sampling_regulargrid (n, 1, [0; 1]);  z = ones (size (x));
+% %! [param, lnv] = stk_param_init (model, x, z);
+% %! assert ((all (isfinite (param))) && (length (param) == 2));
+% %! assert ((all (isfinite (lnv))) && (length (lnv) == 1));
