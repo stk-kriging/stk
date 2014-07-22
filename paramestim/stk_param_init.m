@@ -158,7 +158,7 @@ sigma2_best = NaN;
 aLL_best    = +Inf;
 for eta = eta_list
     for rho = rho_list
-        fprintf ('[stk_param_init] eta = %.3e, rho = %.3e...\n', eta, rho);
+        %fprintf ('[stk_param_init] eta = %.3e, rho = %.3e...\n', eta, rho);
         % first use sigma2 = 1.0
         model.param = log ([1.0; nu; 1/rho]);
         model.lognoisevariance = log (eta);

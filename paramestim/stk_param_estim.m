@@ -157,7 +157,7 @@ end
 
 end % function stk_param_estim ------------------------------------------------
 
-%#ok<*CTCH,*LERR>
+%#ok<*CTCH,*LERR,*SPWRN,*WNTAG>
 
 
 %--- The objective function ---------------------------------------------------
@@ -188,7 +188,6 @@ else
 end
 
 end % function f_with_noise_
-
 
 
 function [lblnv,ublnv] = get_default_bounds_lnv ... % -------------------------

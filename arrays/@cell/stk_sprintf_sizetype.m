@@ -1,10 +1,11 @@
-% PAGE_SCREEN_OUTPUT controls the state of the pager
+% STK_SPRINTF_SIZETYPE prints the size and type into a string
 
 % Copyright Notice
 %
-%    Copyright (C) 2014 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,23 +27,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function old_val = page_screen_output (new_val)
+function s = stk_sprintf_sizetype (x)
+   
+t = size (x);
 
-switch get (0, 'More')
-    case 'on',
-        old_val = 1;
-    case 'off',
-        old_val = 0;
-    otherwise
-        error ('Unexpected value returned by get (0, ''More'').');
+s = '';
+for i = 1:(length(t) - 1),
+    s = [s sprintf('%dx', t(i))]; %#ok<AGROW>
 end
-
-if nargin > 0,
-    if new_val,
-        more on;
-    else
-        more off;
-    end
-end
-        
-end % function page_screen_output
+s = [s sprintf('%d %s array', t(end), class (x))];
+    
+end % function stk_sprintf_sizetype
