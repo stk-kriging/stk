@@ -8,7 +8,7 @@
 %
 % NOTE: why this function ?
 %
-%    This is a first (rough) attempt at solving numerical problems that 
+%    This is a first (rough) attempt at solving numerical problems that
 %    arise when chol is used with a covariance matrix that is semi-positive
 %    definite, or positive definite with some very small eigenvalues. See
 %    tickets #3, #4 and #13 on Sourceforge:
@@ -56,7 +56,7 @@ if p > 0,
     u = diag (diag (A));
     
     while p > 0,
-    
+        
         if epsi > 1,  % avoids infinite while loops
             if ~ all (isfinite (A(:)))
                 errmsg = 'A contains NaNs or Infs.';
@@ -68,12 +68,12 @@ if p > 0,
         
         epsi = epsi * 10;
         
-        warning ('STK:stk_cholcov:AddingRegularizationNoise', sprintf ...
-            ('Adding a little bit of noise to help chol succeed (epsi = %.2e)', epsi));
-        
         [C, p] = chol (A + epsi * u);
         
     end
+    
+    warning ('STK:stk_cholcov:AddingRegularizationNoise', sprintf ...
+        ('Adding a little bit of noise to help chol succeed (epsi = %.2e)', epsi));
     
 end
 
