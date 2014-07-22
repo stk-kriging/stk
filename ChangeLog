@@ -1,3 +1,13 @@
+2014-07-22  Julien Bect  <julien.bect@supelec.fr>
+
+	Implement stk_sprintf_sizetype for cell arrays.
+
+	* arrays/@cell/stk_sprintf_sizetype.m: Implement
+	stk_sprintf_sizetype for cell arrays.
+	* arrays/@stk_dataframe/stk_sprintf_sizetype.m: Minor formatting
+	change in the output string (remove spaces).
+	* arrays/generic/stk_sprintf_sizetype.m: Idem.
+
 2014-07-21  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_config_buildmex.m: Run silently when doing nothing.

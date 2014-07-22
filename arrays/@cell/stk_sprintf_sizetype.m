@@ -28,22 +28,13 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function s = stk_sprintf_sizetype (x)
+   
+t = size (x);
 
-if ~ isnumeric (x)
-    
-    errmsg = sprintf ('Incorrect argument type: %s', class (x));
-    stk_error (errmsg, 'IncorrectType');
-    
-else
-    
-    t = size (x);
-    
-    s = '';
-    for i = 1:(length(t) - 1),
-        s = [s sprintf('%dx', t(i))]; %#ok<AGROW>
-    end
-    s = [s sprintf('%d %s array', t(end), class (x))];
-    
+s = '';
+for i = 1:(length(t) - 1),
+    s = [s sprintf('%dx', t(i))]; %#ok<AGROW>
 end
-
+s = [s sprintf('%d %s array', t(end), class (x))];
+    
 end % function stk_sprintf_sizetype
