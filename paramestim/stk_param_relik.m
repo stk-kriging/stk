@@ -80,6 +80,14 @@ q = size(P, 2);
 W = Q(:, (q+1):n);
 G = W' * (K * W);
 
+% Check if G is (at least close to) symmetric
+Delta = G - G';  s = sqrt (diag (G));
+if any (abs (Delta) > eps * (s * s'))
+    warning ('STK:stk_param_relik:NumericalAccuracyProblem', ...
+        'The computation of G = W'' * K * W is inaccurate.');
+    G = 0.5 * (G + G');  % Make it at least symmetric
+end
+
 % Cholesky factorization: G = C' * C, with upper-triangular C
 C = stk_cholcov (G);
 

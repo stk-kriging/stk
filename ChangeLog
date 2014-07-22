@@ -1,5 +1,12 @@
 2014-07-22  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_param_relik.m: Check symmetry of G = W' * K * W.
+
+	* paramestim/stk_param_relik.m: Check if G = W' * K * W and apply
+	a naive fix if it is not (+ emit a warning).
+	* config/stk_config_setup.m: Do not display the new warning.
+	* core/stk_cholcov.m: Only issue one warning if using epsi.
+
 	Improve the implementation of stk_dataframe objects display.
 
 	* arrays/@stk_dataframe/disp.m: Modified.
