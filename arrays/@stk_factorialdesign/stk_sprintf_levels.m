@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -28,11 +28,9 @@
 
 function s = stk_sprintf_levels (x)
 
-levels = x.levels;
 colnames = get (x.stk_dataframe, 'colnames');
 
-d = length (levels);
-s = sprintf ('1 x %d cell array', d);
+d = length (x.levels);
 
 for i = 1:d   
     
@@ -42,7 +40,7 @@ for i = 1:d
         line{i} = sprintf('levels for variable %s: ', colnames{i});
     end
         
-    L = levels{i};
+    L = x.levels{i};
     if isempty (L)
         line{i} = [line{i} '[]'];
     else
@@ -54,6 +52,6 @@ for i = 1:d
     
 end
 
-s = strvcat (s, line{:});
+s = char (line{:});
 
 end % function stk_sprintf_levels

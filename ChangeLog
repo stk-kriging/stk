@@ -1,5 +1,17 @@
 2014-07-22  Julien Bect  <julien.bect@supelec.fr>
 
+	Improve the implementation of stk_dataframe objects display.
+
+	* arrays/@stk_dataframe/disp.m: Modified.
+	* arrays/@stk_dataframe/display.m: Modified.
+	* arrays/@stk_factorialdesign/stk_sprintf_levels.m: Modified.
+	* arrays/@stk_dataframe/stk_sprintf.m: New function.
+	* arrays/@stk_factorialdesign/stk_sprintf.m: New function.
+	* arrays/generic/stk_sprintf.m: New function.
+	* arrays/@stk_dataframe/stk_sprintf_data.m: Removed.
+	* arrays/@stk_factorialdesign/disp.m: Removed.
+	* arrays/generic/stk_sprintf_data.m: Removed.
+
 	Implement stk_sprintf_sizetype for cell arrays.
 
 	* arrays/@cell/stk_sprintf_sizetype.m: Implement
