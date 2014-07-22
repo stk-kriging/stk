@@ -16,7 +16,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -41,17 +41,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_sampling_randomlhs(n, dim, box)
+function x = stk_sampling_randomlhs (n, dim, box)
 
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % read argument box
-if (nargin < 3) || isempty(box)
-    box = repmat([0; 1], 1, dim);
-else
-    stk_assert_box(box);
+if (nargin < 3) || isempty (box)
+    box = stk_hrect (dim);
 end
 
 niter = 1;
@@ -79,6 +77,16 @@ end % function stk_sampling_randomlhs
 % (all stk_sampling_* functions should behave similarly in this respect)
 
 %!assert (isa(x, 'stk_dataframe'));
+
+%%
+% Check that column names are properly set, if available in box
+
+%!assert (isequal (x.colnames, {}));
+
+%!test
+%! cn = {'W', 'H'};  box = stk_hrect (box, cn);
+%! x = stk_sampling_randomlhs (n, dim, box);
+%! assert (isequal (x.colnames, cn));
 
 %%
 % Check output argument
