@@ -1,8 +1,17 @@
-% STK_MINIMIZE_UNCONSTRAINED minimizes a function by using fminsearch, with
-% no bounds on the input parameters.It takes as inputs, an object belonging to 
-% the class stk_optim_fminsearch, the function that needs to be minimized 
-% and the starting parameter values and then outputs the optimised parameter 
-% values and the minimum value of the function found. 
+% STK_MINIMIZE_UNCONSTRAINED performs unconstrained minimisation using fminsearch.
+%
+% CALL: U_OPT  = stk_minimize_unconstrained (ALGO, F, U_INIT)
+%
+%   estimates the parameters U_OPT without any bounds, which gives the minimum 
+%   value of the function F. A starting point U_INIT must be provided.
+%
+% CALL: [U_OPT, LIK] = stk_minimize_unconstrained (ALGO, F, U_INIT)
+%
+%   also estimates the minimum function value LIK after the unconstrained
+%   minimisation using fminsearch.
+%
+% NOTE: Here ALGO is an input argument to the function, that is an object of
+% class 'stk_optim_fminsearch'.
 
 % Copyright Notice
 %

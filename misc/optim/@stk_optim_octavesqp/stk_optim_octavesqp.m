@@ -1,5 +1,14 @@
-% STK_OPTIM_OCTAVESQP constructs an object belonging to the class 'stk_optim_octavesqp'
-% for function minimisation using the octave function sqp.
+% STK_OPTIM_OCTAVESQP constructs an object of class 'stk_optim_octavesqp'.
+%
+% CALL: X = stk_optim_octavesqp()
+%
+%   constructs an object of class 'stk_optim_octavesqp' with a default set of
+%   options.
+%
+% CALL: X = stk_optim_octavesqp(opt)
+%
+%   constructs an object of class 'stk_optim_octavesqp' with a user-defined
+%   set of options, defined by the structure opt.  
 
 % Copyright Notice
 %

@@ -1,5 +1,14 @@
-% STK_OPTIM_FMINCON constructs an object belonging to the class 'stk_optim_fmincon'
-% for function minimisation using the matlab function fmincon.
+% STK_OPTIM_FMINCON constructs an object of class 'stk_optim_fmincon'.
+%
+% CALL: X = stk_optim_fmincon()
+%
+%   constructs an object of class 'stk_optim_fmincon' with a default set of
+%   options.  
+%
+% CALL: X = stk_optim_fmincon(opt)
+%
+%   constructs an object of class 'stk_optim_fmincon' with a user-defined
+%   set of options, defined by the structure opt.  
 
 % Copyright Notice
 %
