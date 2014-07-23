@@ -1,3 +1,9 @@
+2014-07-23  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_estim.m: Warn about constant-response data.
+
+	* paramestim/stk_param_estim.m: Warn about constant-response data.
+
 2014-07-22  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_param_init.m: Warn about constant-response data.
