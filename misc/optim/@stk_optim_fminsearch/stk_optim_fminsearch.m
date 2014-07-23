@@ -1,6 +1,16 @@
-% STK_OPTIM_FMINSEARCH constructs an object belonging to the class 'stk_optim_fminsearch'
-% for function minimisation using the matlab function fminsearch.
+% STK_OPTIM_FMINSEARCH constructs an object of class 'stk_optim_fminsearch'.
+%
+% CALL: X = stk_optim_fminsearch()
+% 
+%   constructs an object of class 'stk_optim_fminsearch' with a default set of
+%   options.  
+%
+% CALL: X = stk_optim_fminsearch(opt)
+%
+%   constructs an object of class 'stk_optim_fminsearch' with a user-defined
+%   set of options, defined by the structure opt.  
 
+%
 % Copyright Notice
 %
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar

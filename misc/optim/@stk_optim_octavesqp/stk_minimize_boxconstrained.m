@@ -1,9 +1,18 @@
-% STK_MINIMIZE_BOXCONSTRAINED minimizes a function by using sqp, with
-% bounds on the input parameters.It takes as inputs, an object belonging to 
-% the class stk_optim_octavesqp, the function that needs to be minimized, 
-% starting parameter values and the lower and upper bounds on the parameters
-% and then outputs the optimised parameter values and the minimum value of 
-% the function found.
+% STK_MINIMIZE_BOXCONSTRAINED performs boxconstrained minimisation using sqp.
+% 
+% CALL: U_OPT  = stk_minimize_boxconstrained (ALGO, F, U_INIT, LB, UB)
+% 
+%   estimates the parameters U_OPT within the user-defined lowerbounds LB 
+%   and upper bounds UB, which gives the minimum value of the function F. A
+%   starting point U_INIT must be provided.
+%
+% CALL: [U_OPT, LIK] = stk_minimize_boxconstrained (ALGO, F, U_INIT, LB, UB)
+%
+%   also estimates the minimum function value LIK after the boxconstrained
+%   minimisation using sqp.
+%
+% NOTE: Here ALGO is an input argument to the function, that is an object of
+% class 'stk_optim_octavesqp'.
 
 % Copyright Notice
 %
