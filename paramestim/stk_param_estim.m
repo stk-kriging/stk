@@ -68,6 +68,12 @@ end
 %    stk_error (errmsg, 'IncorrectSize');
 %end
 
+% Warn about special case: constant response
+if (std (double (model.observations.z)) == 0)
+    warning ('STK:stk_param_estim:ConstantResponse', ['Constant-response ' ...
+        'data: the output of stk_param_estim is likely to be unreliable.']);
+end
+
 % TODO: turn param0 into an optional argument
 %       => provide a reasonable default choice
 
