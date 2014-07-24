@@ -4,6 +4,17 @@
 
 	* paramestim/stk_param_estim.m: Warn about constant-response data.
 
+2014-07-24  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_sprintf_colvect_scientific.m: Fix a bug.
+
+	* misc/text/stk_sprintf_colvect_scientific.m: Fix a bu related to
+	rounding numbers such as 9.99e02 (which were displayed as 10e+02
+	instead of 1e+03).
+	* arrays/@stk_dataframe/stk_sprintf.m: Set default width to 8.
+	* misc/text/stk_sprintf_colvect.m: Idem.
+	* misc/text/stk_sprintf_colvect_fixedpoint.m: Idem.
+
 2014-07-22  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_param_init.m: Warn about constant-response data.

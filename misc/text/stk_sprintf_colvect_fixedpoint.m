@@ -35,7 +35,7 @@ if isempty(x),
 end
 
 if nargin < 2,
-    max_width = 10;
+    max_width = 8;
 end
 
 % turn x into a column vector
