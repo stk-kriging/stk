@@ -1,10 +1,11 @@
-2014-07-23  Julien Bect  <julien.bect@supelec.fr>
-
-	stk_param_estim.m: Warn about constant-response data.
-
-	* paramestim/stk_param_estim.m: Warn about constant-response data.
-
 2014-07-24  Julien Bect  <julien.bect@supelec.fr>
+
+	Accept invRho = 0 in anisotropic covariance functions.
+
+	* covfcs/stk_gausscov_aniso.m: Accept invRho = 0.
+	* covfcs/stk_materncov32_aniso.m: Idem.
+	* covfcs/stk_materncov52_aniso.m: Idem.
+	* covfcs/stk_materncov_aniso.m: Idem.
 
 	stk_sprintf_colvect_scientific.m: Fix a bug.
 
@@ -14,6 +15,12 @@
 	* arrays/@stk_dataframe/stk_sprintf.m: Set default width to 8.
 	* misc/text/stk_sprintf_colvect.m: Idem.
 	* misc/text/stk_sprintf_colvect_fixedpoint.m: Idem.
+
+2014-07-23  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_estim.m: Warn about constant-response data.
+
+	* paramestim/stk_param_estim.m: Warn about constant-response data.
 
 2014-07-22  Julien Bect  <julien.bect@supelec.fr>
 
