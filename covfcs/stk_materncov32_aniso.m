@@ -21,7 +21,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -75,7 +75,7 @@ Sigma2 = exp (param(1));
 invRho = exp (param(2:end));
 
 % check parameter values
-if ~ (Sigma2 > 0) || ~ all (invRho > 0),
+if ~ (Sigma2 > 0) || ~ all (invRho >= 0),
     error ('Incorrect parameter value.');
 end
 
