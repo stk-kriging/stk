@@ -26,89 +26,121 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [str, err] = stk_sprintf_colvect_scientific(x, max_width)
+function [str, err] = stk_sprintf_colvect_scientific (x, max_width)
 
-if isempty(x),
+if isempty (x),
     str = '';
     err = 0;
     return;
 end
 
 if nargin < 2,
-    max_width = 10;
+    max_width = 8;
 end
 
-% turn x into a column vector
-x = double(x);
+% Turn x into a column vector
+x = double (x);
 x = x(:);
 
-% get rid of infinities
+% Get rid of infinities
 is_inf = isinf (x);
 is_pos = (x > 0);
 is_pinf = is_inf & is_pos;
 is_minf = is_inf & (~ is_pos);
 x(is_inf) = 0.0;
 
-% get rid of negative zeros
-is_zero = (x == 0); 
+% Get rid of negative zeros
+is_zero = (x == 0);
 x(is_zero) = 0.0;
 
-% compute exponents
+% Compute exponents
 ax = abs(x);
 exponent = zeros(size(x));
 exponent(~is_zero) = floor(log10(ax(~is_zero)));
 
-% compute mantissae
+% Compute mantissae
 mantissa = x .* 10 .^ (- exponent);
 
-% maximal absolute exponent
-maxexp = max(abs(exponent));
-
-% is there any negative element ?
+% Is there any negative element ?
 any_negative = any(x < 0);
 
-% Start with only one digit for the mantissa (no comma, then)
-n1 = 1;                                 % nb digits for the mantissa
-n2 = max(2, 1 + floor(log10(maxexp)));  % nb digits for the exponent
-n3 = any_negative + 2;                  % nb non-digit characters (+2 for "e+")
+
+%--- Start with only one digit for the mantissa --------------------------------
+
+% Nb digits for the mantissa (including the leading digit)
+n1 = 1;
+
+% Compute mantissa/exponent after rounding
+[mantissa_r, exponent_r] = round_ (mantissa, exponent, n1);
+
+% Maximal absolute exponent
+maxexp = max (abs (exponent_r));
+
+% Nb digits for the exponent
+n2 = max (2, 1 + floor (log10 (maxexp)));
+
+% Nb non-digit characters (+2 for "e+") -> no decimal separator in this case
+n3 = any_negative + 2;
 
 % Abort this is already too long
 if (n1 + n2 + n3) > max_width
-    str = repmat('#', length(x), max_width);
+    str = repmat ('#', length (x), max_width);
     err = +inf;
     return;
 end
 
 % Otherwise, this is our current best solution
-am = abs(mantissa);
-best_err = max(am - floor(am)); % maximal error on the matissa
+best_err = abs (x - mantissa_r .* 10 .^ (exponent_r));
 best_n1  = 1;
 
-% Should we add a decimal part ?
-if (best_err > eps) && ((n1 + n2 + n3 + 2) <= max_width)
+
+%--- Try to add a decimal part -------------------------------------------------
+
+if (any (best_err > eps * abs (x))) && ((n1 + n2 + n3 + 2) <= max_width)
+    
     % We can add a decimal part, so let's do it...
-    while (best_err > eps) && ((n1 + n2 + n3) < max_width)
+    
+    while (any (best_err > eps * abs (x))) && ((n1 + n2 + n3) < max_width)
+        
+        % Increase numer of digits for the mantissa (including the leading digit)
         n1 = n1 + 1;
+        
+        % Compute mantissa/exponent after rounding
+        [mantissa_r, exponent_r] = round_ (mantissa, exponent, n1);
+        
+        % Maximal absolute exponent
+        maxexp = max (abs (exponent_r));
+        
+        % Nb digits for the exponent
+        n2 = max (2, 1 + floor (log10 (maxexp)));
+        
+        % Nb non-digit characters (+2 for "e+")
+        %  --> "+3" for "e", "." in the mantissa and "+" in the exponent
         n3 = any_negative + 3;
-        % "+3" for "e", "." in the mantissa and "+" in the exponent      
-        c = 10^(1 - n1);
-        mm = round(am ./ c) .* c;
-        err = max(abs(am - mm));
-        if err < best_err - 0.5 * c
+        
+        err = abs (x - mantissa_r .* 10 .^ (exponent_r));
+        if (max (err) < max (best_err))  %  - 0.5 * c  ???
             best_err = err;
             best_n1 = n1;
         end
     end
 end
+
 n1 = best_n1;
 
+
+%--- Produce formatted output -------------------------------------------------
+
+% Compute mantissa/exponent after rounding
+[mantissa_r, exponent_r] = round_ (mantissa, exponent, n1);
+
 % format specifier for the mantissa
-fmt1 = sprintf('%%%d.%df', n1 + (n1 > 1) + any_negative, n1 - 1);
-str1 = arrayfun(@(u)(sprintf(fmt1, u)), mantissa, 'UniformOutput', false);
+fmt1 = sprintf ('%%%d.%df', n1 + (n1 > 1) + any_negative, n1 - 1);
+str1 = arrayfun (@(u)(sprintf (fmt1, u)), mantissa_r, 'UniformOutput', false);
 
 % format specifier for the exponent
 fmt2 = sprintf('e%%+0%dd', n2 + 1);
-str2 = arrayfun(@(u)(sprintf(fmt2, u)), exponent, 'UniformOutput', false);
+str2 = arrayfun (@(u)(sprintf (fmt2, u)), exponent_r, 'UniformOutput', false);
 
 % merge mantissa and exponent
 str = [char(str1{:}) char(str2{:})];
@@ -123,13 +155,25 @@ end
 
 % Compute the maximal error
 if nargout > 1,
-    c = 10^(1 - n1);
-    rounded_mantissa = round(mantissa / c) * c;
-    err_mantissa = abs(rounded_mantissa - mantissa);
-    err = max(err_mantissa .* 10.^(exponent));
+    err = max (abs (x - mantissa_r .* 10 .^ (exponent_r)));
 end
-    
+
 end % function stk_sprintf_colvect_scientific
+
+
+function [mantissa_r, exponent_r] = round_ (mantissa, exponent, n1)
+
+% Round mantissa to n1 digits (including the leading digit)
+y = 10 ^ (n1 - 1);
+mantissa_r = round (mantissa * y) / y;
+exponent_r = exponent;
+
+% Fix mantissa values of 10 after rounding
+b = (abs (mantissa_r) == 10);
+mantissa_r(b) = sign (mantissa_r(b));
+exponent_r(b) = exponent_r(b) + 1;
+
+end % function round_
 
 
 %!shared x s
@@ -154,6 +198,32 @@ end % function stk_sprintf_colvect_scientific
 %!assert (isequal(s, [' 1.2000e+00'; '-3.4567e+04']))
 %!test s = stk_sprintf_colvect_scientific(x, 12);
 %!assert (isequal(s, [' 1.2000e+00'; '-3.4567e+04']))
+
+%!shared x s
+%! x = [0.9; 0.91; 0.99; 0.999];
+%!test s = stk_sprintf_colvect_scientific (x, 4)
+%!assert (isequal(s, ['####'; '####'; '####'; '####']))
+%!test s = stk_sprintf_colvect_scientific (x, 5)
+%!assert (isequal(s, ['9e-01'; '9e-01'; '1e+00'; '1e+00']))
+%!test s = stk_sprintf_colvect_scientific (x, 6)
+%!assert (isequal(s, ['9e-01'; '9e-01'; '1e+00'; '1e+00']))
+%!test s = stk_sprintf_colvect_scientific (x, 7)
+%!assert (isequal(s, ['9.0e-01'; '9.1e-01'; '9.9e-01'; '1.0e+00']))
+%!test s = stk_sprintf_colvect_scientific (x, 8)
+%!assert (isequal(s, ['9.00e-01'; '9.10e-01'; '9.90e-01'; '9.99e-01']))
+
+%!shared x s
+%! x = [0.9; -0.91; 0.99; 0.999];
+%!test s = stk_sprintf_colvect_scientific (x, 4)
+%!assert (isequal(s, ['####'; '####'; '####'; '####']))
+%!test s = stk_sprintf_colvect_scientific (x, 5)
+%!assert (isequal(s, ['#####'; '#####'; '#####'; '#####']))
+%!test s = stk_sprintf_colvect_scientific (x, 6)
+%!assert (isequal(s, [' 9e-01'; '-9e-01'; ' 1e+00'; ' 1e+00']))
+%!test s = stk_sprintf_colvect_scientific (x, 7)
+%!assert (isequal(s, [' 9e-01'; '-9e-01'; ' 1e+00'; ' 1e+00']))
+%!test s = stk_sprintf_colvect_scientific (x, 8)
+%!assert (isequal(s, [' 9.0e-01'; '-9.1e-01'; ' 9.9e-01'; ' 1.0e+00']))
 
 %!test
 %! x = [1e6; -1e10; 1e-221];

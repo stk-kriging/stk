@@ -29,7 +29,7 @@
 function str = stk_sprintf_colvect (x, max_width)
 
 if nargin < 2,
-    max_width = 10;
+    max_width = 8;
 end
     
 % Try fixed-point notation first.
