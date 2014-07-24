@@ -80,16 +80,16 @@ else
         try
             switch get (0, 'Format')
                 case 'short'
-                    data_col_width = 6;
+                    data_col_width = 8;
                 case 'long'
                     data_col_width = 16;
                 otherwise
                     % FIXME: handle other formatting modes...
-                    data_col_width = 10;
+                    data_col_width = 8;
             end
         catch
             % Property 'Format' doesn't exist in Octave 3.2.x
-            data_col_width = 6;
+            data_col_width = 8;
         end
     end
     
