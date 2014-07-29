@@ -31,9 +31,6 @@ function stk_config_setup ()
 % Set default options
 stk_options_set;
 
-% Select optimizers for stk_param_estim
-stk_select_optimizer;
-
 % Select default "parallelization engine"
 stk_parallel_engine_set;
 

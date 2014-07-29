@@ -63,7 +63,9 @@ opts = options;
 
 end % function stk_options_set
 
-
+%#ok<*CTCH>
+ 
+ 
 function opts = init_options ()
 
 opts = struct ();
@@ -86,11 +88,15 @@ opts.stk_title.properties = {'FontSize', 10, 'FontWeight', 'bold'};
 opts.stk_axes.properties = {'FontSize', 8};
 
 if isoctave
-    opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_octavesqp();
-    opts.stk_param_estim.stk_minimize_unconstrained = stk_optim_octavesqp();
+    opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_octavesqp ();
+    opts.stk_param_estim.stk_minimize_unconstrained = stk_optim_octavesqp ();
 else
-    opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_fmincon();
-    opts.stk_param_estim.stk_minimize_unconstrained = stk_optim_fminsearch();
+    try
+        opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_fmincon ();
+    catch
+        opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_fminsearch ();
+    end
+    opts.stk_param_estim.stk_minimize_unconstrained = stk_optim_fminsearch ();
 end
 
 end % function init_options
