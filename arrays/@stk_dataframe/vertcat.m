@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author: Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,83 +26,88 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function z = vertcat(x, y, varargin)
+function z = vertcat (x, y, varargin)
 
-if isa(x, 'stk_dataframe')
-    
-    % In this case, [x; y] will be an stk_dataframe also.
-    
-    y_data = double(y);
-    data = [double(x); y_data];
-    
-    if isa(y, 'stk_dataframe')
-        y_colnames = get (y, 'colnames');
-        y_rownames = get (y, 'rownames');
-    else
-        y_colnames = {};
-        y_rownames = {};
-    end
-    
-    %--- COLUMN NAMES -----------------------------------------------------
-    
+if nargin < 2,
+    y = [];
+end
+
+%--- Get raw data ---------------------------------------------------------
+
+x_data = double (x);
+y_data = double (y);
+
+%--- Get column and row names  of inputs ----------------------------------
+
+if isa (x, 'stk_dataframe')
     x_colnames = get (x, 'colnames');
-    
-    if isempty (x_colnames)
-        
-        colnames = y_colnames;
-        
-    elseif ~isempty(y_colnames) && ~all(strcmp(x_colnames, y_colnames))
-        
-        stk_error(['Cannot concatenate because of incompatible column ' ...
-            'names.'], 'IncompatibleColNames');
-        
-    else % ok, we can use x's column names
-        
-        colnames = x_colnames;
-        
-    end
-    
-    %--- ROW NAMES --------------------------------------------------------
-    
     x_rownames = get (x, 'rownames');
+else
+    x_colnames = {};
+    x_rownames = {};
+end
+
+if isa (y, 'stk_dataframe')
+    y_colnames = get (y, 'colnames');
+    y_rownames = get (y, 'rownames');
+else
+    y_colnames = {};
+    y_rownames = {};
+end
+
+%--- Create output column names -------------------------------------------
+
+if isempty (x_colnames)
     
-    bx = isempty(x_rownames);
-    by = isempty(y_rownames);
+    colnames = y_colnames;
     
-    if bx && by, % none of the argument has row names
-        
-        rownames = {};
-        
-    else % at least of one the arguments has row names
-        
-        if bx
-            x_rownames = repmat({''}, size(x.data, 1), 1);
-        end
-        
-        if by
-            y_rownames = repmat({''}, size(y_data, 1), 1);
-        end
-        
-        rownames = [x_rownames; y_rownames];
-        
+elseif isempty (y_colnames)
+    
+    colnames = x_colnames;
+    
+else
+    
+    if (~ isequal (size (x_colnames), size (y_colnames))) ...
+            || (any (~ strcmp (x_colnames, y_colnames)))
+        warning ('STK:vertcat:IncompatibleColNames', sprintf ( ...
+            ['Incompatible column names !\nThe output of vertcat ' ...
+            'will have no column names.']));  colnames = {};
+    else
+        colnames = x_colnames;
     end
-    
-    z = stk_dataframe(data, colnames, rownames);
-    
-else  % In this case, z will be a matrix.
-    
-    z = [double(x); double(y)];
     
 end
 
-if ~isempty(varargin),
-    z = vertcat(z, varargin{:});
+%--- Create output row names ----------------------------------------------
+
+bx = isempty(x_rownames);
+by = isempty(y_rownames);
+
+if bx && by, % none of the argument has row names
+    
+    rownames = {};
+    
+else % at least of one the arguments has row names
+    
+    if bx,  x_rownames = repmat ({''}, size (x_data, 1), 1);  end
+    if by,  y_rownames = repmat ({''}, size (y_data, 1), 1);  end
+    
+    rownames = [x_rownames; y_rownames];
+    
+end
+
+%--- Create output --------------------------------------------------------
+
+z = stk_dataframe ([x_data; y_data], colnames, rownames);
+
+if ~ isempty (varargin),
+    z = vertcat (z, varargin{:});
 end
 
 end % function vertcat
 
 
-% IMPORTANT NOTE: [x; y; ...] fails to give the same result as vertcat(x, y, 
+% IMPORTANT NOTE: [x; y; ...] fails to give the same result as vertcat(x, y,
 % ...) in some releases of Octave. As a consequence, all tests must be written
 % using horzcat explicitely.
 
@@ -132,10 +137,11 @@ end % function vertcat
 %! z = vertcat (x, y);
 %! assert (isa(z, 'stk_dataframe') && isequal(double(z), [u; v]));
 
-%!error % incompatible variable names
-%! u = rand(3, 1);  x = stk_dataframe(u, {'x'});
-%! v = rand(3, 1);  y = stk_dataframe(v, {'y'});
+%!test % incompatible variable names
+%! u = rand (3, 1);  x = stk_dataframe (u, {'x'});
+%! v = rand (3, 1);  y = stk_dataframe (v, {'y'});
 %! z = vertcat (x, y);
+%! assert (isequal (z.colnames, {}));
 
 %%
 % Vertical concatenation [dataframe; matrix]
@@ -154,9 +160,9 @@ end % function vertcat
 % Vertical concatenation [matrix; dataframe]
 
 %!test
-%! y = stk_dataframe(v);
+%! y = stk_dataframe (v);
 %! z = vertcat (u, y);
-%! assert(isa(z, 'double') && (isequal(z, [u; v])));
+%! assert (isa (z, 'stk_dataframe') && (isequal (double (z), [u; v])));
 
 %%
 % Vertical concatenation of more than two elements

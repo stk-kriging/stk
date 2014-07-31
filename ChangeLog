@@ -1,5 +1,13 @@
 2014-07-31  Julien Bect  <julien.bect@supelec.fr>
 
+	Modify the behaviour of vertcat/horzcat for stk_dataframe objects.
+
+	* arrays/@stk_dataframe/horzcat.m: Modified. The result is always
+	an stk_dataframe object, and has row names iff either one of the
+	two arguments doesn't have row names, or the row names of both
+	arguments agree.
+	* arrays/@stk_dataframe/vertcat.m: Similar changes.
+
 	Modify the behaviour of bsxfun for stk_dataframe objects.
 
 	* arrays/@stk_dataframe/bsxfun.m: Modified. The result is always
