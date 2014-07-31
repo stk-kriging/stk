@@ -1,3 +1,17 @@
+2014-07-31  Julien Bect  <julien.bect@supelec.fr>
+
+	Modify the behaviour of bsxfun for stk_dataframe objects.
+
+	* arrays/@stk_dataframe/bsxfun.m: Modified. The result is always
+	an stk_dataframe object, and has column names iff either one of
+	the two arguments doesn't have columns names or the columns names
+	of both arguments agree.
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Modified unit
+	test.
+	* arrays/@stk_dataframe/abs.m: Overload abs for stk_dataframe
+	object. This allows to write abs (x) instead of abs (double (x))
+	or abs (x.data).
+
 2014-07-24  Julien Bect  <julien.bect@supelec.fr>
 
 	Accept invRho = 0 in anisotropic covariance functions.

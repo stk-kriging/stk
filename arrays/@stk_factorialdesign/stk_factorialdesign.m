@@ -202,7 +202,7 @@ end % function stk_factorialdesign
 
 %!test
 %! z = bsxfun (@plus, u1, x2);
-%! assert (isa (z, 'double') && isequal (z, u1 + u2))
+%! assert (isa (z, 'stk_dataframe') && isequal (double (z), u1 + u2))
 
 %!test
 %! z = bsxfun (@plus, x1, x2);
