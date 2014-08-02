@@ -1,3 +1,19 @@
+2014-08-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix and improve stk_factorialdesign's accessors.
+
+	* arrays/@stk_factorialdesign/subsasgn.m: New function. Override
+	stk_dataframe's subsasgn to prevent illegal modifications of
+	stk_factorialdesign objects through ()-type indexing. Any such
+	modification results in an implicit cast to stk_dataframe.
+	* arrays/@stk_factorialdesign/get.m: Provide read-only access to
+	the underlying stk_dataframe object.
+	* arrays/@stk_factorialdesign/set.m: The result is implicitely
+	cast into an stk_dataframe object upon any modification that would
+	otherwise corrupt the internal structure of the
+	stk_factorialdesign object.
+	* arrays/@stk_factorialdesign/fieldnames.m: Add .stk_dataframe.
+
 2014-08-07  Julien Bect  <julien.bect@supelec.fr>
 
 	Simplify the display of stk_factorialdesign objects.

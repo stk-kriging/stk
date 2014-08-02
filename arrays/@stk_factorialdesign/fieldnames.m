@@ -29,7 +29,7 @@
 function fn = fieldnames (x)
 
 fn = fieldnames (x.stk_dataframe);
-fn = ['levels' fn];
+fn = ['levels' 'stk_dataframe' fn];
 
 end % function fieldnames
 
