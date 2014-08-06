@@ -1,3 +1,11 @@
+2014-08-07  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix list of field names for stk_dataframe objects.
+
+	* arrays/@stk_dataframe/private/reserved_field_names.m: Fix list
+	of field names for stk_dataframe objects.
+	* arrays/@stk_dataframe/fieldnames.m: Update unit test.
+
 2014-07-31  Julien Bect  <julien.bect@supelec.fr>
 
 	Modify the behaviour of vertcat/horzcat for stk_dataframe objects.
