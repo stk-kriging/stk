@@ -1,4 +1,4 @@
-% STK_PRETTYPRINT ...
+% STK_SPRINTF ...
 
 % Copyright Notice
 %
@@ -42,18 +42,32 @@ if (nargin < 3) || (isempty (data_col_width)),
 end
 
 % Print the stk_dataframe
-s = stk_sprintf (x.stk_dataframe, verbosity, data_col_width);
+df = x.stk_dataframe;
+s = stk_sprintf (df, 'basic', data_col_width);
 
 % Print the levels first, if in verbose mode
 if strcmp (verbosity, 'verbose'),
-
-    spstr = stk_options_get ('stk_dataframe', 'disp_spstr');
-             
-    s1 = sprintf ('.levels = <%s>', stk_sprintf_sizetype (x.levels));    
-    s2 = stk_sprintf_levels (x);
     
-    s = char (s1, horzcat (repmat (spstr, size (s2, 1), 1), s2), ...
-        '.stk_dataframe =', horzcat (repmat (spstr, size (s, 1), 1), s));
+    spstr = stk_options_get ('stk_dataframe', 'disp_spstr');
+    L = length (x.levels);
+    
+    s = char (...
+        ... %--------------------------------------------------------------
+        '.info =', ...  % alias for .stk_dataframe.info
+        horzcat (spstr, stk_sprintf_info (df)), ...
+        ... %--------------------------------------------------------------
+        '.colnames =', ...  % alias for .stk_dataframe.colnames
+        horzcat (spstr, stk_sprintf_colnames (df)), ...
+        ... %--------------------------------------------------------------
+        '.rownames =', ...  % alias for .stk_dataframe.rownames
+        horzcat (spstr, stk_sprintf_rownames (df)), ...
+        ... %--------------------------------------------------------------
+        sprintf ('.levels = <%s>', stk_sprintf_sizetype (x.levels)), ...
+        horzcat (repmat (spstr, L, 1), stk_sprintf_levels (x)), ...
+        ... %--------------------------------------------------------------
+        '.data =', ...      % alias for .stk_dataframe.data
+        horzcat (repmat (spstr, size (s, 1), 1), s) ...
+        ); %---------------------------------------------------------------
     
 end
 

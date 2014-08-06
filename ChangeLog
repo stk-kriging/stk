@@ -1,5 +1,12 @@
 2014-08-07  Julien Bect  <julien.bect@supelec.fr>
 
+	Simplify the display of stk_factorialdesign objects.
+
+	* arrays/@stk_factorialdesign/stk_sprintf.m: Simplify the display
+	of stk_factorialdesign objects by hiding the ".stk_dataframe"
+	level (i.e., .info is used as an aliad for .stk_dataframe.info).
+	* arrays/@stk_dataframe/stk_sprintf.m: Modified (tiny change).
+
 	Define list of field names for stk_factorialdesign objects.
 
 	* arrays/@stk_factorialdesign/fieldnames.m: Define list of field
