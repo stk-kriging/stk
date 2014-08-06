@@ -1,5 +1,10 @@
 2014-08-07  Julien Bect  <julien.bect@supelec.fr>
 
+	Define list of field names for stk_factorialdesign objects.
+
+	* arrays/@stk_factorialdesign/fieldnames.m: Define list of field
+	names for stk_factorialdesign objects.
+
 	Fix list of field names for stk_dataframe objects.
 
 	* arrays/@stk_dataframe/private/reserved_field_names.m: Fix list
