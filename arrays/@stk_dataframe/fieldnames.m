@@ -26,12 +26,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function fn = fieldnames(x)
+function fn = fieldnames (x)
 
 fn = [x.colnames reserved_field_names()];
 
 end % function fieldnames
 
 %!test
-%! x = stk_dataframe(rand(3, 2), {'u' 'v'});
-%! assert(all(strcmp(sort(fieldnames(x)), {'colnames' 'rownames' 'u' 'v'})));
+%! x = stk_dataframe (rand (3, 2), {'u' 'v'});
+%! s1 = sort (fieldnames (x));
+%! s2 = {'colnames' 'data' 'info' 'rownames' 'u' 'v'};
+%! assert (all (strcmp (s1, s2)));
