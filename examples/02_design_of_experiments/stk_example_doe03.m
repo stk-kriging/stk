@@ -100,9 +100,8 @@ model = stk_model ('stk_materncov52_iso');
 
 % Parameters for the Matern covariance function
 % ("help stk_materncov52_iso" for more information)
-SIGMA2 = 4.0 ^ 2;  % variance parameter
-RHO1 = 2.0;        % scale (range) parameter
-model.param = log ([SIGMA2; 1/RHO1]);
+model.randomprocess.priorcov.sigma2 = 4.0 ^ 2;  % variance parameter
+model.randomprocess.priorcov.rho    = 2.0;      % scale (range) parameter
 
 % Play with the parameter of the model to understand their influence on the
 % behaviour of the algorithm !
@@ -139,10 +138,11 @@ NEXT_STYLE = {'ro', 'MarkerFaceColor', 'y'};
 while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     % Trick: add a small "regularization" noise to our model
-    model.lognoisevariance = 2 * log (min (1e-4, EI_max / 1e3));
+    model.noise.cov = stk_homnoisecov ((min (1e-4, EI_max / 1e3)) ^ 2);
     
     % Carry out the kriging prediction
-    z_post = stk_predict (model, data.x, data.z, x_grid);
+    model = stk_setobs (model, data.x, data.z);
+    z_post = stk_predict (model, x_grid);
     
     % Compute the Expected Improvement (EI) criterion
     % (the fourth argument indicates that we want to MAXIMIZE f)

@@ -74,6 +74,8 @@ if NOISY,
     zi = zi + NOISESTD * randn (NI, 1);
 end
 
+xzi = stk_makedata(xi, zi);
+
 
 %% SPECIFICATION OF THE MODEL
 %
@@ -86,35 +88,39 @@ end
 % set, but they will be replaced below by estimated parameters.)
 model = stk_model ('stk_materncov_iso');
 
+% Set observations for the model
+model = stk_setobs (model, xzi);
 
-%% ESTIMATION OF THE PARAMETERS OF THE COVARIANCE FUNCTION
+
+%% ESTIMATION OF THE PARAMETERS OF THE COVARIANCE
 %
 % Here, the parameters of the Matern covariance function are estimated by the
 % REML (REstricted Maximum Likelihood) method using stk_param_estim().
 %
 
 % Initial guess for the parameters of the Matern covariance
-[param0, lnv0] = stk_param_init (model, xi, zi, BOX, NOISY);
+% (not working yet on branch 'objectify_me')
+% [param0, lnv0] = stk_param_init (model, BOX, NOISY);
 
 % % Alternative: user-defined initial guess for the parameters
 % % (see "help stk_materncov_iso" for more information)
-% SIGMA2 = 1.0;  % variance parameter
-% NU     = 4.0;  % regularity parameter
-% RHO1   = 0.4;  % scale (range) parameter
-% param0 = log ([SIGMA2; NU; 1/RHO1]);
+model.randomprocess.priorcov.sigma2 = 1.0;  % variance parameter
+model.randomprocess.priorcov.nu     = 4.0;  % regularity parameter
+model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
 
 if ~ NOISY,
-    % Noiseless case: set a small "regularization" noise
+    % Noiseless case: set a small "regularization" noise	
     % the (log)variance of which is provided by stk_param_init
-    model.lognoisevariance = lnv0;
+    % model.noise.cov = stk_homnoisecov (exp (lnv0));
+    model.noise.cov = stk_homnoisecov (1e-4 ^ 2);
 else
     % Otherwise, set the variance of the noise
     % (assumed to be known, not estimated, in this example)
-    model.lognoisevariance = 2 * log (NOISESTD);
+	model.noise.cov = stk_homnoisecov (NOISESTD ^ 2);
 end
 
 % Estimate the parameters
-model.param = stk_param_estim (model, xi, zi, param0);
+model.param = stk_param_estim (model);
 
 model  %#ok<NOPTS>
 
@@ -124,9 +130,11 @@ model  %#ok<NOPTS>
 NT = 400;                                      % Number of points in the grid
 xt = stk_sampling_regulargrid (NT, DIM, BOX);  % Generate a regular grid
 zt = stk_feval (f, xt);                        % Values of f on the grid
+ot = stk_makedata(xt, zt);
 
 % Compute the kriging predictor (and the kriging variance) on the grid
-zp = stk_predict (model, xi, zi, xt);
+zp  = stk_predict (model, xt);
+xzp = stk_makedata (xt, zp);
 
 
 %% Visualisation
@@ -135,7 +143,7 @@ stk_figure ('stk_example_kb02 (a)');  plot (xt, zt, 'k', 'LineWidth', 2);
 stk_title  ('Function to be approximated');
 stk_labels ('input variable x', 'response z');
 
-stk_figure ('stk_example_kb02 (b)');  stk_plot1d (xi, zi, xt, zt, zp);
+stk_figure ('stk_example_kb02 (b)');  stk_plot1d (xzi, ot, xzp);
 stk_title  ('Kriging prediction with estimated parameters');
 stk_labels ('input variable x', 'response z');
 

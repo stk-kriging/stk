@@ -39,6 +39,8 @@
 
 stk_disp_examplewelcome
 
+warning ('I am not ready yet...', 'NotReadyYet');  return;
+
 
 %% DEFINE AN ARTIFICIAL ONE-DIMENSIONAL DATASET
 

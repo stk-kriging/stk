@@ -46,6 +46,9 @@
 
 stk_disp_examplewelcome;
 
+warning ('This script is not ready for the objectify_me branch.')
+return
+
 
 %% MODEL
 

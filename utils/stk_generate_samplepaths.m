@@ -155,7 +155,7 @@ end
 if conditional,
     
     % Carry out the kriging prediction at points xt
-    [zp_ignore, lambda] = stk_predict (model, xi, zi, xt);  %#ok<ASGLU>
+    [zp_ignore, lambda] = stk_predict (stk_setobs (model, xi, zi), xt);  %#ok<ASGLU>
     
     % Condition sample paths on the observations
     zsim_data = stk_conditioning (lambda, zi, zsim_data, xi_ind);

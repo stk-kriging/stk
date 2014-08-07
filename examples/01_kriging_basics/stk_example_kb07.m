@@ -41,10 +41,10 @@ x = stk_sampling_regulargrid (N, DIM, BOX);
 
 % Model
 model  = stk_model ('stk_materncov_iso');
-SIGMA2 = 1.0;  % variance parameter
-NU     = NaN;  % regularity parameter
-RHO1   = 0.4;  % scale (range) parameter
-model.param = log ([SIGMA2; NU; 1/RHO1]);
+
+model.randomprocess.priorcov.sigma2 = 1.0;  % variance parameter
+model.randomprocess.priorcov.nu     = NaN;  % regularity parameter
+model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
 
 % Several values for nu
 nu_list = [0.5 1.5 2.5 10.0];
@@ -56,7 +56,7 @@ NB_PATHS = 10;
 
 for k = 1:4,
     
-    model.param(2) = log (nu_list(k));
+    model.randomprocess.priorcov.nu = nu_list(k);  % regularity parameter
     
     zsim = stk_generate_samplepaths (model, x, NB_PATHS);
     

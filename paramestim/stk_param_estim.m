@@ -1,19 +1,19 @@
 % STK_PARAM_ESTIM estimates the parameters of a covariance function.
 %
-% CALL: PARAM = stk_param_estim (MODEL, XI, YI, PARAM0)
+% CALL: PARAM = stk_param_estim(MODEL, PARAM0)
 %
-%   estimates the parameters PARAM of the covariance function in MODEL
-%   from the data (XI, YI) using the restricted maximum likelihood (ReML)
-%   method. A starting point PARAM0 must be provided.
+%   estimates the parameters PARAM of the covariance function in MODEL from the
+%   data MODEL.observations using the restricted maximum likelihood (ReML) method.
+%   A starting point PARAM0 has to be provided.
 %
-% CALL: [PARAM, LNV] = stk_param_estim (MODEL, XI, YI, PARAM0, LNV0)
+% CALL: [PARAM, LNV] = stk_param_estim(MODEL, PARAM0, LNV0)
 %
-%   also estimate the (logarithm of the) noise variance. This form only
-%   applies to the case where the observations are assumed noisy. A starting
-%   point (PARAM0, LNV0) has to be provided.
+%   also estimate the (logarithm of the) noise variance. This form only applies
+%   to the case where the observations are assumed noisy. A starting point
+%   (PARAM0, LNV0) has to be provided.
 %
-% CALL: PARAM = stk_param_estim (MODEL, XI, YI, PARAM0, [], CRIT)
-% CALL: [PARAM, LNV] = stk_param_estim (MODEL, XI, YI, PARAM0, LNV0, CRIT)
+% CALL: PARAM = stk_param_estim (MODEL, PARAM0, [], CRIT)
+% CALL: [PARAM, LNV] = stk_param_estim (MODEL, PARAM0, LNV0, CRIT)
 %
 %   uses the estimation criterion CRIT instead of the default ReML criterion.
 %
@@ -21,7 +21,7 @@
 %
 %   The first form can be used with noisy observations, in which case the
 %   variance of the observation noise is assumed to be known (and given by
-%   exp (MODEL.lognoisevariance).
+%   MODEL.noise.cov.variance).
 %
 % EXAMPLES: see, e.g., stk_example_kb02, stk_example_kb03, stk_example_kb04,
 %           stk_example_kb06, stk_example_misc02
@@ -56,20 +56,20 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [paramopt, paramlnvopt, info] = stk_param_estim ...
-    (model, xi, zi, param0, param0lnv, criterion)
+	(model, param0, param0lnv, criterion)
 
-if nargin > 6,
+if nargin > 4,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % size checking: xi, zi
-if ~ isequal (size (zi), [size(xi, 1) 1]),
-    errmsg = 'zi should be a column, with the same number of rows as xi.';
-    stk_error (errmsg, 'IncorrectSize');
-end
+%if ~ isequal (size (zi), [size(xi, 1) 1]),
+%    errmsg = 'zi should be a column, with the same number of rows as xi.';
+%    stk_error (errmsg, 'IncorrectSize');
+%end
 
 % Warn about special case: constant response
-if (std (double (zi)) == 0)
+if (std (double (model.observations.z)) == 0)
     warning ('STK:stk_param_estim:ConstantResponse', ['Constant-response ' ...
         'data: the output of stk_param_estim is likely to be unreliable.']);
 end
@@ -78,54 +78,69 @@ end
 %       => provide a reasonable default choice
 
 % TODO: think of a better way to tell we want to estimate the noise variance
-NOISEESTIM = (nargin > 4) && (~ isempty (param0lnv));
+NOISEESTIM = (nargin > 2) && (~ isempty (param0lnv));
 
-if NOISEESTIM && (~ isfield (model, 'lognoisevariance'))
-    model.lognoisevariance = param0lnv;
-end
-
-if nargin < 6,
-    criterion = @stk_param_relik;
-end
-
-% Cast param0 into an object of the appropriate type and size
-% and set model.param to the same value
-if isfloat (param0)
-    % Note: if model.param is an object, this is actually a call to subsasgn() in
-    % disguise => parameter classes *must* support this form of indexing.
-    model.param(:) = param0;
-    param0 = model.param;
-else
-    if ~ strcmp (class (param0), class (model.param))
-        stk_error ('Incorrect type for param0.', 'TypeMismatch');
-    else
-        model.param = param0;
+if NOISEESTIM,
+    % check if estimating the noise variance is possible
+    switch class(model.noise.cov)
+        case 'stk_nullcov'  % noiseless observations
+            stk_error('Please set model.noise...', 'IncorrectArgument');
+        case 'stk_homnoisecov'
+            % ok, we can handle it
+        otherwise
+            errmsg = ['Parameter estimation for general noise models ' ...
+                'is not supported.'];
+            stk_error(errmsg, 'IncorrectArgument');
     end
 end
 
-% TODO: allow user-defined bounds
-[lb, ub] = stk_param_getdefaultbounds (model.covariance_type, param0, xi, zi);
+if nargin < 4,
+    criterion = @stk_param_relik;
+end
 
-if NOISEESTIM
-    [lblnv, ublnv] = get_default_bounds_lnv (model, param0lnv, xi, zi);
+if (nargin < 2) || isempty(param0),
+    param0 = model.param;
+    end
+
+% % Cast param0 into an object of the appropriate type and size
+% % and set model.param to the same value
+% if isfloat(param0)
+%     % Note: if model.param is an object, this is actually a call to subsasgn() in
+%     % disguise => parameter classes *must* support this form of indexing.
+%     model.param(:) = param0;
+%     param0 = model.param;
+% else
+%     if ~strcmp(class(param0), class(model.param))
+%         stk_error('Incorrect type for param0.', 'TypeMismatch');
+%     else
+%         model.param = param0;
+%     end
+% end
+
+% TODO: allow user-defined bounds
+[lb, ub] = stk_get_defaultbounds ( ...
+    model.randomprocess.priorcov, param0, model.observations.z);
+
+if NOISEESTIM % optimize wrt to an "extended" vector of parameters
+    [lblnv, ublnv] = get_defaultbounds_lnv(model, param0lnv);
     lb = [lb ; lblnv];
     ub = [ub ; ublnv];
     u0 = [param0(:); param0lnv];
-else
+else % optimize with respect to cparam
     u0 = param0(:);
 end
 
 switch NOISEESTIM
     case false,
-        f = @(u)(f_ (model, u, xi, zi, criterion));
-        nablaf = @(u)(nablaf_ (model, u, xi, zi, criterion));
+        f = @(u)(f_(model, u, criterion));
+        nablaf = @(u)(nablaf_ (model, u, criterion));
         % note: currently, nablaf is only used with sqp in Octave
     case true,
-        f = @(u)(f_with_noise_ (model, u, xi, zi, criterion));
-        nablaf = @(u)(nablaf_with_noise_ (model, u, xi, zi, criterion));
+        f = @(u)(f_with_noise_(model, u, criterion));
+        nablaf = @(u)(nablaf_with_noise_ (model, u, criterion));
 end
 
-bounds_available = (~ isempty(lb)) && (~ isempty(ub));
+bounds_available = ~isempty(lb) && ~isempty(ub);
 
 optim_display_level = stk_options_get ('stk_param_estim', 'optim_display_level');
 
@@ -149,27 +164,27 @@ switch optim_num,
 
         if optim_num == 2,  % Matlab / fminsearch (Nelder-Mead)
         
-            [u_opt, crit_opt] = fminsearch (f, u0, options);
+        	[u_opt, crit_opt] = fminsearch (f, u0, options);
         
         else  % Matlab / fmincon
             
             options = optimset (options, 'GradObj', 'on');
             
-            try
+        try
                 % try to use the interior-point algorithm, which has been
                 % found to provide satisfactory results in many cases
                 options = optimset (options, 'algorithm', 'interior-point');
-            catch
+        catch
                 % the 'algorithm' option does not exist in some old versions of
                 % matlab (e.g., version 3.1.1 provided with r2007a)...
-                err = lasterror ();
+            err = lasterror ();
                 if ~ strcmp (err.identifier, 'matlab:optimset:invalidparamname')
-                    rethrow (err);
-                end
+                rethrow (err);
             end
+        end
             
-            [u_opt, crit_opt] = fmincon (f, u0, [], [], [], [], lb, ub, [], options);
-            
+        	[u_opt, crit_opt] = fmincon (f, u0, [], [], [], [], lb, ub, [], options);
+        
         end
         
     otherwise,
@@ -185,7 +200,7 @@ else
     paramlnvopt = [];
 end
 
-if isfloat (param0)
+if isfloat(param0)
     % if a floating-point array was provided, return one also
     paramopt = u_opt;
 else
@@ -214,65 +229,65 @@ end % function stk_param_estim ------------------------------------------------
 
 %--- The objective function and its gradient ----------------------------------
 
-function [l, dl] = f_ (model, u, xi, zi, criterion)
+function [l, dl] = f_ (model, u, criterion)
 
-model.param(:) = u;
+model.param = u;
 
 if nargout == 1,
-    l = criterion (model, xi, zi);
+    l = criterion (model);
 else
-    [l, dl] = criterion (model, xi, zi);
+    [l, dl] = criterion (model);
 end
 
 end % function f_
 
 
-function dl = nablaf_ (model, u, xi, zi, criterion)
+function dl = nablaf_ (model, u, criterion)
 
-model.param(:) = u;
-[l_ignored, dl] = criterion (model, xi, zi);  %#ok<ASGLU>
+model.param = u;
+[l_ignored, dl] = criterion (model);  %#ok<ASGLU>
 
 end % function nablaf_
 
 
-function [l, dl] = f_with_noise_ (model, u, xi, zi, criterion)
+function [l, dl] = f_with_noise_ (model, u, criterion)
 
-model.param(:) = u(1:end-1);
-model.lognoisevariance  = u(end);
+model.param = u(1:end-1);
+model.noise.cov.variance = exp(u(end));
 
 if nargout == 1,
-    l = criterion (model, xi, zi);
+    l = criterion (model);
 else
-    [l, dl, dln] = criterion (model, xi, zi);
+    [l, dl, dln] = criterion (model);
     dl = [dl; dln];
 end
 
 end % function f_with_noise_
 
 
-function dl = nablaf_with_noise_ (model, u, xi, zi, criterion)
+function dl = nablaf_with_noise_ (model, u, criterion)
 
-model.param(:) = u(1:end-1);
-model.lognoisevariance  = u(end);
-[l_ignored, dl, dln] = criterion (model, xi, zi);  %#ok<ASGLU>
+model.param = u(1:end-1);
+model.noise.cov.variance = exp(u(end));
+[l_ignored, dl, dln] = criterion (model);  %#ok<ASGLU>
 dl = [dl; dln];
 
 end % function nablaf_with_noise_
 
 
-function [lblnv,ublnv] = get_default_bounds_lnv ... % -------------------------
-    (model, param0lnv, xi, zi) %#ok<INUSL>
+function [lblnv, ublnv] = get_defaultbounds_lnv ... %--------------------------
+    (model, param0lnv)  %#ok<INUSD>
 
 % assume NOISEESTIM
 % constants
 TOLVAR = 0.5;
 
 % bounds for the variance parameter
-empirical_variance = var(zi);
+empirical_variance = var(model.observations.z);
 lblnv = log(eps);
 ublnv = log(empirical_variance) + TOLVAR;
 
-end % function get_default_bounds_lnv -----------------------------------------
+end % function get_defaultbounds_lnv ------------------------------------------
 
 
 %!shared f, xi, zi, NI, param0, model
@@ -290,8 +305,9 @@ end % function get_default_bounds_lnv -----------------------------------------
 
 %!test  % noiseless
 %! zi = stk_feval (f, xi);
-%! param1 = stk_param_estim (model, xi, zi, param0);
-%! param2 = stk_param_estim (model, xi, zi, param0, [], @stk_param_relik);
+%! model = stk_setobs(model, xi, zi);
+%! param1 = stk_param_estim (model, param0);
+%! param2 = stk_param_estim (model, param0, [], @stk_param_relik);
 %! % We cannot assume a DETERMINISTIC optimization algorithm
 %! % (for some reason, Octave's sqp is not exactly deterministic)
 %! assert (stk_isequal_tolrel (param1, param2, 1e-2))
@@ -300,19 +316,10 @@ end % function get_default_bounds_lnv -----------------------------------------
 %! NOISE_STD_TRUE = 0.1;
 %! NOISE_STD_INIT = 1e-5;
 %! zi = zi + NOISE_STD_TRUE * randn(NI, 1);
-%! model.lognoisevariance = 2 * log(NOISE_STD_INIT);
-%! [param, lnv] = stk_param_estim ...
-%!    (model, xi, zi, param0, model.lognoisevariance);
+%! model = stk_setobs(model, xi, zi);
+%! model.noise.cov = stk_homnoisecov(NOISE_STD_INIT^2);
+%! [param, lnv] = stk_param_estim(model, param0, 2 * log(NOISE_STD_INIT));
 
 %!% incorrect number of input arguments
 %!error param = stk_param_estim ()
-%!error param = stk_param_estim (model);
-%!error param = stk_param_estim (model, xi);
-%!error param = stk_param_estim (model, xi, zi);
-%!error param = stk_param_estim (model, xi, zi, param0, log(eps), @stk_param_relik, pi);
-
-%!test % Constant response
-%! model = stk_model ('stk_materncov52_iso');
-%! n = 10;  x = stk_sampling_regulargrid (n, 1, [0; 1]);  z = ones (size (x));
-%! param = stk_param_estim (model, x, z, model.param);
-%! assert ((all (isfinite (param))) && (length (param) == 2));
+%!error param = stk_param_estim(model, param0, log(eps), @stk_param_relik, pi);

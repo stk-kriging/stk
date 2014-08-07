@@ -54,6 +54,7 @@ BOX = [-1.0; 1.0];  % factor space
 NT = 400; % nb of points in the grid
 xt = stk_sampling_regulargrid (NT, DIM, BOX);
 zt = stk_feval (f, xt);
+xzt = stk_makedata (xt, zt); % data structure containing (factors, response) pairs
 
 stk_figure ('stk_example_kb01 (a)');  plot (xt, zt, 'k', 'LineWidth', 2);
 stk_title  ('Function to be approximated');
@@ -73,6 +74,7 @@ stk_labels ('input variable x', 'response z');
 NI = 6;                                        % number of evaluations
 xi = stk_sampling_regulargrid (NI, DIM, BOX);  % evaluation points
 zi = stk_feval (f, xi);                        % evaluation results
+xzi = stk_makedata (xi, zi);
 
 
 %% Specification of the model
@@ -92,10 +94,14 @@ model = stk_model ('stk_materncov_iso');
 
 % Parameters for the Matern covariance function
 % ("help stk_materncov_iso" for more information)
-SIGMA2 = 1.0;  % variance parameter
-NU     = 4.0;  % regularity parameter
-RHO1   = 0.4;  % scale (range) parameter
-model.param = log ([SIGMA2; NU; 1/RHO1]);
+model.randomprocess.priorcov.sigma2 = 1.0;  % variance parameter
+model.randomprocess.priorcov.nu     = 4.0;  % regularity parameter
+model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
+
+% Set observations for the model. NB: We consider that observations are part
+% of the model (the model is actualy a Gaussian process conditioned on a set of
+% observations)
+model = stk_setobs (model, xzi);
 
 
 %% Carry out the kriging prediction and display the result
@@ -106,10 +112,11 @@ model.param = log ([SIGMA2; NU; 1/RHO1]);
 %
 
 % Carry out the kriging prediction at points xt
-zp = stk_predict (model, xi, zi, xt);
+zp = stk_predict (model, xt);
+xzp = stk_makedata (xt, zp);
 
 % Display the result
-stk_figure ('stk_example_kb01 (b)');  stk_plot1d (xi, zi, xt, zt, zp);
+stk_figure ('stk_example_kb01 (b)');  stk_plot1d (xzi, xzt, xzp);
 stk_title  ('Kriging prediction based on noiseless observations');
 stk_labels ('input variable x', 'response z');
 
@@ -121,16 +128,30 @@ NOISEVARIANCE = (1e-1)^2;
 % Now the observations are perturbed by an additive Gaussian noise
 noise = sqrt (NOISEVARIANCE) * randn (size (zi));
 zi_n = zi + noise;
+xzi_noisy =  stk_makedata (xi, zi_n);
 
-% We also include the observation noise in the model
-model_n = model;
-model_n.lognoisevariance = log (NOISEVARIANCE);
+%=== There are two ways for specifying noisy observations in the model
+%
+% (1) information about the noise is included in the observation structure
+%
+%     model_noisy.noise.type = 'wwn';
+%     xzi_noisy.x.v = NOISEVARIANCE * ones(xzi_noisy.n,1);
+%
+% (2) information about the noise is carried by the noise struture
+%
+%     model_noisy.noise.type = 'swn';
+%     model_noisy.noise.lognoisevariance = log (NOISEVARIANCE);
+
+model_noisy = model;
+model_noisy.noise.cov = stk_homnoisecov (NOISEVARIANCE);  % homoscedastic white noise
 
 % Carry out the kriging prediction at locations xt
-zp_n = stk_predict (model_n, xi, zi_n, xt);
+model_noisy = stk_setobs (model_noisy, xzi_noisy);
+zp_noisy = stk_predict (model_noisy, xt);
+xzp_noisy = stk_makedata (xt, zp_noisy);
 
 % Display the result
-stk_figure ('stk_example_kb01 (c)');  stk_plot1d (xi, zi_n, xt, zt, zp_n);
+stk_figure ('stk_example_kb01 (c)');  stk_plot1d (xzi_noisy, xzt, xzp_noisy);
 stk_title  ('Kriging prediction based on noisy observations');
 stk_labels ('input variable x', 'response z');
 

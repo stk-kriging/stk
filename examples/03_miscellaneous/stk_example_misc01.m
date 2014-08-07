@@ -39,7 +39,7 @@
 stk_disp_examplewelcome;  stk_figure ('stk_example_misc01');
 
 
-%% List of correlation functions
+%% LIST OF CORRELATION FUNCTIONS
 
 SIGMA2 = 1.0;  % variance parameter
 RHO1   = 1.0;  % scale (range) parameter
@@ -55,7 +55,7 @@ list_cov = {...
 NB_COVARIANCE_FUNCTIONS = size (list_cov, 1);
 
 
-%% Visualisation
+%% VISUALISATION
 
 x1 = 0.0;
 x2 = stk_sampling_regulargrid (1000, 1, [-5; 5]);

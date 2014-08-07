@@ -89,10 +89,9 @@ axis (BOX(:));  stk_title ('function to be approximated');
 % We start with a generic (anisotropic) Matern covariance function.
 model = stk_model ('stk_materncov_aniso', DIM);
 
-% As a default choice, a constant (but unknown) mean is used,
-% i.e.,  model.order = 0.
-% model.order = 1;  %%% UNCOMMENT TO USE A LINEAR TREND %%%
-% model.order = 2;  %%% UNCOMMENT TO USE A "FULL QUADRATIC" TREND %%%
+% As a default choice, a constant (but unknown) mean is used.
+% model.randomprocess.priormean = stk_lm_affine;     % AFFINE TREND
+% model.randomprocess.priormean = stk_lm_quadratic;  % "FULL QUADRATIC" TREND
 
 
 %% EVALUATE THE FUNCTION ON A "MAXIMIN LHS" DESIGN
@@ -106,26 +105,29 @@ hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
 
 %% ESTIMATE THE PARAMETERS OF THE COVARIANCE FUNCTION
 
+model = stk_setobs(model, stk_makedata(xi, zi));
+
 % Compute an initial guess for the parameters of the Matern covariance (param0)
 % and a reasonable log-variance for a small "regularization noise"
-[param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
+% [param0, model.lognoisevariance] = stk_param_init (model, BOX);
+MODEL_NOISE_STD = 1e-5;
+model.noise.cov = stk_homnoisecov (MODEL_NOISE_STD^2);
 
-% % Alternative: user-defined initial guess for the parameters of
-% % the Matern covariance (see "help stk_materncov_aniso" for more information)
-% SIGMA2 = var (zi);
-% NU     = 2;
-% RHO1   = (BOX(2,1) - BOX(1,1)) / 10;
-% RHO2   = (BOX(2,2) - BOX(1,2)) / 10;
-% param0 = log ([SIGMA2; NU; 1/RHO1; 1/RHO2]);
-% model.lognoisevariance = 2 * log (1e-5);
+% Alternative: user-defined initial guess for the parameters of the Matern
+% covariance (see "help stk_materncov_aniso" for more information)
+SIGMA2 = var(zi);
+NU     = 2;
+RHO1   = (BOX(2,1) - BOX(1,1)) / 10;
+RHO2   = (BOX(2,2) - BOX(1,2)) / 10;
+param0 = log([SIGMA2; NU; 1/RHO1; 1/RHO2]);
 
-model.param = stk_param_estim (model, xi, zi, param0);
+model.param = stk_param_estim(model, param0);
 
 
 %% CARRY OUT KRIGING PREDICITION AND VISUALIZE
 
 % Here, we compute the kriging prediction on each point of the grid
-zp = stk_predict (model, xi, zi, xt);
+zp = stk_predict(model, xt);
 
 % Display the result using a contour plot, to be compared with the contour
 % lines of the true function

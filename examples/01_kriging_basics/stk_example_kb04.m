@@ -72,6 +72,8 @@ zi = stk_feval (f, xi);                     % evaluation results
 
 zi = zi + sqrt (NOISEVARIANCE) * randn (NI, 1);
 
+obs = stk_makedata (xi, zi);
+
 
 %% Specification of the model
 %
@@ -87,9 +89,10 @@ zi = zi + sqrt (NOISEVARIANCE) * randn (NI, 1);
 % kriging) and a Matern covariance function. (Some default parameters are also
 % set, but they will be replaced below by estimated parameters.)
 model = stk_model ('stk_materncov_iso');
+model = stk_setobs (model, obs);
 
 % Noise variance
-model.lognoisevariance = log (100 * eps);
+model.noise.cov = stk_homnoisecov (100 * eps);
 % (this is not the true value of the noise variance !)
 
 
@@ -109,18 +112,18 @@ param0 = log ([SIGMA2; NU; 1/RHO1]);
 % Initial guess for the (log of the) noise variance
 lnv0 = 2 * log (std (zi) / 100);
 
-[param, paramlnv] = stk_param_estim (model, xi, zi, param0, lnv0);
+[param, paramlnv] = stk_param_estim (model, param0, lnv0);
 
 model.param = param;
-model.lognoisevariance = paramlnv;
+model.noise.cov.variance = exp (paramlnv);
 
 
 %% Carry out kriging prediction
 
-zp = stk_predict (model, xi, zi, xt);
+zp = stk_predict (model, xt);
 
 % Visualisation
-stk_plot1d (xi, zi, xt, zt, zp);
+stk_plot1d (obs, stk_makedata (xt, zt), stk_makedata (xt, zp))
 stk_title  ('Kriging prediction');
 stk_labels ('input variable x', 'response z');
 

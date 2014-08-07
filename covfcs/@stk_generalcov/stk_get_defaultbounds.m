@@ -1,12 +1,10 @@
-% STK_NOISECOV computes a noise covariance
-
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011, 2012 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-
+%
 % Copying Permission Statement
 %
 %    This file is part of
@@ -27,44 +25,23 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = stk_noisecov (ni, lognoisevariance, diff)
+function [lb, ub] = stk_get_defaultbounds(cov, cparam0, varargin)
 
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if nargin < 3,
-    diff = -1; % default: compute the value (not a derivative)
+if nargin > 1 && ~isempty(cparam0)
+    cov = set(cov, 'cparam', cparam0);
 end
 
-if isscalar (lognoisevariance), % homoscedastic
-    
-    % the result does not depend on diff
-    K = exp(lognoisevariance) * eye(ni);
-    
-else % heteroscedastic
-    
-    if ~ ((isequal (s, [1, ni])) || (isequal (s, [ni, 1])))
-        error ('lognoisevariance must be a scalar or a vector of length ni.');
-    end
+F = cov.prop.handlers.get_defaultbounds;
 
-    if diff ~= -1,
-        error ('diff ~= -1 is not allowed in the heteroscedastic case');
-    end
-    
-    K = diag (exp (lognoisevariance));
+if ~isempty(F),
+    [lb, ub] = F(cov.prop.param, varargin{:});
+else
+    % sorry, we have no bounds to provide...
+    lb = []; ub = [];
 end
 
-end % function stk_noisecov
-
-
-%!shared ni, lognoisevariance, diff
-%!  ni = 5;
-%!  lognoisevariance = 0.0;
-%!  diff = -1;
-
-%!error K = stk_noisecov();
-%!error K = stk_noisecov(ni);
-%!test  K = stk_noisecov(ni, lognoisevariance);
-%!test  K = stk_noisecov(ni, lognoisevariance, diff);
-%!error K = stk_noisecov(ni, lognoisevariance, diff, pi^2);
+end % function stk_get_defaultbounds

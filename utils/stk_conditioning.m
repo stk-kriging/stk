@@ -124,8 +124,9 @@ end % function stk_conditioning
 %! zi = (1:NI)';  % linear response ;-)
 %!
 %! % Carry out the kriging prediction at points xt
-%! model = stk_model ('stk_materncov_iso');
-%! [ignore_zp, lambda] = stk_predict (model, xi, [], xt);
+%! model = stk_model ('stk_materncov_iso', DIM);
+%! model = stk_setobs (model, xi, []);
+%! [ignore_zp, lambda] = stk_predict (model, xt);
 %!
 %! % Generate (unconditional) sample paths according to the model
 %! NB_PATHS = 10;

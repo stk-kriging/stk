@@ -48,6 +48,7 @@ BOX = [-1.0; 1.0];  % factor space
 NT = 400;  % nb of points in the grid
 xt = stk_sampling_regulargrid (NT, DIM, BOX);
 zt = stk_feval (f, xt);
+xzt = stk_makedata (xt, zt);
 
 
 %% Generate observations
@@ -60,6 +61,7 @@ zt = stk_feval (f, xt);
 xi_ind = [1 20 90 200 300 350];  % indices of evaluation points in xt
 xi = xt(xi_ind, 1);              % evaluation points
 zi = stk_feval (f, xi);          % evaluation results
+xzi = stk_makedata (xi, zi);
 
 
 %% Specification of the model
@@ -76,10 +78,12 @@ model = stk_model ('stk_materncov_iso');
 
 % Parameters for the Matern covariance
 % ("help stk_materncov_iso" for more information)
-SIGMA2 = 1.0;  % variance parameter
-NU     = 4.0;  % regularity parameter
-RHO1   = 0.4;  % scale (range) parameter
-model.param = log ([SIGMA2; NU; 1/RHO1]);
+model.randomprocess.priorcov.sigma2 = 1.0;  % variance parameter
+model.randomprocess.priorcov.nu     = 4.0;  % regularity parameter
+model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
+
+% Set observations for the model
+model = stk_setobs (model, xzi);
 
 
 %% Generate (unconditional) sample paths
@@ -97,13 +101,14 @@ stk_labels ('input variable x', 'response z');
 %% Carry out the kriging prediction and generate conditional sample paths
 
 % Carry out the kriging prediction at points xt
-[zp, lambda] = stk_predict (model, xi, zi, xt);
+[zp, lambda] = stk_predict (model, xt);
+xzp = stk_makedata (xt, zp);
 
 % Condition sample paths on the observations
 zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
 
 % Display the observations only
-stk_subplot (2, 2, 2);  stk_plot1d (xi, zi);
+stk_subplot (2, 2, 2);  stk_plot1d (xzi);
 stk_title ('Observations');
 stk_labels ('input variable x', 'response z');
 
@@ -114,7 +119,7 @@ stk_title ('Conditional sample paths');
 stk_labels ('input variable x', 'response z');
 
 % Display the kriging and credible intervals
-stk_subplot (2, 2, 4);  stk_plot1d (xi, zi, xt, zt, zp, zsimc);
+stk_subplot (2, 2, 4);  stk_plot1d (xzi, xzt, xzp, zsimc);
 stk_title ('Prediction and credible intervals');
 stk_labels ('input variable x', 'response z');
 

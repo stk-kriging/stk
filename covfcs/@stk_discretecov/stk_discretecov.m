@@ -4,8 +4,7 @@
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,30 +26,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = stk_discretecov (param, x, y, diff, pairwise)
+function cov = stk_discretecov (K)
 
-%--- process input arguments ---------------------------------------------------
-
-x = double (x);
-y = double (y);
-
-if (nargin >= 4) && (diff ~= -1),
-    stk_error ('diff should be equal to -1', 'InvalidArgument');
-end
-
-if nargin < 5,
-    pairwise = false;
-end
-
-%--- compute covariance matrix -------------------------------------------------
-
-if ~pairwise,
-    K = param.K(x, y);
+if nargin == 0,
+    % default constructor
+    prop = struct ('K', []);
 else
-    idx = sub2ind (size (param.K), x, y);
-    K = param.K(idx);
+    prop = struct ('K', K);
 end
-    
+
+cov = struct ('prop', prop, 'aux', []);
+
+cov = class (cov, 'stk_discretecov', stk_cov());
+
 end % function stk_discretecov
 
 
@@ -59,12 +47,10 @@ end % function stk_discretecov
 %! x0 = stk_sampling_randunif (n0, dim);
 %! x1 = stk_sampling_randunif (n1, dim);
 %! model = stk_model ('stk_materncov_aniso', dim);
-%! model.order = 1;
+%! model.randomprocess.priormean = stk_lm_affine;
 
 %!test % without noise, pairwise = false
-%! if isfield (model, 'lognoisevariance')
-%!   model = rmfield (model, 'lognoisevariance');
-%! end
+%! model.noise.cov = stk_nullcov ();
 %! model2 = stk_model ('stk_discretecov', model, x0);
 %! idx = [1 4 9];
 %! [K1, P1] = stk_make_matcov (model,  x0(idx, :));
@@ -78,7 +64,7 @@ end % function stk_discretecov
 %! assert (stk_isequal_tolrel (K1, K2));
 
 %!test % with noise, pairwise = false
-%! model.lognoisevariance = log (0.01);
+%! model.noise.cov = stk_homnoisecov (0.01);
 %! model2 = stk_model ('stk_discretecov', model, x0);
 %! idx = [1 4 9];
 %! [K1, P1] = stk_make_matcov (model,  x0(idx, :));

@@ -1,6 +1,6 @@
 % STK_PLOT1D is a convenient plot function in 1D
 %
-% CALL: stk_plot1d (xi, zi, xt, zt, zp)
+% CALL: stk_plot1d (obsi, obst, pred)
 %
 % STK_PLOT1D plots the result of a 1D approximation
 
@@ -31,31 +31,39 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_plot1d (xi, zi, xt, zt, zp, zsim)
+function stk_plot1d (obsi, obst, pred, zsim)
+
+if nargin > 4,
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
 % Shaded area representing pointwise confidence intervals
-if (nargin > 4) && (~ isempty (zp))
-    stk_plot_shadedci (xt, zp);  hold on;
+if (nargin > 2) && (~ isempty (pred)),
+    stk_plot_shadedci (pred.x, pred.z);
+    hold on;
 end
-
+    
 % Plot sample paths
-if (nargin > 5) && (~ isempty (zsim))
-    plot (xt, zsim, '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64]);  hold on;
+if (nargin > 3) && (~ isempty (zsim))
+    plot (pred.x, zsim, '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64])
+    hold on;
 end
-
+    
 % Ground truth
-if (nargin > 3) && (~ isempty (zt))
-    plot (xt, zt, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);  hold on;
+if (nargin > 1) && (~ isempty (obst))
+    plot (obst.x, obst.z, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
+    hold on;
 end
-
+    
 % Kriging predictor (posterior mean)
-if (nargin > 4) && (~ isempty (zp))
-    plot (xt, zp.mean, 'LineWidth', 3, 'Color', [0.95 0.25 0.3]);  hold on;
+if (nargin > 2) && (~ isempty (pred))
+    plot (pred.x, pred.z.mean, 'LineWidth', 4, 'Color', [0.95 0.25 0.3]);
+    hold on;
 end
 
 % Evaluations
-if ~ isempty (zi)
-    plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
+if ~ isempty (obsi)
+    plot (obsi.x, obsi.z, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
 end
 
 hold off;  set (gca, 'box', 'off');  legend off;

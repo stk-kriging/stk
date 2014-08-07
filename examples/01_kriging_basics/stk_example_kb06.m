@@ -55,45 +55,43 @@ zi = stk_dataframe ([0.00; 0.09; 0.21], {'z'});  % Evaluation results
 
 
 %% Default parameters for the Matern covariance
+
+model = stk_model ('stk_materncov_iso', DIM);
+xzi = stk_makedata(xi, zi);  model = stk_setobs (model, xzi);
+
 % Parameters used as initial values for stk_param_estim()
+model.randomprocess.priorcov.sigma2 = 1.0;  % variance parameter
+model.randomprocess.priorcov.nu     = 2.0;  % regularity parameter
+model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
 
-SIGMA2 = 1.0;  % variance parameter
-NU     = 2.0;  % regularity parameter
-RHO1   = 0.4;  % scale (range) parameter
-
-param0 = log ([SIGMA2; NU; 1/RHO1]);
+model.noise.cov = stk_homnoisecov (1e-10 ^ 2);
 
 
 %% Ordinary kriging (constant mean)
 
-model = stk_model ('stk_materncov_iso', DIM);
-model.lognoisevariance = 2 * log (1e-10);
-model.order = 0;
-
-% Estimate the parameters of the covariance
-model.param = stk_param_estim (model, xi, zi, param0);
+model1 = model;
+model1.randomprocess.priormean = stk_lm_constant;
+model1.param = stk_param_estim (model1);
 
 % Carry out kriging prediction
-zp = stk_predict (model, xi, zi, xt);
+zp = stk_predict (model1, xt);
 
 % Plot the result
-stk_subplot (1, 2, 1);  stk_plot1d (xi, zi, xt, [], zp);
+stk_subplot (1, 2, 1);  stk_plot1d (xzi, [], stk_makedata (xt, zp));
 stk_title ('Ordinary kriging');  ylim ([-5 5]);
 
 
 %% Linear trend (aka "universal kriging")
 
-% We just need to change the value of 'order' in the model
-model.order = 1;
-
-% Re-estimate the parameters of the covariance
-model.param = stk_param_estim (model, xi, zi, param0);
+model2 = model;
+model2.randomprocess.priormean = stk_lm_affine;
+model2.param = stk_param_estim (model2);
 
 % Carry out kriging prediction
-zp = stk_predict (model, xi, zi, xt);
+zp = stk_predict (model, xt);
 
 % Plot the result
-stk_subplot (1, 2, 2);  stk_plot1d (xi, zi, xt, [], zp);
+stk_subplot (1, 2, 2);  stk_plot1d (xzi, [], stk_makedata (xt, zp));
 stk_title ('Kriging with linear trend');  ylim ([-5 5]);
 
 

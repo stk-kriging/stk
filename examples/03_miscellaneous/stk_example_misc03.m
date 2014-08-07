@@ -43,16 +43,25 @@ t = (0:0.01:30)';
 %% Gaussian process model with constant prior mean
 
 model = stk_model ('stk_materncov52_iso');
+model = stk_setobs (model, t_obs, S_obs);
 
-% Initial guess for the parameters of the Matern covariance
-[param0, lnv0] = stk_param_init (model, t_obs, S_obs, [], true);
+% % Initial guess for the parameters of the Matern covariance
+% [param0, lnv0] = stk_param_init (model, t_obs, S_obs, [], true);
+SIGMA2 = 3.0;  % variance parameter
+RHO1   = 5.0;  % scale (range) parameter
+param0 = log ([SIGMA2; 1/RHO1]);
+
+% Initial guess for the (log of the) noise variance
+lnv0 = 2 * log (0.1);
+model.noise.cov = stk_homnoisecov (exp (lnv0));
 
 % Estimate the parameters
-[model.param, model.lognoisevariance] = stk_param_estim ...
-    (model, t_obs, S_obs, param0, lnv0);
+[param, paramlnv] = stk_param_estim (model, param0, lnv0);
+model.param = param;
+model.noise.cov.variance = exp (paramlnv);
 
 % Carry out the kriging prediction
-S_posterior = stk_predict (model, t_obs, S_obs, t);
+S_posterior = stk_predict (model, t);
 
 % Display the result
 hold on;  plot (t, S_posterior.mean, 'r-');
@@ -63,19 +72,16 @@ hold on;  plot (t, S_posterior.mean, 'r-');
 % Periodicity assumed to be known
 T0 = 2 * pi;
 
-% Here we use an EXPERIMENTAL feature of STK
-model.order = nan;
-model.lm = @(t)([ones(length(t),1) sin(2*pi*t/T0) cos(2*pi*t/T0)]);
-
-% Initial guess for the parameters of the Matern covariance
-[param0, lnv0] = stk_param_init (model, t_obs, S_obs, [], true);
+% We can directly use a handle as a linear model for the prior mean
+model.randomprocess.priormean = @(t)([ones(length(t),1) sin(2*pi*t/T0) cos(2*pi*t/T0)]);
 
 % Estimate the parameters
-[model.param, model.lognoisevariance] = ...
-    stk_param_estim (model, t_obs, S_obs, param0, lnv0);
+[param, paramlnv] = stk_param_estim (model, param0, lnv0);
+model.param = param;
+model.noise.cov.variance = exp (paramlnv);
 
 % Carry out the kriging prediction
-S_posterior = stk_predict (model, t_obs, S_obs, t);
+S_posterior = stk_predict (model, t);
 
 % Display the result
 hold on;  plot (t, S_posterior.mean, 'g-');

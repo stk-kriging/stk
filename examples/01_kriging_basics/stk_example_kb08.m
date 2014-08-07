@@ -58,18 +58,22 @@ model = stk_model ('stk_materncov_iso');
 
 % Parameters for the Matern covariance
 % ("help stk_materncov_iso" for more information)
-SIGMA2 = 1.0;  % variance parameter
-NU     = 4.0;  % regularity parameter
-RHO1   = 0.4;  % scale (range) parameter
-model.param = log ([SIGMA2; NU; 1/RHO1]);
+model.randomprocess.priorcov.sigma2 = 1.0;  % variance parameter
+model.randomprocess.priorcov.nu     = 4.0;  % regularity parameter
+model.randomprocess.priorcov.rho    = 0.4;  % scale (range) parameter
 
 
 %% Method 1: explicit conditioning by kriging (as in stk_example_kb05)
 
-zsim = stk_generate_samplepaths (model, xt, NB_PATHS);
+% Set observations for the model
+model_post = stk_setobs (model, xi, zi);
+
+% FIXME: despite what the syntax suggests, this produces UNCONDITIONAL
+%   sample paths at the present time. ..
+zsim = stk_generate_samplepaths (model_post, xt, NB_PATHS);
 
 % Carry out the kriging prediction at points xt
-[zp, lambda] = stk_predict (model, xi, zi, xt);
+[zp_ignore, lambda] = stk_predict (model_post, xt);
 
 % Condition sample paths on the observations
 zsimc1 = stk_conditioning (lambda, zi, zsim, xi_ind);
@@ -78,6 +82,17 @@ zsimc1 = stk_conditioning (lambda, zi, zsim, xi_ind);
 %% Method 2: let STK take care of the details
 
 zsimc2 = stk_generate_samplepaths (model, xi, zi, xt, NB_PATHS);
+
+
+%% Method 3: let STK take care of the details (bis)
+
+% FIXME: conditioning and THEN calling stk_generate_samplepaths should
+%  of cours generate conditioned sample path, as follows:
+
+% % Set observations for the model
+% model_post = stk_setobs (model, xi, zi);
+% 
+% zsimc3 = stk_generate_samplepaths (model_post, xt, NB_PATHS);
 
 
 %% Figure
