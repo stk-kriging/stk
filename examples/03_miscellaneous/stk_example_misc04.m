@@ -94,7 +94,7 @@ for i = 1:NB_SAMPLEPATHS,
     y_nd_1 = stk_dataframe ([y1_max y_nd(end, 2)], y_nd.colnames);
     y_nd = [y_nd_0; y_nd; y_nd_1];  %#ok<AGROW>
         
-    stairs (y_nd(:, 1), y_nd(:, 2), 'Color', cm(i, :));
+    stairs (y_nd.data(:, 1), y_nd.data(:, 2), 'Color', cm(i, :));
     stk_labels (model1.response_name, model2.response_name);
     axis ([y1_axis y2_axis]);  hold on;
     
