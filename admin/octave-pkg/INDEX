@@ -14,6 +14,7 @@ Core STK functions
 Parameter estimation
  stk_param_estim
  stk_param_getdefaultbounds
+ stk_param_gls 
  stk_param_init
  stk_param_relik
 
@@ -26,7 +27,6 @@ Parameter estimation
 #@stk_kreq_qr/stk_squared_seminorm
 #@stk_kreq_qr/stk_update
 #@stk_kreq_qr/subsref
-#@stk_kreq_qr/private/compute_P_scaling
 
 Modeling: Covariance functions
  stk_discretecov
@@ -82,17 +82,6 @@ Design of experiments (non-sequential): criterions
  stk_mindist
  stk_phipcrit
 
-## config/ is not in the path
-#stk_config_addpath
-#stk_config_buildmex
-#stk_config_getroot
-#stk_config_makeinfo
-#stk_config_rmpath
-#stk_config_testprivatemex
-#stk_config_graphicstoolkit
-#stk_config_path
-#stk_config_setup
-
 Examples: kriging basics
  stk_example_kb01
  stk_example_kb02
@@ -108,9 +97,12 @@ Examples: design of experiments
  stk_example_doe02
  stk_example_doe03
 
-#stk_example_misc01
-#stk_example_misc02
-#stk_example_misc03
+Examples: miscellaneous
+ stk_example_misc01
+ stk_example_misc02
+ stk_example_misc03
+ stk_example_misc04
+
 #stk_testfun_braninhoo
 
 Probability distributions: cdf, pdf and expected improvement
@@ -125,19 +117,22 @@ Arrays: generic functions for arrays
 ## Well, perhaps 'generic' isn't entirely appropriate...
  stk_commonsize
  stk_feval
+ stk_isdominated
+#stk_length     [do we really want this one ?] 
  stk_normalize
+ stk_paretofind
  stk_rescale
 ## The prefix sprintf might be misleading, since these function
 ## have very little in common with the usual sprintf function in C
+ stk_sprintf
  stk_sprintf_colnames
- stk_sprintf_data
  stk_sprintf_info
  stk_sprintf_rownames
  stk_sprintf_sizetype
+ @cell/stk_sprintf_sizetype
 
 Arrays: @stk_dataframe
-#@stk_dataframe/private/get_column_number
-#@stk_dataframe/private/reserved_field_names
+ @stk_dataframe/abs
  @stk_dataframe/and
  @stk_dataframe/apply
  @stk_dataframe/bsxfun
@@ -179,13 +174,14 @@ Arrays: @stk_dataframe
  @stk_dataframe/size
  @stk_dataframe/std
  @stk_dataframe/stk_dataframe
+#@stk_dataframe/stk_length     [do we really want this one ?]
  @stk_dataframe/stk_normalize
  @stk_dataframe/stk_rescale
+ @stk_dataframe/stk_sprintf 
  @stk_dataframe/stk_sprintf_colnames
- @stk_dataframe/stk_sprintf_data
  @stk_dataframe/stk_sprintf_info
  @stk_dataframe/stk_sprintf_rownames
- @stk_dataframe/stk_sprintf_sizetype
+ @stk_dataframe/stk_sprintf_sizetype 
  @stk_dataframe/subsasgn
  @stk_dataframe/subsref
  @stk_dataframe/sum
@@ -195,15 +191,17 @@ Arrays: @stk_dataframe
  @stk_dataframe/vertcat
  @stk_dataframe/xor
 
-Arrays: @stk_factorialdesign (factorial design, regular grids) 
- @stk_factorialdesign/disp
+Arrays: @stk_factorialdesign (factorial design, regular grids)
+ @stk_factorialdesign/fieldnames
  @stk_factorialdesign/get
  @stk_factorialdesign/ndgrid
  @stk_factorialdesign/set
  @stk_factorialdesign/stk_factorialdesign
  @stk_factorialdesign/stk_normalize
  @stk_factorialdesign/stk_rescale
+ @stk_factorialdesign/stk_sprintf
  @stk_factorialdesign/stk_sprintf_levels
+ @stk_factorialdesign/subsasgn
 
 ## This one is for legacy support of .a data structures
 ## (will be completely removed in the 3.x series)
@@ -228,13 +226,6 @@ Miscellaneous
 #stk_sprintf_colvect_fixedpoint
 #stk_sprintf_colvect_scientific
 #stk_sprintf_framed
-
-## the MOLE...
-#corr
-#graphics_toolkit
-#isoctave
-#linsolve
-#quantile
 
 ## testing STK
 #stk_isequal_tolabs
@@ -269,9 +260,4 @@ Miscellaneous
 #stk_title
 #stk_xlabel
 #stk_ylabel
-
-## misc/benchmarking scripts
-#stk_benchmark_cov1
-#stk_benchmark_cov2
-#stk_benchmark_logdet
 
