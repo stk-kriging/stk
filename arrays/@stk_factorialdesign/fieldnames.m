@@ -36,5 +36,6 @@ end % function fieldnames
 %!test
 %! x = stk_factorialdesign ({0:1, 3:5}, {'u' 'v'})
 %! fn1 = sort (fieldnames (x));
-%! fn2 = {'colnames', 'data', 'info', 'levels', 'rownames', 'u', 'v'};
+%! fn2 = {'colnames', 'data', 'info', 'levels', ...
+%!        'rownames', 'stk_dataframe', 'u', 'v'};
 %! assert (isequal (fn1, fn2));
