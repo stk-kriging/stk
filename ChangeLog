@@ -1,3 +1,11 @@
+2014-08-10  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_example_misc04.m: Fix for Octave compatiblity.
+
+	* examples/03_miscellaneous/stk_example_misc04.m: Fix for Octave
+	compatiblity (stairs does not accept stk_datafrm objects in
+	Octave).
+
 2014-08-08  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix and improve stk_factorialdesign's accessors.
