@@ -4,6 +4,7 @@ all: \
  __stk_dist_matrixy__.mex \
  __stk_filldist_discr_mex__.mex \
  __stk_gpquadform_matrixy__.mex \
+ __stk_isdominated_mex__.mex \
  __stk_mindist_mex__.mex \
  __stk_dist_matrixx__.mex \
  __stk_dist_pairwise__.mex \
