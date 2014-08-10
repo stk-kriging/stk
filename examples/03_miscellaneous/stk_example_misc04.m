@@ -135,7 +135,7 @@ isdom = isdom / NB_SAMPLEPATHS;
 stk_figure ('stk_example_misc04 (b)');
 colormap (hot);  stk_plot2d (@pcolor, y_test, isdom);
 colorbar ('YTick', [0 .25 .5 .75 1], ...
-    'YTickLabels', {'0%', '25%', '50%', '75%', '100%'});
+    'YTickLabel', {'0%', '25%', '50%', '75%', '100%'});
 stk_title ('Probability of domination');
 
 
