@@ -28,7 +28,10 @@
 
 function make_octave_package ()
 
-repo_dir = fileparts (fileparts (mfilename ('fullpath')));
+admin_dir = fileparts (mfilename ('fullpath'));
+addpath (admin_dir);
+
+repo_dir = fileparts (admin_dir);
 
 % A directory that contains various files, which are useful to create the package
 pkg_bits_dir = fullfile ('admin', 'octave-pkg');
@@ -110,7 +113,10 @@ copyfile (fullfile (pkg_bits_dir, 'Makefile'), ...
           fullfile (package_dir, 'src'));
 
 % INDEX
-copyfile (fullfile (pkg_bits_dir, 'INDEX'), package_dir);
+index_file = fullfile (pkg_bits_dir, 'INDEX'); 
+check_index_file (index_file, ...
+    get_public_mfile_list (fullfile (package_dir, 'inst')));
+copyfile (index_file, package_dir);
 
 % Create tar.gz archive
 cd (build_dir);
