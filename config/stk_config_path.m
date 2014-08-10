@@ -37,14 +37,12 @@ end
 isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
 
 % Are we using STK installed as an octave package ?
-if (exist (fullfile (root, 'stk_init.m'), 'file') == 2)
+if isoctave && (exist (fullfile (root, 'PKG_ADD'), 'file') == 2)
+    STK_OCTAVE_PACKAGE = true;
+    path = {};  % don't include root here (otherwise: infinite PKG_ADD loop)
+else
     STK_OCTAVE_PACKAGE = false;
     path = {root};
-elseif isoctave && (exist (fullfile (root, 'PKG_ADD'), 'file') == 2)
-    STK_OCTAVE_PACKAGE = true;
-    path = {};
-else
-    error ('Either stk_init.m or PKG_ADD should be present... What the hell ?');
 end
 
 % main function folders
