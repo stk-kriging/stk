@@ -98,7 +98,7 @@ while 1,
             indexed = [indexed {strtrim(s)}];
         elseif (s(1) == '#') && (s(2) ~= '#')
             s(1) = '';
-            i = regexp (s, '[', 'once');
+            i = regexp (s, '\[', 'once');
             if ~ isempty (i),  s = s(1:(i-1));  end
             ignored = [ignored {strtrim(s)}];
         end
