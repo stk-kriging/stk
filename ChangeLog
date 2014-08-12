@@ -1,3 +1,14 @@
+2014-08-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve Octave packaging.
+
+	* admin/make_octave_package.m: Delete rename_mex.sed after
+	use. Rename test script.
+	* admin/MAKE_OCTAVE_PACKAGE.md: New doc file (in markdown).
+	* admin/octave-pkg/test_package.m: Renamed to
+	* admin/octave-pkg/pkg_install_stk_and_generate_doc.m: Renamed
+	from.
+
 2014-08-10  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_example_misc04.m: Fix property name.

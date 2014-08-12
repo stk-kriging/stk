@@ -73,6 +73,9 @@ sed_program = prepare_sed_rename_mex (repo_dir, build_dir);
 % Process directories recursively
 process_directory ('', package_dir, ignore_list, sed_program);
 
+% Cleanup: delete sed program
+delete (sed_program);
+
 % Add mandatory file : DESCRIPTION
 fid = fopen (fullfile (package_dir, 'DESCRIPTION'), 'wt');
 fprintf (fid, 'Name: STK\n');
@@ -85,7 +88,7 @@ fprintf (fid, 'Title: STK: A Small Toolbox for Kriging\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Author: Julien BECT <julien.bect@supelec.fr>,\n');
 fprintf (fid, ' Emmanuel VAZQUEZ <emmanuel.vazquez@supelec.fr>\n');
-fprintf (fid, ' and many others (see AUTHORS)\n');
+fprintf (fid, ' and others (see AUTHORS)\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Maintainer: Julien BECT <julien.bect@supelec.fr>\n');
 fprintf (fid, ' and Emmanuel VAZQUEZ <emmanuel.vazquez@supelec.fr>\n');
@@ -125,7 +128,7 @@ system (sprintf ('tar --create --gzip --file %s stk', tarball_name));
 
 % a script to help admins test quickly that the tarball is ok
 cd (repo_dir);
-script_name = 'pkg_install_stk_and_generate_doc.m';
+script_name = 'test_package.m';
 copyfile (fullfile (pkg_bits_dir, script_name), build_dir);
 cmd = 'sed -i "s/stk-XX\\.YY\\.ZZ\\.tar\\.gz/%s/" %s';
 system (sprintf (cmd, tarball_name, fullfile (build_dir, script_name)));
