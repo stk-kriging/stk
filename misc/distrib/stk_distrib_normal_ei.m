@@ -1,20 +1,20 @@
 % STK_DISTRIB_NORMAL_EI computes the normal (Gaussian) expected improvement
 %
-% CALL: EI = stk_distrib_normal_ei (X)
+% CALL: EI = stk_distrib_normal_ei (Z)
 %
 %    computes the expected improvement of a standard normal (Gaussian)
-%    random variable above the threshold X.
+%    random variable above the threshold Z.
 %
-% CALL: EI = stk_distrib_normal_ei (X, MU, SIGMA)
-%
-%    computes the expected improvement of a Gaussian random variable
-%    with mean MU and standard deviation SIGMA, above the threshold X.
-%
-% CALL: EI = stk_distrib_normal_ei (X, MU, SIGMA, MINIMIZE)
+% CALL: EI = stk_distrib_normal_ei (Z, MU, SIGMA)
 %
 %    computes the expected improvement of a Gaussian random variable
-%    with mean MU and standard deviation SIGMA, below the threshold X
-%    if MINIMIZE is true, above the threshold X otherwise.
+%    with mean MU and standard deviation SIGMA, above the threshold Z.
+%
+% CALL: EI = stk_distrib_normal_ei (Z, MU, SIGMA, MINIMIZE)
+%
+%    computes the expected improvement of a Gaussian random variable
+%    with mean MU and standard deviation SIGMA, below the threshold Z
+%    if MINIMIZE is true, above the threshold Z otherwise.
 %
 % REFERENCES
 %
@@ -56,17 +56,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function ei = stk_distrib_normal_ei (x, mu, sigma, minimize)
+function ei = stk_distrib_normal_ei (z, mu, sigma, minimize)
 
 if nargin > 4,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 if nargin > 1,
-    delta = bsxfun (@minus, mu, x);
+    delta = bsxfun (@minus, mu, z);
 else
     % Default: mu = 0;
-    delta = - x;
+    delta = - z;
 end
 
 if nargin > 2,
@@ -108,7 +108,7 @@ end % function stk_distrib_normal_ei
 
 %!assert (stk_isequal_tolrel (stk_distrib_normal_ei (0.0), 1 / sqrt (2 * pi), eps))
 
-%!test % decreasing as a function of x
+%!test % decreasing as a function of z
 %! ei = stk_distrib_normal_ei (linspace (-10, 10, 200));
 %! assert (all (diff (ei) < 0))
 

@@ -1,4 +1,4 @@
-% STK_DISTRIB_NORMAL_PDF ...
+% STK_DISTRIB_NORMAL_PDF  [STK internal]
 
 % Copyright Notice
 %
@@ -26,29 +26,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function density = stk_distrib_normal_pdf (x, mu, sigma)
+function density = stk_distrib_normal_pdf (z, mu, sigma)
 
 if nargin > 3,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 if nargin > 1,
-    x = bsxfun (@minus, x, mu);
+    z = bsxfun (@minus, z, mu);
 end
 
 if nargin > 2,
-    [x, sigma] = stk_commonsize (x, sigma);
-    x = x ./ sigma;
+    [z, sigma] = stk_commonsize (z, sigma);
+    z = z ./ sigma;
     k0 = (sigma > 0);
 else
     sigma = 1;
     k0 = 1;
 end
 
-xx = x .^ 2;
-density = nan (size (x));
+xx = z .^ 2;
+density = nan (size (z));
 
-k0 = k0 & (~ isnan (x));
+k0 = k0 & (~ isnan (z));
 kb = (xx > 1491);  % when x^2 > 1491, the result is 0 in double precision
 
 % Deal with "large" values of abs(x)
