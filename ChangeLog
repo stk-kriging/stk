@@ -1,3 +1,10 @@
+2014-08-13  Julien Bect  <julien.bect@supelec.fr>
+
+	Provide a documentation for EI functions.
+
+	* misc/distrib/stk_distrib_normal_ei.m: Add doc.
+	* misc/distrib/stk_distrib_student_ei.m: Add doc.
+
 2014-08-12  Julien Bect  <julien.bect@supelec.fr>
 
 	Improve Octave packaging.

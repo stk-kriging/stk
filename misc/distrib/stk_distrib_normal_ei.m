@@ -1,11 +1,40 @@
-% STK_DISTRIB_NORMAL_EI ...
+% STK_DISTRIB_NORMAL_EI computes the normal (Gaussian) expected improvement
+%
+% CALL: EI = stk_distrib_normal_ei (X)
+%
+%    computes the expected improvement of a standard normal (Gaussian)
+%    random variable above the threshold X.
+%
+% CALL: EI = stk_distrib_normal_ei (X, MU, SIGMA)
+%
+%    computes the expected improvement of a Gaussian random variable
+%    with mean MU and standard deviation SIGMA, above the threshold X.
+%
+% CALL: EI = stk_distrib_normal_ei (X, MU, SIGMA, MINIMIZE)
+%
+%    computes the expected improvement of a Gaussian random variable
+%    with mean MU and standard deviation SIGMA, below the threshold X
+%    if MINIMIZE is true, above the threshold X otherwise.
+%
+% REFERENCES
+%
+%   [1] D. R. Jones, M. Schonlau and William J. Welch. Efficient global
+%       optimization of expensive black-box functions.  Journal of Global
+%       Optimization, 13(4):455-492, 1998.
+%
+%   [2] J. Mockus, V. Tiesis and A. Zilinskas. The application of Bayesian
+%       methods for seeking the extremum. In L.C.W. Dixon and G.P. Szego,
+%       editors, Towards Global Optimization, volume 2, pages 117–129, North
+%       Holland, New York, 1978.
+%
+% See also stk_distrib_student_ei
 
 % Copyright Notice
 %
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:   Julien Bect     <julien.bect@supelec.fr>
-%               Romain Benassi  <romain.benassi@gmail.com>
+%    Authors:  Julien Bect     <julien.bect@supelec.fr>
+%              Romain Benassi  <romain.benassi@gmail.com>
 
 % Copying Permission Statement
 %
