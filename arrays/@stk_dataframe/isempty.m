@@ -1,4 +1,4 @@
-% ISEMPTY [overloaded base function]
+% ISEMPTY [overload base function]
 
 % Copyright Notice
 %

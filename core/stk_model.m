@@ -1,4 +1,4 @@
-% STK_MODEL generates a model with default covariance parameters.
+% STK_MODEL generates a model with default covariance parameters
 %
 % CALL: MODEL = stk_model()
 %

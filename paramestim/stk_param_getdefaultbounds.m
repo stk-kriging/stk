@@ -1,4 +1,4 @@
-% STK_PARAM_GETDEFAULTBOUNDS ...
+% STK_PARAM_GETDEFAULTBOUNDS [STK internal]
 
 % Copyright Notice
 %
@@ -31,7 +31,7 @@ function [lb, ub] = stk_param_getdefaultbounds (covariance_type, param0, xi, zi)
 
 if ~ isfloat (param0)
     
-    stk_error('Incorrect type for param0.', 'TypeMismatch');
+    stk_error ('Incorrect type for param0.', 'TypeMismatch');
     
 else
     

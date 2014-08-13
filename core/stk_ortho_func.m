@@ -1,4 +1,4 @@
-% STK_ORTHO_FUNC  [STK internal function, not part of public API... UAYOR!]
+% STK_ORTHO_FUNC  [deprecated]
 %
 % CALL: P = stk_ortho_func (MODEL, X)
 %

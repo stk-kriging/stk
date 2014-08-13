@@ -1,4 +1,4 @@
-% EQ [overloaded base function]
+% EQ [overload base function]
 
 % Copyright Notice
 %

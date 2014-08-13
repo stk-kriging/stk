@@ -1,4 +1,4 @@
-% STK_PARALLEL_FEVAL [overloaded STK function]
+% STK_PARALLEL_FEVAL [overload STK function]
 
 % Copyright Notice
 %

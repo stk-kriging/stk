@@ -1,4 +1,4 @@
-% VAR [overloaded base function]
+% VAR [overload base function]
 
 % Copyright Notice
 %

@@ -5,7 +5,7 @@
 %    computes the first N terms of the D-dimensional RR2-scrambled Halton
 %    sequence.
 %
-% REFERENCE: 
+% REFERENCE 
 %
 %    Ladislav Kocis and William J. Whiten, "Computational investigations of low
 %    discrepancy sequences", ACM Transactions on Mathematical Software, 

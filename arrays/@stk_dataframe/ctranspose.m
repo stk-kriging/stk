@@ -1,4 +1,4 @@
-% CTRANSPOSE [overloaded base function]
+% CTRANSPOSE [overload base function]
 
 % Copyright Notice
 %

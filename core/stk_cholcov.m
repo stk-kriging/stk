@@ -1,4 +1,4 @@
-% STK_CHOLCOV   [STK internal function, not part of public API... UAYOR!]
+% STK_CHOLCOV  [STK internal]
 %
 % CALL: C = stk_cholcov (A, ...)
 %

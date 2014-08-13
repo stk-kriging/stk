@@ -1,4 +1,4 @@
-% PLOT [overloaded base function]
+% PLOT [overload base function]
 
 % Copyright Notice
 %

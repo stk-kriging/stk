@@ -1,4 +1,4 @@
-% STK_NORMALIZE [overloaded STK function]
+% STK_NORMALIZE [overload STK function]
 
 % Copyright Notice
 %

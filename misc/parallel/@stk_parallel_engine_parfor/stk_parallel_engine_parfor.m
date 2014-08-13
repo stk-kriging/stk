@@ -1,4 +1,4 @@
-% STK_PARALLEL_ENGINE_PARFOR [overloaded STK function]
+% STK_PARALLEL_ENGINE_PARFOR [overload STK function]
 
 % Copyright Notice
 %

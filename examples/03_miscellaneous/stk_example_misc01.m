@@ -7,7 +7,7 @@
 % The Matern covariance function tends to the Gaussian correlation function when
 % its regularity (smoothness) parameter tends to infinity.
 %
-% See also: stk_sf_matern, stk_materncov_iso, stk_materncov_aniso
+% See also: stk_materncov_iso, stk_materncov_aniso
 
 % Copyright Notice
 %

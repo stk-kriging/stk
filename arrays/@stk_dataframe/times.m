@@ -1,4 +1,4 @@
-% TIMES [overloaded base function]
+% TIMES [overload base function]
 
 % Copyright Notice
 %

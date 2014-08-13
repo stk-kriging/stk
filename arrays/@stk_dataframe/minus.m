@@ -1,4 +1,4 @@
-% MINUS [overloaded base function]
+% MINUS [overload base function]
 
 % Copyright Notice
 %

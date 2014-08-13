@@ -14,7 +14,7 @@
 %    * When X is a Latin hypercube sample, the linear (Pearson) correlation
 %      coefficients and Spearman's rank correlation coefficients coincide.
 %
-% REFERENCES:
+% REFERENCES
 %
 %   [1] Ales Florian, "An Efficient Sampling Scheme: Updated Latin Hypercube
 %       Sampling", Probabilistic Engineering Mechanics, 7:123-130, 1992.

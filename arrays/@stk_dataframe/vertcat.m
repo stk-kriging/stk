@@ -1,4 +1,4 @@
-% VERTCAT [overloaded base function]
+% VERTCAT [overload base function]
 
 % Copyright Notice
 %

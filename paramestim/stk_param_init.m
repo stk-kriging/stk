@@ -1,4 +1,4 @@
-% STK_PARAM_INIT provides a starting point for stk_param_estim().
+% STK_PARAM_INIT provides a starting point for stk_param_estim
 
 % Copyright Notice
 %

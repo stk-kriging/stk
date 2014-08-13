@@ -1,4 +1,4 @@
-% SUBSREF [overloaded base function]
+% SUBSREF [overload base function]
 
 % Copyright Notice
 %

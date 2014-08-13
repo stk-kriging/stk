@@ -1,4 +1,4 @@
-% LENGTH [overloaded base function]
+% LENGTH [overload base function]
 
 % Copyright Notice
 %

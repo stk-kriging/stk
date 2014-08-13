@@ -14,7 +14,7 @@
 %    choice of the k-th point X(k, :) does NOT depend on the response at the
 %    previously selected locations X(i, :), i < k.
 %
-% REFERENCE:
+% REFERENCE
 %
 %  [1] Emmanuel Vazquez and Julien Bect, "Sequential search based on kriging:
 %      convergence analysis of some algorithms", In: ISI - 58th World
