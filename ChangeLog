@@ -1,5 +1,14 @@
 2014-08-13  Julien Bect  <julien.bect@supelec.fr>
 
+	Use "z" instead of "x" in all stk_distrib_* functions.
+
+	* misc/distrib/stk_distrib_normal_cdf.m: Use "z" instead of "x".
+	* misc/distrib/stk_distrib_normal_ei.m: Idem.
+	* misc/distrib/stk_distrib_normal_pdf.m: Idem.
+	* misc/distrib/stk_distrib_student_cdf.m: Idem.
+	* misc/distrib/stk_distrib_student_ei.m: Idem.
+	* misc/distrib/stk_distrib_student_pdf.m: Idem.
+
 	Provide a documentation for EI functions.
 
 	* misc/distrib/stk_distrib_normal_ei.m: Add doc.

@@ -1,4 +1,4 @@
-% STK_DISTRIB_STUDENT_CDF ...
+% STK_DISTRIB_STUDENT_CDF  [STK internal]
 
 % Copyright Notice
 %
@@ -31,34 +31,34 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [p, q] = stk_distrib_student_cdf (x, nu, mu, sigma)
+function [p, q] = stk_distrib_student_cdf (z, nu, mu, sigma)
 
 if nargin > 4,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 if nargin > 2,
-    x = bsxfun (@minus, x, mu);
+    z = bsxfun (@minus, z, mu);
 end
 
 if nargin > 3,
-    x = bsxfun (@rdivide, x, sigma);
+    z = bsxfun (@rdivide, z, sigma);
 end
 
-xx = x .^ 2;
-[x, xx, nu] = stk_commonsize (x, xx, nu);
+xx = z .^ 2;
+[z, xx, nu] = stk_commonsize (z, xx, nu);
 
 % Return NaN for negative values of nu (or nu == NaN, or x == NaN)
-p = nan (size (x));
-q = nan (size (x));
-k0 = (nu > 0) & (~ isnan (x));
+p = nan (size (z));
+q = nan (size (z));
+k0 = (nu > 0) & (~ isnan (z));
 
 % Gaussian case (nu = +inf)
 k_inf = isinf (nu);  k = k0 & k_inf;
-[p(k), q(k)] = stk_distrib_normal_cdf (x(k));
+[p(k), q(k)] = stk_distrib_normal_cdf (z(k));
 
 k0 = k0 & (~ k_inf);
-kp = (x > 0);
+kp = (z > 0);
 kn = k0 & (~ kp);
 kp = k0 & kp;
 k_big_abs = (xx > nu);
