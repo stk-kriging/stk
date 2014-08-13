@@ -1,4 +1,4 @@
-% PROD [overloaded base function]
+% PROD [overload base function]
 
 % Copyright Notice
 %

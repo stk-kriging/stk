@@ -1,4 +1,4 @@
-% STK_PARAM_ESTIM estimates the parameters of a covariance function.
+% STK_PARAM_ESTIM estimates the parameters of a covariance function
 %
 % CALL: PARAM = stk_param_estim (MODEL, XI, YI, PARAM0)
 %

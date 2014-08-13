@@ -1,4 +1,4 @@
-% ABS [overloaded base function]
+% ABS [overload base function]
 
 % Copyright Notice
 %

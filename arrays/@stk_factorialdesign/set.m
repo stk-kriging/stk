@@ -1,4 +1,4 @@
-% SET [overloaded base function]
+% SET [overload base function]
 
 % Copyright Notice
 %

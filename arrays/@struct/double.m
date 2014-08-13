@@ -1,4 +1,4 @@
-% DOUBLE [overloaded base function]
+% DOUBLE [overload base function]
 
 % Copyright Notice
 %

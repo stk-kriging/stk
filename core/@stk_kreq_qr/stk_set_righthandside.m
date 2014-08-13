@@ -1,4 +1,4 @@
-% STK_SET_RIGHTHANDSIDE  [STK internal function, not part of public API... UAYOR!]
+% STK_SET_RIGHTHANDSIDE  [STK internal]
 %
 % CALL: kreq = stk_set_righthandside (kreq, Kti, Pt)
 %

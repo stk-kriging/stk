@@ -1,4 +1,4 @@
-% STK_FILLDIST_EXACT computes the (exact) fill distance of a set of points.
+% STK_FILLDIST_EXACT computes the (exact) fill distance of a set of points
 %
 % CALL: FD = stk_filldist_exact(X, BOX)
 %
@@ -22,7 +22,7 @@
 %    also returns the point YMAX where the maximal distance is attained,
 %    i.e., the argmax in equation (1).
 %
-% REFERENCES:
+% REFERENCES
 %
 %   [1] Luc Pronzato and Werner G. Müller, "Design of computer 
 %       experiments: space filling and beyond", Statistics and Computing,

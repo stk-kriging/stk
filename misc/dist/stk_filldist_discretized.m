@@ -1,4 +1,4 @@
-% STK_FILLDIST_DISCRETIZED computes the (discrete) fill distance of a set of points.
+% STK_FILLDIST_DISCRETIZED computes the (discrete) fill distance of a set of points
 %
 % CALL: FD = stk_filldist_discretized(X, Y)
 %
@@ -17,7 +17,7 @@
 %    also returns the value ARGMAX of the index j for which the maximum is attained.
 %    (If the maximum is obtained for several values of j, the smallest is returned.)
 %
-% REFERENCE:
+% REFERENCE
 %
 %   [1] Mark E. Johnson, Leslie M. Moore and Donald Ylvisaker, "Minimax
 %       and maximin distance designs", Journal of Statistical Planning

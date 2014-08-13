@@ -1,4 +1,4 @@
-% LDIVIDE [overloaded base function]
+% LDIVIDE [overload base function]
 
 % Copyright Notice
 %

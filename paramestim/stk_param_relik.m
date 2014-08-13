@@ -1,4 +1,4 @@
-% STK_PARAM_RELIK computes the restricted likelihood of a model given data.
+% STK_PARAM_RELIK computes the restricted likelihood of a model given data
 %
 % CALL: [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (MODEL, XI, YI)
 %

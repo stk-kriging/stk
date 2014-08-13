@@ -1,4 +1,4 @@
-% MIN [overloaded base function]
+% MIN [overload base function]
 
 % Copyright Notice
 %

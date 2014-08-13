@@ -24,7 +24,7 @@
 %      optimize. Morris & Mitchell recommend using p in the range 20-50 for this
 %      purpose.
 %
-% REFERENCES:
+% REFERENCES
 %
 %   [1] Max D. Morris and Toby J. Mitchell, "Exploratory Designs for Computer
 %       Experiments", Journal of Statistical Planning and Inference,

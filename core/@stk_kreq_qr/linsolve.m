@@ -1,4 +1,4 @@
-% LINSOLVE  [STK internal function, not part of public API... UAYOR!]
+% LINSOLVE  [STK internal]
 %
 % CALL: w = linsolve (kreq, rs)
 %

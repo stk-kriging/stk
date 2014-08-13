@@ -1,4 +1,4 @@
-% STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).
+% STK_MAKE_MATCOV computes a covariance matrix (and a design matrix)
 %
 % CALL: [K, P] = stk_make_matcov (MODEL, X0)
 %

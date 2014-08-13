@@ -1,4 +1,4 @@
-% HORZCAT [overloaded base function]
+% HORZCAT [overload base function]
 
 % Copyright Notice
 %

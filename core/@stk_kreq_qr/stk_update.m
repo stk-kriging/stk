@@ -1,4 +1,4 @@
-% STK_UPDATE  [STK internal function, not part of public API... UAYOR!]
+% STK_UPDATE  [STK internal]
 %
 % CALL: kreq = stk_update (kreq, Kjj, Kji, Pj, Ktj)
 %

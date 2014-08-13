@@ -1,4 +1,4 @@
-% STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process.
+% STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process
 %
 % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT)
 %

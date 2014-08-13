@@ -1,4 +1,4 @@
-% BSXFUN [overloaded base function]
+% BSXFUN [overload base function]
 
 % Copyright Notice
 %
