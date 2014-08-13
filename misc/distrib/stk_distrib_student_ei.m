@@ -1,11 +1,42 @@
-% STK_DISTRIB_STUDENT_EI ...
+% STK_DISTRIB_STUDENT_EI computes the Student expected improvement
+%
+% CALL: EI = stk_distrib_student_ei (X, NU)
+%
+%    computes the expected improvement of a Student random variable with NU
+%    degrees of freedom above the threshold X.
+%
+% CALL: EI = stk_distrib_student_ei (X, NU, MU, SIGMA)
+%
+%    computes the expected improvement of a Student random variable with NU
+%    degrees of freedom, location parameter MU and scale parameter SIGMA,
+%    above the threshold X.
+%
+% CALL: EI = stk_distrib_student_ei (X, NU, MU, SIGMA, MINIMIZE)
+%
+%    computes the expected improvement of a Student random variable with NU
+%    degrees of freedom, location parameter MU and scale parameter SIGMA,
+%    below the threshold X if MINIMIZE is true, above the threshold X
+%    otherwise.
+%
+% REFERENCES
+%
+%   [1] R. Benassi, J. Bect and E. Vazquez.  Robust Gaussian process-based
+%       global optimization using a fully Bayesian expected improvement
+%       criterion.  In: Learning and Intelligent Optimization (LION 5),
+%       LNCS 6683, pp. 176-190, Springer, 2011
+%
+%   [2] B. Williams, T. Santner and W. Notz.  Sequential Design of Computer
+%       Experiments to Minimize Integrated Response Functions. Statistica
+%       Sinica, 10(4):1133–1152, 2000.
+%
+% See also stk_distrib_normal_ei
 
 % Copyright Notice
 %
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:   Julien Bect     <julien.bect@supelec.fr>
-%               Romain Benassi  <romain.benassi@gmail.com>
+%    Authors:  Julien Bect     <julien.bect@supelec.fr>
+%              Romain Benassi  <romain.benassi@gmail.com>
 
 % Copying Permission Statement
 %
