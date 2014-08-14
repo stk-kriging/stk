@@ -1,8 +1,8 @@
-% STK_LABELS ...
+% STK_LABELS is a shortcut for stk_xlabel + stk_ylabel
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
