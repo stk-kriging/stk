@@ -8,7 +8,7 @@ stk >> STK, a Small Toolbox for Kriging
 ##
 ##  2) Internal: these functions are mostly intended for internal
 ##     use in STK. Although it might be occasionnaly useful for 
-##     advanced users to call them drectly, they are not considered
+##     advanced users to call them directly, they are not considered
 ##     as part of the public API and therefore not as stable as
 ##     public API functions. A necessary (but not sufficint) condition
 ##     for a function to be called "internal" is that it should not 
