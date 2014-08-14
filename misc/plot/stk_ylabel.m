@@ -1,8 +1,8 @@
-% STK_YLABEL ...
+% STK_YLABEL is a replacement for 'ylabel' for use in STK's examples
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
