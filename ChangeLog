@@ -1,5 +1,9 @@
 2014-08-15  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_plot1d.m: Add missing documentation.
+
+	* misc/plot/stk_plot1d.m: Add doc.
+
 	@stk_dataframe/plot.m: Full rewrite.
 
 	* arrays/@stk_dataframe/plot.m: Full rewrite to improve
