@@ -238,15 +238,29 @@ Miscellaneous: arrays
 #@stk_factorialdesign/stk_rescale           [overload STK]
 #@stk_factorialdesign/stk_sprintf           [internal]
 #@stk_factorialdesign/stk_sprintf_levels    [internal]
-
-Miscellaneous
+ 
+Miscellaneous: options, plots...
  stk_dist
  stk_options_get
  stk_options_set
+ stk_plot1d
+ stk_plot2d
+ stk_plot_shadedci
  stk_select_optimizer
  stk_version
-#stk_assert_box  [internal]
+
 #stk_gpquadform  [experimental]
+
+## Replacement for some base functions related to figures. Mostly for use
+## in STK's examples, to keep consistent graphical options accross all
+## examples. No need to let these appear in the INDEX.
+#stk_axes       [internal]
+#stk_figure     [internal]
+#stk_labels     [internal]
+#stk_subplot    [internal]
+#stk_title      [internal]
+#stk_xlabel     [internal]
+#stk_ylabel     [internal]
 
 ## error/warning 
 #stk_error [internal, not for public use]
@@ -260,6 +274,7 @@ Miscellaneous
 #stk_sprintf_framed
 
 ## testing STK
+#stk_assert_box       [internal]
 #stk_isequal_tolabs
 #stk_isequal_tolrel
 #stk_is_lhs
@@ -280,16 +295,4 @@ Miscellaneous
 #stk_parallel_feval                                      [experimental]
 #stk_parallel_start                                      [experimental]
 #stk_parallel_stop                                       [experimental]
-
-## plotting function... perhaps should we advertise some of these ?
-#stk_axes
-#stk_figure
-#stk_labels
-#stk_plot1d
-#stk_plot2d
-#stk_plot_shadedci
-#stk_subplot
-#stk_title
-#stk_xlabel
-#stk_ylabel
 
