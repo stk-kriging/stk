@@ -1,3 +1,11 @@
+2014-08-15  Julien Bect  <julien.bect@supelec.fr>
+
+	@stk_dataframe/plot.m: Full rewrite.
+
+	* arrays/@stk_dataframe/plot.m: Full rewrite to improve
+	compatibility with the base plot function. Deprecate the case
+	where x is an stk_dataframe objects with two or more columns.
+
 2014-08-14  Julien Bect  <julien.bect@supelec.fr>
 
 	Add missing documentations.

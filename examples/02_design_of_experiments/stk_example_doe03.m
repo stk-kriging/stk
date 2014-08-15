@@ -155,7 +155,7 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     stk_subplot (2, 1, 1);  cla;
     plot (x_grid, z_grid);  xlim (BOX);  hold on;
     plot (x_grid, z_post.mean, 'r-');
-    plot (data, DOE_STYLE{:});
+    plot (data.x, data.z, DOE_STYLE{:});
     plot (x_grid(i_max), z_grid(i_max), NEXT_STYLE{:});
     
     % Figure: lower panel
