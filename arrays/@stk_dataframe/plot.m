@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author: Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,115 +26,68 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function plot (arg1, varargin)
+function plot (varargin)
 
-%--- Plot is highly polymorphic... which case are we dealing with ? -------
+% Parse the list of input arguments
+[h, plot_elem, keyval_pairs] = parse_args_ (varargin{:});
 
-% Extract "numeric" arguments from varargin
-%    (note: axes handles ARE numeric argument... WTF...)
-
-T = @(a)(isnumeric (a) || isa (a, 'stk_dataframe'));
-
-if ~ T (arg1)    
-    stk_error (['The first argument to stk_dataframe/plot must be ' ...
-        'numeric or an stk_dataframe object.'], 'TypeMismatch');
+% Plot all
+for i = 1:(length (plot_elem))
+    p = plot_elem(i);
+    plot_ (h, p.x, p.z, p.S, keyval_pairs{:});
 end
-k = 1;  % at this point, we have at least one "numeric" argument
-if (nargin > 1) && (~ ischar (varargin{1}))
-    arg2 = varargin{1};  varargin(1) = [];
-    if ~ T (arg2)
-        stk_error (['The second argument to stk_dataframe/plot must be' ...
-            ' numeric or an stk_dataframe object.'], 'TypeMismatch');
-    end
-    k = 2;  % at this point, we have at least two "numeric" arguments
-    if (nargin > 2) && (~ ischar (varargin{1}))
-        arg3 = varargin{1};  varargin(1) = [];
-        if ~ T (arg3)
-            stk_error (['The third argument to stk_dataframe/plot ' ...
-                'must be numeric or an stk_dataframe object.'], ...
-                'TypeMismatch');
-        end
-        k = 3;
-    end
-    if (nargin > 3) && (~ ischar (varargin{1}))
-        stk_error (['Syntax error, expecting a char argument at the ' ...
-            'fourth position.'], 'TypeMismatch');
-    end
-end 
 
-% Now figure out which case we are dealing with
+end % function plot
 
-switch k
-    case 1
-        z = arg1;
-        h = gca;                 % default: current axes
-        x = (1:(size (z, 1)))';  % default: x = 1 ... n
-    case 2
-        arg1_handle = false;
-        if isnumeric (arg1) && isscalar (arg1)  % perhaps a handle ?
-            try  arg1_handle = strcmp (get (arg1, 'Type'), 'axes');  end
-        end
-        if arg1_handle,
-            h = arg1;
-            z = arg2;
-            x = (1:(size (z, 1)))';  % default: x = 1 ... n
-        else
-            x = arg1;
-            z = arg2;
-            h = gca;
-        end
-    case 3
-        try
-            assert (strcmp (get (arg1, 'Type'), 'axes'));
-        catch
-            stk_error (['When calling stk_dataframe/plot with three ' ...
-                'numeric arguments, the first one must be a handle to ' ...
-                'an axes object handle.'], 'IncorrectArgument');
-        end
-        h = arg1;
-        x = arg2;
-        z = arg3;
-end
+
+function plot_ (h, x, z, S, varargin)
 
 %--- Handle stk_dataframe inputs ------------------------------------------
 
 if isa (x, 'stk_dataframe'),
     xlab = x.colnames;
-    x = double (x);    
+    x = double (x);
 else
     xlab = {};
 end
 
 if isa (z, 'stk_dataframe'),
     zlab = z.colnames;
-    z = double (z);    
+    z = double (z);
 else
     zlab = {};
 end
 
-%--- Dimension of x and z ? -----------------------------------------------
+%--- Deal with various forms for x and z ----------------------------------
 
-% Tolerate row vector for x
-if isrow (x),  x = x';  end
-
-% Handle deprecated syntax where x has several columns
-if size (x, 2) > 1
-    warning ('STK:plot:Deprecated', sprintf (['DEPRECATED SYNTAX\n' ...
-        'stk_dataframe/plot (x, ...) not supported anymore for ' ...
-        'stk_dataframe objects with more than one column.']));
-    plot (x.data(:, 1), x.data(:, 2), varargin{:});
-    return;
+if isempty (x)  % Special: x not provided
+    
+    % Tolerate row vector for z
+    if isrow (z),  z = z';  end
+    
+    % Create a default x
+    x = (1:(size (z, 1)))';
+    
+else  % General case
+    
+    % Tolerate row vector for x
+    if isrow (x),  x = x';  end
+    
+    % Number of points
+    n = size (x, 1);
+    
+    % Tolerate row vector for z
+    if isequal (size (z), [1 n]),  z = z';  end
+    
 end
 
-% Number of points
-n = size (x, 1);
-
-% Tolerate row vector for z
-if isequal (size (z), [1 n]),  z = z';  end
-        
 %--- Plot and set labels --------------------------------------------------
 
-plot (h, x, z, varargin{:});
+if isempty (S)
+    plot (h, x, z, varargin{:});
+else
+    plot (h, x, z, S, varargin{:});
+end
 
 if ~ isempty (xlab),
     stk_xlabel (xlab);
@@ -148,9 +101,167 @@ if ~ isempty (zlab)
     end
 end
 
-end % function plot
+end % function plot_
 
 %#ok<*SPWRN,*TRYNC>
+
+
+function [h, plot_elem, keyval_pairs] = parse_args_ (arg1, varargin)
+
+% Plot is highly polymorphic, making the task of parsing input arguments a
+% rather lengthy and painful one...
+
+%--- Formal grammar for the list of arguments -----------------------------
+%
+% Terminal symbols
+%
+%    h = a handle to an axes object
+%    x = abscissa argument
+%    z = ordinate argument
+%    S = symbol/color/line string argument
+%    k = key in a key-val pair
+%    v = value in a key-val pair
+%
+% Derivation rules
+%
+%	<arg_list>          ::= <arg_list_0> | h <arg_list_0>
+%   <arg_list_0>        ::= <plot_elem_list> <keyval_pairs>
+%   <keyval_pairs>      ::= k v | <keyval_pairs> k v
+%   <plot_elem_list>    ::= <plot_elem_single> | <plot_elem_several>
+%	<plot_elem_several> ::= <plot_elem> | <plot_elem_several> <plot_elem>
+%   <plot_elem_single>  ::= <plot_elem> | <special_plot_elem>
+%	<plot_elem>         ::= x z | x z S
+%   <special_plot_elem> ::= z | z S
+
+% First, the easy bit: if the first argument can be interpreted as a handle,
+% then it always is.
+
+arg1_handle = false;
+if isscalar (arg1) && isa (arg1, 'double'),
+    try
+        arg1_handle = strcmp (get (arg1, 'Type'), 'axes');
+    end
+end
+
+if arg1_handle,
+    h = arg1;
+    if nargin == 1,
+        stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+    else
+        arg1 = varargin{1};
+        varargin(1) = [];
+    end
+else
+    h = gca;
+end
+
+% Then, arg1 *must* be a "numeric" argument
+if ischar (arg1)
+    stk_error ('Syntax error. Unexpected string argument.', 'TypeMismatch');
+end
+
+% Then, process remaining arguments recursively
+if isempty (varargin)
+    
+    % Special case: x has been omitted, and there are no additional args
+    plot_elem = struct ('x', [], 'z', {arg1}, 'S', []);
+    keyval_pairs = {};
+    
+elseif ischar (varargin{1})
+    
+    % Special case: x has been omitted, and there *are* additional args
+    if mod (length (varargin), 2)
+        S = [];
+        keyval_pairs = parse_keyval_ (varargin);
+    else
+        S = varargin{1};
+        keyval_pairs = parse_keyval_ (varargin{2:end});
+    end
+    plot_elem = struct ('x', [], 'z', {arg1}, 'S', {S});
+    
+else
+    
+    % General case
+    [plot_elem, keyval_pairs] = parse_args__ (arg1, varargin{:});
+    
+end
+
+end % function parse_args_
+
+
+function [plot_elem, keyval_pairs] = parse_args__ (x, z, varargin)
+
+if ischar (x) || ischar (z)
+    display (x);  display (z);
+    stk_error (['Syntax error. At this point, we were expecting ' ...
+        'another numeric (x, z) pair.'], 'SyntaxError');
+end
+
+if isempty (varargin)
+    
+    plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
+    keyval_pairs = {};
+    
+elseif ~ ischar (varargin{1})  % expect another (x, z) pair after this one
+    
+    plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
+    [plot_elem_, keyval_pairs] = parse_args__ (varargin{:});
+    plot_elem = [plot_elem plot_elem_];
+    
+elseif length (varargin) == 1  % S
+    
+    plot_elem = struct ('x', {x}, 'z', {z}, 'S', varargin(1));
+    keyval_pairs = {};
+    
+elseif ischar (varargin{2})  % S, key, val, ...
+    
+    plot_elem = struct ('x', {x}, 'z', {z}, 'S', varargin(1));
+    keyval_pairs = parse_keyval_ (varargin{2:end});
+    
+elseif length (varargin) == 2  % key, val
+    
+    plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
+    keyval_pairs = varargin;
+    
+elseif ~ ischar (varargin{3})  % S, x, z, ...
+    
+    plot_elem = struct ('x', {x}, 'z', {z}, 'S', varargin(1));
+    [plot_elem_, keyval_pairs] = parse_args__ (varargin{2:end});
+    plot_elem = [plot_elem plot_elem_];
+    
+else  % key, val, key, val, ...
+    
+    plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
+    keyval_pairs = parse_keyval_ (varargin{:});
+    
+end
+
+end % function parse_args__
+
+function keyval_pairs = parse_keyval_ (key, val, varargin)
+
+if nargin == 0,
+    
+    keyval_pairs = {};
+    
+elseif nargin == 1,
+    
+    errmsg = 'Syntax error. Incomplete key-value pair';
+    stk_error (errmsg, 'NotEnoughInputArgs');
+    
+elseif ~ ischar (key)
+    
+    display (key);
+    stk_error (['Syntax error. At his point, we were expecting a ' ...
+        'key-value pair, but key is not a string.'], 'TypeMismatch');
+    
+else
+    
+    keyval_pairs = [{key, val} parse_keyval_ (varargin{:})];
+    
+end
+
+end % function parse_keyval_
 
 
 %!test % plot with x as a vector and z as a (univariate) dataframe
