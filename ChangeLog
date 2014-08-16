@@ -1,3 +1,13 @@
+2014-08-16  Julien Bect  <julien.bect@supelec.fr>
+
+	@stk_dataframe/plot.m: Full rewrite again.
+
+	* arrays/@stk_dataframe/plot.m: Full rewrite again, to improve
+	even more compatibility with the base plot function. The case
+	where x is an stk_dataframe objects with two or more columns is
+	now handled in a way that is consistent with the base plot
+	function (i.e., if x has two columns, then we get two 1D plots).
+
 2014-08-15  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_plot1d.m: Add missing documentation.
