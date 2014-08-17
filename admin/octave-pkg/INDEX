@@ -250,8 +250,8 @@ Miscellaneous: options, plots...
  stk_options_get
  stk_options_set
  stk_plot1d
-#stk_plot2d      [deprecated]
- stk_plot_shadedci
+#stk_plot2d           [deprecated]
+#stk_plot_shadedci    [internal]
  stk_select_optimizer
  stk_version
 
