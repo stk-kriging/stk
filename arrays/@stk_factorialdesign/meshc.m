@@ -1,6 +1,6 @@
-% STK_PLOT2D  [deprecated]
+% MESHC  [overload base function]
 %
-% See also: stk_factorialdesign/contour, stk_factorialdesign/mesh, ...
+% See also: stk_factorialdesign/contour, stk_factorialdesign/surf, ...
 
 % Copyright Notice
 %
@@ -28,20 +28,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_plot2d (plotfun, x, z, varargin)
+function meshc (varargin)
 
-if ~ isa (x, 'stk_factorialdesign')
-    errmsg = 'x should be an stk_factorialdesign object.';
-    stk_error (errmsg, 'IncorrectArgument');
-end
+plot_surfmeshcontour (@meshc, varargin{:});
 
-warning ('STK:stk_plot2d:Deprecated', ...
-    'stkplot2d is deprecated, please use @stk_factorialdesign/plot instead');
-
-if ~ ischar (plotfun)  % assume it's a function handle, then
-    plotfun = func2str (plotfun);
-end
-
-feval (plotfun, x, z, varargin{:});
-
-end % function stk_plot2d
+end % function meshc

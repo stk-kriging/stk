@@ -1,5 +1,22 @@
 2014-08-17  Julien Bect  <julien.bect@supelec.fr>
 
+	Deprecate stk_plot2d.
+
+	* misc/plot/stk_plot2d.m: Deprecated.
+	* arrays/@stk_factorialdesign/contour.m: Overload base function.
+	* arrays/@stk_factorialdesign/mesh.m: Overload base function.
+	* arrays/@stk_factorialdesign/meshc.m: Overload base function.
+	* arrays/@stk_factorialdesign/meshz.m: Overload base function.
+	* arrays/@stk_factorialdesign/pcolor.m: Overload base function.
+	* arrays/@stk_factorialdesign/surf.m: Overload base function.
+	* arrays/@stk_factorialdesign/private/plot_surfmeshcontour.m:
+	Provide a common implementation for overloading surf/contour/...
+	* examples/01_kriging_basics/stk_example_kb03.m: Use contour and
+	pcolor.
+	* examples/03_miscellaneous/stk_example_misc04.m: Use pcolor.
+	* admin/octave-pkg/INDEX: Update with the new functions. Hide
+	stk_plot2d.
+
 	@stk_dataframe/plot.m: Hold on after the first plot.
 
 	* arrays/@stk_dataframe/plot.m: Hold on after the first plot, if

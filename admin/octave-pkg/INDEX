@@ -230,10 +230,16 @@ Miscellaneous: arrays
 #@stk_dataframe/vertcat                [overload base]
 #@stk_dataframe/xor                    [overload base]
 
+#@stk_factorialdesign/contour               [overload base]
 #@stk_factorialdesign/fieldnames            [overload base]
 #@stk_factorialdesign/get                   [overload base]
+#@stk_factorialdesign/mesh                  [overload base]
+#@stk_factorialdesign/meshc                 [overload base]
+#@stk_factorialdesign/meshz                 [overload base]
+#@stk_factorialdesign/pcolor                [overload base]
 #@stk_factorialdesign/set                   [overload base]
 #@stk_factorialdesign/subsasgn              [overload base]
+#@stk_factorialdesign/surf                  [overload base]
 #@stk_factorialdesign/stk_normalize         [overload STK]
 #@stk_factorialdesign/stk_rescale           [overload STK]
 #@stk_factorialdesign/stk_sprintf           [internal]
@@ -244,7 +250,7 @@ Miscellaneous: options, plots...
  stk_options_get
  stk_options_set
  stk_plot1d
- stk_plot2d
+#stk_plot2d      [deprecated]
  stk_plot_shadedci
  stk_select_optimizer
  stk_version
