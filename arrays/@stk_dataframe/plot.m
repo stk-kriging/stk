@@ -31,11 +31,19 @@ function plot (varargin)
 % Parse the list of input arguments
 [h, plot_elem, keyval_pairs] = parse_args_ (varargin{:});
 
+% Read hold state
+b = ishold ();
+
 % Plot all
-for i = 1:(length (plot_elem))
+n = length (plot_elem);
+for i = 1:n
     p = plot_elem(i);
     plot_ (h, p.x, p.z, p.S, keyval_pairs{:});
+    if (i == 1) && (n > 1),  hold on;  end
 end
+
+% Restore hold state
+if (~ b) && (n > 1),  hold off;  end
 
 end % function plot
 

@@ -1,3 +1,10 @@
+2014-08-17  Julien Bect  <julien.bect@supelec.fr>
+
+	@stk_dataframe/plot.m: Hold on after the first plot.
+
+	* arrays/@stk_dataframe/plot.m: Hold on after the first plot, if
+	there are several (fixes a bug introduced yesterday).
+
 2014-08-16  Julien Bect  <julien.bect@supelec.fr>
 
 	@stk_dataframe/plot.m: Full rewrite again.
