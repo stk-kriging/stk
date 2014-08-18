@@ -15,21 +15,5 @@ As a result, you should get in ~/source/stk/octave-build:
 
  * stk-X.Y.Z.tar.gz: ready to be installed using `pkg`,
  * stk: unpacked tarball, available for inspection,
- * test_package.m: test script, see below.
-
-## Testing installation and documentation
-
-The script `test_package` provided in the build directory allows to test that
-
- 1. The generated tarball can actually be installed using `pkg`,
- 2. The documentation that will be auto-generated for the Octave-Forge website
-    is OK.
-
-The script should be directly executable (if not, check file
-permissions). Therefore, assuming that you're stll at the root of STK's source
-tree, a simple
-
-	octave-build/test_package.m
-
-from the shell should get you through the whole process, ending with Firefox
-opened on the auto-generated documentation, ready for inspection.
+ * ...
+ 

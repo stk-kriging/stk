@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2014 SUPELEC
 %
-%    Authors:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -126,12 +126,19 @@ cd (build_dir);
 tarball_name = sprintf ('stk-%s.tar.gz', version_number);
 system (sprintf ('tar --create --gzip --file %s stk', tarball_name));
 
-% a script to help admins test quickly that the tarball is ok
-cd (repo_dir);
-script_name = 'test_package.m';
-copyfile (fullfile (pkg_bits_dir, script_name), build_dir);
-cmd = 'sed -i "s/stk-XX\\.YY\\.ZZ\\.tar\\.gz/%s/" %s';
-system (sprintf (cmd, tarball_name, fullfile (build_dir, script_name)));
+% Install package
+pkg ('install', tarball_name);
+
+% Generate HTML documentation
+pkg ('load', 'generate_html');
+generate_package_html ('stk', 'html', 'octave-forge');
+
+% Download a few goodies from the Octave-Forge website
+cd html
+F = @(s) system (sprintf ('wget http://octave.sourceforge.net/%s', s));
+F ('octave-forge.css');
+F ('download.png');
+F ('doc.png');
 
 cd (here)
 
