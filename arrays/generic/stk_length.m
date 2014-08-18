@@ -1,6 +1,14 @@
-% STK_LENGTH ...
-% 
-% FIXME: missing documentation
+% STK_LENGTH return the "length" of an array
+%
+% CALL:  L = stk_length (X)
+%
+%    returns the "length" of the data array X.
+%
+% NOTE:
+%
+%    Currently, the length of a data array (numeric array or stk_dataframe
+%    object) is defined as SIZE (X, 1) but this might change in future
+%    versions of STK. Note that this is not the same as length (X).
 
 % Copyright Notice
 %
