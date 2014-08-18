@@ -1,4 +1,4 @@
-% STK_LENGTH [overloaded stk_length function]
+% STK_LENGTH [overload STK function]
 
 % Copyright Notice
 %
