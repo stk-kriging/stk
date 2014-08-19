@@ -1,4 +1,4 @@
-% MAKE_OCTAVE_PACKAGE
+% BUILD_FORGEDOC
 
 % Copyright Notice
 %
@@ -26,126 +26,58 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function make_octave_package ()
+function build_forgedoc (root_dir, build_dir)
 
-admin_dir = fileparts (mfilename ('fullpath'));
-addpath (admin_dir);
-
-repo_dir = fileparts (admin_dir);
-
-% A directory that contains various files, which are useful to create the package
-pkg_bits_dir = fullfile ('admin', 'octave-pkg');
+disp ('                                      ');
+disp ('**************************************');
+disp ('*  Build Octave-Forge documentation  *');
+disp ('**************************************');
+disp ('                                      ');
 
 here = pwd ();
 
-% From now on, we use relative paths wrt repo_dir
-cd (repo_dir);
+% Version number
+version_number = get_version_number ();
 
-version_number = stk_version ()
-pos = regexp (version_number, '[^\d\.]', 'once');
-if ~ isempty (pos)
-    original_version_number = version_number;
-    version_number (pos:end) = [];
-    warning (sprintf ('Truncating version numbers %s -> %s', ...
-        original_version_number, version_number));
-end
-
-% Build dir
-build_dir = 'octave-build'
-mkdir (build_dir);
-
-% Directory that will contain the unpacked octave package
-package_dir = fullfile (build_dir, 'stk')
-mkdir (package_dir);
-
-% src: sources for MEX-files
-mkdir (fullfile (package_dir, 'src'));
-
-% doc: an optional directory containing documentation for the package
-mkdir (fullfile (package_dir, 'doc'));
-
-% List of files or directories that must be ignored by process_directory ()
-ignore_list = {'.hg', 'admin', 'misc/mole/matlab', build_dir};
-
-% Prepare sed program for renaming MEX-functions (prefix/suffix by __)
-sed_program = prepare_sed_rename_mex (repo_dir, build_dir);
-
-% Process directories recursively
-process_directory ('', package_dir, ignore_list, sed_program);
-
-% Cleanup: delete sed program
-delete (sed_program);
-
-% Add mandatory file : DESCRIPTION
-fid = fopen (fullfile (package_dir, 'DESCRIPTION'), 'wt');
-fprintf (fid, 'Name: STK\n');
-fprintf (fid, '#\n');
-fprintf (fid, 'Version: %s\n', version_number);
-fprintf (fid, '#\n');
-fprintf (fid, 'Date: %s\n', date);
-fprintf (fid, '#\n');
-fprintf (fid, 'Title: STK: A Small Toolbox for Kriging\n');
-fprintf (fid, '#\n');
-fprintf (fid, 'Author: See AUTHORS file\n');
-fprintf (fid, '#\n');
-fprintf (fid, 'Maintainer: Julien BECT <julien.bect@supelec.fr>\n');
-fprintf (fid, ' and Emmanuel VAZQUEZ <emmanuel.vazquez@supelec.fr>\n');
-fprintf (fid, '#\n');
-fprintf (fid, '%s', parse_description_field (repo_dir));
-fprintf (fid, '#\n');
-fprintf (fid, 'Url: https://sourceforge.net/projects/kriging/\n');
-fclose (fid);
-
-% PKG_ADD: commands that are run when the package is added to the path
-PKG_ADD = fullfile (package_dir, 'inst', 'PKG_ADD.m');
-movefile (fullfile (package_dir, 'inst', 'stk_init.m'), PKG_ADD);
-cmd = 'sed -i "s/STK_OCTAVE_PACKAGE = false/STK_OCTAVE_PACKAGE = true/" %s';
-system (sprintf (cmd, PKG_ADD));
-
-% PKG_DEL: commands that are run when the package is removed from the path
-copyfile (fullfile (pkg_bits_dir, 'PKG_DEL.m'), ...
-          fullfile (package_dir, 'inst'));
-
-% post_install: a function that is run after the installation of the package
-copyfile (fullfile (pkg_bits_dir, 'post_install.m'), package_dir);
-
-% Makefile
-copyfile (fullfile (pkg_bits_dir, 'Makefile'), ...
-          fullfile (package_dir, 'src'));
-
-% INDEX
-index_file = fullfile (pkg_bits_dir, 'INDEX'); 
-check_index_file (index_file, ...
-    get_public_mfile_list (fullfile (package_dir, 'inst')));
-copyfile (index_file, package_dir);
-
-% Create tar.gz archive
-cd (build_dir);
-tarball_name = sprintf ('stk-%s.tar.gz', version_number);
-system (sprintf ('tar --create --gzip --file %s stk', tarball_name));
+% Name of the octpkg tarball
+octpkg_tarball_name = sprintf ('stk-%s-octpkg.tar.gz', version_number);
 
 % Install package
-pkg ('install', tarball_name);
+fprintf ('Installing stk %s (pkg install)... ', version_number);
+cd (build_dir);
+pkg ('install', octpkg_tarball_name);
+fprintf ('done.\n');
 
 % Generate HTML documentation
+fprintf ('Generating HTML documentation for OF... ');
+cd octpkg
 pkg ('load', 'generate_html');
 generate_package_html ('stk', 'html', 'octave-forge');
+fprintf ('done.\n');
+
+% Name of the forgedoc tarball
+forgedoc_tarball_name = sprintf ('stk-%s-forgedoc.tar.gz', version_number);
+
+% Create tar.gz archive
+cd html
+system (sprintf ('tar --create --gzip --file %s stk', forgedoc_tarball_name));
+movefile (forgedoc_tarball_name, fullfile ('..', '..'));
 
 % Download a few goodies from the Octave-Forge website
-cd html
-F = @(s) system (sprintf ('wget http://octave.sourceforge.net/%s', s));
-F ('octave-forge.css');
-F ('download.png');
-F ('doc.png');
+fprintf ('Downloading goodies from the OF website... ');
+F = @(s) system (sprintf (...
+    'wget --quiet http://octave.sourceforge.net/%s', s));
+F ('octave-forge.css');  F ('download.png');  F ('doc.png');  F ('oct.png');
+fprintf ('done.\n');
 
-cd (here)
+cd (here);
 
 end % function make_octave_package
 
 %#ok<*NOPRT,*SPWRN,*WNTAG,*SPERR,*AGROW>
 
 
-function process_directory (d, package_dir, ignore_list, sed_program)
+function process_directory (d, unpacked_dir, ignore_list, sed_program)
 
 if ismember (d, ignore_list)
     fprintf ('Ignoring directory %s\n', d);
@@ -165,9 +97,9 @@ for i = 1:(length (dir_content))
     if ~ (isequal (s, '.') || isequal (s, '..'))
         s = fullfile (d, s);
         if dir_content(i).isdir
-            process_directory (s, package_dir, ignore_list, sed_program);
+            process_directory (s, unpacked_dir, ignore_list, sed_program);
         else
-            process_file (s, package_dir, sed_program);
+            process_file (s, unpacked_dir, sed_program);
         end
     end
 end
@@ -176,7 +108,7 @@ end % function process_directory
 
 
 
-function process_file (s, package_dir, sed_program)
+function process_file (s, unpacked_dir, sed_program)
 
 % Regular expressions
 regex_ignore = '(~|\.(hgignore|hgtags|mexglx|mex|mexa64|mexw64|o|tmp|orig))$';
@@ -200,33 +132,33 @@ else
     
     if ~ isempty (regexp (s, regex_mfile, 'once'))
         
-        dst = fullfile (package_dir, 'inst', s);
+        dst = fullfile (unpacked_dir, 'inst', s);
         mkdir_recurs (fileparts (dst));
         system (sprintf ('sed --file %s %s > %s', sed_program, s, dst));
         
     elseif ~ isempty (regexp (s, regex_copy_src, 'once'))
         
-        copyfile (s, fullfile (package_dir, 'src'));
+        copyfile (s, fullfile (unpacked_dir, 'src'));
         
     elseif strcmp (s, 'ChangeLog')
         
         % DESCRIPTION, COPYING, ChangeLog & NEWS will be available
         % in "packinfo" after installation
         
-        copyfile (s, package_dir);
+        copyfile (s, unpacked_dir);
         
     elseif strcmp (s, 'LICENSE')
         
-        copyfile (s, fullfile (package_dir, 'COPYING'));
+        copyfile (s, fullfile (unpacked_dir, 'COPYING'));
         
     elseif strcmp (s, 'WHATSNEW')
         
-        copyfile (s, fullfile (package_dir, 'NEWS'));
+        copyfile (s, fullfile (unpacked_dir, 'NEWS'));
         
     elseif (strcmp (s, 'README')) || (strcmp (s, 'AUTHORS'))
         
         % Put README and AUTHORS in the documentation directory
-        copyfile (s, fullfile (package_dir, 'doc'));
+        copyfile (s, fullfile (unpacked_dir, 'doc'));
         
     else
         
@@ -258,11 +190,11 @@ end
 end % function mkdir_recurs
 
 
-function sed_program = prepare_sed_rename_mex (repo_dir, build_dir)
+function sed_program = prepare_sed_rename_mex (root_dir, build_dir)
 
-cd (fullfile (repo_dir, 'config'));
+cd (fullfile (root_dir, 'config'));
 info = stk_config_makeinfo ();
-cd (repo_dir);
+cd (root_dir);
 
 sed_program = fullfile (build_dir, 'rename_mex.sed');
 fid = fopen (sed_program, 'w');
@@ -276,9 +208,9 @@ fclose (fid);
 end % function rename_mex_functions
 
 
-function descr = parse_description_field (repo_dir)
+function descr = parse_description_field (root_dir)
 
-fid = fopen (fullfile (repo_dir, 'README'));
+fid = fopen (fullfile (root_dir, 'README'));
 
 s = [];
 
