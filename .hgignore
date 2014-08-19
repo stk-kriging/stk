@@ -1,5 +1,5 @@
 syntax: glob
-octave-build
+build
 *.mex
 *.mexa64
 *.mexglx

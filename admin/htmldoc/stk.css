@@ -1,0 +1,152 @@
+a:link {
+  background-color: inherit;
+  color: black;
+}
+
+a:visited {
+  background-color: inherit;
+  color: black;
+}
+
+a.linkToIndex {
+  text-decoration: none;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+body {
+  background: white;
+  color: black;
+  font-family: verdana,helvetica,arial,sans-serif;
+  font-weight: normal;
+  font-size: 13px;
+  width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+}
+
+td {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
+
+div.header {
+  width: inherit;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+div.header #title {  
+  padding-left: 1em;
+  font-size: 120%;
+}
+
+div#title {
+  width: 100%;
+  clear: both;
+  position: fixed;
+  top: 0;
+}
+
+#doccontent {
+  width: inherit;
+  padding: 0em;
+  margin-top: 1em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Layout of packages page */
+div.func {
+  margin-left: 1em;
+}
+
+h3.package_name {
+  background-color: #eeeeec;
+  border: 2px solid #d3d7cf;
+  padding: 2px;
+}
+
+td.package_table { /* Package version, release date, ... */
+  padding-right: 2em;
+  margin-right: 2em;
+}
+
+div #description_box {
+  padding-top: 1em;
+  width: inherit;
+}
+
+a.package_link {
+  background-color: inherit;
+  color: black;
+  font-weight: bold;
+  font-size: 80%;
+  text-decoration: none;
+}
+
+a.package_head_link {
+  background-color: inherit;
+  color: black;
+  text-decoration: none;
+}
+
+table.package {
+  table-layout: fixed;
+  width: 100%;
+}
+
+p.package_link a {
+  background-color: inherit;
+  color: black;
+  text-decoration: none;
+}
+
+div.package_box {
+  background: #fcf98f;
+  border: 2px solid #edd4A0;
+  width: 96%;  padding: 2%;
+  margin-bottom: 1em;
+}
+
+div.package_description {
+  background: #fcf98f;
+  border: 2px solid #edd4A0;
+  width: 96%;
+  padding: 2%;
+  margin-top: 1em;
+  margin-bottom: 3em;
+}
+
+h3.category {
+  background: #EEEEEC;
+  border: solid 2px #daddd6;
+  padding: 2px;
+  width: 742px;
+  margin-top: 2em;
+}
+
+.flink {
+  background-color: inherit;
+  color: inherit;
+  text-align: right;
+  display: block;
+}
+
+.ftext {
+  margin-left: 4ex;
+  color: blue;
+  margin-bottom: 2ex;
+}
+
+div#GPLv3 {
+  margin-top: 3em;
+}
+
+div#doccontent pre {
+  margin-top: 3em;
+}
