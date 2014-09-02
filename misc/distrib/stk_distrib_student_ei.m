@@ -27,7 +27,7 @@
 %
 %   [2] B. Williams, T. Santner and W. Notz.  Sequential Design of Computer
 %       Experiments to Minimize Integrated Response Functions. Statistica
-%       Sinica, 10(4):1133–1152, 2000.
+%       Sinica, 10(4):1133-1152, 2000.
 %
 % See also stk_distrib_normal_ei
 

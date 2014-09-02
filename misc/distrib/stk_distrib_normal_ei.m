@@ -24,7 +24,7 @@
 %
 %   [2] J. Mockus, V. Tiesis and A. Zilinskas. The application of Bayesian
 %       methods for seeking the extremum. In L.C.W. Dixon and G.P. Szego,
-%       editors, Towards Global Optimization, volume 2, pages 117–129, North
+%       editors, Towards Global Optimization, volume 2, pages 117-129, North
 %       Holland, New York, 1978.
 %
 % See also stk_distrib_student_ei
