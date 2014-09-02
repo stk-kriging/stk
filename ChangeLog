@@ -1,5 +1,15 @@
 2014-09-02  Julien Bect  <julien.bect@supelec.fr>
 
+	Rename LICENSE to COPYING.
+
+	* LICENSE: Renamed to COPYING.
+	* COPYING: Formerly known as LICENSE.
+	* README: Update reference to LICENSE.
+	* admin/build_tools/build_forgedoc.m: No more need to rename.
+	* admin/build_tools/build_octpkg.m: No more need to rename.
+	* admin/find_nonstandard_characters.sh: Update reference to LICENSE.
+	* admin/fix_eol.sh: Update reference to LICENSE.
+
 	Rename WHATSNEW to NEWS.
 
 	* NEWS: Formerly known as WHATSNEW. This version is for release
