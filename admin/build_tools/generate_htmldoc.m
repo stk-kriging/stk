@@ -94,8 +94,7 @@ function enhance_copying (htmldoc_dir, htmldocparts_dir)
 
 % Get formatted GPLv3
 
-[fid, errmsg] = fopen (fullfile (htmldocparts_dir, "GPLv3.html"), "rt");
-if fid == -1, error (errmsg); end
+fid = fopen_ (fullfile (htmldocparts_dir, 'GPLv3.html'), 'rt');
 s = (char (fread (fid)))';
 fclose (fid);
 
@@ -108,8 +107,7 @@ s_GPLv3 = tmp(1).content;
 
 fn_copying = fullfile (htmldoc_dir, 'COPYING.html');
 
-[fid, errmsg] = fopen (fn_copying, 'rt');
-if fid == -1, error (errmsg); end
+fid = fopen_ (fn_copying, 'rt');
 s = (char (fread (fid)))';
 fclose (fid);
 
@@ -118,8 +116,7 @@ s = regexprep (s, '<pre>.*</pre>', ...
   ["<div id=\"GPLv3\">\n" s_GPLv3 "</div>\n"]);
 s = regexprep (s, '<h2 class="tbdesc">.*?package</a></p>', '');
 
-[fid, errmsg] = fopen (fn_copying, 'wt');
-if fid == -1, error (errmsg); end
+fid = fopen_ (fn_copying, 'wt');
 fprintf (fid, "%s", s);
 fclose (fid);
 
@@ -132,8 +129,7 @@ function modify_index_html (htmldoc_dir)
 
 fn_index = fullfile (htmldoc_dir, 'index.html');
 
-[fid, errmsg] = fopen (fn_index, 'rt');
-if fid == -1, error (errmsg); end
+fid = fopen_ (fn_index, 'rt');
 s = (char (fread (fid)))';
 fclose (fid);
 
@@ -146,8 +142,7 @@ s = regexprep (s, 'Read license', 'GNU Public Licence v3');
 % NEWS -> News
 s = regexprep (s, '(\s+)NEWS', '$1News');
 
-[fid, errmsg] = fopen (fn_index, 'wt');
-if fid == -1, error (errmsg); end
+fid = fopen_ (fn_index, 'wt');
 fprintf (fid, "%s", s);
 fclose (fid);
 

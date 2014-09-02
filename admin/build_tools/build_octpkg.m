@@ -77,7 +77,7 @@ process_directory ('', unpacked_dir, ignore_list, sed_program);
 delete (sed_program);
 
 % Add mandatory file : DESCRIPTION
-fid = fopen (fullfile (unpacked_dir, 'DESCRIPTION'), 'wt');
+fid = fopen_ (fullfile (unpacked_dir, 'DESCRIPTION'), 'wt');
 fprintf (fid, 'Name: STK\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Version: %s\n', version_number);
@@ -246,7 +246,7 @@ info = stk_config_makeinfo ();
 cd (root_dir);
 
 sed_program = fullfile (build_dir, 'rename_mex.sed');
-fid = fopen (sed_program, 'w');
+fid = fopen_ (sed_program, 'w');
 
 for k = 1:(length (info))
     fprintf (fid, 's/%s/__%s__/g\n', info(k).mexname, info(k).mexname);
@@ -259,7 +259,7 @@ end % function rename_mex_functions
 
 function descr = parse_description_field (root_dir)
 
-fid = fopen (fullfile (root_dir, 'README'));
+fid = fopen_ (fullfile (root_dir, 'README'), 'rt');
 
 s = [];
 
