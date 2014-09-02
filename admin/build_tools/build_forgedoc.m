@@ -140,16 +140,12 @@ else
         
         copyfile (s, fullfile (unpacked_dir, 'src'));
         
-    elseif any (strcmp (s, {'ChangeLog' 'NEWS'}))
+    elseif any (strcmp (s, {'ChangeLog' 'NEWS' 'COPYING'}))
         
         % DESCRIPTION, COPYING, ChangeLog & NEWS will be available
         % in "packinfo" after installation
         
         copyfile (s, unpacked_dir);
-        
-    elseif strcmp (s, 'LICENSE')
-        
-        copyfile (s, fullfile (unpacked_dir, 'COPYING'));
         
     elseif (strcmp (s, 'README')) || (strcmp (s, 'AUTHORS'))
         
