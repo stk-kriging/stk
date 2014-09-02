@@ -71,10 +71,9 @@ fprintf ('done.\n');
 cd (allpurpose_dir);
 copy_citation ('stk/CITATION', 'stk');
 
-% Add HTML doc here
-build_allpurpose_htmldoc ( ...
-    fullfile (allpurpose_dir, 'stk', 'doc', 'html'), ...
-    fullfile (root_dir, 'admin', 'htmldoc'));
+% Build HTML doc
+htmldoc_dir = fullfile (allpurpose_dir, 'stk', 'doc', 'html');
+build_allpurpose_htmldoc (root_dir, build_dir, htmldoc_dir, version_number);
 
 % Create tarball
 fprintf ('Creating tarball: %s ... ', tarball_name);

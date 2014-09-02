@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function build_forgedoc (build_dir)
+function build_forgedoc (root_dir, build_dir)
 
 disp ('                                      ');
 disp ('**************************************');
@@ -39,39 +39,27 @@ here = pwd ();
 % Version number
 version_number = get_version_number ();
 
-% Name of the octpkg tarball
-octpkg_tarball_name = sprintf ('stk-%s-octpkg.tar.gz', version_number);
+% Where we want the documentation to be generated (unpacked)
+htmldoc_dir = fullfile (build_dir, 'octpkg', 'html', 'stk');
 
-% Install package
-fprintf ('Installing stk %s (pkg install)... ', version_number);
-cd (build_dir);
-pkg ('install', octpkg_tarball_name);
-fprintf ('done.\n');
-
-% Generate HTML documentation
-fprintf ('Generating HTML documentation for OF... ');
-cd octpkg
-pkg ('load', 'generate_html');
-generate_package_html ('stk', 'html', 'octave-forge');
-fprintf ('done.\n');
+% Generate the documentation
+generate_htmldoc (root_dir, build_dir, ...
+    htmldoc_dir, version_number, 'forgedoc');
 
 % Name of the forgedoc tarball
 forgedoc_tarball_name = sprintf ('stk-%s-forgedoc.tar.gz', version_number);
 
 % Create tar.gz archive
-cd html
+cd (fileparts (htmldoc_dir));
 system (sprintf ('tar --create --gzip --file %s stk', forgedoc_tarball_name));
 movefile (forgedoc_tarball_name, fullfile ('..', '..'));
 
 % Download a few goodies from the Octave-Forge website
-fprintf ('Downloading goodies from the OF website... ');
+fprintf ('Downloading goodies from the OF website...\n');
 F = @(s) system (sprintf (...
     'wget --quiet http://octave.sourceforge.net/%s', s));
 F ('octave-forge.css');  F ('download.png');  F ('doc.png');  F ('oct.png');
-fprintf ('done.\n');
 
-cd (here);
+fprintf ('Done.\n');  cd (here);
 
 end % function make_octave_package
-
-%#ok<*NOPRT,*SPWRN,*WNTAG,*SPERR,*AGROW>
