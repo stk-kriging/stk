@@ -104,17 +104,17 @@ system (sprintf (cmd, PKG_ADD));
 
 % PKG_DEL: commands that are run when the package is removed from the path
 copyfile (fullfile (pkg_bits_dir, 'PKG_DEL.m'), ...
-          fullfile (unpacked_dir, 'inst'));
+    fullfile (unpacked_dir, 'inst'));
 
 % post_install: a function that is run after the installation of the package
 copyfile (fullfile (pkg_bits_dir, 'post_install.m'), unpacked_dir);
 
 % Makefile
 copyfile (fullfile (pkg_bits_dir, 'Makefile'), ...
-          fullfile (unpacked_dir, 'src'));
+    fullfile (unpacked_dir, 'src'));
 
 % INDEX
-index_file = fullfile (pkg_bits_dir, 'INDEX'); 
+index_file = fullfile (pkg_bits_dir, 'INDEX');
 check_index_file (index_file, ...
     get_public_mfile_list (fullfile (unpacked_dir, 'inst')));
 copyfile (index_file, unpacked_dir);
@@ -199,16 +199,16 @@ else
         % in "packinfo" after installation
         
         copyfile (s, unpacked_dir);
-          
+        
     elseif (strcmp (s, 'README')) || (strcmp (s, 'AUTHORS'))
         
         % Put README and AUTHORS in the documentation directory
         copyfile (s, fullfile (unpacked_dir, 'doc'));
         
     elseif strcmp (s, 'CITATION')
-    
+        
         copy_citation (s, unpacked_dir);
-    
+        
     else
         
         error (sprintf ('Don''t know what to do with file %s', s));
