@@ -46,6 +46,9 @@ addpath (fullfile (admin_dir, 'build_tools'));
 build_dir = fullfile (root_dir, 'build');
 if ~ exist (build_dir, 'dir')
     mkdir (build_dir);
+elseif strcmp (target, 'all')
+    rmdir (build_dir, 's');
+    mkdir (build_dir);
 end
 
 % Build target
@@ -58,9 +61,9 @@ try
         case 'octpkg'
             build_octpkg (root_dir, build_dir);
             
-        case 'forgedoc'
+        case 'forgedoc'                    
             if (exist ('OCTAVE_VERSION', 'builtin') == 5)
-                build_forgedoc (build_dir);
+                build_forgedoc (root_dir, build_dir);
             else
                 error ('Cannot build forgedoc from Matlab.');
             end
