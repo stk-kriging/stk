@@ -60,7 +60,7 @@ try
             
         case 'forgedoc'
             if (exist ('OCTAVE_VERSION', 'builtin') == 5)
-                build_forgedoc (root_dir, build_dir);
+                build_forgedoc (build_dir);
             else
                 error ('Cannot build forgedoc from Matlab.');
             end
