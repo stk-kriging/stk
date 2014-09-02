@@ -63,8 +63,7 @@ fn_overview = fullfile (dir, 'overview.html');
 
 % Get package box from index.html
 
-[fid, errmsg] = fopen (fn_index, "rt");
-if fid == -1, error (errmsg); end
+fid = fopen_ (fn_index, 'rt');
 s = (char (fread (fid)))';
 fclose (fid);
 
@@ -75,16 +74,14 @@ s_box = tmp(1).content;
 
 % Modify overview.html
 
-[fid, errmsg] = fopen (fn_overview, 'rt');
-if fid == -1, error (errmsg); end
+fid = fopen_ (fn_overview, 'rt');
 s = char (fread (fid));
 fclose (fid);
 
 s = regexprep (s', "<h2.*?stk.*?</h2>\S*\n(\S*\n)?", ...
   ["<div class=\"package_box\">\n" s_box "</div>\n\n\n"]);
 
-[fid, errmsg] = fopen (fn_index, 'wt');
-if fid == -1, error (errmsg); end
+fid = fopen_ (fn_index, 'wt');
 fprintf (fid, "%s", s);
 fclose (fid);
 

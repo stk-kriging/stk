@@ -83,7 +83,7 @@ end % function check_index_file
  
 function [indexed, ignored] = parse_index_file (index_file)
 
-fid = fopen (index_file);
+fid = fopen_ (index_file, 'rt');
 
 indexed = {};
 ignored =  {};
