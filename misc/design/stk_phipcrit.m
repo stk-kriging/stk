@@ -1,4 +1,4 @@
-% STK_PHIPCRIT computes the "phi_p" criterion of Morris & Mitchell.
+% STK_PHIPCRIT computes the "phi_p" criterion of Morris & Mitchell
 %
 % CALL: D = stk_phipcrit (X, P)
 %
@@ -45,7 +45,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:   Julien Bect  <julien.bect@supelec.fr>
 
