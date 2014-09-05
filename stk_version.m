@@ -1,4 +1,4 @@
-% STK_VERSION returns STK's version number.
+% STK_VERSION returns STK's version number
 
 % Copyright Notice
 %

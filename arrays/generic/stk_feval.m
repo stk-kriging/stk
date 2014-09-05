@@ -1,4 +1,4 @@
-% STK_FEVAL evaluates a function at given evaluation points.
+% STK_FEVAL evaluates a function at given evaluation points
 %
 % CALL: Z = stk_feval (F, X)
 %
@@ -25,7 +25,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
