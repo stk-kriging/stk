@@ -16,6 +16,12 @@ table {
   border-collapse: collapse;
 }
 
+td {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
+
 body {
   background: white;
   color: black;
@@ -26,12 +32,6 @@ body {
   margin-left: auto;
   margin-right: auto;
   margin-top: 1em;
-}
-
-td {
-  margin: 0px;
-  padding: 0px;
-  border: 0px;
 }
 
 div.header {
@@ -71,11 +71,6 @@ h3.package_name {
   padding: 2px;
 }
 
-td.package_table { /* Package version, release date, ... */
-  padding-right: 2em;
-  margin-right: 2em;
-}
-
 div #description_box {
   padding-top: 1em;
   width: inherit;
@@ -106,22 +101,6 @@ p.package_link a {
   text-decoration: none;
 }
 
-div.package_box {
-  background: #fcf98f;
-  border: 2px solid #edd4A0;
-  width: 96%;  padding: 2%;
-  margin-bottom: 1em;
-}
-
-div.package_description {
-  background: #fcf98f;
-  border: 2px solid #edd4A0;
-  width: 96%;
-  padding: 2%;
-  margin-top: 1em;
-  margin-bottom: 3em;
-}
-
 h3.category {
   background: #EEEEEC;
   border: solid 2px #daddd6;
@@ -149,4 +128,61 @@ div#GPLv3 {
 
 div#doccontent pre {
   margin-top: 3em;
+}
+
+/* Packake info box: version, release date, ... */
+
+div.package_box {
+  background: #fcf98f;
+  border: 2px solid #edd4A0;
+  width: 500px;  /* total width: 500 + (13 + 2) * 2 + 5 = 535px */
+  height: 86px;  /* total height: 86 + (13 + 2) * 2 = 116px */  
+  padding: 13px;
+  margin-right: 5px;
+}
+
+td.package_table {
+  padding-right: 2em;
+}
+
+/* Petits encarts à droite: Download, NEWS */
+
+div.smallLinkBox {
+  width: 180px;  /* total width = 180 + (13 + 2) * 2 + 5 = 215 */
+  height: 23px;  /* total height = 23 + (13 + 2) * 2 + 5 = 63 */ 
+  border: 2px solid;
+  padding: 13px;
+  margin-left: 5px;
+}
+
+div#DownloadBox {   /* green box for "Download" */
+  margin-bottom: 5px;
+  background-color: #baf584;
+  border-color: #83c256;
+}
+
+div#NewsBox {  /* blue box for "What's new ?" */
+  margin-top: 5px;  
+  background-color: #c2bfef;
+  border-color: #827faf;
+}
+
+div.smallLinkBox img {  /* icons */
+  width: 25px;
+  height: auto;
+}
+
+div.smallLinkBox td.icon {
+  padding-right: 10px;
+}
+
+/* Package description box */
+
+div.package_description {
+  background: #fcf98f;
+  border: 2px solid #edd4A0;
+  width: 720px;
+  padding: 13px;
+  margin-top: 1em;
+  margin-bottom: 3em;
 }
