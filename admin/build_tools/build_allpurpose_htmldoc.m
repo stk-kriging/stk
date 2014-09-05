@@ -48,8 +48,7 @@ merge_index_overview (htmldoc_dir);
 
 % Copy the STK icon
 mkdir (image_dir);
-copyfile (fullfile (htmldocparts_dir, 'stk_logo.png'), ...
-    fullfile (image_dir, 'stk_logo.png'));
+copyfile (fullfile (htmldocparts_dir, '*.png'), image_dir);
 
 end % function build_allpurpose_htmldoc
 
@@ -68,18 +67,51 @@ s = (char (fread (fid)))';
 fclose (fid);
 
 tmp = regexp (s, ...
-  '<div class="package_box_contents">(?<content>.*?)</div>', 'names');
+    '<div class="package_box_contents">.*?</div>', 'match');
+s_package_box = tmp{1};
 
-s_box = tmp(1).content;
+% Reconstruct table
+
+s_table = sprintf ("\
+<table>\n\
+<tr><td rowspan=\"2\" class=\"box_table\">\n\
+<div class=\"package_box\">\n\
+  <div class=\"package_box_header\"></div>\n\
+  %s\n\
+</div>\n\
+</td>\n\
+<td>\n\
+  <div class=\"smallLinkBox\" id=\"DownloadBox\">\n\
+  <table><tr>\n\
+    <td class=\"icon\">\n\
+      <img src=\"images/download.png\"/>\n\
+    </td>\n\
+    <td class=\"download_link\">\n\
+      <a href=\"http://sourceforge.net/projects/kriging/files/stk/\" class=\"download_link\">\n\
+      Download STK</a>\n\
+    </td>\n\
+  </tr></table>\n\
+</div>\n\
+</td></tr>\n\
+<tr><td>\n\
+<div class=\"smallLinkBox\" id=\"NewsBox\">\n\
+  <table><tr>\n\
+    <td class=\"icon\"><img src=\"images/news.png\"/></td>\n\
+    <td><a href=\"NEWS.html\" class=\"news_file\">\n\
+      What's new ?\n\
+    </a></td>\n\
+  </tr></table>\n\
+</div>\n\
+</td></tr>\n\
+</table>", s_package_box);
 
 % Modify overview.html
 
 fid = fopen_ (fn_overview, 'rt');
-s = char (fread (fid));
+s = (char (fread (fid)))';
 fclose (fid);
 
-s = regexprep (s', "<h2.*?stk.*?</h2>\S*\n(\S*\n)?", ...
-  ["<div class=\"package_box\">\n" s_box "</div>\n\n\n"]);
+s = regexprep (s, "<h2.*?stk.*?</h2>\S*\n(\S*\n)?", s_table);
 
 fid = fopen_ (fn_index, 'wt');
 fprintf (fid, "%s", s);
