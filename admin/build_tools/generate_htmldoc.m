@@ -111,7 +111,6 @@ fid = fopen_ (fn_copying, 'rt');
 s = (char (fread (fid)))';
 fclose (fid);
 
-s = strrep (s, 'charset=iso-8859-1', 'charset=utf-8');
 s = regexprep (s, '<pre>.*</pre>', ...
   ["<div id=\"GPLv3\">\n" s_GPLv3 "</div>\n"]);
 s = regexprep (s, '<h2 class="tbdesc">.*?package</a></p>', '');
