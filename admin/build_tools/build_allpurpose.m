@@ -71,6 +71,9 @@ fprintf ('done.\n');
 cd (allpurpose_dir);
 copy_citation ('stk/CITATION', 'stk');
 
+% Write explicit version number in README
+copy_readme ('stk/README', 'stk');
+
 % Build HTML doc
 htmldoc_dir = fullfile (allpurpose_dir, 'stk', 'doc', 'html');
 build_allpurpose_htmldoc (root_dir, build_dir, htmldoc_dir, version_number);
