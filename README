@@ -43,11 +43,18 @@ o General information
     Maintainers:  Julien Bect        <julien.bect@supelec.fr>
                   Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
 
-    Description:  The Small (Matlab/GNU Octave) Toolbox for Kriging is a
-                  convenient and efficient research tool for working with
-                  kriging-based methods/Gaussian processes, which are
-                  powerful modeling tools for the design and analysis of
-                  computer experiments.
+    Description:  The STK is a (not so) Small Toolbox for Kriging. Its
+                  primary focus in on the interpolation/regression
+                  technique known as kriging, which is very closely related
+                  to Splines and Radial Basis Functions, and can be
+                  interpreted as a non-parametric Bayesian method using a
+                  Gaussian Process (GP) prior. The STK also provides tools
+                  for the sequential and non-sequential design of
+                  experiments. Even though it is, currently, mostly geared
+                  towards the Design and Analysis of Computer Experiments
+                  (DACE), the STK can be useful for other applications
+                  areas (such as Geostatistics, Machine Learning,
+                  Non-parametric Regression, etc.).
 
     Copyright:    Large portions are Copyright (C) 2011-2014 SUPELEC.
                   See individual copyright notices for more details.

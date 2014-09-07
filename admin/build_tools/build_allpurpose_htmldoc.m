@@ -113,6 +113,10 @@ fclose (fid);
 
 s = regexprep (s, "<h2.*?stk.*?</h2>\S*\n(\S*\n)?", s_table);
 
+% Bold Letters in Description fieldnames
+s = regexprep (s, 'Small Toolbox for Kriging', ...
+    '<b>S</b>mall <b>T</b>oolbox for <b>K</b>riging');
+
 fid = fopen_ (fn_index, 'wt');
 fprintf (fid, "%s", s);
 fclose (fid);

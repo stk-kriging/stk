@@ -142,6 +142,10 @@ s = regexprep (s, 'Read license', 'GNU Public Licence v3');
 s = regexprep (s, 'Package Author', 'Package Authors');
 s = regexprep (s, 'Package Maintainer', 'Package Maintainers');
 
+% Bold Letters in Description fieldnames
+s = regexprep (s, 'Small Toolbox for Kriging', ...
+    '<b>S</b>mall <b>T</b>oolbox for <b>K</b>riging');
+
 % NEWS -> News
 s = regexprep (s, '(\s+)NEWS', '$1News');
 
