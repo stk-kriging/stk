@@ -200,10 +200,15 @@ else
         
         copyfile (s, unpacked_dir);
         
-    elseif (strcmp (s, 'README')) || (strcmp (s, 'AUTHORS'))
+    elseif strcmp (s, 'AUTHORS')
         
-        % Put README and AUTHORS in the documentation directory
+        % Put AUTHORS in the documentation directory
         copyfile (s, fullfile (unpacked_dir, 'doc'));
+        
+    elseif strcmp (s, 'README')
+
+        % Put README in the documentation directory    
+        copy_readme (s, fullfile (unpacked_dir, 'doc'));
         
     elseif strcmp (s, 'CITATION')
         
