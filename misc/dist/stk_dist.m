@@ -10,7 +10,7 @@
 %
 %    where norm(.) denotes the Euclidean norm in R^d.
 %
-% See also: stk_mindist, norm
+% See also: stk_mindist, stk_filldist, norm
 
 % Copyright Notice
 %

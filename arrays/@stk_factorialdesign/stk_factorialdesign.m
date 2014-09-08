@@ -1,8 +1,8 @@
-% STK_FACTORIALDESIGN constructs a factorial design
+% STK_FACTORIALDESIGN constructs a "full factorial design" array
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author: Julien Bect  <julien.bect@supelec.fr>
 
