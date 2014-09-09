@@ -1,10 +1,35 @@
-% STK_PARAM_INIT provides a starting point for stk_param_estim
+% STK_PARAM_INIT provides a starting point for stk_param_estim().
+%
+% CALL: PARAM = stk_param_init (MODEL, XI, YI)
+%
+%   is an heuristic method providing reasonable initial parameters PARAM 
+%   for the covariance function in MODEL. It selects the maximizer of the 
+%   ReML criterion out of a list of possible values given data (XI, YI). 
+%
+% CALL: PARAM = stk_param_init (MODEL, XI, YI, BOX)
+%
+%   BOX should be a 2 x DIM matrix with BOX(1, j) and BOX(2, j) being
+%   the lower- and upper-bound of the interval on the j^th coordinate, 
+%   with DIM being the dimension of XI, DIM = size(XI,2).
+%   If provided, it is used to determine the heuristic list of possible parameter 
+%   values mentioned above.
+%   If not specified or empty, The BOX argument defaults to [min(XI);max(XI)]. 
+%
+% CALL: PARAM = stk_param_init (MODEL, XI, YI, BOX, NOISY)
+%
+%   NOISY should be true or false depending on the presence of noise in the model. 
+%   It defaults to false if not specified.
+%
+% EXAMPLES: see, e.g., stk_example_kb02, stk_example_kb03, stk_example_misc03
+
 
 % Copyright Notice
 %
+%    Copyright (C) 2014 IRT SystemX
 %    Copyright (C) 2012-2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect  <julien.bect@supelec.fr>
+%              Paul Feliot  <paul.feliot@irt-systemx.fr>
 
 % Copying Permission Statement
 %
@@ -128,13 +153,6 @@ end % function stk_param_init
 
 function [param, lnv] = paraminit_ (xi, zi, box, nu, lm, noisy)
 
-% Check for special case: constant response
-if (std (double (zi)) == 0)
-    warning ('STK:stk_param_init:ConstantResponse', ...
-        'Parameter estimation is impossible with constant-response data.');
-    param = [0 log(nu) 0];  lnv = 0;  return  % Return some default values
-end
-
 d = size (xi, 2);
 
 model = stk_model ('stk_materncov_iso');
@@ -165,7 +183,7 @@ sigma2_best = NaN;
 aLL_best    = +Inf;
 for eta = eta_list
     for rho = rho_list
-        %fprintf ('[stk_param_init] eta = %.3e, rho = %.3e...\n', eta, rho);
+        fprintf ('[stk_param_init] eta = %.3e, rho = %.3e...\n', eta, rho);
         % first use sigma2 = 1.0
         model.param = log ([1.0; nu; 1/rho]);
         model.lognoisevariance = log (eta);
@@ -284,10 +302,3 @@ end % function paraminit_
 %! model.param = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
-
-%!test % Constant response
-%! model = stk_model ('stk_materncov52_iso');
-%! n = 10;  x = stk_sampling_regulargrid (n, 1, [0; 1]);  z = ones (size (x));
-%! [param, lnv] = stk_param_init (model, x, z);
-%! assert ((all (isfinite (param))) && (length (param) == 2));
-%! assert ((all (isfinite (lnv))) && (length (lnv) == 1));
