@@ -55,7 +55,6 @@ Kriging: Parameter estimation
 #@stk_kreq_qr/subsref                [internal]
 
 Kriging: Covariance functions
- stk_discretecov
  stk_gausscov_aniso
  stk_gausscov_iso
  stk_materncov32_aniso
@@ -65,6 +64,7 @@ Kriging: Covariance functions
  stk_materncov_aniso
  stk_materncov_iso
  stk_noisecov
+ stk_discretecov
 
 ## The prefix 'sf' for 'special functions' is not appropriate, since the
 ## expression 'special function' refers to specific rather specific in the
