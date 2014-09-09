@@ -2,32 +2,35 @@
 %
 % CALL: K = stk_materncov52_aniso (PARAM, X, Y)
 %
-%	computes  the covariance matrix K between the sets of locations  X  and Y,
-%   using the anisotropic Matern covariance kernel with nu=5/2 and parameters PARAM. 
-%   The output matrix K has size NX x NY, where NX is the number of rows in X and NY
-%   the number of rows in Y. The vector of parameters must have DIM + 1
-%   elements, where DIM is the common number of columns of X and Y:
+%   computes the covariance matrix K between the sets of locations X and Y,
+%   using the anisotropic Matern covariance kernel with nu=5/2 and
+%   parameters PARAM. The output matrix K has size NX x NY, where NX is the
+%   number of rows in X and NY the number of rows in Y. The vector of
+%   parameters must have DIM + 1 elements, where DIM is the common number
+%   of columns of X and Y:
 %
-%     * PARAM(1) = log (SIGMA ^ 2), where SIGMA is the standard deviation,
+%    * PARAM(1) = log (SIGMA ^ 2), where SIGMA is the standard deviation,
 %
-%     * PARAM(1+i) = - log (RHO(i)), where RHO(i) is the range parameter for the ith dimension.
+%    * PARAM(1+i) = - log (RHO(i)), where RHO(i) is the range parameter for
+%      the i-th dimension.
 %
 % CALL: dK = stk_materncov52_aniso (PARAM, X, Y, DIFF)
 %
-%   computes the derivative of the covariance matrix with respect to PARAM(DIFF)
-%   if DIFF~= -1, or the covariance matrix itself if DIFF is equal
-%   to -1 (in which case this is equivalent to stk_materncov_aniso (PARAM, X, Y)).
+%   computes the derivative of the covariance matrix with respect to
+%   PARAM(DIFF) if DIFF~= -1, or the covariance matrix itself if DIFF is
+%   equal to -1 (in which case this is equivalent to stk_materncov_aniso
+%   (PARAM, X, Y)).
 %
 % CALL: K = stk_materncov52_aniso (PARAM, X, Y, DIFF, PAIRWISE)
 %
-%   computes the covariance vector  (or a derivative of it if DIFF > 0)  between
-%   the sets of locations X and Y.  The output K is a vector of length N,  where
-%   N is the common number of rows of X and Y.
+%   computes the covariance vector (or a derivative of it if DIFF > 0)
+%   between the sets of locations X and Y. The output K is a vector of
+%   length N, where N is the common number of rows of X and Y.
 
 % Copyright Notice
 %
 %    Copyright (C) 2014 IRT SystemX
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@supelec.fr>
 %              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -56,7 +59,7 @@
 function k = stk_materncov52_aniso (param, x, y, diff, pairwise)
 
 if nargin > 5,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 persistent x0 y0 xs ys param0  pairwise0 D Kx_cache compute_Kx_cache
@@ -184,12 +187,12 @@ end % function stk_materncov52_aniso
 %! n = 7;
 %! x = stk_sampling_randunif (n, dim);
 %! y = stk_sampling_randunif (n, dim);
-%! 
+%!
 %! K1 = stk_materncov52_aniso  (param, x, y);
 %! K2 = stk_materncov52_aniso(param, x, y, -1, true);
 %! assert (isequal (size (K1), [n n]));
 %! assert (stk_isequal_tolabs (K2, diag (K1)));
-%! 
+%!
 %! for i = 1:(dim + 1),
 %!     dK1 = stk_materncov52_aniso (param, x, y,  i);
 %!     dK2 = stk_materncov52_aniso (param, x, y,  i, true);

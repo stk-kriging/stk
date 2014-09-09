@@ -2,26 +2,25 @@
 %
 % CALL: PARAM = stk_param_init (MODEL, XI, YI)
 %
-%   is an heuristic method providing reasonable initial parameters PARAM 
-%   for the covariance function in MODEL. It selects the maximizer of the 
-%   ReML criterion out of a list of possible values given data (XI, YI). 
+%   is a heuristic method providing reasonable initial parameters PARAM
+%   for the covariance function in MODEL. It selects the maximizer of the
+%   ReML criterion out of a list of possible values given data (XI, YI).
 %
 % CALL: PARAM = stk_param_init (MODEL, XI, YI, BOX)
 %
-%   BOX should be a 2 x DIM matrix with BOX(1, j) and BOX(2, j) being
-%   the lower- and upper-bound of the interval on the j^th coordinate, 
-%   with DIM being the dimension of XI, DIM = size(XI,2).
-%   If provided, it is used to determine the heuristic list of possible parameter 
-%   values mentioned above.
-%   If not specified or empty, The BOX argument defaults to [min(XI);max(XI)]. 
+%   BOX should be a 2 x DIM matrix with BOX(1, j) and BOX(2, j) being the
+%   lower- and upper-bound of the interval on the j^th coordinate, with DIM
+%   being the dimension of XI, DIM = size(XI,2). If provided, it is used to
+%   determine the heuristic list of possible parameter values mentioned
+%   above. If not specified or empty, The BOX argument defaults to
+%   [min(XI); max(XI)].
 %
 % CALL: PARAM = stk_param_init (MODEL, XI, YI, BOX, NOISY)
 %
-%   NOISY should be true or false depending on the presence of noise in the model. 
-%   It defaults to false if not specified.
+%   NOISY should be true or false depending on the presence of noise in the
+%   model. It defaults to false if not specified.
 %
-% EXAMPLES: see, e.g., stk_example_kb02, stk_example_kb03, stk_example_misc03
-
+% See also stk_example_kb02, stk_example_kb03, stk_example_misc03
 
 % Copyright Notice
 %
