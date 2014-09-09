@@ -1,30 +1,36 @@
 % STK_MATERNCOV32_ISO computes the isotropic Matern covariance with nu=3/2
 %
-% CALL: k = stk_materncov32_iso (param, x, y, diff)
-%   param  = vector of parameters of size 2
-%   x      = structure whose field 'a' contains the observed points.
-%            x is a matrix of size n x d, where n is the number of
-%            points and d is the dimension of the
-%            factor space
-%   y      = same as x
-%   diff   = differentiation parameter
+% CALL: K = stk_materncov32_iso (PARAM, X, Y)
 %
-% STK_MATERNCOV32_ISO computes a Matern covariance between two random vectors
-% specified by the locations of the observations. The isotropic covariance
-% function has three parameters
-%    param(1) = log(sigma^2) is the logarithm of the variance of random
-%               process
-%    param(2) = -log(rho) is the logarithm of the inverse of the range
-%               parameter
-% If diff ~= -1, the function returns the derivative of the covariance wrt
-% param(diff)
+%	computes  the covariance matrix K between the sets of locations  X  and Y,
+%   using the isotropic Matern covariance kernel with nu=3/2 and parameters PARAM.
+%   The output matrix K has size NX x NY, where NX is the number of rows in X and NY
+%   the number of rows in Y. The vector of parameters must have two elements:
+%
+%     * PARAM(1) = log (SIGMA ^ 2), where SIGMA is the standard deviation,
+%
+%     * PARAM(2) = - log (RHO), where RHO is the range parameter.
+%
+% CALL: dK = stk_materncov32_iso (PARAM, X, Y, DIFF)
+%
+%   computes the derivative of the covariance matrix with respect to PARAM(DIFF)
+%   if DIFF~= -1, or the covariance matrix itself if DIFF is equal
+%   to -1 (in which case this is equivalent to stk_materncov_iso (PARAM, X, Y)).
+%
+% CALL: K = stk_materncov32_iso (PARAM, X, Y, DIFF, PAIRWISE)
+%
+%   computes the covariance vector  (or a derivative of it if DIFF > 0)  between
+%   the sets of locations X and Y.  The output K is a vector of length N,  where
+%   N is the common number of rows of X and Y.
 
 % Copyright Notice
 %
+%    Copyright (C) 2014 IRT SystemX
 %    Copyright (C) 2011-2013 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Paul Feliot       <paul.feliot@irt-systemx.fr>
 
 % Copying Permission Statement
 %

@@ -1,3 +1,15 @@
+2014-09-09  Paul Feliot  <paul.feliot@irt-systemx.fr>
+
+	doc: Update help text for several functions.
+
+	* covfcs/stk_materncov32_aniso.m: Update help text.
+	* covfcs/stk_materncov32_iso.m: Update help text.
+	* covfcs/stk_materncov52_aniso.m: Update help text.
+	* covfcs/stk_materncov52_iso.m: Update help text.
+	* covfcs/stk_materncov_aniso.m: Update help text.
+	* covfcs/stk_materncov_iso.m: Update help text.
+	* paramestim/stk_param_init.m: Update help text.
+
 2014-09-02  Julien Bect  <julien.bect@supelec.fr>
 
 	Rename LICENSE to COPYING.

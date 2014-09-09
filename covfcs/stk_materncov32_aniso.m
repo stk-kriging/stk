@@ -1,30 +1,37 @@
 % STK_MATERNCOV32_ANISO computes the anisotropic Matern covariance with nu=3/2
 %
-% CALL: k = stk_materncov32_aniso (param, x, y, diff)
-%   param  = vector of parameters of size 1+d
-%   x      = structure whose field 'a' contains the observed points.
-%            x is a matrix of size n x d, where n is the number of
-%            points and d is the dimension of the factor space
-%   y      = same as x
-%   diff   = differentiation parameter
+% CALL: K = stk_materncov32_aniso (PARAM, X, Y)
 %
-% STK_MATERNCOV32_ANISO computes a Matern covariance between two random vectors
-% specified by the locations of the observations. This anisotropic
-% covariance function has 2+d parameters, where d is the dimension of the
-% factor space. They are defined as follows:
-%    param(1)   = log(sigma^2) is the logarithm of the variance
-%    param(1+i) = -log(rho(i)) is  the logarithm of  the inverse  of  the
-%                 i^th range parameter
+%	computes  the covariance matrix K between the sets of locations  X  and Y,
+%   using the anisotropic Matern covariance kernel with nu=3/2 and parameters PARAM. 
+%   The output matrix K has size NX x NY, where NX is the number of rows in X and NY
+%   the number of rows in Y. The vector of parameters must have DIM + 1
+%   elements, where DIM is the common number of columns of X and Y:
 %
-% If diff ~= -1, the function returns the derivative of the covariance wrt
-% param(diff)
+%     * PARAM(1) = log (SIGMA ^ 2), where SIGMA is the standard deviation,
+%
+%     * PARAM(1+i) = - log (RHO(i)), where RHO(i) is the range parameter for the ith dimension.
+%
+% CALL: dK = stk_materncov32_aniso (PARAM, X, Y, DIFF)
+%
+%   computes the derivative of the covariance matrix with respect to PARAM(DIFF)
+%   if DIFF~= -1, or the covariance matrix itself if DIFF is equal
+%   to -1 (in which case this is equivalent to stk_materncov_aniso (PARAM, X, Y)).
+%
+% CALL: K = stk_materncov32_aniso (PARAM, X, Y, DIFF, PAIRWISE)
+%
+%   computes the covariance vector  (or a derivative of it if DIFF > 0)  between
+%   the sets of locations X and Y.  The output K is a vector of length N,  where
+%   N is the common number of rows of X and Y.
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2014 SUPELEC
+%    Copyright (C) 2014 IRT SystemX
+%    Copyright (C) 2011-2013 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Paul Feliot       <paul.feliot@irt-systemx.fr>
 
 % Copying Permission Statement
 %
@@ -75,7 +82,7 @@ Sigma2 = exp (param(1));
 invRho = exp (param(2:end));
 
 % check parameter values
-if ~ (Sigma2 > 0) || ~ all (invRho >= 0),
+if ~ (Sigma2 > 0) || ~ all (invRho > 0),
     error ('Incorrect parameter value.');
 end
 
