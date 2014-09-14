@@ -1,3 +1,167 @@
+Changes in version 2.2.0
+========================
+
+* Octave package
+
+   o The STK is now available both as an "all-purpose" Matlab/Octave toolbox (as
+     usual) and as a full-fledged Octave package that can be installed using
+     `pkg install`.
+
+* Core
+
+   o stk_model now also accepts function handles for covariance_type.
+
+   o stk_ortho_func is deprecated and will be completeky replaced, in the 3.x
+     series, by linear model objects. In the meantime, stk_ortho_func has been
+     kept as a gateway to stk_lm_* functions and now supports the case of cubic
+     polynomial models.
+
+   o stk_cholcov: new function that adaptively adds a little bit of noise on the
+     diagonal of a covariance matrix to help chol succeed, when the first
+     factorization returned by chol is not complete (a warning is emitted when
+     doing so). Used in stk_param_init, @stk_kreq_qr/get, stk_param_relik...
+
+   o @stk_kreq_qr: heuristic improvement of numerical conditioning (implemented
+     in the new private function compute_P_scaling).
+
+* Covariance functions
+
+   o Accept invRho = 0 in anisotropic covariance functions.
+
+   o stk_sf_matern: Handle special cases (3/2, 5/2, Inf) explicitely, and handle
+     large values of the smoothness parameter nu better.
+
+   o Handle the case of Gaussian isotropic and anisotropic covariance functions
+     in stk_param_init and stk_param_getdefaultbounds.
+
+* Linear models
+
+   o Introduce linear models objects. Currently, the following linear model
+     object classes are available: stk_lm_null, stk_lm_constant, stk_lm_affine,
+     stk_lm_quadratic, stk_lm_cubic and stk_lm_matrix.
+
+   o Linear model objects are still considered an experimental feature. They can
+     be accessed by setting model.order to nan, in which case model.lm is
+     expected to contain a linear model object.
+
+   o stk_example_misc03: New example script that demonstrates the use of linear
+     model objects.
+
+* Sample path simulation (stk_generate_samplepaths)
+
+   o The simulation of conditioned sample paths has been made easier (see ticket
+     #3 on SF). This is demonstrated by stk_example_kb08.
+
+   o Now uses model.response_name (if available) to create column names for the
+     output array, and xt.rownames (if available) to create row names.
+
+   o stk_generate_samplepaths can deal with replicated rows in xt.
+
+* Parameter estimation
+
+   o stk_param_estim
+      - Warn about constant-response data.
+      - Return an additional 'info' structure, which currently contains the
+        criterion that has been used, the criterion value at the optimum, and
+        the bounds.
+      - Add a new (optional) input argument that will make it possible, in the
+        future, to select which estimation criterion to use.
+
+   o stk_param_relik
+      - Check symmetry of G = W' * K * W and apply a naive fix if it is not
+        (emit a warning when doing so).
+      - Improved implementation, which seems to reduce the number of warnings
+        related to bad conditioning, and also improve the performance for
+        large n (about 1000, say).
+
+   o New optimization options (can bet set thorugh stk_options_set)
+      - Add global options to control upper/lower bounds for param estim.
+      - (Matlab) Add a 'optim_display_level' option to control the verbosity
+        fmincon/fminsearch. Its default value is 'off'.
+
+   o stk_param_gls: new function that computes the GLS estimator.
+
+* Array objects (stk_dataframe, stk_factorialdesign)
+
+   o stk_length: New function that returns the "length" of an array, currently
+     defined as its number of rows.
+
+   o Improved display for both stk_dataframe and stk_factorial objects
+
+   o Fix and improve accessors (subsasgn, subsref, set, get, fieldnames)
+
+   o Minimalist support for linear indexing on stk_dataframe objects
+
+   o New overloaded methods: @stk_dataframe/abs, @stk_dataframe/reshape
+
+   o @stk_dataframe/plot: Full rewrite to improve compatibility with the base
+     plot function. The case where x is an stk_dataframe objects with two or
+     more columns is now handled in a way that is consistent with the base plot
+     function (i.e., if x has two columns, then we get two 1D plots).
+
+   o @stk_dataframe/horzcat, @stk_dataframe/vertcat: Now the result is always an
+     stk_dataframe object, and has row names iff either one of the two arguments
+     doesn't have row names, or the row names of both arguments agree.
+
+   o @stk_dataframe/bsxfun: Modify the behaviour of bsxfun for stk_dataframe
+     objects. The result is always an stk_dataframe object, and has column names
+     iff either one of the two arguments doesn't have columns names or the
+     columns names of both arguments agree.
+
+Graphics
+
+   o stk_plot2d is deprecated and will be removed in the 3.x series. Use
+     contour, mesh, surf... directly instead (they are now overloaded for
+     stk_factorialdesign objects).
+
+   o stk_plot1d: Improved flexibility in the way input arguments are handled.
+
+   o stk_figure does not set the axis title any more.
+
+Pareto domination
+
+   o stk_isdominated: New function that returns true for dominated rows.
+
+   o stk_paretofind: New function that finds non-dominated points.
+
+   o stk_example_misc04: New example script illustrating random Pareto fronts.
+
+* Faster and less verbose startup
+
+   o Stop bothering users at startup with information that they can find in the
+     README file anyway.
+
+   o Don't display selected optimizers at startup.
+
+   o In Matlab, don't bother checking if the PCT is installed.
+
+* Documentation
+
+   o New HTML documentation, available in the "all-purpose" Matlab/Octave
+     release (doc/html directory) and online on Source-Forge at
+     <http://kriging.sourceforge.net/htmldoc>.
+
+   o Lots of fixes and improvements in help texts.
+
+   o Add a CITATION file, which explains how to cite STK in publications.
+
+   o stk_testfun_braninhoo: Fix domain bounds in the documentation.
+
+* Miscellaneous
+
+   o Options set/get
+      - stk_options_set: Add a reset feature.
+      - stk_options_set: Prevent persistent from being cleared (bugfix)
+
+   o Remove page_screen_output (not needed anymore).
+
+   o Restore the stk_ prefix for distrib_* functions (distrib_normal_cdf is
+     renamed to stk_distrib_normal_cdf, distrib_student_ei to
+     stk_distrib_student_ei, etc.)
+
+   o Lots of internal changes, minor changes, etc. not worth mentioning here.
+
+
 Changes in version 2.1.1
 ========================
 
@@ -35,7 +199,7 @@ Changes in version 2.1.0
     o New function: stk_gausscov_aniso.m (anisotropic Gaussian covariance model)
 
 * Special functions
-    
+
     o The precision of stk_sf_matern has been improved around 0 for high nu
 
     o New function: stk_sf_gausscorr (Gaussian correlation function in 1D)
@@ -47,7 +211,7 @@ Changes in version 2.1.0
     o New function: stk_maxabscorr (maximal pairwise absolute correlation)
 
 * Probability distributions
-  
+
     o A new 'probability distributions' module has been initiated
       (read misc/distrib/README to understand the reasons why)
 
@@ -82,7 +246,7 @@ Changes in version 2.1.0
 
     o isequal() is now working for stk_dataframe and stk_kreq_qr objects in
       Octave 3.2.x (explicit overloading was required for these old releases)
-      
+
     o and many other tiny little things
 
 
@@ -140,7 +304,7 @@ Changes in version 2.0.0
 * Many improvements in the internal structure of STK, for the sake of clarity
   (for those who happen to read the code) and efficiency:
 
-   o @stk_kreq_qr: new class for encapsulating basic computations related 
+   o @stk_kreq_qr: new class for encapsulating basic computations related
      to a Gaussian process (kriging) model.
 
    o The old Kx_cache/Px_cache mechanism, for working efficiently on finite
@@ -186,18 +350,18 @@ Changes in version 2.0.0
 
    o Various new utility functions, tiny or not-so-tiny improvements,
      bugfixes here and there...
-  
+
 
 Changes in version 1.2
 ======================
 
-* stk_predict 
+* stk_predict
    o Now offers the possibility to compute the posterior covariance
      matrix (it is returned as a fourth optional argument).
    o Has been modified to work with non-stationary covariance functions.
 
 * Added a new "pairwise" option to all covariance functions and also to
-  stk_dist (formerly stk_distance_matrix). This options allows to compute 
+  stk_dist (formerly stk_distance_matrix). This options allows to compute
   only the diagonal of the full distance/covariance matrix).
 
 * Space-filling designs
@@ -211,21 +375,21 @@ Changes in version 1.2
 * New functions to work with boxes: stk_rescale, stk_normalize.
 
 * More flexible representation of data
-   o Improved the flexibility most functions (stk_predict, stk_param_estim, 
-     ...), which are now accepting both matrices and "data structures" 
+   o Improved the flexibility most functions (stk_predict, stk_param_estim,
+     ...), which are now accepting both matrices and "data structures"
      (with an 'a' field) as input arguments.
    o New function: stk_datastruct.
 
 * Regular grids
-   o New function stk_plot2d() that serves has a wrapper around 
+   o New function stk_plot2d() that serves has a wrapper around
      {surf|contour|mesh|pcolor}-type functions, to plot data defined
      over a two-dimensional regular grid.
-   o stk_sampling_regulargrid now also returns 'ndgrid-style' coordinate 
+   o stk_sampling_regulargrid now also returns 'ndgrid-style' coordinate
      matrices stored in new .coord field.
 
 * Examples
    o Reorganized the example folder and renamed all example scripts.
-   o New example (stk_example_misc03) to demonstrate the effect of 
+   o New example (stk_example_misc03) to demonstrate the effect of
      adding a prior on the covariance parameters.
    o Improved graphical outputs in stk_example_kb03.
    o New test function: stk_testfun_braninhoo (Branin-Hoo).
