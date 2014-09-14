@@ -58,9 +58,9 @@ Assume, say, that we want to release STK version 4.5 (hum... not yet...).
      Octave package.
  
  * In case problems are found
-   * Fix them on the default branch
-   * Merge into the release/maintenance branch...
-   * ...and go back to "Build tarballs" to create a new release candidate :)
+   * Fix them on the release/maintenance branch
+   * Graft them back to the default branch (if appropriate)
+   * Go back to "Build tarballs" to create a new release candidate :)
  
 
 ## Release
