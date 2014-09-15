@@ -1,3 +1,9 @@
+2014-09-15  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_relik.m: Optimize the case of simple kriging.
+
+	* paramestim/stk_param_relik.m: Optimize the case of simple kriging.
+
 2014-09-09  Paul Feliot  <paul.feliot@irt-systemx.fr>
 
 	doc: Update help text for several functions.
