@@ -1,3 +1,10 @@
+2014-09-20  Julien Bect  <julien.bect@supelec.fr>
+
+	Don't use ~ to ignore arguments.
+
+	* admin/build_tools/build_octpkg.m: Don't use ~ to ignore arguments.
+	* utils/stk_generate_samplepaths.m: Don't use ~ to ignore arguments.
+
 2014-09-15  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_param_relik.m: Optimize the case of simple kriging.
