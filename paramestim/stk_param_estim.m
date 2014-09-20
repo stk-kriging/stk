@@ -163,12 +163,14 @@ switch optim_num,
                 % the 'algorithm' option does not exist in some old versions of
                 % matlab (e.g., version 3.1.1 provided with r2007a)...
                 err = lasterror ();
-                if ~ strcmp (err.identifier, 'matlab:optimset:invalidparamname')
+                if ~ strcmpi (err.identifier, ...
+                        'matlab:optimset:invalidparamname')
                     rethrow (err);
                 end
             end
             
-            [u_opt, crit_opt] = fmincon (f, u0, [], [], [], [], lb, ub, [], options);
+            [u_opt, crit_opt] = fmincon (f, u0, ...
+                [], [], [], [], lb, ub, [], options);
             
         end
         

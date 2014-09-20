@@ -1,5 +1,12 @@
 2014-09-20  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a tiny bug in stk_param_estim.
+
+	* paramestim/stk_param_estim.m: Use strcmpi instead of strcmp to
+	compare err.identifier to 'matlab:optimset:invalidparamname' on
+	line 167. I wonder if this line has ever worked properly... (only
+	affects old releases of Matlab, e.g.,R2007a).
+
 	Don't use ~ to ignore arguments.
 
 	* admin/build_tools/build_octpkg.m: Don't use ~ to ignore arguments.
