@@ -94,6 +94,15 @@ install_mole_function ('graphics_toolkit', opts{:});
 install_mole_function ('corr', opts{:});
 
 
+%--- isrow --------------------------------------------------------------------
+
+% For Octave users: ?
+
+% For Matlab users: missing in R2007a
+
+install_mole_function ('isrow', opts{:});
+
+
 %--- linsolve -----------------------------------------------------------------
 
 % For Octave users: linsolve has been missing in Octave for a long time

@@ -1,5 +1,11 @@
 2014-09-20  Julien Bect  <julien.bect@supelec.fr>
 
+	Provide a replacement for missing isrow.
+
+	* misc/mole/isrow/isrow.m: Replacement for isrow.
+	* config/stk_config_mole.m: Add our isrow function to the path if
+	necessary (e.g., Matlab R2007a).
+
 	Fix a tiny bug in stk_param_estim.
 
 	* paramestim/stk_param_estim.m: Use strcmpi instead of strcmp to
