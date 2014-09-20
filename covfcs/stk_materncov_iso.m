@@ -76,7 +76,7 @@ Nu     = exp (param(2));
 invRho = exp (param(3));
 
 % check parameter values
-if ~ (Sigma2 > 0) || ~ (Nu > 0) || ~ (invRho > 0),
+if ~ (Sigma2 > 0) || ~ (Nu > 0) || ~ (invRho >= 0),
     error ('Incorrect parameter value.');
 end
 

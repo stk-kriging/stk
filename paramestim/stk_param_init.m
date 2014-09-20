@@ -1,4 +1,4 @@
-% STK_PARAM_INIT provides a starting point for stk_param_estim().
+% STK_PARAM_INIT provides a starting point for stk_param_estim
 %
 % CALL: PARAM = stk_param_init (MODEL, XI, YI)
 %
@@ -152,6 +152,13 @@ end % function stk_param_init
 
 function [param, lnv] = paraminit_ (xi, zi, box, nu, lm, noisy)
 
+% Check for special case: constant response
+if (std (double (zi)) == 0)
+    warning ('STK:stk_param_init:ConstantResponse', ...
+        'Parameter estimation is impossible with constant-response data.');
+    param = [0 log(nu) 0];  lnv = 0;  return  % Return some default values
+end
+
 d = size (xi, 2);
 
 model = stk_model ('stk_materncov_iso');
@@ -182,7 +189,7 @@ sigma2_best = NaN;
 aLL_best    = +Inf;
 for eta = eta_list
     for rho = rho_list
-        fprintf ('[stk_param_init] eta = %.3e, rho = %.3e...\n', eta, rho);
+        %fprintf ('[stk_param_init] eta = %.3e, rho = %.3e...\n', eta, rho);
         % first use sigma2 = 1.0
         model.param = log ([1.0; nu; 1/rho]);
         model.lognoisevariance = log (eta);
@@ -301,3 +308,10 @@ end % function paraminit_
 %! model.param = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
+
+%!test % Constant response
+%! model = stk_model ('stk_materncov52_iso');
+%! n = 10;  x = stk_sampling_regulargrid (n, 1, [0; 1]);  z = ones (size (x));
+%! [param, lnv] = stk_param_init (model, x, z);
+%! assert ((all (isfinite (param))) && (length (param) == 2));
+%! assert ((all (isfinite (lnv))) && (length (lnv) == 1));
