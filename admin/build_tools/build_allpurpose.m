@@ -58,6 +58,7 @@ fprintf ('Tarball name: %s\n', tarball_name);
 fprintf ('Exporting with "hg archive" ... ');
 cd (root_dir);
 system (sprintf ('hg archive %s', unpacked_dir));
+delete (fullfile (unpacked_dir, '.hg*'));
 fprintf ('done.\n');
 
 % Delete admin dir

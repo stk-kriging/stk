@@ -73,7 +73,7 @@ Sigma2 = exp (param(1));
 invRho = exp (param(2));
 
 % check parameter values
-if ~ (Sigma2 > 0) || ~ (invRho > 0),
+if ~ (Sigma2 > 0) || ~ (invRho >= 0),
     error ('Incorrect parameter value.');
 end
 
