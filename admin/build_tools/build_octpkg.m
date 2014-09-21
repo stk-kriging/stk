@@ -47,7 +47,7 @@ pkg_bits_dir = fullfile ('admin', 'octpkg');
 version_number = get_version_number ();
 
 % Build dir: assume build_dir is a subdirectory of root_dir
-[~, build_dir] = fileparts (build_dir);
+[ignore_path, build_dir] = fileparts (build_dir);  %#ok<ASGLU>
 octpkg_dir = fullfile (build_dir, 'octpkg');
 if exist (octpkg_dir, 'dir')
     rmdir (octpkg_dir, 's');
