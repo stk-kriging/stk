@@ -35,14 +35,14 @@ end
 
 s = path ();
 
-regex1 = ['^' root];
+regex1 = strcat ('^', escape_regexp (root));
 
 % Safer than calling isoctave directly (this allows stk_config_rmpath to work
 % even if STK has already been partially uninstalled or is not properly installed)
 isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
 
 if isoctave,
-    regex2 = strrep ([octave_config_info('api_version') '$'], '+', '\+');
+    regex2 = strcat (escape_regexp (octave_config_info ('api_version')), '$');
 end
 
 while ~ isempty (s)
@@ -64,3 +64,10 @@ end
 % loop.
 
 end % function stk_config_rmpath
+
+
+function s = escape_regexp (s)
+
+s = regexprep (s, '([\+\.\\])', '\\$1');
+
+end % function escape_regexp
