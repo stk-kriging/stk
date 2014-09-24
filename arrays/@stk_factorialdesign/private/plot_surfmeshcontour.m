@@ -51,7 +51,7 @@ end
 
 [xx1, xx2] = ndgrid (x);
 
-plotfun (h, xx1, xx2, reshape (z, size (xx1)), opts{:});
+call_plotfun (plotfun, h, xx1, xx2, reshape (z, size (xx1)), opts{:});
 
 % Create labels if x provides column names
 c = get (x.stk_dataframe, 'colnames');
@@ -93,7 +93,7 @@ if isscalar (arg1) && isa (arg1, 'double'),
 end
 
 if arg1_handle,
-
+    
     if nargin < 3,
         stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
     end
@@ -104,7 +104,7 @@ if arg1_handle,
     opts = varargin(3:end);
     
 else
-
+    
     if nargin < 2,
         stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
     end
@@ -113,7 +113,7 @@ else
     x = arg1;
     z = varargin{1};
     opts = varargin(2:end);
-
+    
 end
 
 % Then, arg1 must be an stk_factorialdesign object
@@ -131,3 +131,59 @@ if dim ~= 2,
 end
 
 end % function parse_args_
+
+
+function call_plotfun (plotfun, h, x, y, z, varargin)
+
+% In Octave 3.6.4, pcolor supports neither the axis handle argument nor
+% the optional parameter/value arguments. This function has been created to
+% overcome this and other similar issues.
+
+try
+    
+    % When the full 'modern' syntax is supported, the result is usually better,
+    % in particular when options are provided. Let's try that first.
+    
+    plotfun (h, x, y, z, varargin{:});  return;
+    
+catch  %#ok<CTCH>
+    
+    % Do we have an additional numeric argument ?
+    if isempty (varargin)
+        numarg = {};
+        opts = {};
+    else
+        if ischar (varargin{1})
+            numarg = {};
+            opts = varargin;
+        else
+            numarg = varargin(1);
+            opts = varargin(2:end);
+        end
+    end
+    
+    % Select the axes to draw on
+    h1 = gca ();  axes (h);
+
+    try
+        
+        if strcmp (func2str (plotfun), 'contour')
+            [C_ignored, h2] = contour (x, y, z, numarg{:});  %#ok<ASGLU>
+        else
+            h2 = plotfun (x, y, z, numarg{:});
+        end
+        
+        if ~ isempty (opts)
+            set (h2, opts{:});
+        end
+        
+        axes (h1);
+        
+    catch  %#ok<CTCH>
+        axes (h1);
+        rethrow (lasterror ());  %#ok<LERR>
+    end
+
+end % try_catch
+
+end % function call_plotfun
