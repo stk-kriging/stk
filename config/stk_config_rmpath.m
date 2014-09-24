@@ -47,7 +47,7 @@ end
 
 while ~ isempty (s)
     
-    [d, s] = strtok (s, ':');  %#ok<STTOK>
+    [d, s] = strtok (s, pathsep);  %#ok<STTOK>
     
     if (~ isempty (regexp (d,  regex1, 'once'))) ...
         && ((~ isoctave) || isempty (regexp (d,  regex2, 'once'))) ...

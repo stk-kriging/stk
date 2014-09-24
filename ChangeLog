@@ -1,3 +1,11 @@
+2014-09-22  Julien Bect  <julien.bect@supelec.fr>
+
+	Make stk_config_rmpath work on Windows systems.
+
+	* config/stk_config_rmpath.m: Make stk_config_rmpath work on
+	Windows systems (pathsep must be used instead of ':' since ':' is
+	not the path separator for Windows...).
+
 2014-09-20  Julien Bect  <julien.bect@supelec.fr>
 
 	Provide a replacement for missing isrow.
