@@ -99,7 +99,7 @@ if compile,
         movefile (fullfile (d, mex_filename), d);
     end
     
-    fprintf ('ok.\n');
+    fprintf ('ok.\n');  fflush (stdout);
     
 end
 
