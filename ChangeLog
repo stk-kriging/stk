@@ -1,5 +1,12 @@
 2014-09-22  Julien Bect  <julien.bect@supelec.fr>
 
+	Robustify a private function.
+
+	* arrays/@stk_factorialdesign/private/plot_surfmeshcontour.m: Make
+	the function work with old versions of octave where, for some
+	plotting functions (e.g., pcolor in Octave 3.6.4) the full syntax
+	with axes handle and parameter/value pairs is not supported.
+
 	Make stk_config_rmpath work on Windows systems.
 
 	* config/stk_config_rmpath.m: Make stk_config_rmpath work on
