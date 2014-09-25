@@ -1,5 +1,11 @@
 2014-09-25  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a problem with @stk_factorialdesign/fieldnames.m.
+
+	* arrays/@stk_factorialdesign/fieldnames.m: Concatenate cell
+	arrays of strings, but not a string with a cell array of strings
+	since the latter syntax is not supported in Octave 3.2.x.
+
 	Add @stk_factorialdesign/private to the path when using Octave 3.2.x.
 
 	* config/stk_config_path.m: Add @stk_factorialdesign/private to
