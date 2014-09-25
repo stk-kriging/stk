@@ -1,3 +1,10 @@
+2014-09-25  Julien Bect  <julien.bect@supelec.fr>
+
+	Add @stk_factorialdesign/private to the path when using Octave 3.2.x.
+
+	* config/stk_config_path.m: Add @stk_factorialdesign/private to
+	the path when using Octave 3.2.x.
+
 2014-09-22  Julien Bect  <julien.bect@supelec.fr>
 
 	Robustify a private function.
