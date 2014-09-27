@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -42,8 +42,13 @@ else
     
     % bounds for the variance parameter
     log_empirical_variance = log (var (double (zi)));
-    logvar_lb = min (log_empirical_variance, param0(1)) - TOLVAR;
-    logvar_ub = max (log_empirical_variance, param0(1)) + TOLVAR;
+    if log_empirical_variance == - Inf
+        logvar_lb = param0(1) - TOLVAR;
+        logvar_ub = param0(1) + TOLVAR;
+    else
+        logvar_lb = min (log_empirical_variance, param0(1)) - TOLVAR;
+        logvar_ub = max (log_empirical_variance, param0(1)) + TOLVAR;
+    end
     
     dim = size (xi, 2);
     

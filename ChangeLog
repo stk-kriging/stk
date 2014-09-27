@@ -1,3 +1,10 @@
+2014-09-27  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_getdefaultbounds.m: Avoid -Inf in default bounds.
+
+	* paramestim/stk_param_getdefaultbounds.m: Avoid -Inf in default
+	bounds.
+
 2014-09-25  Julien Bect  <julien.bect@supelec.fr>
 
 	Fix a problem with @stk_factorialdesign/fieldnames.m.
