@@ -11,6 +11,11 @@
 
 2014-09-25  Julien Bect  <julien.bect@supelec.fr>
 
+	Fix a problem related to Octave 3.2.x when STK is used as a package.
+
+	* config/stk_config_path.m: Add private folder to the path in
+	Octave 3.2.x even when STK is used as a package.
+
 	Fix a problem with @stk_factorialdesign/fieldnames.m.
 
 	* arrays/@stk_factorialdesign/fieldnames.m: Concatenate cell
