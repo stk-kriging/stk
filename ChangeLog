@@ -1,5 +1,9 @@
 2014-09-27  Julien Bect  <julien.bect@supelec.fr>
 
+	PKG_DEL.m: Use addpath instead of cd.
+
+	* admin/octpkg/PKG_DEL.m: Use addpath instead of cd.
+
 	stk_param_getdefaultbounds.m: Avoid -Inf in default bounds.
 
 	* paramestim/stk_param_getdefaultbounds.m: Avoid -Inf in default
