@@ -26,12 +26,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
+% Deduce the root of STK from the path to this script
 root = fileparts (mfilename ('fullpath'));
-here = pwd ();
+config = fullfile (root, 'config');
 
-cd (fullfile (root, 'config'));
+% Add config to the path. No need to remove it manually at the end of the
+% script since it will be automatically removed by stk_config_rmpath
+addpath (config);
+
+% Remove STK subdirectories from the path
 stk_config_rmpath (root);
 
-cd (here);
-
-clear root here
+clear root config
