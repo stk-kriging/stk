@@ -1,5 +1,9 @@
 2014-09-28  Julien Bect  <julien.bect@supelec.fr>
 
+	@stk_dataframe/plot.m: Fix two problems.
+
+	* arrays/@stk_dataframe/plot.m: Fix two problems.
+
 	stk_config_rmpath.m: Use strrep instead of regexprep.
 
 	* config/stk_config_rmpath.m: Use strrep instead of regexprep for
