@@ -68,6 +68,29 @@ end % function stk_config_rmpath
 
 function s = escape_regexp (s)
 
-s = regexprep (s, '([\+\.\\])', '\\$1');
+% For backward compatibility with Octave 3.2.x, we cannot use regexprep here:
+%
+%    s = regexprep (s, '([\+\.\\])', '\\$1');
+%
+% Indeed, compare the results with Octave 3.8.x
+%
+%    >> regexprep ('2.2.0', '(\.)', '\$1')
+%    ans = 2$12$10
+%
+%    >> regexprep ('2.2.0', '(\.)', '\\$1')
+%    ans = 2\.2\.0
+%
+% and those with Octave 3.2.4
+%
+%    >> regexprep ('2.2.0', '(\.)', '\$1')
+%    ans = 2\.2\.0
+%
+%    >> regexprep ('2.2.0', '(\.)', '\\$1')
+%    ans = 2\\.2\\.0
+%
+
+s = strrep (s, '\', '\\');
+s = strrep (s, '+', '\+');
+s = strrep (s, '.', '\.');
 
 end % function escape_regexp
