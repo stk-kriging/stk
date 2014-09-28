@@ -1,3 +1,10 @@
+2014-09-28  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_config_rmpath.m: Use strrep instead of regexprep.
+
+	* config/stk_config_rmpath.m: Use strrep instead of regexprep for
+	compatiblity with Octave 3.2.x (see comments inside the file).
+
 2014-09-27  Julien Bect  <julien.bect@supelec.fr>
 
 	PKG_DEL.m: Use addpath instead of cd.
