@@ -98,7 +98,11 @@ else
 end
 
 if ~ isempty (xlab),
-    stk_xlabel (xlab);
+    if size (x, 2) == 1
+        stk_xlabel (xlab{1});
+    end
+    % Note: in the case where x has several columns (and z also) we could
+    % create more elaborate legends, e.g., "Zj versus Xj". Another time.
 end
 
 if ~ isempty (zlab)
@@ -265,7 +269,7 @@ elseif ~ ischar (key)
     
 else
     
-    keyval_pairs = [{key, val} parse_keyval_ (varargin{:})];
+    keyval_pairs = [{key, val} parse_keyval_(varargin{:})];
     
 end
 
