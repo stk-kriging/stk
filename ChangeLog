@@ -1,3 +1,11 @@
+2014-09-29  Julien Bect  <julien.bect@supelec.fr>
+
+	Polish stk_sprintf_colvect_* functions.
+
+	* misc/text/stk_sprintf_colvect_fixedpoint.m: Use round instead of
+	floor. Polish formatting.
+	* misc/text/stk_sprintf_colvect_scientific.m: Polish formatting.
+
 2014-09-28  Julien Bect  <julien.bect@supelec.fr>
 
 	@stk_dataframe/plot.m: Fix two problems.

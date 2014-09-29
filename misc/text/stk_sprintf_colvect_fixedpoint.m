@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -79,10 +79,10 @@ if (best_err > eps) && ((n1 + n2 + n3 + 2) <= max_width)
     while (best_err > eps) && ((n1 + n2 + n3) < max_width)
         n2  = n2 + 1; % add one decimal
         n3  = 1 + any_negative; % +1 for the comma
-        c   = 10^(-n2);
-        xx  = floor(ax / c) * c;
-        err = max(ax - xx);
-        if err < best_err - 0.5*c,
+        c   = 10 ^ (-n2);
+        xx  = (round (ax / c)) * c;
+        err = max (abs (ax - xx));
+        if err < best_err,
             best_err = err;
             best_n2  = n2;
         end
@@ -91,9 +91,9 @@ end
 err = best_err;
 n2  = best_n2;
 
-fmt = sprintf('%%%d.%df', n1 + n2 + n3, n2);
-str = arrayfun(@(u)(sprintf(fmt, u)), x, 'UniformOutput', false);
-str = char(str{:});
+fmt = sprintf ('%%%d.%df', n1 + n2 + n3, n2);
+str = arrayfun (@(u) sprintf (fmt, u), x, 'UniformOutput', false);
+str = char (str{:});
 
 % fix infinities
 if any (is_pinf),
