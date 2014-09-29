@@ -28,6 +28,6 @@
 
 function v = stk_version ()
 
-v = '2.2-dev';
+v = '2.3-dev';
 
 end % function stk_version
