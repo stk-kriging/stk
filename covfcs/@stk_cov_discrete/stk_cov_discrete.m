@@ -1,8 +1,8 @@
-% STK_DISCRETECOV...
+% stk_cov_discrete...
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function cov = stk_discretecov (K)
+function cov = stk_cov_discrete (K)
 
 if nargin == 0,
     % default constructor
@@ -37,9 +37,9 @@ end
 
 cov = struct ('prop', prop, 'aux', []);
 
-cov = class (cov, 'stk_discretecov', stk_cov());
+cov = class (cov, 'stk_cov_discrete', stk_cov());
 
-end % function stk_discretecov
+end % function stk_cov_discrete
 
 
 %!shared model, model2, x0
@@ -51,7 +51,7 @@ end % function stk_discretecov
 
 %!test % without noise, pairwise = false
 %! model.noise.cov = stk_nullcov ();
-%! model2 = stk_model ('stk_discretecov', model, x0);
+%! model2 = stk_model ('stk_cov_discrete', model, x0);
 %! idx = [1 4 9];
 %! [K1, P1] = stk_make_matcov (model,  x0(idx, :));
 %! [K2, P2] = stk_make_matcov (model2, idx');
@@ -65,7 +65,7 @@ end % function stk_discretecov
 
 %!test % with noise, pairwise = false
 %! model.noise.cov = stk_homnoisecov (0.01);
-%! model2 = stk_model ('stk_discretecov', model, x0);
+%! model2 = stk_model ('stk_cov_discrete', model, x0);
 %! idx = [1 4 9];
 %! [K1, P1] = stk_make_matcov (model,  x0(idx, :));
 %! [K2, P2] = stk_make_matcov (model2, idx');

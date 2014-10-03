@@ -78,7 +78,7 @@ if nargin < 1,
     % use the (isotropic, 1D) Matern covariance function as a default choice
     model = stk_model_ ('stk_materncov_iso');      
 
-elseif strcmp (covariance_type, 'stk_discretecov')
+elseif strcmp (covariance_type, 'stk_cov_discrete')
     
     % special case: build a discrete model
     model = stk_model_discrete (varargin{:});
@@ -117,14 +117,14 @@ model.domain.nt   = size (x, 1);
 % mean and covariance functions
 model.randomprocess.priormean = stk_lm_matrix ...
     (feval (model_base.randomprocess.priormean, x));
-model.randomprocess.priorcov = stk_discretecov ...
+model.randomprocess.priorcov = stk_cov_discrete ...
     (feval (model_base.randomprocess.priorcov, x));
 
 noisecov = model_base.noise.cov;
 if isa (noisecov, 'stk_nullcov')
     model.noise.cov = stk_nullcov ();
 else
-    model.noise.cov = stk_discretecov (feval (noisecov, x));
+    model.noise.cov = stk_cov_discrete (feval (noisecov, x));
 end
 
 end % function stk_model_discrete
