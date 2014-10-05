@@ -21,7 +21,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -66,14 +66,15 @@ else % nargin > 2
     end
 end
 
-if nargin < 4,
-    box = repmat ([0; 1], 1, dim);
+% read argument 'box'
+if (nargin < 4) || isempty (box)
+    xmin = zeros (1, dim);
+    xmax = ones (1, dim);
 else
-    stk_assert_box (box, dim);
+    box = stk_hrect (box);
+    xmin = box.data(1, :);
+    xmax = box.data(2, :);
 end
-
-xmin = box(1, :);
-xmax = box(2, :);
 
 for j = 1:dim,
     

@@ -48,14 +48,13 @@ stk_disp_examplewelcome;  stk_figure ('stk_example_doe03');
 %
 
 % 1D test function
-f = @(x)(x .* sin (x));  % Define a 1D test function
-DIM = 1;                 % Dimension of the factor space
-BOX = [0; 12];           % Factor space
+f = @(x)(x .* sin (x));            % Define a 1D test function
+DIM = 1;                           % Dimension of the factor space
+BOX = stk_hrect ([0; 12], {'x'});  % Factor space (hyper-rectangle object)
 
 % Space discretization
 NT = 400;  % Number of points in the grid
 x_grid = stk_sampling_regulargrid (NT, DIM, BOX);
-x_grid.colnames = {'x'};
 
 % Give names explicit names to the points of the grid
 x_grid.rownames = arrayfun ...
@@ -76,7 +75,6 @@ N0 = 3;
 
 % Construction of the initial design
 x_init = stk_sampling_regulargrid (N0, DIM, BOX);
-x_init.colnames = {'x'};
 
 % Give names explicit names to the points in the initial design
 x_init.rownames = arrayfun ...
