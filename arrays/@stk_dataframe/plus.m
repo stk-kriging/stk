@@ -1,4 +1,4 @@
-% PLUS [overloaded base function]
+% PLUS [overload base function]
 
 % Copyright Notice
 %

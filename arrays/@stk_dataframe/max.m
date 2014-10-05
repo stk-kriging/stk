@@ -1,4 +1,4 @@
-% MAX [overloaded base function]
+% MAX [overload base function]
 
 % Copyright Notice
 %

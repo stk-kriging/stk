@@ -1,4 +1,4 @@
-% STK_PHIPCRIT computes the "phi_p" criterion of Morris & Mitchell.
+% STK_PHIPCRIT computes the "phi_p" criterion of Morris & Mitchell
 %
 % CALL: D = stk_phipcrit (X, P)
 %
@@ -24,7 +24,7 @@
 %      optimize. Morris & Mitchell recommend using p in the range 20-50 for this
 %      purpose.
 %
-% REFERENCES:
+% REFERENCES
 %
 %   [1] Max D. Morris and Toby J. Mitchell, "Exploratory Designs for Computer
 %       Experiments", Journal of Statistical Planning and Inference,
@@ -45,7 +45,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:   Julien Bect  <julien.bect@supelec.fr>
 

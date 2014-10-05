@@ -1,4 +1,4 @@
-% SUBSREF  [STK internal function, not part of public API... UAYOR!]
+% SUBSREF  [STK internal]
 %
 % CALL: value = subsref (kreq, idx)
 %

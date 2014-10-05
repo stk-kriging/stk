@@ -1,23 +1,23 @@
 % STK_TESTFUN_BRANINHOO computes the Branin-Hoo function.
 %
-% The Branin-Hoo function (Branin and Hoo, 1972) is a classical test function
-% for global optimization algorithms, which belongs to the well-known
-% Dixon-Szego test set (Dixon and Szego, 1978). It is usually minimized over
-% [-5; 10] x [0; 15].
-%
+%    The Branin-Hoo function (Branin and Hoo, 1972) is a classical test
+%    function for global optimization algorithms, which belongs to the
+%    well-known Dixon-Szego test set (Dixon and Szego, 1978). It is usually
+%    minimized over [-5; 10] x [0; 15].
 %
 % REFERENCES
 %
-% Branin, F. H. and Hoo, S. K. (1972), A Method for Finding Multiple Extrema
-% of a Function of n Variables, in Numerical methods of Nonlinear Optimization
-% (F. A. Lootsma, editor, Academic Press, London), 231-237.
+%  [1] Branin, F. H. and Hoo, S. K. (1972), A Method for Finding Multiple
+%      Extrema of a Function of n Variables, in Numerical methods of
+%      Nonlinear Optimization (F. A. Lootsma, editor, Academic Press,
+%      London), 231-237.
 %
-% Dixon L.C.W., Szego G.P., Towards Global Optimization 2, North-Holland,
-% Amsterdam, The Netherlands (1978)
+%  [2] Dixon L.C.W., Szego G.P., Towards Global Optimization 2, North-
+%      Holland, Amsterdam, The Netherlands (1978)
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 

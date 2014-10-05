@@ -1,4 +1,4 @@
-% GET [overloaded base function]
+% GET [overload base function]
 
 % Copyright Notice
 %
@@ -26,12 +26,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = get(x, propname)
+function t = get (x, propname)
 
-if strcmp(propname, 'levels')
-    t = x.levels;
-else
-    t = get(x.stk_dataframe, propname);
+switch propname,
+    
+    case 'levels'
+        t = x.levels;
+    
+    case 'stk_dataframe'  % Read-only access to the underlying df
+        t = x.stk_dataframe;
+    
+    otherwise
+        t = get (x.stk_dataframe, propname);
+        
 end
 
 end % function get

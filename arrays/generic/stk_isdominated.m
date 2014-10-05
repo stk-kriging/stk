@@ -3,8 +3,8 @@
 % CALL: ISDOM = stk_isdominated (A, B)
 %
 %    returns a vector ISDOM of logicals, where ISDOM(i) is true if A(i, :)
-%    is dominated one of the rows of B. A row B(j, :) is said to dominate
-%    A(i, :) if
+%    is dominated by one of the rows of B. A row B(j, :) is said to
+%    dominate A(i, :) if
 %
 %       B(j, k) <= A(i, k)    for all k in {1, 2, ..., d}
 %
@@ -22,7 +22,7 @@
 % CALL: [ISDOM, DPOS] = stk_isdominated (A, B, DO_SORTROWS)
 %
 %    also returns a vector DPOS such that DPOS(i) = 0 if A(i, :) is non-
-%    dominated, and DPOS(i) gives the number of a row in B that dominates
+%    dominated, and DPOS(i) gives the index of a row in B that dominates
 %    A(i, :) otherwise.
 %
 % See also: sortrows, stk_paretofind

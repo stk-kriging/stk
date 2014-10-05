@@ -31,7 +31,7 @@
 %    speaking, if BOX is a symmetric domain (e.g., [-1, 1]^D). Otherwise,
 %    the generated samples shound be called "uncorrelated".
 %
-% REFERENCE: 
+% REFERENCE 
 %
 %    Kenny Q. Ye, "Orthogonal Column Latin Hypercubes and Their 
 %    Application in Computer Experiments", Journal of the American 

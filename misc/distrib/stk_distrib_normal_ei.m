@@ -1,11 +1,40 @@
-% STK_DISTRIB_NORMAL_EI ...
+% STK_DISTRIB_NORMAL_EI computes the normal (Gaussian) expected improvement
+%
+% CALL: EI = stk_distrib_normal_ei (Z)
+%
+%    computes the expected improvement of a standard normal (Gaussian)
+%    random variable above the threshold Z.
+%
+% CALL: EI = stk_distrib_normal_ei (Z, MU, SIGMA)
+%
+%    computes the expected improvement of a Gaussian random variable
+%    with mean MU and standard deviation SIGMA, above the threshold Z.
+%
+% CALL: EI = stk_distrib_normal_ei (Z, MU, SIGMA, MINIMIZE)
+%
+%    computes the expected improvement of a Gaussian random variable
+%    with mean MU and standard deviation SIGMA, below the threshold Z
+%    if MINIMIZE is true, above the threshold Z otherwise.
+%
+% REFERENCES
+%
+%   [1] D. R. Jones, M. Schonlau and William J. Welch. Efficient global
+%       optimization of expensive black-box functions.  Journal of Global
+%       Optimization, 13(4):455-492, 1998.
+%
+%   [2] J. Mockus, V. Tiesis and A. Zilinskas. The application of Bayesian
+%       methods for seeking the extremum. In L.C.W. Dixon and G.P. Szego,
+%       editors, Towards Global Optimization, volume 2, pages 117-129, North
+%       Holland, New York, 1978.
+%
+% See also stk_distrib_student_ei
 
 % Copyright Notice
 %
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:   Julien Bect     <julien.bect@supelec.fr>
-%               Romain Benassi  <romain.benassi@gmail.com>
+%    Authors:  Julien Bect     <julien.bect@supelec.fr>
+%              Romain Benassi  <romain.benassi@gmail.com>
 
 % Copying Permission Statement
 %
@@ -27,17 +56,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function ei = stk_distrib_normal_ei (x, mu, sigma, minimize)
+function ei = stk_distrib_normal_ei (z, mu, sigma, minimize)
 
 if nargin > 4,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 if nargin > 1,
-    delta = bsxfun (@minus, mu, x);
+    delta = bsxfun (@minus, mu, z);
 else
     % Default: mu = 0;
-    delta = - x;
+    delta = - z;
 end
 
 if nargin > 2,
@@ -79,7 +108,7 @@ end % function stk_distrib_normal_ei
 
 %!assert (stk_isequal_tolrel (stk_distrib_normal_ei (0.0), 1 / sqrt (2 * pi), eps))
 
-%!test % decreasing as a function of x
+%!test % decreasing as a function of z
 %! ei = stk_distrib_normal_ei (linspace (-10, 10, 200));
 %! assert (all (diff (ei) < 0))
 

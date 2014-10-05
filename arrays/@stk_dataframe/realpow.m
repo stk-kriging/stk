@@ -1,4 +1,4 @@
-% REALPOW [overloaded base function]
+% REALPOW [overload base function]
 
 % Copyright Notice
 %

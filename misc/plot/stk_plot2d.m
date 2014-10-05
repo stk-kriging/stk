@@ -1,15 +1,12 @@
-% STK_PLOT2D is a wrapper for 2D {surf|contour|pcolor|mesh}-type plots
+% STK_PLOT2D  [deprecated]
 %
-% FIXME: documentation
-%
-% See also: stk_example_kb03
+% See also: stk_factorialdesign/contour, stk_factorialdesign/mesh, ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2012-2014 SUPELEC
+%    Copyright (C) 2014 SUPELEC
 %
-%    Authors:  Julien Bect           <julien.bect@supelec.fr>
-%              Valentin Resseguier   <valentin.resseguier@gmail.com>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -31,49 +28,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_plot2d(plotfun, x, arg3, varargin)
+function stk_plot2d (plotfun, x, z, varargin)
 
-
-%%% Check input arguments
-
-if ~isa(x, 'stk_factorialdesign')
+if ~ isa (x, 'stk_factorialdesign')
     errmsg = 'x should be an stk_factorialdesign object.';
-    stk_error(errmsg, 'IncorrectArgument');
+    stk_error (errmsg, 'IncorrectArgument');
 end
 
-dim = size(x, 2);
+warning ('STK:stk_plot2d:Deprecated', ...
+    'stkplot2d is deprecated, please use @stk_factorialdesign/plot instead');
 
-if dim ~= 2,
-    errmsg = 'stk_plot2d only works for two-dimensional factor spaces.';
-    stk_error(errmsg, 'IncorrectArgument');
+if ~ ischar (plotfun)  % assume it's a function handle, then
+    plotfun = func2str (plotfun);
 end
 
-
-%%% Deal with various possible types for the 'z' argument
-
-if ischar(arg3) || isa(arg3, 'function_handle')
-    z = double(stk_feval(arg3, x));
-else
-    z = double(arg3);
-end
-
-
-%%% Do the actual plotting job
-
-[xx1, xx2] = ndgrid(x);
-
-plotfun(xx1, xx2, reshape(z, size(xx1)), varargin{:});
-
-% Create labels if x provides column names
-try  %#ok<TRYNC>
-    c = x.colnames;
-    assert (iscell (c) && isequal (size (c), [1 2]));
-    stk_labels (c{1}, c{2});
-end
-
-if ismember(func2str(plotfun), {'surf', 'pcolor'}),
-    shading('interp');
-end
-
+feval (plotfun, x, z, varargin{:});
 
 end % function stk_plot2d

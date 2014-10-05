@@ -1,11 +1,42 @@
-% STK_DISTRIB_STUDENT_EI ...
+% STK_DISTRIB_STUDENT_EI computes the Student expected improvement
+%
+% CALL: EI = stk_distrib_student_ei (Z, NU)
+%
+%    computes the expected improvement of a Student random variable with NU
+%    degrees of freedom above the threshold Z.
+%
+% CALL: EI = stk_distrib_student_ei (Z, NU, MU, SIGMA)
+%
+%    computes the expected improvement of a Student random variable with NU
+%    degrees of freedom, location parameter MU and scale parameter SIGMA,
+%    above the threshold Z.
+%
+% CALL: EI = stk_distrib_student_ei (Z, NU, MU, SIGMA, MINIMIZE)
+%
+%    computes the expected improvement of a Student random variable with NU
+%    degrees of freedom, location parameter MU and scale parameter SIGMA,
+%    below the threshold Z if MINIMIZE is true, above the threshold Z
+%    otherwise.
+%
+% REFERENCES
+%
+%   [1] R. Benassi, J. Bect and E. Vazquez.  Robust Gaussian process-based
+%       global optimization using a fully Bayesian expected improvement
+%       criterion.  In: Learning and Intelligent Optimization (LION 5),
+%       LNCS 6683, pp. 176-190, Springer, 2011
+%
+%   [2] B. Williams, T. Santner and W. Notz.  Sequential Design of Computer
+%       Experiments to Minimize Integrated Response Functions. Statistica
+%       Sinica, 10(4):1133-1152, 2000.
+%
+% See also stk_distrib_normal_ei
 
 % Copyright Notice
 %
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:   Julien Bect     <julien.bect@supelec.fr>
-%               Romain Benassi  <romain.benassi@gmail.com>
+%    Authors:  Julien Bect     <julien.bect@supelec.fr>
+%              Romain Benassi  <romain.benassi@gmail.com>
 
 % Copying Permission Statement
 %
@@ -27,7 +58,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function ei = stk_distrib_student_ei (x, nu, mu, sigma, minimize)
+function ei = stk_distrib_student_ei (z, nu, mu, sigma, minimize)
 
 if nargin > 5,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -36,10 +67,10 @@ end
 nu(nu < 0) = nan;
 
 if nargin > 2,
-    delta = bsxfun (@minus, mu, x);
+    delta = bsxfun (@minus, mu, z);
 else
     % Default: mu = 0;
-    delta = - x;
+    delta = - z;
 end
 
 if nargin > 3,
@@ -86,7 +117,7 @@ end % function stk_distrib_student_ei
 
 %!assert (stk_isequal_tolrel (stk_distrib_student_ei (0, 2), 1 / sqrt (2), eps))
 
-%!test % decreasing as a function of x
+%!test % decreasing as a function of z
 %! ei = stk_distrib_student_ei (linspace (-10, 10, 200), 3.33);
 %! assert (all (diff (ei) < 0))
 

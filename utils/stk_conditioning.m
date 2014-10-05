@@ -1,4 +1,4 @@
-% STK_CONDITIONING produces conditioned sample paths.
+% STK_CONDITIONING produces conditioned sample paths
 %
 % CALL: ZSIMC = stk_conditioning (LAMBDA, ZI, ZSIM, XI_IND)
 %

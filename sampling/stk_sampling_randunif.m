@@ -1,4 +1,4 @@
-% STK_SAMPLING_RANDUNIF generates uniformly distributed points.
+% STK_SAMPLING_RANDUNIF generates uniformly distributed points
 %
 % CALL: X = stk_sampling_randunif(N, DIM)
 %

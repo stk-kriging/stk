@@ -1,4 +1,4 @@
-% POWER [overloaded base function]
+% POWER [overload base function]
 
 % Copyright Notice
 %

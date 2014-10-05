@@ -1,22 +1,19 @@
-% STK_MAKE_MATCOV computes a covariance matrix (and a design matrix).
+% STK_MAKE_MATCOV computes a covariance matrix (and a design matrix)
 %
 % CALL: [K, P] = stk_make_matcov (MODEL, X0)
 %
 %    computes the covariance matrix K and the design matrix P for the model
-%    MODEL at the set of points X0. For a set of N points on a DIM-dimensional
-%    space of factors, X0 is expected to be a structure whose field 'a' contains
-%    an N x DIM matrix. As a result, a matrix K of size N x N and a matrix P of
-%    size N x L are obtained, where L is the number of regression functions in
-%    the linear part of the model; e.g., L = 1 if MODEL.order is zero (ordinary
-%    kriging).
+%    MODEL at the set of points X0, which is expected to be an N x DIM
+%    array. As a result, a matrix K of size N x N and a matrix P of size
+%    N x L are obtained, where L is the number of regression functions in
+%    the linear part of the model; e.g., L = 1 if MODEL.order is zero
+%    (ordinary kriging).
 %
 % CALL: K = stk_make_matcov (MODEL, X0, X1)
 %
-%    computes the covariance matrix K for the model MODEL between the sets of
-%    points X0 and X1. Both X0 and X1 are expected to be structures with an 'a'
-%    field, containing the actual numerical data. The resulting K matrix is of
-%    size N0 x N1, where N0 is the number of rows of XO and N1 the number of
-%    rows of X1.
+%    computes the covariance matrix K for the model MODEL between the sets
+%    of points X0 and X1. The resulting K matrix is of size N0 x N1, where
+%    N0 is the number of rows of XO and N1 the number of rows of X1.
 %
 % BE CAREFUL:
 %
@@ -26,7 +23,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>

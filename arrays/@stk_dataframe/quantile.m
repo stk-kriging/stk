@@ -1,4 +1,4 @@
-% QUANTILE [overloaded base function]
+% QUANTILE [overload base function]
 
 % Copyright Notice
 %

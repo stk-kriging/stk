@@ -1,4 +1,4 @@
-% MODE [overloaded base function]
+% MODE [overload base function]
 
 % Copyright Notice
 %

@@ -1,4 +1,4 @@
-% SUBSASGN [overloaded base function]
+% SUBSASGN [overload base function]
 
 % Copyright Notice
 %

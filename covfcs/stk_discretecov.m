@@ -1,8 +1,27 @@
-% STK_DISCRETECOV...
+% STK_DISCRETECOV computes a covariance matrix for a discrete model
+%
+% CALL: K = stk_discretecov (PARAM, X, Y)
+%
+%    computes the covariance matrix K between the sets of locations X and 
+%    Y, using the discrete model (a kriging model on a discrete space)
+%    parameters PARAM. The inputs arguments X and Y are expected to be
+%    vectors of indices. The output matrix K has size NX x NY, where NX is
+%    the length of X and NY the length of Y. PARAM must contain a field
+%    PARAM.K which is the full covariance matrix on the discrete input
+%    space.
+%
+% CALL: K = stk_discretecov (PARAM, X, Y, DIFF, PAIRWISE)
+%
+%    computes the covariance *vector* between the sets of locations X and
+%    Y if PAIRWISE is TRUE, and the covariance *matrix* otherwise. In the
+%    first case, the output K is a vector of length N, where N is the
+%    common number of rows of X and Y. In the second, it is an NX x NY
+%    matrix as above. The argument DIFF has no effect, but must be equal
+%    to -1 since this is not a parametric model.
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>

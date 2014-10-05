@@ -1,4 +1,4 @@
-% STD [overloaded base function]
+% STD [overload base function]
 
 % Copyright Notice
 %
