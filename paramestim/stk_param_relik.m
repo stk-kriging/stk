@@ -186,8 +186,8 @@ end % function stk_param_relik
 %! xi = [-1 -.6 -.2 .2 .6 1]';
 %! zi = [-0.11 1.30 0.23 -1.14 0.36 -0.37]';
 %! model = stk_model ('stk_materncov_iso');
-%! model = stk_setobs(model, xi, zi);
-%! model.param = log([1.0 4.0 2.5]);
+%! model = stk_setobs (model, xi, zi);
+%! model.param = log ([1.0 4.0 2.5]);
 %! model.noise.cov = stk_homnoisecov (0.01);
 %! TOL_REL = 0.01;
 
@@ -198,8 +198,8 @@ end % function stk_param_relik
 %! assert (stk_isequal_tolrel (dARL_dLNV, -1.581e-04, TOL_REL));
 
 %!test  % Same 1D test, with model.order = -1, to test simple kriging
-%! model.order = - 1;
-%! [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (model, xi, zi);
+%! model.randomprocess.priormean = stk_lm_null ();
+%! [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (model);
 %! assert (stk_isequal_tolrel (ARL, 7.475, TOL_REL));
 %! assert (stk_isequal_tolrel (dARL_dtheta, [0.765 0.0238 -1.019]', TOL_REL));
 %! assert (stk_isequal_tolrel (dARL_dLNV, 3.0517e-03, TOL_REL));
