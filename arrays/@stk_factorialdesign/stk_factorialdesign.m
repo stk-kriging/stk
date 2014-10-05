@@ -1,8 +1,8 @@
-% STK_FACTORIALDESIGN constructs a factorial design
+% STK_FACTORIALDESIGN constructs a "full factorial design" array
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author: Julien Bect  <julien.bect@supelec.fr>
 
@@ -202,7 +202,7 @@ end % function stk_factorialdesign
 
 %!test
 %! z = bsxfun (@plus, u1, x2);
-%! assert (isa (z, 'double') && isequal (z, u1 + u2))
+%! assert (isa (z, 'stk_dataframe') && isequal (double (z), u1 + u2))
 
 %!test
 %! z = bsxfun (@plus, x1, x2);

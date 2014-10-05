@@ -1,4 +1,4 @@
-% LE [overloaded base function]
+% LE [overload base function]
 
 % Copyright Notice
 %

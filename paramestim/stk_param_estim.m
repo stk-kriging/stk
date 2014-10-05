@@ -1,4 +1,4 @@
-% STK_PARAM_ESTIM estimates the parameters of a covariance function.
+% STK_PARAM_ESTIM estimates the parameters of a covariance function
 %
 % CALL: PARAM = stk_param_estim (MODEL, XI, YI, PARAM0)
 %
@@ -66,6 +66,12 @@ end
 if ~ isequal (size (zi), [size(xi, 1) 1]),
     errmsg = 'zi should be a column, with the same number of rows as xi.';
     stk_error (errmsg, 'IncorrectSize');
+end
+
+% Warn about special case: constant response
+if (std (double (zi)) == 0)
+    warning ('STK:stk_param_estim:ConstantResponse', ['Constant-response ' ...
+        'data: the output of stk_param_estim is likely to be unreliable.']);
 end
 
 % TODO: turn param0 into an optional argument
@@ -240,3 +246,9 @@ end % function get_default_bounds_lnv -----------------------------------------
 %!error param = stk_param_estim (model, xi);
 %!error param = stk_param_estim (model, xi, zi);
 %!error param = stk_param_estim (model, xi, zi, param0, log(eps), @stk_param_relik, pi);
+
+%!test % Constant response
+%! model = stk_model ('stk_materncov52_iso');
+%! n = 10;  x = stk_sampling_regulargrid (n, 1, [0; 1]);  z = ones (size (x));
+%! param = stk_param_estim (model, x, z, model.param);
+%! assert ((all (isfinite (param))) && (length (param) == 2));

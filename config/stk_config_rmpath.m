@@ -35,19 +35,19 @@ end
 
 s = path ();
 
-regex1 = ['^' root];
+regex1 = strcat ('^', escape_regexp (root));
 
 % Safer than calling isoctave directly (this allows stk_config_rmpath to work
 % even if STK has already been partially uninstalled or is not properly installed)
 isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
 
 if isoctave,
-    regex2 = strrep ([octave_config_info('api_version') '$'], '+', '\+');
+    regex2 = strcat (escape_regexp (octave_config_info ('api_version')), '$');
 end
 
 while ~ isempty (s)
     
-    [d, s] = strtok (s, ':');  %#ok<STTOK>
+    [d, s] = strtok (s, pathsep);  %#ok<STTOK>
     
     if (~ isempty (regexp (d,  regex1, 'once'))) ...
         && ((~ isoctave) || isempty (regexp (d,  regex2, 'once'))) ...
@@ -64,3 +64,33 @@ end
 % loop.
 
 end % function stk_config_rmpath
+
+
+function s = escape_regexp (s)
+
+% For backward compatibility with Octave 3.2.x, we cannot use regexprep here:
+%
+%    s = regexprep (s, '([\+\.\\])', '\\$1');
+%
+% Indeed, compare the results with Octave 3.8.x
+%
+%    >> regexprep ('2.2.0', '(\.)', '\$1')
+%    ans = 2$12$10
+%
+%    >> regexprep ('2.2.0', '(\.)', '\\$1')
+%    ans = 2\.2\.0
+%
+% and those with Octave 3.2.4
+%
+%    >> regexprep ('2.2.0', '(\.)', '\$1')
+%    ans = 2\.2\.0
+%
+%    >> regexprep ('2.2.0', '(\.)', '\\$1')
+%    ans = 2\\.2\\.0
+%
+
+s = strrep (s, '\', '\\');
+s = strrep (s, '+', '\+');
+s = strrep (s, '.', '\.');
+
+end % function escape_regexp

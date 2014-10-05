@@ -1,4 +1,4 @@
-% MEAN [overloaded base function]
+% MEAN [overload base function]
 
 % Copyright Notice
 %

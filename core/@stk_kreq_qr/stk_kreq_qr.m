@@ -1,4 +1,4 @@
-% STK_KREQ_QR  [STK internal function, not part of public API... UAYOR!]
+% STK_KREQ_QR  [STK internal]
 %
 % CALL: kreq = stk_kreq_qr (model, xi, xt)
 %

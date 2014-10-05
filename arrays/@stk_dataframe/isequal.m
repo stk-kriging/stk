@@ -1,4 +1,4 @@
-% ISEQUAL [overloaded base function]
+% ISEQUAL [overload base function]
 
 % Copyright Notice
 %

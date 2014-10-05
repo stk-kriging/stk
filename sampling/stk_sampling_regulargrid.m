@@ -1,4 +1,4 @@
-% STK_SAMPLING_REGULARGRID builds a regular grid.
+% STK_SAMPLING_REGULARGRID builds a regular grid
 %
 % CALL: X = stk_sampling_regulargrid(N, DIM)
 %

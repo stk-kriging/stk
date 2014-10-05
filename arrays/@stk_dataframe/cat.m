@@ -1,4 +1,4 @@
-% CAT [overloaded base function]
+% CAT [overload base function]
 
 % Copyright Notice
 %

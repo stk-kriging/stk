@@ -1,4 +1,4 @@
-% STK_SAMPLING_RANDOMLHS generates a random LHS design.
+% STK_SAMPLING_RANDOMLHS generates a random LHS design
 %
 % CALL: X = stk_sampling_randomlhs(N, DIM)
 %

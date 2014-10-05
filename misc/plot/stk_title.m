@@ -1,8 +1,8 @@
-% STK_TITLE ...
+% STK_TITLE is a replacement for 'title' for use in STK's examples
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 

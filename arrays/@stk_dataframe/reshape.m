@@ -1,4 +1,4 @@
-% RESHAPE [overloaded base function]
+% RESHAPE [overload base function]
 %
 % Note : the result of reshaping a dataframe is again a dataframe, but all row
 % and columns names are lost in the process.

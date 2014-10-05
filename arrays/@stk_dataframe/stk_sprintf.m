@@ -1,4 +1,4 @@
-% DISP [overloaded base function]
+% DISP [overload base function]
 %
 % Example:
 %    format short
@@ -46,11 +46,11 @@ if (nargin < 3) || (isempty (data_col_width)),
     data_col_width = [];
 end
 
-spstr = stk_options_get ('stk_dataframe', 'disp_spstr');
-
 s = sprintf_table_ (x.data, x.colnames, x.rownames, data_col_width);
 
 if strcmp (verbosity, 'verbose'),
+    
+    spstr = stk_options_get ('stk_dataframe', 'disp_spstr');
     
     s = char (...
         '.info =', horzcat (spstr, stk_sprintf_info (x)), ...
@@ -80,16 +80,16 @@ else
         try
             switch get (0, 'Format')
                 case 'short'
-                    data_col_width = 6;
+                    data_col_width = 8;
                 case 'long'
                     data_col_width = 16;
                 otherwise
                     % FIXME: handle other formatting modes...
-                    data_col_width = 10;
+                    data_col_width = 8;
             end
         catch
             % Property 'Format' doesn't exist in Octave 3.2.x
-            data_col_width = 6;
+            data_col_width = 8;
         end
     end
     

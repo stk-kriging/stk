@@ -1,4 +1,4 @@
-% STK_DISTRIB_NORMAL_CDF ...
+% STK_DISTRIB_NORMAL_CDF  [STK internal]
 
 % Copyright Notice
 %
@@ -26,38 +26,38 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [p, q] = stk_distrib_normal_cdf (x, mu, sigma)
+function [p, q] = stk_distrib_normal_cdf (z, mu, sigma)
 
 if nargin > 3,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 if nargin > 1,
-    x = bsxfun (@minus, x, mu);
+    z = bsxfun (@minus, z, mu);
 end
 
 if nargin > 2,
-    [x, sigma] = stk_commonsize (x, sigma);
-    x = x ./ sigma;
+    [z, sigma] = stk_commonsize (z, sigma);
+    z = z ./ sigma;
     k0 = (sigma > 0);
 else
     k0 = 1;
 end
    
-p = nan (size (x));
-q = nan (size (x));
+p = nan (size (z));
+q = nan (size (z));
 
-k0 = k0 & (~ isnan (x));
-kp = (x > 0);
+k0 = k0 & (~ isnan (z));
+kp = (z > 0);
 kn = k0 & (~ kp);
 kp = k0 & kp;
 
 % Deal with positive values of x: compute q first, then p = 1 - q
-q(kp) = 0.5 * erfc (0.707106781186547524 * x(kp));
+q(kp) = 0.5 * erfc (0.707106781186547524 * z(kp));
 p(kp) = 1 - q(kp);
 
 % Deal with negative values of x: compute p first, then q = 1 - p
-p(kn) = 0.5 * erfc (- 0.707106781186547524 * x(kn));
+p(kn) = 0.5 * erfc (- 0.707106781186547524 * z(kn));
 q(kn) = 1 - p(kn);
 
 end % function stk_distrib_normal_cdf

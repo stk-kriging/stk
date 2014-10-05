@@ -1,4 +1,4 @@
-% SUM [overloaded base function]
+% SUM [overload base function]
 
 % Copyright Notice
 %

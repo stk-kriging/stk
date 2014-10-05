@@ -1,4 +1,4 @@
-% STK_SAMPLING_MAXIMINLHS generates a "maximin" LHS design.
+% STK_SAMPLING_MAXIMINLHS generates a "maximin" LHS design
 %
 % CALL: X = stk_sampling_maximinlhs(N, DIM)
 %

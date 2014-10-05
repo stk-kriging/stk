@@ -1,4 +1,4 @@
-% SIZE [overloaded base function]
+% SIZE [overload base function]
 
 % Copyright Notice
 %

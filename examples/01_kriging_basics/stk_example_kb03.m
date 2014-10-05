@@ -80,7 +80,7 @@ xt.colnames = {'x_1', 'x_2'};
 zt = stk_feval (f, xt);
 
 % Since xt is a regular grid, we can do a contour plot
-stk_subplot (2, 2, 1);  stk_plot2d (@contour, xt, f, CONTOUR_LINES);
+stk_subplot (2, 2, 1);  contour (xt, f, CONTOUR_LINES);
 axis (BOX(:));  stk_title ('function to be approximated');
 
 
@@ -129,7 +129,7 @@ zp = stk_predict (model, xi, zi, xt);
 
 % Display the result using a contour plot, to be compared with the contour
 % lines of the true function
-stk_subplot (2, 2, 2);  stk_plot2d (@contour, xt, zp.mean, CONTOUR_LINES);
+stk_subplot (2, 2, 2);  contour (xt, zp.mean, CONTOUR_LINES);
 tsc = sprintf ('approximation from %d points', NI);  hold on;
 plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
 hold off;  axis (BOX(:));  stk_title (tsc);
@@ -137,11 +137,11 @@ hold off;  axis (BOX(:));  stk_title (tsc);
 
 %% VISUALIZE THE ACTUAL PREDICTION ERROR AND THE KRIGING STANDARD DEVIATION
 
-stk_subplot (2, 2, 3);  stk_plot2d (@pcolor, xt, log (abs (zp.mean - zt)));
+stk_subplot (2, 2, 3);  pcolor (xt, log (abs (zp.mean - zt)));
 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
 hold off;  axis (BOX(:));  stk_title ('true approx error (log)');
 
-stk_subplot (2, 2, 4);  stk_plot2d (@pcolor, xt, 0.5 * log (zp.var));
+stk_subplot (2, 2, 4);  pcolor (xt, 0.5 * log (zp.var));
 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
 hold off;  axis (BOX(:));  stk_title ('kriging std (log)');
 

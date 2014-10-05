@@ -1,4 +1,4 @@
-% GE [overloaded base function]
+% GE [overload base function]
 
 % Copyright Notice
 %

@@ -1,15 +1,25 @@
-% STK_PLOT1D is a convenient plot function in 1D
+% STK_PLOT1D is a convenient plot function for 1D kriging predictions
 %
-% CALL: stk_plot1d (xi, zi, xt, zt, zp)
+% CALL: stk_plot1d (XI, ZI, XT, ZT, ZP)
 %
-% STK_PLOT1D plots the result of a 1D approximation
+%    plots the evaluation points (XI, ZI), the "true function" with values
+%    ZT on the grid XT, and a representation of the prediction ZP on the
+%    same grid XT: the kriging prediction (posterior mean) surrounded by a
+%    shaded area corresponding to 95% pointwise confidence intervals.
+%
+%    It is possible to omit plotting either the observations (XI, ZI) or
+%    the true function ZT by providing empty matrices.
+%
+% CALL: stk_plot1d (XI, ZI, XT, ZT, ZP, ZSIM)
+%
+%    also plots a set ZSIM of samplepaths.
 
 % Copyright Notice
 %
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %

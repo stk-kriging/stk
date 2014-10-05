@@ -1,4 +1,4 @@
-% STK_PARALLEL_STOP [overloaded STK function]
+% STK_PARALLEL_STOP [overload STK function]
 
 % Copyright Notice
 %

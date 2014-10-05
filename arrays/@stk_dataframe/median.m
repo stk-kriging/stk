@@ -1,4 +1,4 @@
-% MEDIAN [overloaded base function]
+% MEDIAN [overload base function]
 
 % Copyright Notice
 %

@@ -1,4 +1,4 @@
-% GET  [STK internal function, not part of public API... UAYOR!]
+% GET  [STK internal]
 %
 % CALL: value = get (kreq, propname)
 %
@@ -111,3 +111,5 @@ catch
 end % try_catch
 
 end % function get
+
+%#ok<*CTCH>
