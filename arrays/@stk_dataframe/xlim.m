@@ -1,8 +1,8 @@
-% STK_RESCALE rescales a dataset from one box to another
+% XLIM [overloaded base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2012-2014 SUPELEC
+%    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,42 +26,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [y, a, b] = stk_rescale (x, box1, box2)
+function varargout = xlim (arg1, arg2)
 
-if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+varargout = cell (1, nargout);
+
+if nargin == 1, 
+    [varargout{:}] = xlim (double (arg1));
+    return
 end
 
-% make sure that box1 is an stk_hrect object
-if isempty (box1)
-    box1 = stk_hrect (size (x, 2));
-else
-    box1 = stk_hrect (box1);
-end
+if isa (arg1, 'stk_dataframe'),  arg1 = double (arg1);  end
+if isa (arg2, 'stk_dataframe'),  arg2 = double (arg2);  end
 
-% call @stk_hrect/stk_rescale
-[y, a, b] = stk_rescale (x, box1, box2);
+[varargout{:}] = xlim (arg1, arg2);
 
-end % function stk_rescale
-
-
-%!shared x
-%! x = rand (10, 4);
-%! y = stk_rescale (x, [], []);
-%! assert (stk_isequal_tolabs (x, y));
-
-%!test
-%! y = stk_rescale(0.5, [], [0; 2]);
-%! assert (stk_isequal_tolabs (y, 1.0));
-
-%!test
-%! y = stk_rescale (0.5, [0; 1], [0; 2]);
-%! assert (stk_isequal_tolabs (y, 1.0));
-
-%!test
-%! y = stk_rescale (0.5, [0; 2], []);
-%! assert (stk_isequal_tolabs (y, 0.25));
-
-%!test
-%! y = stk_rescale (0.5, [0; 2], [0; 1]);
-%! assert (stk_isequal_tolabs (y, 0.25));
+end % function xlim
