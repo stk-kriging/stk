@@ -32,9 +32,9 @@ if nargin > 2,
 end
 
 if nargin < 2,
-    empirical_variance = 1.0;
+    log_empirical_variance = 0.0;
 else
-    empirical_variance = var(double(z));
+    log_empirical_variance = log (var (double (z)));
 end
 
 % constants
@@ -43,8 +43,13 @@ TOLVAR = opts.tolvar;
 TOLSCALE = opts.tolscale;
 
 % bounds for the variance parameter
-lbv = min(log(empirical_variance) - TOLVAR, param0(1));
-ubv = max(log(empirical_variance) + TOLVAR, param0(1));
+if log_empirical_variance == - Inf
+    lbv = param0(1) - TOLVAR;
+    ubv = param0(1) + TOLVAR;
+else
+    lbv = min (log_empirical_variance, param0(1)) - TOLVAR;
+    ubv = max (log_empirical_variance, param0(1)) + TOLVAR;
+end
 
 dim = length(param0) - 2;
 
