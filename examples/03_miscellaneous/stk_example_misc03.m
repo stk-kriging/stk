@@ -1,4 +1,4 @@
-% STK_EXAMPLE_MISC03 ...
+% STK_EXAMPLE_MISC03  How to deal with (known) seasonality
 
 % Copyright Notice
 %

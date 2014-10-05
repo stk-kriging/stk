@@ -1,3 +1,290 @@
+2014-09-29  Julien Bect  <julien.bect@supelec.fr>
+
+	Polish stk_sprintf_colvect_* functions.
+
+	* misc/text/stk_sprintf_colvect_fixedpoint.m: Use round instead of
+	floor. Polish formatting.
+	* misc/text/stk_sprintf_colvect_scientific.m: Polish formatting.
+
+2014-09-28  Julien Bect  <julien.bect@supelec.fr>
+
+	@stk_dataframe/plot.m: Fix two problems.
+
+	* arrays/@stk_dataframe/plot.m: Fix two problems.
+
+	stk_config_rmpath.m: Use strrep instead of regexprep.
+
+	* config/stk_config_rmpath.m: Use strrep instead of regexprep for
+	compatiblity with Octave 3.2.x (see comments inside the file).
+
+2014-09-27  Julien Bect  <julien.bect@supelec.fr>
+
+	PKG_DEL.m: Use addpath instead of cd.
+
+	* admin/octpkg/PKG_DEL.m: Use addpath instead of cd.
+
+	stk_param_getdefaultbounds.m: Avoid -Inf in default bounds.
+
+	* paramestim/stk_param_getdefaultbounds.m: Avoid -Inf in default
+	bounds.
+
+2014-09-25  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix a problem related to Octave 3.2.x when STK is used as a package.
+
+	* config/stk_config_path.m: Add private folder to the path in
+	Octave 3.2.x even when STK is used as a package.
+
+	Fix a problem with @stk_factorialdesign/fieldnames.m.
+
+	* arrays/@stk_factorialdesign/fieldnames.m: Concatenate cell
+	arrays of strings, but not a string with a cell array of strings
+	since the latter syntax is not supported in Octave 3.2.x.
+
+	Add @stk_factorialdesign/private to the path when using Octave 3.2.x.
+
+	* config/stk_config_path.m: Add @stk_factorialdesign/private to
+	the path when using Octave 3.2.x.
+
+2014-09-22  Julien Bect  <julien.bect@supelec.fr>
+
+	Robustify a private function.
+
+	* arrays/@stk_factorialdesign/private/plot_surfmeshcontour.m: Make
+	the function work with old versions of octave where, for some
+	plotting functions (e.g., pcolor in Octave 3.6.4) the full syntax
+	with axes handle and parameter/value pairs is not supported.
+
+	Make stk_config_rmpath work on Windows systems.
+
+	* config/stk_config_rmpath.m: Make stk_config_rmpath work on
+	Windows systems (pathsep must be used instead of ':' since ':' is
+	not the path separator for Windows...).
+
+2014-09-20  Julien Bect  <julien.bect@supelec.fr>
+
+	Provide a replacement for missing isrow.
+
+	* misc/mole/isrow/isrow.m: Replacement for isrow.
+	* config/stk_config_mole.m: Add our isrow function to the path if
+	necessary (e.g., Matlab R2007a).
+
+	Fix a tiny bug in stk_param_estim.
+
+	* paramestim/stk_param_estim.m: Use strcmpi instead of strcmp to
+	compare err.identifier to 'matlab:optimset:invalidparamname' on
+	line 167. I wonder if this line has ever worked properly... (only
+	affects old releases of Matlab, e.g.,R2007a).
+
+	Don't use ~ to ignore arguments.
+
+	* admin/build_tools/build_octpkg.m: Don't use ~ to ignore arguments.
+	* utils/stk_generate_samplepaths.m: Don't use ~ to ignore arguments.
+
+2014-09-15  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_relik.m: Optimize the case of simple kriging.
+
+	* paramestim/stk_param_relik.m: Optimize the case of simple kriging.
+
+2014-09-09  Paul Feliot  <paul.feliot@irt-systemx.fr>
+
+	doc: Update help text for several functions.
+
+	* covfcs/stk_materncov32_aniso.m: Update help text.
+	* covfcs/stk_materncov32_iso.m: Update help text.
+	* covfcs/stk_materncov52_aniso.m: Update help text.
+	* covfcs/stk_materncov52_iso.m: Update help text.
+	* covfcs/stk_materncov_aniso.m: Update help text.
+	* covfcs/stk_materncov_iso.m: Update help text.
+	* paramestim/stk_param_init.m: Update help text.
+
+2014-09-02  Julien Bect  <julien.bect@supelec.fr>
+
+	Rename LICENSE to COPYING.
+
+	* LICENSE: Renamed to COPYING.
+	* COPYING: Formerly known as LICENSE.
+	* README: Update reference to LICENSE.
+	* admin/build_tools/build_forgedoc.m: No more need to rename.
+	* admin/build_tools/build_octpkg.m: No more need to rename.
+	* admin/find_nonstandard_characters.sh: Update reference to LICENSE.
+	* admin/fix_eol.sh: Update reference to LICENSE.
+
+	Rename WHATSNEW to NEWS.
+
+	* NEWS: Formerly known as WHATSNEW. This version is for release
+	2.1.1 (we still have to update it to 2.2.0). From now on, we will
+	always keep a version of this file in the default branch.
+	* admin/build_tools/build_forgedoc.m: No need to rename WHATSNEW
+	to NEWS anymore.
+	* admin/build_tools/build_octpkg.m: Same thing.
+
+2014-08-20  Julien Bect  <julien.bect@supelec.fr>
+
+	Add CITATION file.
+
+	* CITATION: Explain how to cite STK in publications.
+
+2014-08-18  Julien Bect  <julien.bect@supelec.fr>
+
+	Document stk_length.
+
+	* arrays/generic/stk_length.m: Add doc.
+	* arrays/@stk_dataframe/stk_length.m: Fix doc.
+	* admin/octave-pkg/INDEX: Un-hide stk_length.
+
+2014-08-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Deprecate stk_plot2d.
+
+	* misc/plot/stk_plot2d.m: Deprecated.
+	* arrays/@stk_factorialdesign/contour.m: Overload base function.
+	* arrays/@stk_factorialdesign/mesh.m: Overload base function.
+	* arrays/@stk_factorialdesign/meshc.m: Overload base function.
+	* arrays/@stk_factorialdesign/meshz.m: Overload base function.
+	* arrays/@stk_factorialdesign/pcolor.m: Overload base function.
+	* arrays/@stk_factorialdesign/surf.m: Overload base function.
+	* arrays/@stk_factorialdesign/private/plot_surfmeshcontour.m:
+	Provide a common implementation for overloading surf/contour/...
+	* examples/01_kriging_basics/stk_example_kb03.m: Use contour and
+	pcolor.
+	* examples/03_miscellaneous/stk_example_misc04.m: Use pcolor.
+	* admin/octave-pkg/INDEX: Update with the new functions. Hide
+	stk_plot2d.
+
+	@stk_dataframe/plot.m: Hold on after the first plot.
+
+	* arrays/@stk_dataframe/plot.m: Hold on after the first plot, if
+	there are several (fixes a bug introduced yesterday).
+
+2014-08-16  Julien Bect  <julien.bect@supelec.fr>
+
+	@stk_dataframe/plot.m: Full rewrite again.
+
+	* arrays/@stk_dataframe/plot.m: Full rewrite again, to improve
+	even more compatibility with the base plot function. The case
+	where x is an stk_dataframe objects with two or more columns is
+	now handled in a way that is consistent with the base plot
+	function (i.e., if x has two columns, then we get two 1D plots).
+
+2014-08-15  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_plot1d.m: Add missing documentation.
+
+	* misc/plot/stk_plot1d.m: Add doc.
+
+	@stk_dataframe/plot.m: Full rewrite.
+
+	* arrays/@stk_dataframe/plot.m: Full rewrite to improve
+	compatibility with the base plot function. Deprecate the case
+	where x is an stk_dataframe objects with two or more columns.
+
+2014-08-14  Julien Bect  <julien.bect@supelec.fr>
+
+	Add missing documentations.
+
+	* arrays/@stk_factorialdesign/ndgrid.m: Add doc.
+	* covfcs/stk_discretecov.m: Add doc.
+
+2014-08-13  Julien Bect  <julien.bect@supelec.fr>
+
+	Use "z" instead of "x" in all stk_distrib_* functions.
+
+	* misc/distrib/stk_distrib_normal_cdf.m: Use "z" instead of "x".
+	* misc/distrib/stk_distrib_normal_ei.m: Idem.
+	* misc/distrib/stk_distrib_normal_pdf.m: Idem.
+	* misc/distrib/stk_distrib_student_cdf.m: Idem.
+	* misc/distrib/stk_distrib_student_ei.m: Idem.
+	* misc/distrib/stk_distrib_student_pdf.m: Idem.
+
+	Provide a documentation for EI functions.
+
+	* misc/distrib/stk_distrib_normal_ei.m: Add doc.
+	* misc/distrib/stk_distrib_student_ei.m: Add doc.
+
+2014-08-12  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve Octave packaging.
+
+	* admin/make_octave_package.m: Delete rename_mex.sed after
+	use. Rename test script.
+	* admin/MAKE_OCTAVE_PACKAGE.md: New doc file (in markdown).
+	* admin/octave-pkg/test_package.m: Renamed to
+	* admin/octave-pkg/pkg_install_stk_and_generate_doc.m: Renamed
+	from.
+
+2014-08-10  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_example_misc04.m: Fix property name.
+
+	* examples/03_miscellaneous/stk_example_misc04.m: Fix property
+	name (YTickLabels --> YTickLabel).
+
+	stk_example_misc04.m: Fix for Octave compatiblity.
+
+	* examples/03_miscellaneous/stk_example_misc04.m: Fix for Octave
+	compatiblity (stairs does not accept stk_datafrm objects in
+	Octave).
+
+2014-08-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix and improve stk_factorialdesign's accessors.
+
+	* arrays/@stk_factorialdesign/subsasgn.m: New function. Override
+	stk_dataframe's subsasgn to prevent illegal modifications of
+	stk_factorialdesign objects through ()-type indexing. Any such
+	modification results in an implicit cast to stk_dataframe.
+	* arrays/@stk_factorialdesign/get.m: Provide read-only access to
+	the underlying stk_dataframe object.
+	* arrays/@stk_factorialdesign/set.m: The result is implicitely
+	cast into an stk_dataframe object upon any modification that would
+	otherwise corrupt the internal structure of the
+	stk_factorialdesign object.
+	* arrays/@stk_factorialdesign/fieldnames.m: Add .stk_dataframe.
+
+2014-08-07  Julien Bect  <julien.bect@supelec.fr>
+
+	Simplify the display of stk_factorialdesign objects.
+
+	* arrays/@stk_factorialdesign/stk_sprintf.m: Simplify the display
+	of stk_factorialdesign objects by hiding the ".stk_dataframe"
+	level (i.e., .info is used as an aliad for .stk_dataframe.info).
+	* arrays/@stk_dataframe/stk_sprintf.m: Modified (tiny change).
+
+	Define list of field names for stk_factorialdesign objects.
+
+	* arrays/@stk_factorialdesign/fieldnames.m: Define list of field
+	names for stk_factorialdesign objects.
+
+	Fix list of field names for stk_dataframe objects.
+
+	* arrays/@stk_dataframe/private/reserved_field_names.m: Fix list
+	of field names for stk_dataframe objects.
+	* arrays/@stk_dataframe/fieldnames.m: Update unit test.
+
+2014-07-31  Julien Bect  <julien.bect@supelec.fr>
+
+	Modify the behaviour of vertcat/horzcat for stk_dataframe objects.
+
+	* arrays/@stk_dataframe/horzcat.m: Modified. The result is always
+	an stk_dataframe object, and has row names iff either one of the
+	two arguments doesn't have row names, or the row names of both
+	arguments agree.
+	* arrays/@stk_dataframe/vertcat.m: Similar changes.
+
+	Modify the behaviour of bsxfun for stk_dataframe objects.
+
+	* arrays/@stk_dataframe/bsxfun.m: Modified. The result is always
+	an stk_dataframe object, and has column names iff either one of
+	the two arguments doesn't have columns names or the columns names
+	of both arguments agree.
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Modified unit
+	test.
+	* arrays/@stk_dataframe/abs.m: Overload abs for stk_dataframe
+	object. This allows to write abs (x) instead of abs (double (x))
+	or abs (x.data).
+
 2014-07-24  Julien Bect  <julien.bect@supelec.fr>
 
 	Accept invRho = 0 in anisotropic covariance functions.

@@ -1,4 +1,4 @@
-% STK_VERSION returns STK's version number.
+% STK_VERSION returns STK's version number
 
 % Copyright Notice
 %
@@ -28,6 +28,6 @@
 
 function v = stk_version ()
 
-v = '2.2-dev/objectify-me';
+v = '2.3-dev';
 
 end % function stk_version

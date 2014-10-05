@@ -1,4 +1,4 @@
-% RDIVIDE [overloaded base function]
+% RDIVIDE [overload base function]
 
 % Copyright Notice
 %

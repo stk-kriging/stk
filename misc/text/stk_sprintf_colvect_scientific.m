@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -54,15 +54,15 @@ is_zero = (x == 0);
 x(is_zero) = 0.0;
 
 % Compute exponents
-ax = abs(x);
-exponent = zeros(size(x));
-exponent(~is_zero) = floor(log10(ax(~is_zero)));
+ax = abs (x);
+exponent = zeros (size (x));
+exponent(~is_zero) = floor (log10 (ax(~ is_zero)));
 
 % Compute mantissae
 mantissa = x .* 10 .^ (- exponent);
 
 % Is there any negative element ?
-any_negative = any(x < 0);
+any_negative = any (x < 0);
 
 
 %--- Start with only one digit for the mantissa --------------------------------
@@ -119,7 +119,7 @@ if (any (best_err > eps * abs (x))) && ((n1 + n2 + n3 + 2) <= max_width)
         n3 = any_negative + 3;
         
         err = abs (x - mantissa_r .* 10 .^ (exponent_r));
-        if (max (err) < max (best_err))  %  - 0.5 * c  ???
+        if (max (err) < max (best_err))
             best_err = err;
             best_n1 = n1;
         end

@@ -1,6 +1,13 @@
 % STK_MODEL generates a model with default parameters
 %
-% CALL: MODEL = stk_model (COVARIANCE_TYPE)
+% CALL: MODEL = stk_model()
+%
+%   returns a structure MODEL (see below for a description of the fields in such
+%   a structure) corresponding to one-dimensional Gaussian process prior with a
+%   constant but unknown mean ("ordinary" kriging) and a stationary Matern
+%   covariance function.
+%
+% CALL: MODEL = stk_model(COVARIANCE_TYPE)
 %
 %   returns a structure MODEL (see below for a description of the fields in such
 %   a structure) corresponding to a Gaussian process prior with a
@@ -39,7 +46,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>

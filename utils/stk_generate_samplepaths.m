@@ -1,4 +1,4 @@
-% STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process.
+% STK_GENERATE_SAMPLEPATHS generates sample paths of a Gaussian process
 %
 % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT)
 %
@@ -103,7 +103,7 @@ end
 %--- Generate unconditional sample paths --------------------------------------
 
 % Pick unique simulation points
-[xt_unique, ~, j] = unique (double (xt), 'rows');
+[xt_unique, i_ignore, j] = unique (double (xt), 'rows');  %#ok<ASGLU>
 
 % Did we actually find duplicates in xt ?
 duplicates_detected = (size (xt_unique, 1) < size (xt, 1));

@@ -1,4 +1,4 @@
-% AND [overloaded base function]
+% AND [overload base function]
 
 % Copyright Notice
 %

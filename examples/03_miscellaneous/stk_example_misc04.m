@@ -97,7 +97,7 @@ for i = 1:NB_SAMPLEPATHS,
     y_nd_1 = stk_dataframe ([y1_max y_nd(end, 2)], y_nd.colnames);
     y_nd = [y_nd_0; y_nd; y_nd_1];  %#ok<AGROW>
         
-    stairs (y_nd(:, 1), y_nd(:, 2), 'Color', cm(i, :));
+    stairs (y_nd.data(:, 1), y_nd.data(:, 2), 'Color', cm(i, :));
     stk_labels (model1.response_name, model2.response_name);
     axis ([y1_axis y2_axis]);  hold on;
     
@@ -136,9 +136,9 @@ isdom = isdom / NB_SAMPLEPATHS;
 
 % Figure (b)
 stk_figure ('stk_example_misc04 (b)');
-colormap (hot);  stk_plot2d (@pcolor, y_test, isdom);
+colormap (hot);  pcolor (y_test, isdom);
 colorbar ('YTick', [0 .25 .5 .75 1], ...
-    'YTickLabels', {'0%', '25%', '50%', '75%', '100%'});
+    'YTickLabel', {'0%', '25%', '50%', '75%', '100%'});
 stk_title ('Probability of domination');
 
 

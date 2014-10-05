@@ -1,4 +1,4 @@
-% STK_PARAM_RELIK computes the restricted likelihood of a model given data.
+% STK_PARAM_RELIK computes the restricted likelihood of a model given data
 %
 % CALL: [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (MODEL)
 %
@@ -73,19 +73,24 @@ yi = model.observations.z;
 
 %% compute rl
 
-[K, P] = stk_make_matcov(model);
-q = size(P, 2);
+[K, P] = stk_make_matcov (model);
+q = size (P, 2);
 
-[Q, R_ignored] = qr(P); %#ok<NASGU> %the second argument *must* be here
-W = Q(:, (q+1):n);
-G = W' * (K * W);
+if q == 0  % Special case: simple kriging
+    G = K;
 
-% Check if G is (at least close to) symmetric
-Delta = G - G';  s = sqrt (diag (G));
-if any (abs (Delta) > eps * (s * s'))
-    warning ('STK:stk_param_relik:NumericalAccuracyProblem', ...
-        'The computation of G = W'' * K * W is inaccurate.');
-    G = 0.5 * (G + G');  % Make it at least symmetric
+else  % General case
+    [Q, R_ignored] = qr (P);  %#ok<NASGU> %the second argument *must* be here
+    W = Q(:, (q+1):n);
+    G = W' * (K * W);
+    
+    % Check if G is (at least close to) symmetric
+    Delta = G - G';  s = sqrt (diag (G));
+    if any (abs (Delta) > eps * (s * s'))
+        warning ('STK:stk_param_relik:NumericalAccuracyProblem', ...
+            'The computation of G = W'' * K * W is inaccurate.');
+        G = 0.5 * (G + G');  % Make it at least symmetric
+    end
 end
 
 % Cholesky factorization: G = C' * C, with upper-triangular C
@@ -95,7 +100,13 @@ C = stk_cholcov (G);
 ldetWKW = 2 * sum (log (diag (C)));
 
 % Compute (W' yi)' * G^(-1) * (W' yi) as u' * u, with u = C' \ (W' * yi)
-u = linsolve (C, W' * double(yi), struct ('UT', true, 'TRANSA', true));
+if q == 0
+    % Simple kriging
+    u = linsolve (C, double (yi), struct ('UT', true, 'TRANSA', true));
+else
+    % General case
+    u = linsolve (C, W' * double (yi), struct ('UT', true, 'TRANSA', true));
+end
 attache = sum (u .^ 2);
 
 priorcov = model.randomprocess.priorcov; % GP prior
@@ -112,8 +123,15 @@ if nargout >= 2
     
     drl_param = zeros (length (priorcov.cparam), 1);
     
-    F = linsolve (C, W', struct ('UT', true, 'TRANSA', true));
-    H = F' * F;
+    if q == 0
+        % Simple kriging
+        H = inv (G);
+    else
+        % General case
+        F = linsolve (C, W', struct ('UT', true, 'TRANSA', true));
+        H = F' * F;  % = W * G^(-1) * W'
+    end
+    
     z = H * double (yi);
 
     for diff = 1:size(drl_param, 1),
@@ -164,21 +182,27 @@ end % function stk_param_relik
 %!test  [J, dJ1, dJ2] = stk_param_relik (model);
 %!error [J, dJ1, dJ2] = stk_param_relik (model, pi^2);
 
-%!test  % Another simple 1D check
-%!
+%!shared xi, zi, model, TOL_REL
 %! xi = [-1 -.6 -.2 .2 .6 1]';
 %! zi = [-0.11 1.30 0.23 -1.14 0.36 -0.37]';
-%!
 %! model = stk_model ('stk_materncov_iso');
 %! model = stk_setobs(model, xi, zi);
 %! model.param = log([1.0 4.0 2.5]);
 %! model.noise.cov = stk_homnoisecov (0.01);
-%! [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (model);
-%!
 %! TOL_REL = 0.01;
+
+%!test  % Another simple 1D check
+%! [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (model);
 %! assert (stk_isequal_tolrel (ARL, 6.327, TOL_REL));
 %! assert (stk_isequal_tolrel (dARL_dtheta, [0.268 0.0149 -0.636]', TOL_REL));
 %! assert (stk_isequal_tolrel (dARL_dLNV, -1.581e-04, TOL_REL));
+
+%!test  % Same 1D test, with model.order = -1, to test simple kriging
+%! model.order = - 1;
+%! [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (model, xi, zi);
+%! assert (stk_isequal_tolrel (ARL, 7.475, TOL_REL));
+%! assert (stk_isequal_tolrel (dARL_dtheta, [0.765 0.0238 -1.019]', TOL_REL));
+%! assert (stk_isequal_tolrel (dARL_dLNV, 3.0517e-03, TOL_REL));
 
 %!test  % Check the gradient on a 2D test case
 %!

@@ -1,4 +1,4 @@
-% ISEQUAL  [STK internal function, not part of public API... UAYOR!]
+% ISEQUAL  [STK internal]
 %
 % CALL: b = isequal (x, y)
 %

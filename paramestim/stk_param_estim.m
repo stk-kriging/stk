@@ -1,4 +1,4 @@
-% STK_PARAM_ESTIM estimates the parameters of a covariance function.
+% STK_PARAM_ESTIM estimates the parameters of a covariance function
 %
 % CALL: PARAM = stk_param_estim(MODEL, PARAM0)
 %
@@ -170,21 +170,23 @@ switch optim_num,
             
             options = optimset (options, 'GradObj', 'on');
             
-        try
+            try
                 % try to use the interior-point algorithm, which has been
                 % found to provide satisfactory results in many cases
                 options = optimset (options, 'algorithm', 'interior-point');
-        catch
+            catch
                 % the 'algorithm' option does not exist in some old versions of
                 % matlab (e.g., version 3.1.1 provided with r2007a)...
-            err = lasterror ();
-                if ~ strcmp (err.identifier, 'matlab:optimset:invalidparamname')
-                rethrow (err);
+                err = lasterror ();
+                if ~ strcmpi (err.identifier, ...
+                        'matlab:optimset:invalidparamname')
+                    rethrow (err);
+                end
             end
-        end
             
-        	[u_opt, crit_opt] = fmincon (f, u0, [], [], [], [], lb, ub, [], options);
-        
+            [u_opt, crit_opt] = fmincon (f, u0, ...
+                [], [], [], [], lb, ub, [], options);
+            
         end
         
     otherwise,

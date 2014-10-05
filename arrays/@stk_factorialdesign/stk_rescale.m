@@ -1,4 +1,4 @@
-% STK_RESCALE [overloaded STK function]
+% STK_RESCALE [overload STK function]
 
 % Copyright Notice
 %

@@ -1,4 +1,4 @@
-% STK_FILLDIST computes the fill distance of a set of points.
+% STK_FILLDIST computes the fill distance of a set of points
 %
 % CALL: FD = stk_filldist(X, BOX)
 %
@@ -38,7 +38,7 @@
 %    of rows of the second argument. Because of that, the test set Y is required
 %    to have at least 3 rows.
 %
-% REFERENCES:
+% REFERENCES
 %
 %   [1] Luc Pronzato and Werner G. Müller, "Design of computer 
 %       experiments: space filling and beyond", Statistics and Computing,

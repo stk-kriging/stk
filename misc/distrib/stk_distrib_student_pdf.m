@@ -1,4 +1,4 @@
-% STK_DISTRIB_STUDENT_PDF ...
+% STK_DISTRIB_STUDENT_PDF  [STK internal]
 
 % Copyright Notice
 %
@@ -30,18 +30,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function density = stk_distrib_student_pdf (x, nu, mu, sigma)
+function density = stk_distrib_student_pdf (z, nu, mu, sigma)
 
 if nargin > 4,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 if nargin > 2,
-    x = bsxfun (@minus, x, mu);
+    z = bsxfun (@minus, z, mu);
 end
 
 if nargin > 3,
-    x = bsxfun (@rdivide, x, sigma);
+    z = bsxfun (@rdivide, z, sigma);
 else
     sigma = 1;
 end
@@ -51,20 +51,20 @@ C = sqrt (nu) .* beta (nu / 2, 0.5);
 if isscalar (nu)
     if nu == +inf
         % Gaussian case (nu = +inf)
-        density = 0.39894228040143268 * exp (- 0.5 * (x .^ 2));
+        density = 0.39894228040143268 * exp (- 0.5 * (z .^ 2));
     else
         % Student case (nu < +inf)
-        density = exp (- 0.5 * (nu + 1) * log (1 + x .^ 2 / nu)) / C;
+        density = exp (- 0.5 * (nu + 1) * log (1 + z .^ 2 / nu)) / C;
     end
 else
-    [x, nu, C] = stk_commonsize (x, nu, C);
-    density = nan (size (x));
+    [z, nu, C] = stk_commonsize (z, nu, C);
+    density = nan (size (z));
     % Gaussian case (nu = +inf)
     k = (nu == +inf);
-    density(k) = 0.39894228040143268 * exp (- 0.5 * (x(k) .^ 2));
+    density(k) = 0.39894228040143268 * exp (- 0.5 * (z(k) .^ 2));
     % Student case (nu < +inf)
     k = (nu > 0);  nu = nu(k);
-    density(k) = exp (- 0.5 * (nu + 1) .* log (1 + x(k) .^ 2 ./ nu)) ./ C(k);
+    density(k) = exp (- 0.5 * (nu + 1) .* log (1 + z(k) .^ 2 ./ nu)) ./ C(k);
 end
 
 density = bsxfun (@rdivide, density, sigma);

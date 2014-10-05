@@ -5,7 +5,7 @@
 %    computes the first N terms of the j^th RR2-scrambled van der Corput
 %    sequence.
 %
-% REFERENCE: 
+% REFERENCE 
 %
 %    Ladislav Kocis and William J. Whiten, "Computational investigations of low
 %    discrepancy sequences", ACM Transactions on Mathematical Software, 

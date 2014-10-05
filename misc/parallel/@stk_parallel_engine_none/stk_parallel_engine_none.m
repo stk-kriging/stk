@@ -1,4 +1,4 @@
-% STK_PARALLEL_ENGINE_NONE [overloaded STK function]
+% STK_PARALLEL_ENGINE_NONE [overload STK function]
 
 % Copyright Notice
 %
