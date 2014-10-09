@@ -58,12 +58,16 @@ x = double (x);
 x1 = x(:, 1);
 x2 = x(:, 2);
 
+x1x1 = x1 .^ 2;
+x2x2 = x2 .^ 2;
+x1x2 = x1 .* x2;
+
 A1 = (x1 + x2 + 1) .^ 2;
-A2 = 19 - 14*x1 + 3*x1.^2 - 14*x2 + 6*x1.*x2 + 3*x2.^2;
+A2 = 19 - 14*x1 + 3*x1x1 - 14*x2 + 6*x1x2 + 3*x2x2;
 A  = 1 + A1 .* A2;  % 4th degree polynomial
 
 B1 = (2*x1 - 3*x2) .^ 2;
-B2 = 18 - 32*x1 + 12*x1.^2 + 48*x2 - 36*x1.*x2 + 27*x2.^2;
+B2 = 18 - 32*x1 + 12*x1x1 + 48*x2 - 36*x1x2 + 27*x2x2;
 B  = 30 + B1 .* B2;  % 4th degree polynomial
 
 y = A .* B;  % 8th degree polynomial
