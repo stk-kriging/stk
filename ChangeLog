@@ -1,3 +1,10 @@
+2014-10-09  Julien Bect  <julien.bect@supelec.fr>
+
+	Add the Goldstein-Price test function.
+
+	* examples/test_functions/stk_testfun_goldsteinprice.m:
+	Goldstein-Price test function.
+
 2014-09-29  Julien Bect  <julien.bect@supelec.fr>
 
 	Polish stk_sprintf_colvect_* functions.
