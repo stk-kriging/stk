@@ -1,3 +1,19 @@
+2014-11-02  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_init.m: Change the behaviour regarding lnv.
+
+	* paramestim/stk_param_init.m: defaults to using the input value
+	of model.lognoisevariance if it is not NaN, and estimating the
+	variance if it is NaN. The meaning of the fifth argument, now
+	called DO_ESTIM_LNV, has also slightly changed: it is used to
+	force or prevent the estimation of the variance of the noise,
+	regardless of the value of model.lognoisevariance.
+	* examples/03_miscellaneous/stk_example_misc03.m: Display the two
+	models that have been used in this example.
+	* NEWS: describe changes related to model structures and parameter
+	estimation.
+	* doc/dev/model.texi: update accordingly.
+
 2014-10-26  Julien Bect  <julien.bect@supelec.fr>
 
 	Make lognoisevariance a mandatory field in model structures.

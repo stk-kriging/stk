@@ -4,9 +4,19 @@ Changes in version 2.3.0
 * Model structures
 
    o lognoisevariance is now considered a mandatory field. For backward
-     compatibility, a missing lognoisevariance field is interpreted as -inf.
+     compatibility, a missing lognoisevariance field is interpreted as -inf. A
+     nan value in the lognoisevariance field is now interpreted as meaning that
+     the variance of the noise must be estimated.
 
    o Improved documentation for stk_model.
+
+* Parameter estimation
+
+   o stk_param_init now defaults to using the input value of
+     model.lognoisevariance if it is not NaN, and estimating the variance if it
+     is NaN. The meaning of the fifth argument, now called DO_ESTIM_LNV, has
+     also slightly changed: it is used to force or prevent the estimation of the
+     variance of the noise, regardless of the value of model.lognoisevariance.
 
 Changes in version 2.2.0
 ========================

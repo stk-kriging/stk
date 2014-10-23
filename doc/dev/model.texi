@@ -47,14 +47,18 @@ available for some time, for backward compatiblity.
 
 @item @code{lognoisevariance}: log of the variance of the observation noise.
 @itemize @bullet
+
 @item The default value for models created using the @code{stk_model}
 function is @code{-inf}, corresponds to noiseless observations.
-@item Coming soon: @code{nan} indicates that this parameter must be
+
+@item @code{nan} indicates that this parameter must be
 estimated.
+
 @item Heteroscedastic noise: some functions (@code{stk_noisecov},
 @code{stk_make_matcov} and partially @code{stk_param_relik}) support
 vector values for this field, corresponding to the case of a
 heteroscedastic noise.
+
 @end itemize
 
 @end itemize
@@ -96,6 +100,17 @@ provided with a non-scalar struct array.
 
 Idea: non-scalar model structures might be an appropriate formalism for
 @emph{vector-valued} models (not currently supported by @STK).
+
+
+@subsection @code{nan} value for the @code{lognoisevariance} field
+
+Starting with STK 2.3.0, a @code{nan} value in the
+@code{lognoisevariance} field indicates the the variance of the noise
+must be estimated.
+
+TODO: Currently, this case is only dealt with in
+@code{stk_param_estim}. It must be properly handled throughout the
+entire toolbox.
 
 
 @c @node Index

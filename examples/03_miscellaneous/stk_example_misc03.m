@@ -64,21 +64,27 @@ hold on;  plot (t, S_posterior.mean, 'r-');
 T0 = 2 * pi;
 
 % Here we use an EXPERIMENTAL feature of STK
-model.order = nan;
-model.lm = @(t)([ones(length(t),1) sin(2*pi*t/T0) cos(2*pi*t/T0)]);
+model2 = stk_model ('stk_materncov52_iso');
+model2.order = nan;
+model2.lm = @(t)([ones(length(t),1) sin(2*pi*t/T0) cos(2*pi*t/T0)]);
 
 % Initial guess for the parameters of the Matern covariance
-[param0, lnv0] = stk_param_init (model, t_obs, S_obs, [], true);
+[param0, lnv0] = stk_param_init (model2, t_obs, S_obs, [], true);
 
 % Estimate the parameters
-[model.param, model.lognoisevariance] = ...
-    stk_param_estim (model, t_obs, S_obs, param0, lnv0);
+[model2.param, model2.lognoisevariance] = ...
+    stk_param_estim (model2, t_obs, S_obs, param0, lnv0);
 
 % Carry out the kriging prediction
-S_posterior = stk_predict (model, t_obs, S_obs, t);
+S_posterior = stk_predict (model2, t_obs, S_obs, t);
 
 % Display the result
 hold on;  plot (t, S_posterior.mean, 'g-');
 
+
+%% Display models
+
+display (model)
+display (model2)
 
 %!test stk_example_misc03;  close all;
