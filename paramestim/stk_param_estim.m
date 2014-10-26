@@ -21,7 +21,7 @@
 %
 %   The first form can be used with noisy observations, in which case the
 %   variance of the observation noise is assumed to be known (and given by
-%   exp (MODEL.lognoisevariance).
+%   exp (MODEL.lognoisevariance)).
 %
 % EXAMPLES: see, e.g., stk_example_kb02, stk_example_kb03, stk_example_kb04,
 %           stk_example_kb06, stk_example_misc02
@@ -80,8 +80,13 @@ end
 % TODO: think of a better way to tell we want to estimate the noise variance
 NOISEESTIM = (nargin > 4) && (~ isempty (param0lnv));
 
-if NOISEESTIM && (~ isfield (model, 'lognoisevariance'))
-    model.lognoisevariance = param0lnv;
+% Backward compatiblity: accept model structures with missing lognoisevariance
+if ~ isfield (model, 'lognoisevariance')
+    if NOISEESTIM
+        model.lognoisevariance = param0lnv;
+    else
+        model.lognoisevariance = - inf;
+    end
 end
 
 if nargin < 6,

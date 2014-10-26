@@ -1,3 +1,13 @@
+Changes in version 2.3.0
+========================
+
+* Model structures
+
+   o lognoisevariance is now considered a mandatory field. For backward
+     compatibility, a missing lognoisevariance field is interpreted as -inf.
+
+   o Improved documentation for stk_model.
+
 Changes in version 2.2.0
 ========================
 

@@ -24,8 +24,8 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2014 IRT SystemX
-%    Copyright (C) 2012-2014 SUPELEC
+%    Copyright (C) 2014 SUPELEC & IRT SystemX
+%    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Authors:  Julien Bect  <julien.bect@supelec.fr>
 %              Paul Feliot  <paul.feliot@irt-systemx.fr>
@@ -73,7 +73,12 @@ end
 
 %--- lognoisevariance ? --------------------------------------------------------
 
-if isfield (model, 'lognoisevariance') && ~ isempty (model.lognoisevariance)
+% Backward compatiblity: accept model structures with missing lognoisevariance
+if ~ isfield (model, 'lognoisevariance')
+    model.lognoisevariance = - inf;
+end
+
+if (model.lognoisevariance > - inf)
     warning (sprintf ('Ignoring current value of lognoisevariance (%.3e)', ...
         model.lognoisevariance), 'IgnoringLogNoiseVariance');
 end

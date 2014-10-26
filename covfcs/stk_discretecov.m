@@ -81,9 +81,7 @@ end % function stk_discretecov
 %! model.order = 1;
 
 %!test % without noise, pairwise = false
-%! if isfield (model, 'lognoisevariance')
-%!   model = rmfield (model, 'lognoisevariance');
-%! end
+%! model.lognoisevariance = - inf;
 %! model2 = stk_model ('stk_discretecov', model, x0);
 %! idx = [1 4 9];
 %! [K1, P1] = stk_make_matcov (model,  x0(idx, :));

@@ -18,7 +18,7 @@
 % BE CAREFUL:
 %
 %    stk_make_matcov (MODEL, X0) and stk_makematcov (MODEL, X0, X0) are NOT
-%    equivalent if model.lognoisevariance exists (in the first case, the
+%    equivalent if model.lognoisevariance > - inf  (in the first case, the
 %    noise variance is added on the diagonal of the covariance matrix).
 
 % Copyright Notice
@@ -50,6 +50,11 @@
 
 function [K, P] = stk_make_matcov (model, x0, x1, pairwise)
 
+% Backward compatiblity: accept model structures with missing lognoisevariance
+if ~ isfield (model, 'lognoisevariance')
+    model.lognoisevariance = - inf;
+end
+
 %=== process input arguments
 
 if nargin > 4,
@@ -72,11 +77,11 @@ pairwise = (nargin > 3) && pairwise;
 
 K = feval (model.covariance_type, model.param, x0, x1, -1, pairwise);
 
-if make_matcov_auto && isfield (model, 'lognoisevariance'),
+if make_matcov_auto && (model.lognoisevariance > - inf),
     if ~ pairwise,
         K = K + stk_noisecov (size (K,1), model.lognoisevariance);
     else
-        stk_error('Not implemented yet.', 'NotImplementedYet');
+        stk_error ('Not implemented yet.', 'NotImplementedYet');
     end
 end
 
