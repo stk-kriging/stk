@@ -20,8 +20,8 @@
 % In STK, a Gaussian process model is described by a 'model' structure,
 % which has mandatory fields and optional fields.
 %
-%   MANDATORY FIELDS: covariance_type, param
-%   OPTIONAL FIELD: lognoisevariance
+%   MANDATORY FIELDS: covariance_type, param, order, lognoisevariance
+%   OPTIONAL FIELD: param_prior, noise_prior, response_name, lm
 %
 % See also stk_materncov_iso, stk_materncov_aniso, ...
 
@@ -90,15 +90,18 @@ if nargin > 2,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
+% Backward compatiblity: accept model structures with missing lognoisevariance
+if ~ isfield (model_base, 'lognoisevariance')
+    model_base.lognoisevariance = - inf;
+end
+
 [K, P] = stk_make_matcov (model_base, x, x);
 
 model_out = struct ( ...
     'covariance_type', 'stk_discretecov', ...
     'param', struct ('K', K, 'P', P));
 
-if isfield (model_base, 'lognoisevariance');
-    model_out.lognoisevariance = model_base.lognoisevariance;
-end
+model_out.lognoisevariance = model_base.lognoisevariance;
 
 end % function stk_model_discretecov
 
@@ -115,16 +118,10 @@ end
 
 model = struct();
 
-%%% covariance type
-
 model.covariance_type = covariance_type;
-
-%%% model.order
 
 % use ordinary kriging as a default choice
 model.order = 0;
-
-%%% model.dim
 
 % default dimension is d = 1
 if nargin < 2,
@@ -132,8 +129,6 @@ if nargin < 2,
 else
     model.dim = dim;
 end
-
-%%% model.param
 
 VAR0 = 1.0; % default value for the variance parameter
 
@@ -174,6 +169,8 @@ switch model.covariance_type
         model.param = [];
         
 end % switch
+
+model.lognoisevariance = - inf;
 
 end % function stk_model_
 

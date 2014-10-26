@@ -1,3 +1,21 @@
+2014-10-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Make lognoisevariance a mandatory field in model structures.
+
+	* core/stk_model.m: Make lognoisevariance a mandatory field in
+	model structures, with default value -inf. For backward
+	compatibility, stk_discrete_cov models can still be created with
+	model structures that lack a lognoisevariance field.
+	* core/stk_make_matcov.m: For backward compatibility, a
+	lognoisevariance field with value -inf is added if absent.
+	* paramestim/stk_param_estim.m: idem.
+	* paramestim/stk_param_init.m: idem.
+	* paramestim/stk_param_relik.m: idem + remove NOISYOBS variable.
+	* covfcs/stk_discretecov.m: Modify unit test accordingly.
+	* NEWS: describes changes related to model structures.
+	* doc/dev/model.texi: Record design notes and ideas about model
+	structures (not meant to be released as a user-level doc).
+
 2014-10-09  Julien Bect  <julien.bect@supelec.fr>
 
 	Add the Goldstein-Price test function.
