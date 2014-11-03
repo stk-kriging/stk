@@ -1,3 +1,10 @@
+2014-11-03  Julien Bect  <julien.bect@supelec.fr>
+
+	Add a 'pairwise' argument to stk_noisecov.
+
+	* covfcs/stk_noisecov.m: Add a 'pairwise' argument.
+	* core/stk_make_matcov.m: Use the new 'pairwise' argument.
+
 2014-11-02  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_param_init.m: Change the behaviour regarding lnv.
@@ -10,8 +17,6 @@
 	regardless of the value of model.lognoisevariance.
 	* examples/03_miscellaneous/stk_example_misc03.m: Display the two
 	models that have been used in this example.
-	* NEWS: describe changes related to model structures and parameter
-	estimation.
 	* doc/dev/model.texi: update accordingly.
 
 2014-10-26  Julien Bect  <julien.bect@supelec.fr>
@@ -28,7 +33,6 @@
 	* paramestim/stk_param_init.m: idem.
 	* paramestim/stk_param_relik.m: idem + remove NOISYOBS variable.
 	* covfcs/stk_discretecov.m: Modify unit test accordingly.
-	* NEWS: describes changes related to model structures.
 	* doc/dev/model.texi: Record design notes and ideas about model
 	structures (not meant to be released as a user-level doc).
 

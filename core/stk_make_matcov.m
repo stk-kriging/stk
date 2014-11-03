@@ -25,8 +25,8 @@
 %
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -77,12 +77,8 @@ pairwise = (nargin > 3) && pairwise;
 
 K = feval (model.covariance_type, model.param, x0, x1, -1, pairwise);
 
-if make_matcov_auto && (model.lognoisevariance > - inf),
-    if ~ pairwise,
-        K = K + stk_noisecov (size (K,1), model.lognoisevariance);
-    else
-        stk_error ('Not implemented yet.', 'NotImplementedYet');
-    end
+if make_matcov_auto && (any (model.lognoisevariance ~= -inf))
+    K = K + stk_noisecov (size (K,1), model.lognoisevariance, -1, pairwise);
 end
 
 %=== compute the regression functions

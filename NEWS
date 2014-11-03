@@ -18,6 +18,11 @@ Changes in version 2.3.0
      also slightly changed: it is used to force or prevent the estimation of the
      variance of the noise, regardless of the value of model.lognoisevariance.
 
+* Covariance functions
+
+   o stk_noisecov now has a 'pairwise' argument, like the others.
+
+
 Changes in version 2.2.0
 ========================
 
