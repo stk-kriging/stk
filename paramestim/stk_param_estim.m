@@ -81,7 +81,7 @@ end
 NOISEESTIM = (nargin > 4) && (~ isempty (param0lnv));
 
 % Backward compatiblity: accept model structures with missing lognoisevariance
-if ~ isfield (model, 'lognoisevariance')
+if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
     if NOISEESTIM
         model.lognoisevariance = param0lnv;
     else

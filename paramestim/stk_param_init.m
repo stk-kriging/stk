@@ -85,7 +85,7 @@ end
 %--- lognoisevariance ? --------------------------------------------------------
 
 % Backward compatiblity: accept model structures with missing lognoisevariance
-if ~ isfield (model, 'lognoisevariance')
+if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
     model.lognoisevariance = - inf;
 end
 

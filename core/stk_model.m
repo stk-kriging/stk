@@ -91,7 +91,8 @@ if nargin > 2,
 end
 
 % Backward compatiblity: accept model structures with missing lognoisevariance
-if ~ isfield (model_base, 'lognoisevariance')
+if (~ isfield (model_base, 'lognoisevariance')) ...
+        || (isempty (model_base.lognoisevariance))
     model_base.lognoisevariance = - inf;
 end
 
