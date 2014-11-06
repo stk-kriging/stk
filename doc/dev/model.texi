@@ -104,13 +104,15 @@ Idea: non-scalar model structures might be an appropriate formalism for
 
 @subsection @code{nan} value for the @code{lognoisevariance} field
 
-Starting with STK 2.3.0, a @code{nan} value in the
-@code{lognoisevariance} field indicates the the variance of the noise
-must be estimated.
+Starting with STK 2.3.0, the @code{lognoisevariance} field is considered
+mandatory: a @code{nan} value indicates that the variance of the noise
+must be estimated, and @code{-inf} indicates that the observations are
+assumed noiseless. For backward compatibility, @code{model} structures
+with a missing or empty @code{lognoisevariance} field are considered as
+noiseless models.
 
-TODO: Currently, this case is only dealt with in
-@code{stk_param_estim}. It must be properly handled throughout the
-entire toolbox.
+TODO (before 2.3.0 release): Handle the @code{nan} case properly
+throughout the entire toolbox.
 
 
 @c @node Index

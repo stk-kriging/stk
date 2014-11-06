@@ -1,3 +1,14 @@
+2014-11-06  Julien Bect  <julien.bect@supelec.fr>
+
+	Handle empty lognoisevariance field as if missing.
+
+	* core/stk_make_matcov.m: Handle empty lognoisevariance field as if missing.
+	* core/stk_model.m: Idem.
+	* doc/dev/model.texi: Idem.
+	* paramestim/stk_param_estim.m: Idem.
+	* paramestim/stk_param_init.m: Idem.
+	* paramestim/stk_param_relik.m: Idem.
+
 2014-11-03  Julien Bect  <julien.bect@supelec.fr>
 
 	Add a 'pairwise' argument to stk_noisecov.

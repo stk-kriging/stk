@@ -51,7 +51,7 @@
 function [K, P] = stk_make_matcov (model, x0, x1, pairwise)
 
 % Backward compatiblity: accept model structures with missing lognoisevariance
-if ~ isfield (model, 'lognoisevariance')
+if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
     model.lognoisevariance = - inf;
 end
 
