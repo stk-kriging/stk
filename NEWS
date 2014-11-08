@@ -12,15 +12,29 @@ Changes in version 2.3.0
 
 * Parameter estimation
 
-   o stk_param_init now defaults to using the input value of
-     model.lognoisevariance if it is not NaN, and estimating the variance if it
-     is NaN. The meaning of the fifth argument, now called DO_ESTIM_LNV, has
-     also slightly changed: it is used to force or prevent the estimation of the
-     variance of the noise, regardless of the value of model.lognoisevariance.
+   o stk_param_init defaults to using the input value of model.lognoisevariance
+     if it is not NaN, and estimating the variance if it is NaN. The meaning of
+     the fifth argument, now called DO_ESTIM_LNV, has thus slightly changed: it
+     is used to force or prevent the estimation of the variance of the noise,
+     regardless of the value of model.lognoisevariance.
+
+   o stk_param_init_lnv is a new function that provides a rough estimate of the
+     variance of the noise (in the spirit of stk_param_init_lnv).
+
+   o stk_param_estim estimates the variance of the noise if either
+       a) param0lnv is provided and is not empty (as in STK <= 2.2.0), or
+       b) model.lognoisevariance is NaN (new behaviour).
+     If param0lnv is not provided, a starting point is obtained using the new
+     stk_param_init_lnv function.
 
 * Covariance functions
 
    o stk_noisecov now has a 'pairwise' argument, like the others.
+
+* Examples
+
+   o stk_example_kb04 demonstrates how it is possible to estimate the variance
+     of the noise without providing a initial guess for it.
 
 
 Changes in version 2.2.0
