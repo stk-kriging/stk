@@ -1,3 +1,17 @@
+2014-11-08  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_estim.m: Estimate lnv if lognoisevariance is nan.
+
+	* paramestim/stk_param_init_lnv.m: New function that provides a
+	rough estimate of the variance of the noise for a given model.
+	* admin/octpkg/INDEX: Include stk_param_init_lnv.m.
+	* paramestim/stk_param_estim.m: Estimate the variance of the noise
+	if the lognoisevariance field is nan, using as a starting point
+	the value returned by stk_param_init_lnv.
+	* examples/01_kriging_basics/stk_example_kb04.m: Demonstrate how
+	it is possible to estimate the variance of the noise without
+	providing a initial guess for it.
+
 2014-11-06  Julien Bect  <julien.bect@supelec.fr>
 
 	Handle empty lognoisevariance field as if missing.
@@ -21,8 +35,8 @@
 	stk_param_init.m: Change the behaviour regarding lnv.
 
 	* paramestim/stk_param_init.m: defaults to using the input value
-	of model.lognoisevariance if it is not NaN, and estimating the
-	variance if it is NaN. The meaning of the fifth argument, now
+	of model.lognoisevariance if it is not nan, and estimating the
+	variance if it is nan. The meaning of the fifth argument, now
 	called DO_ESTIM_LNV, has also slightly changed: it is used to
 	force or prevent the estimation of the variance of the noise,
 	regardless of the value of model.lognoisevariance.
@@ -507,7 +521,7 @@
 	stk_cholcov.m: Prevent infinite while loops.
 
 	* core/stk_cholcov.m: Prevent infinite while loops, that could
-	occur in the case of matrices that either contained NaNs or Infs,
+	occur in the case of matrices that either contained nans or Infs,
 	or were really far from from positive definite.
 
 2014-06-25  Ashwin Ravisankar  <ashwinr1993@gmail.com>
@@ -748,8 +762,8 @@
 
 	Introduce a new (experimental) feature: linear models.
 
-	* core/stk_ortho_func.m: Modified to handle model.order == NaN.
-	* paramestim/stk_param_init.m: Modified to handle model.order == NaN.
+	* core/stk_ortho_func.m: Modified to handle model.order == nan.
+	* paramestim/stk_param_init.m: Modified to handle model.order == nan.
 	* config/stk_config_path.m: Add lm to the path.
 	* lm/@stk_lm_affine/stk_lm_affine.m: New function
 	* lm/@stk_lm_affine/feval.m: New function
@@ -1609,7 +1623,7 @@
 
 2013-10-10  Julien Bect  <julien.bect@supelec.fr>
 
-	distrib_normal_*: return NaN for negative standard deviations.
+	distrib_normal_*: return nan for negative standard deviations.
 
 	* misc/distrib/distrib_normal_pdf.m: modified
 	* misc/distrib/distrib_normal_cdf.m: modified
@@ -3359,7 +3373,7 @@
 
 	Minor bugfix + improved error message in stk_remlqrg()
 
-	* core/stk_remlqrg.m: Minor bugfix: returns NaN for the derivative
+	* core/stk_remlqrg.m: Minor bugfix: returns nan for the derivative
 	with respect to the noise variance in the case of a model without
 	observation noise.  Improved error message if NOISEPRIOR &&
 	~NOISYOBS (doesn't use assert anymore).

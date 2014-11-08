@@ -88,15 +88,12 @@ zi = zi + sqrt (NOISEVARIANCE) * randn (NI, 1);
 % set, but they will be replaced below by estimated parameters.)
 model = stk_model ('stk_materncov_iso');
 
-% Noise variance
-model.lognoisevariance = log (100 * eps);
-% (this is not the true value of the noise variance !)
-
 
 %% Estimate the parameters of the covariance function
 %
 % Here, the parameters of the Matern covariance function are estimated by the
-% REML (REstricted Maximum Likelihood) method using stk_param_estim().
+% REML (REstricted Maximum Likelihood) method using stk_param_estim(), with an
+% initial guess provided for the variance of the noise
 %
 
 % Initial guess for the parameters for the Matern covariance
@@ -109,10 +106,28 @@ param0 = log ([SIGMA2; NU; 1/RHO1]);
 % Initial guess for the (log of the) noise variance
 lnv0 = 2 * log (std (zi) / 100);
 
-[param, paramlnv] = stk_param_estim (model, xi, zi, param0, lnv0);
+[model.param, model.lognoisevariance] = ...
+    stk_param_estim (model, xi, zi, param0, lnv0);
 
-model.param = param;
-model.lognoisevariance = paramlnv;
+display (model);
+
+
+%% Estimate the parameters of the covariance function (bis)
+%
+% The sections shows how to do the same thing without an initial guess for the
+% noise variance. The same initial guess (param0) is used for the other
+% parameters of the model.
+%
+
+model2 = stk_model ('stk_materncov_iso');
+
+% Indicate that with the noise variance to be estimated
+model2.lognoisevariance = nan;
+
+[model2.param, model2.lognoisevariance] = ...
+    stk_param_estim (model2, xi, zi, param0);
+
+display (model2);
 
 
 %% Carry out kriging prediction
@@ -123,8 +138,6 @@ zp = stk_predict (model, xi, zi, xt);
 stk_plot1d (xi, zi, xt, zt, zp);
 stk_title  ('Kriging prediction');
 stk_labels ('input variable x', 'response z');
-
-model %#ok<NOPTS>
 
 
 %!test stk_example_kb04;  close all;

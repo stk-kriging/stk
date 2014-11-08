@@ -42,6 +42,7 @@ Kriging: Parameter estimation
 #stk_param_getdefaultbounds  [internal]
  stk_param_gls 
  stk_param_init
+ stk_param_init_lnv
  stk_param_relik
 
 ## The stk_kre_qr class -> not ready to be exposed

@@ -77,16 +77,19 @@ end
 % TODO: turn param0 into an optional argument
 %       => provide a reasonable default choice
 
-% TODO: think of a better way to tell we want to estimate the noise variance
-NOISEESTIM = (nargin > 4) && (~ isempty (param0lnv));
-
 % Backward compatiblity: accept model structures with missing lognoisevariance
 if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
-    if NOISEESTIM
-        model.lognoisevariance = param0lnv;
-    else
-        model.lognoisevariance = - inf;
-    end
+    model.lognoisevariance = -inf;
+end
+
+% Should we estimate the variance of the noise, too ?
+if nargin > 4
+    % param0lnv present => noise variance *must* be estimated
+    do_estim_lnv = (~ isempty (param0lnv));
+else
+    % otherwise, noise variance estimation happens when lnv is nan
+    do_estim_lnv = (isnan (model.lognoisevariance));
+    param0lnv = [];
 end
 
 if nargin < 6,
@@ -96,8 +99,8 @@ end
 % Cast param0 into an object of the appropriate type and size
 % and set model.param to the same value
 if isfloat (param0)
-    % Note: if model.param is an object, this is actually a call to subsasgn() in
-    % disguise => parameter classes *must* support this form of indexing.
+    % Note: if model.param is an object, this is actually a call to subsasgn()
+    % in disguise => parameter classes *must* support this form of indexing.
     model.param(:) = param0;
     param0 = model.param;
 else
@@ -108,10 +111,15 @@ else
     end
 end
 
+% Ensure that we have a starting point for lnv
+if do_estim_lnv && (isempty (param0lnv))   
+    param0lnv = stk_param_init_lnv (model, xi, zi);
+end
+
 % TODO: allow user-defined bounds
 [lb, ub] = stk_param_getdefaultbounds (model.covariance_type, param0, xi, zi);
 
-if NOISEESTIM
+if do_estim_lnv
     [lblnv, ublnv] = get_default_bounds_lnv (model, param0lnv, xi, zi);
     lb = [lb ; lblnv];
     ub = [ub ; ublnv];
@@ -120,7 +128,7 @@ else
     u0 = param0(:);
 end
 
-switch NOISEESTIM
+switch do_estim_lnv
     case false,
         f = @(u)(f_ (model, u, xi, zi, criterion));
         nablaf = @(u)(nablaf_ (model, u, xi, zi, criterion));
@@ -148,14 +156,14 @@ switch optim_num,
         [u_opt, crit_opt] = sqp (u0, {f, nablaf}, [], [], lb, ub, [], 1e-5);
         
     case {2, 3}, % Matlab
-
+        
         options = optimset ('Display', optim_display_level, ...
             'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
-
+        
         if optim_num == 2,  % Matlab / fminsearch (Nelder-Mead)
-        
+            
             [u_opt, crit_opt] = fminsearch (f, u0, options);
-        
+            
         else  % Matlab / fmincon
             
             options = optimset (options, 'GradObj', 'on');
@@ -185,7 +193,7 @@ switch optim_num,
         
 end % switch
 
-if NOISEESTIM
+if do_estim_lnv
     paramlnvopt = u_opt(end);
     u_opt(end) = [];
 else
@@ -213,7 +221,7 @@ if nargout > 2,
     info.lower_bounds = lb;
     info.upper_bounds = ub;
 end
-    
+
 end % function stk_param_estim ------------------------------------------------
 
 %#ok<*CTCH,*LERR,*SPWRN,*WNTAG>
