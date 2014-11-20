@@ -1,5 +1,9 @@
 2014-11-20  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_param_estim.m: Empty is the same as not provided.
+
+	* paramestim/stk_param_estim.m: Empty is the same as not provided.
+
 	stk_param_estim.m: Simplify variable names.
 
 	* paramestim/stk_param_estim.m: Simplify variable names, param0lnv
