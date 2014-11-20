@@ -56,8 +56,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [paramopt, paramlnvopt, info] = stk_param_estim ...
-    (model, xi, zi, param0, param0lnv, criterion)
+function [paramopt, lnvopt, info] = stk_param_estim ...
+    (model, xi, zi, param0, lnv0, criterion)
 
 if nargin > 6,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -86,11 +86,11 @@ end
 % Should we estimate the variance of the noise, too ?
 if nargin > 4
     % param0lnv present => noise variance *must* be estimated
-    do_estim_lnv = (~ isempty (param0lnv));
+    do_estim_lnv = (~ isempty (lnv0));
 else
     % otherwise, noise variance estimation happens when lnv is nan
     do_estim_lnv = (isnan (model.lognoisevariance));
-    param0lnv = [];
+    lnv0 = [];
 end
 
 if nargin < 6,
@@ -113,18 +113,18 @@ else
 end
 
 % Ensure that we have a starting point for lnv
-if do_estim_lnv && (isempty (param0lnv))   
-    param0lnv = stk_param_init_lnv (model, xi, zi);
+if do_estim_lnv && (isempty (lnv0))   
+    lnv0 = stk_param_init_lnv (model, xi, zi);
 end
 
 % TODO: allow user-defined bounds
 [lb, ub] = stk_param_getdefaultbounds (model.covariance_type, param0, xi, zi);
 
 if do_estim_lnv
-    [lblnv, ublnv] = get_default_bounds_lnv (model, param0lnv, xi, zi);
+    [lblnv, ublnv] = get_default_bounds_lnv (model, lnv0, xi, zi);
     lb = [lb ; lblnv];
     ub = [ub ; ublnv];
-    u0 = [param0(:); param0lnv];
+    u0 = [param0(:); lnv0];
 else
     u0 = param0(:);
 end
@@ -195,10 +195,10 @@ switch optim_num,
 end % switch
 
 if do_estim_lnv
-    paramlnvopt = u_opt(end);
+    lnvopt = u_opt(end);
     u_opt(end) = [];
 else
-    paramlnvopt = model.lognoisevariance;
+    lnvopt = model.lognoisevariance;
 end
 
 if isfloat (param0)
