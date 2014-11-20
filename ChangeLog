@@ -1,3 +1,12 @@
+2014-11-20  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_estim.m: Always return something meaningful for lnv.
+
+	* paramestim/stk_param_estim.m: Always return something meaningful
+	for lnv: when the variance of the noise is not estimated, return
+	model.lognoisevariance. Update the function documentation
+	following this and earlier changes.
+
 2014-11-08  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_param_estim.m: Estimate lnv if lognoisevariance is nan.
@@ -16,7 +25,8 @@
 
 	Handle empty lognoisevariance field as if missing.
 
-	* core/stk_make_matcov.m: Handle empty lognoisevariance field as if missing.
+	* core/stk_make_matcov.m: Handle empty lognoisevariance field as
+	if missing.
 	* core/stk_model.m: Idem.
 	* doc/dev/model.texi: Idem.
 	* paramestim/stk_param_estim.m: Idem.

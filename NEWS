@@ -19,13 +19,15 @@ Changes in version 2.3.0
      regardless of the value of model.lognoisevariance.
 
    o stk_param_init_lnv is a new function that provides a rough estimate of the
-     variance of the noise (in the spirit of stk_param_init_lnv).
+     variance of the noise (in the spirit of stk_param_init).
 
    o stk_param_estim estimates the variance of the noise if either
        a) param0lnv is provided and is not empty (as in STK <= 2.2.0), or
        b) model.lognoisevariance is NaN (new behaviour).
      If param0lnv is not provided, a starting point is obtained using the new
-     stk_param_init_lnv function.
+     stk_param_init_lnv function. In all cases (whether lnv is estimated or not)
+     a meaningful value is returned for lnv (equal to model.nognoisevariance
+     when lnv is not estimated).
 
 * Covariance functions
 
