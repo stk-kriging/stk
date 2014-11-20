@@ -8,7 +8,7 @@
 %   method. A starting point PARAM0 must be provided.
 %
 %   The observations are assumed to be noisy if MODEL.lognoisevariance is
-%   not -inf. In this case, the variance of the noise is estimated if 
+%   not -inf. In this case, the variance of the noise is estimated if
 %   MODEL.lognoisevariance is nan, and assumed known otherwise. The
 %   estimated log-variance is returned as the second output argument LNV
 %   (equal to MODEL.lognoisevariance when it is assumed to be known).
@@ -63,6 +63,11 @@ if nargin > 6,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
+% Empty is the same as not provided
+if nargin < 6,  criterion = [];  end
+if nargin < 5,  lnv0      = [];  end
+if nargin < 4,  param0    = [];  end
+
 % size checking: xi, zi
 if ~ isequal (size (zi), [size(xi, 1) 1]),
     errmsg = 'zi should be a column, with the same number of rows as xi.';
@@ -77,6 +82,9 @@ end
 
 % TODO: turn param0 into an optional argument
 %       => provide a reasonable default choice
+if isempty (param0)
+    error ('TEMP/FIXME: handle the case where param0 is missing');
+end
 
 % Backward compatiblity: accept model structures with missing lognoisevariance
 if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
@@ -84,16 +92,16 @@ if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
 end
 
 % Should we estimate the variance of the noise, too ?
-if nargin > 4
+if ~ isempty (lnv0)
     % param0lnv present => noise variance *must* be estimated
-    do_estim_lnv = (~ isempty (lnv0));
+    do_estim_lnv = true;
 else
     % otherwise, noise variance estimation happens when lnv is nan
     do_estim_lnv = (isnan (model.lognoisevariance));
-    lnv0 = [];
 end
 
-if nargin < 6,
+% Default criterion: restricted likelihood (ReML method)
+if isempty (criterion)
     criterion = @stk_param_relik;
 end
 
@@ -113,7 +121,7 @@ else
 end
 
 % Ensure that we have a starting point for lnv
-if do_estim_lnv && (isempty (lnv0))   
+if do_estim_lnv && (isempty (lnv0))
     lnv0 = stk_param_init_lnv (model, xi, zi);
 end
 
