@@ -1,27 +1,28 @@
 % STK_PARAM_ESTIM estimates the parameters of a covariance function
 %
 % CALL: PARAM = stk_param_estim (MODEL, XI, YI, PARAM0)
+% CALL: [PARAM, LNV] = stk_param_estim (MODEL, XI, YI, PARAM0)
 %
 %   estimates the parameters PARAM of the covariance function in MODEL
 %   from the data (XI, YI) using the restricted maximum likelihood (ReML)
 %   method. A starting point PARAM0 must be provided.
 %
+%   The observations are assumed to be noisy if MODEL.lognoisevariance is
+%   not -inf. In this case, the variance of the noise is estimated if 
+%   MODEL.lognoisevariance is nan, and assumed known otherwise. The
+%   estimated log-variance is returned as the second output argument LNV
+%   (equal to MODEL.lognoisevariance when it is assumed to be known).
+%
 % CALL: [PARAM, LNV] = stk_param_estim (MODEL, XI, YI, PARAM0, LNV0)
 %
-%   also estimate the (logarithm of the) noise variance. This form only
-%   applies to the case where the observations are assumed noisy. A starting
-%   point (PARAM0, LNV0) has to be provided.
+%   additionally provides an initial guess LNV0 for the logarithm of the
+%   noise variance. In this case the observations are automatically assumed
+%   to be noisy, and the value of MODEL.lognoisevariance is ignored.
 %
 % CALL: PARAM = stk_param_estim (MODEL, XI, YI, PARAM0, [], CRIT)
 % CALL: [PARAM, LNV] = stk_param_estim (MODEL, XI, YI, PARAM0, LNV0, CRIT)
 %
 %   uses the estimation criterion CRIT instead of the default ReML criterion.
-%
-% NOTE: known noise variance
-%
-%   The first form can be used with noisy observations, in which case the
-%   variance of the observation noise is assumed to be known (and given by
-%   exp (MODEL.lognoisevariance)).
 %
 % EXAMPLES: see, e.g., stk_example_kb02, stk_example_kb03, stk_example_kb04,
 %           stk_example_kb06, stk_example_misc02
@@ -197,7 +198,7 @@ if do_estim_lnv
     paramlnvopt = u_opt(end);
     u_opt(end) = [];
 else
-    paramlnvopt = [];
+    paramlnvopt = model.lognoisevariance;
 end
 
 if isfloat (param0)
