@@ -1,5 +1,10 @@
 2014-11-20  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_param_estim.m: Simplify variable names.
+
+	* paramestim/stk_param_estim.m: Simplify variable names, param0lnv
+	-> lnv0, paramlnvopt -> lnvopt.
+
 	stk_param_estim.m: Always return something meaningful for lnv.
 
 	* paramestim/stk_param_estim.m: Always return something meaningful
