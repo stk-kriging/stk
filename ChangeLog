@@ -1,5 +1,9 @@
 2014-11-20  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_param_estim.m: Provide a value for param0 if needed.
+
+	* paramestim/stk_param_estim.m: Provide a value for param0 if needed.
+
 	stk_param_estim.m: Empty is the same as not provided.
 
 	* paramestim/stk_param_estim.m: Empty is the same as not provided.

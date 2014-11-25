@@ -8,6 +8,10 @@ Changes in version 2.3.0
      -inf. A nan value in the lognoisevariance field is now interpreted as
      meaning that the variance of the noise must be estimated.
 
+   o model.param is set to nan by stk_model. This special value indicates that
+     the parameters must be estimated from the data before any prediction can
+     be done.
+
    o Improved documentation for stk_model.
 
 * Parameter estimation
@@ -28,6 +32,9 @@ Changes in version 2.3.0
      stk_param_init_lnv function. In all cases (whether lnv is estimated or not)
      a meaningful value is returned for lnv (equal to model.nognoisevariance
      when lnv is not estimated).
+
+   o stk_param_estim can provide a value for param0 when it is missing from the
+     list of input arguments.
 
 * Covariance functions
 
