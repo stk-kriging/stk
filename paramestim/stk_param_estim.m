@@ -80,12 +80,6 @@ if (std (double (zi)) == 0)
         'data: the output of stk_param_estim is likely to be unreliable.']);
 end
 
-% TODO: turn param0 into an optional argument
-%       => provide a reasonable default choice
-if isempty (param0)
-    error ('TEMP/FIXME: handle the case where param0 is missing');
-end
-
 % Backward compatiblity: accept model structures with missing lognoisevariance
 if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
     model.lognoisevariance = -inf;
@@ -97,7 +91,8 @@ if ~ isempty (lnv0)
     do_estim_lnv = true;
 else
     % otherwise, noise variance estimation happens when lnv is nan
-    do_estim_lnv = (isnan (model.lognoisevariance));
+    lnv0 = model.lognoisevariance;
+    do_estim_lnv = (isnan (lnv0));
 end
 
 % Default criterion: restricted likelihood (ReML method)
@@ -105,23 +100,12 @@ if isempty (criterion)
     criterion = @stk_param_relik;
 end
 
-% Cast param0 into an object of the appropriate type and size
-% and set model.param to the same value
-if isfloat (param0)
-    % Note: if model.param is an object, this is actually a call to subsasgn()
-    % in disguise => parameter classes *must* support this form of indexing.
-    model.param(:) = param0;
-    param0 = model.param;
-else
-    if ~ strcmp (class (param0), class (model.param))
-        stk_error ('Incorrect type for param0.', 'TypeMismatch');
-    else
-        model.param = param0;
-    end
-end
+% param0: provide a value (if not provided as input argument)
+[param0, lnv0] = provide_param0_value (model, xi, zi, param0, lnv0);
 
-% Ensure that we have a starting point for lnv
-if do_estim_lnv && (isempty (lnv0))
+% lnv0: try stk_param_init_lnv if we still have no acceptable value
+if do_estim_lnv && (isnan (lnv0))
+    model.param = param0;
     lnv0 = stk_param_init_lnv (model, xi, zi);
 end
 
@@ -231,7 +215,7 @@ if nargout > 2,
     info.upper_bounds = ub;
 end
 
-end % function stk_param_estim ------------------------------------------------
+end % function stk_param_estim -------------------------------------------------
 
 %#ok<*CTCH,*LERR,*SPWRN,*WNTAG>
 
@@ -284,7 +268,7 @@ dl = [dl; dln];
 end % function nablaf_with_noise_
 
 
-function [lblnv,ublnv] = get_default_bounds_lnv ... % -------------------------
+function [lblnv,ublnv] = get_default_bounds_lnv ... % --------------------------
     (model, param0lnv, xi, zi) %#ok<INUSL>
 
 % assume NOISEESTIM
@@ -296,7 +280,47 @@ empirical_variance = var(zi);
 lblnv = log(eps);
 ublnv = log(empirical_variance) + TOLVAR;
 
-end % function get_default_bounds_lnv -----------------------------------------
+end % function get_default_bounds_lnv ------------------------------------------
+
+
+function [param0, lnv0] = provide_param0_value ... % ---------------------------
+    (model, xi, zi, param0, lnv0)
+
+% param0: try to use input argument first
+if ~ isempty (param0)
+    
+    % Cast param0 into an object of the appropriate type
+    if isfloat (model.param)
+        param0 = double (param0);
+    elseif isfloat (param0)
+        param_tmp = model.param;
+        param_tmp(:) = param0;
+        % Note: if model.param is an object, this is actually a call to subsasgn
+        % in disguise => parameter classes *must* support this form of indexing.
+        param0 = param_tmp;
+    elseif ~ isa (param0, class (model.param))
+        stk_error ('Incorrect type for param0.', 'TypeMismatch');
+    end
+    
+    % Test if param0 contains nans
+    if ~ any (isnan (double (param0)))
+        warning ('param0 has nans, using model.param instead');
+        param0 = [];
+    end
+end
+
+% param0: try to use model.param if we still have no acceptable value
+if (isempty (param0)) && (~ any (isnan (double (model.param))))
+    param0 = model.param;
+end
+
+% param0: try stk_param_init if we still have no acceptable value
+if isempty (param0)
+    model.lognoisevariance = lnv0;
+    [param0, lnv0] = stk_param_init (model, xi, zi);
+end
+
+end % function provide_param0_value
 
 
 %!shared f, xi, zi, NI, param0, model
@@ -332,7 +356,6 @@ end % function get_default_bounds_lnv -----------------------------------------
 %!error param = stk_param_estim ()
 %!error param = stk_param_estim (model);
 %!error param = stk_param_estim (model, xi);
-%!error param = stk_param_estim (model, xi, zi);
 %!error param = stk_param_estim (model, xi, zi, param0, log(eps), @stk_param_relik, pi);
 
 %!test % Constant response
