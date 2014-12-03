@@ -1,5 +1,9 @@
 2014-12-03  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_sampling_randunif.m: Fix input argument checking.
+
+	* sampling/stk_sampling_randunif.m: Fix input argument checking.
+
 	stk_sampling_randunif.m: Accept empty dim when box is provided.
 
 	* sampling/stk_sampling_randunif.m: Accept empty dim argument when

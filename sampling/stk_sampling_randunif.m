@@ -45,8 +45,8 @@ if nargin > 3,
 end
 
 % Read argument n
-if (length (n) ~= 1) && (length (n) ~= dim)
-    error ('n should either be a scalar or a vector of length d');
+if ~ ((isscalar (n)) && (isnumeric (n)))
+    error ('n should be a numerical scalar.');
 end
 
 % Read argument dim
@@ -81,11 +81,11 @@ end % function stk_sampling_randunif
 %!shared x, n, dim, box
 %! n = 10; dim = 2; box = [0, 0; 2, 2];
 
-%!error x = stk_sampling_randunif();
-%!error x = stk_sampling_randunif(n);
-%!test  x = stk_sampling_randunif(n, dim);
-%!test  x = stk_sampling_randunif(n, dim, box);
-%!error x = stk_sampling_randunif(n, dim, box, pi);
+%!error x = stk_sampling_randunif ();
+%!test  x = stk_sampling_randunif (n);
+%!test  x = stk_sampling_randunif (n, dim);
+%!test  x = stk_sampling_randunif (n, dim, box);
+%!error x = stk_sampling_randunif (n, dim, box, pi);
 
 %% 
 % Check that the output is a dataframe
