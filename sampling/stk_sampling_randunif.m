@@ -38,26 +38,33 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_sampling_randunif(n, dim, box)
+function x = stk_sampling_randunif (n, dim, box)
 
 if nargin > 3,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% read argument n
-if (length(n) ~=1 ) && (length(n) ~= dim)
-    error('n should either be a scalar or a vector of length d');
+% Read argument n
+if (length (n) ~= 1) && (length (n) ~= dim)
+    error ('n should either be a scalar or a vector of length d');
 end
 
-% read argument box
-if (nargin < 3) || isempty(box)
-    box = repmat([0; 1], 1, dim);
+% Read argument dim
+if (nargin < 2) || ((nargin < 3) && (isempty (dim)))
+    dim = 1;  % Default dimension
+elseif (nargin > 2) && (~ isempty (box))
+    dim = size (box, 2);
+end
+    
+% Read argument box
+if (nargin < 3) || isempty (box)
+    box = repmat ([0; 1], 1, dim);
 else
-    stk_assert_box(box);
+    stk_assert_box (box);
 end
 
 if n == 0, % empty sample    
-    xdata = zeros(0,dim);    
+    xdata = zeros (0, dim);    
 else % at least one input point          
     xdata = stk_rescale(rand(n, dim), [], box);
 end

@@ -40,6 +40,10 @@ Changes in version 2.3.0
 
    o stk_noisecov now has a 'pairwise' argument, like the others.
 
+* Sampling
+
+   o stk_sampling_randunif accepts empty dim argument when box is provided
+
 * Examples
 
    o stk_example_kb04 demonstrates how it is possible to estimate the variance
