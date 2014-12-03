@@ -1,3 +1,11 @@
+2014-12-03  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_sampling_randunif.m: Accept empty dim when box is provided.
+
+	* sampling/stk_sampling_randunif.m: Accept empty dim argument when
+	box is provided, in which case dim is guessed from the dimension
+	of box.
+
 2014-11-20  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_param_estim.m: Provide a value for param0 if needed.
