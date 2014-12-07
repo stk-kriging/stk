@@ -149,6 +149,7 @@ Examples: miscellaneous
 #stk_distrib_normal_pdf      [internal]
 #stk_distrib_student_cdf     [internal]
 #stk_distrib_student_pdf     [internal]
+#stk_distrib_bivnorm_cdf     [internal]
 
 Miscellaneous: arrays
  stk_feval

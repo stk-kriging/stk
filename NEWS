@@ -49,6 +49,10 @@ Changes in version 2.3.0
    o stk_example_kb04 demonstrates how it is possible to estimate the variance
      of the noise without providing a initial guess for it.
 
+* Miscellaneous
+
+   o stk_distrib_bivnorm_cdf computes bivariate normal probabilities.
+
 
 Changes in version 2.2.0
 ========================
