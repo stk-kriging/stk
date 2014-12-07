@@ -38,6 +38,9 @@ info = register_mex (info, relpath, 'stk_gpquadform_matrixy');
 info = register_mex (info, relpath, 'stk_gpquadform_matrixx');
 info = register_mex (info, relpath, 'stk_gpquadform_pairwise');
 
+relpath = fullfile ('misc', 'distrib', 'private');
+info = register_mex (info, relpath, 'stk_distrib_bivnorm0_cdf');
+
 relpath = fullfile ('arrays', '@stk_dataframe', 'private');
 info = register_mex (info, relpath, 'get_column_number');
 

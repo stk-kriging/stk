@@ -1,3 +1,20 @@
+2014-12-09  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_distrib_bivnorm_cdf: Compute bivariate normal probabilities.
+
+	* misc/distrib/stk_distrib_bivnorm_cdf.m: Compute bivariate normal
+	probabilities (with any means, standard deviations and
+	corrrelation coefficients). Supports broadcasting. Accurate
+	computation of [p, q] even when p or q is close to one.
+	* misc/distrib/private/stk_distrib_bivnorm0_cdf.c: C MEX-file for
+	the computation of standard bivariate probabilities (zero means,
+	unit variances).
+	* admin/octpkg/INDEX: Hide stk_distrib_bivnorm_cdf.m, currently
+	considered as an internal function.
+	* admin/octpkg/Makefile: Add __stk_distrib_bivnorm0_cdf__ to the
+	list of targets.
+	* config/stk_config_makeinfo.m: Add stk_distrib_bivnorm0_cdf.
+
 2014-12-03  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_sampling_randunif.m: Fix input argument checking.
