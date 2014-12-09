@@ -10,7 +10,7 @@ stk >> STK, a Small Toolbox for Kriging
 ##     use in STK. Although it might be occasionnaly useful for 
 ##     advanced users to call them directly, they are not considered
 ##     as part of the public API and therefore not as stable as
-##     public API functions. A necessary (but not sufficint) condition
+##     public API functions. A necessary (but not sufficient) condition
 ##     for a function to be called "internal" is that it should not 
 ##     be used in any of the stk_example_* scripts. Use at your own
 ##     risk.
@@ -142,6 +142,7 @@ Examples: miscellaneous
  stk_example_misc04
 
 #stk_testfun_braninhoo
+#stk_testfun_goldsteinprice
 
 ## Cf. misc/distrib/README
 #stk_distrib_normal_cdf      [internal]
