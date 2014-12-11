@@ -22,9 +22,10 @@
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 %
 %    Based on the "Virtual Library for Simulation Experiments"
-%       Copyright (C) 2013 Derek Bingham, Simon Fraser University.
+%       Copyright (C) 2013 Derek Bingham, Simon Fraser University
 %       Authors: Sonja Surjanovic & Derek Bingham (dbingham@stat.sfu.ca)
-%       http://www.sfu.ca/~ssurjano/
+%       Distributed under the GPLv2 licence
+%       http://www.sfu.ca/~ssurjano/Code/goldprm.html
 
 % Copying Permission Statement
 %
