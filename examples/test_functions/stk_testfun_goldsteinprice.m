@@ -5,7 +5,7 @@
 %    Dixon-Szego test set [2].
 %
 %    It is usually minimized over [-2; 2] x [-2; 2]. It has a unique
-%    global minimum at x = (0, 1) with f(x) = 3, and several local minima.
+%    global minimum at x = [0, -1] with f(x) = 3, and several local minima.
 %
 % REFERENCES
 %
