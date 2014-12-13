@@ -303,7 +303,7 @@ if ~ isempty (param0)
     end
     
     % Test if param0 contains nans
-    if ~ any (isnan (double (param0)))
+    if any (isnan (double (param0)))
         warning ('param0 has nans, using model.param instead');
         param0 = [];
     end
