@@ -29,12 +29,18 @@
 function x = subsasgn (x, idx, value)
 
 if isa (x, 'stk_hrect')
-
+    
     x.stk_dataframe = subsasgn (x.stk_dataframe, idx, value);
-
+    
+    data = x.stk_dataframe.data;
+    if any (data(1, :) > data(2, :))
+        stk_error ('Lower bounds cannot be larger than upperbounds', ...
+            'IllegalAssigment');
+    end
+    
 else % value must be an stk_hrect object
     
-    x = subsasgn (x, idx, x.stk_dataframe.data);
+    x = subsasgn (x, idx, x.stk_dataframe);
     
 end
 
