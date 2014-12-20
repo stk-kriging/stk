@@ -30,10 +30,10 @@ function value = get (x, propname)
 
 switch propname
     
-    case {'lb', 'LowerBounds'}
+    case 'lower_bounds'
         value = x.stk_dataframe.data(1, :);
         
-    case {'ub', 'UpperBounds'}
+    case 'upper_bounds'
         value = x.stk_dataframe.data(2, :);
         
     case 'stk_dataframe'  % Read-only access to the underlying df
