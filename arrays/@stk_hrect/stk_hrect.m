@@ -20,7 +20,10 @@ else  % create a new stk_hrect object
     end
     
     assert (isequal (size (box_data), [2 d]));
-    assert (all (box_data(1, :) <= box_data(2, :)));
+    
+    if (~ all (box_data(1, :) <= box_data(2, :)))
+        stk_error ('Invalid bounds', 'InvalidBounds');
+    end
     
     df = stk_dataframe (box_data, {}, {'lower_bounds', 'upper_bounds'});
     s = class (struct (), 'stk_hrect', df);
