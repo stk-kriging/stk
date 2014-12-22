@@ -17,10 +17,11 @@ else  % create a new stk_hrect object
     else
         box_data = double (arg1);
         d = size (box_data, 2);
+        if (~ isequal (size (box_data), [2 d]))
+            stk_error ('Invalid size: should be 2 x dim.', 'IncorrectSize');
+        end
     end
-    
-    assert (isequal (size (box_data), [2 d]));
-    
+        
     if (~ all (box_data(1, :) <= box_data(2, :)))
         stk_error ('Invalid bounds', 'InvalidBounds');
     end
