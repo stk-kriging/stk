@@ -1,8 +1,8 @@
-% STK_XLABEL is a replacement for 'xlabel' for use in STK's examples
+% STK_ZLABEL is a replacement for 'zlabel' for use in STK's examples
 
 % Copyright Notice
 %
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,20 +26,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function h = stk_xlabel (varargin)
+function h = stk_zlabel (varargin)
 
 [h, varargin] = stk_get_axis_arg (varargin{:});
-xlab = varargin{1};
+zlab = varargin{1};
 
 % Get global STK options
-stk_options = stk_options_get ('stk_xlabel', 'properties');
+stk_options = stk_options_get ('stk_zlabel', 'properties');
 user_options = varargin(2:end);
 
 % Apply to all axes
 for i = 1:(length (h))
     
-    % Set x-label and apply STK options
-    xlabel (h(i), xlab, stk_options{:});
+    % Set y-label and apply STK options
+    zlabel (h(i), zlab, stk_options{:});
     
     % Apply user-provided options
     if ~ isempty (user_options)
@@ -48,4 +48,4 @@ for i = 1:(length (h))
     
 end
 
-end % function stk_xlabel
+end % function stk_zlabel

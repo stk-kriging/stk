@@ -26,18 +26,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function h = stk_ylabel (ylab, varargin)
+function h = stk_ylabel (varargin)
+
+[h, varargin] = stk_get_axis_arg (varargin{:});
+ylab = varargin{1};
 
 % Get global STK options
 stk_options = stk_options_get ('stk_ylabel', 'properties');
-user_options = varargin;
+user_options = varargin(2:end);
 
-% Set y-label
-h = ylabel (ylab, stk_options{:});
-
-% Apply user-provided options
-if ~ isempty (user_options)
-    set (h, user_options{:});
+% Apply to all axes
+for i = 1:(length (h))
+    
+    % Set y-label and apply STK options
+    ylabel (h(i), ylab, stk_options{:});
+    
+    % Apply user-provided options
+    if ~ isempty (user_options)
+        set (h(i), user_options{:});
+    end
+    
 end
 
 end % function stk_ylabel
