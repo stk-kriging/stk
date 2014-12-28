@@ -10,7 +10,11 @@ if isa (arg1, 'stk_hrect')  % arg1 is already an stk_hrect object: copy
     
 else  % create a new stk_hrect object
     
-    if isscalar (arg1)  % arg1 is the dimension of the input space
+    % NOTE: the following test uses (prod (size (arg1)) == 1) instead of
+    % isscalar because isscalar (x) means (numel (x) == 1) in Octave 3.8.2
+    % and therefore always returns true for stk_dataframe objects.
+    
+    if (prod (size (arg1)) == 1)  % arg1 is the dimension of the input space
         % => create a default hyper-rectangle [0; 1]^d, with d = arg1
         d = arg1;
         box_data = repmat ([0; 1], 1, d);
