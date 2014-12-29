@@ -33,12 +33,16 @@ stack = dbstack ();
 
 if length(stack) >= 2,
     demo_name = stack(2).name;
+    display_help = true;
 else
     demo_name = 'This is a demo example...';
+    display_help = false;
 end
 
 fprintf ('\n%s\n', stk_sprintf_framed (demo_name));
 
-help (demo_name);
+if display_help
+    help (demo_name);
+end
 
 end % function stk_disp_examplewelcome
