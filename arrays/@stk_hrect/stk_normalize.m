@@ -1,8 +1,8 @@
-% STK_NORMALIZE [overload STK function]
+% STK_NORMALIZE normalizes a dataset to [0; 1] ^ DIM
 
 % Copyright Notice
 %
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -36,32 +36,45 @@ if nargin < 2,
     box = [];
 end
 
-if isa (x, 'stk_dataframe')
-    
-    % Ensure that box is an stk_hrect object
-    if ~ isa (box, 'stk_hrect')
-        if isempty (box),
-            box = stk_boundingbox (x.data);  % Default: bounding box
-        else
-            box = stk_hrect (box);
-        end
+% Read argument x
+x_data = double (x);
+d = size (x_data, 2);
+
+% Ensure that box is an stk_hrect object
+if ~ isa (box, 'stk_hrect')
+    if isempty (box)
+        box = stk_boundingbox (x_data);  % Default: bounding box
+    else
+        box = stk_hrect (box);
     end
-    
-    % Call @stk_hrect/stk_normalize
-    [x.data, a, b] = stk_normalize (x.data, box);
-    
-else % box is an stk_dataframe object
-    
-    % Call @stk_hrect/stk_normalize
-    [x, a, b] = stk_normalize (x, stk_hrect (box));
-    
-end % if
+end
+
+% Read argument box
+box_data = double (box.stk_dataframe);
+if ~ isequal (size (box_data), [2 d])
+    errmsg = sprintf ('box should have size [2 d], with d=%d.', d);
+    stk_error (errmsg, 'IncorrectSize');
+end
+
+xmin = box_data(1, :);  % lower_bounds
+xmax = box_data(2, :);  % upper_bounds
+
+b = 1 ./ (xmax - xmin);
+a = - xmin .* b;
+
+x(:) = bsxfun (@plus, a, x_data * diag (b));
 
 end % function stk_normalize
 
-%!test
-%! u = rand (6, 2) * 2;
-%! x = stk_dataframe (u);
-%! y = stk_normalize (x);
-%! assert (isa (y, 'stk_dataframe') ...
-%!    && stk_isequal_tolabs (double (y), stk_normalize (u)))
+
+%!shared x box y1 y2 y3 y4
+%! n = 5;  box = stk_hrect ([2; 3]);
+%! x = 2 + rand (n, 1);
+
+%!error  y1 = stk_normalize ();
+%!test   y2 = stk_normalize (x);
+%!test   y3 = stk_normalize (x, box);
+%!error  y4 = stk_normalize (x, box, log (2));
+
+%!test assert (~ any ((y2 < -10 * eps) | (y2 > 1 + 10 * eps)));
+%!test assert (~ any ((y3 < -10 * eps) | (y3 > 1 + 10 * eps)));
