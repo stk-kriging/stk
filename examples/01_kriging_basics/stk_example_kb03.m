@@ -66,22 +66,24 @@ switch CASENUM
         
 end
 
+% Optional: create an hyper-rectangle object for the input space
+BOX = stk_hrect (BOX, {'x_1', 'x_2'})
+
 
 %% COMPUTE AND VISUALIZE THE FUNCTION ON A 80 x 80 REGULAR GRID
 
 % Size of the regular grid
-NT = 80^2;
+NT = 80 ^ DIM;
 
 % The function stk_sampling_regulargrid() does the job of creating the grid
 xt = stk_sampling_regulargrid (NT, DIM, BOX);
-xt.colnames = {'x_1', 'x_2'};
 
 % Compute the corresponding responses
 zt = stk_feval (f, xt);
 
 % Since xt is a regular grid, we can do a contour plot
 stk_subplot (2, 2, 1);  contour (xt, f, CONTOUR_LINES);
-axis (BOX(:));  stk_title ('function to be approximated');
+axis (BOX);  stk_title ('function to be approximated');
 
 
 %% CHOOSE A KRIGING (GAUSSIAN PROCESS) MODEL
@@ -145,5 +147,7 @@ stk_subplot (2, 2, 4);  pcolor (xt, 0.5 * log (zp.var));
 hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
 hold off;  axis (BOX(:));  stk_title ('kriging std (log)');
 
+
+%#ok<*NOPTS>
 
 %!test stk_example_kb03;  close all;
