@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,11 +26,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_normalize(x, varargin)
+function x = stk_normalize (x, varargin)
 
-[x.stk_dataframe, a, b] = stk_normalize(x.stk_dataframe, varargin{:});
+if (~ isa (x, 'stk_factorialdesign'))
+    % One of the box arguments is an stk_factorialdesign object
+    stk_error (['stk_factorialdesign objects cannot be used as values '
+        'for ''box'' arguments.'], 'TypeMismatch');
+end
 
-for j = 1:length(x.levels)    
+% Normalize using @stk_dataframe/stk_normalize
+[x.stk_dataframe, a, b] = stk_normalize (x.stk_dataframe, varargin{:});
+
+for j = 1:(length (x.levels))
     x.levels{j} = a(j) + b(j) * x.levels{j};
 end
 
