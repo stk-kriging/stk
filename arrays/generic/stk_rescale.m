@@ -26,21 +26,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [y, a, b] = stk_rescale (x, box1, box2)
+function [x, a, b] = stk_rescale (x, box1, varargin)
 
-if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
-% make sure that box1 is an stk_hrect object
+% Convert box1 to an stk_hrect object
+%   (we know that box1 is not an stk_hrect object, otherwise
+%    we wouldn't have ended up here)
 if isempty (box1)
-    box1 = stk_hrect (size (x, 2));
+    box1 = stk_hrect (size (x, 2));  % Default: [0; 1] ^ DIM
 else
     box1 = stk_hrect (box1);
 end
 
-% call @stk_hrect/stk_rescale
-[y, a, b] = stk_rescale (x, box1, box2);
+% Call @stk_hrect/stk_rescale
+[x, a, b] = stk_rescale (x, box1, varargin{:});
 
 end % function stk_rescale
 

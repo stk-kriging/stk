@@ -26,66 +26,67 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [y, a, b] = stk_rescale (x, box1, box2)
+function [x, a, b] = stk_rescale (x, box1, box2)
 
 if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% read argument x
-x = double (x);
-[n, d] = size (x);
+% Read argument x
+x_data = double (x);
+d = size (x_data, 2);
 
-% convert box1 to a double-precision 2xd array
-try
-    box1 = double (ensure_hrect (box1, d));
-catch
-    errmsg = sprintf ('box1 should be an array of size 2 x %d', d);
+% Ensure that box1 is an stk_hrect object
+if ~ isa (box1, 'stk_hrect')
+    if isempty (box1)
+        box1 = stk_hrect (d);  % Default: [0; 1] ^ DIM
+    else
+        box1 = stk_hrect (box1);
+    end
+end
+
+% Extract lower/upper bounds for box1
+box1_data = double (box1.stk_dataframe);
+if ~ isequal (size (box1_data), [2 d])
+    errmsg = sprintf ('box1 should have size [2 d], with d=%d.', d);
     stk_error (errmsg, 'IncorrectSize');
 end
 
-% convert box2 to a double-precision 2xd array
-try
-    box2 = double (ensure_hrect (box2, d));
-catch
-    errmsg = sprintf ('box2 should be an array of size 2 x %d', d);
+% Ensure that box2 is an stk_hrect object
+if ~ isa (box2, 'stk_hrect')
+    if isempty (box2)
+        box2 = stk_hrect (d);  % [0; 1] ^ d
+    else
+        box2 = stk_hrect (box2);
+    end
+end
+
+% Extract lower/upper bounds for box2
+box2_data = double (box2.stk_dataframe);
+if ~ isequal (size (box2_data), [2 d])
+    errmsg = sprintf ('box2 should have size [2 d], with d=%d.', d);
     stk_error (errmsg, 'IncorrectSize');
 end
 
-% scale to [0; 1] (xx --> zz)
-xmin = box1(1, :);
-xmax = box1(2, :);
+% Scale to [0; 1] (xx --> zz)
+xmin = box1_data(1, :);
+xmax = box1_data(2, :);
 b1 = 1 ./ (xmax - xmin);
 a1 = - xmin .* b1;
 
 % scale to box2 (zz --> yy)
-ymin = box2(1, :);
-ymax = box2(2, :);
+ymin = box2_data(1, :);
+ymax = box2_data(2, :);
 b2 = ymax - ymin;
 a2 = ymin;
 
 b = b2 .* b1;
 a = a2 + a1 .* b2;
-y = repmat (a, n, 1) + x * diag (b);
+x(:) = bsxfun (@plus, a, x_data * diag (b));
 
 end % function stk_rescale
 
 %#ok<*CTCH>
-
-
-function box = ensure_hrect (box, d)
-
-if ~ isa (box, 'stk_hrect')
-    if isempty (box), 
-        box = stk_hrect (d);
-    else
-        box = stk_hrect (box);
-    end
-end
-
-assert (size (box, 2) == d);
-
-end
 
 
 %!shared x
