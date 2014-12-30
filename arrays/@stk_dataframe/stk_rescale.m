@@ -40,7 +40,7 @@ end
 % Rescale using @stk_hrect/stk_rescale
 if isa (x, 'stk_dataframe')
     [x.data, a, b] = stk_rescale (x.data, box1, varargin{:});
-else    
+else
     [x, a, b] = stk_rescale (x, box1, varargin{:});
 end
 
