@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -28,7 +28,7 @@
 
 function result = vertcat (varargin)
 
-for i = 1:nargin,    
+for i = 1:nargin,
     if isa (varargin{i}, 'stk_hrect')
         varargin{i} = varargin{i}.stk_dataframe;
     end
