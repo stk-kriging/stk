@@ -1,11 +1,11 @@
 % STK_SAMPLING_RANDOMLHS generates a random LHS design
 %
-% CALL: X = stk_sampling_randomlhs(N, DIM)
+% CALL: X = stk_sampling_randomlhs (N, DIM)
 %
 %   generates a random Latin Hypercube Sample of size N in the DIM-dimensional
 %   hypercube [0; 1]^DIM.
 %
-% CALL: X = stk_sampling_randomlhs(N, DIM, BOX)
+% CALL: X = stk_sampling_randomlhs (N, DIM, BOX)
 %
 %   generates a random Latin Hypercube Sample of size N in the DIM-dimensional
 %   hyperrectangle specified by the argument BOX, which is a 2 x DIM matrix
@@ -44,10 +44,17 @@
 function x = stk_sampling_randomlhs (n, dim, box)
 
 if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% read argument box
+% Read argument dim
+if (nargin < 2) || ((nargin < 3) && (isempty (dim)))
+    dim = 1;  % Default dimension
+elseif (nargin > 2) && (~ isempty (box))
+    dim = size (box, 2);
+end
+
+% Read argument box
 if (nargin < 3) || isempty (box)
     box = stk_hrect (dim);
 end
@@ -72,7 +79,7 @@ end % function stk_sampling_randomlhs
 %!test  x = stk_sampling_randomlhs(n, dim, box);
 %!error x = stk_sampling_randomlhs(n, dim, box, pi);
 
-%% 
+%%
 % Check that the output is a dataframe
 % (all stk_sampling_* functions should behave similarly in this respect)
 

@@ -1,11 +1,11 @@
 % STK_SAMPLING_RANDUNIF generates uniformly distributed points
 %
-% CALL: X = stk_sampling_randunif(N, DIM)
+% CALL: X = stk_sampling_randunif (N, DIM)
 %
 %   generates N points, independent and uniformly distributed in the
 %   DIM-dimensional hypercube [0; 1]^DIM.
 %
-% CALL: X = stk_sampling_randunif(N, DIM, BOX)
+% CALL: X = stk_sampling_randunif (N, DIM, BOX)
 %
 %   does the same thing in the DIM-dimensional hyperrectangle specified by the
 %   argument BOX, which is a 2 x DIM matrix where BOX(1, j) and BOX(2, j) are
@@ -41,7 +41,7 @@
 function x = stk_sampling_randunif (n, dim, box)
 
 if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % Read argument n
@@ -55,17 +55,17 @@ if (nargin < 2) || ((nargin < 3) && (isempty (dim)))
 elseif (nargin > 2) && (~ isempty (box))
     dim = size (box, 2);
 end
-    
+
 % Read argument box
 if (nargin < 3) || isempty (box)
-    box = stk_hrect (dim);  % build a default box    
+    box = stk_hrect (dim);  % build a default box
 else
     box = stk_hrect (box);  % convert input argument to a proper box
 end
 
-if n == 0, % empty sample    
-    xdata = zeros (0, dim);    
-else % at least one input point          
+if n == 0, % empty sample
+    xdata = zeros (0, dim);
+else % at least one input point
     xdata = stk_rescale (rand(n, dim), [], box);
 end
 
@@ -87,7 +87,7 @@ end % function stk_sampling_randunif
 %!test  x = stk_sampling_randunif (n, dim, box);
 %!error x = stk_sampling_randunif (n, dim, box, pi);
 
-%% 
+%%
 % Check that the output is a dataframe
 % (all stk_sampling_* functions should behave similarly in this respect)
 
