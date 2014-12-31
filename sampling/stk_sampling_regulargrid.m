@@ -95,13 +95,13 @@ end % function stk_sampling_regulargrid
 % Check error for incorrect number of input arguments
 
 %!shared x, n, dim, box
-%! n = 9; dim = 2; box = [0, 0; 1, 1];
+%! n = 9;  dim = 2;  box = [0, 0; 1, 1];
 
-%!error x = stk_sampling_regulargrid();
-%!error x = stk_sampling_regulargrid(n);
-%!test  x = stk_sampling_regulargrid(n, dim);
-%!test  x = stk_sampling_regulargrid(n, dim, box);
-%!error x = stk_sampling_regulargrid(n, dim, box, pi);
+%!error x = stk_sampling_regulargrid ();
+%!test  x = stk_sampling_regulargrid (n);
+%!test  x = stk_sampling_regulargrid (n, dim);
+%!test  x = stk_sampling_regulargrid (n, dim, box);
+%!error x = stk_sampling_regulargrid (n, dim, box, pi);
 
 %%
 % Check that the output is an stk_dataframe

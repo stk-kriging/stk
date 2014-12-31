@@ -130,7 +130,7 @@ end % function generatedesign_
 %! n = 20;  dim = 2;  box = [0, 0; 1, 1];  niter = 1;
 
 %!error x = stk_sampling_maximinlhs ();
-%!error x = stk_sampling_maximinlhs (n);
+%!test  x = stk_sampling_maximinlhs (n);
 %!test  x = stk_sampling_maximinlhs (n, dim);
 %!test  x = stk_sampling_maximinlhs (n, dim, box);
 %!test  x = stk_sampling_maximinlhs (n, dim, box, niter);

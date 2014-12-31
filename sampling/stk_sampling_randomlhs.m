@@ -73,11 +73,11 @@ end % function stk_sampling_randomlhs
 %!shared x, n, dim, box
 %! n = 10; dim = 2; box = [0, 0; 1, 1];
 
-%!error x = stk_sampling_randomlhs();
-%!error x = stk_sampling_randomlhs(n);
-%!test  x = stk_sampling_randomlhs(n, dim);
-%!test  x = stk_sampling_randomlhs(n, dim, box);
-%!error x = stk_sampling_randomlhs(n, dim, box, pi);
+%!error x = stk_sampling_randomlhs ();
+%!test  x = stk_sampling_randomlhs (n);
+%!test  x = stk_sampling_randomlhs (n, dim);
+%!test  x = stk_sampling_randomlhs (n, dim, box);
+%!error x = stk_sampling_randomlhs (n, dim, box, pi);
 
 %%
 % Check that the output is a dataframe

@@ -78,20 +78,19 @@ end
 end % function stk_sampling_halton_rr2
 
 
-%!error stk_sampling_halton_rr2()           % two inputs required
-%!error stk_sampling_halton_rr2(10)         % two inputs required
-%!error stk_sampling_halton_rr2(10, 3, -1)  % two inputs required
+%!error stk_sampling_halton_rr2 ()               % nargin < 1
+%!error stk_sampling_halton_rr2 (10, 3, [], -1)  % nargin > 3
 
 %!test
 %! n = 300; d = 25;
-%! x = stk_sampling_halton_rr2(n, d);
-%! assert(isequal(size(x), [n d]))
+%! x = stk_sampling_halton_rr2 (n, d);
+%! assert (isequal (size (x), [n d]))
 
 %!test
-%! x = stk_sampling_halton_rr2(1000, 3);
+%! x = stk_sampling_halton_rr2 (1000, 3);
 %! y = double (x(end, :));
 %! yref = [0.9052734375 0.028349336991312 0.74848];
-%! assert(stk_isequal_tolrel(y, yref, 1e-13));
+%! assert (stk_isequal_tolrel (y, yref, 1e-13));
 
 %%
 % Check that column names are properly set, if available in box
