@@ -1,8 +1,8 @@
-% STK_XLABEL is a replacement for 'xlabel' for use in STK's examples
+% VERTCAT [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,26 +26,35 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function h = stk_xlabel (varargin)
+function result = vertcat (varargin)
 
-[h, varargin] = stk_get_axis_arg (varargin{:});
-xlab = varargin{1};
-
-% Get global STK options
-stk_options = stk_options_get ('stk_xlabel', 'properties');
-user_options = varargin(2:end);
-
-% Apply to all axes
-for i = 1:(length (h))
-    
-    % Set x-label and apply STK options
-    xlabel (h(i), xlab, stk_options{:});
-    
-    % Apply user-provided options
-    if ~ isempty (user_options)
-        set (h(i), user_options{:});
+for i = 1:nargin,
+    if isa (varargin{i}, 'stk_hrect')
+        varargin{i} = varargin{i}.stk_dataframe;
     end
-    
 end
 
-end % function stk_xlabel
+result = vertcat (varargin{:});
+
+end % function vertcat
+
+
+%!shared d, x, y
+%! d = 10;
+%! x = stk_hrect (d);
+%! y = double (x);
+
+%!test
+%! z = vertcat (x, x);
+%! assert (isequal (size (z), [4 d]));
+%! assert (strcmp (class (z), 'stk_dataframe'));
+
+%!test
+%! z = vertcat (x, y);
+%! assert (isequal (size (z), [4 d]));
+%! assert (strcmp (class (z), 'stk_dataframe'));
+
+%!test
+%! z = vertcat (y, x);
+%! assert (isequal (size (z), [4 d]));
+%! assert (strcmp (class (z), 'stk_dataframe'));

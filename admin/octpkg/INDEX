@@ -152,6 +152,7 @@ Examples: miscellaneous
 #stk_distrib_bivnorm_cdf     [internal]
 
 Miscellaneous: arrays
+ stk_boundingbox
  stk_feval
  stk_isdominated
  stk_length
@@ -161,6 +162,7 @@ Miscellaneous: arrays
  @stk_dataframe/stk_dataframe
  @stk_factorialdesign/stk_factorialdesign
  @stk_factorialdesign/ndgrid
+ @stk_hrect/stk_hrect
 
 #stk_commonsize              [internal]
 #stk_sprintf                 [internal]
@@ -189,6 +191,7 @@ Miscellaneous: arrays
 #@stk_dataframe/bsxfun                 [overload base]
 #@stk_dataframe/cat                    [overload base]
 #@stk_dataframe/ctranspose             [overload base]
+#@stk_dataframe/diff                   [overload base]
 #@stk_dataframe/disp                   [overload base]
 #@stk_dataframe/display                [overload base]
 #@stk_dataframe/double                 [overload base]
@@ -201,6 +204,7 @@ Miscellaneous: arrays
 #@stk_dataframe/horzcat                [overload base]
 #@stk_dataframe/isempty                [overload base]
 #@stk_dataframe/isequal                [overload base]
+#@stk_dataframe/ismember               [overload base]
 #@stk_dataframe/ldivide                [overload base]
 #@stk_dataframe/le                     [overload base]
 #@stk_dataframe/length                 [overload base]
@@ -231,7 +235,9 @@ Miscellaneous: arrays
 #@stk_dataframe/transpose              [overload base]
 #@stk_dataframe/var                    [overload base]
 #@stk_dataframe/vertcat                [overload base]
+#@stk_dataframe/xlim                   [overload base]
 #@stk_dataframe/xor                    [overload base]
+#@stk_dataframe/ylim                   [overload base]
 
 #@stk_factorialdesign/contour               [overload base]
 #@stk_factorialdesign/fieldnames            [overload base]
@@ -247,7 +253,19 @@ Miscellaneous: arrays
 #@stk_factorialdesign/stk_rescale           [overload STK]
 #@stk_factorialdesign/stk_sprintf           [internal]
 #@stk_factorialdesign/stk_sprintf_levels    [internal]
- 
+
+#@stk_hrect/axis           [overload base]
+#@stk_hrect/disp           [overload base]
+#@stk_hrect/display        [overload base]
+#@stk_hrect/get            [overload base]
+#@stk_hrect/horzcat        [overload base]
+#@stk_hrect/ismember       [overload base]
+#@stk_hrect/subsasgn       [overload base]
+#@stk_hrect/subsref        [overload base]
+#@stk_hrect/vertcat        [overload base]
+#@stk_hrect/stk_normalize  [overload STK]
+#@stk_hrect/stk_rescale    [overload STK]
+
 Miscellaneous: options, plots...
  stk_dist
  stk_options_get
@@ -263,13 +281,15 @@ Miscellaneous: options, plots...
 ## Replacement for some base functions related to figures. Mostly for use
 ## in STK's examples, to keep consistent graphical options accross all
 ## examples. No need to let these appear in the INDEX.
-#stk_axes       [internal]
-#stk_figure     [internal]
-#stk_labels     [internal]
-#stk_subplot    [internal]
-#stk_title      [internal]
-#stk_xlabel     [internal]
-#stk_ylabel     [internal]
+#stk_axes          [internal]
+#stk_figure        [internal]
+#stk_get_axis_arg  [internal]
+#stk_labels        [internal]
+#stk_subplot       [internal]
+#stk_title         [internal]
+#stk_xlabel        [internal]
+#stk_ylabel        [internal]
+#stk_zlabel        [internal]
 
 ## error/warning 
 #stk_error [internal, not for public use]
@@ -304,4 +324,3 @@ Miscellaneous: options, plots...
 #stk_parallel_feval                                      [experimental]
 #stk_parallel_start                                      [experimental]
 #stk_parallel_stop                                       [experimental]
-

@@ -78,8 +78,19 @@ end
 
 %--- first, default values for arguments 'box' and 'noisy' ---------------------
 
-if (nargin < 4) || isempty(box),
-    box = [min(xi); max(xi)];
+if nargin < 5,
+    noisy = false;
+    if nargin < 4,
+        box = [];
+    end
+end
+
+if ~ isa (box, 'stk_hrect')
+    if isempty (box),
+        box = stk_boundingbox (xi);  % Default: bounding box
+    else
+        box = stk_hrect (box);
+    end
 end
 
 %--- lognoisevariance ? --------------------------------------------------------

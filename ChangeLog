@@ -1,3 +1,66 @@
+2014-12-31  Julien Bect  <julien.bect@supelec.fr>
+
+	Use @stk_hrect objects wherever it is useful (work in progress).
+
+	* examples/01_kriging_basics/stk_example_kb03.m: Use @stk_hrect.
+	* examples/02_design_of_experiments/stk_example_doe03.m: Use @stk_hrect.
+	* misc/test/stk_is_lhs.m: Use @stk_hrect.
+	* paramestim/stk_param_init.m: Use @stk_hrect.
+	* sampling/stk_sampling_halton_rr2.m: Use @stk_hrect.
+	* sampling/stk_sampling_maximinlhs.m: Use @stk_hrect.
+	* sampling/stk_sampling_olhs.m: Use @stk_hrect.
+	* sampling/stk_sampling_randomlhs.m: Use @stk_hrect.
+	* sampling/stk_sampling_randunif.m: Use @stk_hrect.
+	* sampling/stk_sampling_regulargrid.m: Use @stk_hrect.
+
+	A few additional methods for the @stk_dataframe class.
+
+	* arrays/@stk_dataframe/diff.m: Overload base function.
+	* arrays/@stk_dataframe/ismember.m: Overload base function.
+	* arrays/@stk_dataframe/xlim.m: Overload base function.
+	* arrays/@stk_dataframe/ylim.m: Overload base function.
+
+	Overhaul stk_normalize and stk_rescale functions.
+
+	* arrays/@stk_dataframe/stk_normalize.m: Overhaul.
+	* arrays/@stk_dataframe/stk_rescale.m: Overhaul.
+	* arrays/@stk_factorialdesign/stk_normalize.m: Overhaul.
+	* arrays/@stk_factorialdesign/stk_rescale.m: Overhaul.
+	* arrays/generic/stk_normalize.m: Overhaul.
+	* arrays/generic/stk_rescale.m: Overhaul.
+
+	stk_boundingbox.m: New function to create bounding boxes.
+
+	* arrays/generic/stk_boundingbox.m: New function to create
+	bounding boxes as @stk_hrect object.
+	* admin/octpkg/INDEX: Add new functions to the index.
+
+	New @stk_hrect class to represent hyper-rectangles.
+
+	* arrays/@stk_hrect/stk_hrect.m: Constructor for the new
+	@stk_hrect class.
+	* arrays/@stk_hrect/axis.m: Overload base function.
+	* arrays/@stk_hrect/disp.m: Overload base function.
+	* arrays/@stk_hrect/display.m: Overload base function.
+	* arrays/@stk_hrect/get.m: Overload base function.
+	* arrays/@stk_hrect/horzcat.m: Overload base function.
+	* arrays/@stk_hrect/ismember.m: Overload base function.
+	* arrays/@stk_hrect/stk_normalize.m: Overload STK function.
+	* arrays/@stk_hrect/stk_rescale.m: Overload STK function
+	* arrays/@stk_hrect/subsasgn.m: Overload base function.
+	* arrays/@stk_hrect/subsref.m: Overload base function.
+	* arrays/@stk_hrect/vertcat.m: Overload base function.
+	* admin/octpkg/INDEX: Add new functions to the index.
+
+	Improve plot helper functions.
+
+	* misc/plot/stk_get_axis_arg.m: New function to help handling the
+	options axes argument that most plotting functions have.
+	* misc/plot/stk_xlabel.m: Use stk_get_axis_arg.
+	* misc/plot/stk_ylabel.m: Use stk_get_axis_arg.
+	* misc/plot/stk_zlabel.m: New function, similar to stk_xlabel and stk_ylabel.
+	* misc/options/stk_options_set.m: Add options for stk_zlabel.
+
 2014-12-09  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_distrib_bivnorm_cdf: Compute bivariate normal probabilities.

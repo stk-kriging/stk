@@ -1,8 +1,8 @@
-% STK_XLABEL is a replacement for 'xlabel' for use in STK's examples
+% GET [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,26 +26,28 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function h = stk_xlabel (varargin)
+function value = get (x, propname)
 
-[h, varargin] = stk_get_axis_arg (varargin{:});
-xlab = varargin{1};
-
-% Get global STK options
-stk_options = stk_options_get ('stk_xlabel', 'properties');
-user_options = varargin(2:end);
-
-% Apply to all axes
-for i = 1:(length (h))
+switch propname
     
-    % Set x-label and apply STK options
-    xlabel (h(i), xlab, stk_options{:});
-    
-    % Apply user-provided options
-    if ~ isempty (user_options)
-        set (h(i), user_options{:});
-    end
-    
+    case 'lower_bounds'
+        value = x.stk_dataframe.data(1, :);
+        
+    case 'upper_bounds'
+        value = x.stk_dataframe.data(2, :);
+        
+    case 'stk_dataframe'  % Read-only access to the underlying df
+        value = x.stk_dataframe;
+        
+    otherwise
+        try
+            value = get (x.stk_dataframe, propname);
+        catch
+            stk_error (sprintf ('There is no field named %s', propname), ...
+                'InvalidArgument');
+        end
 end
 
-end % function stk_xlabel
+end % function get
+
+%#ok<*CTCH>

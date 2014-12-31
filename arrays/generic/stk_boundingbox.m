@@ -1,8 +1,8 @@
-% STK_NORMALIZE [overload STK function]
+% STK_BOUNDINGBOX constructs the bounding box for a set of points
 
 % Copyright Notice
 %
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -26,42 +26,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [x, a, b] = stk_normalize (x, box)
+function box = stk_boundingbox (x)
 
-if nargin > 2,
+if nargin > 1,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if nargin < 2,
-    box = [];
+x_data = double (x);
+if (~ ismatrix (x_data))
+    stk_error (['Arrays with more than two dimensions are not ' ...
+        'supported.'], 'IncorrectSize');
 end
 
+xmin = min (x, [], 1);
+xmax = max (x, [], 1);
+box_data = [xmin; xmax];
+
+box = stk_hrect (box_data);
+
 if isa (x, 'stk_dataframe')
-    
-    % Ensure that box is an stk_hrect object
-    if ~ isa (box, 'stk_hrect')
-        if isempty (box),
-            box = stk_boundingbox (x.data);  % Default: bounding box
-        else
-            box = stk_hrect (box);
-        end
-    end
-    
-    % Call @stk_hrect/stk_normalize
-    [x.data, a, b] = stk_normalize (x.data, box);
-    
-else % box is an stk_dataframe object
-    
-    % Call @stk_hrect/stk_normalize
-    [x, a, b] = stk_normalize (x, stk_hrect (box));
-    
-end % if
+    box.colnames = x.colnames;
+end
 
-end % function stk_normalize
-
-%!test
-%! u = rand (6, 2) * 2;
-%! x = stk_dataframe (u);
-%! y = stk_normalize (x);
-%! assert (isa (y, 'stk_dataframe') ...
-%!    && stk_isequal_tolabs (double (y), stk_normalize (u)))
+end % function stk_boundingbox
