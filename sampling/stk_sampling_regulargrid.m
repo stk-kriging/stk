@@ -1,13 +1,13 @@
 % STK_SAMPLING_REGULARGRID builds a regular grid
 %
-% CALL: X = stk_sampling_regulargrid(N, DIM)
+% CALL: X = stk_sampling_regulargrid (N, DIM)
 %
 %   builds a regular grid in the DIM-dimensional hypercube [0; 1]^DIM. If N is
 %   an integer, a grid of size N is built; in this case, acceptable sizes are
 %   such that N^(1/DIM) is an integer. If N is a vector of length N, a grid of
 %   size prod(N) is built, with N(j) points on coordinate j.
 %
-% CALL: X = stk_sampling_regulargrid(N, DIM, BOX)
+% CALL: X = stk_sampling_regulargrid (N, DIM, BOX)
 %
 %   does the same thing in the DIM-dimensional hyperrectangle specified by the
 %   argument BOX, which is a 2 x DIM matrix where BOX(1, j) and BOX(2, j) are
@@ -45,12 +45,19 @@
 function x = stk_sampling_regulargrid (n, dim, box)
 
 if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% read argument 'box'
+% Read argument dim
+if (nargin < 2) || ((nargin < 3) && (isempty (dim)))
+    dim = 1;  % Default dimension
+elseif (nargin > 2) && (~ isempty (box))
+    dim = size (box, 2);
+end
+
+% Read argument 'box'
 if (nargin < 3) || isempty (box)
-    box = stk_hrect (dim);  % build a default box    
+    box = stk_hrect (dim);  % build a default box
 else
     box = stk_hrect (box);  % convert input argument to a proper box
 end
@@ -96,7 +103,7 @@ end % function stk_sampling_regulargrid
 %!test  x = stk_sampling_regulargrid(n, dim, box);
 %!error x = stk_sampling_regulargrid(n, dim, box, pi);
 
-%% 
+%%
 % Check that the output is an stk_dataframe
 %   (all stk_sampling_* functions should behave similarly in this respect)
 % and an stk_factorialdesign (special kind of stk_dataframe)

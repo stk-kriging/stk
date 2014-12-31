@@ -1,26 +1,27 @@
 % STK_SAMPLING_HALTON_RR2 generates points from the Halton/RR2 sequence
 %
-% CALL: X = stk_sampling_halton_rr2(N, D)
+% CALL: X = stk_sampling_halton_rr2 (N, D)
 %
 %    computes the first N terms of the D-dimensional RR2-scrambled Halton
 %    sequence.
 %
-% REFERENCE 
+% REFERENCE
 %
 %    Ladislav Kocis and William J. Whiten, "Computational investigations of low
-%    discrepancy sequences", ACM Transactions on Mathematical Software, 
+%    discrepancy sequences", ACM Transactions on Mathematical Software,
 %    23(2):266-294, 1997.  http://dx.doi.org/10.1145/264029.264064
 %
 % SEE ALSO: stk_sampling_vdc_rr2
 
 % Copyright Notice
 %
+%    Copyright  (C) 2014 SUPELEC
 %    Copyright  (C) 2013 Alexandra Krauth, Elham Rahali & SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
 %               Alexandra Krauth  <alexandrakrauth@gmail.com>
 %               Elham Rahali      <elham.rahali@gmail.com>
- 
+
 % Copying Permission Statement
 %
 %    This file is part of
@@ -44,10 +45,17 @@
 function x = stk_sampling_halton_rr2 (n, d, box)
 
 if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% read argument 'box'
+% Read argument dim
+if (nargin < 2) || ((nargin < 3) && (isempty (d)))
+    d = 1;  % Default dimension
+elseif (nargin > 2) && (~ isempty (box))
+    d = size (box, 2);
+end
+
+% Read argument 'box'
 if (nargin < 3) || isempty (box)
     colnames = {};
 else
@@ -74,7 +82,7 @@ end % function stk_sampling_halton_rr2
 %!error stk_sampling_halton_rr2(10)         % two inputs required
 %!error stk_sampling_halton_rr2(10, 3, -1)  % two inputs required
 
-%!test 
+%!test
 %! n = 300; d = 25;
 %! x = stk_sampling_halton_rr2(n, d);
 %! assert(isequal(size(x), [n d]))
@@ -102,18 +110,18 @@ end % function stk_sampling_halton_rr2
 % Comparison with Scilab+lowdisc
 
 % % Matlab/Octave STK test script
-% 
+%
 % NREP = 10;
 % M = 1e5;
 % DIM = 20;
-% 
+%
 % tic;
 % for i = 1:NREP
 %     x = stk_sampling_halton_rr2(M, DIM);
 % end;
 % t1 = toc/NREP;
 % fprintf('time elapsed: %.2e seconds\n', t1);
-% 
+%
 % fprintf('%.15f\n', x(1:5, 2))
 
 % // Scilab lowdisc test script
@@ -121,7 +129,7 @@ end % function stk_sampling_halton_rr2
 % NREP = 10;
 % M = 1e5;
 % DIM = 20;
-% 
+%
 % tic();
 % for i = 1:NREP,
 %     rng = lowdisc_new("halton");
@@ -132,5 +140,5 @@ end % function stk_sampling_halton_rr2
 %     rng = lowdisc_destroy(rng);
 % end
 % t = toc() / NREP
-% 
+%
 % mprintf('%.15f\n', x(1:9, 2))

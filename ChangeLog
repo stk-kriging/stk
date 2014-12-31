@@ -1,5 +1,16 @@
 2014-12-31  Julien Bect  <julien.bect@supelec.fr>
 
+	Accept empty dim in sampling functions.
+
+	* sampling/stk_sampling_halton_rr2.m: Accept empty dim argument
+	when box is provided, in which case dim is guessed from the
+	dimension of box if provided, and defaults to one otherwise.
+	* sampling/stk_sampling_maximinlhs.m: Idem.
+	* sampling/stk_sampling_olhs.m: Idem.
+	* sampling/stk_sampling_randomlhs.m: Idem.
+	* sampling/stk_sampling_randunif.m: Idem.
+	* sampling/stk_sampling_regulargrid.m: Idem.
+
 	Use @stk_hrect objects wherever it is useful (work in progress).
 
 	* examples/01_kriging_basics/stk_example_kb03.m: Use @stk_hrect.
