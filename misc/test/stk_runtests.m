@@ -125,24 +125,30 @@ for i = 1:numel (flist)
         print_test_file_name (f);
         if has_tests (ff)
             % Silence all warnings & prepare for warning detection.
-            s = warning ('off', 'all');  lastwarn('');
-            % Do the actual tests.
-            [p, n] = stk_test (ff, 'quiet', stdout);
-            % Note: the presence of the third argument (fid=stdout) forces
-            % stk_test in batch mode, which means that it doesn't stop at
-            % the first failed test.
-            print_pass_fail (n, p);
-            n_total = n_total + n;
-            n_pass  = n_pass  + p;
-            % Record function name if at least one test failed
-            if p < n,
-                err = [err; {ff, n, p}];
+            s = warning_off ();
+            try
+                % Do the actual tests.
+                [p, n] = stk_test (ff, 'quiet', stdout);
+                % Note: the presence of the third argument (fid=stdout) forces
+                % stk_test in batch mode, which means that it doesn't stop at
+                % the first failed test.
+                print_pass_fail (n, p);
+                n_total = n_total + n;
+                n_pass  = n_pass  + p;
+                % Record function name if at least one test failed
+                if p < n,
+                    err = [err; {ff, n, p}];
+                end
+                % deal with warnings
+                if ~ isempty (lastwarn ()),
+                    fprintf (' (warnings)');
+                end
+                warning (s);
+            catch
+                % Restore warning state after error
+                warning (s);
+                rethrow (lasterror ());
             end
-            % deal with warnings
-            if ~ isempty (lastwarn ()),
-                fprintf (' (warnings)');
-            end
-            warning (s);
         else
             n_notest = n_notest + 1;
             fprintf (' NO TESTS');
@@ -254,10 +260,23 @@ warning ('ah:ah', 'toto');
 
 if ~ (strcmp (id, 'ah:ah') && strcmp (msg, 'toto'))
     warning ('on', 'all');
+    warning ('off', 'Octave:array-to-scalar');
+    warning ('off', 'Octave:array-to-vector');
+    warning ('off', 'Octave:imag-to-real');
+    warning ('off', 'Octave:matlab-incompatible');
+    warning ('off', 'Octave:missing-semicolon');
+    warning ('off', 'Octave:neg-dim-as-zero');
+    warning ('off', 'Octave:resize-on-range-error');
+    warning ('off', 'Octave:separator-insert');
+    warning ('off', 'Octave:single-quote-string');
+    warning ('off', 'Octave:str-to-num');
+    warning ('off', 'Octave:mixed-string-concat');
+    warning ('off', 'Octave:variable-switch-label');
 end
 
 lastwarn ('');
 
 end % function warning_off
+
 
 %#ok<*AGROW>
