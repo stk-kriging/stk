@@ -589,7 +589,7 @@ if fid == -1,
     error(sprintf('File %s cannot be opened.', nm));
 end
 
-body = [];
+body = '';
 if (fid >= 0)
     while (~ feof (fid))
         ln = fgetl (fid);
