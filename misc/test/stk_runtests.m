@@ -64,9 +64,9 @@ end
 nb_topdirs = numel(dirs);
 
 % run tests all available tests in each directory
-n_total = 0; n_pass = 0; n_files = 0; n_notest = 0; n_dirs = 0;
+n_total = 0;  n_pass = 0;  n_files = 0;  n_notest = 0;  n_dirs = 0; err = {};
 for i = 1:nb_topdirs
-    [np, nt, nn, nf, nd] = run_all_tests(dirs{i}, dirs{i});
+    [np, nt, nn, nf, nd, err] = run_all_tests (dirs{i}, dirs{i}, err);
     n_total  = n_total  + nt;
     n_pass   = n_pass   + np;
     n_files  = n_files  + nf;
@@ -75,9 +75,16 @@ for i = 1:nb_topdirs
 end
 
 if n_dirs > 1,
-    fprintf('Summary for all %d directories:\n', n_dirs);
-    fprintf(' --> passed %d/%d tests\n', n_pass, n_total);
-    fprintf(' --> %d/%d files had no tests\n', n_notest, n_files);
+    fprintf ('*** Summary for all %d directories:\n', n_dirs);
+    fprintf ('*** --> passed %d/%d tests\n', n_pass, n_total);
+    fprintf ('*** --> %d/%d files had no tests\n\n', n_notest, n_files);
+end
+
+if ~ isempty (err)
+    fprintf ('!!! Summary of failed tests:\n');
+    for i = 1:(size (err, 1))
+        fprintf ('!!! %s [%d/%d]\n', err{i,1}, err{i,2} - err{i,3}, err{i,2});
+    end
 end
 
 end % function stk_runtests
@@ -87,14 +94,14 @@ end % function stk_runtests
 % run_all_tests %
 %%%%%%%%%%%%%%%%%
 
-function [n_pass, n_total, n_notest, n_files, n_dirs] ...
-    = run_all_tests (testdir, basedir)
+function [n_pass, n_total, n_notest, n_files, n_dirs, err] ...
+    = run_all_tests (testdir, basedir, err)
 
 % list directory content
 dirinfo = dir(testdir);
 flist = {dirinfo.name};
 
-here = pwd(); cd(basedir);
+here = pwd ();  cd (basedir);
 
 fprintf ('Processing files in %s:\n\n', testdir);
 fflush (stdout);
@@ -116,55 +123,67 @@ for i = 1:numel (flist)
     if (length (f) > 2) && strcmp (f((end-1):end), '.m')
         n_files = n_files + 1;
         print_test_file_name (f);
-        if has_tests(ff)
+        if has_tests (ff)
             % Silence all warnings & prepare for warning detection.
-            s = warning('off', 'all'); lastwarn('');
+            s = warning ('off', 'all');  lastwarn('');
             % Do the actual tests.
             [p, n] = stk_test (ff, 'quiet', stdout);
             % Note: the presence of the third argument (fid=stdout) forces
             % stk_test in batch mode, which means that it doesn't stop at
             % the first failed test.
-            print_pass_fail(n, p);
+            print_pass_fail (n, p);
             n_total = n_total + n;
             n_pass  = n_pass  + p;
+            % Record function name if at least one test failed
+            if p < n,
+                err = [err; {ff, n, p}];
+            end
             % deal with warnings
-            if ~isempty(lastwarn()), fprintf(' (warnings)'); end
-            warning(s);
+            if ~ isempty (lastwarn ()),
+                fprintf (' (warnings)');
+            end
+            warning (s);
         else
             n_notest = n_notest + 1;
-            fprintf(' NO TESTS');
+            fprintf (' NO TESTS');
         end
-        fprintf('\n');
-        fflush(stdout);
+        fprintf ('\n');
+        fflush (stdout);
     elseif dirinfo(i).isdir && (f(1) == '@')
-        subdirs_class{end+1} = ff; %#ok<AGROW>
-        n_dirs = n_dirs + 1;
+        subdirs_class{end+1} = ff;
     elseif dirinfo(i).isdir && strcmp(f, 'private')
-        subdirs_private{end+1} = ff; %#ok<AGROW>
-        n_dirs = n_dirs + 1;
+        subdirs_private{end+1} = ff;
     end
 end
-fprintf('   --> passed %d/%d tests\n', n_pass, n_total);
-fprintf('   --> %d/%d files had no tests\n', n_notest, n_files);
-fprintf('\n');
+fprintf ('   --> passed %d/%d tests\n', n_pass, n_total);
+fprintf ('   --> %d/%d files had no tests\n', n_notest, n_files);
+fprintf ('\n');
 
-for i = 1:length(subdirs_class)
-    [p, n, nnt, nf] = run_all_tests(subdirs_class{i}, pwd());
+for i = 1:(length (subdirs_class))
+    
+    [p, n, nnt, nf, nd, err] = run_all_tests ...
+        (subdirs_class{i}, pwd(), err);
+    
     n_total  = n_total  + n;
     n_pass   = n_pass   + p;
     n_files  = n_files  + nf;
     n_notest = n_notest + nnt;
+    n_dirs   = n_dirs   + nd;
 end
 
-for i = 1:length(subdirs_private)
-    [p, n, nnt, nf] = run_all_tests(subdirs_private{i}, subdirs_private{i});
+for i = 1:(length (subdirs_private))
+    
+    [p, n, nnt, nf, nd, err] = run_all_tests ...
+        (subdirs_private{i}, subdirs_private{i}, err);
+    
     n_total  = n_total  + n;
     n_pass   = n_pass   + p;
     n_files  = n_files  + nf;
     n_notest = n_notest + nnt;
+    n_dirs   = n_dirs   + nd;
 end
 
-cd(here);
+cd (here);
 
 end % function run_all_tests
 
@@ -179,7 +198,8 @@ fid = fopen (f);
 if (fid >= 0)
     str = fread (fid, '*char')';
     fclose (fid);
-    retval = ~isempty (regexp (str, '^%!(test|assert|error|warning)', 'lineanchors'));
+    retval = ~ isempty (regexp ...
+        (str, '^%!(test|assert|error|warning)', 'lineanchors'));
 else
     error ('runtests: fopen failed: %s', f);
 end
@@ -210,7 +230,34 @@ end % function print_pass_fail
 
 function print_test_file_name (nm)
 
-filler = repmat('.', 1, 50 - length(nm));
-fprintf('  %s %s', nm, filler);
+filler = repmat ('.', 1, 50 - length(nm));
+fprintf ('  %s %s', nm, filler);
 
 end % function print_test_file_name
+
+
+%%%%%%%%%%%%%%%
+% warning_off %
+%%%%%%%%%%%%%%%
+
+function s = warning_off ()
+
+s = warning ('off', 'all');
+
+% Check whether warnings can be still be recovered by lastwarn
+%   (this is not the case in Octave 3.8.2, for example;
+%    see https://savannah.gnu.org/bugs/?41028)
+
+lastwarn ('');
+warning ('ah:ah', 'toto');
+[msg, id] = lastwarn ();
+
+if ~ (strcmp (id, 'ah:ah') && strcmp (msg, 'toto'))
+    warning ('on', 'all');
+end
+
+lastwarn ('');
+
+end % function warning_off
+
+%#ok<*AGROW>
