@@ -26,21 +26,67 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [x, a, b] = stk_rescale (x, box1, varargin)
+function [x, a, b] = stk_rescale (x, box1, box2)
 
-% Convert box1 to an stk_hrect object
-%   (we know that box1 is not an stk_hrect object, otherwise
-%    we wouldn't have ended up here)
-if isempty (box1)
-    box1 = stk_hrect (size (x, 2));  % Default: [0; 1] ^ DIM
-else
-    box1 = stk_hrect (box1);
+if nargin > 3,
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% Call @stk_hrect/stk_rescale
-[x, a, b] = stk_rescale (x, box1, varargin{:});
+% Read argument x
+x_data = double (x);
+d = size (x_data, 2);
+
+% Ensure that box1 is an stk_hrect object
+if ~ isa (box1, 'stk_hrect')
+    if isempty (box1)
+        box1 = stk_hrect (d);  % Default: [0; 1] ^ DIM
+    else
+        box1 = stk_hrect (box1);
+    end
+end
+
+% Extract lower/upper bounds for box1
+box1_data = double (box1.stk_dataframe);
+if ~ isequal (size (box1_data), [2 d])
+    errmsg = sprintf ('box1 should have size [2 d], with d=%d.', d);
+    stk_error (errmsg, 'IncorrectSize');
+end
+
+% Ensure that box2 is an stk_hrect object
+if ~ isa (box2, 'stk_hrect')
+    if isempty (box2)
+        box2 = stk_hrect (d);  % [0; 1] ^ d
+    else
+        box2 = stk_hrect (box2);
+    end
+end
+
+% Extract lower/upper bounds for box2
+box2_data = double (box2.stk_dataframe);
+if ~ isequal (size (box2_data), [2 d])
+    errmsg = sprintf ('box2 should have size [2 d], with d=%d.', d);
+    stk_error (errmsg, 'IncorrectSize');
+end
+
+% Scale to [0; 1] (xx --> zz)
+xmin = box1_data(1, :);
+xmax = box1_data(2, :);
+b1 = 1 ./ (xmax - xmin);
+a1 = - xmin .* b1;
+
+% scale to box2 (zz --> yy)
+ymin = box2_data(1, :);
+ymax = box2_data(2, :);
+b2 = ymax - ymin;
+a2 = ymin;
+
+b = b2 .* b1;
+a = a2 + a1 .* b2;
+x(:) = bsxfun (@plus, a, x_data * diag (b));
 
 end % function stk_rescale
+
+%#ok<*CTCH>
 
 
 %!shared x

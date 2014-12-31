@@ -1,4 +1,4 @@
-% STK_NORMALIZE [overload STK function]
+% SUBSASGN [overloaded base function]
 
 % Copyright Notice
 %
@@ -26,42 +26,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [x, a, b] = stk_normalize (x, box)
+function x = subsasgn (x, idx, value)
 
-if nargin > 2,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
-if nargin < 2,
-    box = [];
-end
-
-if isa (x, 'stk_dataframe')
+if isa (x, 'stk_hrect')
     
-    % Ensure that box is an stk_hrect object
-    if ~ isa (box, 'stk_hrect')
-        if isempty (box),
-            box = stk_boundingbox (x.data);  % Default: bounding box
-        else
-            box = stk_hrect (box);
-        end
+    x.stk_dataframe = subsasgn (x.stk_dataframe, idx, value);
+    
+    data = x.stk_dataframe.data;
+    if any (data(1, :) > data(2, :))
+        stk_error ('Lower bounds cannot be larger than upperbounds', ...
+            'IllegalAssigment');
     end
     
-    % Call @stk_hrect/stk_normalize
-    [x.data, a, b] = stk_normalize (x.data, box);
+else % value must be an stk_hrect object
     
-else % box is an stk_dataframe object
+    x = subsasgn (x, idx, x.stk_dataframe);
     
-    % Call @stk_hrect/stk_normalize
-    [x, a, b] = stk_normalize (x, stk_hrect (box));
-    
-end % if
+end
 
-end % function stk_normalize
-
-%!test
-%! u = rand (6, 2) * 2;
-%! x = stk_dataframe (u);
-%! y = stk_normalize (x);
-%! assert (isa (y, 'stk_dataframe') ...
-%!    && stk_isequal_tolabs (double (y), stk_normalize (u)))
+end % function subsasgn

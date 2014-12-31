@@ -21,7 +21,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@supelec.fr>
 %               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
@@ -52,10 +52,11 @@ if nargin > 4,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
+% read argument 'box'
 if (nargin < 3) || isempty (box)
-    box = repmat ([0; 1], 1, d);
+    box = stk_hrect (d);  % build a default box    
 else
-    stk_assert_box (box);
+    box = stk_hrect (box);  % convert input argument to a proper box
 end
 
 if nargin < 4,
@@ -69,7 +70,7 @@ else % at least one input point
     xdata = stk_rescale (xx, [], box);    
 end
 
-x = stk_dataframe (xdata);
+x = stk_dataframe (xdata, box.colnames);
 x.info = 'Created by stk_sampling_maximinlhs';
 
 end % function stk_sampling_maximinlhs
@@ -133,6 +134,16 @@ end % function generatedesign_
 % (all stk_sampling_* functions should behave similarly in this respect)
 
 %!assert (isa (x, 'stk_dataframe'));
+
+%%
+% Check that column names are properly set, if available in box
+
+%!assert (isequal (x.colnames, {}));
+
+%!test
+%! cn = {'W', 'H'};  box = stk_hrect (box, cn);
+%! x = stk_sampling_maximinlhs (n, dim, box);
+%! assert (isequal (x.colnames, cn));
 
 %%
 % Check output argument
