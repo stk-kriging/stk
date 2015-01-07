@@ -1,3 +1,12 @@
+2015-01-07  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_generate_samplepaths.m: Do not simulate observation noise.
+
+	* utils/stk_generate_samplepaths.m: Do not add observation noise
+	to the generated sample paths. This is consistent with
+	stk_predict, which returns posterior variances for the unknown
+	function, not for future noisy observations.
+
 2014-12-31  Julien Bect  <julien.bect@supelec.fr>
 
 	Accept empty dim in sampling functions.

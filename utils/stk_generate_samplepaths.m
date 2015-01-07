@@ -109,11 +109,12 @@ end
 duplicates_detected = (size (xt_unique, 1) < size (xt, 1));
 
 % Compute the covariance matrix
-% (even if there no duplicates, it is not guaranteed that xt_unique and xt are equal)
+% (even if there no duplicates, it is not guaranteed
+%  that xt_unique and xt are equal)
 if duplicates_detected,
-    K = stk_make_matcov (model, xt_unique);
+    K = stk_make_matcov (model, xt_unique, xt_unique);
 else
-    K = stk_make_matcov (model, xt);
+    K = stk_make_matcov (model, xt, xt);
 end
 
 % Cholesky factorization of the covariance matrix

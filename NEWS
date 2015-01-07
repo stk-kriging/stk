@@ -53,6 +53,9 @@ Changes in version 2.3.0
 
    o stk_distrib_bivnorm_cdf computes bivariate normal probabilities.
 
+   o stk_generate_samplepaths.m: Do not add observation noise to the generated
+     sample paths. This is consistent with stk_predict, which returns posterior
+     variances for the unknown function, not for future noisy observations.
 
 Changes in version 2.2.0
 ========================
