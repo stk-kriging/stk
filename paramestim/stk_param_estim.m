@@ -90,9 +90,13 @@ if ~ isempty (lnv0)
     % param0lnv present => noise variance *must* be estimated
     do_estim_lnv = true;
 else
-    % otherwise, noise variance estimation happens when lnv is nan
+    % Otherwise, noise variance estimation happens when lnv has NaNs
     lnv0 = model.lognoisevariance;
-    do_estim_lnv = (isnan (lnv0));
+    do_estim_lnv = any (isnan (lnv0));
+    if do_estim_lnv && (~ isscalar (lnv0))
+        stk_error (['Estimating the variance of the noise is not possible ' ...
+            'in the hetereoscedastic case yet. Sorry.'], 'IncorrectArgument');
+    end
 end
 
 % Default criterion: restricted likelihood (ReML method)
