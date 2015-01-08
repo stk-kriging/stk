@@ -63,24 +63,28 @@ switch nargin,
     case {0, 1},
         stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
         
-    case 2,  % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT)
+    case 2,
+        % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT)
         xt = varargin{1};
         nb_paths = 1;
         conditional = false;
         
-    case 3,  % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT, NB_PATHS)
+    case 3,
+        % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT, NB_PATHS)
         xt = varargin{1};
         nb_paths = varargin{2};
         conditional = false;
         
-    case 4,  % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT)
+    case 4,
+        % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT)
         xi = varargin{1};
         zi = varargin{2};
         xt = varargin{3};
         nb_paths = 1;
         conditional = true;
         
-    case 5,  % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT, NB_PATHS)
+    case 5,
+        % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT, NB_PATHS)
         xi = varargin{1};
         zi = varargin{2};
         xt = varargin{3};
@@ -155,13 +159,39 @@ end
 
 if conditional,
     
+    % Backward compatiblity: tolerate missing lognoisevariance
+    if (~ isfield (model, 'lognoisevariance')) ...
+            || (isempty (model.lognoisevariance))
+        model.lognoisevariance = - inf;
+    end
+    
     % Carry out the kriging prediction at points xt
     [zp_ignore, lambda] = stk_predict (model, xi, zi, xt);  %#ok<ASGLU>
     
-    % Condition sample paths on the observations
-    zsim_data = stk_conditioning (lambda, zi, zsim_data, xi_ind);
+    if model.lognoisevariance == -inf,
+        
+        % Simulate sample paths conditioned on noiseless observations
+        zsim_data = stk_conditioning (lambda, zi, zsim_data, xi_ind);
+        
+    else % Noisy case
+        
+        % Simulate noise values
+        s = sqrt (exp (model.lognoisevariance));
+        ni = length (xi_ind);
+        if isscalar (s)
+            noise_sim = s * randn (ni, nb_paths);
+        else
+            s = reshape (s, ni, 1);
+            noise_sim = bsxfun (@times, s, randn (ni, nb_paths));
+        end
+        
+        % Simulate sample paths conditioned on noisy observations
+        zsim_data = stk_conditioning (lambda, zi, zsim_data, xi_ind, noise_sim);
+        
+    end
     
     zsim_data(xi_ind, :) = [];
+    
 end
 
 
