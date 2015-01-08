@@ -49,13 +49,19 @@ Changes in version 2.3.0
    o stk_example_kb04 demonstrates how it is possible to estimate the variance
      of the noise without providing a initial guess for it.
 
-* Miscellaneous
-
-   o stk_distrib_bivnorm_cdf computes bivariate normal probabilities.
+* Simulation of Gaussian process sample paths
 
    o stk_generate_samplepaths.m: Do not add observation noise to the generated
      sample paths. This is consistent with stk_predict, which returns posterior
      variances for the unknown function, not for future noisy observations.
+
+   o utils/stk_conditioning.m: Simulate sample paths conditioned on noisy
+     observations when the additional NOISE_SIM argument is provided.
+
+* Miscellaneous
+
+   o stk_distrib_bivnorm_cdf computes bivariate normal probabilities.
+
 
 Changes in version 2.2.0
 ========================
