@@ -1,3 +1,11 @@
+2015-01-08  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_conditioning.m: Implement conditioning on noisy observations
+
+	* utils/stk_conditioning.m: Simulate sample paths conditioned on
+	noisy observations when the additional NOISE_SIM argument is
+	provided.
+
 2015-01-07  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_generate_samplepaths.m: Do not simulate observation noise.

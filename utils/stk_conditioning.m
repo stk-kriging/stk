@@ -5,19 +5,28 @@
 %    produces conditioned sample paths ZSMIC from the unconditioned sample paths
 %    ZSIM, using the matrix of kriging weights LAMBDA. Conditioning is done with
 %    respect to a finite number NI of observations, located at the indices given
-%    in XI_IND (vector of length NI), with corresponding observed values ZI.
+%    in XI_IND (vector of length NI), with corresponding noiseless observed
+%    values ZI.
 %
 %    The matrix LAMBDA must be of size NI x N, where N is the number of
 %    evaluation points for the sample paths; such a matrix is typically provided
 %    by stk_predict().
 %
-%    Both ZSIM and ZSIMC have size N x NB_PATHS, where NB_PATH is the number 
+%    Both ZSIM and ZSIMC have size N x NB_PATHS, where NB_PATH is the number
 %    sample paths to be dealt with. ZI is a column of length NI.
 %
 % CALL: ZSIMC = stk_conditioning (LAMBDA, ZI, ZSIM)
 %
 %    assumes that the oberved values ZI correspond to the first NI evaluation
 %    points.
+%
+% CALL: ZSIMC = stk_conditioning (LAMBDA, ZI, ZSIM, XI_IND, NOISE_SIM)
+%
+%    produces conditioned sample paths ZSMIC from the unconditioned sample paths
+%    ZSIM, using the matrix of kriging weights LAMBDA. Conditioning is done with
+%    respect to a finite number NI of observations, located at the indices given
+%    in XI_IND (vector of length NI), with corresponding noisy observed values
+%    ZI, using a NI x N matrix NOISE_SIM of simulated noise values.
 %
 % NOTE: conditioning by kriging
 %
@@ -56,38 +65,55 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function zsimc = stk_conditioning (lambda, zi, zsim, xi_ind)
+function zsimc = stk_conditioning (lambda, zi, z_sim, xi_ind, noise_sim)
 
-if nargin > 4,
+if nargin > 5,
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
+% Are we dealing with noisy observations ?
+noisy = (nargin > 4) && (~ isempty (noise_sim));
+
 zi = double (zi);
-zsim = double (zsim);
+z_sim = double (z_sim);
 
 [ni, n] = size (lambda);
-m = size (zsim, 2);
+m = size (z_sim, 2);
 
-if nargin < 4,
+if (nargin < 4) || (isempty (xi_ind))
     xi_ind = (1:ni)';
 else
     xi_ind = xi_ind(:);
 end
 
 if ~ isequal (size (zi), [ni 1])
-    stk_error ('lambda and zi have incompatible sizes.', 'InvalidArgument');
+    stk_error (sprintf (['Considering the size of lambda (%d x %d), zi ' ...
+        'should have size %d x 1'], ni, n, ni), 'IncorrectSize');
 end
 
-if ~ isequal (size (zsim), [n m])
-    stk_error ('lambda and zsim have incompatible sizes.', 'InvalidArgument');
+if ~ isequal (size (z_sim), [n m])
+    stk_error (sprintf (['Considering the size of lambda (%d x %d), zsim ' ...
+        'should have size %d x N, where N is the number of evaluation ' ...
+        'points for the sample paths.'], ni, n, n), 'IncorrectSize');
 end
 
 if ~ isequal (size (xi_ind), [ni 1])
-    stk_error ('lambda and xi_ind have incompatible sizes.', 'InvalidArgument');
+    stk_error (sprintf (['Considering the size of lambda (%d x %d), xi_ind ' ...
+        'should have size %d x 1'], ni, n, ni), 'IncorrectSize');
 end
 
-delta = repmat (zi, 1, m) - zsim (xi_ind, :);
-zsimc = stk_dataframe (zsim + lambda' * delta);
+if noisy && (~ isequal (size (noise_sim), [ni m]))
+    stk_error (sprintf (['Considering the size of lambda (%d x %d) and the ' ...
+        'size of z_sim (%d x %d), noise_sim should have size %d x %d'], ni, ...
+        n, n, m, ni, m), 'IncorrectSize');
+end
+
+delta = bsxfun (@minus, zi, z_sim(xi_ind, :));
+if noisy
+   delta = delta - noise_sim;
+end
+
+zsimc = stk_dataframe (z_sim + lambda' * delta);
 
 end % function stk_conditioning
 
