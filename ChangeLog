@@ -1,5 +1,10 @@
 2015-01-08  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_generate_samplepaths.m: Fix conditioning on noisy observations
+
+	* utils/stk_generate_samplepaths.m: Fix conditioning on noisy
+	observations, which was not implemented properly until now.
+
 	stk_conditioning.m: Implement conditioning on noisy observations
 
 	* utils/stk_conditioning.m: Simulate sample paths conditioned on
