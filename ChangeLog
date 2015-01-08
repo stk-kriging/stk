@@ -1,5 +1,10 @@
 2015-01-08  Julien Bect  <julien.bect@supelec.fr>
 
+	Improve conditional simulation examples.
+
+	* examples/01_kriging_basics/stk_example_kb05.m: Add documentation.
+	* examples/01_kriging_basics/stk_example_kb09.m: New example.
+
 	stk_generate_samplepaths.m: Fix conditioning on noisy observations
 
 	* utils/stk_generate_samplepaths.m: Fix conditioning on noisy

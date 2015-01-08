@@ -44,11 +44,6 @@ Changes in version 2.3.0
 
    o stk_sampling_randunif accepts empty dim argument when box is provided
 
-* Examples
-
-   o stk_example_kb04 demonstrates how it is possible to estimate the variance
-     of the noise without providing a initial guess for it.
-
 * Simulation of Gaussian process sample paths
 
    o stk_generate_samplepaths.m: Do not add observation noise to the generated
@@ -60,6 +55,15 @@ Changes in version 2.3.0
 
    o stk_generate_samplepaths.m: Fix conditioning on noisy observations, which
      was not implemented properly until now.
+
+* Examples
+
+   o stk_example_kb04 demonstrates how it is possible to estimate the variance
+     of the noise without providing a initial guess for it.
+
+   o stk_example_kb09.m demonstrates how to simulate conditional sample paths in
+     the case of noisy observations, both in the homoscedastic and in the
+     heteroscedastic cases.
 
 * Miscellaneous
 
