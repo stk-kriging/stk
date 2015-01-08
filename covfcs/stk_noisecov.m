@@ -59,9 +59,12 @@ if isscalar (lognoisevariance), % homoscedastic
     end
     
 else % heteroscedastic
-    
+
+    s = size (lognoisevariance);
     if ~ ((isequal (s, [1, ni])) || (isequal (s, [ni, 1])))
-        error ('lognoisevariance must be a scalar or a vector of length ni.');
+        fprintf ('lognoisevariance has size:\n');  display (s);
+        stk_error (sprintf (['lognoisevariance was expected to be either a ' ...
+            'scalar or a vector of length %d\n'], ni), 'IncorrectSize');
     end
     
     if diff ~= -1,
