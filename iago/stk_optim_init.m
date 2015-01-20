@@ -71,7 +71,6 @@ options = {
     'nsamplepaths', 800
     'quadtype', []
     'quadorder', nan
-    'ComputeCurrentOptimum', true
     'stoprule', true
     };
 
@@ -151,7 +150,9 @@ switch algo_obj.noise
         zi = stk_feval (f, xi);
 end
 
-if ~strcmp(algo_obj.noise, 'noisefree')
+if strcmp(algo_obj.noise, 'noisefree')
+    algo_obj.model.lognoisevariance = log(0.0);
+else
     algo_obj.model.lognoisevariance = log(xi.noisevariance);
 end
 

@@ -69,6 +69,7 @@ while ~CONDH_OK
         end
 
         if size(xi.data, 1) == size(unique(xi.data, 'rows'), 1) || noisevariance > 0.0
+            
             [~, lambda_] = stk_predict(model_xg, xi_ind, [], []);
             
             zQ = stk_quadrature(1, algo, zpmean(test_ind), abs(zpvar(test_ind)) + noisevariance);
@@ -98,12 +99,14 @@ while ~CONDH_OK
             CondH(test_ind) = stk_quadrature(2, algo, H);
             
         else
+            
             xi_ind = xi_ind(1:ni); % drop the test point
             zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);
             [~, ind_maximum] = max(zsimc.data);
             F = hist(ind_maximum, 1:ng);
             p = F/algo.nsamplepaths;
             CondH(test_ind) = -sum(p.*log(p+eps));
+            
         end
     end % loop over candidate points
     
