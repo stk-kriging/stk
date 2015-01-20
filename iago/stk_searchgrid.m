@@ -5,12 +5,12 @@ function [xg, xi_ind, algo] = stk_searchgrid(algo, xi)
 
 ni = stk_length(xi);
 if algo.searchgrid_unique
-    [xg, ~, ixg] = unique([xi.data; algo.xg0.data], 'rows');
+    [xg, ixixg, ixg] = unique([xi.data; algo.xg0.data], 'rows');
     xg = stk_dataframe(xg);
     xi_ind = ixg(1:ni);
     if ~strcmp(algo.noise, 'noisefree')
-        noisevariance = algo.noisevariance * ones(stk_length(xg), 1);
-        noisevariance(xi_ind) = xi.noisevariance;
+        noisevariance = [xi.noisevariance; algo.xg0.noisevariance];
+        noisevariance = noisevariance(ixixg);
         xg = stk_ndf(xg, noisevariance);
     end
 else
