@@ -20,7 +20,7 @@
 %       'model', model                optional stk_model
 %       'estimparams', true           estimate parameters of model
 %                                     after each evaluation?
-%       'simulatenoise', false        
+%       'simulatenoise', false
 %       'estimnoise', false           estimate noise variance?
 %       'noisevariance', 0.0          noise variance
 %       'showprogress', true          display progress
@@ -31,16 +31,16 @@
 %       'disp_zvals', []              optional z values for display
 %       'show1dsamplepaths', false    show sample paths?
 %       'show1dmaximizerdens', 2      show estimated density of the maximize
-%       'searchgrid_xvals', []        optional search points 
-%       'searchgrid_unique', true     
+%       'searchgrid_xvals', []        optional search points
+%       'searchgrid_unique', true
 %       'searchgrid_adapt', false     adapt search points
 %       'searchgrid_size', 200        number of search points
 %       'nsamplepaths', 800           number of sample paths for IAGO
 %       'quadtype', []                type of quadrature
 %       'quadorder', nan              order of the quadrature
-%       'ComputeCurrentOptimum', true 
+%       'ComputeCurrentOptimum', true
 %       'stoprule', true              stop rule
-              
+
 % Copyright Notice
 %
 %    Copyright (C) 2011-2014 SUPELEC
@@ -71,89 +71,105 @@
 function [varargout] = stk_optim(f, dim, box, xi, N, varargin)
 
 init = @stk_optim_init;
-[algo_obj, zi] = init (f, dim, box, xi, varargin);
+[algo_obj, xi, zi] = init (f, dim, box, xi, varargin);
 crit = algo_obj.samplingcrit;
 
 if algo_obj.ComputeCurrentOptimum
-	xstarn  = stk_dataframe(zeros(N, dim));
-	Mn      = stk_dataframe(inf(N, 1));
+    xstarn  = stk_dataframe(zeros(N, dim));
+    Mn      = stk_dataframe(inf(N, 1));
 end
 
 crit_reg = nan(N, 1);
 for i = 1:N
-	progress_disp('* iteration', i, N);
-	
-	% CHOOSE NEW EVALUATION POINT
-	[xinew, xg, zp, algo_obj, crit_xg] = crit (algo_obj, xi, zi);
-	
-	% COMPUTE CURRENT OPTIMIZER
-	if algo_obj.ComputeCurrentOptimum
-		switch(algo_obj.type)
-			case 'usemaxobs'
-				[Mn(i, 1), xstarn_ind] = max(zi.data);
-				xstarn(i,:) = xi(xstarn_ind, :);
-			case 'usemaxpred'
-				[~, xstarn_ind] = max(zp.mean);
-				xstarn(i,:) = xg(xstarn_ind, :);
-				Mn(i, 1) = stk_feval(algo_obj.f, xstarn(i,:));
-		end
-	end
-	
-	% CARRY OUT NEW EVALUATION
-	zinew = stk_feval(algo_obj.f, xinew);
-	if algo_obj.simulatenoise
-		noise = sqrt (algo_obj.noisevariance) * randn (1);
-		zinew = zinew + noise;
-	end
-	xi = [xi; xinew]; %#ok<AGROW>
-	zi = [zi; zinew]; %#ok<AGROW>
-	
-	% PAUSE?
-	if algo_obj.pause > 0
-		disp('pause'); pause;
-	end
-	
-	% STOP?
-	if algo_obj.stoprule && algo_obj.ComputeCurrentOptimum,
-		switch algo_obj.samplingcritname
-			case 'EEI',
-				crit_reg(i) = max(crit_xg);
-				if i>1 && crit_reg(i) < 1e-7*crit_reg(1) ...
-						&& crit_reg(i) > 0.9*crit_reg(i-1),
-					disp('Criterion is not improving: early stopping');
-					break
-				end
-			case 'EI',
-				crit_reg(i) = max(crit_xg) - min(crit_xg);
-				if i>1 && crit_reg(i) < 1e-8*(Mn(i) - mean(zi.data)),
-					disp('Criterion is not improving: early stopping');
-					break
-				end
-			case 'IAGO',
-				crit_reg(i) = min(crit_xg);
-				if i>1 && crit_reg(i) < 1e-14,
-					disp('Criterion is ill-conditioned: early stopping');
-					break
-				end
-		end
-	end
+    progress_disp('* iteration', i, N);
+    
+    % CHOOSE NEW EVALUATION POINT
+    [xinew, xg, zp, algo_obj, crit_xg] = crit (algo_obj, xi, zi);
+    
+    % COMPUTE CURRENT OPTIMIZER
+    if algo_obj.ComputeCurrentOptimum
+        switch(algo_obj.type)
+            case 'usemaxobs'
+                [Mn(i, 1), xstarn_ind] = max(zi.data);
+                xstarn(i,:) = xi(xstarn_ind, :);
+            case 'usemaxpred'
+                [~, xstarn_ind] = max(zp.mean);
+                xstarn(i,:) = xg(xstarn_ind, :);
+                Mn(i, 1) = stk_feval(algo_obj.f, xstarn(i,:));
+        end
+    end
+    
+    % CARRY OUT NEW EVALUATION
+    switch algo_obj.noise
+        case 'noisefree'
+            zinew = stk_feval(f, xinew);
+        case 'known'
+            zinew = stk_feval_noise(f, xinew);
+            xinew = stk_ndf(xinew, zinew.noisevariance);
+        case 'simulatenoise'
+            xinew = stk_ndf(xinew, algo_obj.noisevariance);
+            zinew = stk_feval (f, xinew);
+            noise = sqrt (algo_obj.noisevariance) * randn (1);
+            zinew = zinew + noise;
+        case 'unknown'
+            xinew = stk_ndf(xinew, algo_obj.noisevariance); % noisevariance will be estimated
+            zinew = stk_feval(f, xinew);
+    end
+    
+    xi = [xi; xinew]; %#ok<AGROW>
+    zi = [zi; zinew]; %#ok<AGROW>
+
+    if ~strcmp(algo_obj.noise, 'noisefree')
+        algo_obj.model.lognoisevariance = log(xi.noisevariance);
+    end
+
+    
+    % PAUSE?
+    if algo_obj.pause > 0
+        disp('pause'); pause;
+    end
+    
+    % STOP?
+    if algo_obj.stoprule && algo_obj.ComputeCurrentOptimum,
+        switch algo_obj.samplingcritname
+            case 'EEI',
+                crit_reg(i) = max(crit_xg);
+                if i>1 && crit_reg(i) < 1e-7*crit_reg(1) ...
+                        && crit_reg(i) > 0.9*crit_reg(i-1),
+                    disp('Criterion is not improving: early stopping');
+                    break
+                end
+            case 'EI',
+                crit_reg(i) = max(crit_xg) - min(crit_xg);
+                if i>1 && crit_reg(i) < 1e-8*(Mn(i) - mean(zi.data)),
+                    disp('Criterion is not improving: early stopping');
+                    break
+                end
+            case 'IAGO',
+                crit_reg(i) = min(crit_xg);
+                if i>1 && crit_reg(i) < 1e-14,
+                    disp('Criterion is ill-conditioned: early stopping');
+                    break
+                end
+        end
+    end
 end % for i=1:N
 
 %% PREPARE OUTPUT
 if nargout == 1
-	res.xi      = xi;
-	res.zi      = zi;
-	if algo_obj.ComputeCurrentOptimum
-		res.xstarn  = xstarn;
-		res.Mn      = Mn;
-	end
-	varargout{1} = res;
+    res.xi      = xi;
+    res.zi      = zi;
+    if algo_obj.ComputeCurrentOptimum
+        res.xstarn  = xstarn;
+        res.Mn      = Mn;
+    end
+    varargout{1} = res;
 elseif nargout > 1
-	varargout{1} = xi;
-	varargout{2} = zi;
+    varargout{1} = xi;
+    varargout{2} = zi;
 elseif nargout > 2 && algo_obj.ComputeCurrentOptimum
-	varargout{3} = Mn;
-	varargout{4} = xstarn;
+    varargout{3} = Mn;
+    varargout{4} = xstarn;
 end
 
 end %%END stk_optim

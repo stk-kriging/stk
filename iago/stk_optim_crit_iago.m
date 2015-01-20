@@ -33,35 +33,31 @@
 
 function [xinew, xg, zp, algo, CondH ] = stk_optim_crit_iago ( algo, xi, zi )
 
+ni = stk_length(xi);
+
 %% ESTIMATE MODEL PARAMETERS
 if algo.estimparams
     fprintf('parameter estimation ..');
-    algo.model.param = stk_param_estim (algo.model, xi, zi, algo.model.param);
+    if algo.estimnoise
+        [algo.model.param, algo.model.lognoisevariance] = stk_param_estim (...
+            algo.model, xi, zi, algo.model.param, algo.model.lognoisevariance);
+        xi = stk_setnoisevariance(xi, exp(algo.model.lognoisevariance));
+    else
+        algo.model.param = stk_param_estim (algo.model, xi, zi, algo.model.param);
+    end
     fprintf('done\n');
 end
 
 %% SEARCH GRID
-ni = stk_length(xi);
-if algo.searchgrid_unique
-    [xg, ~, ixg] = unique([xi.data; algo.xg0.data], 'rows');
-    xg = stk_dataframe(xg);
-    ng = stk_length(xg);
-    xi_ind = ixg(1:ni);
-else
-    xg = [xi; algo.xg0];
-    ng = stk_length(xg);
-    xi_ind = 1:ni;
-end
-% if algo.searchgrid_move;
-% 	algo = stk_move_the_xg0(algo, xg, xi, xi_ind, zi); end
+[xg, xi_ind, algo] = stk_searchgrid(algo, xi);
+ng = stk_length(xg);
 
 %% SIMULATION + INITIAL PREDICTION
 zsim = stk_generate_samplepaths(algo.model, xg, algo.nsamplepaths);
-
 model_xg = stk_model('stk_discretecov', algo.model, xg);
-zp = stk_predict(model_xg, xi_ind, zi, []);
-
-noisevariance = exp(algo.model.lognoisevariance);
+[zp, lambda] = stk_predict(model_xg, xi_ind, zi, []);
+zpmean = zp.mean;
+zpvar  = zp.var;
 
 %% ACTIVATE DISPLAY?
 if algo.disp; view_init(algo, xi, zi, xg); end
@@ -75,28 +71,32 @@ CONDH_OK = false;
 while ~CONDH_OK
     for test_ind = 1:ng
         if algo.showprogress, progress_disp('  ..', test_ind, ng); end
+        
         xi_ind(ni+1) = test_ind;
         xi = xg(xi_ind, :);
         
+        if strcmp(algo.noise, 'noisefree')
+            noisevariance = 0.0;
+        else
+            model_xg.lognoisevariance = log(xg.noisevariance(xi_ind));
+            noisevariance = exp(model_xg.lognoisevariance(ni+1));
+        end
+
         if size(xi.data, 1) == size(unique(xi.data, 'rows'), 1) || noisevariance > 0.0
-            [~, lambda] = stk_predict(model_xg, xi_ind, [], []);
+            [~, lambda_] = stk_predict(model_xg, xi_ind, [], []);
             
-            switch algo.quadtype
-                case 'GH',
-                    zQ = zp.mean(test_ind) + sqrt(2*(abs(zp.var(test_ind)) + noisevariance)) * algo.zQ;
-                case {'Linear', 'T'},
-                    zQ = zp.mean(test_ind) + sqrt(abs(zp.var(test_ind)) + noisevariance) * algo.zQ;
-            end
+            zQ = stk_quadrature(1, algo, zpmean(test_ind), abs(zpvar(test_ind)) + noisevariance);
+            
             H = zeros(algo.Q,1);
             for k = 1:algo.Q
                 
-                zi(ni+1,:) =  zQ(k); % add a fictitious observation
+                zi_ =  [zi.data; zQ(k)]; % add a fictitious observation
                 
                 % condition on the fictitious observation
-                zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);
+                zsimc = stk_conditioning(lambda_, zi_, zsim, xi_ind);
                 
                 [~, ind_maximum] = max(zsimc.data);
-                
+            
                 % estimate the entropy of the maximizer distribution
                 
                 F = hist(ind_maximum, 1:ng);
@@ -106,21 +106,13 @@ while ~CONDH_OK
                 
                 DEBUG = false;
                 if DEBUG && (test_ind==50 || test_ind==140),
-                    zz_view_debug_1d(algo, xi, zi, xg, test_ind, k, H, ind_maximum); end
+                    zz_view_debug_1d(algo, xi, zi_, xg, test_ind, k, H, ind_maximum); end
             end
             
-            switch algo.quadtype
-                case 'GH',
-                    CondH(test_ind) = 1/sqrt(pi) * sum(algo.wQ.*H);
-                case 'Linear',
-                    CondH(test_ind) = algo.wQ(1) * sum(H);
-                case 'T',
-                    CondH(test_ind) = sum(algo.wQ .* H);
-            end
+            CondH(test_ind) = stk_quadrature(2, algo, H);
+            
         else
             xi_ind = xi_ind(1:ni); % drop the test point
-            zi = zi(1:ni,:);
-            [~, lambda] = stk_predict(model_xg, xi_ind, [], []);
             zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);
             [~, ind_maximum] = max(zsimc.data);
             F = hist(ind_maximum, 1:ng);

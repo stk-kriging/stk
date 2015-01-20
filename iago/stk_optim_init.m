@@ -31,7 +31,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [algo_obj, zi] = stk_optim_init(f, dim, box, xi, varargin)
+function [algo_obj, xi, zi] = stk_optim_init(f, dim, box, xi, varargin)
 
 %% FUNCTION DEFINTION
 algo_obj.f  = f;
@@ -45,14 +45,14 @@ NU     = nan;  % regularity parameter, will be set later
 RHO    = nan(dim, 1);  % scale (range) parameter, will be set later
 param0 = log ([SIGMA2; NU; 1./RHO]);
 model.param = param0;
-model.lognoisevariance = log (nan); % will be set later
+model.lognoisevariance = nan; % will be set later
 
 %% PROCESS OPTIONS
 options = {
     'samplingcritname', 'EI'
     'model', model
     'estimparams', true
-    'simulatenoise', false
+    'noise', 'noisefree'
     'estimnoise', false
     'noisevariance', 0.0
     'showprogress', true
@@ -67,6 +67,7 @@ options = {
     'searchgrid_unique', true
     'searchgrid_adapt', false
     'searchgrid_size', 200
+    'searchgrid_noise', []
     'nsamplepaths', 800
     'quadtype', []
     'quadorder', nan
@@ -87,6 +88,12 @@ for i = 1 : 2 : n
     useropt.(name) = value;
 end
 
+% set MODEL_USER if model is provided by user
+MODEL_USER = isfield(useropt, 'model');
+
+% set NOISEVARIANCE_USER if noisevariance is provided by user
+NOISEVARIANCE_USER = isfield(useropt, 'noisevariance');
+
 % default values
 for i = 1:size(options, 1)
     if isfield(useropt, options{i, 1})
@@ -99,14 +106,53 @@ end
 % warn for unknown options passed by the user
 unknown_fields = fieldnames(useropt);
 for i=1:numel(unknown_fields)
-	fprintf('***Warning*** -- Unknown field %s\n', unknown_fields{i});
+	warning('stk_optim_init: Unknown field %s\n', unknown_fields{i});
+end
+
+%% NOISE OPTIONS: SANITY CHECK
+switch algo_obj.noise
+    case 'noisefree'
+        assert(algo_obj.estimnoise == false, 'STK:optim_init',...
+            'Error: cannot estimate noise variance in the noisefree case');
+        assert(algo_obj.noisevariance == 0.0,  'STK:optim_init',...
+            'Error: noise variance must be zero in the noisefree case');
+    case 'known'
+        % NB: only this case makes it possible to deal with heteroscedastic noise
+        assert(algo_obj.estimnoise == false, 'STK:optim_init',...
+            'Error: cannot estimate noise variance if noise variance is known');
+    case 'simulatenoise'
+        assert(algo_obj.estimnoise == false, 'STK:optim_init',...
+            'Error: cannot estimate noise variance in the ''simulatenoise'' case');
+    case 'unknown'
+        assert(algo_obj.estimnoise == true, 'STK:optim_init',...
+            'Error: if noise variance is unknown, must estimate noise variance');
+end
+
+if MODEL_USER && NOISEVARIANCE_USER
+    assert(algo_obj.model.lognoisevariance == log (algo_obj.noisevariance), ...
+        'STK:optim_init', ...
+        'Error: noise variance in model not equal to noise variance in options');
 end
 
 %% INITIAL EVALUATIONS
-zi = stk_feval (f, xi);
-if algo_obj.simulatenoise
-    noise = sqrt (algo_obj.noisevariance) * randn (size (zi));
-    zi = zi + noise;
+switch algo_obj.noise
+    case 'noisefree'
+        zi = stk_feval (f, xi);
+    case 'known'
+        zi = stk_feval_noise(f, xi);
+        xi = stk_ndf(xi, zi.noisevariance);
+    case 'simulatenoise'
+        xi = stk_ndf(xi, algo_obj.noisevariance);
+        zi = stk_feval (f, xi);
+        noise = sqrt (algo_obj.noisevariance) * randn (size (zi));
+        zi = zi + noise;
+    case 'unknown'
+        xi = stk_ndf(xi, nan);
+        zi = stk_feval (f, xi);
+end
+
+if ~strcmp(algo_obj.noise, 'noisefree')
+    algo_obj.model.lognoisevariance = log(xi.noisevariance);
 end
 
 %% SET DEFAULT MODEL PARAMETERS
@@ -121,12 +167,6 @@ if any(isnan(algo_obj.model.param))
 end
 algo_obj.model.prior.mean = param0;
 algo_obj.model.prior.invcov = 0.5*eye(length(param0));
-if ~isfield(algo_obj.model, 'lognoisevariance') % when model is provided by user without lognoisevariance
-	algo_obj.model.lognoisevariance = log (algo_obj.noisevariance);
-end
-if isnan(algo_obj.model.lognoisevariance)
-    algo_obj.model.lognoisevariance = log (algo_obj.noisevariance);
-end
 
 %% CANDIDATE POINTS
 if ~isempty(algo_obj.searchgrid_xvals)
@@ -137,6 +177,10 @@ else
     if dim == 1
         algo_obj.xg0.data = sort(algo_obj.xg0.data);
     end
+end
+
+if ~strcmp(algo_obj.noise, 'noisefree') && ~isa(algo_obj.xg0, 'stk_ndf')
+    algo_obj.xg0 = stk_ndf(algo_obj.xg0, algo_obj.noisevariance);
 end
 
 %% SELECT SAMPLING CRITERION
@@ -180,7 +224,7 @@ end
 %% QUADRATURE
 if NEED_QUAD
 	algo_obj.Q = algo_obj.quadorder;
-	[algo_obj.zQ, algo_obj.wQ] = stk_quadrature(algo_obj.quadtype, algo_obj.quadorder);
+	algo_obj = stk_quadrature(0, algo_obj, algo_obj.quadtype, algo_obj.quadorder);
 end
 
 %% MISC
