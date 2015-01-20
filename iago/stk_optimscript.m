@@ -62,8 +62,8 @@ switch conf
         xi = xt(xi_ind, :);
     
 		CRIT = 'IAGO';
-        SIMULATENOISE = true;
-        noisevariance =  0.2^2;
+        NOISE = 'simulatenoise';
+        noisevariance =  0.1^2;
 	case 1
 		DIM = 2;
         BOX = [[-1; 1], [-1; 1]];
@@ -82,14 +82,13 @@ switch conf
         CRIT = 'IAGO';
 end
 
-
 %% PARAMETERS OF THE OPTIMIZATION PROCEDURE
 maxiter = 50;
 
 options = {};
 
-if exist('SIMULATENOISE', 'var')
-    options = [options {'simulatenoise', true}];
+if exist('NOISE', 'var')
+    options = [options {'noise', NOISE}];
     options = [options {'noisevariance', noisevariance}];
 end
 
@@ -127,3 +126,4 @@ end
 %% ACTUAL OPTIMIZATION
 res = stk_optim(f, DIM, BOX, xi, maxiter, options);
 
+%[xi, zi, xstarn, Mn] = stk_optim(f, DIM, BOX, xi, maxiter, 'samplingcrit', 'EI', 'disp1d', true);

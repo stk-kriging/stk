@@ -39,24 +39,19 @@ end
 %% ESTIMATE MODEL PARAMETERS
 if algo.estimparams
     fprintf('parameter estimation ..');
-    algo.model.param = stk_param_estim (algo.model, xi, zi, algo.model.param);
+    if algo.estimnoise
+        [algo.model.param, algo.model.lognoisevariance] = stk_param_estim (...
+            algo.model, xi, zi, algo.model.param, algo.model.lognoisevariance);
+        xi = stk_setnoisevariance(xi, exp(algo.model.lognoisevariance));
+    else
+        algo.model.param = stk_param_estim (algo.model, xi, zi, algo.model.param);
+    end
     fprintf('done\n');
 end
 
 %% SEARCH GRID
-ni = stk_length(xi);
-if algo.searchgrid_unique
-    [xg, ~, ixg] = unique([xi.data; algo.xg0.data], 'rows');
-    xg = stk_dataframe(xg);
-    ng = stk_length(xg);
-    xi_ind = ixg(1:ni);
-else
-    xg = [xi; algo.xg0];
-    ng = stk_length(xg);
-    xi_ind = 1:ni;
-end
-if algo.searchgrid_adapt;
-	algo = stk_move_the_xg0(algo, xg, xi, xi_ind, zi); end
+[xg, xi_ind, algo] = stk_searchgrid(algo, xi);
+ng = stk_length(xg);
 
 %% INITIAL PREDICTION
 % zp = stk_predict(algo.model, xi_ind, zi, xg);
@@ -76,53 +71,28 @@ samplingcrit = zeros(ng, 1);
 
 for test_ind = 1:ng
     if algo.showprogress, progress_disp('    test point', test_ind, ng); end
-    
-    switch algo.quadtype
-        case 'GH',
-            zQ = zpmean(test_ind) + sqrt(2*(abs(zpvar(test_ind)) + noisevariance)) * algo.zQ;
-        case {'Linear', 'T'},
-            zQ = zpmean(test_ind) + sqrt(abs(zpvar(test_ind)) + noisevariance) * algo.zQ;
-    end
-    
     xi_ind(ni+1) = test_ind;
-    % xi = xg(xi_ind, :);
-    % [zpcond, lambda] = stk_predict(algo.model, xi, [], xg);
-    [zpcond, lambda] = stk_predict(model_xg, xi_ind, [], []);
+    xi = xg(xi_ind, :);
     
-    losscrit = zeros(algo.Q,1);
-    for k = 1:algo.Q
+    if size(xi.data, 1) == size(unique(xi.data, 'rows'), 1) || noisevariance > 0.0
         
-        zi_ =  [zi.data; zQ(k)]; % add a fictitious observation      
-        zpm = lambda' * zi_;
+        % [zpcond, lambda] = stk_predict(algo.model, xi, [], xg);
+        [zpcond, lambda] = stk_predict(model_xg, xi_ind, [], []);
+        zQ = stk_quadrature(1, algo, zpmean(test_ind), abs(zpvar(test_ind)) + noisevariance);
+        losscrit = zeros(algo.Q,1);
+        for k = 1:algo.Q     
+            zi_ =  [zi.data; zQ(k)]; % add a fictitious observation
+            zpm = lambda' * zi_;    
+            losscrit(k) = stk_losscrit(type, zi_, zpm, zpcond.var);
+        end    
+        samplingcrit(test_ind) = stk_quadrature(2, algo, losscrit);
+    
+    else
         
-        switch(type)
-            case 1 % EI
-                Mn = max(zi_);
-                losscrit(k) = -Mn;
-            case 2 % EI with Mn = max(zp)
-                Mn = max(zpm);
-                losscrit(k) = -Mn;
-            case 3 % EEI
-                Mn = max(zi_);
-                expected_excess = stk_distrib_normal_ei(Mn, zpm, sqrt(zpcond.var));
-                losscrit(k) = 1/ng*sum(expected_excess);
-            case 4 % EEI with Mn = max(zp)
-                Mn = max(zpm);
-                expected_excess = stk_distrib_normal_ei(Mn, zpm, sqrt(zpcond.var));
-                losscrit(k) = 1/ng*sum(expected_excess);
-        end
-        
+        xi_ind = xi_ind(1:ni); % drop the test point
+        samplingcrit(test_ind) = stk_losscrit(type, zi, zpmean, zpvar);
+    
     end
-    
-    switch algo.quadtype
-        case 'GH',
-            samplingcrit(test_ind) = 1/sqrt(pi) * sum(algo.wQ.*losscrit);
-        case 'Linear',
-            samplingcrit(test_ind) = algo.wQ(1) * sum(losscrit);
-        case 'T',
-            samplingcrit(test_ind) = sum(algo.wQ.*losscrit);
-    end
-    
 end
 
 %% PICK THE NEXT EVALUATION POINT
