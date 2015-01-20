@@ -59,6 +59,7 @@ if algo.pause >= 2, disp('pause'); pause; end
 if algo.show1dsamplepaths && algo.show1dmaximizerdens > 1, nplots = 3;
 else nplots = 2; end
 for i = 1:nplots
+    figure(n)
 	h = subplot(nplots, 1, i); hold on; 
 	plot([xinew.data xinew.data], ylim(h), 'LineWidth', 2, 'Color', [0.6, 0.6, 0.6])
 	hold off;

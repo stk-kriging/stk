@@ -31,26 +31,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [xinew, xg, zp, algo, CondH ] = stk_optim_crit_iago ( algo, xi, zi )
+function [xinew, xg, zp, algo, CondH ] = stk_optim_crit_iago ( algo, xg, xi_ind, zi )
 
-ni = stk_length(xi);
-
-%% ESTIMATE MODEL PARAMETERS
-if algo.estimparams
-    fprintf('parameter estimation ..');
-    if algo.estimnoise
-        [algo.model.param, algo.model.lognoisevariance] = stk_param_estim (...
-            algo.model, xi, zi, algo.model.param, algo.model.lognoisevariance);
-        xi = stk_setnoisevariance(xi, exp(algo.model.lognoisevariance));
-    else
-        algo.model.param = stk_param_estim (algo.model, xi, zi, algo.model.param);
-    end
-    fprintf('done\n');
-end
-
-%% SEARCH GRID
-[xg, xi_ind, algo] = stk_searchgrid(algo, xi);
 ng = stk_length(xg);
+
+xi = xg(xi_ind, :);
+ni = stk_length(xi);
 
 %% SIMULATION + INITIAL PREDICTION
 zsim = stk_generate_samplepaths(algo.model, xg, algo.nsamplepaths);

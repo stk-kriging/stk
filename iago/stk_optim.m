@@ -82,9 +82,26 @@ end
 crit_reg = nan(N, 1);
 for i = 1:N
     progress_disp('* iteration', i, N);
+
+    %% ESTIMATE MODEL PARAMETERS
+    if algo_obj.estimparams
+        fprintf('parameter estimation ..');
+        if algo_obj.estimnoise
+            [algo_obj.model.param, algo_obj.model.lognoisevariance] = stk_param_estim (...
+                algo_obj.model, xi, zi, algo_obj.model.param, algo_obj.model.lognoisevariance);
+            xi = stk_setnoisevariance(xi, exp(algo_obj.model.lognoisevariance));
+        else
+            algo_obj.model.param = stk_param_estim (algo_obj.model, xi, zi, algo_obj.model.param);
+        end
+        fprintf('done\n');
+    end
+    
+    %% SEARCH GRID
+    [xg, xi_ind, algo_obj] = stk_searchgrid(algo_obj, xi);
+    ng = stk_length(xg);
     
     % CHOOSE NEW EVALUATION POINT
-    [xinew, xg, zp, algo_obj, crit_xg] = crit (algo_obj, xi, zi);
+    [xinew, xg, zp, algo_obj, crit_xg] = crit (algo_obj, xg, xi_ind, zi);
     
     % COMPUTE CURRENT OPTIMIZER
     if algo_obj.ComputeCurrentOptimum
