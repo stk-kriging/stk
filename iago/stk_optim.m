@@ -20,7 +20,8 @@
 %       'model', model                optional stk_model
 %       'estimparams', true           estimate parameters of model
 %                                     after each evaluation?
-%       'simulatenoise', false
+%       'noise', 'noisefree'          'noisefree', 'known',
+%                                     'simulatenoise', 'unknown'
 %       'estimnoise', false           estimate noise variance?
 %       'noisevariance', 0.0          noise variance
 %       'showprogress', true          display progress
@@ -70,14 +71,11 @@
 
 function [varargout] = stk_optim(f, dim, box, xi, N, varargin)
 
-init = @stk_optim_init;
-[algo_obj, xi, zi] = init (f, dim, box, xi, varargin);
+[algo_obj, xi, zi] = stk_optim_init (f, dim, box, xi, varargin);
 crit = algo_obj.samplingcrit;
 
-if algo_obj.ComputeCurrentOptimum
-    xstarn  = stk_dataframe(zeros(N, dim));
-    Mn      = stk_dataframe(inf(N, 1));
-end
+xstarn  = stk_dataframe(zeros(N, dim));
+Mn      = stk_dataframe(inf(N, 1));
 
 crit_reg = nan(N, 1);
 for i = 1:N
@@ -95,25 +93,24 @@ for i = 1:N
         end
         fprintf('done\n');
     end
-    
+
     % SEARCH GRID
     [xg, xi_ind, algo_obj] = stk_searchgrid(algo_obj, xi);
     
     % CHOOSE NEW EVALUATION POINT
     [xinew, zp, algo_obj, crit_xg] = crit (algo_obj, xg, xi_ind, zi);
     
-    % COMPUTE CURRENT OPTIMIZER
-    if algo_obj.ComputeCurrentOptimum
-        switch(algo_obj.type)
-            case 'usemaxobs'
-                [Mn(i, 1), xstarn_ind] = max(zi.data);
-                xstarn(i,:) = xi(xstarn_ind, :);
-            case 'usemaxpred'
-                [~, xstarn_ind] = max(zp.mean);
-                xstarn(i,:) = xg(xstarn_ind, :);
-                Mn(i, 1) = stk_feval(algo_obj.f, xstarn(i,:));
-        end
+    % COMPUTE CURRENT OPTIMIZER AND OPTIMUM
+    switch(algo_obj.type)
+        case 'usemaxobs'
+            [Mn(i, 1), xstarn_ind] = max(zi.data);
+            xstarn(i,:) = xi(xstarn_ind, :);
+        case 'usemaxpred'
+            [~, xstarn_ind] = max(zp.mean);
+            xstarn(i,:) = xg(xstarn_ind, :);
+            Mn(i, 1) = stk_feval(algo_obj.f, xstarn(i,:));
     end
+
     
     % CARRY OUT NEW EVALUATION
     switch algo_obj.noise
@@ -146,7 +143,7 @@ for i = 1:N
     end
     
     % STOP?
-    if algo_obj.stoprule && algo_obj.ComputeCurrentOptimum,
+    if algo_obj.stoprule,
         switch algo_obj.samplingcritname
             case 'EEI',
                 crit_reg(i) = max(crit_xg);
@@ -175,15 +172,13 @@ end % for i=1:N
 if nargout == 1
     res.xi      = xi;
     res.zi      = zi;
-    if algo_obj.ComputeCurrentOptimum
-        res.xstarn  = xstarn;
-        res.Mn      = Mn;
-    end
+    res.xstarn  = xstarn;
+    res.Mn      = Mn;
     varargout{1} = res;
 elseif nargout > 1
     varargout{1} = xi;
     varargout{2} = zi;
-elseif nargout > 2 && algo_obj.ComputeCurrentOptimum
+elseif nargout > 2
     varargout{3} = Mn;
     varargout{4} = xstarn;
 end

@@ -80,6 +80,8 @@ switch conf
         
         PAUSE = 1;
         CRIT = 'IAGO';
+        NOISE = 'simulatenoise';
+        noisevariance =  2^2;
 end
 
 %% PARAMETERS OF THE OPTIMIZATION PROCEDURE

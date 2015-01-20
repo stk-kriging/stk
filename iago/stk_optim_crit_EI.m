@@ -32,27 +32,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [xinew, xg, zp, algo, samplingcrit] = stk_optim_crit_EI (algo, xi, zi)
+function [xinew, zp, algo, samplingcrit] = stk_optim_crit_EI (algo, xg, xi_ind, zi)
 
-%% ESTIMATE MODEL PARAMETERS
-if algo.estimparams
-    fprintf('parameter estimation ..');
-    algo.model.param = stk_param_estim (algo.model, xi, zi, algo.model.param);
-    fprintf('done\n');
-end
-
-%% SEARCH GRID
-ni = stk_length(xi);
-if algo.searchgrid_unique
-	[xg, ~, ixg] = unique([xi.data; algo.xg0.data], 'rows');
-	xg = stk_dataframe(xg);
-	xi_ind = ixg(1:ni);
-else
-	xg = [xi; algo.xg0];
-	xi_ind = 1:ni;
-end
-if algo.searchgrid_adapt;
-	algo = stk_move_the_xg0(algo, xg, xi, xi_ind, zi); end
 
 %% INITIAL PREDICTION
 model_xg = stk_model('stk_discretecov', algo.model, xg);
