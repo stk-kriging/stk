@@ -1,3 +1,22 @@
+2015-01-21  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_feval.m: Various improvements.
+
+	* arrays/generic/stk_feval.m: Update documentation. Try to make
+	the code clearer. Use stk_disp_progress.
+
+	stk_disp_progress.m: Display a progress indicator.
+
+	* misc/text/stk_disp_progress.m: New function that displays a
+	textual progress indicator.
+
+2015-01-21  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
+	stk_feval.m: Generalize to the case of a cell array of functions
+
+	* arrays/generic/stk_feval.m: Generalize to the case of a cell
+	array of functions (ticket #19 closed).
+
 2015-01-08  Julien Bect  <julien.bect@supelec.fr>
 
 	Improve conditional simulation examples.
