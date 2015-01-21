@@ -59,16 +59,28 @@ end
 xdata = double (x);
 
 if ischar (f),
-    zname = f;
-else
-    if ~isa (f, 'function_handle')
-        errmsg = 'Incorrect type for argument ''f''.';
-        stk_error (errmsg, 'IncorrectType');
-    else
-        zname = func2str (f);
+    numfcs = 1;
+    f_{1} = f;
+    zname{1} = f;
+elseif isa (f, 'function_handle')
+    numfcs = 1;
+    f_{1} = f;
+    zname{1} = func2str(f);
+elseif isa (f, 'cell');
+    numfcs = numel(f);
+    for l = 1:numfcs
+        if ~isa (f{l}, 'function_handle')
+            errmsg = 'Argument ''f'' is not a cellarray of function handles.';
+            stk_error (errmsg, 'IncorrectType');
+        end
+        zname{l} = func2str (f{l}); %#ok<AGROW>
     end
+    f_ = f;
+else
+    errmsg = 'Incorrect type for argument ''f''.';
+    stk_error (errmsg, 'IncorrectType');
 end
-    
+
 if nargin < 3,
     progress_msg = false;
 else
@@ -85,26 +97,29 @@ end
 
 if n == 0, % no input => no output
     
-    zdata = zeros (0, 1);
+    zdata = zeros (0, numfcs);
     
 else % at least one input point
     
-    zdata = zeros (n, 1);
+    zdata = zeros (n, numfcs);
+    
     for i = 1:n,
         if progress_msg, fprintf ('feval %d/%d... ', i, n); end
-        zdata(i) = feval (f, xdata(i, :));
+        for l=1:numfcs
+            zdata(i, l) = feval (f_{l}, xdata(i, :));
+        end
         if progress_msg, fprintf ('done.\n'); end
     end
     
 end
 
-z = stk_dataframe (zdata, {zname});
+z = stk_dataframe (zdata, zname);
 z.info = 'Created by stk_feval';
 
 if isa (x, 'stk_dataframe'),
     z.rownames = x.rownames;
 end
-    
+
 end % function stk_feval
 
 
@@ -129,3 +144,10 @@ end % function stk_feval
 %! y = stk_feval (@(u)(2 * u), x);
 %! assert (isequal (y.data, [2; 4; 6]));
 %! assert (isequal (y.rownames, {'a'; 'b'; 'c'}));
+
+%!test
+%! t = stk_sampling_regulargrid (10, 1, [0; 2*pi]);
+%! t.colnames = {'time'};
+%! z = stk_feval ({@sin @cos}, t);
+%! assert (isa (z, 'stk_dataframe'));
+%! assert (all (size(z) == [10, 2]) );
