@@ -84,6 +84,7 @@ for i = 1:N
     if algo_obj.estimparams
         fprintf('parameter estimation ..');
         if algo_obj.estimnoise
+            algo_obj.model.lognoisevariance = algo_obj.model.lognoisevariance(1);
             [algo_obj.model.param, algo_obj.model.lognoisevariance] = stk_param_estim (...
                 algo_obj.model, xi, zi, algo_obj.model.param, algo_obj.model.lognoisevariance);
             xi = stk_setnoisevariance(xi, exp(algo_obj.model.lognoisevariance));
@@ -109,7 +110,6 @@ for i = 1:N
             xstarn(i,:) = xg(xstarn_ind, :);
             Mn(i, 1) = stk_feval(algo_obj.f, xstarn(i,:));
     end
-
     
     % CARRY OUT NEW EVALUATION
     [xi, zi, algo_obj] = stk_optim_addevals(algo_obj, xi, zi, xinew);
