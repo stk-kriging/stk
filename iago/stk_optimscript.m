@@ -72,21 +72,6 @@ switch TESTCASE_NUM
         NI = 4;
         xi = stk_sampling_maximinlhs (NI, DIM, BOX);
         
-    case 3
-        
-        DIM = 1;
-        BOX = [-1.0; 1.0];
-        
-        f0  = @(x)((0.8*x-0.2).^2+1.0*exp(-1/2*(abs(x+0.1)/0.1).^1.95)+exp(-1/2*(2*x-0.6).^2/0.1)-0.02);
-        
-        NOISEVARIANCE =  0.1^2;
-        
-        NT = 400;
-        xt = stk_sampling_regulargrid (NT, DIM, BOX);        
-        
-        xi_ind = [90 230 290 350];
-        xi = xt(xi_ind, :);
-               
 end
 
 % Ground truth

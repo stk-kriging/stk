@@ -133,7 +133,6 @@ if MODEL_USER && NOISEVARIANCE_USER
 end
 
 %% INITIAL EVALUATIONS
-
 [xi, zi, algo_obj] = stk_optim_addevals(algo_obj, [], [], xi);
 
 %% SET DEFAULT MODEL PARAMETERS
