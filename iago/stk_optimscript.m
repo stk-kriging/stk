@@ -45,17 +45,16 @@ switch TESTCASE_NUM
         DIM = 1;
         BOX = [-1.0; 1.0];
         
-        f = @(x)((0.8*x-0.2).^2 + exp(-0.5*(abs(x+0.1)/0.1).^1.95) ...
+        f0 = @(x) ((0.8*x-0.2).^2 + exp(-0.5*(abs(x+0.1)/0.1).^1.95) ...
             + exp(-1/2*(2*x-0.6).^2/0.1) - 0.02);
+        
+        NOISEVARIANCE = 0.1 ^ 2;
         
         NT = 400;
         xt = stk_sampling_regulargrid (NT, DIM, BOX);
-        zt = stk_feval (f, xt);
         
         xi_ind = [90 230 290 350];
         xi = xt(xi_ind, :);
-        
-        NOISEVARIANCE = 0.1 ^ 2;
         
     case 2,  % A two-dimensional test case
         
@@ -63,37 +62,59 @@ switch TESTCASE_NUM
         BOX = [[-1; 1], [-1; 1]];
         
         f_ = inline ('exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2 + 3*sin(4*pi*x1)', ...
-            'x1', 'x2');  f  = @(x)(- f_(x(:, 1), x(:, 2)));
+            'x1', 'x2');  f0 = @(x)(- f_(x(:, 1), x(:, 2)));
+        
+        NOISEVARIANCE = 2 ^ 2;
         
         NT = 400; % nb of points in the grid
         xt = stk_sampling_regulargrid (NT, DIM, BOX);
-        zt = stk_feval (f, xt);
         
         NI = 4;
         xi = stk_sampling_maximinlhs (NI, DIM, BOX);
         
-        NOISEVARIANCE = 2 ^ 2;
-
     case 3
-
+        
         DIM = 1;
         BOX = [-1.0; 1.0];
-        NOISEVARIANCE =  0.1^2;
+        
         f0  = @(x)((0.8*x-0.2).^2+1.0*exp(-1/2*(abs(x+0.1)/0.1).^1.95)+exp(-1/2*(2*x-0.6).^2/0.1)-0.02);
-        f= {@(x)(f0(x) + sqrt(NOISEVARIANCE)*randn(size(x))), @(x)(NOISEVARIANCE)};
+        
+        NOISEVARIANCE =  0.1^2;
+        
         NT = 400;
-        xt = stk_sampling_regulargrid (NT, DIM, BOX);
-        zt = stk_feval (f0, xt);
+        xt = stk_sampling_regulargrid (NT, DIM, BOX);        
         
         xi_ind = [90 230 290 350];
         xi = xt(xi_ind, :);
-        
-        CRIT = 'IAGO';
-        NOISE = 'known';
-
+               
 end
 
+% Ground truth
+zt = stk_feval (f0, xt);
 
+
+%% Noise variance
+
+% Default: noisy function with known noise variance
+if ~ exist ('NOISE', 'var')
+    NOISE = 'known';  
+end
+
+switch NOISE
+    
+    case 'noiseless'
+        % Optimize f0 directly (noiseless evaluations)
+        f = f0;
+        
+    case {'known', 'unknown'}
+        % Optimise f0 based on noisy evaluations                
+        f = @(x)(f0(x) + sqrt(NOISEVARIANCE));
+        
+        if strcmp (NOISE, 'known')
+          f = {f, @(x)(NOISEVARIANCE)};
+        end
+end
+        
 %% Parameters of the optimization procedure
 
 % Maximum number of iterations
@@ -102,7 +123,7 @@ if ~ exist ('MAX_ITER', 'var')
 end
 
 % Use IAGO unless instructed otherwise
-if exist ('CRIT', 'var')    
+if exist ('CRIT', 'var')
     options = {'samplingcritname', CRIT};
 else
     options = {'samplingcritname', 'IAGO'};
