@@ -121,9 +121,6 @@ switch algo_obj.noise
             'Error: cannot estimate noise variance if noise variance is known');
         assert(isa(f, 'cell'), 'STK:optim_init',...
             'Error: f must be a cellarray of function handles in noise variance is known');
-    case 'simulatenoise'
-        assert(algo_obj.estimnoise == false, 'STK:optim_init',...
-            'Error: cannot estimate noise variance in the ''simulatenoise'' case');
     case 'unknown'
         assert(algo_obj.estimnoise == true, 'STK:optim_init',...
             'Error: if noise variance is unknown, must estimate noise variance');
@@ -143,11 +140,6 @@ switch algo_obj.noise
         zi_ = stk_feval(f, xi);
         zi  = zi_(:, 1);
         xi  = stk_ndf(xi, zi_.data(:, 2));
-    case 'simulatenoise'
-        xi = stk_ndf(xi, algo_obj.noisevariance);
-        zi = stk_feval (f, xi);
-        noise = sqrt (algo_obj.noisevariance) * randn (size (zi));
-        zi = zi + noise;
     case 'unknown'
         xi = stk_ndf(xi, nan);
         zi = stk_feval (f, xi);

@@ -20,8 +20,7 @@
 %       'model', model                optional stk_model
 %       'estimparams', true           estimate parameters of model
 %                                     after each evaluation?
-%       'noise', 'noisefree'          'noisefree', 'known',
-%                                     'simulatenoise', 'unknown'
+%       'noise'                       'noisefree', 'known' or 'unknown'
 %       'estimnoise', false           estimate noise variance?
 %       'noisevariance', 0.0          noise variance
 %       'showprogress', true          display progress
@@ -120,11 +119,6 @@ for i = 1:N
             zinew_ = stk_feval(f, xinew);
             zinew  = zinew_(:, 1);
             xinew  = stk_ndf(xinew, zinew_.data(:, 2));
-        case 'simulatenoise'
-            xinew = stk_ndf(xinew, algo_obj.noisevariance);
-            zinew = stk_feval (f, xinew);
-            noise = sqrt (algo_obj.noisevariance) * randn (1);
-            zinew = zinew + noise;
         case 'unknown'
             xinew = stk_ndf(xinew, algo_obj.noisevariance); % noisevariance will be estimated
             zinew = stk_feval(f, xinew);
