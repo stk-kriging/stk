@@ -115,7 +115,7 @@ else
 end
 
 % Fake noisy data using simulated Gaussian noise
-options = [options {'noise', 'known', 'noisevariance', NOISEVARIANCE}];
+options = [options {'noise', NOISE}];
 
 % Activate display (figures) and provide ground truth
 options = [options { ...
