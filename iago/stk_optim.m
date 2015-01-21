@@ -34,7 +34,7 @@
 %       'show1dmaximizerdens', 2      show estimated density of the maximize
 %       'searchgrid_xvals', []        optional search points
 %       'searchgrid_unique', true
-%       'searchgrid_adapt', false     adapt search points
+%       'searchgrid_adapt', false     adapt search points (not implemented yet)
 %       'searchgrid_size', 200        number of search points
 %       'nsamplepaths', 800           number of sample paths for IAGO
 %       'quadtype', []                type of quadrature
