@@ -78,12 +78,12 @@ switch TESTCASE_NUM
 
         DIM = 1;
         BOX = [-1.0; 1.0];
-        noisevariance =  0.1^2;
+        NOISEVARIANCE =  0.1^2;
         f0  = @(x)((0.8*x-0.2).^2+1.0*exp(-1/2*(abs(x+0.1)/0.1).^1.95)+exp(-1/2*(2*x-0.6).^2/0.1)-0.02);
-        f= {@(x)(f0(x) + sqrt(noisevariance)*randn(size(x))), @(x)(noisevariance)};
+        f= {@(x)(f0(x) + sqrt(NOISEVARIANCE)*randn(size(x))), @(x)(NOISEVARIANCE)};
         NT = 400;
         xt = stk_sampling_regulargrid (NT, DIM, BOX);
-        zt = stk_feval (f, xt);
+        zt = stk_feval (f0, xt);
         
         xi_ind = [90 230 290 350];
         xi = xt(xi_ind, :);
@@ -109,7 +109,7 @@ else
 end
 
 % Fake noisy data using simulated Gaussian noise
-options = [options {'noise', 'simulatenoise', 'noisevariance', NOISEVARIANCE}];
+options = [options {'noise', 'known', 'noisevariance', NOISEVARIANCE}];
 
 % Activate display (figures) and provide ground truth
 options = [options { ...
