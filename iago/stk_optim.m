@@ -117,8 +117,9 @@ for i = 1:N
         case 'noisefree'
             zinew = stk_feval(f, xinew);
         case 'known'
-            zinew = stk_feval_noise(f, xinew);
-            xinew = stk_ndf(xinew, zinew.noisevariance);
+            zinew_ = stk_feval(f, xinew);
+            zinew  = zinew_(:, 1);
+            xinew  = stk_ndf(xinew, zinew_.data(:, 2));
         case 'simulatenoise'
             xinew = stk_ndf(xinew, algo_obj.noisevariance);
             zinew = stk_feval (f, xinew);
