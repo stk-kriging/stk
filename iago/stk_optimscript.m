@@ -108,7 +108,7 @@ switch NOISE
         
     case {'known', 'unknown'}
         % Optimise f0 based on noisy evaluations                
-        f = @(x)(f0(x) + sqrt(NOISEVARIANCE));
+        f = @(x)(f0(x) + sqrt (NOISEVARIANCE) * randn (size (x)));
         
         if strcmp (NOISE, 'known')
           f = {f, @(x)(NOISEVARIANCE)};
