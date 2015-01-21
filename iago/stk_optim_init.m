@@ -231,12 +231,4 @@ if NEED_QUAD
 	algo_obj = stk_quadrature(0, algo_obj, algo_obj.quadtype, algo_obj.quadorder);
 end
 
-%% MISC
-if algo_obj.showprogress
-	addpath(fullfile(pwd(), 'misc'));
-end
-if algo_obj.disp
-	addpath(fullfile(pwd(), 'viewfcs'));
-end
-
 end %%END stk_optim_init
