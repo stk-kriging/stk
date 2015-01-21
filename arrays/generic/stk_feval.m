@@ -4,11 +4,15 @@
 %
 %    evaluates the function F on the evaluation points X, where
 %
-%     * F can be either a function handle or a function name (string), and
+%     * F can be either a function handle or a function name (string),
+%       or a cell-array of function handle or names, and
 %     * X can be either a numerical array or a dataframe.
 %
-%    The output Z is a one-column dataframe, with the same number of rows as X,
-%    and the function name of F as variable name.
+%    The output Z is a dataframe, with the same number of rows as X,
+%    and the function name of F as variable name. The number of column is
+%    one when F is a function name or handle, and is equal to numel (F)
+%    when F is a cell-array of these. In the latter case, column j of Z
+%    contains the result of evaluating function F{j}.
 %
 % CALL: Z = stk_feval (F, X, DISPLAY_PROGRESS)
 %
@@ -27,8 +31,8 @@
 %
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -58,29 +62,26 @@ end
 
 xdata = double (x);
 
-if ischar (f),
-    numfcs = 1;
-    f_{1} = f;
-    zname{1} = f;
-elseif isa (f, 'function_handle')
-    numfcs = 1;
-    f_{1} = f;
-    zname{1} = func2str(f);
-elseif isa (f, 'cell');
-    numfcs = numel(f);
-    for l = 1:numfcs
-        if ~isa (f{l}, 'function_handle')
-            errmsg = 'Argument ''f'' is not a cellarray of function handles.';
-            stk_error (errmsg, 'IncorrectType');
-        end
-        zname{l} = func2str (f{l}); %#ok<AGROW>
-    end
-    f_ = f;
-else
-    errmsg = 'Incorrect type for argument ''f''.';
-    stk_error (errmsg, 'IncorrectType');
-end
+% Turn f into a cell (if it isn't already one)
+if ~ iscell (f),  f = {f};  end
 
+% Number of functions
+numfcs = numel (f);
+
+% Check f and extract function names
+zname = cell (size (f));
+for j = 1:numfcs,
+    if ischar (f{j}),
+        zname{j} = f;
+    elseif ~ isa (f{j}, 'function_handle')
+        stk_error (['Argument ''f'' should be a cell-array of function ' ...
+            'names or function handles.'], 'IncorrectType');
+    else
+        zname{j} = func2str (f{j});
+    end
+end        
+
+% Check 'progress_msg' argument
 if nargin < 3,
     progress_msg = false;
 else
@@ -90,6 +91,7 @@ else
     end
 end
 
+% Zero-dimensional inputs are not allowed
 [n, d] = size (x);
 if d == 0,
     error ('zero-dimensional inputs are not allowed.');
@@ -104,11 +106,12 @@ else % at least one input point
     zdata = zeros (n, numfcs);
     
     for i = 1:n,
-        if progress_msg, fprintf ('feval %d/%d... ', i, n); end
-        for l=1:numfcs
-            zdata(i, l) = feval (f_{l}, xdata(i, :));
+        if progress_msg,
+            stk_disp_progress ('feval %d/%d... ', i, n);
         end
-        if progress_msg, fprintf ('done.\n'); end
+        for j = 1:numfcs
+            zdata(i, j) = feval (f{j}, xdata(i, :));
+        end
     end
     
 end

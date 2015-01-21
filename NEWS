@@ -72,6 +72,8 @@ Changes in version 2.3.0
    o stk_disp_progress.m: New function that displays a textual progress
      indicator.
 
+   o stk_feval now handles cell-arrays of functions (ticket #19 closed).
+
 
 Changes in version 2.2.0
 ========================
