@@ -1,7 +1,8 @@
 function [xg, xi_ind, algo] = stk_searchgrid(algo, xi)
 
-%if algo.searchgrid_adapt;
-%    algo = stk_move_the_xg0(algo, xg, xi, xi_ind, zi); end
+if algo.searchgrid_adapt
+    stk_error ('Not implemented yet.', 'NotImplementedYet');
+end
 
 ni = stk_length(xi);
 if algo.searchgrid_unique

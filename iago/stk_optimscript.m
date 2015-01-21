@@ -38,7 +38,6 @@ if ~ exist ('TESTCASE_NUM', 'var')
     TESTCASE_NUM = 1;
 end
 
-% SEARCHGRID_ADAPT = true;
 SHOW1DSAMPLEPATHS = true;
 
 switch TESTCASE_NUM
@@ -111,9 +110,6 @@ end
 
 options = [options {'pause', false}];
 
-if exist('SEARCHGRID_ADAPT', 'var')
-    options = [options {'searchgrid_adapt', SEARCHGRID_ADAPT}];
-end
 
 %% ACTUAL OPTIMIZATION
 res = stk_optim(f, DIM, BOX, xi, maxiter, options);
