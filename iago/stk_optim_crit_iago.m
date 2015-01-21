@@ -56,8 +56,7 @@ CONDH_OK = false;
 
 while ~CONDH_OK
     for test_ind = 1:ng
-        if algo.showprogress, progress_disp('  ..', test_ind, ng); end
-        
+        if algo.showprogress, progress_disp('  ..', test_ind, ng); end   
         xi_ind(ni+1) = test_ind;
         xi = xg(xi_ind, :);
         
