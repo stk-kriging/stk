@@ -46,7 +46,6 @@ model_xg = stk_model('stk_discretecov', algo.model, xg);
 zp = stk_predict(model_xg, xi_ind, zi, []);
 zpmean = zp.mean;
 zpvar  = zp.var;
-noisevariance = exp(algo.model.lognoisevariance);
 
 %% ACTIVATE DISPLAY?
 if algo.disp; view_init(algo, xi, zi, xg); end
@@ -101,5 +100,3 @@ xinew = xg(ind_min_samplingcrit, :);
 if algo.disp, view_samplingcrit(algo, xg, xi, xinew, samplingcrit, 2, false); end
 
 end %%END stk_optim_crit_SUR
-
-

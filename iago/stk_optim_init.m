@@ -190,10 +190,14 @@ end
 %% SELECT SAMPLING CRITERION
 switch (algo_obj.samplingcritname)
 	case 'EI',
+        assert(strcmp(algo_obj.noise, 'noisefree'), 'STK:optim_init',...
+            'Error: cannot use noisy evaluations with crit=''EI''');
 		algo_obj.samplingcrit = @(algo, xg, xi_ind, zi)(stk_optim_crit_EI (algo, xg, xi_ind, zi));
 		algo_obj.type = 'usemaxobs';
 		NEED_QUAD = false;
 	case 'EI_v2',
+        assert(strcmp(algo_obj.noise, 'noisefree'), 'STK:optim_init',...
+            'Error: cannot use noisy evaluations with crit=''EI_v2''');
 		algo_obj.samplingcrit = @(algo, xg, xi_ind, zi)(stk_optim_crit_SUR (algo, xg, xi_ind, zi, 1));
 		algo_obj.type = 'usemaxobs';
 		NEED_QUAD = true;
@@ -206,6 +210,8 @@ switch (algo_obj.samplingcritname)
 		if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
 		if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
 	case 'EEI',
+        assert(strcmp(algo_obj.noise, 'noisefree'), 'STK:optim_init',...
+            'Error: cannot use noisy evaluations with crit=''EEI''');
 		algo_obj.samplingcrit = @(algo, xg, xi_ind, zi)(stk_optim_crit_SUR (algo, xg, xi_ind, zi, 3));
 		algo_obj.type = 'usemaxobs';
 		NEED_QUAD = true;
