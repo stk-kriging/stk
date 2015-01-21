@@ -133,23 +133,8 @@ if MODEL_USER && NOISEVARIANCE_USER
 end
 
 %% INITIAL EVALUATIONS
-switch algo_obj.noise
-    case 'noisefree'
-        zi = stk_feval (f, xi);
-    case 'known'
-        zi_ = stk_feval(f, xi);
-        zi  = zi_(:, 1);
-        xi  = stk_ndf(xi, zi_.data(:, 2));
-    case 'unknown'
-        xi = stk_ndf(xi, nan);
-        zi = stk_feval (f, xi);
-end
 
-if strcmp(algo_obj.noise, 'noisefree')
-    algo_obj.model.lognoisevariance = log(0.0);
-else
-    algo_obj.model.lognoisevariance = log(xi.noisevariance);
-end
+[xi, zi, algo_obj] = stk_optim_addevals(algo_obj, [], [], xi);
 
 %% SET DEFAULT MODEL PARAMETERS
 if any(isnan(algo_obj.model.param))
