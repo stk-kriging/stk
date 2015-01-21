@@ -61,6 +61,13 @@ for test_ind = 1:ng
     xi_ind(ni+1) = test_ind;
     xi = xg(xi_ind, :);
     
+    if strcmp(algo.noise, 'noisefree')
+        noisevariance = 0.0;
+    else
+        model_xg.lognoisevariance = log(xg.noisevariance(xi_ind));
+        noisevariance = exp(model_xg.lognoisevariance(ni+1));
+    end
+    
     if size(xi.data, 1) == size(unique(xi.data, 'rows'), 1) || noisevariance > 0.0
         
         % [zpcond, lambda] = stk_predict(algo.model, xi, [], xg);
