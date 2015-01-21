@@ -41,7 +41,6 @@ if isempty(conf)
 end
 
 % SEARCHGRID_ADAPT = true;
-PAUSE = 0;
 SHOW1DSAMPLEPATHS = true;
 
 switch conf
@@ -74,7 +73,6 @@ switch conf
         NI = 4;
         xi = stk_sampling_maximinlhs (NI, DIM, BOX);
         
-        PAUSE = 1;
         CRIT = 'IAGO';
         NOISE = 'simulatenoise';
         noisevariance =  2^2;
@@ -113,9 +111,7 @@ if exist('SHOW1DSAMPLEPATHS', 'var')
     options = [options {'show1dsamplepaths', SHOW1DSAMPLEPATHS}];
 end
 
-if exist('PAUSE', 'var')
-    options = [options {'pause', PAUSE}];
-end
+options = [options {'pause', false}];
 
 if exist('SEARCHGRID_ADAPT', 'var')
     options = [options {'searchgrid_adapt', SEARCHGRID_ADAPT}];
