@@ -32,35 +32,33 @@ stk_disp_examplewelcome;
 
 
 %% DEFINE TEST FUNCTIONS
-fprintf('\n* Choose a configuration\n');
-fprintf('  0. One-dimensional test case\n');
-fprintf('  1. Two-dimensional test case\n');
-conf = input('     ... [0]/1 ? : ');
-if isempty(conf)
-    conf = 0;
+
+if ~ exist ('TESTCASE_NUM', 'var')
+    % Default: use the first test case
+    TESTCASE_NUM = 1;
 end
 
 % SEARCHGRID_ADAPT = true;
 SHOW1DSAMPLEPATHS = true;
 
-switch conf
-    case 0, % 
+switch TESTCASE_NUM
+    case 1, %
         DIM = 1;
-		BOX = [-1.0; 1.0];
+        BOX = [-1.0; 1.0];
         f   = @(x)((0.8*x-0.2).^2+1.0*exp(-1/2*(abs(x+0.1)/0.1).^1.95)+exp(-1/2*(2*x-0.6).^2/0.1)-0.02);
-  
+        
         NT = 400;
         xt = stk_sampling_regulargrid (NT, DIM, BOX);
         zt = stk_feval (f, xt);
         
         xi_ind = [90 230 290 350];
         xi = xt(xi_ind, :);
-    
-		CRIT = 'IAGO';
+        
+        CRIT = 'IAGO';
         NOISE = 'simulatenoise';
         noisevariance =  0.1^2;
-	case 1
-		DIM = 2;
+    case 2
+        DIM = 2;
         BOX = [[-1; 1], [-1; 1]];
         
         f_ = inline ('exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2 + 3*sin(4*pi*x1)', 'x1', 'x2');
@@ -69,7 +67,7 @@ switch conf
         NT = 400; % nb of points in the grid
         xt = stk_sampling_regulargrid (NT, DIM, BOX);
         zt = stk_feval (f, xt);
-
+        
         NI = 4;
         xi = stk_sampling_maximinlhs (NI, DIM, BOX);
         
@@ -103,8 +101,8 @@ end
 
 if DIM  <= 2 && exist('zt', 'var')
     options = [options {'disp', true, ...
-    'disp_xvals', xt, ...
-    'disp_zvals', zt}];
+        'disp_xvals', xt, ...
+        'disp_zvals', zt}];
 end
 
 if exist('SHOW1DSAMPLEPATHS', 'var')
