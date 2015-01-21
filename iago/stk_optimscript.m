@@ -28,12 +28,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% INIT
-clear all, close all
-curdir = pwd();
-cd('../');
-stk_init;
-cd(curdir);
+stk_disp_examplewelcome;
+
 
 %% DEFINE TEST FUNCTIONS
 fprintf('\n* Choose a configuration\n');
