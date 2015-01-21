@@ -30,14 +30,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [xinew, zp, algo, samplingcrit] = stk_optim_crit_SUR (algo, xg, xi_ind, zi, type)
+function [xinew, zp, samplingcrit] = stk_optim_crit_SUR (algo, xg, xi_ind, zi, type)
 
 if nargin < 4
     type = 1;
 end
 
 ng = stk_length(xg);
-
 xi = xg(xi_ind, :);
 ni = stk_length(xi);
 

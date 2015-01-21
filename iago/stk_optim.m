@@ -98,7 +98,7 @@ for i = 1:N
     [xg, xi_ind, algo_obj] = stk_searchgrid(algo_obj, xi);
     
     % CHOOSE NEW EVALUATION POINT
-    [xinew, zp, algo_obj, crit_xg] = crit (algo_obj, xg, xi_ind, zi);
+    [xinew, zp, crit_xg] = crit (algo_obj, xg, xi_ind, zi);
     
     % COMPUTE CURRENT OPTIMIZER AND OPTIMUM
     switch(algo_obj.type)
