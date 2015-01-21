@@ -3,10 +3,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2014 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC & Ivana Aleksovska
 %
-%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -31,20 +32,21 @@
 stk_disp_examplewelcome;
 
 
-%% DEFINE TEST FUNCTIONS
+%% Define test case
 
 if ~ exist ('TESTCASE_NUM', 'var')
-    % Default: use the first test case
     TESTCASE_NUM = 1;
 end
 
-SHOW1DSAMPLEPATHS = true;
-
 switch TESTCASE_NUM
-    case 1, %
+    
+    case 1,  % A one-dimensional test case
+        
         DIM = 1;
         BOX = [-1.0; 1.0];
-        f   = @(x)((0.8*x-0.2).^2+1.0*exp(-1/2*(abs(x+0.1)/0.1).^1.95)+exp(-1/2*(2*x-0.6).^2/0.1)-0.02);
+        
+        f = @(x)((0.8*x-0.2).^2 + exp(-0.5*(abs(x+0.1)/0.1).^1.95) ...
+            + exp(-1/2*(2*x-0.6).^2/0.1) - 0.02);
         
         NT = 400;
         xt = stk_sampling_regulargrid (NT, DIM, BOX);
@@ -53,15 +55,15 @@ switch TESTCASE_NUM
         xi_ind = [90 230 290 350];
         xi = xt(xi_ind, :);
         
-        CRIT = 'IAGO';
-        NOISE = 'simulatenoise';
-        noisevariance =  0.1^2;
-    case 2
+        NOISEVARIANCE = 0.1 ^ 2;
+        
+    case 2,  % A two-dimensional test case
+        
         DIM = 2;
         BOX = [[-1; 1], [-1; 1]];
         
-        f_ = inline ('exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2 + 3*sin(4*pi*x1)', 'x1', 'x2');
-        f  = @(x)(-f_(x(:, 1), x(:, 2)));
+        f_ = inline ('exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2 + 3*sin(4*pi*x1)', ...
+            'x1', 'x2');  f  = @(x)(- f_(x(:, 1), x(:, 2)));
         
         NT = 400; % nb of points in the grid
         xt = stk_sampling_regulargrid (NT, DIM, BOX);
@@ -70,48 +72,44 @@ switch TESTCASE_NUM
         NI = 4;
         xi = stk_sampling_maximinlhs (NI, DIM, BOX);
         
-        CRIT = 'IAGO';
-        NOISE = 'simulatenoise';
-        noisevariance =  2^2;
+        NOISEVARIANCE = 2 ^ 2;
 end
 
-%% PARAMETERS OF THE OPTIMIZATION PROCEDURE
-maxiter = 50;
 
-options = {};
+%% Parameters of the optimization procedure
 
-if exist('NOISE', 'var')
-    options = [options {'noise', NOISE}];
-    options = [options {'noisevariance', noisevariance}];
+% Maximum number of iterations
+if ~ exist ('MAX_ITER', 'var')
+    MAX_ITER = 50;
 end
 
-if exist('xg', 'var')
-    options = [options {'searchgrid_xvals', xg}];
+% Use IAGO unless instructed otherwise
+if exist ('CRIT', 'var')    
+    options = {'samplingcritname', CRIT};
+else
+    options = {'samplingcritname', 'IAGO'};
 end
 
-if exist('model', 'var')
-    options = [options {'model', model}];
-    options = [options {'estimparams', false}];
-end
+% Fake noisy data using simulated Gaussian noise
+options = [options {'noise', 'simulatenoise', 'noisevariance', NOISEVARIANCE}];
 
-if exist('CRIT', 'var')
-    options = [options {'samplingcritname', CRIT}];
-end
+% Activate display (figures) and provide ground truth
+options = [options { ...
+    'disp', true, 'show1dsamplepaths', true, ...
+    'disp_xvals', xt, 'disp_zvals', zt}];
 
-if DIM  <= 2 && exist('zt', 'var')
-    options = [options {'disp', true, ...
-        'disp_xvals', xt, ...
-        'disp_zvals', zt}];
-end
-
-if exist('SHOW1DSAMPLEPATHS', 'var')
-    options = [options {'show1dsamplepaths', SHOW1DSAMPLEPATHS}];
-end
-
+% Do not pause (set this to true if you want time to look at the figures)
 options = [options {'pause', false}];
 
 
-%% ACTUAL OPTIMIZATION
-res = stk_optim(f, DIM, BOX, xi, maxiter, options);
+%% Optimization
 
-%[xi, zi, xstarn, Mn] = stk_optim(f, DIM, BOX, xi, maxiter, 'samplingcrit', 'EI', 'disp1d', true);
+res = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);
+
+
+%!test MAX_ITER = 2;  CRIT = 'IAGO';    stk_optimscript;
+% %!error MAX_ITER = 2;  CRIT = 'EI';      stk_optimscript;
+% %!error MAX_ITER = 2;  CRIT = 'EI_v2';   stk_optimscript;
+% %!error MAX_ITER = 2;  CRIT = 'EI_v3';   stk_optimscript;
+%!xtest MAX_ITER = 2;  CRIT = 'EEI';     stk_optimscript;
+%!xtest MAX_ITER = 2;  CRIT = 'EEI_v2';  stk_optimscript;
