@@ -112,25 +112,7 @@ for i = 1:N
 
     
     % CARRY OUT NEW EVALUATION
-    switch algo_obj.noise
-        case 'noisefree'
-            zinew = stk_feval(f, xinew);
-        case 'known'
-            zinew_ = stk_feval(f, xinew);
-            zinew  = zinew_(:, 1);
-            xinew  = stk_ndf(xinew, zinew_.data(:, 2));
-        case 'unknown'
-            xinew = stk_ndf(xinew, algo_obj.noisevariance); % noisevariance will be estimated
-            zinew = stk_feval(f, xinew);
-    end
-    
-    xi = [xi; xinew]; %#ok<AGROW>
-    zi = [zi; zinew]; %#ok<AGROW>
-
-    if ~strcmp(algo_obj.noise, 'noisefree')
-        algo_obj.model.lognoisevariance = log(xi.noisevariance);
-    end
-
+    [xi, zi, algo_obj] = stk_optim_addevals(algo_obj, xi, zi, xinew);
     
     % PAUSE?
     if algo_obj.pause > 0
