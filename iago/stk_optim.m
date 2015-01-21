@@ -79,8 +79,8 @@ Mn      = stk_dataframe(inf(N, 1));
 
 crit_reg = nan(N, 1);
 for i = 1:N
-    progress_disp('* iteration', i, N);
-
+    fprintf ('* iteration .. %d/%d\n', i, N);
+    
     % ESTIMATE MODEL PARAMETERS
     if algo_obj.estimparams
         fprintf('parameter estimation ..');
@@ -185,8 +185,3 @@ elseif nargout > 2
 end
 
 end %%END stk_optim
-
-function progress_disp(msg, n, N)
-msg = sprintf('%s .. %d/%d\n', msg, n, N);
-fprintf(msg);
-end
