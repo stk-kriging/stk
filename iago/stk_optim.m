@@ -26,7 +26,6 @@
 %       'showprogress', true          display progress
 %       'pause', 0                    pause at each iteration
 %       'disp', false                 show plots
-%       'gnuplot', false
 %       'disp_xvals', []              optional x values for display
 %       'disp_zvals', []              optional z values for display
 %       'show1dsamplepaths', false    show sample paths?
@@ -43,6 +42,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
@@ -160,4 +160,4 @@ elseif nargout > 2
     varargout{4} = xstarn;
 end
 
-end %%END stk_optim
+end % function stk_optim

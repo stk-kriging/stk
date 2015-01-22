@@ -6,6 +6,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
@@ -58,7 +59,6 @@ options = {
     'showprogress', true
     'pause', 0
     'disp', false
-    'gnuplot', false
     'disp_xvals', []
     'disp_zvals', []
     'show1dsamplepaths', false
@@ -220,4 +220,4 @@ if NEED_QUAD
 	algo_obj = stk_quadrature(0, algo_obj, algo_obj.quadtype, algo_obj.quadorder);
 end
 
-end %%END stk_optim_init
+end % function stk_optim_init

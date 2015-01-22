@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
@@ -27,7 +28,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function view_init_1d(algo, xi, zi)
+function view_init_1d (algo, xi, zi)
 
 LINE1 = {'-', 'LineWidth', 2, 'Color', [0.39, 0.47, 0.64]};
 LINE2 = {'-', 'LineWidth', 3, 'Color', [0.95 0.25 0.3]};
@@ -94,4 +95,5 @@ else
     set(h,'Box', 'off')
     set(h,'FontSize', 18)
 end
-end
+
+end % function view_init_1d

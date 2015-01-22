@@ -2,10 +2,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,7 +28,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function view_samplingcrit_2d(algo, xg, xi, xinew, samplingcrit, n, ishold) % Hcond + minimizer pos
+function view_samplingcrit_2d (algo, xg, xi, xinew, samplingcrit, h_fig) % Hcond + minimizer pos
 
 CONTOUR_LINES = 40; % number of levels in contour plots
 XGDOT_STYLE    = {'ko', 'MarkerFaceColor', 'k', 'MarkerSize', 3};
@@ -59,5 +60,5 @@ for i = [1 2 4]
 	subplot(2,2,i)
 	hold on, plot(xinew(1), xinew(2), NEWDOT_STYLE{:}); hold off
 end
-end
 
+end % function view_samplingcrit_2d
