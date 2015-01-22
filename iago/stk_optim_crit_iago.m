@@ -6,10 +6,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2014 SUPELEC
+%    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
 %
-%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -31,51 +32,64 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [xinew, zp, CondH ] = stk_optim_crit_iago ( algo, xg, xi_ind, zi )
+function [xinew, zp, CondH ] = stk_optim_crit_iago (algo, xi, zi)
 
-ng = stk_length(xg);
+% Backward compatiblity: accept model structures with missing lognoisevariance
+if (~ isfield (algo.model, 'lognoisevariance')) ...
+        || (isempty (algo.model.lognoisevariance))
+    algo.model.lognoisevariance = - inf;
+end
 
-xi = xg(xi_ind, :);
-ni = stk_length(xi);
+% === SAFETY NET ===
+assert (noise_params_consistency (algo, xi));
+
 
 %% SIMULATION + INITIAL PREDICTION
-zsim = stk_generate_samplepaths(algo.model, xg, algo.nsamplepaths);
-model_xg = stk_model('stk_discretecov', algo.model, xg);
-[zp, lambda] = stk_predict(model_xg, xi_ind, zi, []);
-zpmean = zp.mean;
-zpvar  = zp.var;
 
-%% ACTIVATE DISPLAY?
-if algo.disp; view_init(algo, xi, zi, xg); end
+ni = stk_length (xi);  xi_ind = 1:ni;
+
+xc = algo.xg0;  nc = stk_length (xc);  % candidate points
+xg = [xi; xc];  ng = ni + nc;          % evaluations points & candidate points
+
+model_xg = stk_model ('stk_discretecov', algo.model, xg);
+zsim = stk_generate_samplepaths (model_xg, (1:ng)', algo.nsamplepaths);
+[zp, lambda] = stk_predict (model_xg, xi_ind, zi, []);
+
+if algo.disp,  view_init (algo, xi, zi, xg);  end
+
 
 %% COMPUTE THE STEPWISE UNCERTAINTY REDUCTION CRITERION
 
 % allocate sampling criterion vector
-CondH = zeros(ng, 1);
+CondH = zeros (nc, 1);
 CONDH_OK = false;
 
 while ~CONDH_OK
-    for test_ind = 1:ng
+    for ic = 1:nc
         
         if algo.showprogress,
-            stk_disp_progress ('  ..', test_ind, ng);
+            stk_disp_progress ('  ..', ic, nc);
         end
         
-        xi_ind(ni+1) = test_ind;
+        xi_ind(ni + 1) = ni + ic;
         xi = xg(xi_ind, :);
         
-        if strcmp(algo.noise, 'noisefree')
-            noisevariance = 0.0;
-        else
-            model_xg.lognoisevariance = log(xg.noisevariance(xi_ind));
-            noisevariance = exp(model_xg.lognoisevariance(ni+1));
+        % Noise variance
+        lnv = get_lognoisevariance (algo.model, algo.xg0, ic, true);
+        noisevariance = exp (lnv);
+        
+        % Heteroscedastic case: store lnv in model.lognoisevariance
+        model_ = model_xg;
+        if isa (xg, 'stk_ndf')  % heteroscedastic case
+            model_.lognoisevariance = [model_.lognoisevariance; lnv];
         end
-
+        
         if size(xi.data, 1) == size(unique(xi.data, 'rows'), 1) || noisevariance > 0.0
             
-            [~, lambda_] = stk_predict(model_xg, xi_ind, [], []);
+            [~, lambda_] = stk_predict(model_, xi_ind, [], []);
             
-            zQ = stk_quadrature(1, algo, zpmean(test_ind), abs(zpvar(test_ind)) + noisevariance);
+            zQ = stk_quadrature (1, algo, zp.mean(ni + ic), ...
+                zp.var(ni + ic) + noisevariance);
             
             H = zeros(algo.Q,1);
             for k = 1:algo.Q
@@ -95,14 +109,11 @@ while ~CONDH_OK
                 p_log_p = p .* (log (p));
                 p_log_p(p < 1e-300) = 0;
                 
-                H(k) = - sum (p_log_p);
+                H(k) = - sum (p_log_p);   
                 
-                DEBUG = false;
-                if DEBUG && (test_ind==50 || test_ind==140),
-                    zz_view_debug_1d(algo, xi, zi_, xg, test_ind, k, H, ind_maximum); end
             end
             
-            CondH(test_ind) = stk_quadrature(2, algo, H);
+            CondH(ic) = stk_quadrature(2, algo, H);
             
         else
             
@@ -116,7 +127,7 @@ while ~CONDH_OK
             p_log_p = p .* (log (p));
             p_log_p(p < 1e-300) = 0;
 
-            CondH(test_ind) = - sum (p_log_p);
+            CondH(ic) = - sum (p_log_p);
             
         end
     end % loop over candidate points
@@ -138,9 +149,11 @@ end % test if CondH is computed correctly
 
 %% SELECT THE NEXT EVALUATION POINT
 [~, ind_min_CondH] = min(CondH);
-xinew = xg(ind_min_CondH, :);
+xinew = xc(ind_min_CondH, :);
 
 %% DISPLAY SAMPLING CRITERION?
-if algo.disp, view_samplingcrit(algo, xg, xi, xinew, CondH, 2, false); end
+if algo.disp,
+    view_samplingcrit(algo, xc, xi, xinew, CondH, 2);
+end
 
 end %%END stk_optim_crit_iago
