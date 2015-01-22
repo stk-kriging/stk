@@ -92,7 +92,10 @@ while ~CONDH_OK
                 F = hist(ind_maximum, 1:ng);
                 p = F/algo.nsamplepaths;
                 
-                H(k) = -sum(p.*log(p+eps));
+                p_log_p = p .* (log (p));
+                p_log_p(p < 1e-300) = 0;
+                
+                H(k) = - sum (p_log_p);
                 
                 DEBUG = false;
                 if DEBUG && (test_ind==50 || test_ind==140),
@@ -106,9 +109,14 @@ while ~CONDH_OK
             xi_ind = xi_ind(1:ni); % drop the test point
             zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);
             [~, ind_maximum] = max(zsimc.data);
+            
             F = hist(ind_maximum, 1:ng);
             p = F/algo.nsamplepaths;
-            CondH(test_ind) = -sum(p.*log(p+eps));
+            
+            p_log_p = p .* (log (p));
+            p_log_p(p < 1e-300) = 0;
+
+            CondH(test_ind) = - sum (p_log_p);
             
         end
     end % loop over candidate points
