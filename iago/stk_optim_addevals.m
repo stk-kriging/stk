@@ -30,21 +30,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [xi, zi, algo_obj] = stk_optim_addevals(algo_obj, xi, zi, xinew)
+function [xi, zi, algo] = stk_optim_addevals (algo, xi, zi, xinew)
 
-switch algo_obj.noise
+switch algo.noise
     case 'noisefree'
-        zinew = stk_feval(algo_obj.f, xinew);
+        zinew = stk_feval (algo.f, xinew);
     case 'known'
-        zinew_ = stk_feval(algo_obj.f, xinew);
+        zinew_ = stk_feval (algo.f, xinew);
         zinew  = zinew_(:, 1);
-        xinew  = stk_ndf(xinew, zinew_.data(:, 2));
+        xinew  = stk_ndf (xinew, zinew_.data(:, 2));
     case 'unknown'
-        xinew = stk_ndf(xinew, algo_obj.noisevariance); % noisevariance will be estimated
-        zinew = stk_feval(algo_obj.f, xinew);
+        xinew = stk_ndf (xinew, algo.noisevariance); % noisevariance will be estimated
+        zinew = stk_feval (algo.f, xinew);
 end
 
-if isempty(xi)
+if isempty (xi)
     xi = xinew;
     zi = zinew;
 else
@@ -52,8 +52,8 @@ else
     zi = [zi; zinew];
 end
 
-if ~strcmp(algo_obj.noise, 'noisefree')
-    algo_obj.model.lognoisevariance = log(xi.noisevariance);
+if ~ strcmp (algo.noise, 'noisefree')
+    algo.model.lognoisevariance = log (xi.noisevariance);
 end
 
-end %%END stk_optim_addevals
+end % function stk_optim_addevals
