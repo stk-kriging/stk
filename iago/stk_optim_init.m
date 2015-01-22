@@ -32,12 +32,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [algo_obj, xi, zi] = stk_optim_init(f, dim, box, xi, varargin)
+function [algo, xi, zi] = stk_optim_init(f, dim, box, xi, varargin)
 
 %% FUNCTION DEFINTION
-algo_obj.f  = f;
-algo_obj.dim = dim;
-algo_obj.box = box;
+algo.f  = f;
+algo.dim = dim;
+algo.box = box;
 
 %% DEFAULT MODEL SPECIFICATION
 model = stk_model ('stk_materncov_aniso');
@@ -94,10 +94,10 @@ NOISEVARIANCE_USER = isfield (useropt, 'noisevariance');
 % default values
 for i = 1:size(options, 1)
     if isfield(useropt, options{i, 1})
-        algo_obj.(options{i, 1}) = useropt.(options{i, 1});
+        algo.(options{i, 1}) = useropt.(options{i, 1});
         useropt = rmfield(useropt, options{i, 1});
     else
-        algo_obj.(options{i, 1}) = options{i, 2};
+        algo.(options{i, 1}) = options{i, 2};
     end
 end
 
@@ -115,7 +115,7 @@ end
 
 %% Noise options: check consistency
 
-v1 = algo_obj.noisevariance;  lnv2 = algo_obj.model.lognoisevariance;
+v1 = algo.noisevariance;  lnv2 = algo.model.lognoisevariance;
 
 if MODEL_USER
     if NOISEVARIANCE_USER
@@ -131,7 +131,7 @@ if MODEL_USER
             % Heteroscedastic case: v1 = {known_var, var_fun}
             assert ((iscell (v1)) && (numel (v1) == 2));
             assert ((isempty (v2)) || (isequal (v1, lnv2)));
-            algo_obj.model.lognoisevariance = [];
+            algo.model.lognoisevariance = [];
         end
     else
         % Set options.noisevariance based on model.lognoisevariance
@@ -151,42 +151,42 @@ else
     if isnumeric (v1)
         % Noiseless of noisy/homoscedastic case
         assert (isscalar (v1));
-        algo_obj.model.lognoisevariance = log (v1);
+        algo.model.lognoisevariance = log (v1);
     else
         % Heteroscedastic case:
         assert ((iscell (v1)) && (numel (v1) == 2));
-        algo_obj.model.lognoisevariance = [];
+        algo.model.lognoisevariance = [];
     end
 end
 
 
 %% CANDIDATE POINTS
-if ~isempty(algo_obj.searchgrid_xvals)
-    algo_obj.xg0 = algo_obj.searchgrid_xvals;
-    algo_obj.searchgrid_size = stk_length(algo_obj.xg0);
+if ~isempty(algo.searchgrid_xvals)
+    algo.xg0 = algo.searchgrid_xvals;
+    algo.searchgrid_size = stk_length(algo.xg0);
 else
-    algo_obj.xg0 = stk_sampling_maximinlhs(algo_obj.searchgrid_size, algo_obj.dim, algo_obj.box, 100);
+    algo.xg0 = stk_sampling_maximinlhs(algo.searchgrid_size, algo.dim, algo.box, 100);
     if dim == 1
-        algo_obj.xg0.data = sort(algo_obj.xg0.data);
+        algo.xg0.data = sort(algo.xg0.data);
     end
 end
 
-% Turn algo_obj.xg0 into an stk_ndf object *in the heteroscedastic case only*
-v = algo_obj.noisevariance;
-if isa (algo_obj.xg0, 'stk_ndf')
+% Turn algo.xg0 into an stk_ndf object *in the heteroscedastic case only*
+v = algo.noisevariance;
+if isa (algo.xg0, 'stk_ndf')
     % The user has provided an stk_ndf object => heteroscedastic case
     if NOISEVARIANCE_USER
-        assert (isequal (algo_obj.xg0.noisevariance, v));
+        assert (isequal (algo.xg0.noisevariance, v));
     else
-        algo_obj.noisevariance = algo_obj.xg0.noisevariance;
+        algo.noisevariance = algo.xg0.noisevariance;
     end
 else
     if ischar (v)
         % Heteroscedastic case with known noise variance
-        algo_obj.xg0 = stk_ndf (algo_obj.xg0, nan (size (algo_obj.xg0, 1), 1));
+        algo.xg0 = stk_ndf (algo.xg0, nan (size (algo.xg0, 1), 1));
     elseif (isnumeric (v)) && (~ isscalar (v))
         % Heteroscedastic case with known noise variance
-        algo_obj.xg0 = stk_ndf (algo_obj.xg0, v(:));
+        algo.xg0 = stk_ndf (algo.xg0, v(:));
     else
         % Homoscedastic case with known noise variance (safety net)
         assert ((isnumeric (v)) && (isscalar (v)));
@@ -195,74 +195,74 @@ end
 
 
 %% INITIAL EVALUATIONS
-[xi, zi, algo_obj] = stk_optim_addevals(algo_obj, [], [], xi);
+[xi, zi, algo] = stk_optim_addevals(algo, [], [], xi);
 
 
 %% SET DEFAULT MODEL PARAMETERS
-if any(isnan(algo_obj.model.param))
+if any(isnan(algo.model.param))
     if stk_length(xi) > 1;  SIGMA2 = 4*var(zi.data); else SIGMA2 = 1.0; end
     NU     = 2*dim;
     for d = 1:dim
         RHO(d) = 1/4 * abs(box(2, d) - box(1, d));
     end
     param0 = log ([SIGMA2; NU; 1./RHO]);
-    algo_obj.model.param = param0;
+    algo.model.param = param0;
 end
-algo_obj.model.prior.mean = param0;
-algo_obj.model.prior.invcov = 0.5*eye(length(param0));
+algo.model.prior.mean = param0;
+algo.model.prior.invcov = 0.5*eye(length(param0));
 
 
 %% SELECT SAMPLING CRITERION
 
-noisy_eval = ~ isequal (algo_obj.noisevariance, 0);
+noisy_eval = ~ isequal (algo.noisevariance, 0);
 
-switch (algo_obj.samplingcritname)
+switch (algo.samplingcritname)
     case 'EI',
         assert (noisy_eval, 'STK:optim_init',...
             'Error: cannot use noisy evaluations with crit=''EI''');
-        algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_EI (algo, xi, zi));
-        algo_obj.type = 'usemaxobs';
+        algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_EI (A, xi, zi));
+        algo.type = 'usemaxobs';
         NEED_QUAD = false;
     case 'EI_v2',
         assert (noisy_eval, 'STK:optim_init',...
             'Error: cannot use noisy evaluations with crit=''EI_v2''');
-        algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 1));
-        algo_obj.type = 'usemaxobs';
+        algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 1));
+        algo.type = 'usemaxobs';
         NEED_QUAD = true;
-        if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
-        if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
+        if isempty(algo.quadtype), algo.quadtype = 'GH'; end
+        if isnan(algo.quadorder),  algo.quadorder = 15;  end
     case 'EI_v3',
-        algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 2));
-        algo_obj.type = 'usemaxpred';
+        algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 2));
+        algo.type = 'usemaxpred';
         NEED_QUAD = true;
-        if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
-        if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
+        if isempty(algo.quadtype), algo.quadtype = 'GH'; end
+        if isnan(algo.quadorder),  algo.quadorder = 15;  end
     case 'EEI',
         assert (noisy_eval, 'STK:optim_init',...
             'Error: cannot use noisy evaluations with crit=''EEI''');
-        algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 3));
-        algo_obj.type = 'usemaxobs';
+        algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 3));
+        algo.type = 'usemaxobs';
         NEED_QUAD = true;
-        if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
-        if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
+        if isempty(algo.quadtype), algo.quadtype = 'GH'; end
+        if isnan(algo.quadorder),  algo.quadorder = 15;  end
     case 'EEI_v2',
-        algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 4));
-        algo_obj.type = 'usemaxpred';
+        algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 4));
+        algo.type = 'usemaxpred';
         NEED_QUAD = true;
-        if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
-        if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
+        if isempty(algo.quadtype), algo.quadtype = 'GH'; end
+        if isnan(algo.quadorder),  algo.quadorder = 15;  end
     case 'IAGO',
-        algo_obj.samplingcrit = @stk_optim_crit_iago;
-        algo_obj.type = 'usemaxobs';
+        algo.samplingcrit = @stk_optim_crit_iago;
+        algo.type = 'usemaxobs';
         NEED_QUAD = true;
-        if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
-        if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
+        if isempty(algo.quadtype), algo.quadtype = 'GH'; end
+        if isnan(algo.quadorder),  algo.quadorder = 15;  end
 end
 
 %% QUADRATURE
 if NEED_QUAD
-    algo_obj.Q = algo_obj.quadorder;
-    algo_obj = stk_quadrature(0, algo_obj, algo_obj.quadtype, algo_obj.quadorder);
+    algo.Q = algo.quadorder;
+    algo = stk_quadrature(0, algo, algo.quadtype, algo.quadorder);
 end
 
 end % function stk_optim_init

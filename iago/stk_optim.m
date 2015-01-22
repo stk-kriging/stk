@@ -68,7 +68,7 @@
 
 function [varargout] = stk_optim(f, dim, box, xi, N, varargin)
 
-[algo_obj, xi, zi] = stk_optim_init (f, dim, box, xi, varargin);
+[algo, xi, zi] = stk_optim_init (f, dim, box, xi, varargin);
 
 xstarn  = stk_dataframe(zeros(N, dim));
 Mn      = stk_dataframe(inf(N, 1));
@@ -78,58 +78,58 @@ for i = 1:N
     fprintf ('* iteration .. %d/%d\n', i, N);
     
     % ESTIMATE MODEL PARAMETERS
-    if algo_obj.estimparams
+    if algo.estimparams
         fprintf('parameter estimation ..');
         
-        if isa (algo_obj.xg0, 'stk_ndf')  % noisy heteroscedatic case
-            known_var = algo_obj.noisevariance{1};
+        if isa (algo.xg0, 'stk_ndf')  % noisy heteroscedatic case
+            known_var = algo.noisevariance{1};
             % If known_var is true (known variance) then model.lognoisevariance
             % should *already* contain the vector of log-variances. Otherwise,
             % we call an appropriate estimation procedure.
             if known_var
                 % Nothing to do. Just a safety net.
-                ni = stk_length (xi);  lnv = algo_obj.model.lognoisevariance;
+                ni = stk_length (xi);  lnv = algo.model.lognoisevariance;
                 assert ((isnumeric (lnv)) && (isvector (lnv)) ...
                     && (length (lnv) == ni));
             else
-                var_fun = algo_obj.noisevariance{2};
-                algo_obj.model.lognoisevariance = var_fun (algo_obj, xi, zi);
+                var_fun = algo.noisevariance{2};
+                algo.model.lognoisevariance = var_fun (algo, xi, zi);
                 % Preliminary attempt / other parameters could be useful ?
             end
         end
         
         % All other cases should be dealt with transparently by STK
-        [algo_obj.model.param, algo_obj.model.lognoisevariance] = ...
-            stk_param_estim (algo_obj.model, xi, zi);
+        [algo.model.param, algo.model.lognoisevariance] = ...
+            stk_param_estim (algo.model, xi, zi);
         
         fprintf('done\n');
     end
     
     % Pick a new evaluation point (from algo.xg0)
-    [xinew, zp, crit_xg] = algo_obj.samplingcrit (algo_obj, xi, zi);
+    [xinew, zp, crit_xg] = algo.samplingcrit (algo, xi, zi);
     
     % COMPUTE CURRENT OPTIMIZER AND OPTIMUM
-    switch(algo_obj.type)
+    switch(algo.type)
         case 'usemaxobs'
             [Mn(i, 1), xstarn_ind] = max(zi.data);
             xstarn(i,:) = xi(xstarn_ind, :);
         case 'usemaxpred'
             [~, xstarn_ind] = max(zp.mean);
-            xstarn(i,:) = algo_obj.xg0(xstarn_ind, :);
-            Mn(i, 1) = stk_feval(algo_obj.f, xstarn(i,:));
+            xstarn(i,:) = algo.xg0(xstarn_ind, :);
+            Mn(i, 1) = stk_feval(algo.f, xstarn(i,:));
     end
     
     % CARRY OUT NEW EVALUATION
-    [xi, zi, algo_obj] = stk_optim_addevals(algo_obj, xi, zi, xinew);
+    [xi, zi, algo] = stk_optim_addevals(algo, xi, zi, xinew);
     
     % PAUSE?
-    if algo_obj.pause > 0
+    if algo.pause > 0
         disp('pause'); pause;
     end
     
     % STOP?
-    if algo_obj.stoprule,
-        switch algo_obj.samplingcritname
+    if algo.stoprule,
+        switch algo.samplingcritname
             case 'EEI',
                 crit_reg(i) = max(crit_xg);
                 if i>1 && crit_reg(i) < 1e-7*crit_reg(1) ...
