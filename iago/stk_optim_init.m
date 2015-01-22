@@ -102,11 +102,18 @@ for i = 1:size(options, 1)
         algo_obj.(options{i, 1}) = options{i, 2};
     end
 end
-% warn for unknown options passed by the user
-unknown_fields = fieldnames(useropt);
-for i=1:numel(unknown_fields)
-	warning('stk_optim_init: Unknown field %s\n', unknown_fields{i});
+
+% Warn for unknown options passed by the user
+unknown_fields = fieldnames (useropt);
+for i = 1:(numel (unknown_fields))
+	warning ('Unknown option: %s\n', unknown_fields{i});  %#ok<WNTAG>
 end
+
+% Safety net: stop if there are unknown options
+if ~ isempty (unknown_fields)
+    stk_error ('Unknown option', 'InvalidArgument');
+end
+
 
 %% NOISE OPTIONS: SANITY CHECK
 switch algo_obj.noise
