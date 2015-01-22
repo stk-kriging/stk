@@ -6,10 +6,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2014 SUPELEC
+%    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
 %
-%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %

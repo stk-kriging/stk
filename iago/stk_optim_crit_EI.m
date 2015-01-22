@@ -7,10 +7,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2014 SUPELEC
+%    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
 %
-%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -32,9 +32,24 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [xinew, zp, samplingcrit] = stk_optim_crit_EI (algo, xg, xi_ind, zi)
+function [xinew, zp, samplingcrit] = stk_optim_crit_EI (algo, xi_ind, zi)
 
+error ('This function needs a big rehaul (see stk_optim_crit_iago).');
+
+% Backward compatiblity: accept model structures with missing lognoisevariance
+if (~ isfield (algo.model, 'lognoisevariance')) ...
+        || (isempty (algo.model.lognoisevariance))
+    algo.model.lognoisevariance = - inf;
+elseif ~ isequal (algo.model.lognoisevariance, - inf)
+    error ('The EI criterion is not defined for noisy evaluations');
+end
+
+xg = algo.xg0;
 xi = xg(xi_ind, :);
+ni = stk_length(xi);
+
+% === SAFETY NET ===
+assert (noise_params_consistency (algo, xi));
 
 %% INITIAL PREDICTION
 model_xg = stk_model('stk_discretecov', algo.model, xg);
@@ -56,6 +71,8 @@ samplingcrit = - (Mn + EI);
 xinew = xg(ind_min_samplingcrit, :);
 
 %% DISPLAY SAMPLING CRITERION?
-if algo.disp, view_samplingcrit(algo, xg, xi, xinew, samplingcrit, 2, false); end
+if algo.disp,
+    view_samplingcrit(algo, xg, xi, xinew, samplingcrit, 2);
+end
 
 end %%END stk_optim_crit_EI

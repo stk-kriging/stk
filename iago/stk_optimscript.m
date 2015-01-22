@@ -3,7 +3,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2014 SUPELEC & Ivana Aleksovska
+%    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
 %
 %    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
 %              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -80,26 +80,26 @@ zt = stk_feval (f0, xt);
 
 %% Noise variance
 
-% Default: noisy function with known noise variance
-if ~ exist ('NOISE', 'var')
-    NOISE = 'known';  
+% Default: noisy evaluations
+if ~ exist ('NOISY', 'var')
+    NOISY = true;
 end
 
-switch NOISE
-    
-    case 'noiseless'
-        % Optimize f0 directly (noiseless evaluations)
-        f = f0;
-        
-    case {'known', 'unknown'}
-        % Optimise f0 based on noisy evaluations                
-        f = @(x)(f0(x) + sqrt (NOISEVARIANCE) * randn (size (x)));
-        
-        if strcmp (NOISE, 'known')
-          f = {f, @(x)(NOISEVARIANCE)};
-        end
+if ~ NOISY
+    % Optimize f0 directly (noiseless evaluations)
+    f = f0;  NOISEVARIANCE = 0.0;
+else
+    % Optimise f0 based on noisy evaluations
+    %   (homoscedastic Gaussian noise)
+    f = @(x)(f0(x) + sqrt (NOISEVARIANCE) * randn (size (x)));        
 end
-        
+
+% Do we assume the noise variance to be known ?  Default: yes.
+if ~ exist ('KNOWN_NOISE_VARIANCE', 'var')
+    KNOWN_NOISE_VARIANCE = true;
+end
+
+
 %% Parameters of the optimization procedure
 
 % Maximum number of iterations
@@ -114,8 +114,14 @@ else
     options = {'samplingcritname', 'IAGO'};
 end
 
-% Fake noisy data using simulated Gaussian noise
-options = [options {'noise', NOISE}];
+% Noise variance
+if KNOWN_NOISE_VARIANCE
+    % Homoscedastic noise, known noise variance
+    options = [options {'noisevariance', NOISEVARIANCE}];
+else
+    % Homoscedastic noise, unknown noise variance
+    options = [options {'noisevariance', nan}];
+end
 
 % Activate display (figures) and provide ground truth
 options = [options { ...

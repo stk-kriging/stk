@@ -6,11 +6,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2011-2014 SUPELEC
+%    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
 %
-%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -53,8 +53,6 @@ options = {
     'samplingcritname', 'EI'
     'model', model
     'estimparams', true
-    'noise', 'noisefree'
-    'estimnoise', false
     'noisevariance', 0.0
     'showprogress', true
     'pause', 0
@@ -88,10 +86,10 @@ for i = 1 : 2 : n
 end
 
 % set MODEL_USER if model is provided by user
-MODEL_USER = isfield(useropt, 'model');
+MODEL_USER = isfield (useropt, 'model');
 
 % set NOISEVARIANCE_USER if noisevariance is provided by user
-NOISEVARIANCE_USER = isfield(useropt, 'noisevariance');
+NOISEVARIANCE_USER = isfield (useropt, 'noisevariance');
 
 % default values
 for i = 1:size(options, 1)
@@ -115,32 +113,90 @@ if ~ isempty (unknown_fields)
 end
 
 
-%% NOISE OPTIONS: SANITY CHECK
-switch algo_obj.noise
-    case 'noisefree'
-        assert(algo_obj.estimnoise == false, 'STK:optim_init',...
-            'Error: cannot estimate noise variance in the noisefree case');
-        assert(algo_obj.noisevariance == 0.0,  'STK:optim_init',...
-            'Error: noise variance must be zero in the noisefree case');
-    case 'known'
-        % NB: only this case makes it possible to deal with heteroscedastic noise
-        assert(algo_obj.estimnoise == false, 'STK:optim_init',...
-            'Error: cannot estimate noise variance if noise variance is known');
-        assert(isa(f, 'cell'), 'STK:optim_init',...
-            'Error: f must be a cellarray of function handles in noise variance is known');
-    case 'unknown'
-        assert(algo_obj.estimnoise == true, 'STK:optim_init',...
-            'Error: if noise variance is unknown, must estimate noise variance');
+%% Noise options: check consistency
+
+v1 = algo_obj.noisevariance;  lnv2 = algo_obj.model.lognoisevariance;
+
+if MODEL_USER    
+    if NOISEVARIANCE_USER        
+        if isnumeric (v1)
+            % Noiseless or noisy/homoscedastic case
+            assert ((isscalar (v1)) && (isscalar (lnv2)));
+            if ~ isnan (v1)
+                % Known noise variance: should be the same
+                assert (((v1 == 0) && (lnv2 == -inf)) ...
+                    || (stk_isequal_tolrel (v1, exp (lnv2), 1e-12)));
+            end
+        else
+            % Heteroscedastic case: v1 = {known_var, var_fun}
+            assert ((iscell (v1)) && (numel (v1) == 2));
+            assert ((isempty (v2)) || (isequal (v1, lnv2)));
+            algo_obj.model.lognoisevariance = [];
+        end
+    else
+        % Set options.noisevariance based on model.lognoisevariance
+        if isnumeric (lnv2)
+            % Noiseless of noisy/homoscedastic case
+            assert (isscalar (lnv2));
+            options.noisevariance = exp (lnv2);
+        else
+            % Heteroscedastic case: lnv2 = {known_var, var_fun}
+            assert ((iscell (lnv2)) && (numel (lnv2) == 2));
+            options.noisevariance = lnv;
+        end
+    end
+else
+    % No model has been provided by the user.
+    %  => set model.lognoisevariance based on options.noisevariance
+    if isnumeric (v1)
+        % Noiseless of noisy/homoscedastic case
+        assert (isscalar (v1));
+        algo_obj.model.lognoisevariance = log (v1);
+    else
+        % Heteroscedastic case:
+        assert ((iscell (v1)) && (numel (v1) == 2));
+        algo_obj.model.lognoisevariance = [];
+    end
 end
 
-if MODEL_USER && NOISEVARIANCE_USER
-    assert(algo_obj.model.lognoisevariance == log (algo_obj.noisevariance), ...
-        'STK:optim_init', ...
-        'Error: noise variance in model not equal to noise variance in options');
+
+%% CANDIDATE POINTS
+if ~isempty(algo_obj.searchgrid_xvals)
+    algo_obj.xg0 = algo_obj.searchgrid_xvals;
+	algo_obj.searchgrid_size = stk_length(algo_obj.xg0);
+else
+    algo_obj.xg0 = stk_sampling_maximinlhs(algo_obj.searchgrid_size, algo_obj.dim, algo_obj.box, 100);
+    if dim == 1
+        algo_obj.xg0.data = sort(algo_obj.xg0.data);
+    end
 end
+
+% Turn algo_obj.xg0 into an stk_ndf object *in the heteroscedastic case only*
+v = algo_obj.noisevariance;
+if isa (algo_obj.xg0, 'stk_ndf')
+    % The user has provided an stk_ndf object => heteroscedastic case
+    if NOISEVARIANCE_USER
+        assert (isequal (algo_obj.xg0.noisevariance, v));
+    else
+        algo_obj.noisevariance = algo_obj.xg0.noisevariance;
+    end
+else    
+    if ischar (v)
+        % Heteroscedastic case with known noise variance
+        algo_obj.xg0 = stk_ndf (algo_obj.xg0, nan (size (algo_obj.xg0, 1), 1));
+    elseif (isnumeric (v)) && (~ isscalar (v))
+        % Heteroscedastic case with known noise variance
+        algo_obj.xg0 = stk_ndf (algo_obj.xg0, v(:));
+    else
+        % Homoscedastic case with known noise variance (safety net)
+        assert ((isnumeric (v)) && (isscalar (v)));
+    end
+end
+
 
 %% INITIAL EVALUATIONS
 [xi, zi, algo_obj] = stk_optim_addevals(algo_obj, [], [], xi);
+
 
 %% SET DEFAULT MODEL PARAMETERS
 if any(isnan(algo_obj.model.param))
@@ -155,59 +211,48 @@ end
 algo_obj.model.prior.mean = param0;
 algo_obj.model.prior.invcov = 0.5*eye(length(param0));
 
-%% CANDIDATE POINTS
-if ~isempty(algo_obj.searchgrid_xvals)
-    algo_obj.xg0 = algo_obj.searchgrid_xvals;
-	algo_obj.searchgrid_size = stk_length(algo_obj.xg0);
-else
-    algo_obj.xg0 = stk_sampling_maximinlhs(algo_obj.searchgrid_size, algo_obj.dim, algo_obj.box, 100);
-    if dim == 1
-        algo_obj.xg0.data = sort(algo_obj.xg0.data);
-    end
-end
-
-if ~strcmp(algo_obj.noise, 'noisefree') && ~isa(algo_obj.xg0, 'stk_ndf')
-    algo_obj.xg0 = stk_ndf(algo_obj.xg0, algo_obj.noisevariance);
-end
 
 %% SELECT SAMPLING CRITERION
+
+noisy_eval = ~ isequal (algo_obj.noisevariance, 0);
+
 switch (algo_obj.samplingcritname)
 	case 'EI',
-        assert(strcmp(algo_obj.noise, 'noisefree'), 'STK:optim_init',...
+        assert (noisy_eval, 'STK:optim_init',...
             'Error: cannot use noisy evaluations with crit=''EI''');
-		algo_obj.samplingcrit = @(algo, xg, xi_ind, zi)(stk_optim_crit_EI (algo, xg, xi_ind, zi));
+		algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_EI (algo, xi, zi));
 		algo_obj.type = 'usemaxobs';
 		NEED_QUAD = false;
 	case 'EI_v2',
-        assert(strcmp(algo_obj.noise, 'noisefree'), 'STK:optim_init',...
+        assert (noisy_eval, 'STK:optim_init',...
             'Error: cannot use noisy evaluations with crit=''EI_v2''');
-		algo_obj.samplingcrit = @(algo, xg, xi_ind, zi)(stk_optim_crit_SUR (algo, xg, xi_ind, zi, 1));
+		algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 1));
 		algo_obj.type = 'usemaxobs';
 		NEED_QUAD = true;
 		if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
 		if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
 	case 'EI_v3',
-		algo_obj.samplingcrit = @(algo, xg, xi_ind, zi)(stk_optim_crit_SUR (algo, xg, xi_ind, zi, 2));
+		algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 2));
 		algo_obj.type = 'usemaxpred';
 		NEED_QUAD = true;
 		if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
 		if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
 	case 'EEI',
-        assert(strcmp(algo_obj.noise, 'noisefree'), 'STK:optim_init',...
+        assert (noisy_eval, 'STK:optim_init',...
             'Error: cannot use noisy evaluations with crit=''EEI''');
-		algo_obj.samplingcrit = @(algo, xg, xi_ind, zi)(stk_optim_crit_SUR (algo, xg, xi_ind, zi, 3));
+		algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 3));
 		algo_obj.type = 'usemaxobs';
 		NEED_QUAD = true;
 		if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
 		if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
 	case 'EEI_v2',
-		algo_obj.samplingcrit = @(algo, xg, xi_ind, zi)(stk_optim_crit_SUR (algo, xg, xi_ind, zi, 4));
+		algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 4));
 		algo_obj.type = 'usemaxpred';
 		NEED_QUAD = true;
 		if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
 		if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
 	case 'IAGO',
-		algo_obj.samplingcrit = @(algo, xg, xi_ind, zi)(stk_optim_crit_iago (algo, xg, xi_ind, zi));
+		algo_obj.samplingcrit = @stk_optim_crit_iago;
 		algo_obj.type = 'usemaxobs';
 		NEED_QUAD = true;
 		if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end

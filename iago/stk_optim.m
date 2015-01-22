@@ -18,9 +18,7 @@
 %       ---------  -------------      -------
 %       'samplingcritname', 'EI',     'EI'/'IAGO'
 %       'model', model                optional stk_model
-%       'estimparams', true           estimate parameters of model
 %                                     after each evaluation?
-%       'noise'                       'noisefree', 'known' or 'unknown'
 %       'estimnoise', false           estimate noise variance?
 %       'noisevariance', 0.0          noise variance
 %       'showprogress', true          display progress
@@ -42,11 +40,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2011-2014 SUPELEC
+%    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
 %
-%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -71,7 +69,6 @@
 function [varargout] = stk_optim(f, dim, box, xi, N, varargin)
 
 [algo_obj, xi, zi] = stk_optim_init (f, dim, box, xi, varargin);
-crit = algo_obj.samplingcrit;
 
 xstarn  = stk_dataframe(zeros(N, dim));
 Mn      = stk_dataframe(inf(N, 1));
@@ -83,22 +80,33 @@ for i = 1:N
     % ESTIMATE MODEL PARAMETERS
     if algo_obj.estimparams
         fprintf('parameter estimation ..');
-        if algo_obj.estimnoise
-            algo_obj.model.lognoisevariance = algo_obj.model.lognoisevariance(1);
-            [algo_obj.model.param, algo_obj.model.lognoisevariance] = stk_param_estim (...
-                algo_obj.model, xi, zi, algo_obj.model.param, algo_obj.model.lognoisevariance);
-            xi = stk_setnoisevariance(xi, exp(algo_obj.model.lognoisevariance));
-        else
-            algo_obj.model.param = stk_param_estim (algo_obj.model, xi, zi, algo_obj.model.param);
+        
+        if isa (algo_obj.xg0, 'stk_ndf')  % noisy heteroscedatic case
+            known_var = algo_obj.noisevariance{1};
+            % If known_var is true (known variance) then model.lognoisevariance
+            % should *already* contain the vector of log-variances. Otherwise,
+            % we call an appropriate estimation procedure.
+            if known_var
+                % Nothing to do. Just a safety net.
+                ni = stk_length (xi);  lnv = algo_obj.model.lognoisevariance;
+                assert ((isnumeric (lnv)) && (isvector (lnv)) ...
+                    && (length (lnv) == ni));
+            else
+                var_fun = algo_obj.noisevariance{2};
+                algo_obj.model.lognoisevariance = var_fun (algo_obj, xi, zi);
+                % Preliminary attempt / other parameters could be useful ?
+            end
         end
+        
+        % All other cases should be dealt with transparently by STK
+        [algo_obj.model.param, algo_obj.model.lognoisevariance] = ...
+            stk_param_estim (algo_obj.model, xi, zi);
+        
         fprintf('done\n');
     end
 
-    % SEARCH GRID
-    [xg, xi_ind, algo_obj] = stk_searchgrid(algo_obj, xi);
-    
-    % CHOOSE NEW EVALUATION POINT
-    [xinew, zp, crit_xg] = crit (algo_obj, xg, xi_ind, zi);
+    % Pick a new evaluation point (from algo.xg0)
+    [xinew, zp, crit_xg] = algo_obj.samplingcrit (algo_obj, xi, zi);
     
     % COMPUTE CURRENT OPTIMIZER AND OPTIMUM
     switch(algo_obj.type)
@@ -107,7 +115,7 @@ for i = 1:N
             xstarn(i,:) = xi(xstarn_ind, :);
         case 'usemaxpred'
             [~, xstarn_ind] = max(zp.mean);
-            xstarn(i,:) = xg(xstarn_ind, :);
+            xstarn(i,:) = algo_obj.xg0(xstarn_ind, :);
             Mn(i, 1) = stk_feval(algo_obj.f, xstarn(i,:));
     end
     

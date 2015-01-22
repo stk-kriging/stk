@@ -6,9 +6,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2014 SUPELEC
+%    Copyright (C) 2015 CentraleSupelec
 %
-%    Authors:   Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -32,17 +33,20 @@
 
 function [xi, zi, algo] = stk_optim_addevals (algo, xi, zi, xinew)
 
-switch algo.noise
-    case 'noisefree'
-        zinew = stk_feval (algo.f, xinew);
-    case 'known'
-        zinew_ = stk_feval (algo.f, xinew);
-        zinew  = zinew_(:, 1);
-        xinew  = stk_ndf (xinew, zinew_.data(:, 2));
-    case 'unknown'
-        xinew = stk_ndf (xinew, algo.noisevariance); % noisevariance will be estimated
-        zinew = stk_feval (algo.f, xinew);
-end
+assert (size (xi, 1) == size (zi, 1));
+
+% DESIGN CHOICE: the noise variance associated with the observations is stored
+%   in algo.model.lognoisevariance, as everywhere else in STK. Therefore, we
+%   should *not* use stk_ndf objects for xi and xinew
+assert (~ isa (xi, 'stk_ndf'));  assert (~ isa (xinew, 'stk_ndf'));
+
+% Evaluate
+zinew = stk_feval (algo.f, xinew);
+
+% NOTE: In some situations, stk_feval (f, ...) returns multivariate results,
+%   under the form of an stk_dataframe with more than one column. For instance,
+%   a batch Monte Carlo simulator typically returns the empirical mean and 
+%   variance of a batch of evaluations. That's ok.
 
 if isempty (xi)
     xi = xinew;
@@ -52,8 +56,16 @@ else
     zi = [zi; zinew];
 end
 
-if ~ strcmp (algo.noise, 'noisefree')
-    algo.model.lognoisevariance = log (xi.noisevariance);
+% HETEROSCEDATIC case: Fetch the value of the variance of the noise from
+%    algo.xg0 and update algo.model.lognoisevariance with it.
+if isa (algo.xg0, 'stk_ndf')
+    [b, pos] = ismember (xinew, algo.xg0, 'rows');  assert (all (b));
+    lnv_new = log (algo.xg0.noisevariance(pos));
+    algo.model.lognoisevariance = [algo.model.lognoisevariance; lnv_new];    
 end
+
+% === SAFETY NETS ===
+assert (size (zi, 1) == size (xi, 1));
+assert (noise_params_consistency (algo, xi));
 
 end % function stk_optim_addevals

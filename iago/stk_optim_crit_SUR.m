@@ -6,9 +6,9 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2014 SUPELEC
+%    Copyright (C) 2015 CentraleSupelec
 %
-%    Author:   Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Author:  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -30,15 +30,27 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [xinew, zp, samplingcrit] = stk_optim_crit_SUR (algo, xg, xi_ind, zi, type)
+function [xinew, zp, samplingcrit] = stk_optim_crit_SUR (algo, xi_ind, zi, type)
+
+error ('This function needs a big rehaul (see stk_optim_crit_iago).');
 
 if nargin < 4
     type = 1;
 end
 
-ng = stk_length(xg);
+% Backward compatiblity: accept model structures with missing lognoisevariance
+if (~ isfield (algo.model, 'lognoisevariance')) ...
+        || (isempty (algo.model.lognoisevariance))
+    algo.model.lognoisevariance = - inf;
+end
+
+xg = algo.xg0;
+ng = stk_length (xg);
 xi = xg(xi_ind, :);
-ni = stk_length(xi);
+ni = stk_length (xi);
+
+% === SAFETY NET ===
+assert (noise_params_consistency (algo, xi));
 
 %% INITIAL PREDICTION
 % zp = stk_predict(algo.model, xi_ind, zi, xg);
@@ -64,17 +76,20 @@ for test_ind = 1:ng
     xi_ind(ni+1) = test_ind;
     xi = xg(xi_ind, :);
     
-    if strcmp(algo.noise, 'noisefree')
-        noisevariance = 0.0;
-    else
-        model_xg.lognoisevariance = log(xg.noisevariance(xi_ind));
-        noisevariance = exp(model_xg.lognoisevariance(ni+1));
+    % Noise variance
+    lnv = get_lognoisevariance (algo.model, algo.xg0, test_ind, true);
+    noisevariance = exp (lnv);
+    
+    % Heteroscedastic case: store lnv in model.lognoisevariance
+    model_ = model_xg;
+    if isa (xg, 'stk_ndf')  % heteroscedastic case
+        model_.lognoisevariance = [model_.lognoisevariance; lnv];
     end
     
     if size(xi.data, 1) == size(unique(xi.data, 'rows'), 1) || noisevariance > 0.0
         
         % [zpcond, lambda] = stk_predict(algo.model, xi, [], xg);
-        [zpcond, lambda] = stk_predict(model_xg, xi_ind, [], []);
+        [zpcond, lambda] = stk_predict(model_, xi_ind, [], []);
         zQ = stk_quadrature(1, algo, zpmean(test_ind), abs(zpvar(test_ind)) + noisevariance);
         losscrit = zeros(algo.Q,1);
         for k = 1:algo.Q     
@@ -97,6 +112,8 @@ end
 xinew = xg(ind_min_samplingcrit, :);
 
 %% DISPLAY SAMPLING CRITERION?
-if algo.disp, view_samplingcrit(algo, xg, xi, xinew, samplingcrit, 2, false); end
+if algo.disp,
+    view_samplingcrit(algo, xg, xi, xinew, samplingcrit, 2);
+end
 
 end %%END stk_optim_crit_SUR

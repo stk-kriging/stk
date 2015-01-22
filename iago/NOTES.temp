@@ -1,0 +1,29 @@
+
+=== Notes on DESIGN CHOICES ===
+
+Observations: xi, xinew
+ o they are *not* stk_ndf objects
+ o therefore, they do not carry the value of the noise variance
+ o the noise variance is in algo.model.lognoisevariance
+
+Homoscedastic/heteroscedastic
+ o Homoscedastic case
+    > algo.xg0 is *not* an stk_ndf object
+    > algo.noisevariance is a scalar (NaN means 'unknown')
+    > algo.model.lognoisevariance is a scalar also
+ o Heteroscedastic case
+    > algo.xg0 is an stk_ndf object
+    > algo.noisevariance a pair {known_var, var_fun}
+    o algo.model.lognoisevariance is a vector of length ni
+
+Noiseless/noisy
+ o 'noiseless' iff isequal (algo.noisevariance, 0.0)
+ o no need for an additional flag
+
+To declare that the variance of the noise is unknown
+ o homoscedastic case: set algo.noisevariance to nan
+ o heteroscedastic case: set algo.noisevariance{1} to false
+
+Search grid
+ o the search grid is *exactly* algo.xg0
+ o the evaluation point are not necessarily in the search grid
