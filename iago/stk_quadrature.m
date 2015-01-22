@@ -31,7 +31,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function out = stk_quadrature(state, algo, varargin)
+function out = stk_quadrature (state, algo, varargin)
 
 switch state
     case 0, % init
@@ -58,7 +58,7 @@ switch state
                 u0 = step/2:step:(1-step/2);
                 zQ = -sqrt(2)*erfcinv(2*u0); % zQ = norminv(u0);
                 algo.zQ = zQ(:);
-                algo.wQ = step*ones(algo_obj.Q, 1);
+                algo.wQ = step*ones(algo.Q, 1);
             case 'T',
                 step = 1/quadorder;
                 u0 = step/2:step:(1-step/2);
