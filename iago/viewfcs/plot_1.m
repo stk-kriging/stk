@@ -32,7 +32,7 @@ function plot_1(xi, zi, xg, zp, xt, zt)
 LINE1 = {'--', 'LineWidth', 2, 'Color', [0.39, 0.47, 0.64]};
 LINE2 = {'-', 'LineWidth', 2, 'Color', [0.95 0.25 0.3]};
 MARKER1 = {'ks','MarkerSize',10, 'LineWidth', 3, ...
-		'MarkerEdgeColor', [0.95 0.25 0.3], 'MarkerFaceColor', [0.8 0.8 0.8]};
+    'MarkerEdgeColor', [0.95 0.25 0.3], 'MarkerFaceColor', [0.8 0.8 0.8]};
 
 h=area(xg.data, [zp.mean-2*sqrt(zp.var), 4*sqrt(zp.var)]);
 set(h(1),'FaceColor','none');
@@ -41,7 +41,7 @@ set(h,'LineStyle','-','LineWidth', 1, 'EdgeColor', 'none');
 
 hold on
 if nargin > 4
-	plot(xt.data, zt.data, LINE1{:})
+    plot(xt.data, zt.data, LINE1{:})
 end
 plot(xg.data, zp.mean, LINE2{:})
 plot(xi.data, zi.data, MARKER1{:})

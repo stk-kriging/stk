@@ -104,7 +104,7 @@ for i = 1:N
         
         fprintf('done\n');
     end
-
+    
     % Pick a new evaluation point (from algo.xg0)
     [xinew, zp, crit_xg] = algo_obj.samplingcrit (algo_obj, xi, zi);
     

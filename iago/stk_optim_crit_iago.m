@@ -100,7 +100,7 @@ while ~CONDH_OK
                 zsimc = stk_conditioning(lambda_, zi_, zsim, xi_ind);
                 
                 [~, ind_maximum] = max(zsimc.data);
-            
+                
                 % estimate the entropy of the maximizer distribution
                 
                 F = hist(ind_maximum, 1:ng);
@@ -109,7 +109,7 @@ while ~CONDH_OK
                 p_log_p = p .* (log (p));
                 p_log_p(p < 1e-300) = 0;
                 
-                H(k) = - sum (p_log_p);   
+                H(k) = - sum (p_log_p);
                 
             end
             
@@ -126,7 +126,7 @@ while ~CONDH_OK
             
             p_log_p = p .* (log (p));
             p_log_p(p < 1e-300) = 0;
-
+            
             CondH(ic) = - sum (p_log_p);
             
         end

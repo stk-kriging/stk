@@ -91,7 +91,7 @@ if ~ NOISY
 else
     % Optimise f0 based on noisy evaluations
     %   (homoscedastic Gaussian noise)
-    f = @(x)(f0(x) + sqrt (NOISEVARIANCE) * randn (size (x)));        
+    f = @(x)(f0(x) + sqrt (NOISEVARIANCE) * randn (size (x)));
 end
 
 % Do we assume the noise variance to be known ?  Default: yes.

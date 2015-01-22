@@ -14,7 +14,7 @@ Homoscedastic/heteroscedastic
  o Heteroscedastic case
     > algo.xg0 is an stk_ndf object
     > algo.noisevariance a pair {known_var, var_fun}
-    o algo.model.lognoisevariance is a vector of length ni
+    > algo.model.lognoisevariance is a vector of length ni
 
 Noiseless/noisy
  o 'noiseless' iff isequal (algo.noisevariance, 0.0)
