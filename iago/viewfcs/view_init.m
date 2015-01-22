@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
@@ -27,14 +28,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function view_init(algo, xi, zi, xg)
+function view_init (algo, xi, zi, xg)
+
 if algo.dim == 1
-	if algo.gnuplot
-		export_init_1d(algo, xi, zi)
-	else
-		view_init_1d(algo, xi, zi);
-	end
+    view_init_1d (algo, xi, zi);    
 elseif algo.dim == 2
-	view_init_2d(algo, xi, zi, xg);
+    view_init_2d (algo, xi, zi, xg);
 end
-end
+
+end % function view_init

@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
@@ -27,7 +28,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function view_init_2d(algo, xi, zi, xg)
+function view_init_2d (algo, xi, zi, xg)
 
 CONTOUR_LINES = 40; % number of levels in contour plots
 XGDOT_STYLE    = {'ko', 'MarkerFaceColor', 'k', 'MarkerSize', 2};
@@ -62,5 +63,4 @@ stk_title('prediction');
 % h=gca;
 % set(h,'FontSize', 20)
 
-end
-
+end % function view_init_2d
