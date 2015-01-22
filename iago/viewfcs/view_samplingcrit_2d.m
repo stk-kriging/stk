@@ -42,9 +42,9 @@ ni = stk_length(xi);
 [XX, YY] = meshgrid(xt0.data(:, 1), xt0.data(:,2));
 
 if algo.searchgrid_unique
-	ZZ = griddata(xg.data(:,1), xg.data(:,2), samplingcrit(), XX, YY);
+    ZZ = griddata(xg.data(:,1), xg.data(:,2), samplingcrit(), XX, YY);
 else
-	ZZ = griddata(xg.data(ni+1:end,1), xg.data(ni+1:end,2), samplingcrit(ni+1:end), XX, YY);
+    ZZ = griddata(xg.data(ni+1:end,1), xg.data(ni+1:end,2), samplingcrit(ni+1:end), XX, YY);
 end
 
 subplot(2,2,4)
@@ -57,8 +57,8 @@ stk_labels('x_1', 'x_2');
 stk_title('sampling criterion to be minimized');
 
 for i = [1 2 4]
-	subplot(2,2,i)
-	hold on, plot(xinew(1), xinew(2), NEWDOT_STYLE{:}); hold off
+    subplot(2,2,i)
+    hold on, plot(xinew(1), xinew(2), NEWDOT_STYLE{:}); hold off
 end
 
 end % function view_samplingcrit_2d

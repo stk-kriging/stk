@@ -92,18 +92,18 @@ for test_ind = 1:ng
         [zpcond, lambda] = stk_predict(model_, xi_ind, [], []);
         zQ = stk_quadrature(1, algo, zpmean(test_ind), abs(zpvar(test_ind)) + noisevariance);
         losscrit = zeros(algo.Q,1);
-        for k = 1:algo.Q     
+        for k = 1:algo.Q
             zi_ =  [zi.data; zQ(k)]; % add a fictitious observation
-            zpm = lambda' * zi_;    
+            zpm = lambda' * zi_;
             losscrit(k) = stk_losscrit(type, zi_, zpm, zpcond.var);
-        end    
+        end
         samplingcrit(test_ind) = stk_quadrature(2, algo, losscrit);
-    
+        
     else
         
         xi_ind = xi_ind(1:ni); % drop the test point
         samplingcrit(test_ind) = stk_losscrit(type, zi, zpmean, zpvar);
-    
+        
     end
 end
 

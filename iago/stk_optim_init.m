@@ -95,7 +95,7 @@ NOISEVARIANCE_USER = isfield (useropt, 'noisevariance');
 for i = 1:size(options, 1)
     if isfield(useropt, options{i, 1})
         algo_obj.(options{i, 1}) = useropt.(options{i, 1});
-		useropt = rmfield(useropt, options{i, 1});
+        useropt = rmfield(useropt, options{i, 1});
     else
         algo_obj.(options{i, 1}) = options{i, 2};
     end
@@ -104,7 +104,7 @@ end
 % Warn for unknown options passed by the user
 unknown_fields = fieldnames (useropt);
 for i = 1:(numel (unknown_fields))
-	warning ('Unknown option: %s\n', unknown_fields{i});  %#ok<WNTAG>
+    warning ('Unknown option: %s\n', unknown_fields{i});  %#ok<WNTAG>
 end
 
 % Safety net: stop if there are unknown options
@@ -117,8 +117,8 @@ end
 
 v1 = algo_obj.noisevariance;  lnv2 = algo_obj.model.lognoisevariance;
 
-if MODEL_USER    
-    if NOISEVARIANCE_USER        
+if MODEL_USER
+    if NOISEVARIANCE_USER
         if isnumeric (v1)
             % Noiseless or noisy/homoscedastic case
             assert ((isscalar (v1)) && (isscalar (lnv2)));
@@ -163,7 +163,7 @@ end
 %% CANDIDATE POINTS
 if ~isempty(algo_obj.searchgrid_xvals)
     algo_obj.xg0 = algo_obj.searchgrid_xvals;
-	algo_obj.searchgrid_size = stk_length(algo_obj.xg0);
+    algo_obj.searchgrid_size = stk_length(algo_obj.xg0);
 else
     algo_obj.xg0 = stk_sampling_maximinlhs(algo_obj.searchgrid_size, algo_obj.dim, algo_obj.box, 100);
     if dim == 1
@@ -180,7 +180,7 @@ if isa (algo_obj.xg0, 'stk_ndf')
     else
         algo_obj.noisevariance = algo_obj.xg0.noisevariance;
     end
-else    
+else
     if ischar (v)
         % Heteroscedastic case with known noise variance
         algo_obj.xg0 = stk_ndf (algo_obj.xg0, nan (size (algo_obj.xg0, 1), 1));
@@ -217,52 +217,52 @@ algo_obj.model.prior.invcov = 0.5*eye(length(param0));
 noisy_eval = ~ isequal (algo_obj.noisevariance, 0);
 
 switch (algo_obj.samplingcritname)
-	case 'EI',
+    case 'EI',
         assert (noisy_eval, 'STK:optim_init',...
             'Error: cannot use noisy evaluations with crit=''EI''');
-		algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_EI (algo, xi, zi));
-		algo_obj.type = 'usemaxobs';
-		NEED_QUAD = false;
-	case 'EI_v2',
+        algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_EI (algo, xi, zi));
+        algo_obj.type = 'usemaxobs';
+        NEED_QUAD = false;
+    case 'EI_v2',
         assert (noisy_eval, 'STK:optim_init',...
             'Error: cannot use noisy evaluations with crit=''EI_v2''');
-		algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 1));
-		algo_obj.type = 'usemaxobs';
-		NEED_QUAD = true;
-		if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
-		if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
-	case 'EI_v3',
-		algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 2));
-		algo_obj.type = 'usemaxpred';
-		NEED_QUAD = true;
-		if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
-		if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
-	case 'EEI',
+        algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 1));
+        algo_obj.type = 'usemaxobs';
+        NEED_QUAD = true;
+        if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
+        if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
+    case 'EI_v3',
+        algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 2));
+        algo_obj.type = 'usemaxpred';
+        NEED_QUAD = true;
+        if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
+        if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
+    case 'EEI',
         assert (noisy_eval, 'STK:optim_init',...
             'Error: cannot use noisy evaluations with crit=''EEI''');
-		algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 3));
-		algo_obj.type = 'usemaxobs';
-		NEED_QUAD = true;
-		if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
-		if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
-	case 'EEI_v2',
-		algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 4));
-		algo_obj.type = 'usemaxpred';
-		NEED_QUAD = true;
-		if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
-		if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
-	case 'IAGO',
-		algo_obj.samplingcrit = @stk_optim_crit_iago;
-		algo_obj.type = 'usemaxobs';
-		NEED_QUAD = true;
-		if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
-		if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
+        algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 3));
+        algo_obj.type = 'usemaxobs';
+        NEED_QUAD = true;
+        if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
+        if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
+    case 'EEI_v2',
+        algo_obj.samplingcrit = @(algo, xi, zi)(stk_optim_crit_SUR (algo, xi, zi, 4));
+        algo_obj.type = 'usemaxpred';
+        NEED_QUAD = true;
+        if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
+        if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
+    case 'IAGO',
+        algo_obj.samplingcrit = @stk_optim_crit_iago;
+        algo_obj.type = 'usemaxobs';
+        NEED_QUAD = true;
+        if isempty(algo_obj.quadtype), algo_obj.quadtype = 'GH'; end
+        if isnan(algo_obj.quadorder),  algo_obj.quadorder = 15;  end
 end
 
 %% QUADRATURE
 if NEED_QUAD
-	algo_obj.Q = algo_obj.quadorder;
-	algo_obj = stk_quadrature(0, algo_obj, algo_obj.quadtype, algo_obj.quadorder);
+    algo_obj.Q = algo_obj.quadorder;
+    algo_obj = stk_quadrature(0, algo_obj, algo_obj.quadtype, algo_obj.quadorder);
 end
 
 end % function stk_optim_init

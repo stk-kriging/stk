@@ -66,7 +66,7 @@ Mn = max(zi);
 EI = stk_distrib_normal_ei (Mn, zp.mean, sqrt(zp.var), true);
 samplingcrit = - (Mn + EI);
 
-%% PICK THE NEXT EVALUATION POINT 
+%% PICK THE NEXT EVALUATION POINT
 [~, ind_min_samplingcrit] = min(samplingcrit);
 xinew = xg(ind_min_samplingcrit, :);
 

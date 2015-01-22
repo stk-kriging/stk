@@ -45,7 +45,7 @@ zinew = stk_feval (algo.f, xinew);
 
 % NOTE: In some situations, stk_feval (f, ...) returns multivariate results,
 %   under the form of an stk_dataframe with more than one column. For instance,
-%   a batch Monte Carlo simulator typically returns the empirical mean and 
+%   a batch Monte Carlo simulator typically returns the empirical mean and
 %   variance of a batch of evaluations. That's ok.
 
 if isempty (xi)
@@ -61,7 +61,7 @@ end
 if isa (algo.xg0, 'stk_ndf')
     [b, pos] = ismember (xinew, algo.xg0, 'rows');  assert (all (b));
     lnv_new = log (algo.xg0.noisevariance(pos));
-    algo.model.lognoisevariance = [algo.model.lognoisevariance; lnv_new];    
+    algo.model.lognoisevariance = [algo.model.lognoisevariance; lnv_new];
 end
 
 % === SAFETY NETS ===

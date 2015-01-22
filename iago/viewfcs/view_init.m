@@ -31,7 +31,7 @@
 function view_init (algo, xi, zi, xg)
 
 if algo.dim == 1
-    view_init_1d (algo, xi, zi);    
+    view_init_1d (algo, xi, zi);
 elseif algo.dim == 2
     view_init_2d (algo, xi, zi, xg);
 end
