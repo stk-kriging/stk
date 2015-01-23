@@ -99,7 +99,7 @@ while ~CONDH_OK
                 % condition on the fictitious observation
                 zsimc = stk_conditioning(lambda_, zi_, zsim, xi_ind);
                 
-                [~, ind_maximum] = max(zsimc.data);
+                [~, ind_maximum] = max(zsimc);
                 
                 % estimate the entropy of the maximizer distribution
                 
