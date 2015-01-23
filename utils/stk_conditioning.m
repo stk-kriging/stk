@@ -28,11 +28,18 @@
 %    in XI_IND (vector of length NI), with corresponding noisy observed values
 %    ZI, using a NI x N matrix NOISE_SIM of simulated noise values.
 %
-% NOTE: conditioning by kriging
+% NOTE: Conditioning by kriging
 %
 %    stk_conditioning uses the technique called "conditioning by kriging"
 %    (see, e.g., Chiles and Delfiner, Geostatistics: Modeling Spatial
 %    Uncertainty, Wiley, 1999)
+%
+% NOTE: Output type
+%
+%    The output argument ZSIMC will be an stk_dataframe if either LAMBDA or ZSIM
+%    are stk_dataframe. In case of conflicting row names (coming from
+%    ZSIM.rownames on the one hand and LAMBDA.colnames on the other hand),
+%    ZSIMC.rownames is {}.
 %
 % EXAMPLE: stk_example_kb05
 %
@@ -40,10 +47,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -113,7 +121,7 @@ if noisy
    delta = delta - noise_sim;
 end
 
-zsimc = stk_dataframe (z_sim + lambda' * delta);
+zsimc = z_sim + lambda' * delta;
 
 end % function stk_conditioning
 

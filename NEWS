@@ -50,8 +50,8 @@ Changes in version 2.3.0
      sample paths. This is consistent with stk_predict, which returns posterior
      variances for the unknown function, not for future noisy observations.
 
-   o utils/stk_conditioning.m: Simulate sample paths conditioned on noisy
-     observations when the additional NOISE_SIM argument is provided.
+   o stk_conditioning.m: Simulate sample paths conditioned on noisy observations
+     when the additional NOISE_SIM argument is provided.
 
    o stk_generate_samplepaths.m: Fix conditioning on noisy observations, which
      was not implemented properly until now.
@@ -59,6 +59,9 @@ Changes in version 2.3.0
    o stk_generate_samplepaths.m: The output is an stk_dataframe object if either
      MODEL.response_name exists and is a non-empty string, or one of the input
      arguments (XI, ZI, XT) is an stk_dataframe object.
+
+   o stk_conditioning.m: The output is an stk_dataframe object if either LAMBDA
+     or ZSIM is an stk_dataframe object.
 
 * Examples
 
