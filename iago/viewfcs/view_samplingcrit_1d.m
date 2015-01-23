@@ -40,11 +40,13 @@ else
     subplot(2,1,2);
 end
 
+hold off
 %plot(xg.data(ni+1:end), samplingcrit(ni+1:end), '-', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64])
 [xg, xgi] = sort(xg.data(:));
-plot(xg, samplingcrit(xgi), LINE2{:})
+ymin = min (samplingcrit(xgi));  ymax = max (samplingcrit(xgi));
+delta = (ymax - ymin);  ymin = ymin - 0.05 * delta;  ymax = ymax + 0.05 * delta;
+plot (xg, samplingcrit(xgi), LINE2{:});  ylim ([ymin ymax]);
 %axis([-1 1 -6 1])
-hold off
 stk_labels('x', 'J(x)');
 %stk_title('Sampling criterion to be minimized');
 h=gca;
