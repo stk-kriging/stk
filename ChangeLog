@@ -1,13 +1,22 @@
 2015-01-23  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_conditioning.m: Overload for stk_dataframe objects
+
+	* arrays/@stk_dataframe/stk_conditioning.m: Overload
+	stk_conditioning for stk_dataframe inputs. The output is an
+	stk_dataframe object if either LAMBDA or ZSIM is an stk_dataframe
+	object.
+	* utils/stk_conditioning.m: Do not convert the output into an
+	stk_dataframe object.
+
 	stk_generate_samplepaths.m: Overload for stk_dataframe objects
 
 	* arrays/@stk_dataframe/stk_generate_samplepaths.m: Overload
-	stk_generate_samplepaths for stk_dataframe inputs. The output, in
-	this case, is always an stk_dataframe object.
+	stk_generate_samplepaths for stk_dataframe inputs. The output is
+	always an stk_dataframe object.
 	* utils/stk_generate_samplepaths.m: Simplify the code using the
 	assumption that none of the inputs is an stk_dataframe object. The
-	output, in this case, is an stk_dataframe object if and only if
+	output is an stk_dataframe object if and only if
 	model.response_name exists and is a non-empty string.
 
 2015-01-21  Julien Bect  <julien.bect@supelec.fr>
