@@ -32,8 +32,7 @@ function view_init_1d (algo, xi, zi)
 
 LINE1 = {'-', 'LineWidth', 2, 'Color', [0.39, 0.47, 0.64]};
 LINE2 = {'-', 'LineWidth', 3, 'Color', [0.95 0.25 0.3]};
-MARKER1 = {'ks','MarkerSize', 7, 'LineWidth', 2, ...
-    'MarkerEdgeColor', [0.95 0.25 0.3], 'MarkerFaceColor', [0.8 0.8 0.8]};
+MARKER1 = {'ko','MarkerSize', 5, 'MarkerFaceColor', 'k'};
 
 xt0 = algo.disp_xvals;
 zt0 = algo.disp_zvals;
@@ -59,11 +58,10 @@ if algo.show1dsamplepaths
     
     figure(2)
     if algo.show1dmaximizerdens == 2, subplot(3,1,1); else subplot(2,1,1); end
-    plot_1(xi, zi, xt, zp_);
+    plot_1(xi, [], xt, zp_);
     hold on
     plot(xt.data, zsimc_.data(:,1:8), LINE1{:})
-    plot(xt.data, zp_.mean, LINE2{:})
-    plot(xi.data, zi.data, MARKER1{:})
+    plot(xt.data, zp_.mean, LINE2{:})    
     hold off
     stk_labels('', 'f(x)');
     stk_title('Function to be maximized (dashed blue line) and kriging prediction');
@@ -85,7 +83,6 @@ else
     subplot(2,1,1)
     plot_1(xi, zi, xt, zp_, xt0, zt0); hold on
     plot(xt.data, zp_.mean, LINE2{:});
-    plot(xi.data, zi.data, MARKER1{:});
     % plot(xlim(), max(zi.data)*[1 1], '--', 'LineWidth', 2, 'Color', [0.5, 0.5, 0.5]);
     % axis([-1 1 -4.5 3.5])
     hold off
