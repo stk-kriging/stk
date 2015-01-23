@@ -1,3 +1,15 @@
+2015-01-23  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_generate_samplepaths.m: Overload for stk_dataframe objects
+
+	* arrays/@stk_dataframe/stk_generate_samplepaths.m: Overload
+	stk_generate_samplepaths for stk_dataframe inputs. The output, in
+	this case, is always an stk_dataframe object.
+	* utils/stk_generate_samplepaths.m: Simplify the code using the
+	assumption that none of the inputs is an stk_dataframe object. The
+	output, in this case, is an stk_dataframe object if and only if
+	model.response_name exists and is a non-empty string.
+
 2015-01-21  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_feval.m: Various improvements.

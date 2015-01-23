@@ -56,6 +56,10 @@ Changes in version 2.3.0
    o stk_generate_samplepaths.m: Fix conditioning on noisy observations, which
      was not implemented properly until now.
 
+   o stk_generate_samplepaths.m: The output is an stk_dataframe object if either
+     MODEL.response_name exists and is a non-empty string, or one of the input
+     arguments (XI, ZI, XT) is an stk_dataframe object.
+
 * Examples
 
    o stk_example_kb04 demonstrates how it is possible to estimate the variance
