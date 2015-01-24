@@ -169,3 +169,38 @@ elseif nargout > 2
 end
 
 end % function stk_optim
+
+
+%!shared f0, f, DIM, BOX, xi, MAX_ITER, options, xt, zt, xg, NOISEVARIANCE
+%!
+%! DIM = 1; BOX = [-1.0; 1.0];
+%! 
+%! f0 = @(x) ((0.8*x-0.2).^2 + exp(-0.5*(abs(x+0.1)/0.1).^1.95) ...
+%!     + exp(-1/2*(2*x-0.6).^2/0.1) - 0.02);
+%! 
+%! NT = 400;  xt = stk_sampling_regulargrid (NT, DIM, BOX);
+%! zt = stk_feval (f0, xt); % Ground truth
+%! 
+%! xi_ind = [90 230 290 350];  xi = xt(xi_ind, :);
+%! 
+%! % f = f0;  NOISEVARIANCE = 0.0;  % NOISELESS
+%!
+%! NOISEVARIANCE = 0.1 ^ 2;
+%! f = @(x)(f0(x) + sqrt (NOISEVARIANCE) * randn (size (x)));  % NOISY
+%! 
+%! MAX_ITER = 2;
+%!
+%! xg = stk_sampling_regulargrid (5, DIM, BOX);
+%!
+%! options = {'samplingcritname', 'IAGO',  ...
+%!     'noisevariance', NOISEVARIANCE, ...
+%!     'disp', true, 'show1dsamplepaths', true, ...
+%!     'searchgrid_xvals', xg, 'nsamplepaths', 5};
+
+%!test
+%! options = [options {'disp_xvals', xt, 'disp_zvals', zt}];
+%! res = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);  close all;
+
+%!test  % xt, zt -> numeric
+%! options = [options {'disp_xvals', double(xt), 'disp_zvals', double(zt)}];
+%! res = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);  close all;
