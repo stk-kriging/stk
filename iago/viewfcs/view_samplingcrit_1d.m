@@ -66,7 +66,7 @@ end
 for i = 1:nplots
     figure(h_fig)
     h = subplot(nplots, 1, i); hold on;
-    plot([xinew.data xinew.data], ylim(h), 'LineWidth', 2, 'Color', [0.6, 0.6, 0.6])
+    plot(xinew * [1 1], ylim(h), 'LineWidth', 2, 'Color', [0.6, 0.6, 0.6])
     hold off;
 end
 
