@@ -195,12 +195,25 @@ end % function stk_optim
 %! options = {'samplingcritname', 'IAGO',  ...
 %!     'noisevariance', NOISEVARIANCE, ...
 %!     'disp', true, 'show1dsamplepaths', true, ...
-%!     'searchgrid_xvals', xg, 'nsamplepaths', 5};
+%!     'quadorder', 3, 'nsamplepaths', 5};
 
 %!test
 %! options = [options {'disp_xvals', xt, 'disp_zvals', zt}];
+%! options = [options {'searchgrid_xvals', xg}];
 %! res = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);  close all;
 
 %!test  % xt, zt -> numeric
 %! options = [options {'disp_xvals', double(xt), 'disp_zvals', double(zt)}];
+%! options = [options {'searchgrid_xvals', xg}]
+%! res = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);  close all;
+
+%!test  % xg -> numeric
+%! options = [options {'disp_xvals', xt, 'disp_zvals', zt}];
+%! options = [options {'searchgrid_xvals', double(xg)}];
+%! res = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);  close all;
+
+%!test  % xg -> numeric
+%! options = [options {'disp_xvals', xt, 'disp_zvals', zt}];
+%! options = [options {'searchgrid_xvals', xg}];
+%! xi = xi.data;
 %! res = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);  close all;
