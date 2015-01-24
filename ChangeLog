@@ -1,8 +1,9 @@
 2015-01-24  Julien Bect  <julien.bect@supelec.fr>
 
-	sort.m: Overload base function
+	Overload a few base functions for stk_dataframe objects
 
 	* arrays/@stk_dataframe/sort.m: Overload base function
+	* arrays/@stk_dataframe/mtimes.m: Overload base function
 
 2015-01-23  Julien Bect  <julien.bect@supelec.fr>
 
