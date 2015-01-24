@@ -42,7 +42,7 @@ end
 
 hold off
 %plot(xg.data(ni+1:end), samplingcrit(ni+1:end), '-', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64])
-[xg, xgi] = sort(xg.data(:));
+[xg, xgi] = sort (xg);
 ymin = min (samplingcrit(xgi));  ymax = max (samplingcrit(xgi));
 delta = (ymax - ymin);  ymin = ymin - 0.05 * delta;  ymax = ymax + 0.05 * delta;
 plot (xg, samplingcrit(xgi), LINE2{:});  ylim ([ymin ymax]);

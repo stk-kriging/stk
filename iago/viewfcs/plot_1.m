@@ -40,11 +40,12 @@ set(h,'LineStyle','-','LineWidth', 1, 'EdgeColor', 'none');
 
 hold on
 if nargin > 4
-    plot(xt.data, zt.data, LINE1{:})
+    plot (xt, zt, LINE1{:})
 end
-plot(xg.data, zp.mean, LINE2{:})
+plot (xg, zp.mean, LINE2{:})
 if ~ isempty (zi)
-    plot(xi.data, zi.data, MARKER1{:})
+    plot(xi, zi, MARKER1{:})
 end
 hold off
-end
+
+end % function
