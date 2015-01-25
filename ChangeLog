@@ -1,3 +1,10 @@
+2015-01-25  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_dataframe.m: Make sure that the output is an stk_dataframe
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Make sure that the output
+	is an stk_dataframe object. Add unit tests.
+
 2015-01-24  Julien Bect  <julien.bect@supelec.fr>
 
 	Overload a few base functions for stk_dataframe objects
