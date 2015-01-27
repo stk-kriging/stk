@@ -22,6 +22,9 @@ Changes in version 2.3.0
      is used to force or prevent the estimation of the variance of the noise,
      regardless of the value of model.lognoisevariance.
 
+   o stk_param_init also supports the heteroscedastic noisy case, but only when
+     the variance of the noise is assumed to be known.
+
    o stk_param_init_lnv is a new function that provides a rough estimate of the
      variance of the noise (in the spirit of stk_param_init).
 
