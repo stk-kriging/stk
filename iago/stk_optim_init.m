@@ -41,12 +41,7 @@ algo.box = box;
 
 %% DEFAULT MODEL SPECIFICATION
 model = stk_model ('stk_materncov_aniso');
-SIGMA2 = nan;  % variance parameter, will be set later
-NU     = nan;  % regularity parameter, will be set later
-RHO    = nan(dim, 1);  % scale (range) parameter, will be set later
-param0 = log ([SIGMA2; NU; 1./RHO]);
-model.param = param0;
-model.lognoisevariance = nan; % will be set later
+model.param = nan (dim + 2, 1);
 
 %% PROCESS OPTIONS
 options = {
@@ -198,18 +193,19 @@ end
 [xi, zi, algo] = stk_optim_addevals(algo, [], [], xi);
 
 
-%% SET DEFAULT MODEL PARAMETERS
-if any(isnan(algo.model.param))
-    if stk_length(xi) > 1;  SIGMA2 = 4*var(zi.data); else SIGMA2 = 1.0; end
-    NU     = 2*dim;
-    for d = 1:dim
-        RHO(d) = 1/4 * abs(box(2, d) - box(1, d));
-    end
-    param0 = log ([SIGMA2; NU; 1./RHO]);
-    algo.model.param = param0;
-end
-algo.model.prior.mean = param0;
-algo.model.prior.invcov = 0.5*eye(length(param0));
+%% Set prior for covariance parameters
+
+% FIXME: only works for stk_materncov_aniso !
+
+% Prior mean (rule of thumb)
+LOGSIGMA2_PRIORMEAN = 0;  % don't care, since we use an infinite variance
+LOGNU_PRIORMEAN = 2 * dim;
+LOGINVRHO_PRIORMEAN = 1/4 * (diff (box))';
+
+algo.model.prior.mean = [LOGSIGMA2_PRIORMEAN; ...
+    LOGNU_PRIORMEAN; LOGINVRHO_PRIORMEAN];
+
+algo.model.prior.invcov = diag ([0 0.5*ones(1,dim+1)]);
 
 
 %% SELECT SAMPLING CRITERION
