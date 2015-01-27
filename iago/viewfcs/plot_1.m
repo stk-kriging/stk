@@ -31,7 +31,7 @@ function plot_1(xi, zi, xg, zp, xt, zt)
 
 LINE1 = {'--', 'LineWidth', 2, 'Color', [0.39, 0.47, 0.64]};
 LINE2 = {'-', 'LineWidth', 2, 'Color', [0.95 0.25 0.3]};
-MARKER1 = {'ko','MarkerSize', 5, 'MarkerFaceColor', 'k'};
+MARKER1 = {'mo', 'MarkerSize', 5, 'MarkerFaceColor', 'y'};
 
 h=area(xg.data, [zp.mean-2*sqrt(zp.var), 4*sqrt(zp.var)]);
 set(h(1),'FaceColor','none');
@@ -39,13 +39,26 @@ set(h(2),'FaceColor',[0.8 0.8 0.8]);
 set(h,'LineStyle','-','LineWidth', 1, 'EdgeColor', 'none');
 
 hold on
+
 if nargin > 4
     plot (xt, zt, LINE1{:})
 end
+
 plot (xg, zp.mean, LINE2{:})
+
 if ~ isempty (zi)
-    plot(xi, zi, MARKER1{:})
+    plot(xi, zi(:, 1), MARKER1{:})
+    if size (zi, 2) == 3
+        nb_obs = zi.nb_obs; 
+        for i = 1:(stk_length (zi))
+            if nb_obs(i) > 1
+                h = text (xi(i), zi(i), sprintf ('%d', nb_obs(i)));
+                set (h, 'Color', 'k', 'FontWeight', 'bold', 'FontSize', 13);
+            end
+        end
+    end
 end
+
 hold off
 
 end % function

@@ -101,7 +101,7 @@ for i = 1:N
         
         % All other cases should be dealt with transparently by STK
         [algo.model.param, algo.model.lognoisevariance] = ...
-            stk_param_estim (algo.model, xi, zi);
+            stk_param_estim_withrep (algo.model, xi, zi);
         
         fprintf('done\n');
     end
