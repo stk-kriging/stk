@@ -66,12 +66,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [varargout] = stk_optim(f, dim, box, xi, N, varargin)
+function [x_opt, f_opt, retcode, aux] = stk_optim (f, dim, box, xi, N, varargin)
+
+t0 = tic;  start_time = datestr (now);
 
 [algo, xi, zi] = stk_optim_init (f, dim, box, xi, varargin);
 
-xstarn  = stk_dataframe(zeros(N, dim));
-Mn      = stk_dataframe(inf(N, 1));
+iter_history = struct ('x_opt', {}, 'f_opt', {});
 
 crit_reg = nan(N, 1);
 for i = 1:N
@@ -106,21 +107,21 @@ for i = 1:N
     end
     
     % Pick a new evaluation point (from algo.xg0)
-    [xinew, zp, crit_xg] = algo.samplingcrit (algo, xi, zi);
+    [xi_new, zp, crit_xg] = algo.samplingcrit (algo, xi, zi);
     
     % COMPUTE CURRENT OPTIMIZER AND OPTIMUM
     switch(algo.type)
         case 'usemaxobs'
-            [Mn(i, 1), xstarn_ind] = max(zi.data);
-            xstarn(i,:) = xi(xstarn_ind, :);
+            [f_opt, xstarn_ind] = max(zi.data);
+            x_opt = xi(xstarn_ind, :);
         case 'usemaxpred'
             [~, xstarn_ind] = max(zp.mean);
-            xstarn(i,:) = algo.xg0(xstarn_ind, :);
-            Mn(i, 1) = stk_feval(algo.f, xstarn(i,:));
+            x_opt = algo.xg0(xstarn_ind, :);
+            f_opt = stk_feval(algo.f, x_opt);
     end
     
     % CARRY OUT NEW EVALUATION
-    [xi, zi, algo] = stk_optim_addevals(algo, xi, zi, xinew);
+    [xi, zi, algo, zi_new] = stk_optim_addevals (algo, xi, zi, xi_new);
     
     % PAUSE?
     if algo.pause > 0
@@ -139,7 +140,7 @@ for i = 1:N
                 end
             case 'EI',
                 crit_reg(i) = max(crit_xg) - min(crit_xg);
-                if i>1 && crit_reg(i) < 1e-8*(Mn(i) - mean(zi.data)),
+                if i>1 && crit_reg(i) < 1e-8*(f_opt - mean(zi.data)),
                     disp('Criterion is not improving: early stopping');
                     break
                 end
@@ -151,22 +152,56 @@ for i = 1:N
                 end
         end
     end
+    
+    
+    % HISTORY: Count current number of observations
+    if size (zi, 2) == 1, % One-column representation
+        nb_obs = stk_length (zi);
+    elseif size (zi, 2) == 3,  % Three-columns representation
+        nb_obs = sum (zi.nb_obs);
+    else
+        error ('Unsupported representation of evaluation results.');
+    end
+    
+    % HISTORY: Fill iter_history structure
+    iter_history(i).x_opt     = x_opt;
+    iter_history(i).f_opt     = f_opt;
+    iter_history(i).xi_new    = xi_new;
+    iter_history(i).zi_new    = zi_new;
+    iter_history(i).nb_obs    = nb_obs;
+    iter_history(i).algo      = algo;
+    iter_history(i).t_elapsed = toc (t0);
+    
 end % for i=1:N
 
+
 %% PREPARE OUTPUT
-if nargout == 1
-    res.xi      = xi;
-    res.zi      = zi;
-    res.xstarn  = xstarn;
-    res.Mn      = Mn;
-    varargout{1} = res;
-elseif nargout > 1
-    varargout{1} = xi;
-    varargout{2} = zi;
-elseif nargout > 2
-    varargout{3} = Mn;
-    varargout{4} = xstarn;
+
+% Return estimation of the optimizer
+x_opt = iter_history(end).x_opt;
+
+if nargin > 1,
+    
+    % Return estimation of the optimal value
+    f_opt = iter_history(end).f_opt;
+    
+    if nargin > 2,
+        
+        % Exit code. Unused for now
+        retcode = 0;
+        
+        if nargin > 3
+            
+            aux = struct (...
+                'evaluations', struct ('xi', xi, 'zi', zi), ...
+                'iter_history', iter_history, ...
+                'start_time', start_time, ...
+                'end_time', datestr (now));
+            
+        end
+    end
 end
+
 
 end % function stk_optim
 
@@ -174,20 +209,20 @@ end % function stk_optim
 %!shared f0, f, DIM, BOX, xi, MAX_ITER, options, xt, zt, xg, NOISEVARIANCE
 %!
 %! DIM = 1; BOX = [-1.0; 1.0];
-%! 
+%!
 %! f0 = @(x) ((0.8*x-0.2).^2 + exp(-0.5*(abs(x+0.1)/0.1).^1.95) ...
 %!     + exp(-1/2*(2*x-0.6).^2/0.1) - 0.02);
-%! 
+%!
 %! NT = 400;  xt = stk_sampling_regulargrid (NT, DIM, BOX);
 %! zt = stk_feval (f0, xt); % Ground truth
-%! 
+%!
 %! xi_ind = [90 230 290 350];  xi = xt(xi_ind, :);
-%! 
+%!
 %! % f = f0;  NOISEVARIANCE = 0.0;  % NOISELESS
 %!
 %! NOISEVARIANCE = 0.1 ^ 2;
 %! f = @(x)(f0(x) + sqrt (NOISEVARIANCE) * randn (size (x)));  % NOISY
-%! 
+%!
 %! MAX_ITER = 2;
 %!
 %! xg = stk_sampling_regulargrid (5, DIM, BOX);
