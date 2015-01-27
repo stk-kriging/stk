@@ -119,7 +119,7 @@ while ~CONDH_OK
             
             xi_ind = xi_ind(1:ni); % drop the test point
             zsimc = stk_conditioning(lambda, zi, zsim, xi_ind);
-            [~, ind_maximum] = max(zsimc.data);
+            [~, ind_maximum] = max (zsimc);
             
             F = hist(ind_maximum, 1:ng);
             p = F/algo.nsamplepaths;
