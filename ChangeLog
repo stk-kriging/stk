@@ -1,3 +1,11 @@
+2015-01-28  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_init.m: Handle the heteroscedastic case
+
+	* paramestim/stk_param_init.m: Handle the heteroscedastic case
+	with known variance properly. Error in the heteroscedastic case
+	with unknown variance. Add unit tests.
+
 2015-01-27  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_param_init.m: Fix a bug.
