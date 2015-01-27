@@ -91,10 +91,10 @@ if ~ NOISY
 else
     % Optimise f0 based on noisy evaluations
     %   (homoscedastic Gaussian noise)
-    f = @(x)(f0(x) + sqrt (NOISEVARIANCE) * randn (size (x)));
+    f = @(x)(f0(x) + sqrt (NOISEVARIANCE) * randn (size (x, 1), 1));
 end
 
-% Do we assume the noise variance to be known ?  Default: yes.
+% Do we assume the noise variance to be known ?  Default: yes
 if ~ exist ('KNOWN_NOISE_VARIANCE', 'var')
     KNOWN_NOISE_VARIANCE = true;
 end
@@ -137,9 +137,19 @@ options = [options {'pause', false}];
 [x_opt, f_opt, ~, aux] = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);
 
 
-%!test MAX_ITER = 2;  CRIT = 'IAGO';    stk_optimscript;
-% %!error MAX_ITER = 2;  CRIT = 'EI';      stk_optimscript;
-% %!error MAX_ITER = 2;  CRIT = 'EI_v2';   stk_optimscript;
-% %!error MAX_ITER = 2;  CRIT = 'EI_v3';   stk_optimscript;
-%!xtest MAX_ITER = 2;  CRIT = 'EEI';     stk_optimscript;
-%!xtest MAX_ITER = 2;  CRIT = 'EEI_v2';  stk_optimscript;
+%!shared MAX_ITER TESTCASE_NUM
+%! MAX_ITER = 2;  TESTCASE_NUM = 1;
+
+%!test  CRIT = 'IAGO';    stk_optimscript;
+%!error CRIT = 'EI';      stk_optimscript;
+%!error CRIT = 'EI_v2';   stk_optimscript;
+%!error CRIT = 'EI_v3';   stk_optimscript;
+%!xtest CRIT = 'EEI';     stk_optimscript;
+%!xtest CRIT = 'EEI_v2';  stk_optimscript;
+
+%!shared MAX_ITER TESTCASE_NUM CRIT
+%! MAX_ITER = 2;  TESTCASE_NUM = 2;  CRIT = 'IAGO';
+
+%!test NOISY = false; stk_optimscript;
+%!test NOISY = true; KNOWN_NOISE_VARIANCE = false;  stk_optimscript;
+%!test NOISY = true; KNOWN_NOISE_VARIANCE = true;  stk_optimscript;
