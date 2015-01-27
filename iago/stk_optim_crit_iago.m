@@ -51,11 +51,12 @@ ni = stk_length (xi);  xi_ind = 1:ni;
 xc = algo.xg0;  nc = stk_length (xc);  % candidate points
 xg = [xi; xc];  ng = ni + nc;          % evaluations points & candidate points
 
+if algo.disp,  view_init (algo, xi, zi, xg);  end
+
 model_xg = stk_model ('stk_discretecov', algo.model, xg);
+[model_xg, zi] = stk_fakenorep (model_xg, zi);
 zsim = stk_generate_samplepaths (model_xg, (1:ng)', algo.nsamplepaths);
 [zp, lambda] = stk_predict (model_xg, xi_ind, zi, []);
-
-if algo.disp,  view_init (algo, xi, zi, xg);  end
 
 
 %% COMPUTE THE STEPWISE UNCERTAINTY REDUCTION CRITERION
@@ -80,13 +81,11 @@ while ~CONDH_OK
         
         % Heteroscedastic case: store lnv in model.lognoisevariance
         model_ = model_xg;
-        if isa (xg, 'stk_ndf')  % heteroscedastic case
-            model_.lognoisevariance = [model_.lognoisevariance; lnv];
-        end
+        model_.lognoisevariance = [model_.lognoisevariance; lnv];
         
         if size(xi.data, 1) == size(unique(xi.data, 'rows'), 1) || noisevariance > 0.0
             
-            [~, lambda_] = stk_predict(model_, xi_ind, [], []);
+            [~, lambda_] = stk_predict (model_, xi_ind, [], []);
             
             zQ = stk_quadrature (1, algo, zp.mean(ni + ic), ...
                 zp.var(ni + ic) + noisevariance);
@@ -94,7 +93,7 @@ while ~CONDH_OK
             H = zeros(algo.Q,1);
             for k = 1:algo.Q
                 
-                zi_ =  [zi.data; zQ(k)]; % add a fictitious observation
+                zi_ = [zi; zQ(k)]; % add a fictitious observation
                 
                 % condition on the fictitious observation
                 zsimc = stk_conditioning(lambda_, zi_, zsim, xi_ind);

@@ -1,4 +1,4 @@
-% GET_LOGNOISEVARIANCE [internal]
+% STK_PREDICT_WITHREP ...
 
 % Copyright Notice
 %
@@ -26,28 +26,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function lnv = get_lognoisevariance (model, xg, x, x_is_index)
+function varargout = stk_predict_withrep (model, xi, zi, xt)
 
-if nargin < 4,
-    x_is_index = false;
+if nargin > 4,
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if isa (xg, 'stk_ndf') % heteroscedatic case
+% NOTE: the fact that we need to write such a function shows that
+%   we should have a dedicated class for these three-columnd dataframes
+%   for which we could implement stk_predict (and probably other things too)
 
-    if x_is_index
-        pos = x;
-    else
-        [b, pos] = ismember (x, xg, 'rows');
-        assert (all (b));
-    end
-    
-    lnv = log (xg.noisevariance(pos));
+[model, zi] = stk_fakenorep (model, zi);
 
-else % homoscedastic case
-    
-    lnv = model.lognoisevariance;
-    assert (isscalar (lnv));
-    
-end
+varargout = cell (1, max (1, nargout));
 
-end % function get_lognoisevariance
+[varargout{:}] = stk_predict (model, xi, zi, xt);
+
+end % function stk_predict_withrep

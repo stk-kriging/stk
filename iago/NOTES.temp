@@ -27,3 +27,11 @@ To declare that the variance of the noise is unknown
 Search grid
  o the search grid is *exactly* algo.xg0
  o the evaluation point are not necessarily in the search grid
+
+Gather repetitions: options.gather_repetitions = true|false
+ o default: true
+ o If true: after each evaluation, or batch of evaluations, gather
+   evaluations corresponding to a common xi(j, :). In this case, zi
+   has three columns: 'z_mean', 'z_var', 'nb_obs'
+ o If false: nothing special. In this case, zi has one column unless
+   f itself already returns batch results in three-column format.

@@ -5,8 +5,9 @@
 %    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -41,14 +42,15 @@ zt0 = algo.disp_zvals;
 xi_ind_ = ind(1:stk_length(xi));
 xt = stk_dataframe(xt);
 
-[zp_, lambda_] = stk_predict(algo.model, xi, zi, xt);
+[model_fake, zi_fake] = stk_fakenorep (algo.model, zi);
+[zp_, lambda_] = stk_predict (model_fake, xi, zi_fake, xt);
 
 % prediction + (maximizer density) + sampling criterion
 if algo.show1dsamplepaths
     
-    zsim_ = stk_generate_samplepaths(algo.model, xt, 4000);
-    zsimc_ = stk_conditioning (lambda_, zi, zsim_, xi_ind_);
-    [~, ind_maximum] = max(zsimc_.data);
+    zsim_ = stk_generate_samplepaths (model_fake, xt, 4000);
+    zsimc_ = stk_conditioning (lambda_, zi_fake, zsim_, xi_ind_);
+    [~, ind_maximum] = max (zsimc_.data);
     
     figure(1) % prediction + true function
     plot_1(xi, zi, xt, zp_, xt0, zt0);
@@ -56,18 +58,19 @@ if algo.show1dsamplepaths
     stk_title('Evaluations and kriging prediction');
     
     figure(2)
-    if algo.show1dmaximizerdens == 2, subplot(3,1,1); else subplot(2,1,1); end
+    nr = 2 + (algo.show1dmaximizerdens == 2);
+    subplot (nr, 1, 1);  cla;
     plot_1(xi, [], xt, zp_);
     hold on
-    plot(xt.data, zsimc_.data(:,1:8), LINE1{:})
+    %plot(xt.data, zsimc_.data(:,1:8), LINE1{:})
+    plot(xt.data, zsimc_.data(:,1:200));
     plot(xt.data, zp_.mean, LINE2{:})
     hold off
     stk_labels('', 'f(x)');
     stk_title('Function to be maximized (dashed blue line) and kriging prediction');
     
     if algo.show1dmaximizerdens > 0
-        if algo.show1dmaximizerdens == 1, subplot(2,1,2); end
-        if algo.show1dmaximizerdens == 2; subplot(3,1,2); end
+        subplot (nr, 1, 2);
         plot(xt.data, ksdensity(xt.data(ind_maximum,:), xt.data, ...
             'width', 20*length(unique(ind_maximum))*(algo.box(2) - algo.box(1))/stk_length(xt0)^2), ...
             LINE1{:})

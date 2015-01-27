@@ -49,6 +49,7 @@ options = {
     'model', model
     'estimparams', true
     'noisevariance', 0.0
+    'gather_repetitions', []
     'showprogress', true
     'pause', 0
     'disp', false
@@ -153,6 +154,23 @@ else
         algo.model.lognoisevariance = [];
     end
 end
+
+% Default: Enable repetition gathering, unless we're in the noiseless case
+if isempty (algo.gather_repetitions)
+    algo.gather_repetitions = ~ all (algo.model.lognoisevariance == -inf);
+end
+
+
+%% Convert logical options
+
+algo.estimparams         = logical (algo.estimparams);
+algo.gather_repetitions  = logical (algo.gather_repetitions);
+algo.showprogress        = logical (algo.showprogress);
+algo.disp                = logical (algo.disp);
+algo.show1dsamplepaths   = logical (algo.show1dsamplepaths);
+algo.searchgrid_unique   = logical (algo.searchgrid_unique);
+algo.searchgrid_adapt    = logical (algo.searchgrid_adapt);
+algo.stoprule            = logical (algo.stoprule);
 
 
 %% CANDIDATE POINTS

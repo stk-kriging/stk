@@ -48,10 +48,12 @@ zi_new = stk_feval (algo.f, xi_new);
 %   a batch Monte Carlo simulator typically returns the empirical mean and
 %   variance of a batch of evaluations. That's ok.
 
-if isempty (xi)
-    xi = xi_new;
-    zi = zi_new;
+% Concatenate with previously available evaluation results (if any)
+if algo.gather_repetitions,
+    % Three-column representation of evaluation results
+    [xi, zi] = stk_gather_repetitions (xi, zi, xi_new, zi_new);
 else
+    % Simple one-column reprsentation of evaluation results
     xi = [xi; xi_new];
     zi = [zi; zi_new];
 end
