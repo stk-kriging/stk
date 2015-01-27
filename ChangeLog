@@ -1,3 +1,9 @@
+2015-01-27  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_init.m: Fix a bug.
+
+	* paramestim/stk_param_init.m (paraminit_): Fix a bug.
+
 2015-01-25  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_dataframe.m: Make sure that the output is an stk_dataframe
