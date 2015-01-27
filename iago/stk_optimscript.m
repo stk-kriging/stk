@@ -134,7 +134,7 @@ options = [options {'pause', false}];
 
 %% Optimization
 
-res = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);
+[x_opt, f_opt, ~, aux] = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);
 
 
 %!test MAX_ITER = 2;  CRIT = 'IAGO';    stk_optimscript;
