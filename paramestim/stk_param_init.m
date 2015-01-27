@@ -255,6 +255,7 @@ for eta = eta_list
         else
             model.param = [0.0, log(nu), -log(rho)];
             log_sigma2 = lnv - (log (eta));
+            sigma2 = exp (log_sigma2);
         end
         
         % Now, compute the antilog-likelihood
