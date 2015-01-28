@@ -39,6 +39,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & IRT SystemX
 %    Copyright (C) 2012, 2013 SUPELEC
 %
@@ -102,29 +103,53 @@ end
 
 lnv = model.lognoisevariance;
 
+% Noise variance estimation is not supported in the heteroscedastic case
+if (~ isscalar (lnv)) && (any (isnan (lnv)))
+    stk_error (['model.lognoisevariance is non-scalar and contains nans. ' ...
+        'Noise variance estimation is not supported in the heteroscedastic ' ...
+        'case '], 'InvalidArgument');
+end
+
 % Estimation of noise variance ?
 %  * if do_estim_lnv is provided, use it to decide
 %  * if not, estimation occurs when lnv is nan
 if nargin < 5
-    do_estim_lnv = isnan (lnv);
-end
-    
-if do_estim_lnv
-    lnv = nan;
-elseif isnan (lnv)        
-    stk_error  (sprintf ...
-        (['do_estim_lnv is false, but model.lognoisevariance ' ...
-        ' is nan.\n If you don''t want the noise variance to be ' ...
-        'estimated, you must provide a value for it!']), ...
-        'MissingParameterValue');
+    if isscalar (lnv)
+        % In the homoscedastic case, estimate noise variance iff lnv is nan
+        do_estim_lnv = isnan (lnv);
+    else
+        % Noise variance estimation is not supported in the heteroscedastic
+        % case (see above). Heteroscedastic case with known noise variance:
+        do_estim_lnv = false;
+    end
+else  % do_estim_lnv has been provided
+    if isscalar (lnv)
+        if do_estim_lnv
+            lnv = nan;
+        elseif isnan (lnv)
+            stk_error (sprintf ...
+                (['do_estim_lnv is false, but model.lognoisevariance ' ...
+                'is nan. If you don''t want the noise variance to be ' ...
+                'estimated, you must provide a value for it!']), ...
+                'MissingParameterValue');
+        end
+    else
+        % Noise variance estimation is not supported in the heteroscedastic
+        % case (see above).
+        if do_estim_lnv
+            stk_error (['Noise variance estimation is not supported in the ' ...
+                'heteroscedastic case '], 'InvalidArgument');
+        end
+    end
 end
 
-if (isnan (lnv)) && (nargout < 2)
+if (do_estim_lnv) && (nargout < 2)
     warning (['stk_param_init will be computing an estimation of the ' ...
         'variance of the noise, perhaps should you call the function ' ...
         'with two output arguments?']);
 end
-    
+
+
 %--- linear model --------------------------------------------------------------
 
 if isnan (model.order),
@@ -203,7 +228,7 @@ function [param, lnv] = paraminit_ (xi, zi, box, nu, lm, lnv)
 if (std (double (zi)) == 0)
     warning ('STK:stk_param_init:ConstantResponse', ...
         'Parameter estimation is impossible with constant-response data.');
-    param = [0 log(nu) 0];  if isnan (lnv), lnv = 0; end
+    param = [0 log(nu) 0];  if any (isnan (lnv)), lnv = 0; end
     return  % Return some default values
 end
 
@@ -214,9 +239,11 @@ model.order = nan;  model.lm = lm;
 model.lognoisevariance = lnv;
 
 % list of possible values for the ratio eta = sigma2_noise / sigma2
-if lnv ~= -inf
+if (isscalar (lnv) && (lnv ~= -inf))
+    % Homoscedastic noisy case, with known or unknown noise variance
     eta_list = 10 .^ (-6:3:0);
 else
+    % Noiseless case or heteroscedastic noisy case (known noise variance)
     eta_list = 0;
 end
 
@@ -237,6 +264,9 @@ rho_best    = NaN;
 sigma2_best = NaN;
 aLL_best    = +Inf;
 
+% Homoscedastic case ?
+homoscedastic = (isscalar (lnv));
+
 % Try all possible combinations of rho and eta from the lists
 for eta = eta_list
     for rho = rho_list
@@ -246,15 +276,15 @@ for eta = eta_list
         
         % The same code works for the noiseless case and for the case where lnv
         % must be estimated (in the first case, eta = 0 and thus lnv is -inf)
-        if (eta == 0) || (isnan (lnv))
-            model.lognoisevariance = log (eta);      
+        if (eta == 0) || (homoscedastic && (isnan (lnv)))
+            model.lognoisevariance = log (eta);
             [beta_ignored, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU>
             if ~ (sigma2 > 0), continue; end
             log_sigma2 = log (sigma2);
             model.lognoisevariance = log  (eta * sigma2);
-        else
+        else % Known variances (homo- and hetero-scedastic cases)
             model.param = [0.0, log(nu), -log(rho)];
-            log_sigma2 = lnv - (log (eta));
+            log_sigma2 = (mean (lnv)) - (log (eta));
             sigma2 = exp (log_sigma2);
         end
         
@@ -276,7 +306,11 @@ if isinf (aLL_best)
 end
 
 param = log ([sigma2_best; nu; 1/rho_best]);
-lnv = log (eta_best * sigma2_best);
+
+if (isscalar (lnv)) && (isnan (lnv))
+    % Homoscedatic case with unknown variance... Here is our estimate:
+    lnv = log (eta_best * sigma2_best);
+end
 
 end % function paraminit_
 
@@ -366,6 +400,38 @@ end % function paraminit_
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
 %! model.param = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
+%! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
+
+%!test  % Homoscedastic case / do_estim_lnv = true
+%! model = stk_model ('stk_materncov32_iso');
+%! [model.param, model.lognoisevariance] = ...
+%!     stk_param_init (model, xi, zi, BOX, true);
+%! [model.param, model.lognoisevariance] = ...
+%!     stk_param_estim (model, xi, zi);
+%! zp = stk_predict (model, xi, zi, xt);
+%! assert (model.lognoisevariance > -inf);
+%! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
+
+%!error  % Homoscedastic case / do_estim_lnv = false / model.lnv = nan
+%! model = stk_model ('stk_materncov32_iso');
+%! model.lognoisevariance = nan;  % not compatible with do_estim_lnv == false
+%! [model.param, model.lognoisevariance] = ...
+%!     stk_param_init (model, xi, zi, BOX, false);
+
+%!error  % Heteroscedastic case / do_estim_lnv = true
+%! model = stk_model ('stk_materncov32_iso');
+%! lnv = log ((100 + rand (size (zi))) / 1e6);
+%! model.lognoisevariance = lnv;  % here we say that lnv is known
+%! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX, true);
+
+%!test  % Heteroscedastic case / known noise variance
+%! model = stk_model ('stk_materncov32_iso');
+%! lnv = log ((100 + rand (size (zi))) / 1e6);
+%! model.lognoisevariance = lnv;  % here we say that lnv is known
+%! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
+%! model.param = stk_param_estim (model, xi, zi, param0);
+%! zp = stk_predict (model, xi, zi, xt);
+%! assert (isequal (model.lognoisevariance, lnv));  % should be untouched
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!shared model, x, z
