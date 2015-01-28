@@ -136,10 +136,13 @@ nb_blocks = max (1, ceil(nt / block_size));
 
 block_size = ceil (nt / nb_blocks);
 
-% if we want to return a full kreq object in the case where several blocks are
-% used, we need to recompose full lambda_mu and RS matrices.
-if nargin > 1
+% The full lambda_mu matrix is only needed when nargout > 1
+if nargout > 1,
     lambda_mu = zeros (ni + kreq.r, nt);
+end
+
+% The full RS matrix is only needed when nargout > 3
+if nargout > 3,
     RS = zeros (size (lambda_mu));
 end
 
@@ -164,8 +167,13 @@ for block_num = 1:nb_blocks
         zp_a(idx) = kreq.lambda' * zi;
     end
     
-    if nargin > 1
+    % The full lambda_mu matrix is only needed when nargout > 1    
+    if nargout > 1
         lambda_mu(:, idx) = kreq.lambda_mu;
+    end
+    
+    % The full RS matrix is only needed when nargout > 3
+    if nargout > 3,
         RS(:, idx) = kreq.RS;
     end
     
@@ -244,11 +252,25 @@ end % function stk_predict -----------------------------------------------------
 %!test  y_prd1 = stk_predict(model, x_obs, z_obs, x_prd);
 %!error y_prd1 = stk_predict(model, x_obs, z_obs, x_prd, 0);
 
-%!test
-%! [y_prd1, lambda, mu, K] = stk_predict(model, x_obs, z_obs, x_prd);
-%! assert(isequal(size(lambda), [n m]));
-%! assert(isequal(size(mu), [1 m]));  % ordinary kriging
-%! assert(isequal(size(K), [m m]));
+%!test  % nargout = 2
+%! [y_prd1, lambda] = stk_predict (model, x_obs, z_obs, x_prd);
+%! assert (isequal (size (lambda), [n m]));
+
+%!test  % nargout = 2, compute only variances
+%! [y_prd1, lambda] = stk_predict (model, x_obs, [], x_prd);
+%! assert (isequal (size (lambda), [n m]));
+%! assert (all (isnan (y_prd1.mean)));
+
+%!test  % nargout = 3
+%! [y_prd1, lambda, mu] = stk_predict (model, x_obs, z_obs, x_prd);
+%! assert (isequal (size (lambda), [n m]));
+%! assert (isequal (size (mu), [1 m]));  % ordinary kriging
+
+%!test  % nargout = 4
+%! [y_prd1, lambda, mu, K] = stk_predict (model, x_obs, z_obs, x_prd);
+%! assert (isequal (size (lambda), [n m]));
+%! assert (isequal (size (mu), [1 m]));  % ordinary kriging
+%! assert (isequal (size (K), [m m]));
 
 %!test % use old-style .a structures (legacy)
 %! y_prd2 = stk_predict(model, struct('a', double(x_obs)), ...
