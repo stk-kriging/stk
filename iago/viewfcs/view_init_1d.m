@@ -37,19 +37,15 @@ LINE2 = {'-', 'LineWidth', 3, 'Color', [0.95 0.25 0.3]};
 xt0 = algo.disp_xvals;
 zt0 = algo.disp_zvals;
 
-[xt, ind] = sort ([xi; xt0]);
-[~, ind]  = sort (ind);
-xi_ind_ = ind(1:stk_length(xi));
-xt = stk_dataframe(xt);
+xt = sort ([xi; xt0]);
 
 [model_fake, zi_fake] = stk_fakenorep (algo.model, zi);
-[zp_, lambda_] = stk_predict (model_fake, xi, zi_fake, xt);
+zp_ = stk_predict (model_fake, xi, zi_fake, xt);
 
 % prediction + (maximizer density) + sampling criterion
 if algo.show1dsamplepaths
     
-    zsim_ = stk_generate_samplepaths (model_fake, xt, 4000);
-    zsimc_ = stk_conditioning (lambda_, zi_fake, zsim_, xi_ind_);
+    zsimc_ = stk_generate_samplepaths (model_fake, xi, zi_fake, xt, 4000);
     [~, ind_maximum] = max (zsimc_.data);
     
     figure(1) % prediction + true function
