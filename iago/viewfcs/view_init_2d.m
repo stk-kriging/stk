@@ -38,7 +38,7 @@ xt0 = algo.disp_xvals;
 zt0 = algo.disp_zvals;
 % keyboard
 
-zp_ = stk_predict(algo.model, xi, zi, xt0);
+zp_ = stk_predict_withrep (algo.model, xi, zi, xt0);
 
 figure(1)
 h1 = subplot(2,2,1);
