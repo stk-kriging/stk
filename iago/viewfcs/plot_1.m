@@ -33,7 +33,7 @@ LINE1 = {'--', 'LineWidth', 2, 'Color', [0.39, 0.47, 0.64]};
 LINE2 = {'-', 'LineWidth', 2, 'Color', [0.95 0.25 0.3]};
 MARKER1 = {'mo', 'MarkerSize', 5, 'MarkerFaceColor', 'y'};
 
-h=area(xg.data, [zp.mean-2*sqrt(zp.var), 4*sqrt(zp.var)]);
+h = area (double (xg), [zp.mean-2*sqrt(zp.var), 4*sqrt(zp.var)]);
 set(h(1),'FaceColor','none');
 set(h(2),'FaceColor',[0.8 0.8 0.8]);
 set(h,'LineStyle','-','LineWidth', 1, 'EdgeColor', 'none');

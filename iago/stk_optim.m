@@ -109,6 +109,9 @@ for i = 1:N
     % Pick a new evaluation point (from algo.xg0)
     [xi_new, zp, crit_xg] = algo.samplingcrit (algo, xi, zi);
     
+    % Figure (optional): evaluations, predictions, criterion, etc.
+    if algo.disp,  stk_optim_view_;  end
+    
     % COMPUTE CURRENT OPTIMIZER AND OPTIMUM
     switch(algo.type)
         case 'usemaxobs'
@@ -152,7 +155,6 @@ for i = 1:N
                 end
         end
     end
-    
     
     % HISTORY: Count current number of observations
     if size (zi, 2) == 1, % One-column representation
@@ -204,6 +206,33 @@ end
 
 
 end % function stk_optim
+
+
+%--- SUBFUNCTIONS --------------------------------------------------------------
+% [we use evalin ('caller', ...) since Octave does not support nested functions]
+
+function stk_optim_view_ ()
+
+[algo, i, xi, zi, xi_new, crit_xg] = evalin ...
+    ('caller', 'deal (algo, i, xi, zi, xi_new, crit_xg);');
+
+if mod (i - 1, algo.disp_period) ~= 0
+    return;
+end
+
+% Figure XX01: Ground truth + prediction mean/var on the same grid, in 1D
+if algo.dim == 1
+    stk_optim_fig01 (algo, xi, zi, xi_new);
+end
+
+% Figure XX02: Sampling criterion
+stk_optim_fig02 (algo, crit_xg);
+
+% Figure XX??: density of the maximizer
+%   (useful for criterion that do not already display it)
+%   TODO
+
+end % function stk_optim_view_
 
 
 %!shared f0, f, DIM, BOX, xi, MAX_ITER, options, xt, zt, xg, NOISEVARIANCE

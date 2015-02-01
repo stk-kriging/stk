@@ -1,12 +1,12 @@
-% VIEW_INIT view function
+% STK_OPTIM_CRIT_FIG02 ...
 
 % Copyright Notice
 %
 %    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -28,12 +28,24 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function view_init (algo, xi, zi, xg)
+function stk_optim_crit_fig02 (algo, x, p)
 
-if algo.dim == 1
-    %view_init_1d (algo, xi, zi); REMOVED
-elseif algo.dim == 2
-    view_init_2d (algo, xi, zi, xg);
+figure (algo.disp_fignum_base + algo.disp_fignum_critshift + 2);
+
+% x-axis: actual x-values in 1D, indices otherwise
+if algo.dim == 1,
+    x = double (x);
+    xlab = 'x';
+else
+    x = (1:(stk_length (x)))';
+    xlab = 'index';
 end
 
-end % function view_init
+stem (x, p);
+
+stk_labels (xlab, 'probability');
+stk_title ('Distribution of the maximizer');
+
+drawnow;
+
+end % function stk_optim_crit_fig02

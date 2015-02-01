@@ -55,6 +55,9 @@ options = {
     'disp', false
     'disp_xvals', []
     'disp_zvals', []
+    'disp_period', 1
+    'disp_fignum_base', 3000
+    'disp_fignum_critshift', 200
     'show1dsamplepaths', false
     'show1dmaximizerdens', 2
     'searchgrid_xvals', []
