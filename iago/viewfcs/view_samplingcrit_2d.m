@@ -50,8 +50,8 @@ end
 subplot(2,2,4)
 pcolor (XX, YY, ZZ); shading(gca,'interp'); colorbar
 hold on
-plot (xg.data(:, 1), xg.data(:, 2), XGDOT_STYLE{:});
-plot (xi.data(:, 1), xi.data(:, 2), XIDOT_STYLE{:});
+plot (xg(:, 1), xg(:, 2), XGDOT_STYLE{:});
+plot (xi(:, 1), xi(:, 2), XIDOT_STYLE{:});
 hold off
 stk_labels('x_1', 'x_2');
 stk_title('sampling criterion to be minimized');
