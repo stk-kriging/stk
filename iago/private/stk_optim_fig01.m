@@ -1,12 +1,12 @@
-% VIEW_INIT view function
+% STK_OPTIM_FIG01 ...
 
 % Copyright Notice
 %
 %    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -28,12 +28,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function view_init (algo, xi, zi, xg)
+function stk_optim_fig01 (algo, xi, zi, xi_new)
 
-if algo.dim == 1
-    %view_init_1d (algo, xi, zi); REMOVED
-elseif algo.dim == 2
-    view_init_2d (algo, xi, zi, xg);
-end
+xt0 = algo.disp_xvals;
+zt0 = algo.disp_zvals;
 
-end % function view_init
+zp_ = stk_predict_withrep (algo.model, xi, zi, xt0);
+
+figure (algo.disp_fignum_base + 1);
+
+plot_1 (xi, zi, xt0, zp_, xt0, zt0);  hold on;
+plot (xi_new * [1 1], ylim, '--', 'Color', 0.2 * [1 1 1]);  hold off;
+
+stk_labels ('x', 'f(x)');
+stk_title ('Evaluations and kriging prediction');
+
+drawnow;
+
+end % function stk_optim_fig01

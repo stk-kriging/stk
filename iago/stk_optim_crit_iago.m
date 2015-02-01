@@ -83,6 +83,8 @@ p_log_p = p .* (log (p));
 p_log_p(p < 1e-300) = 0;
 H_current = - sum (p_log_p);
 
+if algo.disp,  stk_optim_crit_iago_view_;  end
+
 
 %% COMPUTE THE STEPWISE UNCERTAINTY REDUCTION CRITERION
 
@@ -184,3 +186,40 @@ if algo.disp,
 end
 
 end %%END stk_optim_crit_iago
+
+
+
+%--- view_current --------------------------------------------------------------
+%
+% Some visualization related to the current state of affairs
+%   (meaning: before the computation of the CEM sampling criterion)
+%
+% [we use evalin ('caller', ...) since Octave does not support nested functions]
+
+function stk_optim_crit_iago_view_ ()
+
+[algo, ni, xi, zi, x_candi, zp, z_sim_xg, p] = evalin ...
+    ('caller', 'deal (algo, ni, xi, zi, xc, zp, z_simc, p);');
+
+% Count calls
+persistent count_calls
+if isempty (count_calls),  count_calls = 0;  end
+count_calls = count_calls + 1;
+
+% Display only once in a while
+if mod (count_calls - 1, algo.disp_period) ~= 0,
+    return;
+end
+
+% Figure XX01: Prediction & conditional samplepaths
+if algo.dim == 1,    
+    % Prediction and simulations: on candidate points only
+    z_pred_candi = zp((ni + 1):end, :);
+    z_sim_candi = z_sim_xg((ni + 1):end, :);
+    stk_optim_crit_fig01 (algo, xi, zi, x_candi, z_pred_candi, z_sim_candi);
+end
+
+% Figure XX02: Distribution of the maximizer
+stk_optim_crit_fig02 (algo, x_candi, p);
+
+end % function view_current
