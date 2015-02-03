@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function z = apply (x, dim, F, u)
+function varargout = apply (x, dim, F, u)
 
 if nargin == 4
     uu = {u};
@@ -34,33 +35,41 @@ else
     uu = {};
 end
 
+varargout = cell (1, max (1, nargout));
+
 if dim == 1
     % act along columns
-    z = feval (F, x.data, uu{:}, 1);
+    [varargout{:}] = feval (F, x.data, uu{:}, 1);
 else
     if dim ~= 2,
         stk_error ('Incorrect dimension specifier', 'IncorrectDimSpec');
     else
         % act along rows (less usual)
-        z = feval (F, x.data, uu{:}, 2);
+        [varargout{:}] = feval (F, x.data, uu{:}, 2);
     end
 end
 
 end % function apply
 
+
 %!shared x t u
-%! t = rand(3, 2);
-%! x = stk_dataframe(t);
+%! t = rand (3, 2);
+%! x = stk_dataframe (t);
 
-%!test u = apply(x, 1, @sum);
-%!assert (isequal(u, sum(t, 1)))
-%!test u = apply(x, 2, @sum);
-%!assert (isequal(u, sum(t, 2)))
-%!error u = apply(x, 3, @sum);
+%!test u = apply (x, 1, @sum);
+%!assert (isequal (u, sum (t, 1)))
+%!test u = apply (x, 2, @sum);
+%!assert (isequal (u, sum (t, 2)))
+%!error u = apply (x, 3, @sum);
 
-%!test u = apply(x, 1, @min, []);
-%!assert (isequal(u, min(t, [], 1)))
-%!test u = apply(x, 2, @min, []);
-%!assert (isequal(u, min(t, [], 2)))
-%!error u = apply(x, 3, @min, []);
+%!test u = apply (x, 1, @min, []);
+%!assert (isequal (u, min (t, [], 1)))
+%!test u = apply (x, 2, @min, []);
+%!assert (isequal (u, min (t, [], 2)))
+%!error u = apply (x, 3, @min, []);
 
+%!test
+%! t = [1; 3; 2];
+%! x = stk_dataframe (t);
+%! [M, k] = apply (x, 1, @max, []);
+%! assert ((M == 3) && (k == 2));

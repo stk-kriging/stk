@@ -1,5 +1,11 @@
 2015-02-03  Julien Bect  <julien.bect@supelec.fr>
 
+	@stk_dataframe/apply, min, max: Return more than one output argument
+
+	* arrays/@stk_dataframe/apply.m: Return more than one output argument
+	* arrays/@stk_dataframe/max.m: Return more than one output argument
+	* arrays/@stk_dataframe/min.m: Return more than one output argument
+
 	stk_param_relik.m: Improve the computation of G = W' * K * W
 
 	* paramestim/stk_param_relik.m: Compute G = W' * K * W in such a

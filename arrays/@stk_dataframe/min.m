@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,28 +27,30 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function z = min(x, y, dim)
+function varargout = min (x, y, dim)
 
 if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if (nargin < 2) || isempty(y), %--- action on rows or columns ---------------------------
-   
-    if nargin < 3, dim = 1; end
-    
-    z = apply(x, dim, @min, []);
-        
-else %--- apply 'min' elementwise -------------------------------------------------------
+varargout = cell (1, max (1, nargout));
 
+if (nargin < 2) || (isempty (y)),  % Act on rows or columns
+    
+    if nargin < 3,  dim = 1;  end
+    
+    [varargout{:}] = apply (x, dim, @min, []);
+    
+else  % Apply 'min' elementwise
+    
     if nargin > 2,
         errmsg = 'Too many input arguments (elementwise min assumed)';
-        stk_error(errmsg, 'TooManyInputArgs');
+        stk_error (errmsg, 'TooManyInputArgs');
     else
-        z = bsxfun(@min, x, y);
+        [varargout{:}] = bsxfun (@min, x, y);
     end
     
-end %--- that's all, folks --------------------------------------------------------------
+end % if
 
 end % function min
 
@@ -63,3 +66,8 @@ end % function min
 %!assert (isequal (min(df1, [], 1), min(x1)))
 %!assert (isequal (min(df1, [], 2), min(x1, [], 2)))
 %!error (min(df1, df1, 2))
+
+%!test
+%! x = stk_dataframe ([5; 2; 4]);
+%! [M, k] = min (x);
+%! assert ((M == 2) && (k == 2));
