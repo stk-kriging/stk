@@ -115,7 +115,7 @@ for i = 1:N
     % COMPUTE CURRENT OPTIMIZER AND OPTIMUM
     switch(algo.type)
         case 'usemaxobs'
-            [f_opt, xstarn_ind] = max(zi.data);
+            [f_opt, xstarn_ind] = max (zi(:, 1));
             x_opt = xi(xstarn_ind, :);
         case 'usemaxpred'
             [~, xstarn_ind] = max(zp.mean);

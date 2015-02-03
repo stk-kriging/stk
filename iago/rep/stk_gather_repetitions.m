@@ -56,38 +56,42 @@ z_new = stk_dataframe (z_new, colnames);
 
 % First, deal with new evaluations that are repetitions
 % of existing evaluation points
-[b, pos] = ismember (x_new, x, 'rows');
-all_pos = unique (pos(pos > 0));
-for k = 1:(length (all_pos))
-    
-    % Concatenate into z_
-    i = all_pos(k);  % index of a row in x
-    b_rep = (pos == i);  % indicates which rows are repetitions of x(i, :)
-    assert (any (b_rep));  % safety net
-    z_ = [z(i, :); z_new(b_rep, :)];
-    
-    % Summarize z_
-    nb_obs = z_.nb_obs;
-    n_tot = sum (nb_obs);
-    p = nb_obs / n_tot;  % weights
-    zm = sum (p .* z_.mean);
-    zv = (sum (p .* z_.var)) + (sum (p .* ((z_.mean - zm) .^ 2)));
-    z(i, :) = [zm zv n_tot];
-    
-    % We can't preserve row names in this case
-    if ~ isempty (z.rownames)
-        z.rownames{i} = '';
+if ~ isempty (x)
+    [b, pos] = ismember (x_new, x, 'rows');
+    all_pos = unique (pos(pos > 0));
+    for k = 1:(length (all_pos))
+        
+        % Concatenate into z_
+        i = all_pos(k);  % index of a row in x
+        b_rep = (pos == i);  % indicates which rows are repetitions of x(i, :)
+        assert (any (b_rep));  % safety net
+        z_ = [z(i, :); z_new(b_rep, :)];
+        
+        % Summarize z_
+        nb_obs = z_.nb_obs;
+        n_tot = sum (nb_obs);
+        p = nb_obs / n_tot;  % weights
+        zm = sum (p .* z_.mean);
+        zv = (sum (p .* z_.var)) + (sum (p .* ((z_.mean - zm) .^ 2)));
+        z(i, :) = [zm zv n_tot];
+        
+        % We can't preserve row names in this case
+        if ~ isempty (z.rownames)
+            z.rownames{i} = '';
+        end
+        if (isa (x, 'stk_dataframe')) && (~ isempty (x.rownames))
+            x.rownames{i} = '';
+        end
+        
     end
-    if (isa (x, 'stk_dataframe')) && (~ isempty (x.rownames))
-        x.rownames{i} = '';
-    end
-    
-end
 
+    % Remove the points that have been dealt with
+    x_new = x_new(~ b, :);
+    z_new = z_new(~ b, :);
+end
+    
 % Second, deal with those that are not repetitions of any existing evaluation
 % point (but there may still be repetitions *inside* z_new)
-x_new = x_new(~ b, :);
-z_new = z_new(~ b, :);
 [arg1_ignored, idx, pos] = unique (double (x_new), 'rows');
 nb_unique = length (idx);
 % Note: Octave doesn't support the 'stable', so we just reorder manually
@@ -113,7 +117,7 @@ for r = 1:nb_unique
     else  % General case: repetitions (any number of them)
         
         % Concatenate into z_
-        z_ = [z(i, :); z_new(b_rep, :)];
+        z_ = z_new(b_rep, :);
     
         % Summarize z_ into z_new_(r, :)
         nb_obs = z_.nb_obs;
