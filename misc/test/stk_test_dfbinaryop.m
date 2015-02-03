@@ -47,7 +47,7 @@ catch
 
     err = lasterror ();
 
-    if strcmp (err.message, ['octave_base_value::array_value(): '
+    if strcmp (err.message, ['octave_base_value::array_value(): ' ...
                              'wrong type argument `class'''])
 
         warning (msg.message);
