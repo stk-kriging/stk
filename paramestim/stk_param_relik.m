@@ -12,6 +12,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@supelec.fr>
@@ -69,7 +70,10 @@ if q == 0  % Special case: simple kriging
 else  % General case
     [Q, R_ignored] = qr (P);  %#ok<NASGU> %the second argument *must* be here
     W = Q(:, (q+1):n);
-    G = W' * (K * W);
+    
+    % Compute G = W' * K * W
+    M = (stk_cholcov (K)) * W;
+    G = (M') * M;
     
     % Check if G is (at least close to) symmetric
     Delta = G - G';  s = sqrt (diag (G));
