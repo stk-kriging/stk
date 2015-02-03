@@ -1,3 +1,10 @@
+2015-02-03  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_relik.m: Improve the computation of G = W' * K * W
+
+	* paramestim/stk_param_relik.m: Compute G = W' * K * W in such a
+	way that the result is always (?) symmetric.
+
 2015-01-28  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_predict.m: Compute lambda_mu and RS only when necessary

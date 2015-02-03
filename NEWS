@@ -39,6 +39,9 @@ Changes in version 2.3.0
    o stk_param_estim can provide a value for param0 when it is missing from the
      list of input arguments.
 
+   o stk_param_relik: Compute G = W' * K * W in such a way that the result is
+     always (?) symmetric.
+
 * Prediction
 
    o stk_predict computes lambda_mu and RS only when necessary,
