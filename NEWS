@@ -94,9 +94,12 @@ Changes in version 2.3.0
 
    o sort and mtimes are now overloaded for stk_dataframe objects
 
-   o Now the output of stk_dataframe is always an stk_dataframe
-     object. Previously, this wasn't true if the first input argument was, e.g.,
-     an stk_factorialdesign object.
+   o min, max are now able to return a second output argument (index of
+     mininizer or maximizer) for stk_dataframe arguments.
+
+   o Now the output of stk_dataframe is always an stk_dataframe object.
+     Previously, this wasn't true if the first input argument was, e.g., an
+     stk_factorialdesign object.
 
 
 Changes in version 2.2.0
