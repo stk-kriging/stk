@@ -72,7 +72,7 @@ numfcs = numel (f);
 zname = cell (size (f));
 for j = 1:numfcs,
     if ischar (f{j}),
-        zname{j} = f;
+        zname{j} = f{j};
     elseif ~ isa (f{j}, 'function_handle')
         stk_error (['Argument ''f'' should be a cell-array of function ' ...
             'names or function handles.'], 'IncorrectType');
@@ -154,3 +154,10 @@ end % function stk_feval
 %! z = stk_feval ({@sin @cos}, t);
 %! assert (isa (z, 'stk_dataframe'));
 %! assert (all (size(z) == [10, 2]) );
+
+%!test
+%! t = stk_sampling_regulargrid (20, 1, [0; 2*pi]);
+%! F = {'sin' 'cos'};
+%! z = stk_feval (F, t);
+%! assert (isequal (z.data, [sin(t.data) cos(t.data)]));
+%! assert (isequal (z.colnames, {'sin' 'cos'}));
