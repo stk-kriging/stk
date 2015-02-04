@@ -1,5 +1,12 @@
 2015-02-04  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_feval.m: Accept multivariate outputs (closes #20)
+
+	* arrays/generic/stk_feval.m: Accept functions with multivariate
+	outputs (i.e., outputs with several columns). Improve the
+	construction of the output dataframe (column names). Add unit
+	tests.
+
 	stk_feval.m: Fix a bug related to column names
 
 	* arrays/generic/stk_feval.m: Fix a bug related to column names.
