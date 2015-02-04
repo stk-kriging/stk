@@ -1,3 +1,9 @@
+2015-02-04  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_feval.m: Fix a bug related to column names
+
+	* arrays/generic/stk_feval.m: Fix a bug related to column names.
+
 2015-02-03  Julien Bect  <julien.bect@supelec.fr>
 
 	@stk_dataframe/apply, min, max: Return more than one output argument
