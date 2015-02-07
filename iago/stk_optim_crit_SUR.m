@@ -30,7 +30,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [xinew, zp, samplingcrit] = stk_optim_crit_SUR (algo, xi_ind, zi, type)
+function [zp, samplingcrit] = stk_optim_crit_SUR (algo, xi_ind, zi, type)
 
 error ('This function needs a big rehaul (see stk_optim_crit_iago).');
 
@@ -107,12 +107,9 @@ for test_ind = 1:ng
     end
 end
 
-%% PICK THE NEXT EVALUATION POINT
-[~, ind_min_samplingcrit] = min(samplingcrit);
-xinew = xg(ind_min_samplingcrit, :);
-
 %% DISPLAY SAMPLING CRITERION?
 if algo.disp,
+    [~, ind_min] = min(samplingcrit);  xinew = xg(ind_min, :); %%%TEMP
     view_samplingcrit(algo, xg, xi, xinew, samplingcrit, 2);
 end
 

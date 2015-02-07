@@ -32,7 +32,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [xinew, zp, CondH ] = stk_optim_crit_iago (algo, xi, zi)
+function [zp, CondH ] = stk_optim_crit_iago (algo, xi, zi)
 
 % Backward compatiblity: accept model structures with missing lognoisevariance
 if (~ isfield (algo.model, 'lognoisevariance')) ...
@@ -176,12 +176,10 @@ while ~CONDH_OK
     
 end % test if CondH is computed correctly
 
-%% SELECT THE NEXT EVALUATION POINT
-[~, ind_min_CondH] = min(CondH);
-xinew = xc(ind_min_CondH, :);
 
 %% DISPLAY SAMPLING CRITERION?
 if algo.disp,
+    [~, ind_min_CondH] = min(CondH);  xinew = xc(ind_min_CondH, :);  %%%TEMP
     view_samplingcrit(algo, xc, xi, xinew, CondH, 2);
 end
 
@@ -212,7 +210,7 @@ if mod (count_calls - 1, algo.disp_period) ~= 0,
 end
 
 % Figure XX01: Prediction & conditional samplepaths
-if algo.dim == 1,    
+if algo.dim == 1,
     % Prediction and simulations: on candidate points only
     z_pred_candi = zp((ni + 1):end, :);
     z_sim_candi = z_sim_xg((ni + 1):end, :);
