@@ -242,38 +242,30 @@ switch (algo.samplingcritname)
         algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 1));
         algo.type = 'usemaxobs';
         NEED_QUAD = true;
-        if isempty(algo.quadtype), algo.quadtype = 'GH'; end
-        if isnan(algo.quadorder),  algo.quadorder = 15;  end
     case 'EI_v3',
         algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 2));
         algo.type = 'usemaxpred';
         NEED_QUAD = true;
-        if isempty(algo.quadtype), algo.quadtype = 'GH'; end
-        if isnan(algo.quadorder),  algo.quadorder = 15;  end
     case 'EEI',
         assert (noisy_eval, 'STK:optim_init',...
             'Error: cannot use noisy evaluations with crit=''EEI''');
         algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 3));
         algo.type = 'usemaxobs';
         NEED_QUAD = true;
-        if isempty(algo.quadtype), algo.quadtype = 'GH'; end
-        if isnan(algo.quadorder),  algo.quadorder = 15;  end
     case 'EEI_v2',
         algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 4));
         algo.type = 'usemaxpred';
         NEED_QUAD = true;
-        if isempty(algo.quadtype), algo.quadtype = 'GH'; end
-        if isnan(algo.quadorder),  algo.quadorder = 15;  end
     case 'IAGO',
         algo.samplingcrit = @stk_optim_crit_iago;
         algo.type = 'usemaxobs';
         NEED_QUAD = true;
-        if isempty(algo.quadtype), algo.quadtype = 'GH'; end
-        if isnan(algo.quadorder),  algo.quadorder = 15;  end
 end
 
 %% QUADRATURE
 if NEED_QUAD
+    if isempty(algo.quadtype), algo.quadtype = 'GH'; end
+    if isnan(algo.quadorder),  algo.quadorder = 15;  end
     algo.Q = algo.quadorder;
     algo = stk_quadrature(0, algo, algo.quadtype, algo.quadorder);
 end
