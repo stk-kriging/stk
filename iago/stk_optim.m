@@ -66,11 +66,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [x_opt, f_opt, retcode, aux] = stk_optim (f, dim, box, xi, N, varargin)
+function [x_opt, f_opt, retcode, aux] = ...
+    stk_optim (f, dim, box, xi, zi, N, varargin)
 
 t0 = tic;  start_time = datestr (now);
 
-[algo, xi, zi] = stk_optim_init (f, dim, box, xi, varargin);
+algo = stk_optim_init (f, dim, box, varargin);
+
+% Initial design
+if isempty (zi) && (~ isempty (xi))
+    [xi, zi, algo] = stk_optim_addevals (algo, [], [], xi);
+else
+    assert ((stk_length (xi)) == (stk_length (zi)));
+end
 
 iter_history = struct ('x_opt', {}, 'f_opt', {});
 
@@ -264,20 +272,20 @@ end % function stk_optim_view_
 %!test
 %! options = [options {'disp_xvals', xt, 'disp_zvals', zt}];
 %! options = [options {'searchgrid_xvals', xg}];
-%! res = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);  close all;
+%! res = stk_optim (f, DIM, BOX, xi, [], MAX_ITER, options);  close all;
 
 %!test  % xt, zt -> numeric
 %! options = [options {'disp_xvals', double(xt), 'disp_zvals', double(zt)}];
 %! options = [options {'searchgrid_xvals', xg}]
-%! res = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);  close all;
+%! res = stk_optim (f, DIM, BOX, xi, [], MAX_ITER, options);  close all;
 
 %!test  % xg -> numeric
 %! options = [options {'disp_xvals', xt, 'disp_zvals', zt}];
 %! options = [options {'searchgrid_xvals', double(xg)}];
-%! res = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);  close all;
+%! res = stk_optim (f, DIM, BOX, xi, [], MAX_ITER, options);  close all;
 
 %!test  % xg -> numeric
 %! options = [options {'disp_xvals', xt, 'disp_zvals', zt}];
 %! options = [options {'searchgrid_xvals', xg}];
 %! xi = xi.data;
-%! res = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);  close all;
+%! res = stk_optim (f, DIM, BOX, xi, [], MAX_ITER, options);  close all;

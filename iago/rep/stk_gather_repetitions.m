@@ -28,6 +28,11 @@
 
 function [x, z] = stk_gather_repetitions (x, z, x_new, z_new)
 
+if nargin == 2,
+    x_new = x;  x = [];
+    z_new = z;  z = [];
+end
+
 % NOTE: we assume that there are no repetitions in (x, z)
 
 n = stk_length (x);      assert (stk_length (z) == n);

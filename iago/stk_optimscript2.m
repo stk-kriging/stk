@@ -39,9 +39,6 @@ NOISEVARIANCE = 1 ^ 2;
 nc = 31;
 xc = stk_sampling_regulargrid (nc, DIM, BOX);
 
-% Initial DoE
-xi = xc(1:6:nc, :);
-
 % Ground truth  (this grid of 400 is not actually used by the algorithm)
 NT = 400;
 xt = stk_sampling_regulargrid (NT, DIM, BOX);
@@ -50,6 +47,10 @@ zt = stk_feval (f0, xt);
 % Optimise f0 based on noisy evaluations
 %   (homoscedastic Gaussian noise)
 f = @(x)(f0(x) + sqrt (NOISEVARIANCE) * randn (size (x)));
+
+% Initial DoE: one batch of five every 6 candidate points
+xi = repmat (xc(1:6:nc, :), 5, 1);
+[xi, zi] = stk_gather_repetitions (xi, f(xi));
 
 
 %% Parameters of the optimization procedure
@@ -77,4 +78,4 @@ options = [options {'searchgrid_xvals', xc, ...
 
 %% Optimization
 
-[x_opt, f_opt, ~, aux] = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);
+[x_opt, f_opt, ~, aux] = stk_optim (f, DIM, BOX, xi, [], MAX_ITER, options);

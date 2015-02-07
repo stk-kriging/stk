@@ -134,7 +134,7 @@ options = [options {'pause', false}];
 
 %% Optimization
 
-[x_opt, f_opt, ~, aux] = stk_optim (f, DIM, BOX, xi, MAX_ITER, options);
+[x_opt, f_opt, ~, aux] = stk_optim (f, DIM, BOX, xi, [], MAX_ITER, options);
 
 
 %!shared MAX_ITER TESTCASE_NUM
