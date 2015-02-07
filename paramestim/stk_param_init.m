@@ -40,8 +40,7 @@
 % Copyright Notice
 %
 %    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2014 SUPELEC & IRT SystemX
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
 %    Authors:  Julien Bect  <julien.bect@supelec.fr>
 %              Paul Feliot  <paul.feliot@irt-systemx.fr>

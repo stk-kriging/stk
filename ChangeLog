@@ -1,5 +1,11 @@
 2015-02-04  Julien Bect  <julien.bect@supelec.fr>
 
+	Overload uplus, uminus for stk_dataframe objects.
+
+	* arrays/@stk_dataframe/uminus.m: Overload uminus.
+	* arrays/@stk_dataframe/uplus.m: Overload uplus.
+	* arrays/@stk_factorialdesign/uminus.m: Overload uminus.
+
 	stk_feval.m: Accept multivariate outputs (closes #20)
 
 	* arrays/generic/stk_feval.m: Accept functions with multivariate
