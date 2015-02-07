@@ -32,7 +32,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [algo, xi, zi] = stk_optim_init(f, dim, box, xi, varargin)
+function algo = stk_optim_init (f, dim, box, varargin)
 
 %% FUNCTION DEFINTION
 algo.f  = f;
@@ -208,10 +208,6 @@ else
         assert ((isnumeric (v)) && (isscalar (v)));
     end
 end
-
-
-%% INITIAL EVALUATIONS
-[xi, zi, algo] = stk_optim_addevals(algo, [], [], xi);
 
 
 %% Set prior for covariance parameters
