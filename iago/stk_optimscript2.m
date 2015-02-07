@@ -78,4 +78,4 @@ options = [options {'searchgrid_xvals', xc, ...
 
 %% Optimization
 
-[x_opt, f_opt, ~, aux] = stk_optim (f, DIM, BOX, xi, [], MAX_ITER, options);
+[x_opt, f_opt, ~, aux] = stk_optim (f, DIM, BOX, xi, zi, MAX_ITER, options);
