@@ -29,7 +29,6 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2014 IRT SystemX
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@supelec.fr>
