@@ -58,7 +58,7 @@ switch state
                 u0 = step/2:step:(1-step/2);
                 zQ = -sqrt(2)*erfcinv(2*u0); % zQ = norminv(u0);
                 algo.zQ = zQ(:);
-                algo.wQ = step*ones(algo.Q, 1);
+                algo.wQ = step*ones(algo.quadorder, 1);
             case 'T',
                 step = 1/quadorder;
                 u0 = step/2:step:(1-step/2);

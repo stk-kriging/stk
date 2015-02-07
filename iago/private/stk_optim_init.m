@@ -262,11 +262,12 @@ switch (algo.samplingcritname)
         NEED_QUAD = true;
 end
 
+
 %% QUADRATURE
+
 if NEED_QUAD
     if isempty(algo.quadtype), algo.quadtype = 'GH'; end
     if isnan(algo.quadorder),  algo.quadorder = 15;  end
-    algo.Q = algo.quadorder;
     algo = stk_quadrature(0, algo, algo.quadtype, algo.quadorder);
 end
 
