@@ -92,17 +92,17 @@ end
     
 % Second, deal with those that are not repetitions of any existing evaluation
 % point (but there may still be repetitions *inside* z_new)
-[arg1_ignored, idx, pos] = unique (double (x_new), 'rows');
+[arg1_ignored, idx, pos] = unique (double (x_new), 'rows', 'first');
 nb_unique = length (idx);
-% Note: Octave doesn't support the 'stable', so we just reorder manually
-[idx_sorted, k] = sort (idx);
-x_new = x_new(idx_sorted, :);
+% Note: Octave doesn't support the 'stable' option, so we just reorder manually
+[idx_stable, k] = sort (idx);
+x_new = x_new(idx_stable, :);
 z_new_ = stk_dataframe (nan (nb_unique, 3), colnames, {});
 for r = 1:nb_unique
 
     % Pick a row & count repetitions
-    i = idx(k(r));  % index of a row in x_new
-    b_rep = (pos == i);  % indicates which rows are repetitions of x_new(i, :)
+    i = idx_stable(r);  % index of a row in x_new
+    b_rep = (pos == k(r)); % indicates which rows are repetitions of x_new(i, :)
     n_rep = sum (b_rep);  assert (n_rep > 0);
 
     if n_rep == 1,  % Special case: no repetitions
