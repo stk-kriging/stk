@@ -136,8 +136,8 @@ while ~CONDH_OK
             zQ = stk_quadrature (1, algo, zp.mean(ind_candi), ...
                 zp.var(ind_candi) + noisevariance);
             
-            H = zeros(algo.Q,1);
-            for k = 1:algo.Q
+            H = zeros(algo.quadorder,1);
+            for k = 1:algo.quadorder
                 
                 % Finish the computation of zsimc
                 delta = zQ(k) - z_sim0(ind_candi, :);
@@ -168,8 +168,8 @@ while ~CONDH_OK
     % 		disp(['Warning: numerical instability detected' ...
     % 			  ' while computing entropy, increasing quadrature order']);
     % 		CONDH_OK = false;
-    % 		algo.Q = algo.Q + 100;
-    % 		[algo.zQ, algo.wQ] = stk_quadrature(algo.quadtype, algo.Q);
+    % 		algo.quadorder = algo.quadorder + 100;
+    % 		[algo.zQ, algo.wQ] = stk_quadrature(algo.quadtype, algo.quadorder);
     % 	else
     % 		CONDH_OK = true;
     % 	end
