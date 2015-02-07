@@ -32,7 +32,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [xinew, zp, samplingcrit] = stk_optim_crit_EI (algo, xi_ind, zi)
+function [zp, samplingcrit] = stk_optim_crit_EI (algo, xi_ind, zi)
 
 error ('This function needs a big rehaul (see stk_optim_crit_iago).');
 
@@ -66,12 +66,9 @@ Mn = max(zi);
 EI = stk_distrib_normal_ei (Mn, zp.mean, sqrt(zp.var), true);
 samplingcrit = - (Mn + EI);
 
-%% PICK THE NEXT EVALUATION POINT
-[~, ind_min_samplingcrit] = min(samplingcrit);
-xinew = xg(ind_min_samplingcrit, :);
-
 %% DISPLAY SAMPLING CRITERION?
 if algo.disp,
+    [~, ind_min] = min(samplingcrit);  xinew = xg(ind_min, :); %%%TEMP
     view_samplingcrit(algo, xg, xi, xinew, samplingcrit, 2);
 end
 

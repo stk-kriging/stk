@@ -113,9 +113,18 @@ for i = 1:N
         
         fprintf('done\n');
     end
+
+    % Compute sampling criterion
+    [zp, crit_xg] = algo.samplingcrit (algo, xi, zi);
+    assert ((stk_length (algo.xg0)) == (stk_length (crit_xg)));
     
-    % Pick a new evaluation point (from algo.xg0)
-    [xi_new, zp, crit_xg] = algo.samplingcrit (algo, xi, zi);
+    % Pick a new evaluation point
+    min_crit = min (crit_xg);
+    idx_min = find (crit_xg == min_crit);  % TODO: introduce numerical tol ?
+    if (length (idx_min)) > 1
+        idx_min = idx_min (randi (length (idx_min)));
+    end
+    xi_new = algo.xg0(idx_min, :);
     
     % Figure (optional): evaluations, predictions, criterion, etc.
     if algo.disp,  stk_optim_view_;  end
