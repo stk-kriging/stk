@@ -94,7 +94,7 @@ Changes in version 2.3.0
 
    o stk_feval now handles multivariate outputs (ticket #20 closed).
 
-   o sort and mtimes are now overloaded for stk_dataframe objects
+   o sort, mtimes, uplus and uminus are now overloaded for stk_dataframe objects
 
    o min, max are now able to return a second output argument (index of
      mininizer or maximizer) for stk_dataframe arguments.
