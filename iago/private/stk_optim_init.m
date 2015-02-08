@@ -46,6 +46,7 @@ model.param = nan (dim + 2, 1);
 %% PROCESS OPTIONS
 options = {
     'samplingcritname', 'EI'
+    'samplingcrit', []
     'model', model
     'estimparams', true
     'noisevariance', 0.0
@@ -68,7 +69,7 @@ options = {
     'nsamplepaths', 800
     'quadtype', []
     'quadorder', nan
-    'stoprule', true
+    'stoprule', false
     'opt_estim', 'auto'
     };
 
@@ -235,23 +236,33 @@ algo.model.prior.invcov = diag ([0 0.5*ones(1,dim+1)]);
 
 %% Sampling criterion
 
-switch (algo.samplingcritname)
-    case 'EI',
-        algo.samplingcrit = @stk_optim_crit_EI;
-    case 'EI_v2',
-        algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 1));
-    case 'EI_v3',
-        algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 2));
-    case 'EEI',
-        algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 3));
-    case 'EEI_v2',
-        algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 4));
-    case 'IAGO',
-        algo.samplingcrit = @stk_optim_crit_iago;
-    otherwise
-        algo.samplingcrit = str2func (algo.samplingcritname);
+if isempty (algo.samplingcrit)
+    
+    switch (algo.samplingcritname)
+        case 'EI',
+            % Expected improvement criterion
+            algo.samplingcrit = @stk_optim_crit_EI;
+        case {'CEM', 'IAGO'},
+            % Conditional entropy of the maximizer
+            algo.samplingcrit = @stk_optim_crit_iago;
+        otherwise
+            % Try to create a function handle automatically
+            algo.samplingcrit = str2func (algo.samplingcritname);
+    end
+    
+else  % Make sure algo.samplingcritname is a char
+    
+    algo.samplingcritname = 'UnnamedCriterion';
+    
 end
 
+% Experimental (a.k.a user-defined) sampling criteria can be used by providing
+% directly a function handle in algo.samplingcrit. For instance
+%
+%    algo.samplingcritname = 'EEI';
+%    algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 3));
+
+assert (ischar (algo.samplingcritname));
 assert (isa (algo.samplingcrit, 'function_handle'));
 
 
@@ -286,8 +297,11 @@ end
 % integration rule. We should provide some control over this one too.
 %
 
+% Detect automatically some sampling criterion names for which we know
+% that a quadrature is performed. For user-defined criterions, the user
+% must specify algo.quadtype and algo.quadorder.
 NEED_QUAD = ismember (algo.samplingcritname, ...
-    {'EI_v2', 'EI_v3', 'EEI', 'EEI_v2', 'IAGO'});
+    {'EI_v2', 'EI_v3', 'EEI', 'EEI_v2', 'CEM', 'IAGO'});
 
 if NEED_QUAD,
     % Default: Gauss-Hermite quadrature with 15 quadrature points

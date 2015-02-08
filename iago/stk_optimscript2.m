@@ -58,8 +58,15 @@ xi = repmat (xc(1:6:nc, :), 5, 1);
 % Maximum number of iterations
 MAX_ITER = 5000;
 
-% Use IAGO unless instructed otherwise
-options = {'samplingcritname', 'IAGO'};
+% Sampling criterion: conditional entropy of the maximizer
+options = {'samplingcritname', 'CEM'};  % (IAGO algorithm)
+
+% % Use IID uniform sampling (constant criterion)
+% % This demonstrate the use of a user-defined sampling criterion.
+% options = {'samplingcritname', 'IID', ...
+%     'samplingcrit', @(algo, x_obs, z_obs)(deal ( ...
+%     stk_predict_withrep (algo.model, x_obs, z_obs, algo.xg0), ...
+%     ones (stk_length (algo.xg0), 1)))};
 
 % Homoscedastic noise, known noise variance
 options = [options {'noisevariance', NOISEVARIANCE}];
