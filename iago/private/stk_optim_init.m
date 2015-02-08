@@ -69,6 +69,7 @@ options = {
     'quadtype', []
     'quadorder', nan
     'stoprule', true
+    'opt_estim', 'auto'
     };
 
 if iscell(varargin{1}{1}),
@@ -163,6 +164,13 @@ if isempty (algo.gather_repetitions)
     algo.gather_repetitions = ~ all (algo.model.lognoisevariance == -inf);
 end
 
+% Some criterions cannot deal with noisy evaluations
+if (~ isequal (algo.noisevariance, 0)) ...
+        && (ismember (algo.samplingcritname, {'EI', 'EI_v2', 'EEI'}))
+    stk_error (sprintf (['Criterion ''%s'' cannot be used with noisy ' ...
+        'evaluations'], algo.samplingcritname), 'InvalidArgument');
+end
+
 
 %% Convert logical options
 
@@ -225,50 +233,72 @@ algo.model.prior.mean = [LOGSIGMA2_PRIORMEAN; ...
 algo.model.prior.invcov = diag ([0 0.5*ones(1,dim+1)]);
 
 
-%% SELECT SAMPLING CRITERION
-
-noisy_eval = ~ isequal (algo.noisevariance, 0);
+%% Sampling criterion
 
 switch (algo.samplingcritname)
     case 'EI',
-        assert (noisy_eval, 'STK:optim_init',...
-            'Error: cannot use noisy evaluations with crit=''EI''');
-        algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_EI (A, xi, zi));
-        algo.type = 'usemaxobs';
-        NEED_QUAD = false;
+        algo.samplingcrit = @stk_optim_crit_EI;
     case 'EI_v2',
-        assert (noisy_eval, 'STK:optim_init',...
-            'Error: cannot use noisy evaluations with crit=''EI_v2''');
         algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 1));
-        algo.type = 'usemaxobs';
-        NEED_QUAD = true;
     case 'EI_v3',
         algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 2));
-        algo.type = 'usemaxpred';
-        NEED_QUAD = true;
     case 'EEI',
-        assert (noisy_eval, 'STK:optim_init',...
-            'Error: cannot use noisy evaluations with crit=''EEI''');
         algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 3));
-        algo.type = 'usemaxobs';
-        NEED_QUAD = true;
     case 'EEI_v2',
         algo.samplingcrit = @(A, xi, zi)(stk_optim_crit_SUR (A, xi, zi, 4));
-        algo.type = 'usemaxpred';
-        NEED_QUAD = true;
     case 'IAGO',
         algo.samplingcrit = @stk_optim_crit_iago;
-        algo.type = 'usemaxobs';
-        NEED_QUAD = true;
+    otherwise
+        algo.samplingcrit = str2func (algo.samplingcritname);
 end
 
+assert (isa (algo.samplingcrit, 'function_handle'));
 
-%% QUADRATURE
 
-if NEED_QUAD
-    if isempty(algo.quadtype), algo.quadtype = 'GH'; end
-    if isnan(algo.quadorder),  algo.quadorder = 15;  end
-    algo = stk_quadrature(0, algo, algo.quadtype, algo.quadorder);
+%% Method used to estimate x_opt and f_opt
+
+if strcmp (algo.opt_estim, 'auto')
+    if algo.noisevariance == 0
+        % Noiseless case: use the best evaluation so far
+        algo.opt_estim = 'usemaxobs';
+    else
+        % Othewise, use the best predicted value
+        algo.opt_estim = 'usemaxpred';
+    end
 end
+
+% FIXME: Another option would be worth including, namely, using the MAP
+%    estimate for the optimal location in the set of candidate points
+
+if ~ ismember (algo.opt_estim, {'usemaxobs', 'usemaxpred'})
+    stk_error (['Option opt_estim should be equal to ''usemaxobs'' or ' ...
+        '''usemaxpred''.'], 'InvalidArgument');
+end
+
+        
+%% Quadrature rule(s)
+%
+% Currently, this section only deals with the choice of the "vertical"
+% integration scheme, i.e., integration with respect to the unknown value of
+% future observation(s).
+%
+% FIXME: in the case of integral criteria, there is another ("horizontal")
+% integration rule. We should provide some control over this one too.
+%
+
+NEED_QUAD = ismember (algo.samplingcritname, ...
+    {'EI_v2', 'EI_v3', 'EEI', 'EEI_v2', 'IAGO'});
+
+if NEED_QUAD,
+    % Default: Gauss-Hermite quadrature with 15 quadrature points
+    if isempty (algo.quadtype),  algo.quadtype = 'GH';  end
+    if isnan (algo.quadorder),   algo.quadorder = 15;   end
+end
+
+if ~ isempty (algo.quadtype)
+    % Compute quadrature points and weights
+    algo = stk_quadrature (0, algo, algo.quadtype, algo.quadorder);
+end
+
 
 end % function stk_optim_init
