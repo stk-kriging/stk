@@ -16,7 +16,7 @@
 %
 %       parameter, default value      comment
 %       ---------  -------------      -------
-%       'samplingcritname', 'EI',     'EI'/'IAGO'
+%       'samplingcritname', 'EI',     'EI', 'IAGO', ...
 %       'model', model                optional stk_model
 %                                     after each evaluation?
 %       'estimnoise', false           estimate noise variance?
@@ -35,7 +35,7 @@
 %       'nsamplepaths', 800           number of sample paths for IAGO
 %       'quadtype', []                type of quadrature
 %       'quadorder', nan              order of the quadrature
-%       'stoprule', true              stop rule
+%       'stoprule', false             stop rule
 %       'opt_estim', 'auto'           how do we estimate x_opt and f_opt ?
 
 % Copyright Notice
@@ -82,7 +82,7 @@ end
 
 iter_history = struct ('x_opt', {}, 'f_opt', {});
 
-crit_reg = nan(N, 1);
+% crit_reg = nan(N, 1);
 for i = 1:N
     fprintf ('* iteration .. %d/%d\n', i, N);
     
@@ -148,30 +148,37 @@ for i = 1:N
         disp('pause'); pause;
     end
     
-    % STOP?
-    if algo.stoprule,
-        switch algo.samplingcritname
-            case 'EEI',
-                crit_reg(i) = max(crit_xg);
-                if i>1 && crit_reg(i) < 1e-7*crit_reg(1) ...
-                        && crit_reg(i) > 0.9*crit_reg(i-1),
-                    disp('Criterion is not improving: early stopping');
-                    break
-                end
-            case 'EI',
-                crit_reg(i) = max(crit_xg) - min(crit_xg);
-                if i>1 && crit_reg(i) < 1e-8*(f_opt - mean(zi.data)),
-                    disp('Criterion is not improving: early stopping');
-                    break
-                end
-            case 'IAGO',
-                crit_reg(i) = min(crit_xg);
-                if i>1 && crit_reg(i) < 1e-14,
-                    disp('Criterion is ill-conditioned: early stopping');
-                    break
-                end
-        end
-    end
+    % FIXME: the choice of a stopping rule should not be directly tied to the
+    %   choice of a sampling criterion. It makes it impossible to use stopping   
+    %   rules in conjunction with user-defined criterions. Moreover, early
+    %   stopping should be associated with specific return codes. Finally, each
+    %   of these stopping rules involve one or two numerical constants that
+    %   should be tunable as options.
+    
+    % % STOP?
+    % if algo.stoprule,
+    %    switch algo.samplingcritname
+    %         case 'EEI',
+    %             crit_reg(i) = max(crit_xg);
+    %             if i>1 && crit_reg(i) < 1e-7*crit_reg(1) ...
+    %                     && crit_reg(i) > 0.9*crit_reg(i-1),
+    %                 disp('Criterion is not improving: early stopping');
+    %                 break
+    %             end
+    %         case 'EI',
+    %             crit_reg(i) = max(crit_xg) - min(crit_xg);
+    %             if i>1 && crit_reg(i) < 1e-8*(f_opt - mean(zi.data)),
+    %                 disp('Criterion is not improving: early stopping');
+    %                 break
+    %             end
+    %         case 'IAGO',
+    %             crit_reg(i) = min(crit_xg);
+    %             if i>1 && crit_reg(i) < 1e-14,
+    %                 disp('Criterion is ill-conditioned: early stopping');
+    %                 break
+    %             end
+    %     end
+    % end
     
     % HISTORY: Count current number of observations
     if size (zi, 2) == 1, % One-column representation
