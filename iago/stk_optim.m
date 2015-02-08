@@ -16,7 +16,8 @@
 %
 %       parameter, default value      comment
 %       ---------  -------------      -------
-%       'samplingcritname', 'EI',     'EI', 'IAGO', ...
+%       'samplingcritname', 'EI',     criterion name ('EI', 'IAGO', ...)
+%       'samplingcrit', [],           criterion function handle
 %       'model', model                optional stk_model
 %                                     after each evaluation?
 %       'estimnoise', false           estimate noise variance?
