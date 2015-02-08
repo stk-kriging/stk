@@ -117,7 +117,8 @@ for i = 1:N
 
     % Compute sampling criterion
     [zp, crit_xg] = algo.samplingcrit (algo, xi, zi);
-    assert ((stk_length (algo.xg0)) == (stk_length (crit_xg)));
+    assert ((stk_length (algo.xg0)) == (stk_length (crit_xg)));  %%%TEMP
+    assert ((stk_length (algo.xg0)) == (stk_length (zp)));       %%%TEMP
     
     % Pick a new evaluation point
     min_crit = min (crit_xg);

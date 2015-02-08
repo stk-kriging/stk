@@ -174,7 +174,10 @@ while ~CONDH_OK
     % 		CONDH_OK = true;
     % 	end
     
-end % test if CondH is computed correctly
+end
+
+% Return predictions on candidate points only
+zp = zp((ni + 1):end, :);
 
 
 %% DISPLAY SAMPLING CRITERION?
