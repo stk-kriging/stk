@@ -134,12 +134,11 @@ for i = 1:N
     % COMPUTE CURRENT OPTIMIZER AND OPTIMUM
     switch algo.opt_estim
         case 'usemaxobs'
-            [f_opt, xstarn_ind] = max (zi(:, 1));
-            x_opt = xi(xstarn_ind, :);
+            [f_opt, idx_opt] = max (zi(:, 1));
+            x_opt = xi(idx_opt, :);
         case 'usemaxpred'
-            [~, xstarn_ind] = max(zp.mean);
-            x_opt = algo.xg0(xstarn_ind, :);
-            f_opt = stk_feval(algo.f, x_opt);
+            [f_opt, idx_opt] = max (zp.mean);
+            x_opt = algo.xg0(idx_opt, :);
     end
     
     % CARRY OUT NEW EVALUATION
