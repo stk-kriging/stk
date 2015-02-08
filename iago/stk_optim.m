@@ -35,8 +35,8 @@
 %       'nsamplepaths', 800           number of sample paths for IAGO
 %       'quadtype', []                type of quadrature
 %       'quadorder', nan              order of the quadrature
-%       'ComputeCurrentOptimum', true
 %       'stoprule', true              stop rule
+%       'opt_estim', 'auto'           how do we estimate x_opt and f_opt ?
 
 % Copyright Notice
 %
@@ -130,7 +130,7 @@ for i = 1:N
     if algo.disp,  stk_optim_view_;  end
     
     % COMPUTE CURRENT OPTIMIZER AND OPTIMUM
-    switch(algo.type)
+    switch algo.opt_estim
         case 'usemaxobs'
             [f_opt, xstarn_ind] = max (zi(:, 1));
             x_opt = xi(xstarn_ind, :);
