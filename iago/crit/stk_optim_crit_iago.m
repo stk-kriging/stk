@@ -114,7 +114,13 @@ while ~CONDH_OK
         ind_candi = ni + ic;
         
         % Noise variance
-        lnv = get_lognoisevariance (algo.model, algo.xg0, ic, true);
+        if algo.fakebigbatch_heuristic,
+            % Pretend that the future new observation will be noiseless
+            lnv = - inf;
+        else
+            % Get the lnv for the future new observation
+            lnv = get_lognoisevariance (algo.model, algo.xg0, ic, true);
+        end
         noisevariance = exp (lnv);
         
         % Heteroscedastic case: store lnv in model.lognoisevariance
