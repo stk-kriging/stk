@@ -71,7 +71,7 @@ options = {
     'quadorder', nan
     'stoprule', false
     'opt_estim', 'auto'
-    'fakebigbatch_heuristic', false
+    'futurebatchsize', 1
     };
 
 if iscell(varargin{1}{1}),
@@ -184,7 +184,6 @@ algo.show1dsamplepaths      = logical (algo.show1dsamplepaths);
 algo.searchgrid_unique      = logical (algo.searchgrid_unique);
 algo.searchgrid_adapt       = logical (algo.searchgrid_adapt);
 algo.stoprule               = logical (algo.stoprule);
-algo.fakebigbatch_heuristic = logical (algo.fakebigbatch_heuristic);
 
 
 %% CANDIDATE POINTS
@@ -316,5 +315,14 @@ if ~ isempty (algo.quadtype)
     algo = stk_quadrature (0, algo, algo.quadtype, algo.quadorder);
 end
 
+
+%% Future batch size
+
+fbs = algo.futurebatchsize;
+if ~ ((isscalar (fbs)) && (fbs > 0) && ...
+        ((floor (fbs) == fbs) || (isinf (fbs))))
+    stk_error ('futurebatchsize should be a positive integer of +inf', ...
+        'InvalidArgument');
+end
 
 end % function stk_optim_init
