@@ -1,3 +1,9 @@
+2015-02-09  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_hrect.m: Provide default constructor
+
+	* arrays/@stk_hrect/stk_hrect.m: Provide default constructor
+
 2015-02-04  Julien Bect  <julien.bect@supelec.fr>
 
 	Overload uplus, uminus for stk_dataframe objects.
