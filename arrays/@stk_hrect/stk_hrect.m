@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -29,10 +30,16 @@
 function s = stk_hrect (arg1, colnames)
 
 if nargin > 2,
+    
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
-if isa (arg1, 'stk_hrect')  % arg1 is already an stk_hrect object: copy
+    
+elseif nargin == 0  % Default constructor
+    
+    df = stk_dataframe ();
+    s = class (struct (), 'stk_hrect', df);
+    return
+    
+elseif isa (arg1, 'stk_hrect')  % arg1 is already an stk_hrect object: copy
     
     s = arg1;
     
