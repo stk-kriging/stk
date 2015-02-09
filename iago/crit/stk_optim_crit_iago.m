@@ -32,7 +32,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [zp, CondH ] = stk_optim_crit_iago (algo, xi, zi)
+function [zc_pred, CondH ] = stk_optim_crit_iago (algo, xi, zi)
 
 % Backward compatiblity: accept model structures with missing lognoisevariance
 if (~ isfield (algo.model, 'lognoisevariance')) ...
@@ -55,8 +55,11 @@ if algo.disp,  view_init (algo, xi, zi, xg);  end
 
 model_xg = stk_model ('stk_discretecov', algo.model, xg);
 [model_xg, zi] = stk_fakenorep (model_xg, zi);
-z_sim0 = stk_generate_samplepaths (model_xg, (1:ng)', algo.nsamplepaths);
-[zp, lambda] = stk_predict (model_xg, xi_ind, zi, []);
+zg_sim0 = stk_generate_samplepaths (model_xg, (1:ng)', algo.nsamplepaths);
+[zg_pred, lambda] = stk_predict (model_xg, xi_ind, zi, []);
+
+% Return predictions on candidate points only
+zc_pred = zg_pred((ni + 1):end, :);
 
 
 %% Compute current entropy
@@ -72,10 +75,11 @@ else
 end
 
 % Simulate samplepaths
-z_simc = stk_conditioning (lambda, zi, z_sim0, xi_ind, noise_sim);
+zg_simc = stk_conditioning (lambda, zi, zg_sim0, xi_ind, noise_sim);
+zc_simc = zg_simc((ni + 1):end, :);
 
 % Discrete distribution of the maximizer
-[~, ind_maximum] = max (z_simc((ni + 1):end, :));
+[~, ind_maximum] = max (zc_simc);
 p = (hist (ind_maximum, 1:nc)) / algo.nsamplepaths;
 
 % Compute current entropy
@@ -89,12 +93,15 @@ if algo.disp,  stk_optim_crit_iago_view_;  end
 %% COMPUTE THE STEPWISE UNCERTAINTY REDUCTION CRITERION
 
 % We don't want any fancy object in here
-xi = double (xi);  zi = double (zi);
-xg = double (xg);  z_sim0 = double (z_sim0);
+xi = double (xi);  zi = double (zi);  zg_sim0 = double (zg_sim0);
 
-% allocate sampling criterion vector
+% Allocate sampling criterion vector
 CondH = zeros (nc, 1);
 CONDH_OK = false;
+
+% Define std tolerance
+% FIXME: numerical constant should go in the options
+std_tol = (max (zc_pred.mean) - median (zc_pred.mean)) * 1e-10;
 
 while ~CONDH_OK
     for ic = 1:nc
@@ -115,7 +122,9 @@ while ~CONDH_OK
         model_ = model_xg;
         model_.lognoisevariance = [model_.lognoisevariance; lnv];
         
-        if (ismember (xg(ind_candi, :), xi, 'rows')) && (noisevariance == 0.0)
+        % Do not sample again a point where the value is already known
+        % with a very high accuracy (according to the model)
+        if (sqrt (zc_pred.var(ic))) < std_tol
             
             % No change of entropy if we sample this point again
             CondH(ic) = H_current;
@@ -126,26 +135,26 @@ while ~CONDH_OK
             [~, lambda_] = stk_predict (model_, [xi_ind; ind_candi], [], []);
             
             % Compute the part of zsimc that does not depend on k
-            delta = bsxfun (@minus, zi, z_sim0(xi_ind, :));
+            delta = bsxfun (@minus, zi, zg_sim0(xi_ind, :));
             if (~ isempty (noise_sim))  % Noisy case ?
                 delta = delta - noise_sim;
             end
-            z_simc = z_sim0 + lambda_(1:ni, :)' * delta;
+            zg_simc = zg_sim0 + lambda_(1:ni, :)' * delta;
             
             % Compute quadrature points
-            zQ = stk_quadrature (1, algo, zp.mean(ind_candi), ...
-                zp.var(ind_candi) + noisevariance);
+            zQ = stk_quadrature (1, algo, zc_pred.mean(ic), ...
+                zc_pred.var(ic) + noisevariance);
             
             H = zeros(algo.quadorder,1);
             for k = 1:algo.quadorder
                 
                 % Finish the computation of zsimc
-                delta = zQ(k) - z_sim0(ind_candi, :);
+                delta = zQ(k) - zg_sim0(ind_candi, :);
                 if noisevariance > 0
                     delta = delta - (sqrt (noisevariance)) ...
                         * (randn (1, algo.nsamplepaths));
                 end
-                z_simc_ = z_simc + lambda_(ni + 1, :)' * delta;
+                z_simc_ = zg_simc + lambda_(ni + 1, :)' * delta;
                 
                 % estimate the entropy of the maximizer distribution
                 [~, ind_maximum] = max(z_simc_((ni + 1):end, :));
@@ -176,9 +185,6 @@ while ~CONDH_OK
     
 end
 
-% Return predictions on candidate points only
-zp = zp((ni + 1):end, :);
-
 
 %% DISPLAY SAMPLING CRITERION?
 if algo.disp,
@@ -199,8 +205,8 @@ end %%END stk_optim_crit_iago
 
 function stk_optim_crit_iago_view_ ()
 
-[algo, ni, xi, zi, x_candi, zp, z_sim_xg, p] = evalin ...
-    ('caller', 'deal (algo, ni, xi, zi, xc, zp, z_simc, p);');
+[algo, ni, xi, zi, xc, zc_pred, zc_simc, p] = evalin ...
+    ('caller', 'deal (algo, ni, xi, zi, xc, zc_pred, zc_simc, p);');
 
 % Count calls
 persistent count_calls
@@ -214,13 +220,10 @@ end
 
 % Figure XX01: Prediction & conditional samplepaths
 if algo.dim == 1,
-    % Prediction and simulations: on candidate points only
-    z_pred_candi = zp((ni + 1):end, :);
-    z_sim_candi = z_sim_xg((ni + 1):end, :);
-    stk_optim_crit_fig01 (algo, xi, zi, x_candi, z_pred_candi, z_sim_candi);
+    stk_optim_crit_fig01 (algo, xi, zi, xc, zc_pred, zc_simc);
 end
 
 % Figure XX02: Distribution of the maximizer
-stk_optim_crit_fig02 (algo, x_candi, p);
+stk_optim_crit_fig02 (algo, xc, p);
 
 end % function view_current
