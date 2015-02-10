@@ -1,3 +1,11 @@
+2015-02-10  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_feval.m: Fix backward compatibility issue
+
+	* arrays/generic/stk_feval.m: Fix backward compatibility
+	issue. Old-style STK structures, where the data is contained in a
+	field named 'a', were not dealt with properly. Add unit test.
+
 2015-02-09  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_hrect.m: Provide default constructor
