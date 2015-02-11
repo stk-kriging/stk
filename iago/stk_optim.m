@@ -207,17 +207,17 @@ end % for i=1:N
 % Return estimation of the optimizer
 x_opt = iter_history(end).x_opt;
 
-if nargin > 1,
+if nargout > 1,
     
     % Return estimation of the optimal value
     f_opt = iter_history(end).f_opt;
     
-    if nargin > 2,
+    if nargout > 2,
         
         % Exit code. Unused for now
         retcode = 0;
         
-        if nargin > 3
+        if nargout > 3
             
             aux = struct (...
                 'evaluations', struct ('xi', xi, 'zi', zi), ...
