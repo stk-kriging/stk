@@ -33,11 +33,11 @@ function stk_optim_fig01 (algo, xi, zi, xi_new)
 xt0 = algo.disp_xvals;
 zt0 = algo.disp_zvals;
 
-zp_ = stk_predict_withrep (algo.model, xi, zi, xt0);
+zp = stk_predict_withrep (algo.model, xi, zi, algo.xg0);
 
 figure (algo.disp_fignum_base + 1);
 
-plot_1 (xi, zi, xt0, zp_, xt0, zt0);  hold on;
+plot_1 (xi, zi, algo.xg0, zp, xt0, zt0);  hold on;
 plot (xi_new * [1 1], ylim, '--', 'Color', 0.2 * [1 1 1]);  hold off;
 
 stk_labels ('x', 'f(x)');
