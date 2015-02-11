@@ -1,3 +1,10 @@
+2015-02-11  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_feval.m: Accept any object that implement feval
+
+	* arrays/generic/stk_feval.m: Accept any object that implement
+	feval (not just strings and function handles).
+
 2015-02-10  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_feval.m: Fix backward compatibility issues
