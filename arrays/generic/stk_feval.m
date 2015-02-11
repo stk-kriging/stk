@@ -75,11 +75,12 @@ for k = 1:numfcs,
     
     if ischar (f{k}),
         fname{k} = f{k};
-    elseif ~ isa (f{k}, 'function_handle')
-        stk_error (['Argument ''f'' should be a cell-array of function ' ...
-            'names or function handles.'], 'IncorrectType');
     else
-        fname{k} = func2str (f{k});
+        try
+            fname{k} = func2str (f{k});
+        catch
+            fname{k} = sprintf ('F%d', k);
+        end
     end
     
     % Truncate long function names
