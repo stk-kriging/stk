@@ -151,13 +151,17 @@ while ~CONDH_OK
             
             % Compute quadrature points
             zQ = stk_quadrature (1, algo, zc_pred.mean(ic), ...
-                zc_pred.var(ic) + 2 * noisevariance);
+                zc_pred.var(ic) + noisevariance);
             
             H = zeros(algo.quadorder,1);
             for k = 1:algo.quadorder
                 
                 % Finish the computation of zsimc
                 delta = zQ(k) - zg_sim0(ind_candi, :);
+                if noisevariance > 0
+                    delta = delta - (sqrt (noisevariance)) ...
+                        * (randn (1, algo.nsamplepaths));
+                end
                 z_simc_ = zg_simc + lambda_(ni + 1, :)' * delta;
                 
                 % estimate the entropy of the maximizer distribution
