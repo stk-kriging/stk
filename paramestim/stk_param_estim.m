@@ -69,13 +69,14 @@ if nargin < 5,  lnv0      = [];  end
 if nargin < 4,  param0    = [];  end
 
 % size checking: xi, zi
-if ~ isequal (size (zi), [size(xi, 1) 1]),
+zi_data = double (zi);
+if ~ isequal (size (zi_data), [stk_length(xi) 1]),
     errmsg = 'zi should be a column, with the same number of rows as xi.';
     stk_error (errmsg, 'IncorrectSize');
 end
 
 % Warn about special case: constant response
-if (std (double (zi)) == 0)
+if (std (zi_data) == 0)
     warning ('STK:stk_param_estim:ConstantResponse', ['Constant-response ' ...
         'data: the output of stk_param_estim is likely to be unreliable.']);
 end

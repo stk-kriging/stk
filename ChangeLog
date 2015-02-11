@@ -1,3 +1,21 @@
+2015-02-11  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_feval.m: Accept any object that implement feval
+
+	* arrays/generic/stk_feval.m: Accept any object that implement
+	feval (not just strings and function handles).
+
+2015-02-10  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_feval.m: Fix backward compatibility issues
+
+	* arrays/generic/stk_feval.m: Fix backward compatibility
+	issue. Old-style STK structures, where the data is contained in a
+	field named 'a', were not dealt with properly. Add unit test.
+	* core/stk_predict.m: Convert xi to double (same reason).
+	* paramestim/stk_param_estim.m: Convert zi to double (same reason).
+	* arrays/@struct/stk_length.m: New function.
+
 2015-02-09  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_hrect.m: Provide default constructor

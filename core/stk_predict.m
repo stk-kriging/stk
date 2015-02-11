@@ -91,6 +91,7 @@ if ~ (isempty (zi) || isequal (size (zi), [ni 1]))
 end
 
 xt = double (xt);
+xi = double (xi);
 
 if strcmp (model.covariance_type, 'stk_discretecov') % use indices
     if isempty (xt)
