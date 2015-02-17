@@ -1,3 +1,21 @@
+2015-02-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Initialize model.param with NaNs.
+
+	* core/stk_model.m: Initialize model.param with NaNs.
+	* core/stk_predict.m: Fix unit tests.
+	* covfcs/stk_discretecov.m: Fix unit tests.
+	* covfcs/stk_gausscov_aniso.m: Fix unit tests.
+	* covfcs/stk_gausscov_iso.m: Fix unit tests.
+	* covfcs/stk_materncov32_aniso.m: Fix unit tests.
+	* covfcs/stk_materncov32_iso.m: Fix unit tests.
+	* covfcs/stk_materncov52_aniso.m: Fix unit tests.
+	* covfcs/stk_materncov52_iso.m: Fix unit tests.
+	* covfcs/stk_materncov_aniso.m: Fix unit tests.
+	* covfcs/stk_materncov_iso.m: Fix unit tests.
+	* utils/stk_conditioning.m: Fix unit tests.
+	* utils/stk_generate_samplepaths.m: Fix unit tests.
+
 2015-02-11  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_feval.m: Accept any object that implement feval

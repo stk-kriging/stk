@@ -76,7 +76,7 @@
 function zsimc = stk_conditioning (lambda, zi, z_sim, xi_ind, noise_sim)
 
 if nargin > 5,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % Are we dealing with noisy observations ?
@@ -118,7 +118,7 @@ end
 
 delta = bsxfun (@minus, zi, z_sim(xi_ind, :));
 if noisy
-   delta = delta - noise_sim;
+    delta = delta - noise_sim;
 end
 
 zsimc = z_sim + lambda' * delta;
@@ -158,7 +158,8 @@ end % function stk_conditioning
 %! zi = (1:NI)';  % linear response ;-)
 %!
 %! % Carry out the kriging prediction at points xt
-%! model = stk_model ('stk_materncov_iso');
+%! model = stk_model ('stk_materncov52_iso');
+%! model.param = log ([1.0; 2.9]);
 %! [ignore_zp, lambda] = stk_predict (model, xi, [], xt);
 %!
 %! % Generate (unconditional) sample paths according to the model

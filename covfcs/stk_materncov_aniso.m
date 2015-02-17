@@ -141,11 +141,10 @@ end % function stk_materncov_aniso
 % 1D, 5x5
 
 %!shared param x y
-%!  dim = 1;
-%!  model = stk_model('stk_materncov_aniso', dim);
-%!  param = model.param;
-%!  x = stk_sampling_randunif(5, dim);
-%!  y = stk_sampling_randunif(5, dim);
+%! dim = 1;
+%! param = log ([1.0; 1.5; 2.8]);
+%! x = stk_sampling_randunif(5, dim);
+%! y = stk_sampling_randunif(5, dim);
 
 %!error stk_materncov_aniso();
 %!error stk_materncov_aniso(param);
@@ -169,24 +168,23 @@ end % function stk_materncov_aniso
 % 3D, 4x10
 
 %!shared dim param x y nx ny
-%!  dim = 3;
-%!  model = stk_model('stk_materncov_aniso', dim);
-%!  param = model.param;
-%!  nx = 4; ny = 10;
-%!  x = stk_sampling_randunif(nx,  dim);
-%!  y = stk_sampling_randunif(ny, dim);
+%! dim = 3;
+%! param = log ([1.0; 1.5; 2.8; 2.7; 2.9]);
+%! nx = 4; ny = 10;
+%! x = stk_sampling_randunif(nx,  dim);
+%! y = stk_sampling_randunif(ny, dim);
 
 %!test
-%!  K1 = stk_materncov_aniso(param, x, y);
-%!  K2 = stk_materncov_aniso(param, x, y, -1);
-%!  assert(isequal(size(K1), [nx ny]));
-%!  assert(stk_isequal_tolabs(K1, K2));
+%! K1 = stk_materncov_aniso(param, x, y);
+%! K2 = stk_materncov_aniso(param, x, y, -1);
+%! assert(isequal(size(K1), [nx ny]));
+%! assert(stk_isequal_tolabs(K1, K2));
 
 %!test
-%!  for i = 1:(dim+2),
-%!    dK = stk_materncov_aniso(param, x, y,  i);
-%!    assert(isequal(size(dK), [nx ny]));
-%!  end
+%! for i = 1:(dim+2),
+%!     dK = stk_materncov_aniso(param, x, y,  i);
+%!     assert(isequal(size(dK), [nx ny]));
+%! end
 
 %!test
 %! n = 7;

@@ -107,11 +107,10 @@ end % function stk_materncov32_iso
 % 1D, 5x5
 
 %!shared param x y
-%!  dim = 1;
-%!  model = stk_model ('stk_materncov32_iso', dim);
-%!  param = model.param;
-%!  x = stk_sampling_randunif (5, dim);
-%!  y = stk_sampling_randunif (5, dim);
+%! dim = 1;
+%! param = log ([1.0; 2.5]);
+%! x = stk_sampling_randunif (5, dim);
+%! y = stk_sampling_randunif (5, dim);
 
 %!error stk_materncov32_iso ();
 %!error stk_materncov32_iso (param);
@@ -134,24 +133,23 @@ end % function stk_materncov32_iso
 % 3D, 4x10
 
 %!shared dim param x y nx ny
-%!  dim = 3;
-%!  model = stk_model ('stk_materncov32_iso', dim);
-%!  param = model.param;
-%!  nx = 4; ny = 10;
-%!  x = stk_sampling_randunif (nx,  dim);
-%!  y = stk_sampling_randunif (ny, dim);
+%! dim = 3;
+%! param = log ([1.0; 2.5]);
+%! nx = 4; ny = 10;
+%! x = stk_sampling_randunif (nx,  dim);
+%! y = stk_sampling_randunif (ny, dim);
 
 %!test
-%!  K1 = stk_materncov32_iso (param, x, y);
-%!  K2 = stk_materncov32_iso (param, x, y, -1);
-%!  assert (isequal (size (K1), [nx ny]));
-%!  assert (stk_isequal_tolabs (K1, K2));
+%! K1 = stk_materncov32_iso (param, x, y);
+%! K2 = stk_materncov32_iso (param, x, y, -1);
+%! assert (isequal (size (K1), [nx ny]));
+%! assert (stk_isequal_tolabs (K1, K2));
 
 %!test
-%!  for i = 1:2,
-%!    dK = stk_materncov32_iso (param, x, y,  i);
-%!    assert (isequal (size (dK), [nx ny]));
-%!  end
+%! for i = 1:2,
+%!     dK = stk_materncov32_iso (param, x, y,  i);
+%!     assert (isequal (size (dK), [nx ny]));
+%! end
 
 %!test
 %! n = 7;
