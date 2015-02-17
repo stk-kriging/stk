@@ -36,10 +36,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -102,8 +103,8 @@ if strcmp (model.covariance_type, 'stk_discretecov') % use indices
             warning ('STK:stk_predict:IncorrectSize', sprintf(['xt should be ' ...
                 'a column.\n --> Trying to continue with xt = xt(:) ...']));
             xt = xt(:);
-        end        
-        nt = size (xt, 1);     
+        end
+        nt = size (xt, 1);
     end
 else
     nt = size (xt, 1);
@@ -112,7 +113,7 @@ else
         stk_error (errmsg, 'IncorrectSize');
     end
 end
-    
+
 %--- Prepare the output arguments ----------------------------------------------
 
 zp_v = zeros (nt, 1);
@@ -168,7 +169,7 @@ for block_num = 1:nb_blocks
         zp_a(idx) = kreq.lambda' * zi;
     end
     
-    % The full lambda_mu matrix is only needed when nargout > 1    
+    % The full lambda_mu matrix is only needed when nargout > 1
     if nargout > 1
         lambda_mu(:, idx) = kreq.lambda_mu;
     end
@@ -245,6 +246,7 @@ end % function stk_predict -----------------------------------------------------
 %!
 %! model = stk_model('stk_materncov32_iso');
 %! model.order = 0; % this is currently the default, but better safe than sorry
+%! model.param = log ([1.0; 2.1]);
 
 %!error y_prd1 = stk_predict();
 %!error y_prd1 = stk_predict(model);

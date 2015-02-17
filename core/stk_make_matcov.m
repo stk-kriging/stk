@@ -23,6 +23,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@supelec.fr>
@@ -92,7 +93,8 @@ end % function stk_make_matcov
 
 %!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
 %! n0 = 20;  n1 = 10;  d = 4;
-%! model = stk_model ('stk_materncov_aniso', d);  model.order = 1;
+%! model = stk_model ('stk_materncov52_aniso', d);  model.order = 1;
+%! model.param = log ([1.0; 2.1; 2.2; 2.3; 2.4]);
 %! model2 = model;  model2.lognoisevariance = log(0.01);
 %! x0 = stk_sampling_randunif (n0, d);
 %! x1 = stk_sampling_randunif (n1, d);

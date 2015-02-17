@@ -2,7 +2,7 @@
 %
 % CALL: K = stk_gausscov_iso (PARAM, X, Y)
 %
-%   computes  the covariance matrix K  between  the sets of locations  X  and Y, 
+%   computes  the covariance matrix K  between  the sets of locations  X  and Y,
 %   using the isotropic Gaussian covariance function with parameters PARAM.  The
 %   output matrix K has size NX x NY, where NX is the number of rows in X and NY
 %   the number of rows in Y. The vector of parameters must have two elements:
@@ -27,10 +27,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -106,11 +107,10 @@ end % function stk_gausscov_iso
 % 1D, 5x5
 
 %!shared param x y
-%!  dim = 1;
-%!  model = stk_model ('stk_gausscov_iso', dim);
-%!  param = model.param;
-%!  x = stk_sampling_randunif (5, dim);
-%!  y = stk_sampling_randunif (5, dim);
+%! dim = 1;
+%! param = log ([1.0; 2.5]);
+%! x = stk_sampling_randunif (5, dim);
+%! y = stk_sampling_randunif (5, dim);
 
 %!error stk_gausscov_iso ();
 %!error stk_gausscov_iso (param);
@@ -134,8 +134,7 @@ end % function stk_gausscov_iso
 
 %!shared dim param x y nx ny
 %! dim = 3;
-%! model = stk_model ('stk_gausscov_iso', dim);
-%! param = model.param;
+%! param = log ([1.0; 2.5]);
 %! nx = 4; ny = 10;
 %! x = stk_sampling_randunif (nx,  dim);
 %! y = stk_sampling_randunif (ny, dim);

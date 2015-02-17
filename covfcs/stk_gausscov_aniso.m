@@ -29,10 +29,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -135,11 +136,10 @@ end % function stk_gausscov_aniso
 % 1D, 5x5
 
 %!shared param x y K1 K2 K3
-%!  dim = 1;
-%!  model = stk_model ('stk_gausscov_aniso', dim);
-%!  param = model.param;
-%!  x = stk_sampling_randunif (5, dim);
-%!  y = stk_sampling_randunif (6, dim);
+%! dim = 1;
+%! param = log ([1.0; 2.5]);
+%! x = stk_sampling_randunif (5, dim);
+%! y = stk_sampling_randunif (6, dim);
 
 %!error K0 = stk_gausscov_aniso ();
 %!error K0 = stk_gausscov_aniso (param);
@@ -172,24 +172,23 @@ end % function stk_gausscov_aniso
 % 3D, 4x10
 
 %!shared dim param x y nx ny
-%!  dim = 3;
-%!  model = stk_model ('stk_gausscov_aniso', dim);
-%!  param = model.param;
-%!  nx = 4; ny = 10;
-%!  x = stk_sampling_randunif (nx,  dim);
-%!  y = stk_sampling_randunif (ny, dim);
+%! dim = 3;
+%! param = log ([1.0; 2.5; 2.4; 2.6]);
+%! nx = 4; ny = 10;
+%! x = stk_sampling_randunif (nx,  dim);
+%! y = stk_sampling_randunif (ny, dim);
 
 %!test
-%!  K1 = stk_gausscov_aniso (param, x, y);
-%!  K2 = stk_gausscov_aniso (param, x, y, -1);
-%!  assert (isequal (size (K1), [nx ny]));
-%!  assert (stk_isequal_tolabs (K1, K2));
+%! K1 = stk_gausscov_aniso (param, x, y);
+%! K2 = stk_gausscov_aniso (param, x, y, -1);
+%! assert (isequal (size (K1), [nx ny]));
+%! assert (stk_isequal_tolabs (K1, K2));
 
 %!test
-%!  for i = 1:(dim + 1),
-%!    dK = stk_gausscov_aniso (param, x, y,  i);
-%!    assert (isequal (size (dK), [nx ny]));
-%!  end
+%! for i = 1:(dim + 1),
+%!     dK = stk_gausscov_aniso (param, x, y,  i);
+%!     assert (isequal (size (dK), [nx ny]));
+%! end
 
 %!test
 %! n = 7;
