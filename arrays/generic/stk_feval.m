@@ -197,12 +197,13 @@ end
 
 %--- Create output stk_dataframe object ----------------------------------------
 
-z = stk_dataframe (zdata, colnames);
-z.info = 'Created by stk_feval';
-
 if isa (x, 'stk_dataframe'),
-    z.rownames = x.rownames;
+    rownames = x.rownames;
+else
+    rownames = {};
 end
+
+z = stk_dataframe (zdata, colnames, rownames);
     
 end % function stk_feval
 
