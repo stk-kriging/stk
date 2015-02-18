@@ -1,3 +1,14 @@
+2015-02-18  Julien Bect  <julien.bect@supelec.fr>
+
+	Optimize for speed (and fix a tiny bug)
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Optimize for speed
+	* arrays/@stk_dataframe/set.m: Optimize for speed (and fix a tiny bug)
+	* arrays/@stk_dataframe/horzcat.m: Optimize for speed
+	* arrays/@stk_dataframe/vertcat.m: Optimize for speed
+	* arrays/@stk_dataframe/subsref.m: Optimize for speed
+	* arrays/generic/stk_feval.m: Optimize for speed
+
 2015-02-17  Julien Bect  <julien.bect@supelec.fr>
 
 	Initialize model.param with NaNs.

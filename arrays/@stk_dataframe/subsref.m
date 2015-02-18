@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -49,17 +50,17 @@ switch idx(1).type
                 I = idx(1).subs{1};
                 J = idx(1).subs{2};
                 
-                c = get (x, 'colnames');
-                if ~ isempty (c),
-                    c = c(1, J);
+                x.data = x.data(I, J);
+                
+                if ~ isempty (x.colnames),
+                    x.colnames = x.colnames(1, J);
                 end
                 
-                r = get (x, 'rownames');
-                if ~ isempty (r),
-                    r = r(I, 1);
+                if ~ isempty (x.rownames),
+                    x.rownames = x.rownames(I, 1);
                 end
-                
-                t = stk_dataframe (x.data(I, J), c, r);
+
+                t = x;
                 
             else
                 stk_error ('Illegal indexing.', 'IllegalIndexing');
@@ -82,7 +83,7 @@ switch idx(1).type
         
 end
 
-end % function subsref
+end % function @stk_dataframe.subsref
 
 
 %!shared x s t data

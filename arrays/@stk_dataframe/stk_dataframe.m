@@ -33,7 +33,7 @@ function x = stk_dataframe (x, colnames, rownames)
 if nargin > 3,
     
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
-
+    
 elseif nargin == 0  % Default constructor
     
     x_data = zeros (0, 1);
@@ -70,7 +70,7 @@ elseif strcmp (class (x), 'stk_dataframe')  %#ok<STISA>
 elseif isa (x, 'stk_dataframe')
     
     x_data = x.data;
-            
+    
     if nargin == 1,
         
         colnames = x.colnames;
@@ -100,7 +100,7 @@ elseif isa (x, 'stk_dataframe')
                     'of strings or [].'], 'InvalidArgument');
                 % Note: [] means "keep x.rownames"
                 %       while {} means "no rownames names"
-            end            
+            end
         end
     end
     
@@ -117,20 +117,36 @@ else  % Assume x is (or can be converted to) numeric data
     end
 end
 
+[n, d] = size (x_data);
+
+% Check colnames argument: must be a 1 x d cell array of strings
+if ~ iscell (colnames)
+    if isempty (colnames)
+        colnames = {};
+    else
+        stk_error ('colnames should be a cell array.', 'TypeMismatch');
+    end
+elseif (~ isempty (colnames)) && (~ isequal (size (colnames), [1 d]))
+    colnames = reshape (colnames, 1, d);
+end
+
+% Check rownames argument: must be a n x 1 cell array of strings
+if ~ iscell (rownames)
+    if isempty (rownames)
+        rownames = {};
+    else
+        stk_error ('rownames should be a cell array.', 'TypeMismatch');
+    end
+elseif (~ isempty (rownames)) && (~ isequal (size (rownames), [n 1]))
+    rownames = reshape (rownames, n, 1);
+end
+
 x = struct ('data', x_data, ...
-    'colnames', {{}}, 'rownames', {{}}, 'info', '');
+    'colnames', {colnames}, 'rownames', {rownames}, 'info', '');
 
 x = class (x, 'stk_dataframe');
 
-if ~ isempty (colnames)
-    x = set (x, 'colnames', colnames);
-end
-
-if ~ isempty (rownames)
-    x = set (x, 'rownames', rownames);
-end
-
-end % function stk_dataframe
+end % function @stk_dataframe.stk_dataframe
 
 
 %!error x = stk_dataframe (1, {}, {}, pi);
