@@ -29,6 +29,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@supelec.fr>
@@ -54,13 +55,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function z = stk_feval (f, x, progress_msg)
+function z = stk_feval (f, x, progress_msg, df_out)
 
 if nargin > 3,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-xdata = double (x);
+% Check 'progress_msg' argument
+if nargin < 3,
+    progress_msg = false;
+else
+    progress_msg = logical (progress_msg);
+end
+
+% Check 'df_out' argument
+if nargin  < 4,
+    % Default: type stability
+    df_out = isa (x, 'stk_dataframe');
+else
+    df_out = logical (df_out);
+end
 
 % Turn f into a cell (if it isn't already one)
 if ~ iscell (f),  f = {f};  end
@@ -69,36 +83,31 @@ if ~ iscell (f),  f = {f};  end
 numfcs = numel (f);
 
 % Check f and extract function names
-fname = cell (size (f));
-truncated_fname = false (size (f));
-for k = 1:numfcs,
-    
-    if ischar (f{k}),
-        fname{k} = f{k};
-    else
-        try
-            fname{k} = func2str (f{k});
-        catch
-            fname{k} = sprintf ('F%d', k);
+if df_out
+    fname = cell (size (f));
+    truncated_fname = false (size (f));
+    for k = 1:numfcs,
+        
+        if ischar (f{k}),
+            fname{k} = f{k};
+        else
+            try
+                fname{k} = func2str (f{k});
+            catch
+                fname{k} = sprintf ('F%d', k);
+            end
         end
-    end
-    
-    % Truncate long function names
-    if (length (fname{k})) > 15
-        fname{k} = sprintf ('F%d', k);
-        truncated_fname(k) = true;
+        
+        % Truncate long function names
+        if (length (fname{k})) > 15
+            fname{k} = sprintf ('F%d', k);
+            truncated_fname(k) = true;
+        end
     end
 end
 
-% Check 'progress_msg' argument
-if nargin < 3,
-    progress_msg = false;
-else
-    if ~ islogical (progress_msg),
-        errmsg = 'Incorrect type for argument ''progress_msg''.';
-        stk_error (errmsg, 'IncorrectType');
-    end
-end
+% Extract numeric data
+xdata = double (x);
 
 % Zero-dimensional inputs are not allowed
 [n, d] = size (xdata);
@@ -108,11 +117,13 @@ end
 
 % Each function can have several outputs => we will try to recover meaningful
 % column names by looking at these outputs and store them in:
-fcolnames = cell (1, numfcs);
+if df_out
+    fcolnames = cell (1, numfcs);
+end
 
 if n == 0, % no input => no output
     
-    zdata = zeros (0, numfcs);
+    z = zeros (0, numfcs);
     
 else % at least one input point
     
@@ -122,42 +133,49 @@ else % at least one input point
         stk_disp_progress ('feval %d/%d... ', 1, n);
     end
     
-    zdata = cell (1, numfcs);
+    z1 = [];
     output_dim = zeros (1, numfcs);
     
     for k = 1:numfcs
         
         % Get the evaluation result
         %  (at this point, we don't know the size or type of zdata{k})
-        zdata{k} = feval (f{k}, xdata(1, :));
+        z1_k = feval (f{k}, xdata(1, :));
         
         % Guess output dimension
-        output_dim(k) = size (zdata{k}, 2);
-        if ~ isequal (size (zdata{k}), [1 output_dim(k)])
-            stk_error (['The output of F{j} should be a scalar or a row ' ...
-                'vector'], 'IncorrectSize');
+        output_dim(k) = size (z1_k, 2);
+        
+        % Concatenate
+        try
+            z1 = [z1 double(z1_k)];  %#ok<AGROW>
+        catch
+            if ~ isequal (size (z1_k), [1 output_dim(k)])
+                stk_error (['The output of F{j} should be a scalar or a ' ...
+                    'row vector'], 'IncorrectSize');
+            else
+                rethrow (lasterror);
+            end
         end
         
         % Guess column names
-        if isa (zdata{k}, 'stk_dataframe')
-            fcolnames{k} = zdata{k}.colnames;
+        if df_out && (isa (z1_k, 'stk_dataframe'))
+            fcolnames{k} = z1_k.colnames;
         end
-        
-        % Make sure that zdata{k} is of class 'double'
-        zdata{k} = double (zdata{k});
     end
-    
-    zdata = cell2mat (zdata);
     
     % Begin/end indices for each block of columns
     j_end = cumsum (output_dim);
     j_beg = 1 + [0 j_end(1:end-1)];
-
+    
+    % Prepare for subsequent evaluations
+    z = zeros (n, j_end(end));
+    z(1, :) = z1;
+    
     if n > 1,  %--- Subsequent evaluations -------------------------------------
-               
+        
         for i = 2:n,
             for k = 1:numfcs
-                zdata(i, (j_beg(k):j_end(k))) = feval (f{k}, xdata(i, :));
+                z(i, (j_beg(k):j_end(k))) = feval (f{k}, xdata(i, :));
             end
         end
     end
@@ -166,46 +184,53 @@ end
 
 %--- Create column names -------------------------------------------------------
 
-colnames = cell (1, size (zdata, 2));
-
-for k = 1:numfcs
+if df_out
+    colnames = cell (1, size (z, 2));
     
-    if ~ isempty (fcolnames{k})  % We have column names, let's use them
-                
-        % Special case: only one function, without a nice short displayable name
-        if (numfcs == 1) && truncated_fname(1)
-            prefix = '';
-        else
-            prefix = [fname{1} '_'];
+    for k = 1:numfcs
+        
+        if ~ isempty (fcolnames{k})  % We have column names, let's use them
+            
+            % Special case: only one function,
+            %   without a nice short displayable name
+            if (numfcs == 1) && truncated_fname(1)
+                prefix = '';
+            else
+                prefix = [fname{1} '_'];
+            end
+            
+            colnames(j_beg(k):j_end(k)) = cellfun (...
+                @(u)(sprintf ('%s%s', prefix, u)), fcolnames{k}, ...
+                'UniformOutput', false);
+            
+        elseif output_dim(k) == 1  % Only one column and no column names
+            
+            colnames{j_beg(k)} = fname{k};
+            
+        else  % General case: several columns but no column names
+            
+            colnames(j_beg(k):j_end(k)) = arrayfun (...
+                @(u)(sprintf ('%s_%d', fname{k}, u)), 1:output_dim(k), ...
+                'UniformOutput', false);
         end
-
-        colnames(j_beg(k):j_end(k)) = cellfun (...
-            @(u)(sprintf ('%s%s', prefix, u)), fcolnames{k}, ...
-            'UniformOutput', false);
-               
-    elseif output_dim(k) == 1  % Only one column and no column names
-        
-        colnames{j_beg(k)} = fname{k};
-        
-    else  % General case: several columns but no column names
-                
-        colnames(j_beg(k):j_end(k)) = arrayfun (...
-            @(u)(sprintf ('%s_%d', fname{k}, u)), 1:output_dim(k), ...
-            'UniformOutput', false);
     end
 end
 
 %--- Create output stk_dataframe object ----------------------------------------
 
-if isa (x, 'stk_dataframe'),
-    rownames = x.rownames;
-else
-    rownames = {};
+if df_out
+    if isa (x, 'stk_dataframe'),
+        rownames = x.rownames;
+    else
+        rownames = {};
+    end
+    
+    z = stk_dataframe (z, colnames, rownames);
 end
 
-z = stk_dataframe (zdata, colnames, rownames);
-    
 end % function stk_feval
+
+%#ok<*CTCH,*LERR>
 
 
 %!shared f xt

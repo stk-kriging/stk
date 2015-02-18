@@ -1,5 +1,10 @@
 2015-02-18  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_feval.m: Do not return an stk_dataframe object systematically
+
+	* arrays/generic/stk_feval.m: Return an stk_dataframe object only
+	if the input x itself is an stk_dataframe object.
+
 	Optimize for speed (and fix a tiny bug)
 
 	* arrays/@stk_dataframe/stk_dataframe.m: Optimize for speed
