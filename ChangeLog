@@ -1,3 +1,13 @@
+2015-02-21  Julien Bect  <julien.bect@supelec.fr>
+
+	Optimize for speed
+
+	* misc/distrib/stk_distrib_normal_cdf.m: Optimize for speed
+	* covfcs/stk_gausscov_aniso.m: Optimize for speed
+	* covfcs/stk_materncov32_aniso.m: Optimize for speed
+	* covfcs/stk_materncov52_aniso.m: Optimize for speed
+	* covfcs/stk_materncov_aniso.m: Optimize for speed
+
 2015-02-18  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_feval.m: Do not return an stk_dataframe object systematically

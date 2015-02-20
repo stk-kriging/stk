@@ -75,9 +75,13 @@ dim = size (x, 2);
 if (size (y, 2) ~= dim),
     stk_error ('xi and yi have incompatible sizes.', 'InvalidArgument');
 end
+
+% check param
 nb_params = dim + 1;
 if (numel (param) ~= nb_params)
     stk_error ('xi and param have incompatible sizes.', 'InvalidArgument');
+else
+    param = reshape (param, 1, nb_params);  % row vector
 end
 
 % extract parameters from the "param" vector
@@ -89,15 +93,14 @@ if ~ (Sigma2 > 0) || ~ all (invRho >= 0),
     error ('Incorrect parameter value.');
 end
 
-invRho = diag (invRho);
-
 % check if all input arguments are the same as before
 % (or if this is the first call to the function)
 if isempty (x0) || isempty (y0) || isempty (param0) ...
         || ~ isequal ({x, y, param}, {x0, y0, param0}) ...
         || ~ isequal (pairwise, pairwise0)
     % compute the distance matrix
-    xs = x * invRho;  ys = y * invRho;
+    xs = bsxfun (@times, x, invRho);
+    ys = bsxfun (@times, y, invRho);
     D = stk_dist (xs, ys, pairwise);
     % save arguments for the next call
     x0 = x;  y0 = y;  param0 = param;  pairwise0 = pairwise;
@@ -118,12 +121,10 @@ elseif (diff >= 2) && (diff <= nb_params),
         Kx_cache  = 1 ./ (D + eps) .* (Sigma2 * stk_sf_matern32 (D, 1));
         compute_Kx_cache = false;
     end
-    nx = size (x,1);  ny = size (y,1);
     if pairwise,
         k = (xs(:, ind) - ys(:, ind)).^2 .* Kx_cache;
     else
-        k = (repmat (xs(:, ind), 1, ny) - ...
-            repmat (ys(:, ind)', nx, 1)) .^ 2 .* Kx_cache;
+        k = (bsxfun (@minus, xs(:, ind), ys(:, ind)')) .^ 2 .* Kx_cache;
     end
 else
     stk_error ('Incorrect value for the ''diff'' parameter.', ...

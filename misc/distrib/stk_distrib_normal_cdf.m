@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
@@ -37,28 +38,29 @@ if nargin > 1,
 end
 
 if nargin > 2,
-    [z, sigma] = stk_commonsize (z, sigma);
-    z = z ./ sigma;
+    z = bsxfun (@rdivide, z, sigma);
     k0 = (sigma > 0);
 else
     k0 = 1;
 end
-   
+
 p = nan (size (z));
 q = nan (size (z));
 
-k0 = k0 & (~ isnan (z));
+k0 = bsxfun (@and, k0, ~ isnan (z));
 kp = (z > 0);
 kn = k0 & (~ kp);
 kp = k0 & kp;
 
 % Deal with positive values of x: compute q first, then p = 1 - q
-q(kp) = 0.5 * erfc (0.707106781186547524 * z(kp));
-p(kp) = 1 - q(kp);
+q_kp = 0.5 * erfc (0.707106781186547524 * z(kp));
+q(kp) = q_kp;
+p(kp) = 1 - q_kp;
 
 % Deal with negative values of x: compute p first, then q = 1 - p
-p(kn) = 0.5 * erfc (- 0.707106781186547524 * z(kn));
-q(kn) = 1 - p(kn);
+p_kn = 0.5 * erfc (- 0.707106781186547524 * z(kn));
+p(kn) = p_kn;
+q(kn) = 1 - p_kn;
 
 end % function stk_distrib_normal_cdf
 
