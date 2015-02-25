@@ -123,7 +123,7 @@ elseif (diff >= 2) && (diff <= nb_params),
     if pairwise,
         k = ((xs(:, ind) - ys(:, ind)) .^ 2) .* Kx_cache;
     else
-        k = bsxfun (@minus, xs(:, ind), ys(:, ind)')) .^ 2 .* Kx_cache;
+        k = (bsxfun (@minus, xs(:, ind), ys(:, ind)')) .^ 2 .* Kx_cache;
     end
 else
     stk_error ('Incorrect value for the ''diff'' parameter.', ...
