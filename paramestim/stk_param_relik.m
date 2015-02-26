@@ -164,7 +164,8 @@ end % function stk_param_relik
 
 %!shared f, xi, zi, NI, model, J, dJ1, dJ2
 %!
-%! f = @(x)(- (0.8 * x(1) + sin (5 * x(2) + 1) + 0.1 * sin (10 * x(3))));
+%! f = @(x)(- (0.8 * x(:, 1) + sin (5 * x(:, 2) + 1) ...
+%!          + 0.1 * sin (10 * x(:, 3))));
 %! DIM = 3;  NI = 20;  box = repmat ([-1.0; 1.0], 1, DIM);
 %! xi = stk_sampling_halton_rr2 (NI, DIM, box);
 %! zi = stk_feval (f, xi);

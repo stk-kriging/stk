@@ -55,25 +55,33 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function z = stk_feval (f, x, progress_msg, df_out)
+function z = stk_feval (f, x, progress_msg, df_out, vectorized)
 
-if nargin > 3,
+if nargin > 5,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % Check 'progress_msg' argument
-if nargin < 3,
+if (nargin < 3) || (isempty (progress_msg)),
     progress_msg = false;
 else
     progress_msg = logical (progress_msg);
 end
 
 % Check 'df_out' argument
-if nargin  < 4,
+if (nargin  < 4) || (isempty (df_out)),
     % Default: type stability
     df_out = isa (x, 'stk_dataframe');
 else
     df_out = logical (df_out);
+end
+
+% Check 'vectorized' argument
+if (nargin  < 5) || (isempty (vectorized)),
+    % Default: use vectorized evaluations, unless progress_msg is true
+    vectorized = ~ progress_msg;
+else
+    vectorized = logical (vectorized);
 end
 
 % Turn f into a cell (if it isn't already one)
@@ -127,63 +135,102 @@ if n == 0, % no input => no output
     
 else % at least one input point
     
-    %--- First evaluation: figure out the dimension of the output --------------
-    
-    if progress_msg,
-        stk_disp_progress ('feval %d/%d... ', 1, n);
-    end
-    
-    z1 = [];
     output_dim = zeros (1, numfcs);
     
-    for k = 1:numfcs
+    if vectorized %--- Vectorized calls ----------------------------------------
         
-        % Get the evaluation result
-        %  (at this point, we don't know the size or type of zdata{k})
-        z1_k = feval (f{k}, xdata(1, :));
+        z = cell (1, numfcs);
+        for k = 1:numfcs
+            
+            z{k} = feval (f{k}, xdata);
+            
+            % Check output size
+            if (size (z{k}, 1) ~= size (xdata, 1))
+                stk_error (['The size of the output is incorrect. Perhaps ' ...
+                    'the function does not support vectorized ' ...
+                    'evaluations.'], 'IncorrectSize');
+            end
+            
+            % Guess output dimension
+            output_dim(k) = size (z{k}, 2);
+            
+            % Guess column names
+            if df_out && (isa (z{k}, 'stk_dataframe'))
+                fcolnames{k} = z{k}.colnames;
+            end
+            
+        end
         
-        % Guess output dimension
-        output_dim(k) = size (z1_k, 2);
+    else  %--- Unvectorized calls: n == 1 --------------------------------------
         
-        % Concatenate
-        try
-            z1 = [z1 double(z1_k)];  %#ok<AGROW>
-        catch
-            if ~ isequal (size (z1_k), [1 output_dim(k)])
-                stk_error (['The output of F{j} should be a scalar or a ' ...
-                    'row vector'], 'IncorrectSize');
-            else
-                rethrow (lasterror);
+        % First evaluation: figure out the dimension of the output
+        
+        if progress_msg,
+            stk_disp_progress ('feval %d/%d... ', 1, n);
+        end
+        
+        z1 = [];
+        
+        for k = 1:numfcs
+            
+            % Get the evaluation result
+            %  (at this point, we don't know the size or type of zdata{k})
+            z1_k = feval (f{k}, xdata(1, :));
+            
+            % Guess output dimension
+            output_dim(k) = size (z1_k, 2);
+            
+            % Concatenate
+            try
+                z1 = [z1 double(z1_k)];  %#ok<AGROW>
+            catch
+                if ~ isequal (size (z1_k), [1 output_dim(k)])
+                    stk_error (['The output of F{j} should be a scalar or ' ...
+                        'a row vector'], 'IncorrectSize');
+                else
+                    rethrow (lasterror);
+                end
+            end
+            
+            % Guess column names
+            if df_out && (isa (z1_k, 'stk_dataframe'))
+                fcolnames{k} = z1_k.colnames;
             end
         end
         
-        % Guess column names
-        if df_out && (isa (z1_k, 'stk_dataframe'))
-            fcolnames{k} = z1_k.colnames;
-        end
-    end
+    end % if vectorized
     
     % Begin/end indices for each block of columns
     j_end = cumsum (output_dim);
     j_beg = 1 + [0 j_end(1:end-1)];
     
-    % Prepare for subsequent evaluations
-    z = zeros (n, j_end(end));
-    z(1, :) = z1;
-    
-    if n > 1,  %--- Subsequent evaluations -------------------------------------
+    if vectorized %--- Vectorized calls ----------------------------------------
         
-        for i = 2:n,            
-            if progress_msg,
-                stk_disp_progress ('feval %d/%d... ', i, n);
+        % Concatenate function outputs
+        z = horzcat (z{:});
+        
+    else  %--- Unvectorized calls: n > 1 ---------------------------------------
+        
+        % Prepare for subsequent evaluations
+        z = zeros (n, j_end(end));
+        z(1, :) = z1;
+        
+        if n > 1,  % Subsequent evaluations
+            
+            for i = 2:n,
+                if progress_msg,
+                    stk_disp_progress ('feval %d/%d... ', i, n);
+                end
+                for k = 1:numfcs
+                    z(i, (j_beg(k):j_end(k))) = feval (f{k}, xdata(i, :));
+                end
             end
-            for k = 1:numfcs
-                z(i, (j_beg(k):j_end(k))) = feval (f{k}, xdata(i, :));
-            end
-        end
-    end
+            
+        end % if n > 1
+        
+    end % if vectorized
     
-end
+end % if n == 0
 
 %--- Create column names -------------------------------------------------------
 
@@ -244,7 +291,9 @@ end % function stk_feval
 %!error  yt = stk_feval (f);
 %!test   yt = stk_feval (f, xt);
 %!test   yt = stk_feval (f, xt, false);
-%!error  yt = stk_feval (f, xt, false, pi^2);
+%!test   yt = stk_feval (f, xt, false, false);
+%!test   yt = stk_feval (f, xt, false, false, false);
+%!error  yt = stk_feval (f, xt, false, false, false, pi^2);
 
 %!test
 %! N = 15;
@@ -281,10 +330,16 @@ end % function stk_feval
 %! assert (isequal (z.data, [sin(t.data) cos(t.data)]));
 %! assert (isequal (z.colnames, {'sin' 'cos'}));
 
-%!test
+%!test  % vectorized
+%! F = @(t)([sin(t) cos(t)]);
+%! G = @(t)(0.365 * t.^2 + (cos ((t - 1).*(t - 2) + 0.579033)));
+%! z = stk_feval ({@sin @cos G F 'tan'}, t);
+%! assert (isequal (z.colnames, {'sin' 'cos' 'F3' 'F4_1' 'F4_2' 'tan'}));
+
+%!test  % not vectorized
 %! F = @(t)([sin(t) cos(t)]);
 %! G = @(t)(0.365 * t^2 + (cos ((t - 1)*(t - 2) + 0.579033)));
-%! z = stk_feval ({@sin @cos G F 'tan'}, t);
+%! z = stk_feval ({@sin @cos G F 'tan'}, t, [], [], false);
 %! assert (isequal (z.colnames, {'sin' 'cos' 'F3' 'F4_1' 'F4_2' 'tan'}));
 
 %!test  % backward compatibility with old-style STK structures

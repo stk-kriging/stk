@@ -1,5 +1,11 @@
 2015-03-11  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_feval.m: Implement vectorized calls and use them by default.
+
+	* arrays/generic/stk_feval.m: Implement vectorized calls and use them by
+	default.
+	* paramestim/stk_param_relik.m: Fix unit test.
+
 	Fix progress indicator in stk_feval.
 
 	* arrays/generic/stk_feval.m: Restore the progress indicator.
