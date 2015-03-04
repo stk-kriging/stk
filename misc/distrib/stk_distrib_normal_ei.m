@@ -31,6 +31,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:  Julien Bect     <julien.bect@supelec.fr>
@@ -79,9 +80,13 @@ end
 % Default: compute the EI for a maximization problem
 if nargin > 3,
     minimize = logical (minimize);
-    if ~ minimize,
-        delta = - delta;
-    end
+else
+    minimize = false;
+end
+
+% Reduce to the maximization case
+if minimize,
+    delta = - delta;
 end
 
 [delta, sigma] = stk_commonsize (delta, sigma);
@@ -93,8 +98,11 @@ b1 = (sigma > 0);
 
 % Compute the EI where sigma > 0
 b = b0 & b1;
-u = delta(b) ./ sigma(b);
-ei(b) = sigma(b) .* (stk_distrib_normal_pdf (u) + u .* stk_distrib_normal_cdf (u));
+if any (b)
+    u = delta(b) ./ sigma(b);
+    ei(b) = sigma(b) .* (stk_distrib_normal_pdf (u) ...
+        + u .* stk_distrib_normal_cdf (u));
+end
 
 % Compute the EI where sigma == 0
 b = b0 & (~ b1);
@@ -108,14 +116,17 @@ end % function stk_distrib_normal_ei
 
 %!assert (stk_isequal_tolrel (stk_distrib_normal_ei (0.0), 1 / sqrt (2 * pi), eps))
 
-%!test % decreasing as a function of z
+%!test  % Decreasing as a function of z
 %! ei = stk_distrib_normal_ei (linspace (-10, 10, 200));
 %! assert (all (diff (ei) < 0))
 
-%!test % size and positivity of the result
+%!shared M, mu, sigma, ei
 %! M = randn (1, 10);
 %! mu = randn (5, 1);
 %! sigma = 1 + rand (1, 1, 7);
 %! ei = stk_distrib_normal_ei (M, mu, sigma);
-%! assert (isequal (size (ei), [5, 10, 7]))
-%! assert (all (ei(:) >= 0))
+
+%!assert (isequal (size (ei), [5, 10, 7]))
+%!assert (all (ei(:) >= 0))
+%!assert (isequal (ei, stk_distrib_normal_ei (M, mu, sigma, false)));
+%!assert (isequal (ei, stk_distrib_normal_ei (-M, -mu, sigma, true)));
