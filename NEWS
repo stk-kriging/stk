@@ -103,9 +103,10 @@ Changes in version 2.3.0
      Previously, this wasn't true if the first input argument was, e.g., an
      stk_factorialdesign object.
 
-   o Bug fixes in stk_distrib_normal_ei and stk_distrib_student_ei:
-     the optional input argument "minimize" was not properly taken into
-     account.
+   o stk_distrib_normal_ei, stk_distrib_student_ei: bugfix (the
+     optional input argument "minimize" was not taken into account).
+
+   o stk_distrib_normal_cdf.m: Fix the zero-variance case.
 
 
 Changes in version 2.2.0

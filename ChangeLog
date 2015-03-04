@@ -1,5 +1,10 @@
 2015-03-04  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_distrib_normal_cdf.m: Fix the zero-variance case
+
+	* misc/distrib/stk_distrib_normal_cdf.m: Fix the zero-variance
+	case. Add unit tests.
+
 	Fix bugs in stk_distrib_*_ei functions.
 
 	* misc/distrib/stk_distrib_normal_ei.m: Fix bug (input argument

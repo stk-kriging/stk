@@ -37,30 +37,62 @@ if nargin > 1,
     z = bsxfun (@minus, z, mu);
 end
 
-if nargin > 2,
-    z = bsxfun (@rdivide, z, sigma);
-    k0 = (sigma > 0);
+if nargin < 3,
+    sigma = 1;
+end
+
+if isscalar (sigma)
+    if sigma > 0
+        z = z / sigma;
+        k0 = false;
+        k1 = true;
+    elseif sigma == 0
+        k0 = true;
+        k1 = false;
+    else
+        k0 = false;
+        k1 = false;
+    end
 else
-    k0 = 1;
+    [z, sigma] = stk_commonsize (z, sigma);
+    k0 = (sigma == 0);
+    k1 = (sigma > 0);
+    z(k1) = z(k1) ./ sigma(k1);
 end
 
 p = nan (size (z));
 q = nan (size (z));
 
-k0 = bsxfun (@and, k0, ~ isnan (z));
-kp = (z > 0);
-kn = k0 & (~ kp);
-kp = k0 & kp;
+kp = (z >= 0);
+kz = ~ isnan (z);
 
-% Deal with positive values of x: compute q first, then p = 1 - q
-q_kp = 0.5 * erfc (0.707106781186547524 * z(kp));
-q(kp) = q_kp;
-p(kp) = 1 - q_kp;
+if any (k1)  % sigma > 0
+    
+    k1 = bsxfun (@and, k1, kz);
+    k1n = k1 & (~ kp);
+    k1p = k1 & kp;
+    
+    % Deal with positive values of x: compute q first, then p = 1 - q
+    q_k1p = 0.5 * erfc (0.707106781186547524 * z(k1p));
+    q(k1p) = q_k1p;
+    p(k1p) = 1 - q_k1p;
+    
+    % Deal with negative values of x: compute p first, then q = 1 - p
+    p_k1n = 0.5 * erfc (- 0.707106781186547524 * z(k1n));
+    p(k1n) = p_k1n;
+    q(k1n) = 1 - p_k1n;
+    
+end
 
-% Deal with negative values of x: compute p first, then q = 1 - p
-p_kn = 0.5 * erfc (- 0.707106781186547524 * z(kn));
-p(kn) = p_kn;
-q(kn) = 1 - p_kn;
+if any (k0)  % sigma == 0
+    
+    k0 = bsxfun (@and, k0, kz);
+    
+    p_k0 = double (kp(k0));
+    p(k0) = p_k0;
+    q(k0) = 1 - p_k0;
+    
+end
 
 end % function stk_distrib_normal_cdf
 
@@ -82,3 +114,6 @@ end % function stk_distrib_normal_cdf
 %!assert (isequal (stk_distrib_normal_cdf (-inf), 0.0));
 %!assert (isnan   (stk_distrib_normal_cdf ( nan)));
 %!assert (isnan   (stk_distrib_normal_cdf (0, 0, -1)));
+%!assert (isequal (stk_distrib_normal_cdf (0, 0, 0), 1.0));
+%!assert (isequal (stk_distrib_normal_cdf (0, 1, 0), 0.0));
+%!assert (isequal (stk_distrib_normal_cdf (1, 0, 0), 1.0));
