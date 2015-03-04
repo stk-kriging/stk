@@ -1,3 +1,12 @@
+2015-03-04  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix bugs in stk_distrib_*_ei functions.
+
+	* misc/distrib/stk_distrib_normal_ei.m: Fix bug (input argument
+	"minimize" was not properly taken into account).
+	* misc/distrib/stk_distrib_student_ei.m: Fix bug (input argument
+	"minimize" was not properly taken into account).
+
 2015-02-21  Julien Bect  <julien.bect@supelec.fr>
 
 	Optimize for speed

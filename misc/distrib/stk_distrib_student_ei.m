@@ -81,11 +81,15 @@ else
 end
 
 % Default: compute the EI for a maximization problem
-if nargin > 4,    
+if nargin > 4,
     minimize = logical (minimize);
-    if ~ minimize,
-        delta = - delta;
-    end
+else
+    minimize = false;
+end
+
+% Reduce to the maximization case
+if minimize,
+    delta = - delta;
 end
 
 [delta, nu, sigma] = stk_commonsize (delta, nu, sigma);
@@ -93,7 +97,7 @@ end
 ei = nan (size (delta));
 
 b0 = ~ (isnan (delta) | isnan (nu) | isnan (sigma));
-b1 = (nu > 1);   
+b1 = (nu > 1);
 b2 = (sigma > 0);
 
 % The EI is infinite for nu <= 1
@@ -101,9 +105,13 @@ ei(b0 & (~ b1)) = +inf;
 b0 = b0 & b1;
 
 % Compute the EI where nu > 1 and sigma > 0
-b = b0 & b2;  u = delta(b) ./ sigma(b);  nu = nu(b);
-ei(b) = sigma(b) .* ((nu + u .^ 2) ./ (nu - 1) ...
-    .* stk_distrib_student_pdf (u, nu) + u .* stk_distrib_student_cdf (u, nu));
+b = b0 & b2;
+if any (b)
+    u = delta(b) ./ sigma(b);  nu = nu(b);
+    ei(b) = sigma(b) .* ((nu + u .^ 2) ./ (nu - 1) ...
+        .* stk_distrib_student_pdf (u, nu) ...
+        + u .* stk_distrib_student_cdf (u, nu));
+end
 
 % Compute the EI where nu > 1 and sigma == 0
 b = b0 & (~ b2);
@@ -117,14 +125,18 @@ end % function stk_distrib_student_ei
 
 %!assert (stk_isequal_tolrel (stk_distrib_student_ei (0, 2), 1 / sqrt (2), eps))
 
-%!test % decreasing as a function of z
+%!test  % Decreasing as a function of z
 %! ei = stk_distrib_student_ei (linspace (-10, 10, 200), 3.33);
 %! assert (all (diff (ei) < 0))
 
-%!test % size and positivity of the result
+%!shared M, mu, sigma, ei, nu
 %! M = randn (1, 10);
 %! mu = randn (5, 1);
 %! sigma = 1 + rand (1, 1, 7);
-%! ei = stk_distrib_normal_ei (M, mu, sigma);
-%! assert (isequal (size (ei), [5, 10, 7]))
-%! assert (all (ei(:) >= 0))
+%! nu = 2;
+%! ei = stk_distrib_student_ei (M, nu, mu, sigma);
+
+%!assert (isequal (size (ei), [5, 10, 7]))
+%!assert (all (ei(:) >= 0))
+%!assert (isequal (ei, stk_distrib_student_ei (M, nu, mu, sigma, false)));
+%!assert (isequal (ei, stk_distrib_student_ei (-M, nu, -mu, sigma, true)));
