@@ -173,7 +173,10 @@ else % at least one input point
     
     if n > 1,  %--- Subsequent evaluations -------------------------------------
         
-        for i = 2:n,
+        for i = 2:n,            
+            if progress_msg,
+                stk_disp_progress ('feval %d/%d... ', i, n);
+            end
             for k = 1:numfcs
                 z(i, (j_beg(k):j_end(k))) = feval (f{k}, xdata(i, :));
             end
