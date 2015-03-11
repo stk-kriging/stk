@@ -52,7 +52,7 @@ if n == 1
 end
 
 % Print current progress message
-msg = sprintf ('%s .. %d/%d', msg, n, N);
+msg = sprintf (msg, n, N);
 fprintf ([revmsg, msg]);
 
 % Prepare for erasing next time
