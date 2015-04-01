@@ -3,16 +3,15 @@ STK is mainly developped and maintained by (alphabetical order):
    BECT Julien
    VAZQUEZ Emmanuel
 
-Individual copyright notices are provided for each file in the toolbox.
-
 The following people have helped develop the toolbox in various ways
-(providing new functions, code patches, bug reports...):
+(from providing ideas and bug reports to actually contributing code):
 
    ALEKSOVSKA Ivana
    BENASSI Romain
    DABOUSSI Elias
    DUTRIEUX Heloise
    FELIOT Paul
+   FRASNEDO Sophie
    JAN Benoit
    KETTANI Othmane
    KRAUTH Alexandra
@@ -22,3 +21,6 @@ The following people have helped develop the toolbox in various ways
    RAVISANKAR Ashwin
    RESSEGUIER Valentin
    VILLEMONTEIX Julien
+
+Individual copyright notices are provided at the beginning of each
+file in the toolbox.
