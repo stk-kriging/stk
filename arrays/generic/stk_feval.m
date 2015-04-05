@@ -5,25 +5,57 @@
 %    evaluates the function F on the evaluation points X, where
 %
 %     * F can be either a function handle or a function name (string),
-%       or a cell-array of function handle or names, and
-%     * X can be either a numerical array or a dataframe.
+%       or a cell-array of function handles or names, and
+%     * X can be either a numerical array or an stk_dataframe object.
 %
-%    The output Z is a dataframe, with the same number of rows as X,
-%    and the function name of F as variable name. The number of column is
-%    one when F is a function name or handle, and is equal to numel (F)
-%    when F is a cell-array of these. In the latter case, column j of Z
-%    contains the result of evaluating function F{j}.
+%    The output Z contains the evaluation results. The number of rows of Z is
+%    the same as the number of rows of X.
+%
+%     * If F is a single function (name of handle) that returns row vectors with
+%       J elements, then Z has J columns and Z(i, :) is equal to F(X(i, :)).
+%     * If F is a cell-array of functions (names or handles), where F{k} returns
+%       row vectors J_k elements, then Z has J = J_1 + ... + J_K elements, and
+%       Z(i, :) is equal to [F{1}(X(i, :)) ... F{K}(X(i, :))].
+%
+%    This two-argument form assumes that F supports vectorized evaluations.
+%
+% EXAMPLE:
+%
+%    f = {@sin @cos};
+%    x = stk_sampling_regulargrid (100, 1, [0; 2*pi]);
+%    x.colnames = {'x'};
+%    y = stk_feval (f, x);
+%    plot (x, y);
 %
 % CALL: Z = stk_feval (F, X, DISPLAY_PROGRESS)
 %
-%    displays progress messages if DISPLAY_PROGRESS is true. This is especially
-%    useful if each evaluation of F requires a significant computation time.
+%    displays progress messages if DISPLAY_PROGRESS is true, and does the same
+%    as the previous form otherwise. Displaying a progress message is useful if
+%    each evaluation of F requires a significant computation time.
 %
-% EXAMPLE:
-%       f = @(x)(- (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
-%       xt = stk_sampling_regulargrid (100, 1, [0; 1]);
-%       yt = stk_feval (f, xt);
-%       plot (xt, yt);
+%    This three-argument form assumes that F supports vectorized evaluations if
+%    DISPLAY_PROGRESS is false, and performs evaluations one by one otherwise.
+%
+% NOTE: output type
+%
+%   The output of stk_feval is an stk_dataframe object if X is, with the same
+%   row names and with column names determined automatically. Otherwise, the
+%   type of the output of stk_feval is determined by the type of the output of
+%   each function that is evaluated (together with the usual rules for concate-
+%   nating arrays of different types, if necessary).
+%
+% CALL: Z = stk_feval (F, X, DISPLAY_PROGRESS, DF_OUT)
+%
+%   returns an stk_dataframe output if DF_OUT is true (even if X is not an
+%   stk_dataframe object itself), and let the usual concatenation rules
+%   determine the output type otherwise (even if X is an stk_dataframe).
+%
+% CALL: Z = stk_feval (F, X, DISPLAY_PROGRESS, DF_OUT, VECTORIZED)
+%
+%   controls whether function evaluations are performed in a "vectorized" manner
+%   (i.e., all rows at once) or one row after the other. This form can be used
+%   to override the default rules explained above. Vectorized evaluations are
+%   usually faster but some functions do not support them.
 %
 % See also feval
 
