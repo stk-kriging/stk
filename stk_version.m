@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
@@ -28,6 +29,6 @@
 
 function v = stk_version ()
 
-v = '2.2.0';
+v = '2.2.1';
 
 end % function stk_version
