@@ -174,7 +174,7 @@ end % function stk_generate_samplepaths
 %#ok<*CTCH>
 
 
-%!shared model xi zi xt n nb_paths
+%!shared model, xi, zi, xt, n, nb_paths
 %! dim = 1;  n = 50;  nb_paths = 5;
 %! model = stk_model ('stk_materncov32_iso', dim);
 %! xt = stk_sampling_regulargrid (n, dim, [-1.0; 1.0]);

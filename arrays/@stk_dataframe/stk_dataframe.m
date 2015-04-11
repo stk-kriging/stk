@@ -58,7 +58,7 @@ end
 
 end % function stk_dataframe
 
-%!shared x y
+%!shared x, y
 
 %!test % default constructor
 %! x = stk_dataframe ();   

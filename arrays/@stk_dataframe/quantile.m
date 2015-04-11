@@ -36,7 +36,7 @@ z = apply (x, dim, @quantile, p);
 
 end % function quantile
 
-%!shared x1 df1 p
+%!shared x1, df1, p
 %! x1 = rand (9, 3);
 %! df1 = stk_dataframe (x1, {'a', 'b', 'c'});
 %! p = 0.95;

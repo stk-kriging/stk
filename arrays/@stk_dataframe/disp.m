@@ -52,7 +52,7 @@ disp ([repmat(prefix, size(s, 1), 1) s]);
 end % function disp
 
 
-%!shared x fmt
+%!shared x, fmt
 %! try % doesn't work on old Octave versions, nevermind
 %!   fmt = get (0, 'Format');
 %! catch

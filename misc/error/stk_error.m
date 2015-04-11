@@ -75,10 +75,9 @@ end % function stk_error
 %!  mnemonic = 'ClintEastwood';
 %!  badstack = 0; % not a valid stack structure
 
-%!% valid use of stk_error
+% Valid use of stk_error
 %!error <make my day> stk_error(errmsg, mnemonic);
-%!error id=STK:eval_test_code:ClintEastwood stk_error (errmsg, mnemonic);
 
-%!% use of an incorrect stack structure
+% Use of an incorrect stack structure
 %!error <stack structure> stk_error (errmsg, mnemonic, badstack);
 %!error id=STK:stk_error:InvalidArgument stk_error (errmsg, mnemonic, badstack);
