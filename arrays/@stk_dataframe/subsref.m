@@ -85,7 +85,7 @@ end
 end % function subsref
 
 
-%!shared x s t data
+%!shared x, s, t, data
 %! x = stk_dataframe(rand(3, 2));
 %! s = {'a'; 'b'; 'c'};
 %! t = {'xx' 'yy'};
@@ -103,7 +103,7 @@ end % function subsref
 
 %--- tests with a bivariate dataframe + column names --------------------------
 
-%!shared u data
+%!shared u, data
 %! u = rand(3, 2);
 %! data = stk_dataframe(u, {'x1', 'x2'});
 
@@ -128,7 +128,7 @@ end % function subsref
 
 %--- tests with a univariate dataframe ----------------------------------------
 
-%!shared u data
+%!shared u, data
 %! u = rand(3, 1); data = stk_dataframe(u, {'x'});
 
 %!assert (isequal (data.x, u))

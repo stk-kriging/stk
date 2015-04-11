@@ -145,7 +145,7 @@ end % if
 end % function sprintf_table_
 
 
-%!shared x fmt
+%!shared x, fmt
 %! try % doesn't work on old Octave versions, nevermind
 %!   fmt = get (0, 'Format');
 %! catch

@@ -92,7 +92,7 @@ zsimc = stk_dataframe (zsim + lambda' * delta);
 end % function stk_conditioning
 
 
-%!shared n m ni xi_ind lambda zsim zi
+%!shared n, m, ni, xi_ind, lambda, zsim, zi
 %!
 %! n = 50;  m = 5;  ni = 10;  xi_ind = 1:ni;
 %! lambda = 1/ni * ones (ni, n);            % prediction == averaging

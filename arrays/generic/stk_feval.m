@@ -108,7 +108,7 @@ end
 end % function stk_feval
 
 
-%!shared f xt
+%!shared f, xt
 %!  f = @(x)(- (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
 %!  xt = stk_sampling_regulargrid (20, 1, [0; 1]);
 

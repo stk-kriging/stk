@@ -80,7 +80,7 @@ end
 end % end function stk_param_gls
 
 
-%!shared xi zi model beta sigma2
+%!shared xi, zi, model, beta, sigma2
 %! xi = (1:10)';  zi = sin (xi);
 %! model = stk_model ('stk_materncov52_iso');
 %! model.param = [0.0 0.0];

@@ -1,3 +1,11 @@
+Changes in version 2.2.1
+========================
+
+* Octave 4.0 compliance
+
+   o Fix unit tests
+
+
 Changes in version 2.2.0
 ========================
 

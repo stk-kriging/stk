@@ -105,7 +105,7 @@ end % function stk_gausscov_iso
 %%
 % 1D, 5x5
 
-%!shared param x y
+%!shared param, x, y
 %!  dim = 1;
 %!  model = stk_model ('stk_gausscov_iso', dim);
 %!  param = model.param;
@@ -132,7 +132,7 @@ end % function stk_gausscov_iso
 %%
 % 3D, 4x10
 
-%!shared dim param x y nx ny
+%!shared dim, param, x, y, nx, ny
 %! dim = 3;
 %! model = stk_model ('stk_gausscov_iso', dim);
 %! param = model.param;

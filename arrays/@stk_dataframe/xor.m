@@ -32,7 +32,7 @@ y = bsxfun(@xor, x1, x2);
 
 end % function xor
 
-%!shared x y z
+%!shared x, y, z
 %! x = floor (3 * rand (7, 2));
 %! y = floor (3 * rand (7, 2));
 %! z = floor (3 * rand (7, 3));

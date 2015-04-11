@@ -57,7 +57,7 @@ y = repmat (a, n, 1) + x * diag (b);
 end % function stk_normalize
 
 
-%!shared x box y1 y2 y3 y4
+%!shared x, box, y1, y2, y3, y4
 %! n = 5;  box = [2; 3];  x = box(1) + diff (box) * rand (n, 1);
 
 %!error  y1 = stk_normalize ();

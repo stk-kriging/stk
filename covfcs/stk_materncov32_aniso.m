@@ -136,7 +136,7 @@ end % function stk_materncov32_aniso
 %%
 % 1D, 5x5
 
-%!shared param x y K1 K2 K3
+%!shared param, x, y, K1, K2, K3
 %!  dim = 1;
 %!  model = stk_model ('stk_materncov32_aniso', dim);
 %!  param = model.param;
@@ -173,7 +173,7 @@ end % function stk_materncov32_aniso
 %%
 % 3D, 4x10
 
-%!shared dim param x y nx ny
+%!shared dim, param, x, y, nx, ny
 %!  dim = 3;
 %!  model = stk_model ('stk_materncov32_aniso', dim);
 %!  param = model.param;
