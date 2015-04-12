@@ -119,7 +119,7 @@ end % function @stk_dataframe.vertcat
 % ...) in some releases of Octave. As a consequence, all tests must be written
 % using horzcat explicitely.
 
-%!shared u v
+%!shared u, v
 %! u = rand(3, 2);
 %! v = rand(3, 2);
 

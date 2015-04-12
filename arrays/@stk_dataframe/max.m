@@ -59,7 +59,7 @@ end % function max
 %!test  stk_test_dfbinaryop ('max', rand(7, 2), pi);
 %!error stk_test_dfbinaryop ('max', rand(7, 2), rand(7, 3));
 
-%!shared x1 df1
+%!shared x1, df1
 %! x1 = rand(9, 3);
 %! df1 = stk_dataframe(x1, {'a', 'b', 'c'});
 %!assert (isequal (max(df1),        max(x1)))

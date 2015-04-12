@@ -153,7 +153,7 @@ end
 
 end % function subsasgn
 
-%!shared x s t data
+%!shared x, s, t, data
 %! x = stk_dataframe(rand(3, 2));
 %! s = {'a'; 'b'; 'c'};
 %! t = {'xx' 'yy'};

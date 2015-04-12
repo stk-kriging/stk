@@ -63,7 +63,7 @@ kreq.n = kreq.n + size (Kjj, 1);
 end % function stk_update
 
 
-%!shared model x y
+%!shared model, x, y
 %! model = stk_model ('stk_materncov32_iso', 1);
 %! model.param = log ([1.0; 2.8]);
 %! x = [1.2; 0.3; -1.9];

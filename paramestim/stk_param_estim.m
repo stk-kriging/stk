@@ -357,7 +357,7 @@ end % function provide_param0_value
 %! [param, lnv] = stk_param_estim ...
 %!    (model, xi, zi, param0, model.lognoisevariance);
 
-%!% incorrect number of input arguments
+% Incorrect number of input arguments
 %!error param = stk_param_estim ()
 %!error param = stk_param_estim (model);
 %!error param = stk_param_estim (model, xi);
