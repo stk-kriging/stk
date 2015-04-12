@@ -109,6 +109,14 @@ Changes in version 2.3.0
    o stk_distrib_normal_cdf.m: Fix the zero-variance case.
 
 
+Changes in version 2.2.1
+========================
+
+* Octave 4.0 compliance
+
+   o Fix unit tests   
+
+
 Changes in version 2.2.0
 ========================
 

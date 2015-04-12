@@ -136,7 +136,7 @@ end % function stk_gausscov_aniso
 %%
 % 1D, 5x5
 
-%!shared param x y K1 K2 K3
+%!shared param, x, y, K1, K2, K3
 %! dim = 1;
 %! param = log ([1.0; 2.5]);
 %! x = stk_sampling_randunif (5, dim);
@@ -172,7 +172,7 @@ end % function stk_gausscov_aniso
 %%
 % 3D, 4x10
 
-%!shared dim param x y nx ny
+%!shared dim, param, x, y, nx, ny
 %! dim = 3;
 %! param = log ([1.0; 2.5; 2.4; 2.6]);
 %! nx = 4; ny = 10;

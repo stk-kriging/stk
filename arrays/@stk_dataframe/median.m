@@ -35,7 +35,7 @@ z = apply(x, dim, @median);
 end % function median
 
 
-%!shared x1 df1
+%!shared x1, df1
 %! x1 = rand(9, 3);
 %! df1 = stk_dataframe(x1, {'a', 'b', 'c'});
 %!assert (isequal (median(df1),    median(x1)))

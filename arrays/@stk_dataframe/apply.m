@@ -51,8 +51,7 @@ end
 
 end % function apply
 
-
-%!shared x t u
+%!shared x, t, u
 %! t = rand (3, 2);
 %! x = stk_dataframe (t);
 

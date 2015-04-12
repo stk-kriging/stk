@@ -332,7 +332,7 @@ end % function paraminit_
 %! assert (stk_isequal_tolabs (p2(1), p1(1) + log (scale^2), 1e-10))
 %! assert (stk_isequal_tolabs (p2(2), p1(2), eps))
 
-%!shared xi zi BOX xt zt
+%!shared xi, zi, BOX, xt, zt
 %!
 %! f = @(x)(- (0.8 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
 %! DIM = 1;               % Dimension of the factor space

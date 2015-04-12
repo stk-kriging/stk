@@ -114,14 +114,14 @@ end % function stk_make_matcov
 %!assert (isequal (size (Pb), [n0 d + 1]));
 %!assert (isequal (size (Pc), [n0 d + 1]));
 
-%!% In the noiseless case, (1) and (2) should give the same results
+% In the noiseless case, (1) and (2) should give the same results
 %!assert (isequal (Kb, Ka));
 
-%!% In the noisy case, however...
+% In the noisy case, however...
 %!test  [Ka, Pa] = stk_make_matcov (model2, x0);           % (1')
 %!test  [Kb, Pb] = stk_make_matcov (model2, x0, x0);       % (2')
 %!error assert (isequal (Kb, Ka));
 
-%!% The second output depends on x0 only => should be the same for (1)--(3)
+% The second output depends on x0 only => should be the same for (1)--(3)
 %!assert (isequal (Pa, Pb));
 %!assert (isequal (Pa, Pc));
