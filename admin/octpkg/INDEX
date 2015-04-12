@@ -284,8 +284,6 @@ Miscellaneous: options, plots...
 #stk_isequal_tolabs
 #stk_isequal_tolrel
 #stk_is_lhs
-#stk_runtests
-#stk_test
 #stk_test_dfbinaryop
 
 ## (embryonic) parallelization engine
