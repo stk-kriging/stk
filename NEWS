@@ -116,6 +116,10 @@ Changes in version 2.2.1
 
    o Fix unit tests   
 
+* Octave package
+
+   o Do not ship stk_test and stk_runtests with the Octave package
+
 
 Changes in version 2.2.0
 ========================

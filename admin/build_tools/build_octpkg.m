@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
@@ -64,7 +65,7 @@ mkdir (fullfile (unpacked_dir, 'src'));
 % doc: an optional directory containing documentation for the package
 mkdir (fullfile (unpacked_dir, 'doc'));
 
-% List of files or directories that must be ignored by process_directory ()
+% List of directories that must be ignored by process_directory ()
 ignore_list = {'.hg', 'admin', 'misc/mole/matlab', build_dir};
 
 % Prepare sed program for renaming MEX-functions (prefix/suffix by __)
@@ -175,6 +176,8 @@ if ~ isempty (regexp (s, regex_ignore, 'once')) ...
         || strcmp (s, 'config/stk_config_makeinfo.m') ...
         || strcmp (s, 'misc/mole/README') ...
         || strcmp (s, 'misc/distrib/README') ...
+        || strcmp (s, 'misc/test/stk_test.m') ...
+        || strcmp (s, 'misc/test/stk_runtests.m') ...
         || strcmp (s, 'misc/optim/stk_optim_hasfmincon.m') ...
         || strcmp (s, 'doc/dev/model.texi')
     
@@ -207,8 +210,8 @@ else
         copyfile (s, fullfile (unpacked_dir, 'doc'));
         
     elseif strcmp (s, 'README')
-
-        % Put README in the documentation directory    
+        
+        % Put README in the documentation directory
         copy_readme (s, fullfile (unpacked_dir, 'doc'));
         
     elseif strcmp (s, 'CITATION')
@@ -260,7 +263,7 @@ end
 
 fclose (fid);
 
-end % function rename_mex_functions
+end % function prepare_sed_rename_mex
 
 
 function descr = parse_description_field (root_dir)
