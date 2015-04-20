@@ -1,14 +1,6 @@
-% STK_BOUNDINGBOX constructs the bounding box for a set of points
+% STK_BOUNDINGBOX  [overload STK function]
 %
-% CALL: B = stk_boundingbox (X)
-%
-%    returns the bounding box of X, defined as:
-%
-%       B = [min(X); max(X)].
-%
-%    The result is an stk_hrect object.
-%
-%  See also: stk_hrect
+% CALL: 
 
 % Copyright Notice
 %
@@ -42,22 +34,21 @@ if nargin > 1,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if (~ ismatrix (x))
-    stk_error (['Arrays with more than two dimensions are not ' ...
-        'supported.'], 'IncorrectSize');
+if ~ isfield (x, 'a')
+    % The "modern STK" answer is:
+    stk_error (['stk_boundingbox (x) is not defined for structure ' ...
+        'arguments.'], 'TypeMismatch');
+else
+    % But for backward compatibility we still support:
+    box = stk_boundingbox (x.a);
 end
 
-xmin = min (x, [], 1);
-xmax = max (x, [], 1);
-
-box = stk_hrect ([xmin; xmax]);
-
-end % function stk_boundingbox
+end % function @struct.stk_boundingbox
 
 
 %!shared x, y, cn
 %! cn = {'a', 'b', 'c'};
-%! x = [0 3 2; 1 4 1; 7 0 2];
+%! x = struct ('a', [0 3 2; 1 4 1; 7 0 2]);
 
 %!error  y = stk_boundingbox ();
 %!test   y = stk_boundingbox (x);

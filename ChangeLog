@@ -1,3 +1,13 @@
+2015-04-20  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_boundingbox.m: Add doc and overload for several classes.
+
+	* arrays/generic/stk_boundingbox.m: Add doc. Handle plain arrays only.
+	* arrays/@stk_dataframe/stk_boundingbox.m: Overload.
+	* arrays/@stk_factorialdesign/stk_boundingbox.m: Overload.
+	* arrays/@stk_hrect/stk_boundingbox.m: Overload.
+	* arrays/@struct/stk_boundingbox.m: Overload.
+
 2015-04-05  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_feval.m: Update documentation.
