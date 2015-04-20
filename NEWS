@@ -108,6 +108,8 @@ Changes in version 2.3.0
 
    o stk_distrib_normal_cdf.m: Fix the zero-variance case.
 
+   o stk_boundingbox.m:constructs the bounding box for a set of points.
+
 
 Changes in version 2.2.1
 ========================
