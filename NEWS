@@ -74,6 +74,12 @@ Changes in version 2.3.0
    o stk_conditioning.m: The output is an stk_dataframe object if either LAMBDA
      or ZSIM is an stk_dataframe object.
 
+* Objects representing sets
+
+   o stk_hrect: new class to describe hyper-rectangle objects.
+
+   o stk_boundingbox.m: constructs the bounding box for a set of points.
+
 * Examples
 
    o stk_example_kb04 demonstrates how it is possible to estimate the variance
@@ -107,8 +113,6 @@ Changes in version 2.3.0
      optional input argument "minimize" was not taken into account).
 
    o stk_distrib_normal_cdf.m: Fix the zero-variance case.
-
-   o stk_boundingbox.m:constructs the bounding box for a set of points.
 
 
 Changes in version 2.2.1

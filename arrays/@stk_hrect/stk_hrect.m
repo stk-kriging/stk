@@ -1,4 +1,25 @@
-% STK_HRECT ... [FIXME: Document me !]
+% STK_HRECT creates an hyper-rectangle object
+%
+% CALL: B = stk_hrect (D)
+% CALL: B = stk_hrect (D, COLNAMES)
+%
+%   creates an object representing a D-dimensional unit hypercube, [0; 1] ^ D.
+%
+%   The second (optional) argument can be used to provide variable names.
+%
+% CALL: B = stk_hrect (X)
+% CALL: B = stk_hrect (X, COLNAMES)
+%
+%   creates an object representing a D-dimensional hyperrectangle with lower
+%   bounds X(1, :) and upper bounds X(2, :). The input X must be a 2xD
+%   numerical array.
+%
+% NOTE: class hierarchy
+%
+%   An stk_hrect object is two-row stk_dataframe object, with row names
+%   'lower_bounds' and 'upper_bounds'.
+%
+% See also: stk_dataframe, stk_boundingbox
 
 % Copyright Notice
 %

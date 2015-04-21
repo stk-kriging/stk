@@ -1,3 +1,9 @@
+2015-04-21  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_hrect.m: Add help text
+
+	* arrays/@stk_hrect/stk_hrect.m: Add help text
+
 2015-04-20  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_boundingbox.m: Add doc and overload for several classes.
