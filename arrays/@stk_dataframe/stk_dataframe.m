@@ -1,4 +1,33 @@
-% STK_DATAFRAME constructs a dataframe
+% STK_DATAFRAME constructs a dataframe object
+%
+% CALL: D = stk_dataframe (X)
+%
+%    constructs a dataframe object from X. If X is a plain numeric array, then
+%    D is dataframe without row or column names. If X already is an
+%    stk_dataframe object, row names and column names are preserved when they
+%    exist.
+%
+% CALL: D = stk_dataframe (X, COLNAMES)
+%
+%    allows to specify column names for the dataframe D. Row names from X are
+%    preserved when they exist.
+%
+%    If COLNAMES is empty ([]), this is equivalent to D = stk_dataframe (X);
+%    in particular, if X has column names, then D inherits from them.
+%
+%    If COLNAMES is an empty cell({}), the resulting dataframe has no column
+%    names.
+%
+% CALL: D = stk_dataframe (X, COLNAMES, ROWNAMES)
+%
+%    allows to specify row names as well.
+%
+%    If ROWNAMES is empty ([]), this is equivalent to D = stk_dataframe (X,
+%    COLNAMES); in particular, if X has row names, then D inherits from them.
+%
+%    If ROWNAMES is an empty cell({}), the resulting dataframe has no row names.
+%
+% See also: stk_factorialdesign, stk_hrect
 
 % Copyright Notice
 %
