@@ -27,60 +27,52 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = subsref(x, idx)
+function t = subsref (x, idx)
 
 switch idx(1).type
     
     case '()'
         
-        if length(idx) ~= 1
+        L = length (idx(1).subs);
+        
+        if L == 1,  % linear indexing
             
-            stk_error ('Illegal indexing.', 'IllegalIndexing');
+            t = subsref (x.data, idx);
             
-        else % ok, only one level of indexing
+        elseif L == 2,  % matrix-style indexing
             
-            L = length (idx(1).subs);
+            I = idx(1).subs{1};
+            J = idx(1).subs{2};
             
-            if L == 1,  % linear indexing
-                
-                t = subsref (x.data, idx);
-                
-            elseif L == 2,  % matrix-style indexing
-                
-                I = idx(1).subs{1};
-                J = idx(1).subs{2};
-                
-                x.data = x.data(I, J);
-                
-                if ~ isempty (x.colnames),
-                    x.colnames = x.colnames(1, J);
-                end
-                
-                if ~ isempty (x.rownames),
-                    x.rownames = x.rownames(I, 1);
-                end
-
-                t = x;
-                
-            else
-                stk_error ('Illegal indexing.', 'IllegalIndexing');
+            x.data = x.data(I, J);
+            
+            if ~ isempty (x.colnames),
+                x.colnames = x.colnames(1, J);
             end
             
+            if ~ isempty (x.rownames),
+                x.rownames = x.rownames(I, 1);
+            end
+            
+            t = x;
+            
+        else
+            stk_error ('Illegal indexing.', 'IllegalIndexing');
         end
         
     case '{}'
         
         errmsg = 'Indexing with curly braces is not allowed.';
-        stk_error(errmsg, 'IllegalIndexing');
+        stk_error (errmsg, 'IllegalIndexing');
         
     case '.'
         
-        t = get(x, idx(1).subs);
+        t = get (x, idx(1).subs);
         
-        if length(idx) > 1,
-            t = subsref(t, idx(2:end));
-        end
-        
+end
+
+if (length (idx)) > 1,
+    t = subsref (t, idx(2:end));
 end
 
 end % function @stk_dataframe.subsref
