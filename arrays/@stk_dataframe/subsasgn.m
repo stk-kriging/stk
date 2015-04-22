@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
@@ -88,12 +89,9 @@ switch idx(1).type
                     % Column names
                     if val_is_an_stkdf && (isequal (idx(1).subs{1}, ':'))
                         
-                        cn = {};
-                        if isa (val, 'stk_dataframe')
-                            cn = val.colnames;
-                        end
-                        
+                        cn = val.colnames;
                         xcn = x.colnames;
+                        
                         if isempty (xcn)
                             if ~ isempty (cn)
                                 xcn = repmat ({''}, 1, size (n1, 2));
@@ -116,12 +114,9 @@ switch idx(1).type
                     % Row names
                     if val_is_an_stkdf && (isequal (idx(1).subs{2}, ':'))
                         
-                        rn = {};
-                        if isa (val, 'stk_dataframe')
-                            rn = val.rownames;
-                        end
-                        
+                        rn = val.rownames;
                         xrn = x.rownames;
+                        
                         if isempty (xrn)
                             if ~ isempty (rn)
                                 xrn = repmat ({''}, size (val, 1), 1);
