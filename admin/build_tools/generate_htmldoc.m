@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,7 +28,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function success = generate_htmldoc ...
-    (root_dir, build_dir, htmldoc_dir, version_number, flavour)
+    (root_dir, htmldoc_dir, octpkg_tarball, flavour)
 
 if (exist ('OCTAVE_VERSION', 'builtin') ~= 5)
     warning ('Cannot build forgedoc from Matlab.');
@@ -35,24 +36,16 @@ if (exist ('OCTAVE_VERSION', 'builtin') ~= 5)
     return;
 end
 
-here = pwd ();
-
-[dir0, htmldoc_dirname] = fileparts (htmldoc_dir);
-
-% Name of the octpkg tarball
-octpkg_tarball_name = sprintf ('stk-%s-octpkg.tar.gz', version_number);
-
 % Check that octpkg has been built
-cd (build_dir);
-if (~ exist (octpkg_tarball_name, 'file'))
+if (~ exist (octpkg_tarball, 'file'))
     error (sprintf ...
-        ('%s does not exist: build octpkg first.', octpkg_tarball_name));
+        ('%s does not exist: build octpkg first.', octpkg_tarball));
 end
 
 % Install package (even if it's already installed)
-fprintf ('Installing %s (pkg install)...\n', octpkg_tarball_name);
+fprintf ('Installing %s (pkg install)...\n', octpkg_tarball);
 pkg ('load', 'generate_html');
-pkg ('install', octpkg_tarball_name);
+pkg ('install', octpkg_tarball);
 
 % Options for generate_package_html
 switch flavour
@@ -67,12 +60,7 @@ end
 % Generate HTML documentation
 fprintf ('Generating HTML documentation for OF...\n');
 pkg ('load', 'generate_html');
-generate_package_html ('stk', dir0, options);
-
-% Rename generated directory (default name: 'stk')
-if (~ strcmp (htmldoc_dirname, 'stk'))
-    movefile (fullfile (dir0, 'stk'), htmldoc_dir);
-end
+generate_package_html ('stk', htmldoc_dir, options);
 
 % Enhance COPYING (license) file
 htmldocparts_dir = fullfile (root_dir, 'admin', 'htmldoc');
@@ -80,8 +68,6 @@ enhance_copying (htmldoc_dir, htmldocparts_dir);
 
 % Make a few changes to index.html
 modify_index_html (htmldoc_dir);
-
-cd (here);
 
 success = true;
 
@@ -105,7 +91,7 @@ s_GPLv3 = tmp(1).content;
 
 % Replace in COPYING.html
 
-fn_copying = fullfile (htmldoc_dir, 'COPYING.html');
+fn_copying = fullfile (htmldoc_dir, 'stk', 'COPYING.html');
 
 fid = fopen_ (fn_copying, 'rt');
 s = (char (fread (fid)))';
@@ -126,7 +112,7 @@ end % function enhance_copying
 
 function modify_index_html (htmldoc_dir)
 
-fn_index = fullfile (htmldoc_dir, 'index.html');
+fn_index = fullfile (htmldoc_dir, 'stk', 'index.html');
 
 fid = fopen_ (fn_index, 'rt');
 s = (char (fread (fid)))';

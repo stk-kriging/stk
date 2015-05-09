@@ -5,7 +5,7 @@
 %    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function build_octpkg (root_dir, build_dir)
+function build_octpkg (root_dir, release_dir)
 
 disp ('                          ');
 disp ('**************************');
@@ -47,16 +47,16 @@ pkg_bits_dir = fullfile ('admin', 'octpkg');
 % Get a valid version number (without an extension such as '-dev')
 version_number = get_version_number ();
 
-% Build dir: assume build_dir is a subdirectory of root_dir
-[ignore_path, build_dir] = fileparts (build_dir);  %#ok<ASGLU>
-octpkg_dir = fullfile (build_dir, 'octpkg');
-if exist (octpkg_dir, 'dir')
-    rmdir (octpkg_dir, 's');
+% Create release_dir if necessaryrelease_dir
+if ~ exist (release_dir, 'dir')
+    mkdir (release_dir);
 end
-mkdir (octpkg_dir);
 
 % Directory that will contain the unpacked octave package
-unpacked_dir = fullfile (octpkg_dir, 'stk');
+unpacked_dir = fullfile (release_dir, 'stk');
+if exist (unpacked_dir, 'dir')
+    rmdir (unpacked_dir, 's');
+end
 mkdir (unpacked_dir);
 
 % src: sources for MEX-files
@@ -66,10 +66,10 @@ mkdir (fullfile (unpacked_dir, 'src'));
 mkdir (fullfile (unpacked_dir, 'doc'));
 
 % List of directories that must be ignored by process_directory ()
-ignore_list = {'.hg', 'admin', 'misc/mole/matlab', build_dir};
+ignore_list = {'.hg', 'admin', 'misc/mole/matlab', 'build'};
 
 % Prepare sed program for renaming MEX-functions (prefix/suffix by __)
-sed_program = prepare_sed_rename_mex (root_dir, octpkg_dir);
+sed_program = prepare_sed_rename_mex (root_dir, release_dir);
 
 % Process directories recursively
 process_directory ('', unpacked_dir, ignore_list, sed_program);
@@ -120,12 +120,6 @@ check_index_file (index_file, ...
     get_public_mfile_list (fullfile (unpacked_dir, 'inst')));
 copyfile (index_file, unpacked_dir);
 
-% Create tar.gz archive
-cd (octpkg_dir);
-tarball_name = sprintf ('stk-%s-octpkg.tar.gz', version_number);
-system (sprintf ('tar --create --gzip --file %s stk', tarball_name));
-movefile (tarball_name, '..');
-
 cd (here)
 
 end % function make_octave_package
@@ -172,6 +166,7 @@ regex_mfile = '\.m$';
 regex_copy_src = '\.[ch]$';
 
 if ~ isempty (regexp (s, regex_ignore, 'once')) ...
+        || strcmp (s, 'Makefile') ...
         || strcmp (s, 'config/stk_config_buildmex.m') ...
         || strcmp (s, 'config/stk_config_makeinfo.m') ...
         || strcmp (s, 'misc/mole/README') ...
@@ -248,13 +243,13 @@ end
 end % function mkdir_recurs
 
 
-function sed_program = prepare_sed_rename_mex (root_dir, build_dir)
+function sed_program = prepare_sed_rename_mex (root_dir, release_dir)
 
 cd (fullfile (root_dir, 'config'));
 info = stk_config_makeinfo ();
 cd (root_dir);
 
-sed_program = fullfile (build_dir, 'rename_mex.sed');
+sed_program = fullfile (release_dir, 'rename_mex.sed');
 fid = fopen_ (sed_program, 'w');
 
 for k = 1:(length (info))
