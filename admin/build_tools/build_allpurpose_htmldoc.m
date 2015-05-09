@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,11 +28,12 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function build_allpurpose_htmldoc ...
-    (root_dir, build_dir, htmldoc_dir, version_number)
+    (root_dir, htmldoc_dir, octpkg_tarball)
 
 % Generate the documentation
-generate_htmldoc (root_dir, build_dir, ...
-    htmldoc_dir, version_number, 'allpurpose');
+base_dir = fileparts (htmldoc_dir);
+generate_htmldoc (root_dir, base_dir, octpkg_tarball, 'allpurpose');
+movefile (fullfile (base_dir, 'stk'), htmldoc_dir);
 
 % Directories
 htmldocparts_dir = fullfile (root_dir, 'admin', 'htmldoc');
