@@ -1,3 +1,10 @@
+2015-05-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Fix %!shared blocks in unit tests.
+
+	* arrays/@stk_hrect/stk_normalize.m: Fix unit test.
+	* arrays/generic/stk_feval.m: Fix unit test.
+
 2015-04-22  Julien Bect  <julien.bect@supelec.fr>
 
 	Improve indexing (subasgn/subsref) for stk_dataframe objects.

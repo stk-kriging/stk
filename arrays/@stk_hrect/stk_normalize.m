@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -67,7 +68,7 @@ x(:) = bsxfun (@plus, a, x_data * diag (b));
 end % function stk_normalize
 
 
-%!shared x box y1 y2 y3 y4
+%!shared x, box, y1, y2, y3, y4
 %! n = 5;  box = stk_hrect ([2; 3]);
 %! x = 2 + rand (n, 1);
 
