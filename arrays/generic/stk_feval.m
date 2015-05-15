@@ -339,7 +339,7 @@ end % function stk_feval
 %! assert (isequal (y.data, [2; 4; 6]));
 %! assert (isequal (y.rownames, {'a'; 'b'; 'c'}));
 
-%!shared t z_ref n
+%!shared t, z_ref, n
 %! n = 20;
 %! t = stk_sampling_regulargrid (n, 1, [0; 2*pi]);
 %! z_ref = [sin(t.data) cos(t.data)];
