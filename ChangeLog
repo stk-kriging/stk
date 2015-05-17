@@ -1,5 +1,10 @@
 2015-05-17  Julien Bect  <julien.bect@supelec.fr>
 
+	stk_runtests.m: Make sure that all Octave warnings are disabled
+
+	* misc/test/stk_runtests.m: Make sure that all Octave warnings are
+	disabled
+
 	Fix %!shared blocks in unit tests.
 
 	* arrays/@stk_hrect/stk_normalize.m: Fix unit test.
