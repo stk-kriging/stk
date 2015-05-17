@@ -1,5 +1,9 @@
 2015-05-17  Julien Bect  <julien.bect@supelec.fr>
 
+	admin/octpkg/Makefile: Use $(MKOCTFILE) if defined
+
+	* admin/octpkg/Makefile: Use $(MKOCTFILE) if defined
+
 	stk_runtests.m: Make sure that all Octave warnings are disabled
 
 	* misc/test/stk_runtests.m: Make sure that all Octave warnings are
