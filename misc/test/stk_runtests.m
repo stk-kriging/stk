@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
@@ -260,18 +261,11 @@ warning ('ah:ah', 'toto');
 
 if ~ (strcmp (id, 'ah:ah') && strcmp (msg, 'toto'))
     warning ('on', 'all');
-    warning ('off', 'Octave:array-to-scalar');
-    warning ('off', 'Octave:array-to-vector');
-    warning ('off', 'Octave:imag-to-real');
-    warning ('off', 'Octave:matlab-incompatible');
-    warning ('off', 'Octave:missing-semicolon');
-    warning ('off', 'Octave:neg-dim-as-zero');
-    warning ('off', 'Octave:resize-on-range-error');
-    warning ('off', 'Octave:separator-insert');
-    warning ('off', 'Octave:single-quote-string');
-    warning ('off', 'Octave:str-to-num');
-    warning ('off', 'Octave:mixed-string-concat');
-    warning ('off', 'Octave:variable-switch-label');
+    for i = 1:(length (s))
+        if ~ isempty (regexp (s(i).identifier, '^Octave:', 'once'))
+            warning (s(i).state, s(i).identifier);
+        end
+    end
 end
 
 lastwarn ('');
