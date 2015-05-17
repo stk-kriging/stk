@@ -29,27 +29,39 @@ Assume, say, that we want to release STK version 4.5 (hum... not yet...).
 
  * Build tarballs
  
-        octave --eval "cd admin; build all"
+        make clean  ## safer (our Makefile is far from perfect)
+        make
         
- * As a result, directory `./build` should contain the following files:
+ * As a result, directory `./build` should contain:
  
-   * `stk-2.2-allpurpose.tar.gz`: "all purpose" (Matlab/Octave) release.
-   * `allpurpose/stk/`: unpacked tarball, available for inspection.
+   * `sourceforge/stk-4.5.0-allpurpose.tar.gz`: "all purpose" (Matlab/Octave)
+      release, to be uploaded in the SourceForge FRS.
+   * `sourceforge/stk-4.5.0-octpkg.tar.gz`: Octave package, to be uploaded
+      in the SourceForge FRS as well.
 
-   * `stk-2.2-octpkg.tar.gz`: "Octave package" release. This is a regular
-     Octave package tarball, ready to be installed using `pkg`.
-   * `octpkg/stk/`: unpacked tarball, available for inspection.
-   
-   * `stk-2.2-forgedoc.tar.gz`: Octave-Forge HTML documention.
-   * `octpkg/stk/`: unpacked tarball, available for inspection.
-   
+   * `sourceforge/stk/`: unpacked tarball corresponding to the "all purpose"
+      release, available for inspection.
+
+   * `octaveforge/stk-4.5.0.tar.gz`: "Octave package" release. This is a regular
+     Octave package tarball, identical to the `stk-4.5.0-octpkg.tar.gz`, ready
+     to be installed using `pkg`.
+   * `octaveforge/stk-4.5.0-html.tar.gz`: Octave-Forge HTML documentation.
+   * `octaveforge/stk-4.5.0.md5sum`: MD5 sums for the Octave package and its HTML
+     documentation. All three files are ready to be upload on the OF package
+     release tracker (http://sourceforge.net/p/octave/package-releases).
+
+   * `octaveforge/stk/`: unpacked Octave package tarball, available for inspection.
+   * `octaveforge/stk-html/`: unpacked HTML doc tarball (prefer the next one for
+     visual inspection)
+   * `octaveforge/stk-html-inspect/`: unpacked HTML doc tarball, together with some
+     OF goodies (images, CSS stylesheet), ready for visual inspection.
 
 ## Check build outputs
 
  * Inspect HTML documentations
-   * `build/allpurpose/stk/doc/html`: HTML doc for the "all purpose" release,
+   * `sourceforge/stk/doc/html`: HTML doc for the "all purpose" release,
       that will also be uploaded to <http://kriging.sourceforge.net/htmldoc/>
-   * `build/octpkg/html`: HTML doc for the Octave-Forge web site.
+   * `octaveforge/stk-html-inspect`: HTML doc for the Octave-Forge web site.
    
  * Run test suite
    * Check that all unit tests and all example scripts run on all available test
@@ -60,7 +72,7 @@ Assume, say, that we want to release STK version 4.5 (hum... not yet...).
  * In case problems are found
    * Fix them on the release/maintenance branch
    * Graft them back to the default branch (if appropriate)
-   * Go back to "Build tarballs" to create a new release candidate :)
+   * Go back to "Build tarballs" to create a new release candidate
  
 
 ## Release
@@ -83,8 +95,8 @@ Assume, say, that we want to release STK version 4.5 (hum... not yet...).
        <http://sourceforge.net/projects/kriging/files/>
    * Upload a copy of the "allpurpose" HTML doc to 
        <http://kriging.sourceforge.net/htmldoc/>
-   * Send the Octave package + Octave-Forge HTML doc to Octave-Forge maintainers
-   
+   * Upload the Octave package, the HTML documentation and the MD5 sums to the OF
+     package release tracker.
 
 ## Spread the news
 
