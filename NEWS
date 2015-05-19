@@ -1,3 +1,11 @@
+Changes in version 2.3.1
+========================
+
+* Bug fixes
+
+   o stk_optim_hasfmincon.m: Detect fmincon by trying to use it, instead of
+     relying on the result of the exist function (ticket #30 closed).
+
 Changes in version 2.3.0
 ========================
 
