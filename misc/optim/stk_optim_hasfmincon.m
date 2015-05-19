@@ -4,9 +4,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -34,7 +35,14 @@ persistent b;
 
 if isempty (b),
     
-    b = (exist ('fmincon','file') == 2);
+    try
+        opt = optimset ('Display', 'off', 'GradObj', 'on');
+        z = fmincon (@objfun, 0, [], [], [], [], -1, 1, [], opt);
+        assert (abs (z - 0.3) < 1e-2);
+        b = true;
+    catch %#ok<CTCH>
+        b = false;
+    end
     
     mlock ();
     
@@ -43,3 +51,11 @@ end
 fmincon_available = b;
 
 end % function stk_optim_hasfmincon
+
+
+function [f, df] = objfun (x)
+
+f = (x - 0.3) .^ 2;
+df = 2 * (x - 0.3);
+
+end % function objfun
