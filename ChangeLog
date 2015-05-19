@@ -1,3 +1,11 @@
+2015-05-19  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_optim_hasfmincon.m: Improve fmincon detection
+
+	* misc/optim/stk_optim_hasfmincon.m: Try to use fmincon to check
+	that it is there, instead of relying on the result of the exist
+	function (closes ticket #30).
+
 2015-05-17  Julien Bect  <julien.bect@supelec.fr>
 
 	admin/octpkg/Makefile: Use $(MKOCTFILE) if defined
