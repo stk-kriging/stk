@@ -29,6 +29,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2011-2013 SUPELEC
 %
@@ -88,7 +89,7 @@ end
 
 % Should we estimate the variance of the noise, too ?
 if ~ isempty (lnv0)
-    % param0lnv present => noise variance *must* be estimated
+    % lnv0 present => noise variance *must* be estimated
     do_estim_lnv = true;
 else
     % Otherwise, noise variance estimation happens when lnv has NaNs
@@ -274,16 +275,20 @@ end % function nablaf_with_noise_
 
 
 function [lblnv,ublnv] = get_default_bounds_lnv ... % --------------------------
-    (model, param0lnv, xi, zi) %#ok<INUSL>
+    (model, lnv0, xi, zi) %#ok<INUSL>
 
-% assume NOISEESTIM
-% constants
 TOLVAR = 0.5;
 
-% bounds for the variance parameter
+% Bounds for the variance parameter
 empirical_variance = var(zi);
-lblnv = log(eps);
-ublnv = log(empirical_variance) + TOLVAR;
+lblnv = log (eps);
+ublnv = log (empirical_variance) + TOLVAR;
+
+% Make sure that lnv0 falls within the bounds
+if ~ isempty (lnv0)
+    lblnv = min (lblnv, lnv0 - TOLVAR);
+    ublnv = max (ublnv, lnv0 + TOLVAR);
+end
 
 end % function get_default_bounds_lnv ------------------------------------------
 
