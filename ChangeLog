@@ -1,3 +1,10 @@
+2015-05-20  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_estim.m: Make sure that lnv0 falls within the bounds
+
+	* paramestim/stk_param_estim.m (get_default_bounds_lnv): Make sure
+	that lnv0 falls within the bounds returned by get_default_bounds_lnv.
+
 2015-05-19  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_optim_hasfmincon.m: Improve fmincon detection
