@@ -9,6 +9,9 @@ Changes in version 2.3.1
    o stk_param_estim.m: Make sure that the bounds that we use for the lnv
      parameter contain the starting point lnv0 when it is provided.
 
+   o @stk_dataframe/set.m: Fix stk_error calls (missing mnemonic).
+
+
 Changes in version 2.3.0
 ========================
 
