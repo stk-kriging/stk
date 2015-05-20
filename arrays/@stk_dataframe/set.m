@@ -45,7 +45,8 @@ switch icol
             n1 = size (x.data, 1);
             n2 = length (value);
             if ~ iscell (value)
-                stk_error ('value should be a cell array.');
+                stk_error (['Input argument ''value'' should be a cell' ...
+                    ' array.'], 'InvalidArgument');
             elseif isequal (size (value), [n2 1])
                 x.rownames = value;
             else
@@ -73,7 +74,8 @@ switch icol
             d2 = length (value);
             
             if ~ iscell (value)
-                stk_error ('value should be a cell array.');
+                stk_error (['Input argument ''value'' should be a cell' ...
+                    ' array.'], 'InvalidArgument');
             elseif isequal (size (value), [1 d2])
                 x.colnames = value;
             else

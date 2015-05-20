@@ -1,5 +1,9 @@
 2015-05-20  Julien Bect  <julien.bect@supelec.fr>
 
+	@stk_dataframe/set.m: Fix stk_error calls (missing mnemonic)
+
+	* arrays/@stk_dataframe/set.m: Fix stk_error calls (missing mnemonic)
+
 	stk_param_estim.m: Make sure that lnv0 falls within the bounds
 
 	* paramestim/stk_param_estim.m (get_default_bounds_lnv): Make sure
