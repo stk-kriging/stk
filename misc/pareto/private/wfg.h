@@ -9,20 +9,20 @@ typedef double OBJECTIVE;
 
 typedef struct
 {
-	OBJECTIVE *objectives;
+    OBJECTIVE *objectives;
 } POINT;
 
 typedef struct
 {
-	int nPoints;
-	int n;
-	POINT *points;
+    int nPoints;
+    int n;
+    POINT *points;
 } FRONT;
 
 typedef struct
 {
-	int nFronts;
-	FRONT *fronts;
+    int nFronts;
+    FRONT *fronts;
 } FILECONTENTS;
 
 FILECONTENTS *readFile(char[]);
