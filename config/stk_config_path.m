@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
-%    Author:   Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -38,10 +39,8 @@ isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
 
 % Are we using STK installed as an octave package ?
 if isoctave && (exist (fullfile (root, 'PKG_ADD'), 'file') == 2)
-    STK_OCTAVE_PACKAGE = true;
     path = {};  % don't include root here (otherwise: infinite PKG_ADD loop)
 else
-    STK_OCTAVE_PACKAGE = false;
     path = {root};
 end
 
@@ -66,6 +65,7 @@ path = [path {...
     fullfile(misc, 'optim'   ) ...
     fullfile(misc, 'options' ) ...
     fullfile(misc, 'parallel') ...
+    fullfile(misc, 'pareto'  ) ...    
     fullfile(misc, 'plot'    ) ...
     fullfile(misc, 'specfun' ) ...
     fullfile(misc, 'test'    ) ...
