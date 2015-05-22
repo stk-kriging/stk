@@ -1,50 +1,60 @@
-/*
+/*****************************************************************************
+ *                                                                           *
+ *                  Small (Matlab/Octave) Toolbox for Kriging                *
+ *                                                                           *
+ * Copyright Notice                                                          *
+ *                                                                           *
+ *    Copyright (C) 2015 CentraleSupelec                                     *
+ *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
+ *                                                                           *
+ *    Based on the file wfg.c from WFG 1.10 by Lyndon While, Lucas           *
+ *    Bradstreet, Luigi Barone, released under the GPLv2 licence. The        *
+ *    original copyright notice is:                                          *
+ *                                                                           *
+ *       Copyright (C) 2010 Lyndon While, Lucas Bradstreet                   *
+ *                                                                           *
+ * Copying Permission Statement                                              *
+ *                                                                           *
+ *    This file is part of                                                   *
+ *                                                                           *
+ *            STK: a Small (Matlab/Octave) Toolbox for Kriging               *
+ *               (http://sourceforge.net/projects/kriging)                   *
+ *                                                                           *
+ *    STK is free software: you can redistribute it and/or modify it under   *
+ *    the terms of the GNU General Public License as published by the Free   *
+ *    Software Foundation,  either version 3  of the License, or  (at your   *
+ *    option) any later version.                                             *
+ *                                                                           *
+ *    STK is distributed  in the hope that it will  be useful, but WITHOUT   *
+ *    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY   *
+ *    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public   *
+ *    License for more details.                                              *
+ *                                                                           *
+ *    You should  have received a copy  of the GNU  General Public License   *
+ *    along with STK.  If not, see <http://www.gnu.org/licenses/>.           *
+ *                                                                           *
+ ****************************************************************************/
 
- This program is free software (software libre); you can redistribute
- it and/or modify it under the terms of the GNU General Public License
- as published by the Free Software Foundation; either version 2 of the
- License, or (at your option) any later version.
-
- This program is distributed in the hope that it will be useful, but
- WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- General Public License for more details.
-
- You should have received a copy of the GNU General Public License
- along with this program; if not, you can obtain a copy of the GNU
- General Public License at:
-                 http://www.gnu.org/copyleft/gpl.html
- or by writing to:
-           Free Software Foundation, Inc., 59 Temple Place,
-                 Suite 330, Boston, MA 02111-1307 USA
-
- ----------------------------------------------------------------------
-
-*/
+/* TODO: find out which of these includes are *REALLY* necessary */
 
 #include <stdio.h>
 #include <stdbool.h>
 #include <math.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/time.h>
 #include <sys/resource.h>
 #include "wfg.h"
 
+double hv (FRONT);
+
 #define BEATS(x,y)   (x > y)
 #define WORSE(x,y)   (BEATS(y,x) ? (x) : (y))
 
-int n;         /* the number of objectives                     */
-POINT ref;     /* the reference point                          */
-
-FRONT *fs;     /* memory management stuff                      */
-int fr = 0;    /* current depth                                */
-int maxm = 0;  /* identify the biggest fronts in the file      */
-int maxn = 0;
-int safe;      /* the number of points that don't need sorting */
-
-double totaltime;
-
-double hv(FRONT);
-
+int n = 0;         /* the number of objectives                     */
+FRONT *fs = NULL;  /* memory management stuff                      */
+int fr = 0;        /* current depth                                */
+int safe = 0;      /* the number of points that don't need sorting */
 
 int greater(const void *v1, const void *v2)
 /* this sorts points worsening in the last objective */
@@ -527,64 +537,44 @@ double hv(FRONT ps)
 }
 
 
-int main(int argc, char *argv[])
-/* processes each front from the file */
+void wfg_alloc (int maxm, int maxn)
+/* Allocate memory for several auxiliary fronts */
 {
-    int i, j, k;
+  int i, j, max_depth;
 
-    FILECONTENTS *f = readFile(argv[1]);
-
-    /* find the biggest fronts */
-    for (i = 0; i < f->nFronts; i++)
-    {   if (f->fronts[i].nPoints > maxm) maxm = f->fronts[i].nPoints;
-        if (f->fronts[i].n       > maxn) maxn = f->fronts[i].n;
-    }
-
-    /* allocate memory */
-    int maxdepth = maxn - 2;
-    fs = malloc(sizeof(FRONT) * maxdepth);
-    for (i = 0; i < maxdepth; i++)
-    {   fs[i].points = malloc(sizeof(POINT) * maxm);
-        for (j = 0; j < maxm; j++)
-            fs[i].points[j].objectives = malloc(sizeof(OBJECTIVE) * (maxn - i - 1));
-    }
-
-    /* initialise the reference point */
-    ref.objectives = malloc(sizeof(OBJECTIVE) * maxn);
-    if (argc == 2)
-    {   printf("No reference point provided: using the origin\n");
-        for (i = 0; i < maxn; i++) ref.objectives[i] = 0;
-    }
-    else if (argc - 2 != maxn)
-    {   printf("Your reference point should have %d values\n", maxn);
-        return 0;
-    }
-    else
-        for (i = 2; i < argc; i++) ref.objectives[i - 2] = atof(argv[i]);
-
-    /* modify the objective values relative to the reference point */
-    for (i = 0; i < f->nFronts; i++)
-        for (j = 0; j < f->fronts[i].nPoints; j++)
-            for (k = 0; k < f->fronts[i].n; k++)
-                f->fronts[i].points[j].objectives[k] = fabs(f->fronts[i].points[j].objectives[k] - ref.objectives[k]);
-
-    for (i = 0; i < f->nFronts; i++)
+  max_depth = maxn - 2;  
+  fs = (FRONT*) mxMalloc (sizeof (FRONT) * max_depth);
+  for (i = 0; i < max_depth; i++)
     {
-        struct timeval tv1, tv2;
-        struct rusage ru_before, ru_after;
-        getrusage (RUSAGE_SELF, &ru_before);
-
-        n = f->fronts[i].n;
-        safe = 0;
-        printf("hv(%d) = %1.10f\n", i+1, hv(f->fronts[i]));
-
-        getrusage (RUSAGE_SELF, &ru_after);
-        tv1 = ru_before.ru_utime;
-        tv2 = ru_after.ru_utime;
-        printf("Time: %f (s)\n", tv2.tv_sec + tv2.tv_usec * 1e-6 - tv1.tv_sec - tv1.tv_usec * 1e-6);
-        totaltime += tv2.tv_sec + tv2.tv_usec * 1e-6 - tv1.tv_sec - tv1.tv_usec * 1e-6;
+      fs[i].points = (POINT*) mxMalloc (sizeof (POINT) * maxm);
+      for (j = 0; j < maxm; j++)
+	fs[i].points[j].objectives = (OBJECTIVE*)
+	  mxMalloc (sizeof (OBJECTIVE) * (maxn - i - 1));
     }
-    printf("Total time = %f (s)\n", totaltime);
+}
 
-    return 0;
+
+void wfg_free (int maxm, int maxn)
+{
+  int i, j, max_depth;
+
+  max_depth = maxn - 2;
+  for (i = 0; i < max_depth; i++)
+    {
+      for (j = 0; j < maxm; j++)
+	mxFree (fs[i].points[j].objectives);
+      mxFree (fs[i].points);
+    }
+  mxFree (fs);
+}
+
+
+double wfg_compute_hv (FRONT ps)
+{
+  /* Set global variables */
+  n = ps.n;
+  safe = 0;
+  fr = 0;
+
+  return hv (ps);
 }
