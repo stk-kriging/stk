@@ -17,13 +17,15 @@ static void trimLine(char line[])
 
 void printContents(FILECONTENTS *f)
 {
-    for (int i = 0; i < f->nFronts; i++)
+    int i, j, k;
+
+    for (i = 0; i < f->nFronts; i++)
     {
         printf("Front %d:\n", i+1);
-        for (int j = 0; j < f->fronts[i].nPoints; j++)
+        for (j = 0; j < f->fronts[i].nPoints; j++)
         {
             printf("\t");
-            for (int k = 0; k < f->fronts[i].n; k++)
+            for (k = 0; k < f->fronts[i].n; k++)
             {
                 printf("%f ", f->fronts[i].points[j].objectives[k]);
             }
@@ -82,7 +84,7 @@ FILECONTENTS *readFile(char filename[])
     }
 
     fc->nFronts--;
-    // for (int i = 0; i < fc->nFronts; i++) fc->fronts[i].n = fc->fronts[i].points[0].nObjectives;
+
     fclose(fp);
     /* printf("Read %d fronts\n", fc->nFronts);
        printContents(fc); */

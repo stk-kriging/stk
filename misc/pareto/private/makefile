@@ -14,7 +14,7 @@ ifndef march
 endif
 
 
-CC = gcc -std=c99 -Wall  $(OPT)
+CC = gcc -std=c89 -Wall  $(OPT)
 
 $(EXE): $(OBJ) wfg.c
 	$(CC) -o wfg wfg.c $(OBJ)
