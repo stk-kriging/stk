@@ -155,15 +155,18 @@ Examples: miscellaneous
 Miscellaneous: arrays
  stk_boundingbox
  stk_feval
- stk_isdominated
  stk_length
  stk_normalize
- stk_paretofind
  stk_rescale
  @stk_dataframe/stk_dataframe
  @stk_factorialdesign/stk_factorialdesign
  @stk_factorialdesign/ndgrid
  @stk_hrect/stk_hrect
+
+Miscellaneous: Pareto optimality
+ stk_dominatedhv
+ stk_isdominated
+ stk_paretofind
 
 #stk_commonsize              [internal]
 #stk_sprintf                 [internal]
