@@ -1,0 +1,18 @@
+1.10 
+* Relaxed maximisation/minimisation, so each objective in each front can be treated independently without code modification 
+* Removed 3D base case, and removed copyright and attribution to Fonseca et al. 
+* Greatly accelerated code: 
+  - incorporated base cases for small fronts (four points or fewer) 
+  - accelerated determination of reduced fronts 
+  - accelerated domination checks 
+  - reduced sorting costs 
+  - calculated objective differences wrt reference point once only 
+* Tidied-up code 
+
+1.02 
+* Accelerated domination checks 
+* Corrected base case error for opt <= 1 
+* Tided-up code 
+
+1.01 
+* Updated README.TXT and wfg.c with correct copyright and attribution to Fonseca, Lopez-Ibanez, and Paquete. 
