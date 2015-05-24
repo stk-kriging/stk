@@ -11,6 +11,11 @@ Changes in version 2.3.1
 
    o @stk_dataframe/set.m: Fix stk_error calls (missing mnemonic).
 
+* Minor changes
+
+   o stk_init.m: Clear persistent variables. As a consequence, stk_init can now
+     be used to restart STK completely.
+
 
 Changes in version 2.3.0
 ========================
