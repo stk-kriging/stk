@@ -9,6 +9,9 @@ Assume, say, that we want to release STK version 4.5 (hum... not yet...).
         ./admin/find_nonstandard_characters.sh
         ./admin/fix_eol.sh
 
+ * Check that all mlock-ed files and all files containing persistent variables
+   are listed in `config/stk_config_clearpersistents.m`.
+
  * Check that AUTHORS is up-to-date. Check copyright years on all files modified
    since the previous release.
  

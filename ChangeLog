@@ -1,3 +1,13 @@
+2015-05-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Clear persistent variables in stk_init.
+
+	* config/stk_config_clearpersistents.m: New function that unlocks
+	all possibly mlock-ed STK files and clears all STK functions that
+	contain persistent variables.
+	* stk_init.m: Call stk_config_clearpersistents.
+	* admin/RELEASE.md: Update release instructions.
+
 2015-05-20  Julien Bect  <julien.bect@supelec.fr>
 
 	@stk_dataframe/set.m: Fix stk_error calls (missing mnemonic)
