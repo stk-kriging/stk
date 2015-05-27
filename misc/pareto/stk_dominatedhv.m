@@ -56,31 +56,56 @@
 
 function hv = stk_dominatedhv (y, y_ref)
 
-y = double (y);
-
-if (~ ismatrix (y))
-    stk_error ('y_data should be a matrix', 'IncorrectArgument');
+if nargin > 2,
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if nargin < 2  % Use [0 0 ... 0] as a reference point
+% Ensure that y is a cell array
+if ~ iscell (y),
+    if (~ ismatrix (y))
+        stk_error ('y should be a matrix or a cell array', 'IncorrectArgument');
+    end
+    y = {y};
+end
+
+% Missing or empty: will use [0 0 ... 0] as a reference point
+if nargin < 2,
+    y_ref = [];
+elseif ~ isrow (y_ref)
+    stk_error ('y_ref should be a row vector.', 'IncorrectSize');
+end
+
+% Pre-processing
+y = cellfun (@(z) wfg_prepocessing (z, y_ref), y, 'UniformOutput', false);
+
+hv = stk_dominatedhv_mex (y);
+
+end % function stk_dominatedhv
+
+
+function y = wfg_prepocessing (y, y_ref)
+
+y = double (y);
+
+p_ref = size (y_ref, 2);
+
+if isempty (y_ref)  % Use [0 0 ... 0] as a reference point
     
     % WFG convention: maximization problem
     y = - y;
     
-elseif nargin == 2  % Reference point provided
+else  % Reference point provided
     
-    % Check the size of y_ref
-    if ~ isequal (size (y_ref), [1 size(y, 2)])
-        stk_error (['The number of columns of y_ref should be equal to ' ...
-            'the number of columns of y_data'], 'IncorrectArgument');
+    p = size (y, 2);
+    
+    % Check the size of y
+    if (p > p_ref)
+        stk_error (['The number of columns the data matrix should not be ' ...
+            'larger than the number of columns of y_ref'], 'IncorrectArgument');
     end
     
     % WFG convention: maximization problem
-    y = bsxfun (@minus, y_ref, y);
-    
-else
-    
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    y = bsxfun (@minus, y_ref(1:p), y);
     
 end
 
@@ -89,9 +114,7 @@ if ~ all (y >= 0);
         'IncorrectArgument');
 end
 
-hv = stk_dominatedhv_mex (y);
-
-end % function stk_dominatedhv
+end
 
 
 %!shared y, hv0 % Example from README.TXT in WFg 1.10
@@ -123,3 +146,19 @@ end % function stk_dominatedhv
 %!    y = - 0.5 * ones (1, d);
 %!    assert (isequal (stk_dominatedhv (y), 0.5 ^ d));
 %! end
+
+%!test
+%! y1 = [0.25 0.75];
+%! y2 = [0.50 0.50];
+%! y3 = [0.75 0.25];
+%!
+%! y_ref = [1 1];
+%!
+%! y = {[], y1, y2, y3; [y1; y2], [y1; y3], [y2; y3], [y1; y2; y3]};
+%!
+%! dv = 0.25 ^ 2;
+%!
+%! hv0 = [0 3 4 3; 5 5 5 6] * dv
+%! hv1 = stk_dominatedhv (y, y_ref)
+%!
+%! assert (isequal (hv0, hv1))

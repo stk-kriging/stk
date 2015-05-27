@@ -43,12 +43,15 @@ double compute_hv (mxArray* f, FRONT *buffer)
   double hv, t;         /* hypervolume */
 
   nb_points = mxGetM (f);
+  if (nb_points == 0)
+      return 0.0;
+
   nb_objectives = mxGetN (f);
   data = mxGetPr (f);
 
   if (nb_objectives == 0)
     {
-      return 0;
+      return 0.0;
     }
   else if (nb_objectives == 1)
     {
@@ -74,17 +77,21 @@ double compute_hv (mxArray* f, FRONT *buffer)
     }
 }
 
+#define Y_IN    prhs[0]
+#define HV_OUT  plhs[0]
+
 void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
   int i, j;             /* loop indices */
-  mxArray **mx_fronts;  /* fronts, as mxArray objects */
-  FRONT front;          /* front structure, as expected by WFG */
+  mxArray **fronts;     /* fronts, as mxArray objects */
+  FRONT buffer;         /* front structure, as expected by WFG */
   int nb_fronts;        /* number of Pareto fronts */
   int nb_points;        /* number of points in a given front */
   int nb_objectives;    /* number of objectives for a given front */
   int maxm = 0;         /* maximum number of points in a front */
   int maxn = 0;         /* maximum number of objectives        */
   double *hv;           /* computed hyper-volumes */
+  int must_free_fronts; /* flag: do we need to free 'fronts' ? */
 
   if (nlhs > 1)   /* Check number of output arguments */
     mexErrMsgTxt ("Too many output arguments.");
@@ -92,39 +99,40 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   if (nrhs != 1)  /* Check number of input arguments */
     mexErrMsgTxt ("Incorrect number of input arguments.");
 
-  if (stk_is_realmatrix (prhs[0]))
+  if (stk_is_realmatrix (Y_IN))
     {
       nb_fronts = 1;
-      mx_fronts = (mxArray**) prhs;
+      fronts = (mxArray**) prhs;
+      must_free_fronts = 0;
     }
-  else if (mxIsCell (prhs[0]))
+  else if (mxIsCell (Y_IN))
     {
-      mexErrMsgTxt ("Not Implemented yet.");
+      nb_fronts = mxGetNumberOfElements (Y_IN);
+      fronts = (mxArray**) mxMalloc (sizeof (mxArray*) * nb_fronts);
+      for (i = 0; i < nb_fronts; i++)
+        fronts[i] = mxGetCell (Y_IN, i);
+      must_free_fronts = 1;
     }
   else
     {
       mexErrMsgTxt ("Incorrect input type: cell or double expected.");
     }
 
-
   /*--- Prepare fronts for WFG -----------------------------------------------*/
 
   for (i = 0; i < nb_fronts; i++)
     {
-      nb_points = mxGetM (mx_fronts[i]);
+      nb_points = mxGetM (fronts[i]);
       if (nb_points > maxm) maxm = nb_points;
 
-      nb_objectives = mxGetN (mx_fronts[i]);
+      nb_objectives = mxGetN (fronts[i]);
       if (nb_objectives > maxn) maxn = nb_objectives;
     }
 
-  for (i = 0; i < nb_fronts; i++)
-    {
-      front.points = (POINT*) mxMalloc (sizeof (POINT) * maxm);
-      for (j = 0; j < maxm; j++)
-        front.points[j].objectives = (double*)
-          mxMalloc (sizeof (double) * maxn);
-    }
+  buffer.points = (POINT*) mxMalloc (sizeof (POINT) * maxm);
+  for (j = 0; j < maxm; j++)
+    buffer.points[j].objectives = (double*)
+      mxMalloc (sizeof (double) * maxn);
 
 
   /*--- Allocate memory ------------------------------------------------------*/
@@ -133,25 +141,31 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   wfg_alloc (maxm, maxn);
 
   /* Allocate memory for the output argument */
-  plhs[0] = mxCreateDoubleMatrix (nb_fronts, 1, mxREAL);
-  hv = mxGetPr (plhs[0]);
-
+  if (nb_fronts == 1)
+    {
+      HV_OUT = mxCreateDoubleScalar (1);
+    }
+  else
+    {
+      HV_OUT = mxCreateNumericArray (mxGetNumberOfDimensions (Y_IN),
+        mxGetDimensions (Y_IN), mxDOUBLE_CLASS, mxREAL);
+    }
+  hv = mxGetPr (HV_OUT);
 
   /*--- Compute hyper-volumes ------------------------------------------------*/
 
   for (i = 0; i < nb_fronts; i++)
-    hv[i] = compute_hv (mx_fronts[i], &front);
+    hv[i] = compute_hv (fronts[i], &buffer);
 
 
   /*--- Free memory ----------------------------------------------------------*/
 
   wfg_free (maxm, maxn);
 
-  for (i = 0; i < nb_fronts; i++)
-    {
-      for (j = 0; j < nb_points; j++)
-        mxFree (front.points[j].objectives);
-      mxFree (front.points);
-    }
+  for (j = 0; j < maxm; j++)
+    mxFree (buffer.points[j].objectives);
+  mxFree (buffer.points);
 
+  if (must_free_fronts)
+    mxFree (fronts);
 }
