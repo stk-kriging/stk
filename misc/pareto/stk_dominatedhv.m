@@ -60,25 +60,32 @@ if nargin > 2,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% Ensure that y is a cell array
-if ~ iscell (y),
-    if (~ ismatrix (y))
-        stk_error ('y should be a matrix or a cell array', 'IncorrectArgument');
-    end
-    y = {y};
-end
-
-% Missing or empty: will use [0 0 ... 0] as a reference point
+% Missing or empty y_ref: will use [0 0 ... 0] as a reference point
 if nargin < 2,
     y_ref = [];
 elseif ~ isrow (y_ref)
     stk_error ('y_ref should be a row vector.', 'IncorrectSize');
 end
 
-% Pre-processing
-y = cellfun (@(z) wfg_prepocessing (z, y_ref), y, 'UniformOutput', false);
-
-hv = stk_dominatedhv_mex (y);
+if ~ iscell (y),  % y is a matrix
+    
+    if (~ ismatrix (y))
+        stk_error ('y should be a matrix or a cell array', 'IncorrectArgument');
+    end
+    
+    % Pre-processing
+    y = wfg_prepocessing (y, y_ref);
+    
+    hv = stk_dominatedhv_mex (y);
+    
+else
+    
+    % Pre-processing
+    y = cellfun (@(z) wfg_prepocessing (z, y_ref), y, 'UniformOutput', false);
+    
+    hv = stk_dominatedhv_mex (y);
+    
+end
 
 end % function stk_dominatedhv
 
