@@ -6,10 +6,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -38,6 +39,10 @@ config = fullfile (root, 'config');
 % Add config to the path. It will be removed at the end of this script.
 addpath (config);
 
+% Unlock all possibly mlock-ed STK files and clear all STK functions
+% that contain persistent variables
+stk_config_clearpersistents ();
+
 % Activate the MOLE
 stk_config_mole (root);
 
@@ -50,8 +55,8 @@ if ~ STK_OCTAVE_PACKAGE
     % To force recompilation of all MEX-files, use stk_config_buildmex (true);
 end
 
-% Add STK folders to the path (note: doing this ATFER building the MEX-files seems to
-% solve the problem related to having MEX-files in private folders)
+% Add STK folders to the path (note: doing this ATFER building the MEX-files
+% seems to solve the problem related to having MEX-files in private folders)
 stk_config_addpath (root);
 
 % Check that MEX-files located in private folders are properly detected (note:

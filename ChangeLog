@@ -1,3 +1,52 @@
+2015-05-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dominatedhv.m: New function to compute dominated hypervolumes.
+
+	* misc/pareto/stk_dominatedhv.m: New function to compute
+	dominated hypervolumes, which uses WFG 1.10 internally
+	* misc/pareto/private/stk_dominatedhv_mex.c: MEX-file wrapper for WFG
+	* admin/octpkg/INDEX: Add new function to the index
+	* admin/octpkg/Makefile: Add new MEX-file to the Makefile
+	* config/stk_config_makeinfo.m:Add new MEX-file to the build list
+
+	Import WFG 1.10.
+
+	* misc/pareto/private/wfg.c: Main WFG source file, with minor changes
+	* misc/pareto/private/wfg.h: Main WFG header, with minor changes
+	* misc/pareto/private/wfg.README: WFG README + ChangeLog + Copyright
+	* admin/build_tools/build_octpkg.m: Ignore wfg.README.
+
+	Make it possible to have several source files for one MEX.
+
+	* config/stk_config_buildmex.m: Make it possible to have several
+	source files for one MEX.
+	* config/stk_config_makeinfo.m: Existing MEX-files do not have any
+	additional source file.
+
+	Move Pareto-related functions to misc/pareto.
+
+	* arrays/generic/private/stk_isdominated_mex.c: moved from
+	* misc/pareto/private/stk_isdominated_mex.c: moved to
+	* arrays/generic/private/stk_paretofind_mex.c: moved from
+	* misc/pareto/private/stk_paretofind_mex.c: moved to
+	* arrays/generic/stk_isdominated.m: moved from
+	* misc/pareto/stk_isdominated.m: moved to
+	* arrays/generic/stk_paretofind.m: moved from
+	* misc/pareto/stk_paretofind.m: moved to
+	* admin/octpkg/INDEX: Create a dedicated section in the index
+	* config/stk_config_makeinfo.m: Update make info
+	* config/stk_config_path.m: Add new directory to the path
+
+2015-05-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Clear persistent variables in stk_init.
+
+	* config/stk_config_clearpersistents.m: New function that unlocks
+	all possibly mlock-ed STK files and clears all STK functions that
+	contain persistent variables.
+	* stk_init.m: Call stk_config_clearpersistents.
+	* admin/RELEASE.md: Update release instructions.
+
 2015-05-20  Julien Bect  <julien.bect@supelec.fr>
 
 	@stk_dataframe/set.m: Fix stk_error calls (missing mnemonic)
