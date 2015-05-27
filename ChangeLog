@@ -1,5 +1,14 @@
 2015-05-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_pmisclass.m: Compute the probability of misclassification
+
+	* utils/stk_pmisclass.m: New function to compute the probability
+	of misclassification with respect to a given threshold (either the
+	current probability of misclassification or the expectation of the
+	future probability of misclassification).
+	* examples/02_design_of_experiments/stk_example_doe04.m: Example
+	script that demonstrates the use of stk_pmisclass ().
+
 	stk_dominatedhv.m: New function to compute dominated hypervolumes.
 
 	* misc/pareto/stk_dominatedhv.m: New function to compute

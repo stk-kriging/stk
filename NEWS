@@ -3,8 +3,18 @@ Changes in version 2.4.0
 
 * Miscellaneous
 
+   o stk_pmisclass.m: New function to compute either the current probability of
+     misclassification or the expectation of the future probability of
+     misclassification, with respect to a given threshold.
+
    o stk_dominatedhv.m: New function to compute dominated hypervolumes, which
      relies internally on the "Walking Fish Group" (WFG 1.10) algorithm.
+
+* Examples
+
+   o stk_example_doe04.m: Example script that demonstrates the use of
+     stk_pmisclass ().
+
 
 Changes in version 2.3.1
 ========================
