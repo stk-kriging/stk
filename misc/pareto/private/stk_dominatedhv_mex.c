@@ -34,25 +34,64 @@
 
 /* We assume in this file that OBJECTIVE is the same as double */
 
+double compute_hv (mxArray* f, FRONT *buffer)
+{
+  int i, j;             /* loop indices */
+  int nb_points;        /* number of points */
+  int nb_objectives;    /* number of objectives */
+  double *data;         /* pointer to input data */
+  double hv, t;         /* hypervolume */
+
+  nb_points = mxGetM (f);
+  nb_objectives = mxGetN (f);
+  data = mxGetPr (f);
+
+  if (nb_objectives == 0)
+    {
+      return 0;
+    }
+  else if (nb_objectives == 1)
+    {
+        /* one objective: return the max */
+        hv = 0;
+        for (i = 0; i < nb_points; i++)
+          {
+            t = data[i];
+            if (t > hv)  hv = t;
+          }
+        return hv;
+    }
+  else /* two ore more objectives */
+    {
+      buffer->nPoints = nb_points;
+      buffer->n = nb_objectives;
+
+      for (i = 0; i < nb_points; i++)
+        for (j = 0; j < nb_objectives; j++)
+          buffer->points[i].objectives[j] = data[j * nb_points + i];
+
+      return wfg_compute_hv (buffer);
+    }
+}
+
 void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
-  int i, j, k;          /* loop indices */
+  int i, j;             /* loop indices */
   mxArray **mx_fronts;  /* fronts, as mxArray objects */
-  FRONT *fronts;        /* fronts, as expected by WFG */
+  FRONT front;          /* front structure, as expected by WFG */
   int nb_fronts;        /* number of Pareto fronts */
   int nb_points;        /* number of points in a given front */
   int nb_objectives;    /* number of objectives for a given front */
   int maxm = 0;         /* maximum number of points in a front */
   int maxn = 0;         /* maximum number of objectives        */
   double *hv;           /* computed hyper-volumes */
-  double *data;         /* pointer to input data */
 
   if (nlhs > 1)   /* Check number of output arguments */
     mexErrMsgTxt ("Too many output arguments.");
-  
+
   if (nrhs != 1)  /* Check number of input arguments */
     mexErrMsgTxt ("Incorrect number of input arguments.");
-  
+
   if (stk_is_realmatrix (prhs[0]))
     {
       nb_fronts = 1;
@@ -68,9 +107,8 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
     }
 
 
-  /*--- Prepare fronts for WFG ------------------------------------------------*/
+  /*--- Prepare fronts for WFG -----------------------------------------------*/
 
-  fronts = (FRONT*) mxMalloc (sizeof (FRONT) * nb_fronts);
   for (i = 0; i < nb_fronts; i++)
     {
       nb_points = mxGetM (mx_fronts[i]);
@@ -78,23 +116,18 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
       nb_objectives = mxGetN (mx_fronts[i]);
       if (nb_objectives > maxn) maxn = nb_objectives;
-           
-      fronts[i].nPoints = nb_points;
-      fronts[i].n = nb_objectives;
-      fronts[i].points = (POINT*) mxMalloc (sizeof (POINT) * nb_points);
-      
-      for (j = 0; j < nb_points; j++)
-	{
-	  fronts[i].points[j].objectives = (double*)
-	    mxMalloc (sizeof (double) * nb_objectives);
-	  data = mxGetPr (mx_fronts[i]);
-	  for (k = 0; k < nb_objectives; k++)
-	    fronts[i].points[j].objectives[k] = data[k * nb_points + j];
-	}
+    }
+
+  for (i = 0; i < nb_fronts; i++)
+    {
+      front.points = (POINT*) mxMalloc (sizeof (POINT) * maxm);
+      for (j = 0; j < maxm; j++)
+        front.points[j].objectives = (double*)
+          mxMalloc (sizeof (double) * maxn);
     }
 
 
-  /*--- Allocate memory -------------------------------------------------------*/
+  /*--- Allocate memory ------------------------------------------------------*/
 
   /* Allocate memory for WFG */
   wfg_alloc (maxm, maxn);
@@ -104,22 +137,21 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   hv = mxGetPr (plhs[0]);
 
 
-  /*--- Compute hyper-volumes -------------------------------------------------*/
+  /*--- Compute hyper-volumes ------------------------------------------------*/
 
   for (i = 0; i < nb_fronts; i++)
-    hv[i] = wfg_compute_hv (fronts[i]);
+    hv[i] = compute_hv (mx_fronts[i], &front);
 
 
-  /*--- Free memory -----------------------------------------------------------*/
+  /*--- Free memory ----------------------------------------------------------*/
 
   wfg_free (maxm, maxn);
 
   for (i = 0; i < nb_fronts; i++)
-    {     
+    {
       for (j = 0; j < nb_points; j++)
-	mxFree (fronts[i].points[j].objectives);
-      mxFree (fronts[i].points);
+        mxFree (front.points[j].objectives);
+      mxFree (front.points);
     }
-  mxFree (fronts);
 
 }

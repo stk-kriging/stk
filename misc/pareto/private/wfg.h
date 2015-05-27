@@ -54,7 +54,7 @@ typedef struct
 }
 FRONT;
 
-double wfg_compute_hv (FRONT ps);
+double wfg_compute_hv (FRONT* ps);
 
 void wfg_alloc (int maxm, int maxn);
 void wfg_free (int maxm, int maxn);

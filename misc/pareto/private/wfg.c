@@ -542,14 +542,17 @@ void wfg_alloc (int maxm, int maxn)
 {
   int i, j, max_depth;
 
-  max_depth = maxn - 2;  
-  fs = (FRONT*) mxMalloc (sizeof (FRONT) * max_depth);
-  for (i = 0; i < max_depth; i++)
+  if (maxn > 2)
     {
-      fs[i].points = (POINT*) mxMalloc (sizeof (POINT) * maxm);
-      for (j = 0; j < maxm; j++)
-	fs[i].points[j].objectives = (OBJECTIVE*)
-	  mxMalloc (sizeof (OBJECTIVE) * (maxn - i - 1));
+      max_depth = maxn - 2;
+      fs = (FRONT*) mxMalloc (sizeof (FRONT) * max_depth);
+      for (i = 0; i < max_depth; i++)
+        {
+          fs[i].points = (POINT*) mxMalloc (sizeof (POINT) * maxm);
+          for (j = 0; j < maxm; j++)
+            fs[i].points[j].objectives = (OBJECTIVE*)
+              mxMalloc (sizeof (OBJECTIVE) * (maxn - i - 1));
+        }
     }
 }
 
@@ -558,23 +561,26 @@ void wfg_free (int maxm, int maxn)
 {
   int i, j, max_depth;
 
-  max_depth = maxn - 2;
-  for (i = 0; i < max_depth; i++)
+  if (maxn > 2)
     {
-      for (j = 0; j < maxm; j++)
-	mxFree (fs[i].points[j].objectives);
-      mxFree (fs[i].points);
+      max_depth = maxn - 2;
+      for (i = 0; i < max_depth; i++)
+        {
+          for (j = 0; j < maxm; j++)
+            mxFree (fs[i].points[j].objectives);
+          mxFree (fs[i].points);
+        }
+      mxFree (fs);
     }
-  mxFree (fs);
 }
 
 
-double wfg_compute_hv (FRONT ps)
+double wfg_compute_hv (FRONT* ps)
 {
   /* Set global variables */
-  n = ps.n;
+  n = ps->n;
   safe = 0;
   fr = 0;
 
-  return hv (ps);
+  return hv (*ps);
 }
