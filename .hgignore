@@ -6,4 +6,5 @@ build
 *.mexw64
 *.o
 *~
+*.asv
 *orig
