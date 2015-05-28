@@ -1,3 +1,9 @@
+2015-05-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg.c: Remove C99-specific code (stdbool.h).
+
+	* misc/pareto/private/wfg.c: Remove C99-specific code (stdbool.h).
+
 2015-05-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_pmisclass.m: Compute the probability of misclassification

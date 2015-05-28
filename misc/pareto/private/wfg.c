@@ -38,7 +38,6 @@
 /* TODO: find out which of these includes are *REALLY* necessary */
 
 #include <stdio.h>
-#include <stdbool.h>
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
@@ -107,7 +106,7 @@ int dominates2way(POINT p, POINT q, int k)
 }
 
 
-bool dominates1way(POINT p, POINT q, int k)
+int dominates1way(POINT p, POINT q, int k)
 /* returns true if p dominates q or p == q, false otherwise
    the assumption is that q doesn't dominate p
    k is the highest index inspected */
@@ -116,9 +115,9 @@ bool dominates1way(POINT p, POINT q, int k)
 
     for (i = k; i >= 0; i--)
         if BEATS(q.objectives[i],p.objectives[i])
-            return false;
+            return 0;
 
-    return true;
+    return 1;
 }
 
 
