@@ -1,3 +1,10 @@
+2015-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_distrib_bivnorm_cdf.m: Bugfix
+
+	* misc/distrib/stk_distrib_bivnorm_cdf.m: Fix a bug in the case of
+	mixtures of singular and non-singular cases. Add unit test.
+
 2015-05-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Clear persistent variables in stk_init.
