@@ -99,7 +99,7 @@ q = ones (s);
 
 b1p = (z1_ >= 0);
 if any (b1p)
-    [p(b1p) q(b1p)] = stk_distrib_normal_cdf (z2_(b1p), 0, sigma2_(b1));
+    [p(b1p) q(b1p)] = stk_distrib_normal_cdf (z2_(b1p), 0, sigma2_(b1p));
 end
 
 end % function handle_singular_case
@@ -181,3 +181,7 @@ end % function handle_singular_case
 %!test
 %! [p, q] = stk_distrib_bivnorm_cdf ([inf inf], 0, 0, 1, 1, 0);
 %! assert ((p == 1.0) && (q == 0.0))
+
+%!test  % A mixture of singular and non-singular cases
+%! p = stk_distrib_bivnorm_cdf ([0 0], 0, 0, [1; 0], 1, 0);
+%! assert (isequal (p, [0.25; 0.5]));
