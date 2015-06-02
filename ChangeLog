@@ -1,3 +1,12 @@
+2015-06-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg.c: Improve portability again
+
+	* misc/pareto/private/wfg.c: Improve portability again. Now all
+	variables are declared at the beginning of functions (as required
+	by the C89 standard). And some unused headers have been removed,
+	too.
+
 2015-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_distrib_bivnorm_cdf.m: Bugfix

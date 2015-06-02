@@ -41,8 +41,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/time.h>
-#include <sys/resource.h>
+#include "mex.h"
 #include "wfg.h"
 
 double hv (FRONT);
@@ -124,9 +123,10 @@ int dominates1way(POINT p, POINT q, int k)
 void makeDominatedBit(FRONT ps, int p)
 /* creates the front ps[0 .. p-1] in fs[fr], with each point bounded by ps[p] and dominated points removed */
 {
-    int i, j;
+    int i, j, k;
     int l = 0;
     int u = p - 1;
+    POINT t;
 
     for (i = p - 1; i >= 0; i--)
         if (BEATS(ps.points[p].objectives[n - 1],ps.points[i].objectives[n - 1]))
@@ -141,13 +141,14 @@ void makeDominatedBit(FRONT ps, int p)
                 fs[fr].points[l].objectives[j] = WORSE(ps.points[p].objectives[j],ps.points[i].objectives[j]);
             l++;
         }
-    POINT t;
+
     /* points below l are all equal in the last objective; points above l are all worse
        points below l can dominate each other, and we don't need to compare the last objective
        points above l cannot dominate points that start below l, and we don't need to compare the last objective */
     fs[fr].nPoints = 1;
     for (i = 1; i < l; i++)
-    {   int j = 0;
+    {
+        j = 0;
         while (j < fs[fr].nPoints)
             switch (dominates2way(fs[fr].points[i], fs[fr].points[j], n-2))
             {
@@ -161,7 +162,7 @@ void makeDominatedBit(FRONT ps, int p)
                 fs[fr].points[i] = t;
                 while(j < fs[fr].nPoints - 1 && dominates1way(fs[fr].points[j], fs[fr].points[fs[fr].nPoints - 1], n-1))
                     fs[fr].nPoints--;
-                int k = j+1;
+                k = j+1;
                 while (k < fs[fr].nPoints)
                     if(dominates1way(fs[fr].points[j], fs[fr].points[k], n-2))
                     {   t = fs[fr].points[k];
@@ -203,7 +204,7 @@ void makeDominatedBit(FRONT ps, int p)
                 fs[fr].points[i] = t;
                 while(j < fs[fr].nPoints - 1 && dominates1way(fs[fr].points[j], fs[fr].points[fs[fr].nPoints - 1], n-1))
                     fs[fr].nPoints--;
-                int k = j+1;
+                k = j+1;
                 while (k < fs[fr].nPoints)
                     if(dominates1way(fs[fr].points[j], fs[fr].points[k], n-1))
                     {   t = fs[fr].points[k];
@@ -481,8 +482,9 @@ double inclhv4(POINT p, POINT q, POINT r, POINT s)
 double exclhv(FRONT ps, int p)
 /* returns the exclusive hypervolume of ps[p] relative to ps[0 .. p-1] */
 {
+    double volume;
     makeDominatedBit(ps, p);
-    double volume = inclhv(ps.points[p]) - hv(fs[fr - 1]);
+    volume = inclhv(ps.points[p]) - hv(fs[fr - 1]);
     fr--;
     return volume;
 }
