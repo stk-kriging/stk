@@ -97,16 +97,6 @@ fprintf (fid, '#\n');
 fprintf (fid, 'Url: https://sourceforge.net/projects/kriging/\n');
 fclose (fid);
 
-% PKG_ADD: commands that are run when the package is added to the path
-PKG_ADD = fullfile (unpacked_dir, 'inst', 'PKG_ADD.m');
-movefile (fullfile (unpacked_dir, 'inst', 'stk_init.m'), PKG_ADD);
-cmd = 'sed -i "s/STK_OCTAVE_PACKAGE = false/STK_OCTAVE_PACKAGE = true/" %s';
-system (sprintf (cmd, PKG_ADD));
-
-% PKG_DEL: commands that are run when the package is removed from the path
-copyfile (fullfile (pkg_bits_dir, 'PKG_DEL.m'), ...
-    fullfile (unpacked_dir, 'inst'));
-
 % post_install: a function that is run after the installation of the package
 copyfile (fullfile (pkg_bits_dir, 'post_install.m'), unpacked_dir);
 
@@ -119,6 +109,13 @@ index_file = fullfile (pkg_bits_dir, 'INDEX');
 check_index_file (index_file, ...
     get_public_mfile_list (fullfile (unpacked_dir, 'inst')));
 copyfile (index_file, unpacked_dir);
+
+% Modify stk_init and stk_config_path for STK to work as an octave package
+cmd = 'sed -i "s/STK_OCTAVE_PACKAGE = false/STK_OCTAVE_PACKAGE = true/" %s';
+system (sprintf (cmd, fullfile ...
+    (unpacked_dir, 'inst', 'stk_init.m')));
+system (sprintf (cmd, fullfile ...
+    (unpacked_dir, 'inst', 'config', 'stk_config_path.m')));
 
 cd (here)
 

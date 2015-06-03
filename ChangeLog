@@ -1,3 +1,29 @@
+2015-06-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Use PKG_ADD/PKG_DEL directives in the Octave package.
+
+	* stk_init.m: Add PKG_ADD/PKG_DEL directives. Also, add an
+	optional input argument 'do_quit'; when it is true, stk_init
+	removes STK from the path.
+	* admin/build_tools/build_octpkg.m: No more PKG_ADD/PKG_DEL
+	files. They are replaced by corresponding directives in
+	stk_init.m, which is no longer renamed to PKG_ADD. Also, there are
+	now two STK_OCTAVE_PACKAGE variables to set (one in stk_init.m,
+	the other one in stk_config_rmpath.m).
+	* admin/build_tools/check_index_file.m: No need to warry about
+	PKG_ADD.m ad PKG_DEL.m anymore.
+	* admin/octpkg/post_install.m: Idem.
+	* admin/octpkg/INDEX: Add stk_init to the INDEX.
+	* config/stk_config_path.m: Do not look for PKG_ADD to detect
+	Octave package mode, since there no longer is a PKG_ADD
+	file. Instead, rely on a hard-coded STK_OCTAVE_PACKAGE variable,
+	which is modified at build time by build_octpkg (similarly to the
+	one in stk_init).
+	* config/stk_config_rmpath.m: Modify comment.
+	* config/stk_config_addpath.m: Modify comment.
+	* admin/octpkg/PKG_DEL.m: Removed. Instead, a PKD_DEL directive
+	has been inserted in stk_init.
+
 2015-06-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Avoid unnecessary calls to stk_commonsize.

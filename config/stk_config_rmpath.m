@@ -59,9 +59,9 @@ while ~ isempty (s)
 end
 
 % Note: it is important NOT to remove STK's root folder at this point. Indeed,
-% in the case where STK is used as an Octave package, this would result in
-% calling PKG_DEL, and therefore stk_config_rmpath again, causing an infinite
-% loop.
+% in the case where STK is used as an Octave package, this would trigger the
+% PKG_DEL directive in stk_init.m, and therefore stk_config_rmpath again,
+% causing an infinite loop.
 
 end % function stk_config_rmpath
 
