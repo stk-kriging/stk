@@ -32,6 +32,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
+function stk_init (do_quit)
+
 % Deduce the root of STK from the path to this script
 root = fileparts (mfilename ('fullpath'));
 config = fullfile (root, 'config');
@@ -42,6 +44,17 @@ addpath (config);
 % Unlock all possibly mlock-ed STK files and clear all STK functions
 % that contain persistent variables
 stk_config_clearpersistents ();
+
+if (nargin > 0) && (do_quit)
+
+    % Remove STK subdirectories from the path
+    stk_config_rmpath (root);
+
+    % No need to remove config manually at the end of the script since
+    % it is removed by stk_config_rmpath. We can exit.
+    return
+
+end
 
 % Activate the MOLE
 stk_config_mole (root);
@@ -75,4 +88,9 @@ stk_config_setup;
 % Remove config from the path
 rmpath (config);
 
-clear root config STK_OCTAVE_PACKAGE ans;
+end % function stk_init
+
+
+%% PKG_ADD: stk_init ();
+
+%% PKG_DEL: stk_init (true);
