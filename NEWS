@@ -14,6 +14,9 @@ Changes in version 2.3.1
    o stk_distrib_bivnorm_cdf.m: Fix a bug in the case of mixtures of
      singular and non-singular cases.
 
+   o @stk_dataframe/subsasgn.m: Preserve column names when deleting rows, even
+     if the resulting array is empty.
+
 * Minor changes
 
    o stk_init.m: Clear persistent variables. As a consequence, stk_init can now

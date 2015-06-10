@@ -1,3 +1,10 @@
+2015-06-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/subsasgn.m: Preserve column names when deleting rows.
+
+	* arrays/@stk_dataframe/subsasgn.m: Preserve column names when
+	deleting rows, even if the resulting array is empty.
+
 2015-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_distrib_bivnorm_cdf.m: Bugfix
