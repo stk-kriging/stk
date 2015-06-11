@@ -4,6 +4,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
@@ -54,8 +55,14 @@ else
     
     smax = max (s);
     
+    % Take care of empty dimensions, if any
+    b = (smax > 0);
+    smax = smax (b);
+    s = s(:, b);
+
+    nrep = ones (size (smax));
     for i = 1:n,
-        nrep = smax ./ s(i, :);        
+        nrep(b) = smax ./ s(i, :);
         if ~ all ((s(i, :) == 1) | (nrep == 1))
             error ('Input arguments cannot be brought to a common size.');
         else

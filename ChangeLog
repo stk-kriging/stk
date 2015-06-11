@@ -1,6 +1,14 @@
+2015-06-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_commonsize.m: Accept empty dimensions
+
+	* arrays/generic/stk_commonsize.m: Accept empty dimensions, under
+	the condition that all input arguments have the same empty
+	dimensions (in which case the result is empty).
+
 2015-06-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
-	@stk_dataframe/subsasgn.m: Preserve column names when deleting rows.
+	@stk_dataframe/subsasgn.m: Preserve column names when deleting rows
 
 	* arrays/@stk_dataframe/subsasgn.m: Preserve column names when
 	deleting rows, even if the resulting array is empty.
@@ -14,7 +22,7 @@
 
 2015-05-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
-	Clear persistent variables in stk_init.
+	Clear persistent variables in stk_init
 
 	* config/stk_config_clearpersistents.m: New function that unlocks
 	all possibly mlock-ed STK files and clears all STK functions that
