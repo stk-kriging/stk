@@ -40,6 +40,10 @@ Changes in version 2.3.1
    o stk_init.m: Clear persistent variables. As a consequence, stk_init can now
      be used to restart STK completely.
 
+   o stk_commonsize.m: Accept empty dimensions, under the condition that all
+     input arguments have the same empty dimensions (in which case the result is
+     empty).
+
 
 Changes in version 2.3.0
 ========================
