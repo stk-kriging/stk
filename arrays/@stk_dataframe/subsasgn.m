@@ -138,45 +138,45 @@ switch idx(1).type
                     
                 end
                 
-            else  % assignment rhs is empty: deletion
+            else  % Assignment rhs is empty: deletion
                 
-                if L == 1,  % linear indexing
-                    if d == 1,
+                if L == 1,  % Linear indexing
+                    
+                    if d == 1,  % Column array => remove rows
                         I = idx(1).subs{1};
                         J = 1;
-                    elseif n == 1,
+                        remove_rows = true;
+                    elseif n == 1,  % Row array => remove columns
                         I = 1;
                         J = idx(1).subs{1};
+                        remove_rows = false;
                     else
-                        stk_error('Illegal indexing.', 'IllegalIndexing');
+                        stk_error ('Illegal indexing.', 'IllegalIndexing');
                     end
-                else
+                    
+                else  % Matrix-style indexing
+                    
                     I = idx(1).subs{1};
                     J = idx(1).subs{2};
-                end
-                
-                remove_columns = (strcmp(I, ':') ...
-                    || ((n == 1) && isequal(I, 1)));
-                remove_rows = (strcmp(J, ':') ...
-                    || ((d == 1) && isequal(J, 1)));
-                
-                if ~ (remove_columns || remove_rows)
-                    
-                    stk_error('Illegal indexing.', 'IllegalIndexing');
-                    
-                elseif remove_columns
-                    
-                    x.data(:, J) = [];
-                    if ~ isempty(x.colnames)
-                        x.colnames(J) = [];
+                    remove_rows = strcmp (J, ':');
+                    if ~ (remove_rows || (strcmp (I, ':')))
+                        stk_error ('Illegal indexing.', 'IllegalIndexing');
                     end
                     
-                else % remove_rows
+                end
+                
+                if remove_rows  % Keep column names
                     
-                    x.data(I, :) = [];
-                    
+                    x.data(I, :) = [];                    
                     if ~ isempty (x.rownames)
                         x.rownames(I) = [];
+                    end
+                    
+                else  % Remove columns
+                    
+                    x.data(:, J) = [];
+                    if ~ isempty (x.colnames)
+                        x.colnames(J) = [];
                     end
                     
                 end
@@ -301,6 +301,14 @@ end % function subsasgn
 %!test
 %! x(:, :) = [];
 %! assert (isempty (x));
+
+%!test  % Delete the only row of a one-row dataframe
+%! y1 = stk_dataframe ([1.2 3.33], {'mean', 'var'})
+%! y1(1, :) = [];  % Remove the only row of data
+%! assert (isequal (size (y1), [0 2]))
+%! assert (isequal (y1.colnames, {'mean', 'var'}))
+%! y11 = get (y1, 'mean');
+%! assert (isempty (y11));
 
 %!error x{1} = 2;
 %!error x(1, 2) = [];
