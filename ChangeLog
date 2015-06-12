@@ -1,3 +1,10 @@
+2015-06-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_commonsize.m: Avoid unnecessary calls to repmat.
+
+	* arrays/generic/stk_commonsize.m: Avoid unnecessary calls to
+	repmat.
+
 2015-06-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_commonsize.m: Accept empty dimensions

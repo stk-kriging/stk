@@ -63,9 +63,10 @@ else
     nrep = ones (size (smax));
     for i = 1:n,
         nrep(b) = smax ./ s(i, :);
-        if ~ all ((s(i, :) == 1) | (nrep == 1))
+        nrep_one = (nrep == 1);
+        if ~ all ((s(i, :) == 1) | nrep_one)
             error ('Input arguments cannot be brought to a common size.');
-        else
+        elseif ~ all (nrep_one)
             C{i} = repmat (C{i}, nrep);
         end
     end
