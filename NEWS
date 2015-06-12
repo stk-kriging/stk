@@ -26,6 +26,9 @@ Changes in version 2.3.1
      input arguments have the same empty dimensions (in which case the result is
      empty).
 
+   o stk_commonsize.m: is now faster when some arguments already have the proper
+     size (unnecessary calls to repmat are avoided).
+
 
 Changes in version 2.3.0
 ========================
