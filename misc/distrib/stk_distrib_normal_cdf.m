@@ -54,7 +54,9 @@ if isscalar (sigma)
         k1 = false;
     end
 else
-    [z, sigma] = stk_commonsize (z, sigma);
+    if ~ isequal (size (z), size (sigma))
+        [z, sigma] = stk_commonsize (z, sigma);
+    end
     k0 = (sigma == 0);
     k1 = (sigma > 0);
     z(k1) = z(k1) ./ sigma(k1);

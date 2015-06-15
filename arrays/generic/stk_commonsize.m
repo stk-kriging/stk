@@ -42,7 +42,7 @@ else
     if n == 1
         % varargin{1} is expected to be a cell array in this case
         C = varargin{1};
-        n = length (C);        
+        n = length (C);
     else
         C = varargin;
     end
@@ -59,7 +59,7 @@ else
     b = (smax > 0);
     smax = smax (b);
     s = s(:, b);
-
+    
     nrep = ones (size (smax));
     for i = 1:n,
         nrep(b) = smax ./ s(i, :);
