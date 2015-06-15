@@ -29,6 +29,9 @@ Changes in version 2.3.1
    o stk_commonsize.m: is now faster when some arguments already have the proper
      size (unnecessary calls to repmat are avoided).
 
+   o stk_distrib_normal_cdf.m, stk_distrib_bivnorm_cdf.m: are now slightly
+     faster (unnecessary calls to stk_commonsize are avoided).
+
 
 Changes in version 2.3.0
 ========================
