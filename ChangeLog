@@ -1,3 +1,11 @@
+2015-06-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Avoid unnecessary calls to stk_commonsize.
+
+	* misc/distrib/stk_distrib_bivnorm_cdf.m: Avoid unnecessary calls
+	to stk_commonsize.
+	* misc/distrib/stk_distrib_normal_cdf.m: Idem.
+
 2015-06-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_commonsize.m: Avoid unnecessary calls to repmat.
