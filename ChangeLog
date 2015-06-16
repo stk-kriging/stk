@@ -1,5 +1,9 @@
 2015-06-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	check_index_file.m: Fix error handling.
+
+	* admin/build_tools/check_index_file.m: Fix error handling.
+
 	Use PKG_ADD/PKG_DEL directives in the Octave package.
 
 	* stk_init.m: Add PKG_ADD/PKG_DEL directives. Also, add an
