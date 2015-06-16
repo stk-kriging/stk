@@ -38,8 +38,12 @@ end
 isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
 
 % Are we using STK installed as an octave package ?
-if isoctave && (exist (fullfile (root, 'PKG_ADD'), 'file') == 2)
-    path = {};  % don't include root here (otherwise: infinite PKG_ADD loop)
+STK_OCTAVE_PACKAGE = false;
+
+% Don't include the root in the path when STK is used as an Octave package
+% (otherwise we get an infinite PKG_ADD loop)
+if STK_OCTAVE_PACKAGE
+    path = {};
 else
     path = {root};
 end
