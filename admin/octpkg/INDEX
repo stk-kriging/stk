@@ -284,6 +284,7 @@ Miscellaneous: Pareto optimality
 
 Miscellaneous: options, plots...
  stk_dist
+ stk_init
  stk_options_get
  stk_options_set
  stk_plot1d

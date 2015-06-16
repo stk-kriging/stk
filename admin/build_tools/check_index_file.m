@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Authors:  Julien Bect  <julien.bect@supelec.fr>
@@ -42,10 +43,6 @@ if nargin < 2,
     end
     
 end
-
-% When parsing the uncompressed package, PKG_ADD.m and PKG_DEL.m are located
-% at the root (it is only later, in post_install, that they will be renamed)
-public_mfile_list = setdiff (public_mfile_list, {'PKG_ADD', 'PKG_DEL'});
 
 [indexed, ignored] = parse_index_file (index_file);
 
