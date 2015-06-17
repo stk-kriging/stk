@@ -1,3 +1,9 @@
+2015-06-17  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg.c: Pass pointers to FRONT structures
+
+	* misc/pareto/private/wfg.c: Pass pointers to FRONT structures.
+
 2015-06-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	check_index_file.m: Fix error handling.
