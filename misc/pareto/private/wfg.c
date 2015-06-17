@@ -49,18 +49,19 @@ double hv (FRONT*);
 #define BEATS(x,y)   (x > y)
 #define WORSE(x,y)   (BEATS(y,x) ? (x) : (y))
 
-int n = 0;         /* the number of objectives                     */
 FRONT *fs = NULL;  /* memory management stuff                      */
 int fr = 0;        /* current depth                                */
 int safe = 0;      /* the number of points that don't need sorting */
 
-int greater(const void *v1, const void *v2)
+
+int greater (const void *v1, const void *v2)
 /* this sorts points worsening in the last objective */
 {
     int i;
-
     POINT p = *(POINT*)v1;
     POINT q = *(POINT*)v2;
+    int n = p.n; /* assume that p and q have the same size */
+
     for (i = n - 1; i >= 0; i--)
         if BEATS(p.objectives[i],q.objectives[i]) return -1;
         else if BEATS(q.objectives[i],p.objectives[i]) return  1;
@@ -69,13 +70,14 @@ int greater(const void *v1, const void *v2)
 }
 
 
-int greaterabbrev(const void *v1, const void *v2)
+int greaterabbrev (const void *v1, const void *v2)
 /* this sorts points worsening in the penultimate objective */
 {
     int i;
-
     POINT p = *(POINT*)v1;
     POINT q = *(POINT*)v2;
+    int n = p.n; /* assume that p and q have the same size */
+
     for (i = n - 2; i >= 0; i--)
         if BEATS(p.objectives[i],q.objectives[i]) return -1;
         else if BEATS(q.objectives[i],p.objectives[i]) return  1;
@@ -126,6 +128,7 @@ void makeDominatedBit (FRONT* ps, int p)
     int i, j, k;
     int l = 0;
     int u = p - 1;
+    int n = ps->n;
     POINT t;
 
     for (i = p - 1; i >= 0; i--)
@@ -224,6 +227,10 @@ void makeDominatedBit (FRONT* ps, int p)
             fs[fr].nPoints++;
         }
     }
+
+    /* Set the number of objectives for all points */
+    wfg_front_resize (&fs[fr], fs[fr].nPoints, n);
+
     fr++;
 }
 
@@ -243,23 +250,24 @@ double hv2 (FRONT* ps, int k)
 }
 
 
-double inclhv(POINT p)
+double inclhv (POINT p)
 /* returns the inclusive hypervolume of p */
 {
     int i;
 
     double volume = 1;
-    for (i = 0; i < n; i++)
+    for (i = 0; i < p.n; i++)
         volume *= p.objectives[i];
 
     return volume;
 }
 
 
-double inclhv2(POINT p, POINT q)
+double inclhv2 (POINT p, POINT q)
 /* returns the hypervolume of {p, q} */
 {
     int i;
+    int n = p.n; /* assume that p and q have the same size */
     double vp  = 1;
     double vq  = 1;
     double vpq = 1;
@@ -275,10 +283,11 @@ double inclhv2(POINT p, POINT q)
 }
 
 
-double inclhv3(POINT p, POINT q, POINT r)
+double inclhv3 (POINT p, POINT q, POINT r)
 /* returns the hypervolume of {p, q, r} */
 {
     int i;
+    int n = p.n; /* assume that p, q and r have the same size */
     double vp   = 1;
     double vq   = 1;
     double vr   = 1;
@@ -326,10 +335,11 @@ double inclhv3(POINT p, POINT q, POINT r)
 }
 
 
-double inclhv4(POINT p, POINT q, POINT r, POINT s)
+double inclhv4 (POINT p, POINT q, POINT r, POINT s)
 /* returns the hypervolume of {p, q, r, s} */
 {
     int i;
+    int n = p.n; /* assume that p, q, r and s have the same size */
     double vp    = 1;
     double vq   = 1;
     double vr   = 1;
@@ -483,9 +493,11 @@ double exclhv (FRONT* ps, int p)
 /* returns the exclusive hypervolume of ps[p] relative to ps[0 .. p-1] */
 {
     double volume;
+
     makeDominatedBit (ps, p);
     volume = inclhv (ps->points[p]) - hv (&fs[fr - 1]);
     fr--;
+
     return volume;
 }
 
@@ -494,6 +506,8 @@ double hv (FRONT* ps)
 /* returns the hypervolume of ps[0 ..] */
 {
     int i;
+    int n = ps->n;
+    double volume;
 
     /* process small fronts with the IEA */
     switch (ps->nPoints)
@@ -501,11 +515,11 @@ double hv (FRONT* ps)
     case 1:
         return inclhv (ps->points[0]);
     case 2:
-        return inclhv2(ps->points[0], ps->points[1]);
+        return inclhv2 (ps->points[0], ps->points[1]);
     case 3:
-        return inclhv3(ps->points[0], ps->points[1], ps->points[2]);
+        return inclhv3 (ps->points[0], ps->points[1], ps->points[2]);
     case 4:
-        return inclhv4(ps->points[0], ps->points[1], ps->points[2], ps->points[3]);
+        return inclhv4 (ps->points[0], ps->points[1], ps->points[2], ps->points[3]);
     }
 
     /* these points need sorting */
@@ -517,22 +531,30 @@ double hv (FRONT* ps)
 
     if (n == 3 && safe > 0)
     {
-        double volume = ps->points[0].objectives[2] * (hv2 (ps, safe));
-        n--;
+        volume = ps->points[0].objectives[2] * (hv2 (ps, safe));
+
+        wfg_front_resize (ps, ps->nPoints, n - 1);
+
         for (i = safe; i < ps->nPoints; i++)
             /* we can ditch dominated points here, but they will be ditched anyway in makeDominatedBit */
-            volume += ps->points[i].objectives[n] * (exclhv (ps, i));
-        n++;
+            volume += ps->points[i].objectives[n - 1] * (exclhv (ps, i));
+
+        wfg_front_resize (ps, ps->nPoints, n);
+
         return volume;
     }
     else
     {
-        double volume = inclhv4 (ps->points[0], ps->points[1], ps->points[2], ps->points[3]);
-        n--;
+        volume = inclhv4 (ps->points[0], ps->points[1], ps->points[2], ps->points[3]);
+
+        wfg_front_resize (ps, ps->nPoints, n - 1);
+
         for (i = 4; i < ps->nPoints; i++)
             /* we can ditch dominated points here, but they will be ditched anyway in makeDominatedBit */
-            volume += ps->points[i].objectives[n] * (exclhv (ps, i));
-        n++;
+            volume += ps->points[i].objectives[n - 1] * (exclhv (ps, i));
+
+        wfg_front_resize (ps, ps->nPoints, n);
+
         return volume;
     }
 }
@@ -541,36 +563,27 @@ double hv (FRONT* ps)
 void wfg_alloc (int maxm, int maxn)
 /* Allocate memory for several auxiliary fronts */
 {
-  int i, j, max_depth;
+  int i, max_depth;
 
   if (maxn > 2)
     {
       max_depth = maxn - 2;
       fs = (FRONT*) mxMalloc (sizeof (FRONT) * max_depth);
       for (i = 0; i < max_depth; i++)
-        {
-          fs[i].points = (POINT*) mxMalloc (sizeof (POINT) * maxm);
-          for (j = 0; j < maxm; j++)
-            fs[i].points[j].objectives = (OBJECTIVE*)
-              mxMalloc (sizeof (OBJECTIVE) * (maxn - i - 1));
-        }
+        wfg_front_init (&fs[i], maxm, maxn - i - 1);
     }
 }
 
 
 void wfg_free (int maxm, int maxn)
 {
-  int i, j, max_depth;
+  int i, max_depth;
 
   if (maxn > 2)
     {
       max_depth = maxn - 2;
       for (i = 0; i < max_depth; i++)
-        {
-          for (j = 0; j < maxm; j++)
-            mxFree (fs[i].points[j].objectives);
-          mxFree (fs[i].points);
-        }
+        wfg_front_destroy (&fs[i]);
       mxFree (fs);
     }
 }
@@ -579,9 +592,62 @@ void wfg_free (int maxm, int maxn)
 double wfg_compute_hv (FRONT* ps)
 {
   /* Set global variables */
-  n = ps->n;
   safe = 0;
   fr = 0;
 
   return hv (ps);
+}
+
+
+/**************************************/
+/***** BASIC OPERATIONS ON FRONTS *****/
+/**************************************/
+
+void wfg_front_init (FRONT* front, int nb_points, int nb_objectives)
+{
+  int j;
+
+  front->nPoints_alloc = nb_points;  /* must *not* be changed */
+  front->n_alloc = nb_objectives;  /* must *not* be changed */
+
+  front->nPoints = nb_points;
+  front->n = nb_objectives;
+
+  front->points = (POINT*) mxMalloc (sizeof (POINT) * nb_points);
+
+  for (j = 0; j < nb_points; j++)
+    { 
+      front->points[j].n = nb_objectives;
+      front->points[j].objectives = (OBJECTIVE*)
+        mxMalloc (sizeof (OBJECTIVE) * nb_objectives);
+    }
+}
+
+
+void wfg_front_destroy (FRONT* front)
+{
+  int j;
+
+  for (j = 0; j < front->nPoints_alloc; j++)
+    mxFree (front->points[j].objectives);
+
+  mxFree (front->points);
+}
+
+
+void wfg_front_resize (FRONT* f, int nb_points, int nb_objectives)
+{
+  int j;
+
+  if (nb_points > f->nPoints_alloc)
+    mexErrMsgTxt ("Cannot set nPoints > nPoints_alloc.");
+
+  if (nb_objectives > f->n_alloc)
+    mexErrMsgTxt ("Cannot set n > n_alloc.");
+
+  f->nPoints = nb_points;
+  f->n = nb_objectives;
+
+  for (j = 0; j < nb_points; j++)
+    f->points[j].n = nb_objectives;
 }

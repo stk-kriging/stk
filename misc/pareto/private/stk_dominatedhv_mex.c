@@ -66,8 +66,7 @@ double compute_hv (mxArray* f, FRONT *buffer)
     }
   else /* two ore more objectives */
     {
-      buffer->nPoints = nb_points;
-      buffer->n = nb_objectives;
+      wfg_front_resize (buffer, nb_points, nb_objectives);
 
       for (i = 0; i < nb_points; i++)
         for (j = 0; j < nb_objectives; j++)
@@ -82,7 +81,7 @@ double compute_hv (mxArray* f, FRONT *buffer)
 
 void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 {
-  int i, j;             /* loop indices */
+  int i;                /* loop indices */
   mxArray **fronts;     /* fronts, as mxArray objects */
   FRONT buffer;         /* front structure, as expected by WFG */
   int nb_fronts;        /* number of Pareto fronts */
@@ -129,10 +128,7 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
       if (nb_objectives > maxn) maxn = nb_objectives;
     }
 
-  buffer.points = (POINT*) mxMalloc (sizeof (POINT) * maxm);
-  for (j = 0; j < maxm; j++)
-    buffer.points[j].objectives = (double*)
-      mxMalloc (sizeof (double) * maxn);
+  wfg_front_init (&buffer, maxm, maxn);
 
 
   /*--- Allocate memory ------------------------------------------------------*/
@@ -162,9 +158,7 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
 
   wfg_free (maxm, maxn);
 
-  for (j = 0; j < maxm; j++)
-    mxFree (buffer.points[j].objectives);
-  mxFree (buffer.points);
+  wfg_front_destroy (&buffer);
 
   if (must_free_fronts)
     mxFree (fronts);
