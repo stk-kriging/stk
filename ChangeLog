@@ -1,5 +1,13 @@
 2015-06-17  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	wfg: Remove n from the global scope
+
+	* misc/pareto/private/wfg.c:: Remove n from the global scope. Add
+	new helper functions to encapsulate basic operations on fronts:
+	wfg_front_init, wfg_front_destroy, wfg_front_resize.
+	* misc/pareto/private/wfg.h: Declare the new functions.
+	* misc/pareto/private/stk_dominatedhv_mex.c: Use the new functions.
+
 	wfg.c: Pass pointers to FRONT structures
 
 	* misc/pareto/private/wfg.c: Pass pointers to FRONT structures.

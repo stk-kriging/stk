@@ -42,6 +42,7 @@ typedef double OBJECTIVE;
 
 typedef struct
 {
+    int n;
     OBJECTIVE *objectives;
 }
 POINT;
@@ -49,7 +50,9 @@ POINT;
 typedef struct
 {
     int nPoints;
+    int nPoints_alloc;  /* must *not* be changed */
     int n;
+    int n_alloc;        /* must *not* be changed */
     POINT *points;
 }
 FRONT;
@@ -58,5 +61,9 @@ double wfg_compute_hv (FRONT* ps);
 
 void wfg_alloc (int maxm, int maxn);
 void wfg_free (int maxm, int maxn);
+
+void wfg_front_init (FRONT* front, int nb_points, int nb_objectives);
+void wfg_front_destroy (FRONT* front);
+void wfg_front_resize (FRONT* f, int nb_points, int nb_objectives);
 
 #endif
