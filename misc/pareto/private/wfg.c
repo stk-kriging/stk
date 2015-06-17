@@ -44,7 +44,7 @@
 #include "mex.h"
 #include "wfg.h"
 
-double hv (FRONT);
+double hv (FRONT*);
 
 #define BEATS(x,y)   (x > y)
 #define WORSE(x,y)   (BEATS(y,x) ? (x) : (y))
@@ -120,7 +120,7 @@ int dominates1way(POINT p, POINT q, int k)
 }
 
 
-void makeDominatedBit(FRONT ps, int p)
+void makeDominatedBit (FRONT* ps, int p)
 /* creates the front ps[0 .. p-1] in fs[fr], with each point bounded by ps[p] and dominated points removed */
 {
     int i, j, k;
@@ -129,16 +129,16 @@ void makeDominatedBit(FRONT ps, int p)
     POINT t;
 
     for (i = p - 1; i >= 0; i--)
-        if (BEATS(ps.points[p].objectives[n - 1],ps.points[i].objectives[n - 1]))
-        {   fs[fr].points[u].objectives[n - 1] = ps.points[i].objectives[n - 1];
+        if (BEATS(ps->points[p].objectives[n - 1],ps->points[i].objectives[n - 1]))
+        {   fs[fr].points[u].objectives[n - 1] = ps->points[i].objectives[n - 1];
             for (j = 0; j < n - 1; j++)
-                fs[fr].points[u].objectives[j] = WORSE(ps.points[p].objectives[j],ps.points[i].objectives[j]);
+                fs[fr].points[u].objectives[j] = WORSE(ps->points[p].objectives[j],ps->points[i].objectives[j]);
             u--;
         }
         else
-        {   fs[fr].points[l].objectives[n - 1] = ps.points[p].objectives[n - 1];
+        {   fs[fr].points[l].objectives[n - 1] = ps->points[p].objectives[n - 1];
             for (j = 0; j < n - 1; j++)
-                fs[fr].points[l].objectives[j] = WORSE(ps.points[p].objectives[j],ps.points[i].objectives[j]);
+                fs[fr].points[l].objectives[j] = WORSE(ps->points[p].objectives[j],ps->points[i].objectives[j]);
             l++;
         }
 
@@ -228,16 +228,16 @@ void makeDominatedBit(FRONT ps, int p)
 }
 
 
-double hv2(FRONT ps, int k)
+double hv2 (FRONT* ps, int k)
 /* returns the hypervolume of ps[0 .. k-1] in 2D
    assumes that ps is sorted improving */
 {
     int i;
 
-    double volume = ps.points[0].objectives[0] * ps.points[0].objectives[1];
+    double volume = ps->points[0].objectives[0] * ps->points[0].objectives[1];
     for (i = 1; i < k; i++)
-        volume += ps.points[i].objectives[1] *
-                  (ps.points[i].objectives[0] - ps.points[i - 1].objectives[0]);
+        volume += ps->points[i].objectives[1] *
+                  (ps->points[i].objectives[0] - ps->points[i - 1].objectives[0]);
 
     return volume;
 }
@@ -479,59 +479,59 @@ double inclhv4(POINT p, POINT q, POINT r, POINT s)
 }
 
 
-double exclhv(FRONT ps, int p)
+double exclhv (FRONT* ps, int p)
 /* returns the exclusive hypervolume of ps[p] relative to ps[0 .. p-1] */
 {
     double volume;
-    makeDominatedBit(ps, p);
-    volume = inclhv(ps.points[p]) - hv(fs[fr - 1]);
+    makeDominatedBit (ps, p);
+    volume = inclhv (ps->points[p]) - hv (&fs[fr - 1]);
     fr--;
     return volume;
 }
 
 
-double hv(FRONT ps)
+double hv (FRONT* ps)
 /* returns the hypervolume of ps[0 ..] */
 {
     int i;
 
     /* process small fronts with the IEA */
-    switch (ps.nPoints)
+    switch (ps->nPoints)
     {
     case 1:
-        return inclhv (ps.points[0]);
+        return inclhv (ps->points[0]);
     case 2:
-        return inclhv2(ps.points[0], ps.points[1]);
+        return inclhv2(ps->points[0], ps->points[1]);
     case 3:
-        return inclhv3(ps.points[0], ps.points[1], ps.points[2]);
+        return inclhv3(ps->points[0], ps->points[1], ps->points[2]);
     case 4:
-        return inclhv4(ps.points[0], ps.points[1], ps.points[2], ps.points[3]);
+        return inclhv4(ps->points[0], ps->points[1], ps->points[2], ps->points[3]);
     }
 
     /* these points need sorting */
-    qsort(&ps.points[safe], ps.nPoints - safe, sizeof(POINT), greater);
+    qsort(&ps->points[safe], ps->nPoints - safe, sizeof(POINT), greater);
     /* n = 2 implies that safe = 0 */
-    if (n == 2) return hv2(ps, ps.nPoints);
+    if (n == 2) return hv2 (ps, ps->nPoints);
     /* these points don't NEED sorting, but it helps */
-    qsort(ps.points, safe, sizeof(POINT), greaterabbrev);
+    qsort(ps->points, safe, sizeof(POINT), greaterabbrev);
 
     if (n == 3 && safe > 0)
     {
-        double volume = ps.points[0].objectives[2] * hv2(ps, safe);
+        double volume = ps->points[0].objectives[2] * (hv2 (ps, safe));
         n--;
-        for (i = safe; i < ps.nPoints; i++)
+        for (i = safe; i < ps->nPoints; i++)
             /* we can ditch dominated points here, but they will be ditched anyway in makeDominatedBit */
-            volume += ps.points[i].objectives[n] * exclhv(ps, i);
+            volume += ps->points[i].objectives[n] * (exclhv (ps, i));
         n++;
         return volume;
     }
     else
     {
-        double volume = inclhv4(ps.points[0], ps.points[1], ps.points[2], ps.points[3]);
+        double volume = inclhv4 (ps->points[0], ps->points[1], ps->points[2], ps->points[3]);
         n--;
-        for (i = 4; i < ps.nPoints; i++)
+        for (i = 4; i < ps->nPoints; i++)
             /* we can ditch dominated points here, but they will be ditched anyway in makeDominatedBit */
-            volume += ps.points[i].objectives[n] * exclhv(ps, i);
+            volume += ps->points[i].objectives[n] * (exclhv (ps, i));
         n++;
         return volume;
     }
@@ -583,5 +583,5 @@ double wfg_compute_hv (FRONT* ps)
   safe = 0;
   fr = 0;
 
-  return hv (*ps);
+  return hv (ps);
 }
