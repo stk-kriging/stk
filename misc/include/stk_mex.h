@@ -4,7 +4,8 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright  (C) 2012, 2013 SUPELEC                                      *
+ *    Copyright (C) 2015 CentraleSupelec                                     *
+ *    Copyright (C) 2012, 2013 SUPELEC                                       *
  *                                                                           *
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
  *                                                                           *
@@ -35,6 +36,20 @@
 
 #include <math.h>
 #include "mex.h"
+
+#if (defined __STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+#   include <stdbool.h>
+#else
+#   ifndef bool
+#      define bool int
+#   endif
+#   ifndef true
+#      define true 1
+#   endif
+#   ifndef false
+#      define false 0
+#   endif
+#endif
 
 int stk_is_realmatrix(const mxArray* x)
 {
