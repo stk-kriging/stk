@@ -32,6 +32,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
+%% PKG_ADD: stk_init ();
+
+%% PKG_DEL: stk_init (true);
+
 function stk_init (do_quit)
 
 % Deduce the root of STK from the path to this script
@@ -89,8 +93,3 @@ stk_config_setup;
 rmpath (config);
 
 end % function stk_init
-
-
-%% PKG_ADD: stk_init ();
-
-%% PKG_DEL: stk_init (true);
