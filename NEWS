@@ -16,6 +16,16 @@ Changes in version 2.4.0
      stk_pmisclass ().
 
 
+Changes in version 2.3.2
+========================
+
+* Minor changes
+
+   o stk_param_getdefaultbounds.m: Return empty lower and upper bounds for
+     parameter classes that do not implement the stk_param_getdefaultbounds
+     (instead of calling error).
+
+
 Changes in version 2.3.1
 ========================
 
