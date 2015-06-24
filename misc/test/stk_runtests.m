@@ -5,7 +5,7 @@
 %    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 %
 %    This file has been adapted from runtests.m in Octave 3.6.2 (which is
 %    distributed under the GNU General Public Licence version 3 (GPLv3)).

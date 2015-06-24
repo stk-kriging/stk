@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 %
 %    This file recycles part of stk_plot2d.m (now deprecated):
 %
@@ -12,7 +12,7 @@
 %       Copyright (C) 2013 SUPELEC & Valentin Resseguier
 %       Copyright (C) 2012 SUPELEC
 %
-%       Authors:  Julien Bect          <julien.bect@supelec.fr>
+%       Authors:  Julien Bect          <julien.bect@centralesupelec.fr>
 %                 Valentin Resseguier  <valentin.resseguier@gmail.com>
 
 % Copying Permission Statement

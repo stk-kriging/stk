@@ -7,7 +7,7 @@
 %    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %

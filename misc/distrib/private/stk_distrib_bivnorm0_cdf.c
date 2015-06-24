@@ -5,8 +5,8 @@
  * Copyright Notice                                                          *
  *                                                                           *
  *    Copyright (C) 2014 Supelec                                             *
- *    Author: Julien Bect <julien.bect@supelec.fr>                           *
- *    URL: http://sourceforge.net/projects/kriging/                          *
+ *                                                                           *
+ *    Author: Julien Bect <julien.bect@centralesupelec.fr>                   *
  *                                                                           *
  *    Based on mvndstpack.f by Yihong Ge and Alan Genz                       *
  *     (see original copyright notice below)                                 *

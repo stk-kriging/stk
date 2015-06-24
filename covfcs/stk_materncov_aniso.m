@@ -33,8 +33,8 @@
 %    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:  Julien Bect       <julien.bect@supelec.fr>
-%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 %              Paul Feliot       <paul.feliot@irt-systemx.fr>
 
 % Copying Permission Statement
