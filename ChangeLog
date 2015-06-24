@@ -1,3 +1,11 @@
+2015-06-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_getdefaultbounds.m: Return [] for parameter classes
+
+	* paramestim/stk_param_getdefaultbounds.m: Return empty lower and
+	upper bounds for parameter classes that do not implement the
+	stk_param_getdefaultbounds.
+
 2015-06-17  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	wfg: Remove n from the global scope
