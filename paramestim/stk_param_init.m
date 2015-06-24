@@ -42,7 +42,7 @@
 %    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
-%    Authors:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
 %              Paul Feliot  <paul.feliot@irt-systemx.fr>
 
 % Copying Permission Statement
@@ -78,11 +78,8 @@ end
 
 %--- first, default values for arguments 'box' and 'noisy' ---------------------
 
-if nargin < 5,
-    noisy = false;
-    if nargin < 4,
-        box = [];
-    end
+if nargin < 4,
+    box = [];
 end
 
 if ~ isa (box, 'stk_hrect')
