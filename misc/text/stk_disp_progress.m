@@ -12,8 +12,8 @@
 %
 %    Copyright (C) 2014 SUPELEC
 %
-%    Authors:  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%              Julien Bect       <julien.bect@supelec.fr>
+%    Authors:  Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%              Julien Bect       <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %

@@ -5,6 +5,7 @@
  * Copyright Notice                                                          *
  *                                                                           *
  *    Copyright (C) 2015 CentraleSupelec                                     *
+ *                                                                           *
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
  *                                                                           *
  *    Based on the file wfg.c from WFG 1.10 by Lyndon While, Lucas           *
