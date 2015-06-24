@@ -1,6 +1,12 @@
 Changes in version 2.3.2
 ========================
 
+* Bug fixes
+
+   o stk_param_estim.m: Fix a bug with parameter objects. More precisely, use
+     (:) indexing systematically to access the vector of numerical parameters
+     corresponding to a given parameter object.
+
 * Minor changes
 
    o stk_param_getdefaultbounds.m: Return empty lower and upper bounds for

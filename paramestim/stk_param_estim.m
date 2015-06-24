@@ -36,6 +36,7 @@
 %    Authors:  Julien Bect        <julien.bect@supelec.fr>
 %              Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
 %              Ashwin Ravisankar  <ashwinr1993@gmail.com>
+%              Remi Stroh         <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -313,14 +314,14 @@ if ~ isempty (param0)
     end
     
     % Test if param0 contains nans
-    if any (isnan (double (param0)))
+    if any (isnan (param0(:)))
         warning ('param0 has nans, using model.param instead');
         param0 = [];
     end
 end
 
 % param0: try to use model.param if we still have no acceptable value
-if (isempty (param0)) && (~ any (isnan (double (model.param))))
+if (isempty (param0)) && (~ any (isnan (model.param(:))))
     param0 = model.param;
 end
 

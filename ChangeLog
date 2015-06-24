@@ -1,5 +1,12 @@
 2015-06-25  Rémi Stroh  <remi.stroh@lne.fr>
 
+	stk_param_estim.m: Fix a bug related to parameter objects.
+
+	* paramestim/stk_param_estim.m (provide_param0_value): Fix a bug
+	related to parameter objects. More precisely, use (:) indexing
+	systematically to access the vector of numerical parameters
+	corresponding to a given parameter object.
+
 	@stk_factorialdesign/stk_normalize.m: Add missing line continuation mark
 
 	* arrays/@stk_factorialdesign/stk_normalize.m: Add missing line
