@@ -30,7 +30,7 @@ function x = stk_normalize (x, varargin)
 
 if (~ isa (x, 'stk_factorialdesign'))
     % One of the box arguments is an stk_factorialdesign object
-    stk_error (['stk_factorialdesign objects cannot be used as values '
+    stk_error (['stk_factorialdesign objects cannot be used as values ' ...
         'for ''box'' arguments.'], 'TypeMismatch');
 end
 
