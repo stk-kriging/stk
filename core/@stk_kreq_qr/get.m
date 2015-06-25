@@ -6,9 +6,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect       <julien.bect@centralesupelec.fr>
+%             Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -48,7 +50,7 @@ catch
             value = kreq.lambda_mu((kreq.n + 1):end, :);
             
         case 'delta_var'
-            value = dot (kreq.lambda_mu, kreq.RS)';
+            value = dot (kreq.lambda_mu, kreq.RS, 1)';
             
         case 'log_abs_det_kriging_matrix'
             % LS_Q has +/- 1 determinant, so we only need to care about LS_R

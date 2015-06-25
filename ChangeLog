@@ -1,3 +1,10 @@
+2015-06-25  Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+
+	@stk_kreq_qr/get.m: Fix a call to dot ()
+
+	* core/@stk_kreq_qr/get.m: Fix a call to dot () to make it work
+	when there is only one observation.
+
 2015-06-25  Rémi Stroh  <remi.stroh@lne.fr>
 
 	stk_param_estim.m: Fix a bug related to parameter objects.
