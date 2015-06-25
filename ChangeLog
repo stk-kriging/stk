@@ -1,3 +1,12 @@
+2015-06-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init.m: XXXX_param_init (undocumented feature)
+
+	* paramestim/stk_param_init.m: make it possible to define a
+	XXXX_param_init function that provides initial estimates for a
+	user-defined covariance function called XXXX (undocumented
+	feature).
+
 2015-06-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_init.m: Removed unused variable.

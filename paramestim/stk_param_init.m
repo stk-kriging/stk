@@ -65,7 +65,38 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [param, lnv] = stk_param_init (model, xi, zi, box, do_estim_lnv)
+function [param, lnv] = stk_param_init (model, varargin)
+
+cov_list = { ...
+    'stk_materncov_iso', ...
+    'stk_materncov_aniso', ...
+    'stk_materncov32_iso', ...
+    'stk_materncov32_aniso', ...
+    'stk_materncov52_iso', ...
+    'stk_materncov52_aniso', ...
+    'stk_gausscov_iso', ...
+    'stk_gausscov_aniso'};
+    
+if ismember (model.covariance_type, cov_list)
+    [param, lnv] = stk_param_init_ (model, varargin{:});
+else
+    try
+        % Undocumented feature: make it possible to define a XXXX_param_init
+        %  function that provides initial estimates for a user-defined
+        %  covariance function called XXXX.
+        fname = [model.covariance_type '_param_init'];
+        [param, lnv] = feval (fname, model, varargin{:});
+    catch
+        stk_error (sprintf (['Unable to initialize covariance parameters ' ...
+            'automatically for covariance functions of type %s'], ...
+            model.covariance_type), 'IncorrectArgument');
+    end % try_catch
+end % if
+
+end % function stk_param_init
+
+
+function [param, lnv] = stk_param_init_ (model, xi, zi, box, do_estim_lnv)
 
 if nargin > 5,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -215,7 +246,7 @@ switch model.covariance_type
         stk_error (errmsg, 'IncorrectArgument');
 end
 
-end % function stk_param_init
+end % function stk_param_init_
 
 
 function [param, lnv] = paraminit_ (xi, zi, box, nu, lm, lnv)
