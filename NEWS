@@ -21,9 +21,12 @@ Changes in version 2.3.2
 
 * Bug fixes
 
-   o stk_param_estim.m: Fix a bug with parameter objects. More precisely, use
-     (:) indexing systematically to access the vector of numerical parameters
-     corresponding to a given parameter object.
+   o stk_param_estim.m: Fix a bug related to parameter objects. More precisely,
+     use (:) indexing systematically to access the vector of numerical
+     parameters corresponding to a given parameter object.
+
+   o @stk_kreq_qr/get.m: Fix a call to dot () to make it work when there is only
+     one observation.
 
 * Minor changes
 
