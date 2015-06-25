@@ -1,3 +1,10 @@
+2015-06-25  Rémi Stroh  <remi.stroh@lne.fr>
+
+	@stk_factorialdesign/stk_normalize.m: Add missing line continuation mark
+
+	* arrays/@stk_factorialdesign/stk_normalize.m: Add missing line
+	continuation mark.
+
 2015-06-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_init.m: XXXX_param_init (undocumented feature)
