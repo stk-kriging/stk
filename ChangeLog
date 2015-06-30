@@ -1,3 +1,10 @@
+2015-06-30  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	build_octpkg.m:	Fix the generated DESCRIPTION file
+
+	* admin/build_tools/build_octpkg.m: Add "Depends: octave (>=
+	3.2.2)" and "Autoload: no" to the generated DESCRIPTION file.
+
 2015-06-25  Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 	@stk_kreq_qr/get.m: Fix a call to dot ()
