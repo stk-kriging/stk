@@ -28,11 +28,15 @@ Changes in version 2.3.2
    o @stk_kreq_qr/get.m: Fix a call to dot () to make it work when there is only
      one observation.
 
+   o Add missing field "Depends" to the DESCRIPTION file in the Octave package.
+
 * Minor changes
 
    o stk_param_getdefaultbounds.m: Return empty lower and upper bounds for
      parameter classes that do not implement the stk_param_getdefaultbounds
      (instead of calling error).
+
+   o Add optional field "Autoload" to the DESCRIPTION file in the Octave package.
 
 
 Changes in version 2.3.1
