@@ -95,6 +95,10 @@ fprintf (fid, '#\n');
 fprintf (fid, '%s', parse_description_field (root_dir));
 fprintf (fid, '#\n');
 fprintf (fid, 'Url: https://sourceforge.net/projects/kriging/\n');
+fprintf (fid, '#\n');
+fprintf (fid, 'Depends: octave (>= 3.2.2)\n');
+fprintf (fid, '#\n');
+fprintf (fid, 'Autoload: no\n');
 fclose (fid);
 
 % post_install: a function that is run after the installation of the package
