@@ -4,9 +4,14 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright (C) 2014 SUPELEC                                             *
- *    Author:    Julien Bect  <julien.bect@supelec.fr>                       *
- *    URL:       http://sourceforge.net/projects/kriging/                    *
+ *    Copyright (C) 2015 CentraleSupelec                                     *
+ *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
+ *                                                                           *
+ *    Based on the file wfg.h from WFG 1.10 by Lyndon While, Lucas           *
+ *    Bradstreet, Luigi Barone, released under the GPLv2 licence. The        *
+ *    original copyright notice is:                                          *
+ *                                                                           *
+ *       Copyright (C) 2010 Lyndon While, Lucas Bradstreet                   *
  *                                                                           *
  * Copying Permission Statement                                              *
  *                                                                           *
@@ -30,62 +35,35 @@
  *                                                                           *
  ****************************************************************************/
 
-#include "stk_mex.h"
+#ifndef ___WFG_H___
+#define ___WFG_H___
 
-typedef double SCALAR;
-typedef mxLogical LOGICAL;
-#include "pareto.h"
+typedef double OBJECTIVE;
 
-#define ARGIN_X       prhs[0]
-#define ARGOUT_NDPOS  plhs[0]
-#define ARGOUT_DRANK  plhs[1]
-
-void mexFunction
-(
-    int nlhs, mxArray *plhs[],
-    int nrhs, const mxArray *prhs[]
-)
+typedef struct
 {
-    int i, k, n, d, *tmp_ndpos, *tmp_drank;
-    double *x, *ndpos, *drank;
-
-    if (nrhs != 1)  /* Check number of input arguments */
-        mexErrMsgTxt ("Incorrect number of input arguments.");
-
-    if (nlhs > 3)   /* Check number of output arguments */
-        mexErrMsgTxt ("Too many output arguments.");
-
-    if (! stk_is_realmatrix (ARGIN_X))
-        mexErrMsgTxt ("The input should be a real-valued "
-                      "double-precision array.");
-
-    /* Read input argument */
-    n = mxGetM (ARGIN_X);
-    d = mxGetN (ARGIN_X);
-    x = mxGetPr (ARGIN_X);
-
-    /* Create a temporary arrays */
-    tmp_ndpos = (int *) mxCalloc (n, sizeof (int));
-    tmp_drank = (int *) mxCalloc (n, sizeof (int));
-
-    /* PRUNE */
-    k = pareto_find (x, tmp_ndpos, tmp_drank, n, d);
-
-    /* ARGOUT #1: position of non-dominated points, in lexical order */
-    ARGOUT_NDPOS = mxCreateDoubleMatrix (k, 1, mxREAL);
-    ndpos = mxGetPr (ARGOUT_NDPOS);
-    for (i = 0; i < k; i++)
-        ndpos[i] = (double) (1 + tmp_ndpos[i]);
-
-    /* ARGOUT #2: rank of first dominating point */
-    if (nlhs > 1) {
-        ARGOUT_DRANK = mxCreateDoubleMatrix (n, 1, mxREAL);
-        drank = mxGetPr (ARGOUT_DRANK);
-        for (i = 0; i < n; i++)
-            drank[i] = (double) (1 + tmp_drank[i]);
-    }
-
-    /* Cleanup */
-    mxFree (tmp_ndpos);
-    mxFree (tmp_drank);
+    int n;
+    OBJECTIVE *objectives;
 }
+POINT;
+
+typedef struct
+{
+    int nPoints;
+    int nPoints_alloc;  /* must *not* be changed */
+    int n;
+    int n_alloc;        /* must *not* be changed */
+    POINT *points;
+}
+FRONT;
+
+double wfg_compute_hv (FRONT* ps);
+
+void wfg_alloc (int maxm, int maxn);
+void wfg_free (int maxm, int maxn);
+
+void wfg_front_init (FRONT* front, int nb_points, int nb_objectives);
+void wfg_front_destroy (FRONT* front);
+void wfg_front_resize (FRONT* f, int nb_points, int nb_objectives);
+
+#endif

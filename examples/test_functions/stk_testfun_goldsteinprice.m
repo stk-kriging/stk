@@ -19,7 +19,7 @@
 %
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 %
 %    Based on the "Virtual Library for Simulation Experiments"
 %       Copyright (C) 2013 Derek Bingham, Simon Fraser University

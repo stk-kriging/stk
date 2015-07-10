@@ -17,13 +17,14 @@
 %    dominated, and equal to the smallest j such that X(i, :) is dominated
 %    by X(NDPOS(j), :) otherwise.
 %
-% See also: sortrows, stk_isdominated
+% See also: sortrows, stk_isdominated, stk_dominatedhv
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %

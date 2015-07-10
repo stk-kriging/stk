@@ -5,7 +5,7 @@
 %    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -54,7 +54,9 @@ if isscalar (sigma)
         k1 = false;
     end
 else
-    [z, sigma] = stk_commonsize (z, sigma);
+    if ~ isequal (size (z), size (sigma))
+        [z, sigma] = stk_commonsize (z, sigma);
+    end
     k0 = (sigma == 0);
     k1 = (sigma > 0);
     z(k1) = z(k1) ./ sigma(k1);

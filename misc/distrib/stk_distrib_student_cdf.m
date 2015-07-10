@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 %
 %    This code is very loosely based on Octave's tcdf function:
 %       ## Copyright (C) 2013 Julien Bect

@@ -18,7 +18,7 @@
 %    Copyright  (C) 2014 SUPELEC
 %    Copyright  (C) 2013 Alexandra Krauth, Elham Rahali & SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
 %               Alexandra Krauth  <alexandrakrauth@gmail.com>
 %               Elham Rahali      <elham.rahali@gmail.com>
 

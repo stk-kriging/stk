@@ -29,12 +29,14 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2011-2013 SUPELEC
 %
-%    Authors:  Julien Bect        <julien.bect@supelec.fr>
-%              Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
 %              Ashwin Ravisankar  <ashwinr1993@gmail.com>
+%              Remi Stroh         <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -88,7 +90,7 @@ end
 
 % Should we estimate the variance of the noise, too ?
 if ~ isempty (lnv0)
-    % param0lnv present => noise variance *must* be estimated
+    % lnv0 present => noise variance *must* be estimated
     do_estim_lnv = true;
 else
     % Otherwise, noise variance estimation happens when lnv has NaNs
@@ -129,67 +131,19 @@ end
 switch do_estim_lnv
     case false,
         f = @(u)(f_ (model, u, xi, zi, criterion));
-        nablaf = @(u)(nablaf_ (model, u, xi, zi, criterion));
-        % note: currently, nablaf is only used with sqp in Octave
     case true,
         f = @(u)(f_with_noise_ (model, u, xi, zi, criterion));
-        nablaf = @(u)(nablaf_with_noise_ (model, u, xi, zi, criterion));
 end
 
-bounds_available = (~ isempty(lb)) && (~ isempty(ub));
+bounds_available = (~ isempty (lb)) && (~ isempty (ub));
 
-optim_display_level = stk_options_get ('stk_param_estim', 'optim_display_level');
-
-% switch according to preferred optimizer
-optim_num = stk_select_optimizer (bounds_available);
-switch optim_num,
-    
-    case 1, % Octave / sqp
-        
-        if ~ strcmp (optim_display_level, 'off')
-            warning (sprintf (['Ignoring option: ' ...
-                'optim_display_level = %s'], optim_display_level));
-        end
-        
-        [u_opt, crit_opt] = sqp (u0, {f, nablaf}, [], [], lb, ub, [], 1e-5);
-        
-    case {2, 3}, % Matlab
-        
-        options = optimset ('Display', optim_display_level, ...
-            'MaxFunEvals', 300, 'TolFun', 1e-5, 'TolX', 1e-6);
-        
-        if optim_num == 2,  % Matlab / fminsearch (Nelder-Mead)
-            
-            [u_opt, crit_opt] = fminsearch (f, u0, options);
-            
-        else  % Matlab / fmincon
-            
-            options = optimset (options, 'GradObj', 'on');
-            
-            try
-                % try to use the interior-point algorithm, which has been
-                % found to provide satisfactory results in many cases
-                options = optimset (options, 'algorithm', 'interior-point');
-            catch
-                % the 'algorithm' option does not exist in some old versions of
-                % matlab (e.g., version 3.1.1 provided with r2007a)...
-                err = lasterror ();
-                if ~ strcmpi (err.identifier, ...
-                        'matlab:optimset:invalidparamname')
-                    rethrow (err);
-                end
-            end
-            
-            [u_opt, crit_opt] = fmincon (f, u0, ...
-                [], [], [], [], lb, ub, [], options);
-            
-        end
-        
-    otherwise,
-        
-        error ('Unexpected value returned by stk_select_optimizer.');
-        
-end % switch
+if bounds_available
+    A = stk_options_get ('stk_param_estim', 'stk_minimize_boxconstrained');
+    [u_opt, crit_opt] = stk_minimize_boxconstrained (A, f, u0, lb, ub);
+else
+    A = stk_options_get ('stk_param_estim', 'stk_minimize_unconstrained');
+    [u_opt, crit_opt] = stk_minimize_unconstrained (A, f, u0);
+end
 
 if do_estim_lnv
     lnvopt = u_opt(end);
@@ -225,7 +179,7 @@ end % function stk_param_estim -------------------------------------------------
 %#ok<*CTCH,*LERR,*SPWRN,*WNTAG>
 
 
-%--- The objective function and its gradient ----------------------------------
+%--- The objective function ---------------------------------------------------
 
 function [l, dl] = f_ (model, u, xi, zi, criterion)
 
@@ -238,14 +192,6 @@ else
 end
 
 end % function f_
-
-
-function dl = nablaf_ (model, u, xi, zi, criterion)
-
-model.param(:) = u;
-[l_ignored, dl] = criterion (model, xi, zi);  %#ok<ASGLU>
-
-end % function nablaf_
 
 
 function [l, dl] = f_with_noise_ (model, u, xi, zi, criterion)
@@ -263,27 +209,21 @@ end
 end % function f_with_noise_
 
 
-function dl = nablaf_with_noise_ (model, u, xi, zi, criterion)
-
-model.param(:) = u(1:end-1);
-model.lognoisevariance  = u(end);
-[l_ignored, dl, dln] = criterion (model, xi, zi);  %#ok<ASGLU>
-dl = [dl; dln];
-
-end % function nablaf_with_noise_
-
-
 function [lblnv,ublnv] = get_default_bounds_lnv ... % --------------------------
-    (model, param0lnv, xi, zi) %#ok<INUSL>
+    (model, lnv0, xi, zi) %#ok<INUSL>
 
-% assume NOISEESTIM
-% constants
 TOLVAR = 0.5;
 
-% bounds for the variance parameter
+% Bounds for the variance parameter
 empirical_variance = var(zi);
-lblnv = log(eps);
-ublnv = log(empirical_variance) + TOLVAR;
+lblnv = log (eps);
+ublnv = log (empirical_variance) + TOLVAR;
+
+% Make sure that lnv0 falls within the bounds
+if ~ isempty (lnv0)
+    lblnv = min (lblnv, lnv0 - TOLVAR);
+    ublnv = max (ublnv, lnv0 + TOLVAR);
+end
 
 end % function get_default_bounds_lnv ------------------------------------------
 
@@ -308,14 +248,14 @@ if ~ isempty (param0)
     end
     
     % Test if param0 contains nans
-    if any (isnan (double (param0)))
+    if any (isnan (param0(:)))
         warning ('param0 has nans, using model.param instead');
         param0 = [];
     end
 end
 
 % param0: try to use model.param if we still have no acceptable value
-if (isempty (param0)) && (~ any (isnan (double (model.param))))
+if (isempty (param0)) && (~ any (isnan (model.param(:))))
     param0 = model.param;
 end
 

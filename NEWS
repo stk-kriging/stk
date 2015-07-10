@@ -1,3 +1,55 @@
+Changes in version 2.4.0
+========================
+
+* Optimizer objects
+
+    o The choice of the optimization algorithm used in stk_param_estim is now
+      much more flexible, thanks to a new interface based on "optimizer object"
+      classes.
+
+    o The following classes are currently available: @stk_optim_octavesqp
+      @stk_optim_fmincon, @stk_optim_fminsearch.
+
+    o Automatic detection of available optimizers.
+
+* Miscellaneous
+
+   o stk_pmisclass.m: New function to compute either the current probability of
+     misclassification or the expectation of the future probability of
+     misclassification, with respect to a given threshold.
+
+   o stk_dominatedhv.m: New function to compute dominated hypervolumes, which
+     relies internally on the "Walking Fish Group" (WFG 1.10) algorithm.
+
+* Examples
+
+   o stk_example_doe04.m: Example script that demonstrates the use of
+     stk_pmisclass ().
+
+
+Changes in version 2.3.2
+========================
+
+* Bug fixes
+
+   o stk_param_estim.m: Fix a bug related to parameter objects. More precisely,
+     use (:) indexing systematically to access the vector of numerical
+     parameters corresponding to a given parameter object.
+
+   o @stk_kreq_qr/get.m: Fix a call to dot () to make it work when there is only
+     one observation.
+
+   o Add missing field "Depends" to the DESCRIPTION file in the Octave package.
+
+* Minor changes
+
+   o stk_param_getdefaultbounds.m: Return empty lower and upper bounds for
+     parameter classes that do not implement the stk_param_getdefaultbounds
+     (instead of calling error).
+
+   o Add optional field "Autoload" to the DESCRIPTION file in the Octave package.
+
+
 Changes in version 2.3.1
 ========================
 
@@ -5,6 +57,33 @@ Changes in version 2.3.1
 
    o stk_optim_hasfmincon.m: Detect fmincon by trying to use it, instead of
      relying on the result of the exist function (ticket #30 closed).
+
+   o stk_param_estim.m: Make sure that the bounds that we use for the lnv
+     parameter contain the starting point lnv0 when it is provided.
+
+   o @stk_dataframe/set.m: Fix stk_error calls (missing mnemonic).
+
+   o stk_distrib_bivnorm_cdf.m: Fix a bug in the case of mixtures of
+     singular and non-singular cases.
+
+   o @stk_dataframe/subsasgn.m: Preserve column names when deleting rows, even
+     if the resulting array is empty.
+
+* Minor changes
+
+   o stk_init.m: Clear persistent variables. As a consequence, stk_init can now
+     be used to restart STK completely.
+
+   o stk_commonsize.m: Accept empty dimensions, under the condition that all
+     input arguments have the same empty dimensions (in which case the result is
+     empty).
+
+   o stk_commonsize.m: is now faster when some arguments already have the proper
+     size (unnecessary calls to repmat are avoided).
+
+   o stk_distrib_normal_cdf.m, stk_distrib_bivnorm_cdf.m: are now slightly
+     faster (unnecessary calls to stk_commonsize are avoided).
+
 
 Changes in version 2.3.0
 ========================

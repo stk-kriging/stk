@@ -1,6 +1,18 @@
-% STK_OPTIM_HASFMINCON returns true if fmincon is available
+% STK_OPTIM_HASFMINCON is a deprecated function
 %
-% CALL: fmincon_available = stk_optim_hasfmincon ()
+% stk_optim_fmincon is deprecated and will be removed
+% from future releases of STK. Use
+%
+%    try
+%       algo = stk_optim_fmincon ();
+%       fmincon_available = true;
+%    catch
+%       fmincon_available = false;
+%    end
+%
+% instead if you want to check whether fmincon is available or not.
+%
+% See also: stk_optim_fmincon
 
 % Copyright Notice
 %
@@ -31,31 +43,13 @@
 
 function fmincon_available = stk_optim_hasfmincon ()
 
-persistent b;
+warning (help ('stk_optim_hasfmincon'));
 
-if isempty (b),
-    
-    try
-        opt = optimset ('Display', 'off', 'GradObj', 'on');
-        z = fmincon (@objfun, 0, [], [], [], [], -1, 1, [], opt);
-        assert (abs (z - 0.3) < 1e-2);
-        b = true;
-    catch %#ok<CTCH>
-        b = false;
-    end
-    
-    mlock ();
-    
+try
+    algo = stk_optim_fmincon ();
+    fmincon_available = true;
+catch
+    fmincon_available = false;
 end
 
-fmincon_available = b;
-
 end % function stk_optim_hasfmincon
-
-
-function [f, df] = objfun (x)
-
-f = (x - 0.3) .^ 2;
-df = 2 * (x - 0.3);
-
-end % function objfun
