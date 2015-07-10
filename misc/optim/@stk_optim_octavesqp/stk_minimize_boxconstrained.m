@@ -1,8 +1,8 @@
 % STK_MINIMIZE_BOXCONSTRAINED performs boxconstrained minimisation using sqp.
-% 
+%
 % CALL: U_OPT  = stk_minimize_boxconstrained (ALGO, F, U_INIT, LB, UB)
-% 
-%   estimates the parameters U_OPT within the user-defined lowerbounds LB 
+%
+%   estimates the parameters U_OPT within the user-defined lowerbounds LB
 %   and upper bounds UB, which gives the minimum value of the function F. A
 %   starting point U_INIT must be provided.
 %
@@ -18,7 +18,7 @@
 %
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
-%    Authors:  Julien Bect        <julien.bect@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
 %              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
@@ -56,6 +56,9 @@ end % function stk_minimize_boxconstrained
 
 
 function df = nabla_f_ (f, u)
+
+% Note: with this implementation, f_val is computed twice
+%   (once when f is called by sqp, and once again when nabla_f is called)
 
 [f_val, df] = f (u);  %#ok<ASGLU>
 

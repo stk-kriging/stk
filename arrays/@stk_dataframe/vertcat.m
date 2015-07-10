@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function z = vertcat (x, y, varargin)
+function x = vertcat (x, y, varargin)
 
 if nargin < 2,
     y = [];
@@ -98,20 +99,27 @@ end
 
 %--- Create output --------------------------------------------------------
 
-z = stk_dataframe ([x_data; y_data], colnames, rownames);
-
-if ~ isempty (varargin),
-    z = vertcat (z, varargin{:});
+if strcmp (class (x), 'stk_dataframe')  %#ok<STISA>
+    % Optimize for speed (no need to call constructor)
+    x.data = [x_data; y_data];
+    x.colnames = colnames;
+    x.rownames = rownames;
+else
+    x = stk_dataframe ([x_data; y_data], colnames, rownames);
 end
 
-end % function vertcat
+if ~ isempty (varargin),
+    x = vertcat (x, varargin{:});
+end
+
+end % function @stk_dataframe.vertcat
 
 
 % IMPORTANT NOTE: [x; y; ...] fails to give the same result as vertcat(x, y,
 % ...) in some releases of Octave. As a consequence, all tests must be written
 % using horzcat explicitely.
 
-%!shared u v
+%!shared u, v
 %! u = rand(3, 2);
 %! v = rand(3, 2);
 

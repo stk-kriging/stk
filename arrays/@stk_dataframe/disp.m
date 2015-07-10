@@ -9,8 +9,8 @@
 %
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -52,7 +52,7 @@ disp ([repmat(prefix, size(s, 1), 1) s]);
 end % function disp
 
 
-%!shared x fmt
+%!shared x, fmt
 %! try % doesn't work on old Octave versions, nevermind
 %!   fmt = get (0, 'Format');
 %! catch

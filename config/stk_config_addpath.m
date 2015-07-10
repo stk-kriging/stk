@@ -2,10 +2,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -55,7 +56,7 @@ for i = 1:length (path),
 end
 
 % Selectively add MOLE subdirectories to compensate for missing functions
-% (note that stk_init.m/PKG_ADD also does that, but it is necessary to do it again here,
+% (note that stk_init.m also does that, but it is necessary to do it again here,
 % just in case some functions were provided by another copy of STK that has been removed
 % from the path by stk_config_addpath (see above))
 stk_config_mole (root);

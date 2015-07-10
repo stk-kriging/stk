@@ -1,17 +1,17 @@
 % STK_MODEL generates a model with default covariance parameters
 %
-% CALL: MODEL = stk_model()
+% CALL: MODEL = stk_model ()
 %
 %   returns a structure MODEL (see below for a description of the fields in such
 %   a structure) corresponding to one-dimensional Gaussian process prior with a
 %   constant but unknown mean ("ordinary" kriging) and a stationary Matern
 %   covariance function.
 %
-% CALL: MODEL = stk_model(COVARIANCE_TYPE)
+% CALL: MODEL = stk_model (COVARIANCE_TYPE)
 %
 %   uses the user-supplied COVARIANCE_TYPE instead of the default.
 %
-% CALL: MODEL = stk_model(COVARIANCE_TYPE, DIM)
+% CALL: MODEL = stk_model (COVARIANCE_TYPE, DIM)
 %
 %   creates a DIM-dimensional model. Note that, for DIM > 1, anisotropic
 %   covariance functions are provided with default parameters that make them
@@ -20,17 +20,18 @@
 % In STK, a Gaussian process model is described by a 'model' structure,
 % which has mandatory fields and optional fields.
 %
-%   MANDATORY FIELDS: covariance_type, param
-%   OPTIONAL FIELD: lognoisevariance
+%   MANDATORY FIELDS: covariance_type, param, order, lognoisevariance
+%   OPTIONAL FIELD: param_prior, noise_prior, response_name, lm
 %
 % See also stk_materncov_iso, stk_materncov_aniso, ...
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:  Julien Bect       <julien.bect@supelec.fr>
-%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -90,15 +91,19 @@ if nargin > 2,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
+% Backward compatiblity: accept model structures with missing lognoisevariance
+if (~ isfield (model_base, 'lognoisevariance')) ...
+        || (isempty (model_base.lognoisevariance))
+    model_base.lognoisevariance = - inf;
+end
+
 [K, P] = stk_make_matcov (model_base, x, x);
 
 model_out = struct ( ...
     'covariance_type', 'stk_discretecov', ...
     'param', struct ('K', K, 'P', P));
 
-if isfield (model_base, 'lognoisevariance');
-    model_out.lognoisevariance = model_base.lognoisevariance;
-end
+model_out.lognoisevariance = model_base.lognoisevariance;
 
 end % function stk_model_discretecov
 
@@ -110,21 +115,15 @@ end % function stk_model_discretecov
 function model = stk_model_ (covariance_type, dim)
 
 if nargin > 2,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 model = struct();
 
-%%% covariance type
-
 model.covariance_type = covariance_type;
-
-%%% model.order
 
 % use ordinary kriging as a default choice
 model.order = 0;
-
-%%% model.dim
 
 % default dimension is d = 1
 if nargin < 2,
@@ -133,47 +132,30 @@ else
     model.dim = dim;
 end
 
-%%% model.param
-
-VAR0 = 1.0; % default value for the variance parameter
-
+% For known covariance types, the field param is initialized with a vector of
+% nan of the appropriate size.  This serves as a reminder, for the user, of the
+% correct size for a parameter vector---nothing more.
 switch model.covariance_type
     
     case 'stk_materncov_iso'
-        
-        NU0 = 2.0;   % smoothness (regularity) parameter
-        RHO = 0.3;   % range parameter (spatial scale)
-        
-        model.param = log([VAR0; NU0; 1/RHO]);
+        model.param = nan (3, 1);
         
     case {'stk_materncov32_iso', 'stk_materncov52_iso', 'stk_gausscov_iso'}
-        
-        RHO = 0.3;   % range parameter (spatial scale)
-        
-        model.param = log([VAR0; 1/RHO]);
+        model.param = nan (2, 1);
         
     case 'stk_materncov_aniso'
-        
-        NU0 = 2.0;   % smoothness (regularity) parameter
-        RHO = 0.3;   % range parameter (spatial scale)
-        
-        model.param = log([VAR0; NU0; 1/RHO * ones(model.dim,1)]);
+        model.param = nan (2 + model.dim, 1);
         
     case {'stk_materncov32_aniso', ...
             'stk_materncov52_aniso', 'stk_gausscov_aniso'}
-        
-        RHO = 0.3;   % range parameter (spatial scale)
-        
-        model.param = log([VAR0; 1/RHO * ones(model.dim,1)]);
+        model.param = nan (1 + model.dim, 1);
         
     otherwise
-        
-        warning (['Unknown covariance type, model.param ' ...
-            'cannot be initialized.']);  %#ok<WNTAG>
-        
         model.param = [];
         
 end % switch
+
+model.lognoisevariance = - inf;
 
 end % function stk_model_
 

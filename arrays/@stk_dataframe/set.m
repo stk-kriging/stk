@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -43,19 +44,24 @@ switch icol
         else
             n1 = size (x.data, 1);
             n2 = length (value);
-            if ~ iscell (value) && (isequal (size (value), [1 n2]) ...
-                    || isequal (value, [n2 1])),
-                stk_error ('value should be a vector-shaped cell array.');
+            if ~ iscell (value)
+                stk_error (['Input argument ''value'' should be a cell' ...
+                    ' array.'], 'InvalidArgument');
+            elseif isequal (size (value), [n2 1])
+                x.rownames = value;
             else
-                value = value(:);
-                b = cellfun (@isempty, value);
-                value(b) = repmat ({''}, sum (b), 1);
-                if n2 <= n1
-                    x.rownames = [value; repmat({''}, n1 - n2, 1)];
-                else
-                    x.rownames = value;
-                    x.data = [x.data; nan(n2 - n1, size(x.data, 2))];
-                end
+                x.rownames = reshape (value, n2, 1);
+            end
+            
+            b = cellfun (@isempty, x.rownames);
+            nb = sum (b);
+            if nb > 0
+                x.rownames(b) = repmat ({''}, nb, 1);
+            end
+            if n2 < n1
+                x.rownames = [x.rownames; repmat({''}, n1 - n2, 1)];
+            elseif n2 > n1
+                x.data = [x.data; nan(n2 - n1, size(x.data, 2))];
             end
         end
         
@@ -66,19 +72,25 @@ switch icol
         else
             d1 = size (x.data, 2);
             d2 = length (value);
-            if ~ iscell (value) && (isequal (size (value), [1 d2]) ...
-                    || isequal (value, [d2 1])),
-                stk_error ('value should be a vector-shaped cell array.');
+            
+            if ~ iscell (value)
+                stk_error (['Input argument ''value'' should be a cell' ...
+                    ' array.'], 'InvalidArgument');
+            elseif isequal (size (value), [1 d2])
+                x.colnames = value;
             else
-                value = reshape (value, 1, d2);
-                b = cellfun (@isempty, value);
-                value(b) = repmat ({''}, 1, sum (b));
-                if d2 <= d1
-                    x.colnames = [value repmat({''}, 1, d1 - d2)];
-                else
-                    x.colnames = value;
-                    x.data = [x.data nan(size(x.data, 1), d2 - d1)];
-                end
+                x.colnames = reshape (value, 1, d2);
+            end
+            
+            b = cellfun (@isempty, x.colnames);
+            nb = sum (b);
+            if nb > 0
+                x.colnames(b) = repmat ({''}, 1, nb);
+            end
+            if d2 < d1
+                x.colnames = [x.colnames repmat({''}, 1, d1 - d2)];
+            elseif d2 > d1
+                x.data = [x.data nan(size(x.data, 1), d2 - d1)];
             end
         end
         
@@ -119,4 +131,4 @@ switch icol
         
 end
 
-end % function set
+end % function @stk_dataframe.set

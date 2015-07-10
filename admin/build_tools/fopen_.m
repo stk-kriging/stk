@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -31,6 +32,7 @@ function fid = fopen_ (varargin)
 [fid, errmsg] = fopen (varargin{:});
 
 if fid == -1,
+    fprintf ('Error while trying to open %s.\n', varargin{1});
     error (errmsg);
 end
 

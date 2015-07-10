@@ -2,9 +2,9 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2012, 2013 SUPELEC
+%    Copyright (C) 2012-2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,51 +26,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [y, a, b] = stk_rescale (x, box1, box2)
+function [x, a, b] = stk_rescale (x, box1, varargin)
 
-if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
-% read argument x
-x = double (x);
-[n, d] = size (x);
-
-% read box1
-if ~ isempty (box1),
-    stk_assert_box (box1, d);
-end
-
-% read box2
-if ~ isempty (box2),
-    stk_assert_box (box2, d);
-end
-
-% scale to [0; 1] (xx --> zz)
-if ~ isempty (box1),
-    xmin = box1 (1, :);
-    xmax = box1 (2, :);
-    b1 = 1 ./ (xmax - xmin);
-    a1 = - xmin .* b1;
+% Convert box1 to an stk_hrect object
+%   (we know that box1 is not an stk_hrect object, otherwise
+%    we wouldn't have ended up here)
+if isempty (box1)
+    box1 = stk_hrect (size (x, 2));  % Default: [0; 1] ^ DIM
 else
-    b1 = ones (1, d);
-    a1 = zeros (1, d);
+    box1 = stk_hrect (box1);
 end
 
-% scale to box2 (zz --> yy)
-if ~ isempty (box2),
-    zmin = box2(1, :);
-    zmax = box2(2, :);
-    b2 = zmax - zmin;
-    a2 = zmin;
-else
-    b2 = ones (1, d);
-    a2 = zeros (1, d);    
-end
-
-b = b2 .* b1;
-a = a2 + a1 .* b2;
-y = repmat (a, n, 1) + x * diag (b);
+% Call @stk_hrect/stk_rescale
+[x, a, b] = stk_rescale (x, box1, varargin{:});
 
 end % function stk_rescale
 

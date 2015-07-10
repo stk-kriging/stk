@@ -4,9 +4,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -41,7 +42,7 @@ else
     if n == 1
         % varargin{1} is expected to be a cell array in this case
         C = varargin{1};
-        n = length (C);        
+        n = length (C);
     else
         C = varargin;
     end
@@ -54,11 +55,18 @@ else
     
     smax = max (s);
     
+    % Take care of empty dimensions, if any
+    b = (smax > 0);
+    smax = smax (b);
+    s = s(:, b);
+    
+    nrep = ones (size (smax));
     for i = 1:n,
-        nrep = smax ./ s(i, :);        
-        if ~ all ((s(i, :) == 1) | (nrep == 1))
+        nrep(b) = smax ./ s(i, :);
+        nrep_one = (nrep == 1);
+        if ~ all ((s(i, :) == 1) | nrep_one)
             error ('Input arguments cannot be brought to a common size.');
-        else
+        elseif ~ all (nrep_one)
             C{i} = repmat (C{i}, nrep);
         end
     end

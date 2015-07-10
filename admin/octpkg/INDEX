@@ -7,11 +7,11 @@ stk >> STK, a Small Toolbox for Kriging
 ##     versions of STK, no need to adertise them.
 ##
 ##  2) Internal: these functions are mostly intended for internal
-##     use in STK. Although it might be occasionnaly useful for 
+##     use in STK. Although it might be occasionnaly useful for
 ##     advanced users to call them directly, they are not considered
 ##     as part of the public API and therefore not as stable as
-##     public API functions. A necessary (but not sufficint) condition
-##     for a function to be called "internal" is that it should not 
+##     public API functions. A necessary (but not sufficient) condition
+##     for a function to be called "internal" is that it should not
 ##     be used in any of the stk_example_* scripts. Use at your own
 ##     risk.
 ##
@@ -19,7 +19,7 @@ stk >> STK, a Small Toolbox for Kriging
 ##     as a corresponding "generic" function, with such a similar
 ##     behaviour that no documentation needs to be provided. For
 ##     instance, @stk_dataframe/abs is just a shortcut to avoid
-##     writing abs (double (x)) or abs (x.data) when x is an 
+##     writing abs (double (x)) or abs (x.data) when x is an
 ##     stk_dataframe object. No need to advertise such functions in
 ##     the INDEX.
 ##
@@ -40,8 +40,9 @@ Kriging: Core STK functions
 Kriging: Parameter estimation
  stk_param_estim
 #stk_param_getdefaultbounds  [internal]
- stk_param_gls 
+ stk_param_gls
  stk_param_init
+ stk_param_init_lnv
  stk_param_relik
 
 ## The stk_kre_qr class -> not ready to be exposed
@@ -78,10 +79,10 @@ Kriging: Covariance functions
 #stk_sf_matern52     [internal]
 
 ## The use of stk_lm_* objects is currently considered as an experimental
-## feature. It is not advertised in any of the example scripts. Moreover, 
+## feature. It is not advertised in any of the example scripts. Moreover,
 ## it requires to set model.order to NaN, a "cheat code" feature which
-## is very weakly documented (only in stk_example_misc03). stk_lm_* 
-## should become the standard way of of defining the "linear part" of a 
+## is very weakly documented (only in stk_example_misc03). stk_lm_*
+## should become the standard way of of defining the "linear part" of a
 ## model in the next major release of STK.
 #@stk_lm_affine/stk_lm_affine          [experimental]
 #@stk_lm_affine/feval                  [experimental]
@@ -115,9 +116,10 @@ Design of experiments (non-sequential): criterions
  stk_mindist
  stk_phipcrit
 
-Design of experiments (sequential): expected improvement
+Design of experiments (sequential): criterions
  stk_distrib_normal_ei
  stk_distrib_student_ei
+ stk_pmisclass
 
 Examples: kriging basics
  stk_example_kb01
@@ -128,11 +130,13 @@ Examples: kriging basics
  stk_example_kb06
  stk_example_kb07
  stk_example_kb08
+ stk_example_kb09
 
 Examples: design of experiments
  stk_example_doe01
  stk_example_doe02
  stk_example_doe03
+ stk_example_doe04
 
 Examples: miscellaneous
  stk_example_misc01
@@ -141,23 +145,30 @@ Examples: miscellaneous
  stk_example_misc04
 
 #stk_testfun_braninhoo
+#stk_testfun_goldsteinprice
 
 ## Cf. misc/distrib/README
 #stk_distrib_normal_cdf      [internal]
 #stk_distrib_normal_pdf      [internal]
 #stk_distrib_student_cdf     [internal]
 #stk_distrib_student_pdf     [internal]
+#stk_distrib_bivnorm_cdf     [internal]
 
 Miscellaneous: arrays
+ stk_boundingbox
  stk_feval
- stk_isdominated
  stk_length
  stk_normalize
- stk_paretofind
  stk_rescale
  @stk_dataframe/stk_dataframe
  @stk_factorialdesign/stk_factorialdesign
  @stk_factorialdesign/ndgrid
+ @stk_hrect/stk_hrect
+
+Miscellaneous: Pareto optimality
+ stk_dominatedhv
+ stk_isdominated
+ stk_paretofind
 
 #stk_commonsize              [internal]
 #stk_sprintf                 [internal]
@@ -168,67 +179,80 @@ Miscellaneous: arrays
 
 #@cell/stk_sprintf_sizetype  [internal]
 
-## This one is for legacy support of .a data structures
+## Those are for legacy support of .a data structures
 ## (will be completely removed in the 3.x series)
 #@struct/double
+#@struct/stk_boundingbox
+#@struct/stk_length
 
-#@stk_dataframe/stk_length             [overload STK]
-#@stk_dataframe/stk_normalize          [overload STK]
-#@stk_dataframe/stk_rescale            [overload STK]
-#@stk_dataframe/apply                  [internal]
-#@stk_dataframe/stk_sprintf            [internal]
-#@stk_dataframe/stk_sprintf_colnames   [internal]
-#@stk_dataframe/stk_sprintf_info       [internal]
-#@stk_dataframe/stk_sprintf_rownames   [internal]
-#@stk_dataframe/stk_sprintf_sizetype   [internal]
-#@stk_dataframe/abs                    [overload base]
-#@stk_dataframe/and                    [overload base]
-#@stk_dataframe/bsxfun                 [overload base]
-#@stk_dataframe/cat                    [overload base]
-#@stk_dataframe/ctranspose             [overload base]
-#@stk_dataframe/disp                   [overload base]
-#@stk_dataframe/display                [overload base]
-#@stk_dataframe/double                 [overload base]
-#@stk_dataframe/end                    [overload base]
-#@stk_dataframe/eq                     [overload base]
-#@stk_dataframe/fieldnames             [overload base]
-#@stk_dataframe/ge                     [overload base]
-#@stk_dataframe/get                    [overload base]
-#@stk_dataframe/gt                     [overload base]
-#@stk_dataframe/horzcat                [overload base]
-#@stk_dataframe/isempty                [overload base]
-#@stk_dataframe/isequal                [overload base]
-#@stk_dataframe/ldivide                [overload base]
-#@stk_dataframe/le                     [overload base]
-#@stk_dataframe/length                 [overload base]
-#@stk_dataframe/lt                     [overload base]
-#@stk_dataframe/ne                     [overload base]
-#@stk_dataframe/or                     [overload base]
-#@stk_dataframe/plot                   [overload base]
-#@stk_dataframe/subsasgn               [overload base]
-#@stk_dataframe/subsref                [overload base]
-#@stk_dataframe/max                    [overload base]
-#@stk_dataframe/mean                   [overload base]
-#@stk_dataframe/median                 [overload base]
-#@stk_dataframe/min                    [overload base]
-#@stk_dataframe/minus                  [overload base]
-#@stk_dataframe/mode                   [overload base]
-#@stk_dataframe/plus                   [overload base]
-#@stk_dataframe/power                  [overload base]
-#@stk_dataframe/prod                   [overload base]
-#@stk_dataframe/rdivide                [overload base]
-#@stk_dataframe/realpow                [overload base]
-#@stk_dataframe/reshape                [overload base]
-#@stk_dataframe/set                    [overload base]
-#@stk_dataframe/size                   [overload base]
-#@stk_dataframe/quantile               [overload base]
-#@stk_dataframe/std                    [overload base]
-#@stk_dataframe/sum                    [overload base]
-#@stk_dataframe/times                  [overload base]
-#@stk_dataframe/transpose              [overload base]
-#@stk_dataframe/var                    [overload base]
-#@stk_dataframe/vertcat                [overload base]
-#@stk_dataframe/xor                    [overload base]
+#@stk_dataframe/stk_boundingbox           [overload STK]
+#@stk_dataframe/stk_conditioning          [overload STK]
+#@stk_dataframe/stk_generate_samplepaths  [overload STK]
+#@stk_dataframe/stk_length                [overload STK]
+#@stk_dataframe/stk_normalize             [overload STK]
+#@stk_dataframe/stk_rescale               [overload STK]
+#@stk_dataframe/apply                     [internal]
+#@stk_dataframe/stk_sprintf               [internal]
+#@stk_dataframe/stk_sprintf_colnames      [internal]
+#@stk_dataframe/stk_sprintf_info          [internal]
+#@stk_dataframe/stk_sprintf_rownames      [internal]
+#@stk_dataframe/stk_sprintf_sizetype      [internal]
+#@stk_dataframe/abs                       [overload base]
+#@stk_dataframe/and                       [overload base]
+#@stk_dataframe/bsxfun                    [overload base]
+#@stk_dataframe/cat                       [overload base]
+#@stk_dataframe/ctranspose                [overload base]
+#@stk_dataframe/diff                      [overload base]
+#@stk_dataframe/disp                      [overload base]
+#@stk_dataframe/display                   [overload base]
+#@stk_dataframe/double                    [overload base]
+#@stk_dataframe/end                       [overload base]
+#@stk_dataframe/eq                        [overload base]
+#@stk_dataframe/fieldnames                [overload base]
+#@stk_dataframe/ge                        [overload base]
+#@stk_dataframe/get                       [overload base]
+#@stk_dataframe/gt                        [overload base]
+#@stk_dataframe/horzcat                   [overload base]
+#@stk_dataframe/isempty                   [overload base]
+#@stk_dataframe/isequal                   [overload base]
+#@stk_dataframe/ismember                  [overload base]
+#@stk_dataframe/ldivide                   [overload base]
+#@stk_dataframe/le                        [overload base]
+#@stk_dataframe/length                    [overload base]
+#@stk_dataframe/lt                        [overload base]
+#@stk_dataframe/ne                        [overload base]
+#@stk_dataframe/or                        [overload base]
+#@stk_dataframe/plot                      [overload base]
+#@stk_dataframe/subsasgn                  [overload base]
+#@stk_dataframe/subsref                   [overload base]
+#@stk_dataframe/max                       [overload base]
+#@stk_dataframe/mean                      [overload base]
+#@stk_dataframe/median                    [overload base]
+#@stk_dataframe/min                       [overload base]
+#@stk_dataframe/minus                     [overload base]
+#@stk_dataframe/mode                      [overload base]
+#@stk_dataframe/mtimes                    [overload base]
+#@stk_dataframe/plus                      [overload base]
+#@stk_dataframe/power                     [overload base]
+#@stk_dataframe/prod                      [overload base]
+#@stk_dataframe/rdivide                   [overload base]
+#@stk_dataframe/realpow                   [overload base]
+#@stk_dataframe/reshape                   [overload base]
+#@stk_dataframe/set                       [overload base]
+#@stk_dataframe/size                      [overload base]
+#@stk_dataframe/sort                      [overload base]
+#@stk_dataframe/quantile                  [overload base]
+#@stk_dataframe/std                       [overload base]
+#@stk_dataframe/sum                       [overload base]
+#@stk_dataframe/times                     [overload base]
+#@stk_dataframe/transpose                 [overload base]
+#@stk_dataframe/uminus                    [overload base]
+#@stk_dataframe/uplus                     [overload base]
+#@stk_dataframe/var                       [overload base]
+#@stk_dataframe/vertcat                   [overload base]
+#@stk_dataframe/xlim                      [overload base]
+#@stk_dataframe/xor                       [overload base]
+#@stk_dataframe/ylim                      [overload base]
 
 #@stk_factorialdesign/contour               [overload base]
 #@stk_factorialdesign/fieldnames            [overload base]
@@ -240,19 +264,34 @@ Miscellaneous: arrays
 #@stk_factorialdesign/set                   [overload base]
 #@stk_factorialdesign/subsasgn              [overload base]
 #@stk_factorialdesign/surf                  [overload base]
+#@stk_factorialdesign/uminus                [overload base]
+#@stk_factorialdesign/stk_boundingbox       [overload STK]
 #@stk_factorialdesign/stk_normalize         [overload STK]
 #@stk_factorialdesign/stk_rescale           [overload STK]
 #@stk_factorialdesign/stk_sprintf           [internal]
 #@stk_factorialdesign/stk_sprintf_levels    [internal]
- 
+
+#@stk_hrect/axis             [overload base]
+#@stk_hrect/disp             [overload base]
+#@stk_hrect/display          [overload base]
+#@stk_hrect/get              [overload base]
+#@stk_hrect/horzcat          [overload base]
+#@stk_hrect/ismember         [overload base]
+#@stk_hrect/subsasgn         [overload base]
+#@stk_hrect/subsref          [overload base]
+#@stk_hrect/vertcat          [overload base]
+#@stk_hrect/stk_boundingbox  [overload STK]
+#@stk_hrect/stk_normalize    [overload STK]
+#@stk_hrect/stk_rescale      [overload STK]
+
 Miscellaneous: options, plots...
  stk_dist
+ stk_init
  stk_options_get
  stk_options_set
  stk_plot1d
 #stk_plot2d           [deprecated]
 #stk_plot_shadedci    [internal]
- stk_select_optimizer
  stk_version
 
 #stk_gpquadform  [experimental]
@@ -260,20 +299,23 @@ Miscellaneous: options, plots...
 ## Replacement for some base functions related to figures. Mostly for use
 ## in STK's examples, to keep consistent graphical options accross all
 ## examples. No need to let these appear in the INDEX.
-#stk_axes       [internal]
-#stk_figure     [internal]
-#stk_labels     [internal]
-#stk_subplot    [internal]
-#stk_title      [internal]
-#stk_xlabel     [internal]
-#stk_ylabel     [internal]
+#stk_axes          [internal]
+#stk_figure        [internal]
+#stk_get_axis_arg  [internal]
+#stk_labels        [internal]
+#stk_subplot       [internal]
+#stk_title         [internal]
+#stk_xlabel        [internal]
+#stk_ylabel        [internal]
+#stk_zlabel        [internal]
 
-## error/warning 
+## error/warning
 #stk_error [internal, not for public use]
 ##stk_warning does not exist yet, but it should (?)
 
 ## misc/text
 #stk_disp_examplewelcome
+#stk_disp_progress
 #stk_sprintf_colvect
 #stk_sprintf_colvect_fixedpoint
 #stk_sprintf_colvect_scientific
@@ -284,8 +326,6 @@ Miscellaneous: options, plots...
 #stk_isequal_tolabs
 #stk_isequal_tolrel
 #stk_is_lhs
-#stk_runtests
-#stk_test
 #stk_test_dfbinaryop
 
 ## (embryonic) parallelization engine
@@ -301,4 +341,3 @@ Miscellaneous: options, plots...
 #stk_parallel_feval                                      [experimental]
 #stk_parallel_start                                      [experimental]
 #stk_parallel_stop                                       [experimental]
-

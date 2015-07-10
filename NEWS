@@ -1,3 +1,208 @@
+Changes in version 2.4.0
+========================
+
+* Miscellaneous
+
+   o stk_pmisclass.m: New function to compute either the current probability of
+     misclassification or the expectation of the future probability of
+     misclassification, with respect to a given threshold.
+
+   o stk_dominatedhv.m: New function to compute dominated hypervolumes, which
+     relies internally on the "Walking Fish Group" (WFG 1.10) algorithm.
+
+* Examples
+
+   o stk_example_doe04.m: Example script that demonstrates the use of
+     stk_pmisclass ().
+
+
+Changes in version 2.3.2
+========================
+
+* Bug fixes
+
+   o stk_param_estim.m: Fix a bug related to parameter objects. More precisely,
+     use (:) indexing systematically to access the vector of numerical
+     parameters corresponding to a given parameter object.
+
+   o @stk_kreq_qr/get.m: Fix a call to dot () to make it work when there is only
+     one observation.
+
+   o Add missing field "Depends" to the DESCRIPTION file in the Octave package.
+
+* Minor changes
+
+   o stk_param_getdefaultbounds.m: Return empty lower and upper bounds for
+     parameter classes that do not implement the stk_param_getdefaultbounds
+     (instead of calling error).
+
+   o Add optional field "Autoload" to the DESCRIPTION file in the Octave package.
+
+
+Changes in version 2.3.1
+========================
+
+* Bug fixes
+
+   o stk_optim_hasfmincon.m: Detect fmincon by trying to use it, instead of
+     relying on the result of the exist function (ticket #30 closed).
+
+   o stk_param_estim.m: Make sure that the bounds that we use for the lnv
+     parameter contain the starting point lnv0 when it is provided.
+
+   o @stk_dataframe/set.m: Fix stk_error calls (missing mnemonic).
+
+   o stk_distrib_bivnorm_cdf.m: Fix a bug in the case of mixtures of
+     singular and non-singular cases.
+
+   o @stk_dataframe/subsasgn.m: Preserve column names when deleting rows, even
+     if the resulting array is empty.
+
+* Minor changes
+
+   o stk_init.m: Clear persistent variables. As a consequence, stk_init can now
+     be used to restart STK completely.
+
+   o stk_commonsize.m: Accept empty dimensions, under the condition that all
+     input arguments have the same empty dimensions (in which case the result is
+     empty).
+
+   o stk_commonsize.m: is now faster when some arguments already have the proper
+     size (unnecessary calls to repmat are avoided).
+
+   o stk_distrib_normal_cdf.m, stk_distrib_bivnorm_cdf.m: are now slightly
+     faster (unnecessary calls to stk_commonsize are avoided).
+
+
+Changes in version 2.3.0
+========================
+
+* Model structures
+
+   o lognoisevariance is now considered a mandatory field. For backward
+     compatibility, a missing or empty lognoisevariance field is interpreted as
+     -inf. A nan value in the lognoisevariance field is now interpreted as
+     meaning that the variance of the noise must be estimated.
+
+   o model.param is set to nan by stk_model. This special value indicates that
+     the parameters must be estimated from the data before any prediction can
+     be done.
+
+   o Improved documentation for stk_model.
+
+* Parameter estimation
+
+   o stk_param_init defaults to using the input value of model.lognoisevariance
+     if it is not NaN, and estimating the variance if it is NaN. The meaning of
+     the fifth argument, now called DO_ESTIM_LNV, has thus slightly changed: it
+     is used to force or prevent the estimation of the variance of the noise,
+     regardless of the value of model.lognoisevariance.
+
+   o stk_param_init also supports the heteroscedastic noisy case, but only when
+     the variance of the noise is assumed to be known.
+
+   o stk_param_init_lnv is a new function that provides a rough estimate of the
+     variance of the noise (in the spirit of stk_param_init).
+
+   o stk_param_estim estimates the variance of the noise if either
+       a) param0lnv is provided and is not empty (as in STK <= 2.2.0), or
+       b) model.lognoisevariance is NaN (new behaviour).
+     If param0lnv is not provided, a starting point is obtained using the new
+     stk_param_init_lnv function. In all cases (whether lnv is estimated or not)
+     a meaningful value is returned for lnv (equal to model.nognoisevariance
+     when lnv is not estimated).
+
+   o stk_param_estim can provide a value for param0 when it is missing from the
+     list of input arguments.
+
+   o stk_param_relik: Compute G = W' * K * W in such a way that the result is
+     always (?) symmetric.
+
+* Prediction
+
+   o stk_predict computes lambda_mu and RS only when necessary,
+     depending on the number of output arguments.
+
+* Covariance functions
+
+   o stk_noisecov now has a 'pairwise' argument, like the others.
+
+* Sampling
+
+   o stk_sampling_randunif accepts empty dim argument when box is provided
+
+* Simulation of Gaussian process sample paths
+
+   o stk_generate_samplepaths.m: Do not add observation noise to the generated
+     sample paths. This is consistent with stk_predict, which returns posterior
+     variances for the unknown function, not for future noisy observations.
+
+   o stk_conditioning.m: Simulate sample paths conditioned on noisy observations
+     when the additional NOISE_SIM argument is provided.
+
+   o stk_generate_samplepaths.m: Fix conditioning on noisy observations, which
+     was not implemented properly until now.
+
+   o stk_generate_samplepaths.m: The output is an stk_dataframe object if either
+     MODEL.response_name exists and is a non-empty string, or one of the input
+     arguments (XI, ZI, XT) is an stk_dataframe object.
+
+   o stk_conditioning.m: The output is an stk_dataframe object if either LAMBDA
+     or ZSIM is an stk_dataframe object.
+
+* Objects representing sets
+
+   o stk_hrect: new class to describe hyper-rectangle objects.
+
+   o stk_boundingbox.m: constructs the bounding box for a set of points.
+
+* Examples
+
+   o stk_example_kb04 demonstrates how it is possible to estimate the variance
+     of the noise without providing a initial guess for it.
+
+   o stk_example_kb09.m demonstrates how to simulate conditional sample paths in
+     the case of noisy observations, both in the homoscedastic and in the
+     heteroscedastic cases.
+
+* Miscellaneous
+
+   o stk_distrib_bivnorm_cdf computes bivariate normal probabilities.
+
+   o stk_disp_progress.m: New function that displays a textual progress
+     indicator.
+
+   o stk_feval handles cell-arrays of functions (ticket #19 closed),
+     multivariate outputs (ticket #20 closed), and uses vectorized calls by
+     default (unless a progress indicator is displayed).
+
+   o sort, mtimes, uplus and uminus are now overloaded for stk_dataframe objects
+
+   o min, max are now able to return a second output argument (index of
+     mininizer or maximizer) for stk_dataframe arguments.
+
+   o Now the output of stk_dataframe is always an stk_dataframe object.
+     Previously, this wasn't true if the first input argument was, e.g., an
+     stk_factorialdesign object.
+
+   o stk_distrib_normal_ei, stk_distrib_student_ei: bugfix (the
+     optional input argument "minimize" was not taken into account).
+
+   o stk_distrib_normal_cdf.m: Fix the zero-variance case.
+
+
+Changes in version 2.2.1
+========================
+
+* Octave 4.0 compliance
+
+   o Fix unit tests   
+
+* Octave package
+
+   o Do not ship stk_test and stk_runtests with the Octave package
+
+
 Changes in version 2.2.0
 ========================
 

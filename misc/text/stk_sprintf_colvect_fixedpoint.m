@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -105,7 +105,7 @@ end
 
 end % function stk_sprintf_colvect_fixedpoint
 
-%!shared x s
+%!shared x, s
 %! x = [1.2; 3.48];
 %!test s = stk_sprintf_colvect_fixedpoint(x, 1);
 %!assert (isequal(s, ['1'; '3']))
@@ -118,7 +118,7 @@ end % function stk_sprintf_colvect_fixedpoint
 %!test s = stk_sprintf_colvect_fixedpoint(x, 5);
 %!assert (isequal(s, ['1.20'; '3.48']))
 
-%!shared x s
+%!shared x, s
 %! x = [1.2; -3.48];
 %!test s = stk_sprintf_colvect_fixedpoint(x, 1);
 %!assert (isequal(s, ['#'; '#']))
@@ -133,7 +133,7 @@ end % function stk_sprintf_colvect_fixedpoint
 %!test s = stk_sprintf_colvect_fixedpoint(x, 6);
 %!assert (isequal(s, [' 1.20'; '-3.48']))
 
-%!shared x s
+%!shared x, s
 %! x = [0.2; 0.48];
 %!test s = stk_sprintf_colvect_fixedpoint(x, 1);
 %!assert (isequal(s, ['0'; '0']))

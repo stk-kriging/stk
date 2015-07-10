@@ -29,8 +29,8 @@
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2011-2013 SUPELEC
 %
-%    Authors:  Julien Bect        <julien.bect@supelec.fr>
-%              Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
 %              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
@@ -80,7 +80,7 @@ end
 end % end function stk_param_gls
 
 
-%!shared xi zi model beta sigma2
+%!shared xi, zi, model, beta, sigma2
 %! xi = (1:10)';  zi = sin (xi);
 %! model = stk_model ('stk_materncov52_iso');
 %! model.param = [0.0 0.0];

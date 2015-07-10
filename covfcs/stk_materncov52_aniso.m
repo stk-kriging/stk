@@ -29,11 +29,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2014 IRT SystemX
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:  Julien Bect       <julien.bect@supelec.fr>
-%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 %              Paul Feliot       <paul.feliot@irt-systemx.fr>
 
 % Copying Permission Statement
@@ -75,9 +75,13 @@ dim = size (x, 2);
 if (size (y, 2) ~= dim),
     stk_error ('xi and yi have incompatible sizes.', 'InvalidArgument');
 end
+
+% check param
 nb_params = dim + 1;
 if (numel (param) ~= nb_params)
     stk_error ('xi and param have incompatible sizes.', 'InvalidArgument');
+else
+    param = reshape (param, 1, nb_params);  % row vector
 end
 
 % extract parameters from the "param" vector
@@ -89,15 +93,14 @@ if ~ (Sigma2 > 0) || ~ all (invRho >= 0),
     error ('Incorrect parameter value.');
 end
 
-invRho = diag (invRho);
-
 % check if all input arguments are the same as before
 % (or if this is the first call to the function)
 if isempty (x0) || isempty (y0) || isempty (param0) ...
         || ~ isequal ({x, y, param}, {x0, y0, param0}) ...
         || ~ isequal (pairwise, pairwise0)
     % compute the distance matrix
-    xs = x * invRho;  ys = y * invRho;
+    xs = bsxfun (@times, x, invRho);
+    ys = bsxfun (@times, y, invRho);
     D = stk_dist (xs, ys, pairwise);
     % save arguments for the next call
     x0 = x;  y0 = y;  param0 = param;  pairwise0 = pairwise;
@@ -118,12 +121,10 @@ elseif (diff >= 2) && (diff <= nb_params),
         Kx_cache  = 1 ./ (D + eps) .* (Sigma2 * stk_sf_matern52 (D, 1));
         compute_Kx_cache = false;
     end
-    nx = size (x, 1);  ny = size (y, 1);
     if pairwise,
         k = (xs(:, ind) - ys(:, ind)).^2 .* Kx_cache;
     else
-        k = (repmat (xs(:, ind), 1, ny) ...
-            - repmat (ys(:, ind)', nx, 1)) .^ 2 .* Kx_cache;
+        k = (bsxfun (@minus, xs(:, ind), ys(:, ind)')) .^ 2 .* Kx_cache;
     end
 else
     stk_error ('Incorrect value for the ''diff'' parameter.', ...
@@ -136,12 +137,11 @@ end % function stk_materncov52_aniso
 %%
 % 1D, 5x5
 
-%!shared param x y
-%!  dim = 1;
-%!  model = stk_model ('stk_materncov52_aniso', dim);
-%!  param = model.param;
-%!  x = stk_sampling_randunif (5, dim);
-%!  y = stk_sampling_randunif (5, dim);
+%!shared param, x, y
+%! dim = 1;
+%! param = log ([1.0; 2.5]);
+%! x = stk_sampling_randunif (5, dim);
+%! y = stk_sampling_randunif (5, dim);
 
 %!error stk_materncov52_aniso ();
 %!error stk_materncov52_aniso (param);
@@ -163,25 +163,24 @@ end % function stk_materncov52_aniso
 %%
 % 3D, 4x10
 
-%!shared dim param x y nx ny
-%!  dim = 3;
-%!  model = stk_model ('stk_materncov52_aniso', dim);
-%!  param = model.param;
-%!  nx = 4; ny = 10;
-%!  x = stk_sampling_randunif (nx,  dim);
-%!  y = stk_sampling_randunif (ny, dim);
+%!shared dim, param, x, y, nx, ny
+%! dim = 3;
+%! param = log ([1.0; 2.5; 2.4; 2.6]);
+%! nx = 4; ny = 10;
+%! x = stk_sampling_randunif (nx,  dim);
+%! y = stk_sampling_randunif (ny, dim);
 
 %!test
-%!  K1 = stk_materncov52_aniso (param, x, y);
-%!  K2 = stk_materncov52_aniso (param, x, y, -1);
-%!  assert (isequal (size (K1), [nx ny]));
-%!  assert (stk_isequal_tolabs (K1, K2));
+%! K1 = stk_materncov52_aniso (param, x, y);
+%! K2 = stk_materncov52_aniso (param, x, y, -1);
+%! assert (isequal (size (K1), [nx ny]));
+%! assert (stk_isequal_tolabs (K1, K2));
 
 %!test
-%!  for i = 1:(dim + 1),
-%!    dK = stk_materncov52_aniso (param, x, y,  i);
-%!    assert (isequal (size (dK), [nx ny]));
-%!  end
+%! for i = 1:(dim + 1),
+%!     dK = stk_materncov52_aniso (param, x, y,  i);
+%!     assert (isequal (size (dK), [nx ny]));
+%! end
 
 %!test
 %! n = 7;

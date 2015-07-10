@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,28 +27,30 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function z = max(x, y, dim)
+function varargout = max (x, y, dim)
 
 if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if (nargin < 2) || isempty(y), %--- action on rows or columns ---------------------------
-   
-    if nargin < 3, dim = 1; end
-    
-    z = apply(x, dim, @max, []);    
-        
-else %--- apply 'max' elementwise -------------------------------------------------------
+varargout = cell (1, max (1, nargout));
 
+if (nargin < 2) || (isempty (y)),  % Act on rows or columns
+    
+    if nargin < 3,  dim = 1;  end
+    
+    [varargout{:}] = apply (x, dim, @max, []);
+    
+else  % Apply 'max' elementwise
+    
     if nargin > 2,
         errmsg = 'Too many input arguments (elementwise max assumed)';
         stk_error(errmsg, 'TooManyInputArgs');
     else
-        z = bsxfun(@max, x, y);
+        [varargout{:}] = bsxfun (@max, x, y);
     end
     
-end %--- that's all, folks --------------------------------------------------------------
+end % if
 
 end % function max
 
@@ -56,10 +59,15 @@ end % function max
 %!test  stk_test_dfbinaryop ('max', rand(7, 2), pi);
 %!error stk_test_dfbinaryop ('max', rand(7, 2), rand(7, 3));
 
-%!shared x1 df1
+%!shared x1, df1
 %! x1 = rand(9, 3);
 %! df1 = stk_dataframe(x1, {'a', 'b', 'c'});
 %!assert (isequal (max(df1),        max(x1)))
 %!assert (isequal (max(df1, [], 1), max(x1)))
 %!assert (isequal (max(df1, [], 2), max(x1, [], 2)))
 %!error (max(df1, df1, 2))
+
+%!test
+%! x = stk_dataframe ([1; 3; 2]);
+%! [M, k] = max (x);
+%! assert ((M == 3) && (k == 2));

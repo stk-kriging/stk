@@ -12,10 +12,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -43,38 +44,36 @@ if nargin > 3,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
+% Backward compatiblity: accept model structures with missing lognoisevariance
+if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
+    model.lognoisevariance = - inf;
+end
+
 % Ensure that param is a column vector (note: in the case where model.param is
 % an object, this is actually a call to subsasgn() in disguise).
 param = model.param(:);
 
-PARAMPRIOR = isfield(model, 'prior');
-NOISYOBS   = isfield(model, 'lognoisevariance');
-NOISEPRIOR = isfield(model, 'noiseprior');
+PARAMPRIOR = isfield (model, 'prior');
+NOISEPRIOR = isfield (model, 'noiseprior');
 
-if ~NOISYOBS,
-    if NOISEPRIOR,
-        error(['Having a prior on the noise variance when there is' ...
-            'no observation noise doesn''t make sense...']);
-    else
-        % log(eps) is harmless
-        model.lognoisevariance = log(eps);
-    end
-end
+n = size (xi, 1);
 
-n = size(xi, 1);
 
-%% compute rl
+%% Compute the (opposite of) the restricted log-likelihood
 
 [K, P] = stk_make_matcov (model, xi);
 q = size (P, 2);
 
 if q == 0  % Special case: simple kriging
     G = K;
-
+    
 else  % General case
     [Q, R_ignored] = qr (P);  %#ok<NASGU> %the second argument *must* be here
     W = Q(:, (q+1):n);
-    G = W' * (K * W);
+    
+    % Compute G = W' * K * W
+    M = (stk_cholcov (K)) * W;
+    G = (M') * M;
     
     % Check if G is (at least close to) symmetric
     Delta = G - G';  s = sqrt (diag (G));
@@ -101,23 +100,23 @@ else
 end
 attache = sum (u .^ 2);
 
+rl = 0.5 * ((n - q) * log(2 * pi) + ldetWKW + attache);
+
+
+%% Add priors
+
 if PARAMPRIOR
     delta_p = param - model.prior.mean;
-    prior = delta_p' * model.prior.invcov * delta_p;
-else
-    prior = 0;
+    rl = rl + 0.5 * delta_p' * model.prior.invcov * delta_p;
 end
 
 if NOISEPRIOR
     delta_lnv = model.lognoisevariance - model.noiseprior.mean;
-    noiseprior = delta_lnv^2 / model.noiseprior.var;
-else
-    noiseprior = 0;
+    rl = rl + 0.5 * (delta_lnv ^ 2) / model.noiseprior.var;
 end
 
-rl = 1/2 * ((n-q) * log(2*pi) + ldetWKW + attache + prior + noiseprior);
 
-%% compute gradient
+%% Compute gradient
 
 if nargout >= 2
     
@@ -145,17 +144,15 @@ if nargout >= 2
     end
     
     if nargout >= 3,
-        if NOISYOBS,
+        if model.lognoisevariance == -inf
+            drl_lnv = nan;
+        else
             diff = 1;
             V = stk_noisecov (n, model.lognoisevariance, diff);
             drl_lnv = 1/2 * (sum (sum (H .* V)) - z' * V * z);
             if NOISEPRIOR
                 drl_lnv = drl_lnv + delta_lnv / model.noiseprior.var;
             end
-        else
-            % returns NaN for the derivative with respect to the noise
-            % variance in the case of a model without observation noise
-            drl_lnv = NaN;
         end
     end
     
@@ -167,7 +164,8 @@ end % function stk_param_relik
 
 %!shared f, xi, zi, NI, model, J, dJ1, dJ2
 %!
-%! f = @(x)(- (0.8 * x(1) + sin (5 * x(2) + 1) + 0.1 * sin (10 * x(3))));
+%! f = @(x)(- (0.8 * x(:, 1) + sin (5 * x(:, 2) + 1) ...
+%!          + 0.1 * sin (10 * x(:, 3))));
 %! DIM = 3;  NI = 20;  box = repmat ([-1.0; 1.0], 1, DIM);
 %! xi = stk_sampling_halton_rr2 (NI, DIM, box);
 %! zi = stk_feval (f, xi);

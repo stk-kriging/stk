@@ -1,20 +1,21 @@
 % STK_OPTIM_FMINCON constructs an object of class 'stk_optim_fmincon'.
 %
-% CALL: X = stk_optim_fmincon()
+% CALL: X = stk_optim_fmincon ()
 %
 %   constructs an object of class 'stk_optim_fmincon' with a default set of
-%   options.  
+%   options.
 %
-% CALL: X = stk_optim_fmincon(opt)
+% CALL: X = stk_optim_fmincon (opt)
 %
 %   constructs an object of class 'stk_optim_fmincon' with a user-defined
-%   set of options, defined by the structure opt.  
+%   set of options, defined by the structure opt.
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
-%    Authors:  Julien Bect        <julien.bect@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
 %              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
@@ -37,29 +38,72 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_optim_fmincon (opt)
+function x = stk_optim_fmincon (options)
 
 if nargin > 1
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if exist ('fmincon') ~= 2
-    errmsg = 'Function fmincon does not exist or not added to path';
-    stk_error (errmsg, 'fmincon_does_not_exist');
+persistent has_fmincon
+if isempty (has_fmincon)
+    has_fmincon = check_has_fmincon ();
+    mlock ();
+end
+
+if ~ has_fmincon
+    errmsg = 'fmincon () doesn''t seem to be available';
+    stk_error (errmsg, 'fminconNotAvailable');
 end
 
 if nargin == 0,
     
-    opt = optimset (            ...
-        'Display',      'iter', ...
-        'Algorithm',    'interior-point', ...
+    options = optimset (            ...
+        'Display',      'off',  ...
         'GradObj',      'on',   ...
-        'MaxFunEvals',  1500,   ...
-        'TolFun',       1e-10,  ...
-        'UseParallel', 'always');   
+        'MaxFunEvals',  500,    ...
+        'TolFun',       1e-5,   ...
+        'TolX',         1e-6    );
+    
+    try
+        % try to use the interior-point algorithm, which has been
+        % found to provide satisfactory results in many cases
+        options = optimset (options, 'algorithm', 'interior-point');
+    catch
+        % the 'algorithm' option does not exist in some old versions of
+        % matlab (e.g., version 3.1.1 provided with r2007a)...
+        err = lasterror ();
+        if ~ strcmpi (err.identifier, 'matlab:optimset:invalidparamname')
+            rethrow (err);
+        end
+    end
+    
+    % TODO: see if the 'UseParallel' option can be useful
+    
 end
 
-x = struct ('options', opt);
+x = struct ('options', options);
 x = class (x, 'stk_optim_fmincon');
 
 end % function stk_optim_fmincon
+
+
+function has_fmincon = check_has_fmincon ()
+
+try
+    opt = optimset ('Display', 'off', 'GradObj', 'on');
+    z = fmincon (@objfun, 0, [], [], [], [], -1, 1, [], opt);
+    assert (abs (z - 0.3) < 1e-2);
+    has_fmincon = true;
+catch %#ok<CTCH>
+    has_fmincon = false;
+end
+
+end % function check_has_fmincon
+
+
+function [f, df] = objfun (x)
+
+f = (x - 0.3) .^ 2;
+df = 2 * (x - 0.3);
+
+end % function objfun

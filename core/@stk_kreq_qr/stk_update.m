@@ -6,9 +6,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -62,8 +63,9 @@ kreq.n = kreq.n + size (Kjj, 1);
 end % function stk_update
 
 
-%!shared model x y
+%!shared model, x, y
 %! model = stk_model ('stk_materncov32_iso', 1);
+%! model.param = log ([1.0; 2.8]);
 %! x = [1.2; 0.3; -1.9];
 %! y = 0.0;
 

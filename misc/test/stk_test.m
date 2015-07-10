@@ -6,8 +6,8 @@
 %
 %    Copyright (C) 2012, 2013 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
+%               Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
 %
 %    This file has been adapted from test.m in Octave 3.6.2,  distributed
 %    under the GNU General Public Licence version 3 (GPLv3). The original
@@ -589,7 +589,7 @@ if fid == -1,
     error(sprintf('File %s cannot be opened.', nm));
 end
 
-body = [];
+body = '';
 if (fid >= 0)
     while (~ feof (fid))
         ln = fgetl (fid);
@@ -606,21 +606,6 @@ end
 end % function x__extract_test_code
 
 
-%% Tests of comments
-
-%!% This is a lonely comment
-
-%!# This is a lonely Octave-style comment (why not)
-
-%!% This is a comment block. It can contain anything!
-%!
-%! It is the '%' as the block type that makes it a comment
-%! and it  stays as a comment even through continuation lines
-%! which means that it works well with commenting out whole tests
-%!
-%! zobi la mouche
-%!
-
 %% Tests of 'assert' blocks
 
 %!assert(isempty([]))      % support for test assert shorthand
@@ -628,16 +613,16 @@ end % function x__extract_test_code
 
 %% Tests of shared variables
 
-%!% Default: variables are not shared between blocks.
+% Default: variables are not shared between blocks.
 %!test a=1;
 %!test assert(~exist('a'));
 
-%!% 'shared' blocks allow to declare a variable shared by several blocks
+% 'shared' blocks allow to declare a variable shared by several blocks
 %!shared a              % create a shared variable
 %!test a = 3;           % assign to a shared variable
 %!test assert(a == 3);  % variable should equal 3 in this second 'test' block
 
-%!% each 'shared' blocks deletes previously declared shared variables
+% Each 'shared' blocks deletes previously declared shared variables
 %!shared b, c                % replace shared variables {'a'} --> {'b', 'c'}
 %!test assert(~exist('a'));  % a no longer exists
 %!test assert(isempty(b));   % variables start off empty
@@ -660,7 +645,7 @@ end % function x__extract_test_code
 %!error test(1, 2, 3, 4)       % too many input args
 %!error <garbage> garbage      % usage on nonexistent function should be
 
-%!% when used without a pattern <>, 'error' block succeed on any error
+% When used without a pattern <>, 'error' block succeed on any error
 %!error stt_test('test', 'bogus');   % undefined function error
 %!error stk_test('test', 'bogus');   % error raised by stk_test itself
 
@@ -668,21 +653,21 @@ end % function x__extract_test_code
 % !warning <worry about>   % we expect a warning msg including "worry about"
 % ! warning('Don''t worry about this warning');
 
-%!% 'error' tests succeed on syntax errors if no pattern is provided (this
-%!% is not the behaviour of Octave's test() function)
+% 'error' tests succeed on syntax errors if no pattern is provided
+% (this is not the behaviour of Octave's test() function)
 %!error }{
 
 %% Tests the behaviour of stk_test() itself
 
-%!% The number of input arguments should be between one and three
+% The number of input arguments should be between one and three
 %!error stk_test();
 %!error stk_test('disp', 'verbose', [], 'extra arg !!!');
 
-%!% The first argument of stk_test() must be a non-empty string
+% The first argument of stk_test() must be a non-empty string
 %!error <non-empty string> stk_test([])
 %!error <non-empty string> stk_test(0.0)
 
-%!% The second argument of stk_test() must be a either empty, or one of the
+% The second argument of stk_test() must be a either empty, or one of the
 %%! following strings: normal, quiet, verbose
 %!error <empty or a string> stk_test('stk_mindist', 0.0)
 %!error <unknown flag> stk_test('stk_mindist', 'dudule')

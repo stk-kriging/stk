@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -48,7 +48,7 @@ end % if
 end % function cat
 
 
-%!shared u v x y
+%!shared u, v, x, y
 %! u = rand(3, 2);
 %! v = rand(3, 2);
 %! x = stk_dataframe(u);

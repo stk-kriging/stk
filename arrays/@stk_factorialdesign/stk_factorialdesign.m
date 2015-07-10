@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -106,7 +106,7 @@ end % function stk_factorialdesign
 
 %--- disp & display -----------------------------------------------------------
 
-%!shared x fmt
+%!shared x, fmt
 %! try % doesn't work on old Octave versions, nevermind
 %!   fmt = get (0, 'Format');
 %! catch
@@ -139,7 +139,7 @@ end % function stk_factorialdesign
 
 % Note: the output is a plain stk_dataframe
 
-%!shared x y
+%!shared x, y
 %! x = stk_sampling_regulargrid (3^2, 2);
 %! y = x;
 
@@ -167,7 +167,7 @@ end % function stk_factorialdesign
 
 %--- apply & related functions ------------------------------------------------
 
-%!shared x t
+%!shared x, t
 %! x = stk_sampling_regulargrid (3^2, 2);
 %! t = double (x);
 
@@ -191,7 +191,7 @@ end % function stk_factorialdesign
 
 %--- bsxfun & related functions -----------------------------------------------
 
-%!shared x1 x2 x3 u1 u2 u3
+%!shared x1, x2, x3, u1, u2, u3
 %! x1 = stk_sampling_regulargrid ([4 3], 2);  u1 = double (x1);
 %! x2 = stk_sampling_regulargrid ([3 4], 2);  u2 = double (x2);
 %! x3 = x1 + 1;                               u3 = u1 + 1;

@@ -1,21 +1,22 @@
 % STK_OPTIM_FMINSEARCH constructs an object of class 'stk_optim_fminsearch'.
 %
 % CALL: X = stk_optim_fminsearch()
-% 
+%
 %   constructs an object of class 'stk_optim_fminsearch' with a default set of
-%   options.  
+%   options.
 %
 % CALL: X = stk_optim_fminsearch(opt)
 %
 %   constructs an object of class 'stk_optim_fminsearch' with a user-defined
-%   set of options, defined by the structure opt.  
+%   set of options, defined by the structure opt.
 
 %
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
-%    Authors:  Julien Bect        <julien.bect@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
 %              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
@@ -50,12 +51,15 @@ if exist ('fminsearch') ~= 2
 end
 
 if nargin == 0
-    opt = optimset ( ...
-        'Display', 'iter', 'GradObj', 'on', ...
-        'MaxFunEvals', 1500, 'TolFun', 1e-10);
+    
+    opt = optimset (            ...
+        'Display',      'off',  ...
+        'MaxFunEvals',  500,    ...
+        'TolFun',       1e-5,   ...
+        'TolX',         1e-6    );
 end
 
 x = struct ('options', opt);
 x = class (x, 'stk_optim_fminsearch');
-    
+
 end % function stk_optim_fminsearch

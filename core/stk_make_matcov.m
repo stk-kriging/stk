@@ -18,15 +18,16 @@
 % BE CAREFUL:
 %
 %    stk_make_matcov (MODEL, X0) and stk_makematcov (MODEL, X0, X0) are NOT
-%    equivalent if model.lognoisevariance exists (in the first case, the
+%    equivalent if model.lognoisevariance > - inf  (in the first case, the
 %    noise variance is added on the diagonal of the covariance matrix).
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -50,6 +51,11 @@
 
 function [K, P] = stk_make_matcov (model, x0, x1, pairwise)
 
+% Backward compatiblity: accept model structures with missing lognoisevariance
+if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
+    model.lognoisevariance = - inf;
+end
+
 %=== process input arguments
 
 if nargin > 4,
@@ -72,12 +78,8 @@ pairwise = (nargin > 3) && pairwise;
 
 K = feval (model.covariance_type, model.param, x0, x1, -1, pairwise);
 
-if make_matcov_auto && isfield (model, 'lognoisevariance'),
-    if ~ pairwise,
-        K = K + stk_noisecov (size (K,1), model.lognoisevariance);
-    else
-        stk_error('Not implemented yet.', 'NotImplementedYet');
-    end
+if make_matcov_auto && (any (model.lognoisevariance ~= -inf))
+    K = K + stk_noisecov (size (K,1), model.lognoisevariance, -1, pairwise);
 end
 
 %=== compute the regression functions
@@ -91,7 +93,8 @@ end % function stk_make_matcov
 
 %!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
 %! n0 = 20;  n1 = 10;  d = 4;
-%! model = stk_model ('stk_materncov_aniso', d);  model.order = 1;
+%! model = stk_model ('stk_materncov52_aniso', d);  model.order = 1;
+%! model.param = log ([1.0; 2.1; 2.2; 2.3; 2.4]);
 %! model2 = model;  model2.lognoisevariance = log(0.01);
 %! x0 = stk_sampling_randunif (n0, d);
 %! x1 = stk_sampling_randunif (n1, d);
@@ -111,14 +114,14 @@ end % function stk_make_matcov
 %!assert (isequal (size (Pb), [n0 d + 1]));
 %!assert (isequal (size (Pc), [n0 d + 1]));
 
-%!% In the noiseless case, (1) and (2) should give the same results
+% In the noiseless case, (1) and (2) should give the same results
 %!assert (isequal (Kb, Ka));
 
-%!% In the noisy case, however...
+% In the noisy case, however...
 %!test  [Ka, Pa] = stk_make_matcov (model2, x0);           % (1')
 %!test  [Kb, Pb] = stk_make_matcov (model2, x0, x0);       % (2')
 %!error assert (isequal (Kb, Ka));
 
-%!% The second output depends on x0 only => should be the same for (1)--(3)
+% The second output depends on x0 only => should be the same for (1)--(3)
 %!assert (isequal (Pa, Pb));
 %!assert (isequal (Pa, Pc));

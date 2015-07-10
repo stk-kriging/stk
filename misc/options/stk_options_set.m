@@ -2,10 +2,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2013 SUPELEC
 %
-%    Authors:  Julien Bect        <julien.bect@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
 %              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
@@ -49,7 +50,16 @@ switch nargin
         end
         
     case 2,
-        options.(varargin{1}) = varargin{2};
+        if (strcmp (varargin{1}, 'stk_param_estim')) ...
+                && (strcmp (varargin{2}, 'optim_display_level'))
+            % TODO: Remove this warning in STK 3.x
+            warning (sprintf (['Options stk_param_estim.optim_display_level' ...
+                ' has been removed.\n\nDisplay options for optimization ' ...
+                'algorithms can be set through the properties of the ' ...
+                'algorithm objects instead.\n']));
+        else
+            options.(varargin{1}) = varargin{2};
+        end
         
     case 3,
         options.(varargin{1}).(varargin{2}) = varargin{3};
@@ -64,8 +74,8 @@ opts = options;
 end % function stk_options_set
 
 %#ok<*CTCH>
- 
- 
+
+
 function opts = init_options ()
 
 opts = struct ();
@@ -79,11 +89,10 @@ opts.stk_dataframe.disp_spstr = '    ';
 opts.stk_param_getdefaultbounds.tolvar = 5.0;
 opts.stk_param_getdefaultbounds.tolscale = 5.0;
 
-opts.stk_param_estim.optim_display_level = 'off';
-
 opts.stk_figure.properties = {'InvertHardcopy', 'off', 'Color', [1 1 1]};
 opts.stk_xlabel.properties = {'FontSize', 10, 'Color', [0.2 0 1]};
 opts.stk_ylabel.properties = opts.stk_xlabel.properties;
+opts.stk_zlabel.properties = opts.stk_xlabel.properties;
 opts.stk_title.properties = {'FontSize', 10, 'FontWeight', 'bold'};
 opts.stk_axes.properties = {'FontSize', 8};
 

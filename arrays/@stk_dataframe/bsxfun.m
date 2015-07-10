@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -93,7 +93,7 @@ end % function bsxfun
 % on stk_dataframe objects.
 
 
-%!shared x1 x2 data1 data2
+%!shared x1, x2, data1, data2
 %! x1 = rand (3, 2);  data1 = stk_dataframe (x1);
 %! x2 = rand (3, 2);  data2 = stk_dataframe (x2);
 

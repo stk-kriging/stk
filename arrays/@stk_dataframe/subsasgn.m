@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -65,59 +66,117 @@ switch idx(1).type
                 stk_error('Illegal indexing.', 'IllegalIndexing');
             end
             
-            val = double (val);
+            val_data = double (val);
             
-            if ~ isempty (val)  % assignment
+            if ~ isempty (val_data)  % assignment
                 
-                x.data = subsasgn(x.data, idx, val);
-                
-                [n1, d1] = size(x.data);
-                if (n1 > n) && ~ isempty (x.rownames)
-                    x.rownames = vertcat(x.rownames, repmat({''}, n1 - n, 1));
-                end
-                if (d1 > d) && ~ isempty (x.colnames)
-                    x.colnames = horzcat(x.colnames, repmat({''}, 1, d1 - d));
-                end
-                
-            else  % assignment rhs is empty: deletion
+                x.data = subsasgn (x.data, idx, val_data);
                 
                 if L == 1,  % linear indexing
-                    if d == 1,
-                        I = idx(1).subs{1};
-                        J = 1;
-                    elseif n == 1,
-                        I = 1;
-                        J = idx(1).subs{1};
-                    else
-                        stk_error('Illegal indexing.', 'IllegalIndexing');
+                    
+                    % Linear indexing is not allowed to change the shape of a
+                    % dataframe (this happens, with numeric arrays, when
+                    % indexing beyond numel)
+                    if ~ isequal (size (x.data), [n d])
+                        stk_error ('Illegal indexing.', 'IllegalIndexing');
                     end
-                else
-                    I = idx(1).subs{1};
-                    J = idx(1).subs{2};
+                    
+                else  % matrix-style indexing
+                    
+                    [n1, d1] = size (x.data);
+                    val_is_an_stkdf = isa (val, 'stk_dataframe');
+                    
+                    % Column names
+                    if val_is_an_stkdf && (isequal (idx(1).subs{1}, ':'))
+                        
+                        cn = val.colnames;
+                        xcn = x.colnames;
+                        
+                        if isempty (xcn)
+                            if ~ isempty (cn)
+                                xcn = repmat ({''}, 1, size (n1, 2));
+                                x.colnames = subsasgn (xcn, idx, cn);
+                            end
+                        else
+                            if isempty (cn)
+                                cn = repmat ({''}, 1, size (val, 2));
+                            end
+                            x.colnames = subsasgn (xcn, idx, cn);
+                        end
+                        
+                    elseif (d1 > d) && (~ isempty (x.colnames))
+                        
+                        x.colnames = horzcat (x.colnames, ...
+                            repmat ({''}, 1, d1 - d));
+                        
+                    end
+                    
+                    % Row names
+                    if val_is_an_stkdf && (isequal (idx(1).subs{2}, ':'))
+                        
+                        rn = val.rownames;
+                        xrn = x.rownames;
+                        
+                        if isempty (xrn)
+                            if ~ isempty (rn)
+                                xrn = repmat ({''}, size (val, 1), 1);
+                                x.rownames = subsasgn (xrn, idx, rn);
+                            end
+                        else
+                            if isempty (rn)
+                                rn = repmat ({''}, size (val, 1), 1);
+                            end
+                            x.rownames = subsasgn (xrn, idx, rn);
+                        end
+                        
+                    elseif (n1 > n) && ~ isempty (x.rownames)
+                        
+                        x.rownames = vertcat (x.rownames, ...
+                            repmat ({''}, n1 - n, 1));
+                        
+                    end
+                    
                 end
                 
-                remove_columns = (strcmp(I, ':') ...
-                    || ((n == 1) && isequal(I, 1)));
-                remove_rows = (strcmp(J, ':') ...
-                    || ((d == 1) && isequal(J, 1)));
+            else  % Assignment rhs is empty: deletion
                 
-                if ~ (remove_columns || remove_rows)
+                if L == 1,  % Linear indexing
                     
-                    stk_error('Illegal indexing.', 'IllegalIndexing');
-                    
-                elseif remove_columns
-                    
-                    x.data(:, J) = [];
-                    if ~ isempty(x.colnames)
-                        x.colnames(J) = [];
+                    if d == 1,  % Column array => remove rows
+                        I = idx(1).subs{1};
+                        J = 1;
+                        remove_rows = true;
+                    elseif n == 1,  % Row array => remove columns
+                        I = 1;
+                        J = idx(1).subs{1};
+                        remove_rows = false;
+                    else
+                        stk_error ('Illegal indexing.', 'IllegalIndexing');
                     end
                     
-                else % remove_rows
+                else  % Matrix-style indexing
                     
-                    x.data(I, :) = [];
+                    I = idx(1).subs{1};
+                    J = idx(1).subs{2};
+                    remove_rows = strcmp (J, ':');
+                    if ~ (remove_rows || (strcmp (I, ':')))
+                        stk_error ('Illegal indexing.', 'IllegalIndexing');
+                    end
                     
+                end
+                
+                if remove_rows  % Keep column names
+                    
+                    x.data(I, :) = [];                    
                     if ~ isempty (x.rownames)
                         x.rownames(I) = [];
+                    end
+                    
+                else  % Remove columns
+                    
+                    x.data(:, J) = [];
+                    if ~ isempty (x.colnames)
+                        x.colnames(J) = [];
                     end
                     
                 end
@@ -153,7 +212,7 @@ end
 
 end % function subsasgn
 
-%!shared x s t data
+%!shared x, s, t, data
 %! x = stk_dataframe(rand(3, 2));
 %! s = {'a'; 'b'; 'c'};
 %! t = {'xx' 'yy'};
@@ -243,6 +302,14 @@ end % function subsasgn
 %! x(:, :) = [];
 %! assert (isempty (x));
 
+%!test  % Delete the only row of a one-row dataframe
+%! y1 = stk_dataframe ([1.2 3.33], {'mean', 'var'})
+%! y1(1, :) = [];  % Remove the only row of data
+%! assert (isequal (size (y1), [0 2]))
+%! assert (isequal (y1.colnames, {'mean', 'var'}))
+%! y11 = get (y1, 'mean');
+%! assert (isempty (y11));
+
 %!error x{1} = 2;
 %!error x(1, 2) = [];
 %!error x(1, 2).a = 3;
@@ -252,7 +319,7 @@ end % function subsasgn
 %!shared x
 %! x = stk_dataframe((1:5)');
 
-% linear indexing is allowed for univariate dataframes
+% linear indexing
 %!test x(2) = 0;   assert (isequal (double (x), [1; 0; 3; 4; 5]));
 %!test x(3) = [];  assert (isequal (double (x), [1; 0; 4; 5]));
 
@@ -275,3 +342,55 @@ end % function subsasgn
 %! assert (isequal (x.rownames, {''; 'b'}));
 %! assert (isequal (x.colnames, {'' 'v'}));
 %! assert (isequalwithequalnans (x.data, nan (2)));
+
+%--- test replacing one column using ':' ---------------------------------------
+
+%!shared x
+%! x = stk_dataframe (reshape (1:12, 4, 3), {'u' 'v' 'w'});
+
+%!test  % change one column using ':', plain numeric argument
+%! y = [0; 9; 0; 9];
+%! z = x;  z(:, 2) = y;
+%! assert (isequal (z(:, 1), x(:, 1)));
+%! assert (isequal (z(:, 2).data, y));
+
+%!test  % change one column using ':', skt_dataframe argument
+%! y = stk_dataframe ([0; 9; 0; 9], {'y'});
+%! z = x;  z(:, 2) = y;
+%! assert (isequal (z(:, 1), x(:, 1)));
+%! assert (isequal (z(:, 2), y));
+
+%--- test replacing one row using ':' ------------------------------------------
+
+%!shared x
+%! x = stk_dataframe (reshape (1:12, 4, 3), [], {'a'; 'b'; 'c'; 'd'});
+
+%!test  % change one row using ':', plain numeric argument
+%! y = [7 7 7];
+%! z = x;  z(3, :) = y;
+%! assert (isequal (z(1, :), x(1, :)));
+%! assert (isequal (z(3, :).data, y));
+
+%!test  % change one row using ':', skt_dataframe argument
+%! y = stk_dataframe ([7 7 7], [], {'y'});
+%! z = x;  z(3, :) = y;
+%! assert (isequal (z(1, :), x(1, :)));
+%! assert (isequal (z(3, :), y));
+
+%--- change several values at once with linear indxing -------------------------
+
+%!shared x
+%! x = stk_dataframe (zeros (2), {'u' 'v'});
+
+%!test  % first column
+%! x(1:2) = 1;
+%! y = stk_dataframe ([1 0; 1 0], {'u' 'v'});
+%! assert (isequal (x, y));
+
+%!test  % one more element
+%! x(1:3) = 2;
+%! y = stk_dataframe ([2 2; 2 0], {'u' 'v'});
+%! assert (isequal (x, y));
+
+%!error  % too many elements
+%! x(1:5) = 3;

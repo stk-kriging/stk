@@ -2,7 +2,7 @@
 %
 % CALL: U_OPT  = stk_minimize_unconstrained (ALGO, F, U_INIT)
 %
-%   estimates the parameters U_OPT without any bounds, which gives the minimum 
+%   estimates the parameters U_OPT without any bounds, which gives the minimum
 %   value of the function F. A starting point U_INIT must be provided.
 %
 % CALL: [U_OPT, LIK] = stk_minimize_unconstrained (ALGO, F, U_INIT)
