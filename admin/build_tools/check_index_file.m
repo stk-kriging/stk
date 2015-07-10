@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Authors:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -43,10 +44,6 @@ if nargin < 2,
     
 end
 
-% When parsing the uncompressed package, PKG_ADD.m and PKG_DEL.m are located
-% at the root (it is only later, in post_install, that they will be renamed)
-public_mfile_list = setdiff (public_mfile_list, {'PKG_ADD', 'PKG_DEL'});
-
 [indexed, ignored] = parse_index_file (index_file);
 
 errmsg = {};
@@ -54,23 +51,23 @@ errmsg = {};
 missing = setdiff (public_mfile_list, union (indexed, ignored));
 if ~ isempty (missing)
     errmsg = {sprintf('\nThe following public M-file are missing in INDEX:\n')};
-    errmsg = [errmsg cellfun(...
+    errmsg = [errmsg; cellfun(...
         @(s)(sprintf ('!!! %s\n', s)), missing, 'UniformOutput', false)];
 end
 
 ignored = setdiff (ignored, public_mfile_list);
 if ~ isempty (ignored)
-    errmsg = [errmsg {sprintf(['\nThe following M-files are ignored in ' ...
+    errmsg = [errmsg; {sprintf(['\nThe following M-files are ignored in ' ...
         'INDEX but are not in the list of public M-files:\n'])}];
-    errmsg = [errmsg cellfun(...
+    errmsg = [errmsg; cellfun(...
         @(s)(sprintf ('!!! %s\n', s)), ignored, 'UniformOutput', false)];    
 end
 
 indexed = setdiff (indexed, public_mfile_list);
 if ~ isempty (indexed)
-    errmsg = [errmsg {sprintf(['\nThe following M-files are indexed in ' ...
+    errmsg = [errmsg; {sprintf(['\nThe following M-files are indexed in ' ...
         'INDEX but are not in the list of public M-files:\n'])}];
-    errmsg = [errmsg cellfun(...
+    errmsg = [errmsg; cellfun(...
         @(s)(sprintf ('!!! %s\n', s)), indexed, 'UniformOutput', false)];    
 end
 

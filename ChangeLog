@@ -1,3 +1,248 @@
+2015-07-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Introduce optimizer objects.
+
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Constructor
+	for fmincon algorithm objects.
+	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m:
+	Constructor for fminsearch algorithm objects.
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m:
+	Constructor for Octave SQP algorithm objects.
+	* misc/optim/@stk_optim_fmincon/stk_minimize_boxconstrained.m:
+	Box-constrained optimization with fmincon.
+	* misc/optim/@stk_optim_octavesqp/stk_minimize_boxconstrained.m:
+	Box-constrained optimization with sqp.
+	* misc/optim/@stk_optim_octavesqp/stk_minimize_unconstrained.m:
+	Unconstrained optimization with sqp.
+	* misc/optim/@stk_optim_fminsearch/stk_minimize_unconstrained.m:
+	Unconstrained optimization with fminsearch.
+	* paramestim/stk_param_estim.m: Big cleanup thanks to the new
+	system of algorithm classes.
+	* misc/options/stk_options_set.m: Select default optimization
+	algorithms. This was previously done in stk_select_optimizer.
+	Also, remove the option 'optim_display_level' for stk_param_estim.
+	* config/stk_config_setup.m: Remove call to stk_select_optimizer.
+	* misc/optim/stk_select_optimizer.m: Deprecated.
+	* misc/optim/stk_optim_hasfmincon.m: Deprecated.
+	* config/stk_config_clearpersistents.m: Remove
+	stk_optim_hasfmincon and stk_select_optimizer from the list of
+	functions to be cleared. Add stk_optim_fmincon.
+	* admin/octpkg/INDEX: Remove stk_select_optimizer from the index.
+
+2015-06-30  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	build_octpkg.m:	Fix the generated DESCRIPTION file
+
+	* admin/build_tools/build_octpkg.m: Add "Depends: octave (>=
+	3.2.2)" and "Autoload: no" to the generated DESCRIPTION file.
+
+2015-06-25  Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+
+	@stk_kreq_qr/get.m: Fix a call to dot ()
+
+	* core/@stk_kreq_qr/get.m: Fix a call to dot () to make it work
+	when there is only one observation.
+
+2015-06-25  Rémi Stroh  <remi.stroh@lne.fr>
+
+	stk_param_estim.m: Fix a bug related to parameter objects.
+
+	* paramestim/stk_param_estim.m (provide_param0_value): Fix a bug
+	related to parameter objects. More precisely, use (:) indexing
+	systematically to access the vector of numerical parameters
+	corresponding to a given parameter object.
+
+	@stk_factorialdesign/stk_normalize.m: Add missing line continuation mark
+
+	* arrays/@stk_factorialdesign/stk_normalize.m: Add missing line
+	continuation mark.
+
+2015-06-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init.m: XXXX_param_init (undocumented feature)
+
+	* paramestim/stk_param_init.m: make it possible to define a
+	XXXX_param_init function that provides initial estimates for a
+	user-defined covariance function called XXXX (undocumented
+	feature).
+
+2015-06-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init.m: Removed unused variable.
+
+	* paramestim/stk_param_init.m: Removed unused variable.
+
+	stk_param_getdefaultbounds.m: Return [] for parameter classes
+
+	* paramestim/stk_param_getdefaultbounds.m: Return empty lower and
+	upper bounds for parameter classes that do not implement the
+	stk_param_getdefaultbounds.
+
+2015-06-17  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg: Remove n from the global scope
+
+	* misc/pareto/private/wfg.c:: Remove n from the global scope. Add
+	new helper functions to encapsulate basic operations on fronts:
+	wfg_front_init, wfg_front_destroy, wfg_front_resize.
+	* misc/pareto/private/wfg.h: Declare the new functions.
+	* misc/pareto/private/stk_dominatedhv_mex.c: Use the new functions.
+
+	wfg.c: Pass pointers to FRONT structures
+
+	* misc/pareto/private/wfg.c: Pass pointers to FRONT structures.
+
+2015-06-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	check_index_file.m: Fix error handling.
+
+	* admin/build_tools/check_index_file.m: Fix error handling.
+
+	Use PKG_ADD/PKG_DEL directives in the Octave package.
+
+	* stk_init.m: Add PKG_ADD/PKG_DEL directives. Also, add an
+	optional input argument 'do_quit'; when it is true, stk_init
+	removes STK from the path.
+	* admin/build_tools/build_octpkg.m: No more PKG_ADD/PKG_DEL
+	files. They are replaced by corresponding directives in
+	stk_init.m, which is no longer renamed to PKG_ADD. Also, there are
+	now two STK_OCTAVE_PACKAGE variables to set (one in stk_init.m,
+	the other one in stk_config_rmpath.m).
+	* admin/build_tools/check_index_file.m: No need to warry about
+	PKG_ADD.m ad PKG_DEL.m anymore.
+	* admin/octpkg/post_install.m: Idem.
+	* admin/octpkg/INDEX: Add stk_init to the INDEX.
+	* config/stk_config_path.m: Do not look for PKG_ADD to detect
+	Octave package mode, since there no longer is a PKG_ADD
+	file. Instead, rely on a hard-coded STK_OCTAVE_PACKAGE variable,
+	which is modified at build time by build_octpkg (similarly to the
+	one in stk_init).
+	* config/stk_config_rmpath.m: Modify comment.
+	* config/stk_config_addpath.m: Modify comment.
+	* admin/octpkg/PKG_DEL.m: Removed. Instead, a PKD_DEL directive
+	has been inserted in stk_init.
+
+2015-06-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Avoid unnecessary calls to stk_commonsize.
+
+	* misc/distrib/stk_distrib_bivnorm_cdf.m: Avoid unnecessary calls
+	to stk_commonsize.
+	* misc/distrib/stk_distrib_normal_cdf.m: Idem.
+
+2015-06-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_commonsize.m: Avoid unnecessary calls to repmat.
+
+	* arrays/generic/stk_commonsize.m: Avoid unnecessary calls to
+	repmat.
+
+2015-06-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_commonsize.m: Accept empty dimensions
+
+	* arrays/generic/stk_commonsize.m: Accept empty dimensions, under
+	the condition that all input arguments have the same empty
+	dimensions (in which case the result is empty).
+
+2015-06-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/subsasgn.m: Preserve column names when deleting rows
+
+	* arrays/@stk_dataframe/subsasgn.m: Preserve column names when
+	deleting rows, even if the resulting array is empty.
+
+2015-06-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg.c: Improve portability again
+
+	* misc/pareto/private/wfg.c: Improve portability again. Now all
+	variables are declared at the beginning of functions (as required
+	by the C89 standard). And some unused headers have been removed,
+	too.
+
+2015-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_distrib_bivnorm_cdf.m: Bugfix
+
+	* misc/distrib/stk_distrib_bivnorm_cdf.m: Fix a bug in the case of
+	mixtures of singular and non-singular cases. Add unit test.
+
+2015-05-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg.c: Remove C99-specific code (stdbool.h).
+
+	* misc/pareto/private/wfg.c: Remove C99-specific code (stdbool.h).
+
+2015-05-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_pmisclass.m: Compute the probability of misclassification
+
+	* utils/stk_pmisclass.m: New function to compute the probability
+	of misclassification with respect to a given threshold (either the
+	current probability of misclassification or the expectation of the
+	future probability of misclassification).
+	* examples/02_design_of_experiments/stk_example_doe04.m: Example
+	script that demonstrates the use of stk_pmisclass ().
+
+	stk_dominatedhv.m: New function to compute dominated hypervolumes.
+
+	* misc/pareto/stk_dominatedhv.m: New function to compute
+	dominated hypervolumes, which uses WFG 1.10 internally
+	* misc/pareto/private/stk_dominatedhv_mex.c: MEX-file wrapper for WFG
+	* admin/octpkg/INDEX: Add new function to the index
+	* admin/octpkg/Makefile: Add new MEX-file to the Makefile
+	* config/stk_config_makeinfo.m:Add new MEX-file to the build list
+
+	Import WFG 1.10.
+
+	* misc/pareto/private/wfg.c: Main WFG source file, with minor changes
+	* misc/pareto/private/wfg.h: Main WFG header, with minor changes
+	* misc/pareto/private/wfg.README: WFG README + ChangeLog + Copyright
+	* admin/build_tools/build_octpkg.m: Ignore wfg.README.
+
+	Make it possible to have several source files for one MEX.
+
+	* config/stk_config_buildmex.m: Make it possible to have several
+	source files for one MEX.
+	* config/stk_config_makeinfo.m: Existing MEX-files do not have any
+	additional source file.
+
+	Move Pareto-related functions to misc/pareto.
+
+	* arrays/generic/private/stk_isdominated_mex.c: moved from
+	* misc/pareto/private/stk_isdominated_mex.c: moved to
+	* arrays/generic/private/stk_paretofind_mex.c: moved from
+	* misc/pareto/private/stk_paretofind_mex.c: moved to
+	* arrays/generic/stk_isdominated.m: moved from
+	* misc/pareto/stk_isdominated.m: moved to
+	* arrays/generic/stk_paretofind.m: moved from
+	* misc/pareto/stk_paretofind.m: moved to
+	* admin/octpkg/INDEX: Create a dedicated section in the index
+	* config/stk_config_makeinfo.m: Update make info
+	* config/stk_config_path.m: Add new directory to the path
+
+2015-05-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Clear persistent variables in stk_init
+
+	* config/stk_config_clearpersistents.m: New function that unlocks
+	all possibly mlock-ed STK files and clears all STK functions that
+	contain persistent variables.
+	* stk_init.m: Call stk_config_clearpersistents.
+	* admin/RELEASE.md: Update release instructions.
+
+2015-05-20  Julien Bect  <julien.bect@supelec.fr>
+
+	@stk_dataframe/set.m: Fix stk_error calls (missing mnemonic)
+
+	* arrays/@stk_dataframe/set.m: Fix stk_error calls (missing mnemonic)
+
+	stk_param_estim.m: Make sure that lnv0 falls within the bounds
+
+	* paramestim/stk_param_estim.m (get_default_bounds_lnv): Make sure
+	that lnv0 falls within the bounds returned by get_default_bounds_lnv.
+
 2015-05-19  Julien Bect  <julien.bect@supelec.fr>
 
 	stk_optim_hasfmincon.m: Improve fmincon detection

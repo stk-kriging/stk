@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
 %
 %    The function comes from Octave 3.7.6+'s quantile.m, with minor
 %    modifications. The original copyright notice was:

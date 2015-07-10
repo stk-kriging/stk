@@ -6,10 +6,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -31,12 +32,33 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
+%% PKG_ADD: stk_init ();
+
+%% PKG_DEL: stk_init (true);
+
+function stk_init (do_quit)
+
 % Deduce the root of STK from the path to this script
 root = fileparts (mfilename ('fullpath'));
 config = fullfile (root, 'config');
 
 % Add config to the path. It will be removed at the end of this script.
 addpath (config);
+
+% Unlock all possibly mlock-ed STK files and clear all STK functions
+% that contain persistent variables
+stk_config_clearpersistents ();
+
+if (nargin > 0) && (do_quit)
+
+    % Remove STK subdirectories from the path
+    stk_config_rmpath (root);
+
+    % No need to remove config manually at the end of the script since
+    % it is removed by stk_config_rmpath. We can exit.
+    return
+
+end
 
 % Activate the MOLE
 stk_config_mole (root);
@@ -50,8 +72,8 @@ if ~ STK_OCTAVE_PACKAGE
     % To force recompilation of all MEX-files, use stk_config_buildmex (true);
 end
 
-% Add STK folders to the path (note: doing this ATFER building the MEX-files seems to
-% solve the problem related to having MEX-files in private folders)
+% Add STK folders to the path (note: doing this ATFER building the MEX-files
+% seems to solve the problem related to having MEX-files in private folders)
 stk_config_addpath (root);
 
 % Check that MEX-files located in private folders are properly detected (note:
@@ -70,4 +92,4 @@ stk_config_setup;
 % Remove config from the path
 rmpath (config);
 
-clear root config STK_OCTAVE_PACKAGE ans;
+end % function stk_init

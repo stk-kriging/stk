@@ -1,17 +1,21 @@
-% STK_SELECT_OPTIMIZER selects an optimizer for stk_param_estim()
+% STK_SELECT_OPTIMIZER is a deprecated function
 %
-% CALL: OPTIM_NUM = stk_select_optimizer (BOUNDS_AVAILABLE)
+% stk_select_optimizer is deprecated and will be removed
+% from future releases of STK. Use
 %
-%   returns a number that indicates which optimizer STK should use for
-%   box-constrained (if BOUNDS_AVAILABLE is true or absent) or unconstrained
-%   optimization in its parameter estimation procedure. The result OPTIM_NUM is
-%   equal to 1 for Octave/sqp, 2 for Matlab/fminsearch, or 3 for Matlab/fmincon.
+%   stk_options_get ('stk_param_estim', ...)
+%   stk_options_set ('stk_param_estim', ...)
+%
+% instead to get/set optimizer algorithm objects.
+%
+% See also: stk_options_get, stk_options_set
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -35,38 +39,41 @@
 
 function optim_num = stk_select_optimizer (bounds_available, display)
 
-persistent optim_num_con optim_num_unc
+warning (help ('stk_select_optimizer'));
 
-% Invocation with no arguments (setup) =>  recheck which optimizer to use
+% Invocation with no arguments (setup) => recheck which optimizer to use
 force_recheck = (nargin == 0);
 
-% Select an appropriate optimizer
-if isempty (optim_num_con) || isempty (optim_num_unc) || force_recheck,
-    
-    if isoctave,
-        % Use sqp for both unconstrained and box-constrained optimization
-        optim_num_con = 1;
-        optim_num_unc = 1;
+% Get current optimization algorithm objects
+algo_con = stk_options_get ('stk_param_estim', 'stk_minimize_boxconstrained');
+algo_unc = stk_options_get ('stk_param_estim', 'stk_minimize_unconstrained');
+
+% Autmatically select optimizers
+% (note: copy-pasted from the selection logic implemented in stk_options_set)
+if (isempty (algo_con)) || force_recheck,
+    if isoctave
+        algo_con = stk_optim_octavesqp ();
     else
-        % check if Matlab's fmincon is available
-        optim_num_con = 2 + stk_optim_hasfmincon ();
-        % use fminsearch (Nelder-Mead) for unconstrained optimization
-        optim_num_unc = 2;
-        % TODO: use fminunc for unconstrained optimization in Matlab
-        %       if the Optimization Toolbox is available (?)
+        try
+            algo_con = stk_optim_fmincon ();
+        catch
+            algo_con = stk_optim_fminsearch ();
+        end
     end
-    
-    mlock;
-    
-    % In Matlab, warn if fmincon is not present
-    if (~ isoctave) && (optim_num_con == 2)
-        warning (['Function fmincon not found, ', ...
-            'falling back on fminsearch.']); %#ok<WNTAG>
+end
+if (isempty (algo_unc)) || force_recheck,
+    if isoctave
+        algo_unc = stk_optim_octavesqp ();
+    else
+        algo_unc = stk_optim_fminsearch ();
     end
-    
 end
 
-% Return the selected optimizer
+% Legacy: corresponding optim_num in stk <= 2.3.2
+optim_num_con = get_optim_num (algo_con);
+optim_num_unc = get_optim_num (algo_unc);
+
+% Return value
 if nargin > 0
     if bounds_available,
         optim_num = optim_num_con;
@@ -89,7 +96,7 @@ if (nargin > 1) && display,
         case 3, % Matlab / fmincon
             fprintf ('fmincon.\n');
         otherwise
-            error ('Unexpected value for optim_num_con');
+            fprintf ('%s\n', class (algo_con));
     end
     
     fprintf ('Unconstrained optimizer for stk_param_estim: ');
@@ -99,9 +106,25 @@ if (nargin > 1) && display,
         case 2, % Matlab / fminsearch
             fprintf ('fminsearch.\n');
         otherwise
-            error ('Unexpected value for optim_num_unc');
+            fprintf ('%s\n', class (algo_unc));
     end
     
 end
 
 end % function stk_select_optimizer
+
+
+function optim_num = get_optim_num (algo)
+
+switch class (algo)
+    case 'stk_optim_octavesqp'
+        optim_num = 1;
+    case 'stk_optim_fminsearch'
+        optim_num = 2;
+    case 'stk_optim_fmincon'
+        optim_num = 3;
+    otherwise
+        optim_num = [];
+end
+
+end % function get_optim_num

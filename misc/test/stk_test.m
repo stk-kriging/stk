@@ -6,8 +6,8 @@
 %
 %    Copyright (C) 2012, 2013 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
+%               Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
 %
 %    This file has been adapted from test.m in Octave 3.6.2,  distributed
 %    under the GNU General Public Licence version 3 (GPLv3). The original

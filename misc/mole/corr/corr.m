@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
 %
 %    This code is looesely based on Octave 3.7.7+'s quantile.m., where
 %    the original copyright notice was:

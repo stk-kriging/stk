@@ -89,23 +89,17 @@ fprintf (fid, 'Title: STK: A Small Toolbox for Kriging\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Author: See AUTHORS file\n');
 fprintf (fid, '#\n');
-fprintf (fid, 'Maintainer: Julien BECT <julien.bect@supelec.fr>\n');
-fprintf (fid, ' and Emmanuel VAZQUEZ <emmanuel.vazquez@supelec.fr>\n');
+fprintf (fid, 'Maintainer: Julien BECT <julien.bect@centralesupelec.fr>\n');
+fprintf (fid, ' and Emmanuel VAZQUEZ <emmanuel.vazquez@centralesupelec.fr>\n');
 fprintf (fid, '#\n');
 fprintf (fid, '%s', parse_description_field (root_dir));
 fprintf (fid, '#\n');
 fprintf (fid, 'Url: https://sourceforge.net/projects/kriging/\n');
+fprintf (fid, '#\n');
+fprintf (fid, 'Depends: octave (>= 3.2.2)\n');
+fprintf (fid, '#\n');
+fprintf (fid, 'Autoload: no\n');
 fclose (fid);
-
-% PKG_ADD: commands that are run when the package is added to the path
-PKG_ADD = fullfile (unpacked_dir, 'inst', 'PKG_ADD.m');
-movefile (fullfile (unpacked_dir, 'inst', 'stk_init.m'), PKG_ADD);
-cmd = 'sed -i "s/STK_OCTAVE_PACKAGE = false/STK_OCTAVE_PACKAGE = true/" %s';
-system (sprintf (cmd, PKG_ADD));
-
-% PKG_DEL: commands that are run when the package is removed from the path
-copyfile (fullfile (pkg_bits_dir, 'PKG_DEL.m'), ...
-    fullfile (unpacked_dir, 'inst'));
 
 % post_install: a function that is run after the installation of the package
 copyfile (fullfile (pkg_bits_dir, 'post_install.m'), unpacked_dir);
@@ -119,6 +113,13 @@ index_file = fullfile (pkg_bits_dir, 'INDEX');
 check_index_file (index_file, ...
     get_public_mfile_list (fullfile (unpacked_dir, 'inst')));
 copyfile (index_file, unpacked_dir);
+
+% Modify stk_init and stk_config_path for STK to work as an octave package
+cmd = 'sed -i "s/STK_OCTAVE_PACKAGE = false/STK_OCTAVE_PACKAGE = true/" %s';
+system (sprintf (cmd, fullfile ...
+    (unpacked_dir, 'inst', 'stk_init.m')));
+system (sprintf (cmd, fullfile ...
+    (unpacked_dir, 'inst', 'config', 'stk_config_path.m')));
 
 cd (here)
 
@@ -171,6 +172,7 @@ if ~ isempty (regexp (s, regex_ignore, 'once')) ...
         || strcmp (s, 'config/stk_config_makeinfo.m') ...
         || strcmp (s, 'misc/mole/README') ...
         || strcmp (s, 'misc/distrib/README') ...
+        || strcmp (s, 'misc/pareto/private/wfg.README') ...
         || strcmp (s, 'misc/test/stk_test.m') ...
         || strcmp (s, 'misc/test/stk_runtests.m') ...
         || strcmp (s, 'misc/optim/stk_optim_hasfmincon.m') ...

@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -45,18 +46,23 @@ relpath = fullfile ('arrays', '@stk_dataframe', 'private');
 info = register_mex (info, relpath, 'get_column_number');
 
 relpath = 'sampling';
-info = register_mex (info, relpath, 'stk_sampling_vdc_rr2', {'primes.h'});
+info = register_mex (info, relpath, 'stk_sampling_vdc_rr2', {}, {'primes.h'});
 
-relpath = fullfile ('arrays', 'generic', 'private');
-info = register_mex (info, relpath, 'stk_paretofind_mex', {'pareto.h'});
-info = register_mex (info, relpath, 'stk_isdominated_mex', {'pareto.h'});
+relpath = fullfile ('misc', 'pareto', 'private');
+info = register_mex (info, relpath, 'stk_paretofind_mex', {}, {'pareto.h'});
+info = register_mex (info, relpath, 'stk_isdominated_mex', {}, {'pareto.h'});
+info = register_mex (info, relpath, 'stk_dominatedhv_mex', {'wfg.c'}, {'wfg.h'});
 
 end % function stk_config_makeinfo
 
 
-function info = register_mex (info, relpath, mexname, includes)
+function info = register_mex (info, relpath, mexname, other_src, includes)
 
 if nargin < 4,
+    other_src = {};
+end
+
+if nargin < 5,
     includes = {};
 end
 
@@ -64,6 +70,7 @@ k = 1 + length (info);
 
 info(k).relpath = relpath;
 info(k).mexname = mexname;
+info(k).other_src = other_src;
 info(k).includes = [{'stk_mex.h'} includes];
 
 end % function register_mex

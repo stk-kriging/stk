@@ -2,9 +2,12 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2014 SUPELEC & A. Ravisankar
+%    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
+%              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
 %
@@ -39,7 +42,7 @@ switch nargin
     
     case 0, % nothing to do, just return the output
         
-    case 1, % reset        
+    case 1, % reset
         if (ischar (varargin{1})) && strcmp (varargin{1}, 'default')
             options = init_options ();
         else
@@ -47,7 +50,16 @@ switch nargin
         end
         
     case 2,
-        options.(varargin{1}) = varargin{2};
+        if (strcmp (varargin{1}, 'stk_param_estim')) ...
+                && (strcmp (varargin{2}, 'optim_display_level'))
+            % TODO: Remove this warning in STK 3.x
+            warning (sprintf (['Options stk_param_estim.optim_display_level' ...
+                ' has been removed.\n\nDisplay options for optimization ' ...
+                'algorithms can be set through the properties of the ' ...
+                'algorithm objects instead.\n']));
+        else
+            options.(varargin{1}) = varargin{2};
+        end
         
     case 3,
         options.(varargin{1}).(varargin{2}) = varargin{3};
@@ -60,6 +72,8 @@ end
 opts = options;
 
 end % function stk_options_set
+
+%#ok<*CTCH>
 
 
 function opts = init_options ()
@@ -75,13 +89,23 @@ opts.stk_dataframe.disp_spstr = '    ';
 opts.stk_param_getdefaultbounds.tolvar = 5.0;
 opts.stk_param_getdefaultbounds.tolscale = 5.0;
 
-opts.stk_param_estim.optim_display_level = 'off';
-
 opts.stk_figure.properties = {'InvertHardcopy', 'off', 'Color', [1 1 1]};
 opts.stk_xlabel.properties = {'FontSize', 10, 'Color', [0.2 0 1]};
 opts.stk_ylabel.properties = opts.stk_xlabel.properties;
 opts.stk_zlabel.properties = opts.stk_xlabel.properties;
 opts.stk_title.properties = {'FontSize', 10, 'FontWeight', 'bold'};
 opts.stk_axes.properties = {'FontSize', 8};
-  
+
+if isoctave
+    opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_octavesqp ();
+    opts.stk_param_estim.stk_minimize_unconstrained = stk_optim_octavesqp ();
+else
+    try
+        opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_fmincon ();
+    catch
+        opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_fminsearch ();
+    end
+    opts.stk_param_estim.stk_minimize_unconstrained = stk_optim_fminsearch ();
+end
+
 end % function init_options

@@ -9,8 +9,8 @@
 %
 %    Copyright (C) 2012 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
+%               Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
 %
 %    This file is based on the Oct2mat package, version 1.0.7. The
 %    following information was provided in the DESCRIPTION of the

@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -30,9 +30,6 @@ function stk_config_setup ()
 
 % Set default options
 stk_options_set;
-
-% Select optimizers for stk_param_estim
-stk_select_optimizer;
 
 % Select default "parallelization engine"
 stk_parallel_engine_set;

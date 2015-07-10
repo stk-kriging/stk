@@ -116,9 +116,10 @@ Design of experiments (non-sequential): criterions
  stk_mindist
  stk_phipcrit
 
-Design of experiments (sequential): expected improvement
+Design of experiments (sequential): criterions
  stk_distrib_normal_ei
  stk_distrib_student_ei
+ stk_pmisclass
 
 Examples: kriging basics
  stk_example_kb01
@@ -135,6 +136,7 @@ Examples: design of experiments
  stk_example_doe01
  stk_example_doe02
  stk_example_doe03
+ stk_example_doe04
 
 Examples: miscellaneous
  stk_example_misc01
@@ -155,15 +157,18 @@ Examples: miscellaneous
 Miscellaneous: arrays
  stk_boundingbox
  stk_feval
- stk_isdominated
  stk_length
  stk_normalize
- stk_paretofind
  stk_rescale
  @stk_dataframe/stk_dataframe
  @stk_factorialdesign/stk_factorialdesign
  @stk_factorialdesign/ndgrid
  @stk_hrect/stk_hrect
+
+Miscellaneous: Pareto optimality
+ stk_dominatedhv
+ stk_isdominated
+ stk_paretofind
 
 #stk_commonsize              [internal]
 #stk_sprintf                 [internal]
@@ -281,12 +286,12 @@ Miscellaneous: arrays
 
 Miscellaneous: options, plots...
  stk_dist
+ stk_init
  stk_options_get
  stk_options_set
  stk_plot1d
 #stk_plot2d           [deprecated]
 #stk_plot_shadedci    [internal]
- stk_select_optimizer
  stk_version
 
 #stk_gpquadform  [experimental]

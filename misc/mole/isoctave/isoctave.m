@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2011-2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 %
 %    Note: was called 'stk_is_octave_in_use' in STK <= 2.0.1
 

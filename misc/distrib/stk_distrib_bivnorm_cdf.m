@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -57,7 +57,10 @@ end
 
 %--- Bring everything to a common size -----------------------------------------
 
-[z1, z2, sigma1, sigma2, rho] = stk_commonsize (z1, z2, sigma1, sigma2, rho);
+if ~ isequal (size (z1), size (z2), size (sigma1), size (sigma2), size (rho))
+    [z1, z2, sigma1, sigma2, rho] = stk_commonsize ...
+        (z1, z2, sigma1, sigma2, rho);
+end
 
 p = nan (size (z1));
 q = nan (size (z1));
@@ -99,7 +102,7 @@ q = ones (s);
 
 b1p = (z1_ >= 0);
 if any (b1p)
-    [p(b1p) q(b1p)] = stk_distrib_normal_cdf (z2_(b1p), 0, sigma2_(b1));
+    [p(b1p) q(b1p)] = stk_distrib_normal_cdf (z2_(b1p), 0, sigma2_(b1p));
 end
 
 end % function handle_singular_case
@@ -151,7 +154,7 @@ end % function handle_singular_case
 %! [p, q] = stk_distrib_bivnorm_cdf ([inf 10], 0, 0, 1, 1, 0);
 %! assert (p == 1.0);
 %! assert (stk_isequal_tolrel (q, 7.619853024160489e-24, 1e-12))
-     
+
 %!test
 %! [p, q] = stk_distrib_bivnorm_cdf ([inf inf], 0, 0, 1, 1, 0);
 %! assert ((p == 1.0) && (q == 0.0))
@@ -177,7 +180,11 @@ end % function handle_singular_case
 %! [p, q] = stk_distrib_bivnorm_cdf ([10 inf], 0, 0, 1, 1, 0);
 %! assert (p == 1.0);
 %! assert (stk_isequal_tolrel (q, 7.619853024160489e-24, 1e-12))
-     
+
 %!test
 %! [p, q] = stk_distrib_bivnorm_cdf ([inf inf], 0, 0, 1, 1, 0);
 %! assert ((p == 1.0) && (q == 0.0))
+
+%!test  % A mixture of singular and non-singular cases
+%! p = stk_distrib_bivnorm_cdf ([0 0], 0, 0, [1; 0], 1, 0);
+%! assert (isequal (p, [0.25; 0.5]));
