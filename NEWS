@@ -1,6 +1,17 @@
 Changes in version 2.4.0
 ========================
 
+* Optimizer objects
+
+    o The choice of the optimization algorithm used in stk_param_estim is now
+      much more flexible, thanks to a new interface based on "optimizer object"
+      classes.
+
+    o The following classes are currently available: @stk_optim_octavesqp
+      @stk_optim_fmincon, @stk_optim_fminsearch.
+
+    o Automatic detection of available optimizers.
+
 * Miscellaneous
 
    o stk_pmisclass.m: New function to compute either the current probability of
