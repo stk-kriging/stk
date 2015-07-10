@@ -1,8 +1,8 @@
 % STK_MINIMIZE_BOXCONSTRAINED performs boxconstrained minimisation using fmincon.
-% 
+%
 % CALL: U_OPT  = stk_minimize_boxconstrained (ALGO, F, U_INIT, LB, UB)
-% 
-%   estimates the parameters U_OPT within the user-defined lowerbounds LB 
+%
+%   estimates the parameters U_OPT within the user-defined lowerbounds LB
 %   and upper bounds UB, which gives the minimum value of the function F. A
 %   starting point U_INIT must be provided.
 %
@@ -13,7 +13,7 @@
 %
 % NOTE: Here ALGO is an input argument to the function, that is an object of
 % class 'stk_optim_fmincon'.
-   
+
 % Copyright Notice
 %
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar

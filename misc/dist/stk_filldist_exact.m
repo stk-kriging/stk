@@ -38,11 +38,11 @@
 %
 %    Copyright (C) 2013 SUPELEC, Guillaume Carlier & Florian Pasanisi
 %
-%    Authors:  Julien Bect             <julien.bect@supelec.fr>
+%    Authors:  Julien Bect             <julien.bect@centralesupelec.fr>
 %              Florian Pasanisi        <florian.pasanisi@gmail.com>
 %              and Guillaume Carlier
 %
-%    Maintainer: Julien Bect <julien.bect@supelec.fr>
+%    Maintainer: Julien Bect <julien.bect@centralesupelec.fr>
 %
 %    Guillaume Carlier and Florian Pasanisi wrote a first implementation 
 %    of the algorithm  following the paper of  Pronzato & Müller (2011), 

@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,66 +27,58 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function t = subsref(x, idx)
+function t = subsref (x, idx)
 
 switch idx(1).type
     
     case '()'
         
-        if length(idx) ~= 1
+        L = length (idx(1).subs);
+        
+        if L == 1,  % linear indexing
             
-            stk_error ('Illegal indexing.', 'IllegalIndexing');
+            t = subsref (x.data, idx);
             
-        else % ok, only one level of indexing
+        elseif L == 2,  % matrix-style indexing
             
-            L = length (idx(1).subs);
+            I = idx(1).subs{1};
+            J = idx(1).subs{2};
             
-            if L == 1,  % linear indexing
-                
-                t = subsref (x.data, idx);
-                
-            elseif L == 2,  % matrix-style indexing
-                
-                I = idx(1).subs{1};
-                J = idx(1).subs{2};
-                
-                c = get (x, 'colnames');
-                if ~ isempty (c),
-                    c = c(1, J);
-                end
-                
-                r = get (x, 'rownames');
-                if ~ isempty (r),
-                    r = r(I, 1);
-                end
-                
-                t = stk_dataframe (x.data(I, J), c, r);
-                
-            else
-                stk_error ('Illegal indexing.', 'IllegalIndexing');
+            x.data = x.data(I, J);
+            
+            if ~ isempty (x.colnames),
+                x.colnames = x.colnames(1, J);
             end
             
+            if ~ isempty (x.rownames),
+                x.rownames = x.rownames(I, 1);
+            end
+            
+            t = x;
+            
+        else
+            stk_error ('Illegal indexing.', 'IllegalIndexing');
         end
         
     case '{}'
         
         errmsg = 'Indexing with curly braces is not allowed.';
-        stk_error(errmsg, 'IllegalIndexing');
+        stk_error (errmsg, 'IllegalIndexing');
         
     case '.'
         
-        t = get(x, idx(1).subs);
-        
-        if length(idx) > 1,
-            t = subsref(t, idx(2:end));
-        end
+        t = get (x, idx(1).subs);
         
 end
 
-end % function subsref
+if (length (idx)) > 1,
+    t = subsref (t, idx(2:end));
+end
+
+end % function @stk_dataframe.subsref
 
 
-%!shared x s t data
+%!shared x, s, t, data
 %! x = stk_dataframe(rand(3, 2));
 %! s = {'a'; 'b'; 'c'};
 %! t = {'xx' 'yy'};
@@ -103,7 +96,7 @@ end % function subsref
 
 %--- tests with a bivariate dataframe + column names --------------------------
 
-%!shared u data
+%!shared u, data
 %! u = rand(3, 2);
 %! data = stk_dataframe(u, {'x1', 'x2'});
 
@@ -128,7 +121,7 @@ end % function subsref
 
 %--- tests with a univariate dataframe ----------------------------------------
 
-%!shared u data
+%!shared u, data
 %! u = rand(3, 1); data = stk_dataframe(u, {'x'});
 
 %!assert (isequal (data.x, u))

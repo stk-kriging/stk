@@ -1,10 +1,10 @@
-% PKG_DEL
+% STK_BOUNDINGBOX  [overload STK function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2014 SUPELEC
+%    Copyright (C) 2015 CentraleSupelec
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,15 +26,25 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-% Deduce the root of STK from the path to this script
-root = fileparts (mfilename ('fullpath'));
-config = fullfile (root, 'config');
+function box = stk_boundingbox (x)
 
-% Add config to the path. No need to remove it manually at the end of the
-% script since it will be automatically removed by stk_config_rmpath
-addpath (config);
+if nargin > 1,
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
-% Remove STK subdirectories from the path
-stk_config_rmpath (root);
+box = stk_boundingbox (x.data);
 
-clear root config
+box.colnames = x.colnames;
+
+end % function @stk_dataframe.stk_boundingbox
+
+
+%!shared x, y, cn
+%! cn = {'a', 'b', 'c'};
+%! x = stk_dataframe ([0 3 2; 1 4 1; 7 0 2], cn);
+
+%!error  y = stk_boundingbox ();
+%!test   y = stk_boundingbox (x);
+%!error  y = stk_boundingbox (x, 1);
+
+%!assert (isequal (y, stk_hrect ([0 0 1; 7 4 2], cn)));

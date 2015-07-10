@@ -2,7 +2,7 @@
 %
 % CALL: U_OPT  = stk_minimize_unconstrained (ALGO, F, U_INIT)
 %
-%   estimates the parameters U_OPT without any bounds, which gives the minimum 
+%   estimates the parameters U_OPT without any bounds, which gives the minimum
 %   value of the function F. A starting point U_INIT must be provided.
 %
 % CALL: [U_OPT, LIK] = stk_minimize_unconstrained (ALGO, F, U_INIT)
@@ -17,7 +17,7 @@
 %
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
-%    Authors:  Julien Bect        <julien.bect@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
 %              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
@@ -46,6 +46,6 @@ if nargin > 3
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-[u_opt,lik] = stk_minimize_boxconstrained(algo,f,u_init,[],[]);
+[u_opt, lik] = stk_minimize_boxconstrained (algo, f, u_init, [], []);
 
 end % function stk_minimize_unconstrained

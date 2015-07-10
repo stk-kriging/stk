@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -176,7 +176,7 @@ exponent_r(b) = exponent_r(b) + 1;
 end % function round_
 
 
-%!shared x s
+%!shared x, s
 %! x = [1.2; -34567];
 %!test s = stk_sprintf_colvect_scientific(x, 1);
 %!assert (isequal(s, ['#'; '#']))
@@ -199,7 +199,7 @@ end % function round_
 %!test s = stk_sprintf_colvect_scientific(x, 12);
 %!assert (isequal(s, [' 1.2000e+00'; '-3.4567e+04']))
 
-%!shared x s
+%!shared x, s
 %! x = [0.9; 0.91; 0.99; 0.999];
 %!test s = stk_sprintf_colvect_scientific (x, 4)
 %!assert (isequal(s, ['####'; '####'; '####'; '####']))
@@ -212,7 +212,7 @@ end % function round_
 %!test s = stk_sprintf_colvect_scientific (x, 8)
 %!assert (isequal(s, ['9.00e-01'; '9.10e-01'; '9.90e-01'; '9.99e-01']))
 
-%!shared x s
+%!shared x, s
 %! x = [0.9; -0.91; 0.99; 0.999];
 %!test s = stk_sprintf_colvect_scientific (x, 4)
 %!assert (isequal(s, ['####'; '####'; '####'; '####']))

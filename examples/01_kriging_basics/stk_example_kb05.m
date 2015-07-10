@@ -8,13 +8,22 @@
 % this means that unconditioned sample path are simulated first (using
 % stk_generate_samplepaths), and then conditioned on the observations by kriging
 % (using stk_conditioning).
+%
+% Note: in this example, for pedagogical purposes, conditioned samplepaths are
+% simulated in two steps: first, unconditioned samplepaths are simulated;
+% second, conditioned samplepaths are obtained using conditioning by kriging.
+% In practice, these two steps can be carried out all at once using
+% stk_generate_samplepath (see, e.g., stk_example_kb09).
+%
+% See also: stk_generate_samplepaths, stk_conditioning, stk_example_kb09
+
 
 % Copyright Notice
 %
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %

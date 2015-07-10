@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -35,7 +35,7 @@ z = apply(x, dim, @mode);
 end % function mode
 
 
-%!shared x1 df1
+%!shared x1, df1
 %! x1 = floor(3 * rand(9, 3));
 %! df1 = stk_dataframe(x1, {'a', 'b', 'c'});
 %!assert (isequal (mode(df1),    mode(x1)))

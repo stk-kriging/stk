@@ -25,13 +25,14 @@
 %    dominated, and DPOS(i) gives the index of a row in B that dominates
 %    A(i, :) otherwise.
 %
-% See also: sortrows, stk_paretofind
+% See also: sortrows, stk_paretofind, stk_dominatedhv
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %

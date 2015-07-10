@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function build_allpurpose (root_dir, build_dir)
+function build_allpurpose (root_dir, release_dir, octpkg_tarball)
 
 disp ('                              ');
 disp ('******************************');
@@ -36,53 +37,36 @@ disp ('                              ');
 
 here = pwd ();
 
-% Directory: allpurpose
-allpurpose_dir = fullfile (build_dir, 'allpurpose');
-if exist (allpurpose_dir, 'dir')
-    rmdir (allpurpose_dir, 's');
+% Create release_dir if necessary
+if ~ exist (release_dir, 'dir')
+    mkdir (release_dir);
 end
-mkdir (allpurpose_dir);
 
 % Directory that will contain the unpacked octave package
-unpacked_dir = fullfile (allpurpose_dir, 'stk');
+unpacked_dir = fullfile (release_dir, 'stk');
+if exist (unpacked_dir, 'dir')
+    rmdir (unpacked_dir, 's');
+end
 mkdir (unpacked_dir);
-
-% Version number
-version_number = get_version_number ();
-
-% Tarball name
-tarball_name = sprintf ('stk-%s-allpurpose.tar.gz', version_number);
-fprintf ('Tarball name: %s\n', tarball_name);
 
 % Export files using 'hg archive'
 fprintf ('Exporting with "hg archive" ... ');
 cd (root_dir);
-system (sprintf ('hg archive %s', unpacked_dir));
-delete (fullfile (unpacked_dir, '.hg*'));
-fprintf ('done.\n');
-
-% Delete admin dir
-fprintf ('Deleting admin dir ... ');
-tmp = confirm_recursive_rmdir (0);
-rmdir (fullfile (unpacked_dir, 'admin'), 's');
-confirm_recursive_rmdir (tmp);
+system (sprintf (['hg archive --exclude admin --exclude ''.hg*'' ' ...
+ '--exclude Makefile %s'], unpacked_dir));
 fprintf ('done.\n');
 
 % Instantiate CITATION template
-cd (allpurpose_dir);
+cd (release_dir);
 copy_citation ('stk/CITATION', 'stk');
 
 % Write explicit version number in README
 copy_readme ('stk/README', 'stk');
 
 % Build HTML doc
-htmldoc_dir = fullfile (allpurpose_dir, 'stk', 'doc', 'html');
-build_allpurpose_htmldoc (root_dir, build_dir, htmldoc_dir, version_number);
+htmldoc_dir = fullfile (unpacked_dir, 'doc', 'html');
+build_allpurpose_htmldoc (root_dir, htmldoc_dir, octpkg_tarball);
 
-% Create tarball
-fprintf ('Creating tarball: %s ... ', tarball_name);
-system (sprintf ('tar --create --gzip --file %s %s', tarball_name, 'stk'));
-movefile (tarball_name, '..');
 fprintf ('done.\n');
 
 cd (here);

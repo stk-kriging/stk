@@ -2,9 +2,9 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,9 +26,36 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [x, a, b] = stk_normalize(x, varargin)
+function [x, a, b] = stk_normalize (x, box)
 
-[x.data, a, b] = stk_normalize(x.data, varargin{:});
+if nargin > 2,
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
+if nargin < 2,
+    box = [];
+end
+
+if isa (x, 'stk_dataframe')
+    
+    % Ensure that box is an stk_hrect object
+    if ~ isa (box, 'stk_hrect')
+        if isempty (box),
+            box = stk_boundingbox (x.data);  % Default: bounding box
+        else
+            box = stk_hrect (box);
+        end
+    end
+    
+    % Call @stk_hrect/stk_normalize
+    [x.data, a, b] = stk_normalize (x.data, box);
+    
+else % box is an stk_dataframe object
+    
+    % Call @stk_hrect/stk_normalize
+    [x, a, b] = stk_normalize (x, stk_hrect (box));
+    
+end % if
 
 end % function stk_normalize
 

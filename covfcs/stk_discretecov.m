@@ -2,7 +2,7 @@
 %
 % CALL: K = stk_discretecov (PARAM, X, Y)
 %
-%    computes the covariance matrix K between the sets of locations X and 
+%    computes the covariance matrix K between the sets of locations X and
 %    Y, using the discrete model (a kriging model on a discrete space)
 %    parameters PARAM. The inputs arguments X and Y are expected to be
 %    vectors of indices. The output matrix K has size NX x NY, where NX is
@@ -21,10 +21,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -69,7 +70,7 @@ else
     idx = sub2ind (size (param.K), x, y);
     K = param.K(idx);
 end
-    
+
 end % function stk_discretecov
 
 
@@ -77,13 +78,12 @@ end % function stk_discretecov
 %! n0 = 20; n1 = 10; dim = 4;
 %! x0 = stk_sampling_randunif (n0, dim);
 %! x1 = stk_sampling_randunif (n1, dim);
-%! model = stk_model ('stk_materncov_aniso', dim);
+%! model = stk_model ('stk_materncov52_aniso', dim);
 %! model.order = 1;
+%! model.param = log ([1.0; 2.1; 2.2; 2.3; 2.4]);
 
 %!test % without noise, pairwise = false
-%! if isfield (model, 'lognoisevariance')
-%!   model = rmfield (model, 'lognoisevariance');
-%! end
+%! model.lognoisevariance = - inf;
 %! model2 = stk_model ('stk_discretecov', model, x0);
 %! idx = [1 4 9];
 %! [K1, P1] = stk_make_matcov (model,  x0(idx, :));

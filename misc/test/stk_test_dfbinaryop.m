@@ -4,7 +4,7 @@
 %
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -47,7 +47,7 @@ catch
 
     err = lasterror ();
 
-    if strcmp (err.message, ['octave_base_value::array_value(): '
+    if strcmp (err.message, ['octave_base_value::array_value(): ' ...
                              'wrong type argument `class'''])
 
         warning (msg.message);

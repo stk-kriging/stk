@@ -17,13 +17,14 @@
 %    dominated, and equal to the smallest j such that X(i, :) is dominated
 %    by X(NDPOS(j), :) otherwise.
 %
-% See also: sortrows, stk_isdominated
+% See also: sortrows, stk_isdominated, stk_dominatedhv
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -54,7 +55,7 @@ varargout = cell (1, max (1, nargout));
 end % function stk_paretofind
 
 
-%!shared x ndpos drank
+%!shared x, ndpos, drank
 %! x = [     ...
 %!     0  2; ...
 %!     2  2; ...
@@ -64,7 +65,7 @@ end % function stk_paretofind
 %!assert (isequal (ndpos, 1));
 %!assert (isequal (drank, [0; 1]));
 
-%!shared x ndpos drank
+%!shared x, ndpos, drank
 %! x = [     ...
 %!     3  2; ...
 %!     2  2; ...
@@ -74,7 +75,7 @@ end % function stk_paretofind
 %!assert (isequal (ndpos, 2));
 %!assert (isequal (drank, [1; 0]));
 
-%!shared x ndpos drank
+%!shared x, ndpos, drank
 %! x = [     ...
 %!     1  0; ...
 %!     2  0; ...
@@ -86,7 +87,7 @@ end % function stk_paretofind
 %!assert (isequal (ndpos, [5; 3; 1]));
 %!assert (isequal (drank, [0; 3; 0; 2; 0]));
 
-%!shared x ndpos drank
+%!shared x, ndpos, drank
 %! x = [     ...
 %!     1  0; ...
 %!     2  0; ...

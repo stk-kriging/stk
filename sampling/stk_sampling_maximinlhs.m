@@ -1,19 +1,19 @@
 % STK_SAMPLING_MAXIMINLHS generates a "maximin" LHS design
 %
-% CALL: X = stk_sampling_maximinlhs(N, DIM)
+% CALL: X = stk_sampling_maximinlhs (N, DIM)
 %
 %   generates a "maximin" Latin Hypercube Sample of size N in the
 %   DIM-dimensional hypercube [0; 1]^DIM. More precisely, NITER = 1000
 %   independent random LHS are generated, and the one with the biggest
 %   separation distance is returned.
 %
-% CALL: X = stk_sampling_maximinlhs(N, DIM, BOX)
+% CALL: X = stk_sampling_maximinlhs (N, DIM, BOX)
 %
 %   does the same thing in the DIM-dimensional hyperrectangle specified by the
 %   argument BOX, which is a 2 x DIM matrix where BOX(1, j) and BOX(2, j) are
 %   the lower- and upper-bound of the interval on the j^th coordinate.
 %
-% CALL: X = stk_sampling_maximinlhs(N, DIM, BOX, NITER)
+% CALL: X = stk_sampling_maximinlhs (N, DIM, BOX, NITER)
 %
 %   allows to change the number of independent random LHS that are used.
 %
@@ -21,10 +21,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
+%               Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -49,27 +49,35 @@
 function x = stk_sampling_maximinlhs (n, d, box, niter)
 
 if nargin > 4,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
+% Read argument dim
+if (nargin < 2) || ((nargin < 3) && (isempty (d)))
+    d = 1;  % Default dimension
+elseif (nargin > 2) && (~ isempty (box))
+    d = size (box, 2);
+end
+
+% Read argument 'box'
 if (nargin < 3) || isempty (box)
-    box = repmat ([0; 1], 1, d);
+    box = stk_hrect (d);  % build a default box
 else
-    stk_assert_box (box);
+    box = stk_hrect (box);  % convert input argument to a proper box
 end
 
 if nargin < 4,
     niter = 1000;
 end
 
-if n == 0, % no input => no output    
-    xdata = zeros (0, d);    
+if n == 0, % no input => no output
+    xdata = zeros (0, d);
 else % at least one input point
     xx = lhsdesign_ (n, d, niter);
-    xdata = stk_rescale (xx, [], box);    
+    xdata = stk_rescale (xx, [], box);
 end
 
-x = stk_dataframe (xdata);
+x = stk_dataframe (xdata, box.colnames);
 x.info = 'Created by stk_sampling_maximinlhs';
 
 end % function stk_sampling_maximinlhs
@@ -122,17 +130,27 @@ end % function generatedesign_
 %! n = 20;  dim = 2;  box = [0, 0; 1, 1];  niter = 1;
 
 %!error x = stk_sampling_maximinlhs ();
-%!error x = stk_sampling_maximinlhs (n);
+%!test  x = stk_sampling_maximinlhs (n);
 %!test  x = stk_sampling_maximinlhs (n, dim);
 %!test  x = stk_sampling_maximinlhs (n, dim, box);
 %!test  x = stk_sampling_maximinlhs (n, dim, box, niter);
 %!error x = stk_sampling_maximinlhs (n, dim, box, niter, pi);
 
-%% 
+%%
 % Check that the output is a dataframe
 % (all stk_sampling_* functions should behave similarly in this respect)
 
 %!assert (isa (x, 'stk_dataframe'));
+
+%%
+% Check that column names are properly set, if available in box
+
+%!assert (isequal (x.colnames, {}));
+
+%!test
+%! cn = {'W', 'H'};  box = stk_hrect (box, cn);
+%! x = stk_sampling_maximinlhs (n, dim, box);
+%! assert (isequal (x.colnames, cn));
 
 %%
 % Check output argument

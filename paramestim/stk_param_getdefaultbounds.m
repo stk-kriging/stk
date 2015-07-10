@@ -2,10 +2,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@supelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -29,7 +30,17 @@
 
 function [lb, ub] = stk_param_getdefaultbounds (covariance_type, param0, xi, zi)
 
-if ~ isfloat (param0)
+if isobject (param0)
+    
+    % param0 is an object from a class that does not implement
+    % stk_param_getdefaultbounds (otherwise we wouldn't have ended up here).
+    % We assume that this is a choice of the designer of the parameter class,
+    % and therefore return [] without a warning.
+    
+    lb = [];
+    ub = [];
+    
+elseif ~ isfloat (param0)
     
     stk_error ('Incorrect type for param0.', 'TypeMismatch');
     
@@ -81,7 +92,7 @@ else
             
             warning (sprintf (['Unknown covariance type: %s, ' ...
                 'returning empty bounds.'], covariance_type)); %#ok<WNTAG,SPWRN>
-                
+            
             lb = [];
             ub = [];
             

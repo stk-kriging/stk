@@ -1,20 +1,21 @@
 % STK_OPTIM_OCTAVESQP constructs an object of class 'stk_optim_octavesqp'.
 %
-% CALL: X = stk_optim_octavesqp()
+% CALL: X = stk_optim_octavesqp ()
 %
 %   constructs an object of class 'stk_optim_octavesqp' with a default set of
 %   options.
 %
-% CALL: X = stk_optim_octavesqp(opt)
+% CALL: X = stk_optim_octavesqp (opt)
 %
 %   constructs an object of class 'stk_optim_octavesqp' with a user-defined
-%   set of options, defined by the structure opt.  
+%   set of options, defined by the structure opt.
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
-%    Authors:  Julien Bect        <julien.bect@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
 %              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
@@ -43,13 +44,13 @@ if nargin > 1
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if exist ('sqp') ~= 2
-    errmsg='Function sqp does not exist or not added to path';
-    stk_error(errmsg,'sqp_does_not_exist');
+if ~ isoctave
+    errmsg = 'Function sqp is only available in Octave';
+    stk_error (errmsg, 'sqpNotAvailable');
 end
 
 if nargin == 0
-    opt = struct('maxiter', 1500,'tol', 1e-10);   
+    opt = struct ('maxiter', 500, 'tol', 1e-5);
 end
 
 x = struct ('options', opt);

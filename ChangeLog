@@ -1,3 +1,732 @@
+2015-07-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Introduce optimizer objects.
+
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Constructor
+	for fmincon algorithm objects.
+	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m:
+	Constructor for fminsearch algorithm objects.
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m:
+	Constructor for Octave SQP algorithm objects.
+	* misc/optim/@stk_optim_fmincon/stk_minimize_boxconstrained.m:
+	Box-constrained optimization with fmincon.
+	* misc/optim/@stk_optim_octavesqp/stk_minimize_boxconstrained.m:
+	Box-constrained optimization with sqp.
+	* misc/optim/@stk_optim_octavesqp/stk_minimize_unconstrained.m:
+	Unconstrained optimization with sqp.
+	* misc/optim/@stk_optim_fminsearch/stk_minimize_unconstrained.m:
+	Unconstrained optimization with fminsearch.
+	* paramestim/stk_param_estim.m: Big cleanup thanks to the new
+	system of algorithm classes.
+	* misc/options/stk_options_set.m: Select default optimization
+	algorithms. This was previously done in stk_select_optimizer.
+	Also, remove the option 'optim_display_level' for stk_param_estim.
+	* config/stk_config_setup.m: Remove call to stk_select_optimizer.
+	* misc/optim/stk_select_optimizer.m: Deprecated.
+	* misc/optim/stk_optim_hasfmincon.m: Deprecated.
+	* config/stk_config_clearpersistents.m: Remove
+	stk_optim_hasfmincon and stk_select_optimizer from the list of
+	functions to be cleared. Add stk_optim_fmincon.
+	* admin/octpkg/INDEX: Remove stk_select_optimizer from the index.
+
+2015-06-30  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	build_octpkg.m:	Fix the generated DESCRIPTION file
+
+	* admin/build_tools/build_octpkg.m: Add "Depends: octave (>=
+	3.2.2)" and "Autoload: no" to the generated DESCRIPTION file.
+
+2015-06-25  Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+
+	@stk_kreq_qr/get.m: Fix a call to dot ()
+
+	* core/@stk_kreq_qr/get.m: Fix a call to dot () to make it work
+	when there is only one observation.
+
+2015-06-25  Rémi Stroh  <remi.stroh@lne.fr>
+
+	stk_param_estim.m: Fix a bug related to parameter objects.
+
+	* paramestim/stk_param_estim.m (provide_param0_value): Fix a bug
+	related to parameter objects. More precisely, use (:) indexing
+	systematically to access the vector of numerical parameters
+	corresponding to a given parameter object.
+
+	@stk_factorialdesign/stk_normalize.m: Add missing line continuation mark
+
+	* arrays/@stk_factorialdesign/stk_normalize.m: Add missing line
+	continuation mark.
+
+2015-06-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init.m: XXXX_param_init (undocumented feature)
+
+	* paramestim/stk_param_init.m: make it possible to define a
+	XXXX_param_init function that provides initial estimates for a
+	user-defined covariance function called XXXX (undocumented
+	feature).
+
+2015-06-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init.m: Removed unused variable.
+
+	* paramestim/stk_param_init.m: Removed unused variable.
+
+	stk_param_getdefaultbounds.m: Return [] for parameter classes
+
+	* paramestim/stk_param_getdefaultbounds.m: Return empty lower and
+	upper bounds for parameter classes that do not implement the
+	stk_param_getdefaultbounds.
+
+2015-06-17  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg: Remove n from the global scope
+
+	* misc/pareto/private/wfg.c:: Remove n from the global scope. Add
+	new helper functions to encapsulate basic operations on fronts:
+	wfg_front_init, wfg_front_destroy, wfg_front_resize.
+	* misc/pareto/private/wfg.h: Declare the new functions.
+	* misc/pareto/private/stk_dominatedhv_mex.c: Use the new functions.
+
+	wfg.c: Pass pointers to FRONT structures
+
+	* misc/pareto/private/wfg.c: Pass pointers to FRONT structures.
+
+2015-06-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	check_index_file.m: Fix error handling.
+
+	* admin/build_tools/check_index_file.m: Fix error handling.
+
+	Use PKG_ADD/PKG_DEL directives in the Octave package.
+
+	* stk_init.m: Add PKG_ADD/PKG_DEL directives. Also, add an
+	optional input argument 'do_quit'; when it is true, stk_init
+	removes STK from the path.
+	* admin/build_tools/build_octpkg.m: No more PKG_ADD/PKG_DEL
+	files. They are replaced by corresponding directives in
+	stk_init.m, which is no longer renamed to PKG_ADD. Also, there are
+	now two STK_OCTAVE_PACKAGE variables to set (one in stk_init.m,
+	the other one in stk_config_rmpath.m).
+	* admin/build_tools/check_index_file.m: No need to warry about
+	PKG_ADD.m ad PKG_DEL.m anymore.
+	* admin/octpkg/post_install.m: Idem.
+	* admin/octpkg/INDEX: Add stk_init to the INDEX.
+	* config/stk_config_path.m: Do not look for PKG_ADD to detect
+	Octave package mode, since there no longer is a PKG_ADD
+	file. Instead, rely on a hard-coded STK_OCTAVE_PACKAGE variable,
+	which is modified at build time by build_octpkg (similarly to the
+	one in stk_init).
+	* config/stk_config_rmpath.m: Modify comment.
+	* config/stk_config_addpath.m: Modify comment.
+	* admin/octpkg/PKG_DEL.m: Removed. Instead, a PKD_DEL directive
+	has been inserted in stk_init.
+
+2015-06-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Avoid unnecessary calls to stk_commonsize.
+
+	* misc/distrib/stk_distrib_bivnorm_cdf.m: Avoid unnecessary calls
+	to stk_commonsize.
+	* misc/distrib/stk_distrib_normal_cdf.m: Idem.
+
+2015-06-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_commonsize.m: Avoid unnecessary calls to repmat.
+
+	* arrays/generic/stk_commonsize.m: Avoid unnecessary calls to
+	repmat.
+
+2015-06-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_commonsize.m: Accept empty dimensions
+
+	* arrays/generic/stk_commonsize.m: Accept empty dimensions, under
+	the condition that all input arguments have the same empty
+	dimensions (in which case the result is empty).
+
+2015-06-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/subsasgn.m: Preserve column names when deleting rows
+
+	* arrays/@stk_dataframe/subsasgn.m: Preserve column names when
+	deleting rows, even if the resulting array is empty.
+
+2015-06-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg.c: Improve portability again
+
+	* misc/pareto/private/wfg.c: Improve portability again. Now all
+	variables are declared at the beginning of functions (as required
+	by the C89 standard). And some unused headers have been removed,
+	too.
+
+2015-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_distrib_bivnorm_cdf.m: Bugfix
+
+	* misc/distrib/stk_distrib_bivnorm_cdf.m: Fix a bug in the case of
+	mixtures of singular and non-singular cases. Add unit test.
+
+2015-05-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg.c: Remove C99-specific code (stdbool.h).
+
+	* misc/pareto/private/wfg.c: Remove C99-specific code (stdbool.h).
+
+2015-05-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_pmisclass.m: Compute the probability of misclassification
+
+	* utils/stk_pmisclass.m: New function to compute the probability
+	of misclassification with respect to a given threshold (either the
+	current probability of misclassification or the expectation of the
+	future probability of misclassification).
+	* examples/02_design_of_experiments/stk_example_doe04.m: Example
+	script that demonstrates the use of stk_pmisclass ().
+
+	stk_dominatedhv.m: New function to compute dominated hypervolumes.
+
+	* misc/pareto/stk_dominatedhv.m: New function to compute
+	dominated hypervolumes, which uses WFG 1.10 internally
+	* misc/pareto/private/stk_dominatedhv_mex.c: MEX-file wrapper for WFG
+	* admin/octpkg/INDEX: Add new function to the index
+	* admin/octpkg/Makefile: Add new MEX-file to the Makefile
+	* config/stk_config_makeinfo.m:Add new MEX-file to the build list
+
+	Import WFG 1.10.
+
+	* misc/pareto/private/wfg.c: Main WFG source file, with minor changes
+	* misc/pareto/private/wfg.h: Main WFG header, with minor changes
+	* misc/pareto/private/wfg.README: WFG README + ChangeLog + Copyright
+	* admin/build_tools/build_octpkg.m: Ignore wfg.README.
+
+	Make it possible to have several source files for one MEX.
+
+	* config/stk_config_buildmex.m: Make it possible to have several
+	source files for one MEX.
+	* config/stk_config_makeinfo.m: Existing MEX-files do not have any
+	additional source file.
+
+	Move Pareto-related functions to misc/pareto.
+
+	* arrays/generic/private/stk_isdominated_mex.c: moved from
+	* misc/pareto/private/stk_isdominated_mex.c: moved to
+	* arrays/generic/private/stk_paretofind_mex.c: moved from
+	* misc/pareto/private/stk_paretofind_mex.c: moved to
+	* arrays/generic/stk_isdominated.m: moved from
+	* misc/pareto/stk_isdominated.m: moved to
+	* arrays/generic/stk_paretofind.m: moved from
+	* misc/pareto/stk_paretofind.m: moved to
+	* admin/octpkg/INDEX: Create a dedicated section in the index
+	* config/stk_config_makeinfo.m: Update make info
+	* config/stk_config_path.m: Add new directory to the path
+
+2015-05-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Clear persistent variables in stk_init
+
+	* config/stk_config_clearpersistents.m: New function that unlocks
+	all possibly mlock-ed STK files and clears all STK functions that
+	contain persistent variables.
+	* stk_init.m: Call stk_config_clearpersistents.
+	* admin/RELEASE.md: Update release instructions.
+
+2015-05-20  Julien Bect  <julien.bect@supelec.fr>
+
+	@stk_dataframe/set.m: Fix stk_error calls (missing mnemonic)
+
+	* arrays/@stk_dataframe/set.m: Fix stk_error calls (missing mnemonic)
+
+	stk_param_estim.m: Make sure that lnv0 falls within the bounds
+
+	* paramestim/stk_param_estim.m (get_default_bounds_lnv): Make sure
+	that lnv0 falls within the bounds returned by get_default_bounds_lnv.
+
+2015-05-19  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_optim_hasfmincon.m: Improve fmincon detection
+
+	* misc/optim/stk_optim_hasfmincon.m: Try to use fmincon to check
+	that it is there, instead of relying on the result of the exist
+	function (closes ticket #30).
+
+2015-05-17  Julien Bect  <julien.bect@supelec.fr>
+
+	admin/octpkg/Makefile: Use $(MKOCTFILE) if defined
+
+	* admin/octpkg/Makefile: Use $(MKOCTFILE) if defined
+
+	stk_runtests.m: Make sure that all Octave warnings are disabled
+
+	* misc/test/stk_runtests.m: Make sure that all Octave warnings are
+	disabled
+
+	Fix %!shared blocks in unit tests.
+
+	* arrays/@stk_hrect/stk_normalize.m: Fix unit test.
+	* arrays/generic/stk_feval.m: Fix unit test.
+
+2015-04-22  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve indexing (subasgn/subsref) for stk_dataframe objects.
+
+	* arrays/@stk_dataframe/subsasgn.m: Preserve row names and column
+	names when it is possible (closes ticket #21).
+	* arrays/@stk_dataframe/subsref.m: Allow for several levels of
+	indexing in the case of ()-indexing.
+
+	stk_dataframe.m: Add help text
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Add help text (closes
+	ticket #26).
+
+2015-04-21  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_hrect.m: Add help text
+
+	* arrays/@stk_hrect/stk_hrect.m: Add help text (closes ticket #27).
+
+2015-04-20  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_boundingbox.m: Add doc and overload for several classes (ticket #28)
+
+	* arrays/generic/stk_boundingbox.m: Add doc. Handle plain arrays only.
+	* arrays/@stk_dataframe/stk_boundingbox.m: Overload.
+	* arrays/@stk_factorialdesign/stk_boundingbox.m: Overload.
+	* arrays/@stk_hrect/stk_boundingbox.m: Overload.
+	* arrays/@struct/stk_boundingbox.m: Overload.
+
+2015-04-05  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_feval.m: Update documentation.
+
+	* stk_feval.m: Update documentation.
+
+2015-03-11  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_feval.m: Implement vectorized calls and use them by default.
+
+	* arrays/generic/stk_feval.m: Implement vectorized calls and use them by
+	default.
+	* paramestim/stk_param_relik.m: Fix unit test.
+
+	Fix progress indicator in stk_feval.
+
+	* arrays/generic/stk_feval.m: Restore the progress indicator.
+	* misc/text/stk_disp_progress.m: Fix progress message.
+
+2015-03-04  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_distrib_normal_cdf.m: Fix the zero-variance case
+
+	* misc/distrib/stk_distrib_normal_cdf.m: Fix the zero-variance
+	case. Add unit tests.
+
+	Fix bugs in stk_distrib_*_ei functions.
+
+	* misc/distrib/stk_distrib_normal_ei.m: Fix bug (input argument
+	"minimize" was not properly taken into account).
+	* misc/distrib/stk_distrib_student_ei.m: Fix bug (input argument
+	"minimize" was not properly taken into account).
+
+2015-02-21  Julien Bect  <julien.bect@supelec.fr>
+
+	Optimize for speed
+
+	* misc/distrib/stk_distrib_normal_cdf.m: Optimize for speed
+	* covfcs/stk_gausscov_aniso.m: Optimize for speed
+	* covfcs/stk_materncov32_aniso.m: Optimize for speed
+	* covfcs/stk_materncov52_aniso.m: Optimize for speed
+	* covfcs/stk_materncov_aniso.m: Optimize for speed
+
+2015-02-18  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_feval.m: Do not return an stk_dataframe object systematically
+
+	* arrays/generic/stk_feval.m: Return an stk_dataframe object only
+	if the input x itself is an stk_dataframe object.
+
+	Optimize for speed (and fix a tiny bug)
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Optimize for speed
+	* arrays/@stk_dataframe/set.m: Optimize for speed (and fix a tiny bug)
+	* arrays/@stk_dataframe/horzcat.m: Optimize for speed
+	* arrays/@stk_dataframe/vertcat.m: Optimize for speed
+	* arrays/@stk_dataframe/subsref.m: Optimize for speed
+	* arrays/generic/stk_feval.m: Optimize for speed
+
+2015-02-17  Julien Bect  <julien.bect@supelec.fr>
+
+	Initialize model.param with NaNs.
+
+	* core/stk_model.m: Initialize model.param with NaNs.
+	* core/stk_predict.m: Fix unit tests.
+	* covfcs/stk_discretecov.m: Fix unit tests.
+	* covfcs/stk_gausscov_aniso.m: Fix unit tests.
+	* covfcs/stk_gausscov_iso.m: Fix unit tests.
+	* covfcs/stk_materncov32_aniso.m: Fix unit tests.
+	* covfcs/stk_materncov32_iso.m: Fix unit tests.
+	* covfcs/stk_materncov52_aniso.m: Fix unit tests.
+	* covfcs/stk_materncov52_iso.m: Fix unit tests.
+	* covfcs/stk_materncov_aniso.m: Fix unit tests.
+	* covfcs/stk_materncov_iso.m: Fix unit tests.
+	* utils/stk_conditioning.m: Fix unit tests.
+	* utils/stk_generate_samplepaths.m: Fix unit tests.
+
+2015-02-11  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_feval.m: Accept any object that implement feval
+
+	* arrays/generic/stk_feval.m: Accept any object that implement
+	feval (not just strings and function handles).
+
+2015-02-10  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_feval.m: Fix backward compatibility issues
+
+	* arrays/generic/stk_feval.m: Fix backward compatibility
+	issue. Old-style STK structures, where the data is contained in a
+	field named 'a', were not dealt with properly. Add unit test.
+	* core/stk_predict.m: Convert xi to double (same reason).
+	* paramestim/stk_param_estim.m: Convert zi to double (same reason).
+	* arrays/@struct/stk_length.m: New function.
+
+2015-02-09  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_hrect.m: Provide default constructor
+
+	* arrays/@stk_hrect/stk_hrect.m: Provide default constructor
+
+2015-02-04  Julien Bect  <julien.bect@supelec.fr>
+
+	Overload uplus, uminus for stk_dataframe objects.
+
+	* arrays/@stk_dataframe/uminus.m: Overload uminus.
+	* arrays/@stk_dataframe/uplus.m: Overload uplus.
+	* arrays/@stk_factorialdesign/uminus.m: Overload uminus.
+
+	stk_feval.m: Accept multivariate outputs (closes #20)
+
+	* arrays/generic/stk_feval.m: Accept functions with multivariate
+	outputs (i.e., outputs with several columns). Improve the
+	construction of the output dataframe (column names). Add unit
+	tests.
+
+	stk_feval.m: Fix a bug related to column names
+
+	* arrays/generic/stk_feval.m: Fix a bug related to column names.
+
+2015-02-03  Julien Bect  <julien.bect@supelec.fr>
+
+	@stk_dataframe/apply, min, max: Return more than one output argument
+
+	* arrays/@stk_dataframe/apply.m: Return more than one output argument
+	* arrays/@stk_dataframe/max.m: Return more than one output argument
+	* arrays/@stk_dataframe/min.m: Return more than one output argument
+
+	stk_param_relik.m: Improve the computation of G = W' * K * W
+
+	* paramestim/stk_param_relik.m: Compute G = W' * K * W in such a
+	way that the result is always (?) symmetric.
+
+2015-01-28  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_predict.m: Compute lambda_mu and RS only when necessary
+
+	* core/stk_predict.m: Compute lambda_mu and RS only when
+	necessary, depending on the number of output arguments. Add unit
+	tests.
+
+	stk_param_init.m: Handle the heteroscedastic case
+
+	* paramestim/stk_param_init.m: Handle the heteroscedastic case
+	with known variance properly. Error in the heteroscedastic case
+	with unknown variance. Add unit tests.
+
+2015-01-27  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_init.m: Fix a bug.
+
+	* paramestim/stk_param_init.m (paraminit_): Fix a bug.
+
+2015-01-25  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_dataframe.m: Make sure that the output is an stk_dataframe
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Make sure that the output
+	is an stk_dataframe object. Add unit tests.
+
+2015-01-24  Julien Bect  <julien.bect@supelec.fr>
+
+	Overload a few base functions for stk_dataframe objects
+
+	* arrays/@stk_dataframe/sort.m: Overload base function
+	* arrays/@stk_dataframe/mtimes.m: Overload base function
+
+2015-01-23  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_conditioning.m: Overload for stk_dataframe objects
+
+	* arrays/@stk_dataframe/stk_conditioning.m: Overload
+	stk_conditioning for stk_dataframe inputs. The output is an
+	stk_dataframe object if either LAMBDA or ZSIM is an stk_dataframe
+	object.
+	* utils/stk_conditioning.m: Do not convert the output into an
+	stk_dataframe object.
+
+	stk_generate_samplepaths.m: Overload for stk_dataframe objects
+
+	* arrays/@stk_dataframe/stk_generate_samplepaths.m: Overload
+	stk_generate_samplepaths for stk_dataframe inputs. The output is
+	always an stk_dataframe object.
+	* utils/stk_generate_samplepaths.m: Simplify the code using the
+	assumption that none of the inputs is an stk_dataframe object. The
+	output is an stk_dataframe object if and only if
+	model.response_name exists and is a non-empty string.
+
+2015-01-21  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_feval.m: Various improvements.
+
+	* arrays/generic/stk_feval.m: Update documentation. Try to make
+	the code clearer. Use stk_disp_progress.
+
+	stk_disp_progress.m: Display a progress indicator.
+
+	* misc/text/stk_disp_progress.m: New function that displays a
+	textual progress indicator.
+
+2015-01-21  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+
+	stk_feval.m: Generalize to the case of a cell array of functions
+
+	* arrays/generic/stk_feval.m: Generalize to the case of a cell
+	array of functions (ticket #19 closed).
+
+2015-01-08  Julien Bect  <julien.bect@supelec.fr>
+
+	Improve conditional simulation examples.
+
+	* examples/01_kriging_basics/stk_example_kb05.m: Add documentation.
+	* examples/01_kriging_basics/stk_example_kb09.m: New example.
+
+	stk_generate_samplepaths.m: Fix conditioning on noisy observations
+
+	* utils/stk_generate_samplepaths.m: Fix conditioning on noisy
+	observations, which was not implemented properly until now.
+
+	stk_conditioning.m: Implement conditioning on noisy observations
+
+	* utils/stk_conditioning.m: Simulate sample paths conditioned on
+	noisy observations when the additional NOISE_SIM argument is
+	provided.
+
+2015-01-07  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_generate_samplepaths.m: Do not simulate observation noise.
+
+	* utils/stk_generate_samplepaths.m: Do not add observation noise
+	to the generated sample paths. This is consistent with
+	stk_predict, which returns posterior variances for the unknown
+	function, not for future noisy observations.
+
+2014-12-31  Julien Bect  <julien.bect@supelec.fr>
+
+	Accept empty dim in sampling functions.
+
+	* sampling/stk_sampling_halton_rr2.m: Accept empty dim argument
+	when box is provided, in which case dim is guessed from the
+	dimension of box if provided, and defaults to one otherwise.
+	* sampling/stk_sampling_maximinlhs.m: Idem.
+	* sampling/stk_sampling_olhs.m: Idem.
+	* sampling/stk_sampling_randomlhs.m: Idem.
+	* sampling/stk_sampling_randunif.m: Idem.
+	* sampling/stk_sampling_regulargrid.m: Idem.
+
+	Use @stk_hrect objects wherever it is useful (work in progress).
+
+	* examples/01_kriging_basics/stk_example_kb03.m: Use @stk_hrect.
+	* examples/02_design_of_experiments/stk_example_doe03.m: Use @stk_hrect.
+	* misc/test/stk_is_lhs.m: Use @stk_hrect.
+	* paramestim/stk_param_init.m: Use @stk_hrect.
+	* sampling/stk_sampling_halton_rr2.m: Use @stk_hrect.
+	* sampling/stk_sampling_maximinlhs.m: Use @stk_hrect.
+	* sampling/stk_sampling_olhs.m: Use @stk_hrect.
+	* sampling/stk_sampling_randomlhs.m: Use @stk_hrect.
+	* sampling/stk_sampling_randunif.m: Use @stk_hrect.
+	* sampling/stk_sampling_regulargrid.m: Use @stk_hrect.
+
+	A few additional methods for the @stk_dataframe class.
+
+	* arrays/@stk_dataframe/diff.m: Overload base function.
+	* arrays/@stk_dataframe/ismember.m: Overload base function.
+	* arrays/@stk_dataframe/xlim.m: Overload base function.
+	* arrays/@stk_dataframe/ylim.m: Overload base function.
+
+	Overhaul stk_normalize and stk_rescale functions.
+
+	* arrays/@stk_dataframe/stk_normalize.m: Overhaul.
+	* arrays/@stk_dataframe/stk_rescale.m: Overhaul.
+	* arrays/@stk_factorialdesign/stk_normalize.m: Overhaul.
+	* arrays/@stk_factorialdesign/stk_rescale.m: Overhaul.
+	* arrays/generic/stk_normalize.m: Overhaul.
+	* arrays/generic/stk_rescale.m: Overhaul.
+
+	stk_boundingbox.m: New function to create bounding boxes.
+
+	* arrays/generic/stk_boundingbox.m: New function to create
+	bounding boxes as @stk_hrect object.
+	* admin/octpkg/INDEX: Add new functions to the index.
+
+	New @stk_hrect class to represent hyper-rectangles.
+
+	* arrays/@stk_hrect/stk_hrect.m: Constructor for the new
+	@stk_hrect class.
+	* arrays/@stk_hrect/axis.m: Overload base function.
+	* arrays/@stk_hrect/disp.m: Overload base function.
+	* arrays/@stk_hrect/display.m: Overload base function.
+	* arrays/@stk_hrect/get.m: Overload base function.
+	* arrays/@stk_hrect/horzcat.m: Overload base function.
+	* arrays/@stk_hrect/ismember.m: Overload base function.
+	* arrays/@stk_hrect/stk_normalize.m: Overload STK function.
+	* arrays/@stk_hrect/stk_rescale.m: Overload STK function
+	* arrays/@stk_hrect/subsasgn.m: Overload base function.
+	* arrays/@stk_hrect/subsref.m: Overload base function.
+	* arrays/@stk_hrect/vertcat.m: Overload base function.
+	* admin/octpkg/INDEX: Add new functions to the index.
+
+	Improve plot helper functions.
+
+	* misc/plot/stk_get_axis_arg.m: New function to help handling the
+	options axes argument that most plotting functions have.
+	* misc/plot/stk_xlabel.m: Use stk_get_axis_arg.
+	* misc/plot/stk_ylabel.m: Use stk_get_axis_arg.
+	* misc/plot/stk_zlabel.m: New function, similar to stk_xlabel and stk_ylabel.
+	* misc/options/stk_options_set.m: Add options for stk_zlabel.
+
+2014-12-09  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_distrib_bivnorm_cdf: Compute bivariate normal probabilities.
+
+	* misc/distrib/stk_distrib_bivnorm_cdf.m: Compute bivariate normal
+	probabilities (with any means, standard deviations and
+	corrrelation coefficients). Supports broadcasting. Accurate
+	computation of [p, q] even when p or q is close to one.
+	* misc/distrib/private/stk_distrib_bivnorm0_cdf.c: C MEX-file for
+	the computation of standard bivariate probabilities (zero means,
+	unit variances).
+	* admin/octpkg/INDEX: Hide stk_distrib_bivnorm_cdf.m, currently
+	considered as an internal function.
+	* admin/octpkg/Makefile: Add __stk_distrib_bivnorm0_cdf__ to the
+	list of targets.
+	* config/stk_config_makeinfo.m: Add stk_distrib_bivnorm0_cdf.
+
+2014-12-03  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_sampling_randunif.m: Fix input argument checking.
+
+	* sampling/stk_sampling_randunif.m: Fix input argument checking.
+
+	stk_sampling_randunif.m: Accept empty dim when box is provided.
+
+	* sampling/stk_sampling_randunif.m: Accept empty dim argument when
+	box is provided, in which case dim is guessed from the dimension
+	of box.
+
+2014-11-20  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_estim.m: Provide a value for param0 if needed.
+
+	* paramestim/stk_param_estim.m: Provide a value for param0 if needed.
+
+	stk_param_estim.m: Empty is the same as not provided.
+
+	* paramestim/stk_param_estim.m: Empty is the same as not provided.
+
+	stk_param_estim.m: Simplify variable names.
+
+	* paramestim/stk_param_estim.m: Simplify variable names, param0lnv
+	-> lnv0, paramlnvopt -> lnvopt.
+
+	stk_param_estim.m: Always return something meaningful for lnv.
+
+	* paramestim/stk_param_estim.m: Always return something meaningful
+	for lnv: when the variance of the noise is not estimated, return
+	model.lognoisevariance. Update the function documentation
+	following this and earlier changes.
+
+2014-11-08  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_estim.m: Estimate lnv if lognoisevariance is nan.
+
+	* paramestim/stk_param_init_lnv.m: New function that provides a
+	rough estimate of the variance of the noise for a given model.
+	* admin/octpkg/INDEX: Include stk_param_init_lnv.m.
+	* paramestim/stk_param_estim.m: Estimate the variance of the noise
+	if the lognoisevariance field is nan, using as a starting point
+	the value returned by stk_param_init_lnv.
+	* examples/01_kriging_basics/stk_example_kb04.m: Demonstrate how
+	it is possible to estimate the variance of the noise without
+	providing a initial guess for it.
+
+2014-11-06  Julien Bect  <julien.bect@supelec.fr>
+
+	Handle empty lognoisevariance field as if missing.
+
+	* core/stk_make_matcov.m: Handle empty lognoisevariance field as
+	if missing.
+	* core/stk_model.m: Idem.
+	* doc/dev/model.texi: Idem.
+	* paramestim/stk_param_estim.m: Idem.
+	* paramestim/stk_param_init.m: Idem.
+	* paramestim/stk_param_relik.m: Idem.
+
+2014-11-03  Julien Bect  <julien.bect@supelec.fr>
+
+	Add a 'pairwise' argument to stk_noisecov.
+
+	* covfcs/stk_noisecov.m: Add a 'pairwise' argument.
+	* core/stk_make_matcov.m: Use the new 'pairwise' argument.
+
+2014-11-02  Julien Bect  <julien.bect@supelec.fr>
+
+	stk_param_init.m: Change the behaviour regarding lnv.
+
+	* paramestim/stk_param_init.m: defaults to using the input value
+	of model.lognoisevariance if it is not nan, and estimating the
+	variance if it is nan. The meaning of the fifth argument, now
+	called DO_ESTIM_LNV, has also slightly changed: it is used to
+	force or prevent the estimation of the variance of the noise,
+	regardless of the value of model.lognoisevariance.
+	* examples/03_miscellaneous/stk_example_misc03.m: Display the two
+	models that have been used in this example.
+	* doc/dev/model.texi: update accordingly.
+
+2014-10-26  Julien Bect  <julien.bect@supelec.fr>
+
+	Make lognoisevariance a mandatory field in model structures.
+
+	* core/stk_model.m: Make lognoisevariance a mandatory field in
+	model structures, with default value -inf. For backward
+	compatibility, stk_discrete_cov models can still be created with
+	model structures that lack a lognoisevariance field.
+	* core/stk_make_matcov.m: For backward compatibility, a
+	lognoisevariance field with value -inf is added if absent.
+	* paramestim/stk_param_estim.m: idem.
+	* paramestim/stk_param_init.m: idem.
+	* paramestim/stk_param_relik.m: idem + remove NOISYOBS variable.
+	* covfcs/stk_discretecov.m: Modify unit test accordingly.
+	* doc/dev/model.texi: Record design notes and ideas about model
+	structures (not meant to be released as a user-level doc).
+
+2014-10-09  Julien Bect  <julien.bect@supelec.fr>
+
+	Add the Goldstein-Price test function.
+
+	* examples/test_functions/stk_testfun_goldsteinprice.m:
+	Goldstein-Price test function.
+
 2014-09-29  Julien Bect  <julien.bect@supelec.fr>
 
 	Polish stk_sprintf_colvect_* functions.
@@ -451,7 +1180,7 @@
 	stk_cholcov.m: Prevent infinite while loops.
 
 	* core/stk_cholcov.m: Prevent infinite while loops, that could
-	occur in the case of matrices that either contained NaNs or Infs,
+	occur in the case of matrices that either contained nans or Infs,
 	or were really far from from positive definite.
 
 2014-06-25  Ashwin Ravisankar  <ashwinr1993@gmail.com>
@@ -692,8 +1421,8 @@
 
 	Introduce a new (experimental) feature: linear models.
 
-	* core/stk_ortho_func.m: Modified to handle model.order == NaN.
-	* paramestim/stk_param_init.m: Modified to handle model.order == NaN.
+	* core/stk_ortho_func.m: Modified to handle model.order == nan.
+	* paramestim/stk_param_init.m: Modified to handle model.order == nan.
 	* config/stk_config_path.m: Add lm to the path.
 	* lm/@stk_lm_affine/stk_lm_affine.m: New function
 	* lm/@stk_lm_affine/feval.m: New function
@@ -1553,7 +2282,7 @@
 
 2013-10-10  Julien Bect  <julien.bect@supelec.fr>
 
-	distrib_normal_*: return NaN for negative standard deviations.
+	distrib_normal_*: return nan for negative standard deviations.
 
 	* misc/distrib/distrib_normal_pdf.m: modified
 	* misc/distrib/distrib_normal_cdf.m: modified
@@ -3303,7 +4032,7 @@
 
 	Minor bugfix + improved error message in stk_remlqrg()
 
-	* core/stk_remlqrg.m: Minor bugfix: returns NaN for the derivative
+	* core/stk_remlqrg.m: Minor bugfix: returns nan for the derivative
 	with respect to the noise variance in the case of a model without
 	observation noise.  Improved error message if NOISEPRIOR &&
 	~NOISYOBS (doesn't use assert anymore).

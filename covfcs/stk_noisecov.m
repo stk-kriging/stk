@@ -2,10 +2,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,32 +27,55 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = stk_noisecov (ni, lognoisevariance, diff)
+function K = stk_noisecov (ni, lognoisevariance, diff, pairwise)
 
-if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+if nargin > 4,
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if nargin < 3,
+if (nargin < 3) || (isempty (diff)),
     diff = -1; % default: compute the value (not a derivative)
 end
 
+if nargin < 4
+    pairwise = false; % default: matrix
+end
+
 if isscalar (lognoisevariance), % homoscedastic
+    % Remark: the result does not depend on diff
     
-    % the result does not depend on diff
-    K = exp(lognoisevariance) * eye(ni);
+    if pairwise
+        if lognoisevariance == -inf
+            K = zeros (ni, 1);
+        else
+            K = (exp (lognoisevariance)) * (ones (ni, 1));
+        end
+    else
+        if lognoisevariance == -inf
+            K = zeros (ni);
+        else
+            K = (exp (lognoisevariance)) * (eye (ni));
+        end
+    end
     
 else % heteroscedastic
-    
-    if ~ ((isequal (s, [1, ni])) || (isequal (s, [ni, 1])))
-        error ('lognoisevariance must be a scalar or a vector of length ni.');
-    end
 
+    s = size (lognoisevariance);
+    if ~ ((isequal (s, [1, ni])) || (isequal (s, [ni, 1])))
+        fprintf ('lognoisevariance has size:\n');  display (s);
+        stk_error (sprintf (['lognoisevariance was expected to be either a ' ...
+            'scalar or a vector of length %d\n'], ni), 'IncorrectSize');
+    end
+    
     if diff ~= -1,
         error ('diff ~= -1 is not allowed in the heteroscedastic case');
     end
     
-    K = diag (exp (lognoisevariance));
+    if pairwise
+        K = exp (lognoisevariance(:));
+    else
+        K = diag (exp (lognoisevariance));
+    end
 end
 
 end % function stk_noisecov
@@ -67,4 +90,5 @@ end % function stk_noisecov
 %!error K = stk_noisecov(ni);
 %!test  K = stk_noisecov(ni, lognoisevariance);
 %!test  K = stk_noisecov(ni, lognoisevariance, diff);
-%!error K = stk_noisecov(ni, lognoisevariance, diff, pi^2);
+%!test  K = stk_noisecov(ni, lognoisevariance, diff, true);
+%!error K = stk_noisecov(ni, lognoisevariance, diff, true, pi^2);

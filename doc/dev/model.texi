@@ -1,0 +1,123 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename stk_models.info
+@settitle STK model structures (design notes)
+@c %**end of header
+
+@c @titlepage
+@c @title STK model structures (design notes)
+@c @author Julien Bect
+@c @page
+@c @end titlepage
+
+@macro STK
+@acronym {STK}
+@end macro
+
+@unnumbered @STK@ model structures (design notes)
+
+@section Introduction
+
+@subsection What is this document ?
+
+This document describes @STK@ model structures. It is currently in a very
+rough form and should be considered as a set of notes for @STK@
+developers. Long term goal: relevant information about @STK@ models
+should be included in the @STK@ user manual (which does not exist yet).
+
+@subsection Structures vs objects
+
+Models are currently described by structures (scalar struct
+arrays). Long term goal: structure will be completely replaced by
+objects, but support for old-style model structures will remain
+available for some time, for backward compatiblity.
+
+
+@section Fields
+
+@subsection Mandatory fields
+
+@itemize @bullet
+
+@item @code{covariance_type}
+
+@item @code{param}
+
+@item @code{order}
+
+@item @code{lognoisevariance}: log of the variance of the observation noise.
+@itemize @bullet
+
+@item The default value for models created using the @code{stk_model}
+function is @code{-inf}, corresponds to noiseless observations.
+
+@item @code{nan} indicates that this parameter must be
+estimated.
+
+@item Heteroscedastic noise: some functions (@code{stk_noisecov},
+@code{stk_make_matcov} and partially @code{stk_param_relik}) support
+vector values for this field, corresponding to the case of a
+heteroscedastic noise.
+
+@end itemize
+
+@end itemize
+
+
+@subsection Optional fields
+
+@itemize @bullet
+
+@item @code{param_prior}
+
+@item @code{noise_prior}
+
+@item @code{response_name}
+
+@item @code{lm}
+
+@end itemize
+
+
+@section Notes / ideas / todos
+
+@subsection Heteroscedastic models
+
+Support for heteroscedasticity in STK is, at the present time, rather
+limited (and somewhat shaky). Vector values for @code{lognoisevariance}
+should only be accepted for @code{stk_discrete_cov} models. For other
+types of models, defined on infinite (continuous) factor spaces,
+@code{lognoisevariance} could be a handle to a function that compute the
+log of the noise variance at any given point.
+
+
+@subsection Non-scalar struct array ?
+
+Currently, only @emph{scalar} struct arrays are supported as model
+structures. Actually, the size of a @code{model} argument is not
+explicitely checked, which means that most @STK@ functions will crash when
+provided with a non-scalar struct array.
+
+Idea: non-scalar model structures might be an appropriate formalism for
+@emph{vector-valued} models (not currently supported by @STK).
+
+
+@subsection @code{nan} value for the @code{lognoisevariance} field
+
+Starting with STK 2.3.0, the @code{lognoisevariance} field is considered
+mandatory: a @code{nan} value indicates that the variance of the noise
+must be estimated, and @code{-inf} indicates that the observations are
+assumed noiseless. For backward compatibility, @code{model} structures
+with a missing or empty @code{lognoisevariance} field are considered as
+noiseless models.
+
+TODO (before 2.3.0 release): Handle the @code{nan} case properly
+throughout the entire toolbox.
+
+
+@c @node Index
+@c @unnumbered Index
+
+@c @printindex cp
+
+@bye

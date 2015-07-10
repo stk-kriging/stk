@@ -1,11 +1,11 @@
 % STK_SAMPLING_RANDUNIF generates uniformly distributed points
 %
-% CALL: X = stk_sampling_randunif(N, DIM)
+% CALL: X = stk_sampling_randunif (N, DIM)
 %
 %   generates N points, independent and uniformly distributed in the
 %   DIM-dimensional hypercube [0; 1]^DIM.
 %
-% CALL: X = stk_sampling_randunif(N, DIM, BOX)
+% CALL: X = stk_sampling_randunif (N, DIM, BOX)
 %
 %   does the same thing in the DIM-dimensional hyperrectangle specified by the
 %   argument BOX, which is a 2 x DIM matrix where BOX(1, j) and BOX(2, j) are
@@ -13,10 +13,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@supelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
+%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -38,31 +38,38 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_sampling_randunif(n, dim, box)
+function x = stk_sampling_randunif (n, dim, box)
 
 if nargin > 3,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% read argument n
-if (length(n) ~=1 ) && (length(n) ~= dim)
-    error('n should either be a scalar or a vector of length d');
+% Read argument n
+if ~ ((isscalar (n)) && (isnumeric (n)))
+    error ('n should be a numerical scalar.');
 end
 
-% read argument box
-if (nargin < 3) || isempty(box)
-    box = repmat([0; 1], 1, dim);
+% Read argument dim
+if (nargin < 2) || ((nargin < 3) && (isempty (dim)))
+    dim = 1;  % Default dimension
+elseif (nargin > 2) && (~ isempty (box))
+    dim = size (box, 2);
+end
+
+% Read argument box
+if (nargin < 3) || isempty (box)
+    box = stk_hrect (dim);  % build a default box
 else
-    stk_assert_box(box);
+    box = stk_hrect (box);  % convert input argument to a proper box
 end
 
-if n == 0, % empty sample    
-    xdata = zeros(0,dim);    
-else % at least one input point          
-    xdata = stk_rescale(rand(n, dim), [], box);
+if n == 0, % empty sample
+    xdata = zeros (0, dim);
+else % at least one input point
+    xdata = stk_rescale (rand(n, dim), [], box);
 end
 
-x = stk_dataframe(xdata);
+x = stk_dataframe (xdata, box.colnames);
 x.info = 'Created by stk_sampling_randunif';
 
 end % function stk_sampling_randunif
@@ -74,17 +81,27 @@ end % function stk_sampling_randunif
 %!shared x, n, dim, box
 %! n = 10; dim = 2; box = [0, 0; 2, 2];
 
-%!error x = stk_sampling_randunif();
-%!error x = stk_sampling_randunif(n);
-%!test  x = stk_sampling_randunif(n, dim);
-%!test  x = stk_sampling_randunif(n, dim, box);
-%!error x = stk_sampling_randunif(n, dim, box, pi);
+%!error x = stk_sampling_randunif ();
+%!test  x = stk_sampling_randunif (n);
+%!test  x = stk_sampling_randunif (n, dim);
+%!test  x = stk_sampling_randunif (n, dim, box);
+%!error x = stk_sampling_randunif (n, dim, box, pi);
 
-%% 
+%%
 % Check that the output is a dataframe
 % (all stk_sampling_* functions should behave similarly in this respect)
 
 %!assert (isa(x, 'stk_dataframe'));
+
+%%
+% Check that column names are properly set, if available in box
+
+%!assert (isequal (x.colnames, {}));
+
+%!test
+%! cn = {'W', 'H'};  box = stk_hrect (box, cn);
+%! x = stk_sampling_randunif (n, dim, box);
+%! assert (isequal (x.colnames, cn));
 
 %%
 % Check output argument
