@@ -226,13 +226,16 @@ end
 
 % Prior mean (rule of thumb)
 LOGSIGMA2_PRIORMEAN = 0;  % don't care, since we use an infinite variance
-LOGNU_PRIORMEAN = 2 * dim;
-LOGINVRHO_PRIORMEAN = 1/4 * (diff (box))';
+LOGNU_PRIORMEAN = log (2 + 0.5 * dim);
+LOGINVRHO_PRIORMEAN = - log (1/4 * (diff (box))');
 
 algo.model.prior.mean = [LOGSIGMA2_PRIORMEAN; ...
     LOGNU_PRIORMEAN; LOGINVRHO_PRIORMEAN];
 
-algo.model.prior.invcov = diag ([0 0.5*ones(1,dim+1)]);
+LOGNU_VAR = 0.3 ^ 2;
+LOGINVRHO_VAR = 0.5 ^ 2;
+algo.model.prior.invcov = diag ([0 1/LOGNU_VAR ...
+    1/LOGINVRHO_VAR*ones(1,dim)]);
 
 
 %% Sampling criterion
