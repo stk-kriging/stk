@@ -1,6 +1,12 @@
 Changes in version 2.4.0
 ========================
 
+* Bug fixes
+
+    o stk_dist, stk_filldist, stk_gpquadform, stk_mindist: Fix segmentation
+      faults occuring with very large matrices (related to signed integer-based
+      index computation in the underlying MEX-files).
+
 * Optimizer objects
 
     o The choice of the optimization algorithm used in stk_param_estim is now

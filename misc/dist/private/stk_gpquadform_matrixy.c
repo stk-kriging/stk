@@ -4,9 +4,10 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
+ *    Copyright (C) 2015 CentraleSupelec                                     *
  *    Copyright (C) 2013 SUPELEC                                             *
  *                                                                           *
- *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                  *
+ *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
  *                                                                           *
  * Copying Permission Statement                                              *
  *                                                                           *
@@ -36,10 +37,10 @@
 static void gpquadfrom_matrixy
 (
  double* x, double* y, double* rx2, double* ry2, 
- double* h, int nx, int ny, int dim
+ double* h, size_t nx, size_t ny, size_t dim
  )
 {
-  int i, j, kx, ky;
+  size_t i, j, kx, ky;
   double diff, lambda;
 
   for (i = 0; i < nx; i++) {
@@ -69,7 +70,7 @@ mxArray* compute_gpquadfrom_matrixy
  const mxArray* ry
  )
 {
-  unsigned int k, d, mx, my;
+  size_t k, d, mx, my;
   double u, *p, *rx2, *ry2;
   mxArray *h;
 

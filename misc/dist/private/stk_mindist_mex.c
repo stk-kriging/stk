@@ -4,6 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
+ *    Copyright (C) 2015 CentraleSupelec                                     *
  *    Copyright (C) 2012 SUPELEC                                             *
  *                                                                           *
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
@@ -35,9 +36,9 @@
 #define X_IN   prhs[0]  /* input argument  */
 #define H_OUT  plhs[0]  /* output argument */
 
-static double compute_mindist(double* x, int nx, int dim)
+static double compute_mindist(double* x, size_t nx, size_t dim)
 {
-  int i, j, k1, k2;
+  size_t i, j, k1, k2;
   double diff, dist_squared, mindist_squared;
 
   mindist_squared = -1;
@@ -65,7 +66,7 @@ static double compute_mindist(double* x, int nx, int dim)
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 {
-  unsigned int dim, mx;
+  size_t dim, mx;
 
   if (nlhs > 1)
       mexErrMsgTxt("Too many output arguments.");
