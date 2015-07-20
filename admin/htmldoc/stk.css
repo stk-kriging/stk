@@ -1,0 +1,188 @@
+a:link {
+  background-color: inherit;
+  color: black;
+}
+
+a:visited {
+  background-color: inherit;
+  color: black;
+}
+
+a.linkToIndex {
+  text-decoration: none;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+td {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+}
+
+body {
+  background: white;
+  color: black;
+  font-family: verdana,helvetica,arial,sans-serif;
+  font-weight: normal;
+  font-size: 13px;
+  width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+}
+
+div.header {
+  width: inherit;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+div.header #title {  
+  padding-left: 1em;
+  font-size: 120%;
+}
+
+div#title {
+  width: 100%;
+  clear: both;
+  position: fixed;
+  top: 0;
+}
+
+#doccontent {
+  width: inherit;
+  padding: 0em;
+  margin-top: 1em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Layout of packages page */
+div.func {
+  margin-left: 1em;
+}
+
+h3.package_name {
+  background-color: #eeeeec;
+  border: 2px solid #d3d7cf;
+  padding: 2px;
+}
+
+div #description_box {
+  padding-top: 1em;
+  width: inherit;
+}
+
+a.package_link {
+  background-color: inherit;
+  color: black;
+  font-weight: bold;
+  font-size: 80%;
+  text-decoration: none;
+}
+
+a.package_head_link {
+  background-color: inherit;
+  color: black;
+  text-decoration: none;
+}
+
+table.package {
+  table-layout: fixed;
+  width: 100%;
+}
+
+p.package_link a {
+  background-color: inherit;
+  color: black;
+  text-decoration: none;
+}
+
+h3.category {
+  background: #EEEEEC;
+  border: solid 2px #daddd6;
+  padding: 2px;
+  width: 742px;
+  margin-top: 2em;
+}
+
+.flink {
+  background-color: inherit;
+  color: inherit;
+  text-align: right;
+  display: block;
+}
+
+.ftext {
+  margin-left: 4ex;
+  color: blue;
+  margin-bottom: 2ex;
+}
+
+div#GPLv3 {
+  margin-top: 3em;
+}
+
+div#doccontent pre {
+  margin-top: 3em;
+}
+
+/* Packake info box: version, release date, ... */
+
+div.package_box {
+  background: #fcf98f;
+  border: 2px solid #edd4A0;
+  width: 500px;  /* total width: 500 + (13 + 2) * 2 + 5 = 535px */
+  height: 86px;  /* total height: 86 + (13 + 2) * 2 = 116px */  
+  padding: 13px;
+  margin-right: 5px;
+}
+
+td.package_table {
+  padding-right: 2em;
+}
+
+/* Petits encarts à droite: Download, NEWS */
+
+div.smallLinkBox {
+  width: 180px;  /* total width = 180 + (13 + 2) * 2 + 5 = 215 */
+  height: 23px;  /* total height = 23 + (13 + 2) * 2 + 5 = 63 */ 
+  border: 2px solid;
+  padding: 13px;
+  margin-left: 5px;
+}
+
+div#DownloadBox {   /* green box for "Download" */
+  margin-bottom: 5px;
+  background-color: #baf584;
+  border-color: #83c256;
+}
+
+div#NewsBox {  /* blue box for "What's new ?" */
+  margin-top: 5px;  
+  background-color: #c2bfef;
+  border-color: #827faf;
+}
+
+div.smallLinkBox img {  /* icons */
+  width: 25px;
+  height: auto;
+}
+
+div.smallLinkBox td.icon {
+  padding-right: 10px;
+}
+
+/* Package description box */
+
+div.package_description {
+  background: #fcf98f;
+  border: 2px solid #edd4A0;
+  width: 720px;
+  padding: 13px;
+  margin-top: 1em;
+  margin-bottom: 3em;
+}

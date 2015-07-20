@@ -1,0 +1,35 @@
+What is the MOLE ?
+==================
+
+MOLE stands for "Matlab/Octave Langage Extensions"
+
+This directory is meant to contain general purpose functions that either extend
+the Matlab/Octave langage or provided a replacement for a function that is
+missing or buggy in one of the two langages.
+
+
+Long-term goal
+==============
+
+The MOLE might one day be released as a package on its own, independently of
+STK. Therefore, here, functions DO NOT have their name prefixed by stk_.
+
+
+Directories
+===========
+
+./matlab contains functions that are missing in Matlab:
+
+      o fflush
+      o file_in_loadpath
+      o file_in_path
+      o index
+      o page_screen_output
+      o stdout
+
+Other functions are provided in single-function subdirectories:
+
+      o isoctave
+      o corr
+      o linsolve
+      o quantile

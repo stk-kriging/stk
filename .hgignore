@@ -1,0 +1,10 @@
+syntax: glob
+build
+*.mex
+*.mexa64
+*.mexglx
+*.mexw64
+*.o
+*~
+*.asv
+*orig
