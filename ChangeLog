@@ -1,3 +1,10 @@
+2015-08-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg.c (inclhv4): Put all declarations at the beginning
+
+	* misc/pareto/private/wfg.c (inclhv4): Put all variable
+	declarations at the beginning of the function (strict ANSI C).
+
 2015-07-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Use size_t for computations on positive indices.

@@ -356,6 +356,7 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
     double vprs = 1;
     double vqrs = 1;
     double vpqrs = 1;
+    OBJECTIVE z1, z2;
 
     for (i = 0; i < n; i++)
     {
@@ -381,7 +382,7 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
                 }
                 else
                 {
-                    OBJECTIVE z1 = WORSE(q.objectives[i],s.objectives[i]);
+                    z1 = WORSE(q.objectives[i],s.objectives[i]);
                     vpq *= q.objectives[i];
                     vpr *= r.objectives[i];
                     vps *= WORSE(p.objectives[i],s.objectives[i]);
@@ -410,7 +411,7 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
             }
             else
             {
-                OBJECTIVE z1 = WORSE(p.objectives[i],r.objectives[i]);
+                z1 = WORSE(p.objectives[i],r.objectives[i]);
                 vpq *= q.objectives[i];
                 vpr *= z1;
                 vps *= WORSE(p.objectives[i],s.objectives[i]);
@@ -426,8 +427,8 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
         else if (BEATS(q.objectives[i],r.objectives[i]))
             if (BEATS(p.objectives[i],s.objectives[i]))
             {
-                OBJECTIVE z1 = WORSE(p.objectives[i],r.objectives[i]);
-                OBJECTIVE z2 = WORSE(r.objectives[i],s.objectives[i]);
+                z1 = WORSE(p.objectives[i],r.objectives[i]);
+                z2 = WORSE(r.objectives[i],s.objectives[i]);
                 vpq *= p.objectives[i];
                 vpr *= z1;
                 vps *= s.objectives[i];
@@ -442,8 +443,8 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
             }
             else
             {
-                OBJECTIVE z1 = WORSE(p.objectives[i],r.objectives[i]);
-                OBJECTIVE z2 = WORSE(r.objectives[i],s.objectives[i]);
+                z1 = WORSE(p.objectives[i],r.objectives[i]);
+                z2 = WORSE(r.objectives[i],s.objectives[i]);
                 vpq *= p.objectives[i];
                 vpr *= z1;
                 vps *= p.objectives[i];
@@ -472,7 +473,7 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
         }
         else
         {
-            OBJECTIVE z1 = WORSE(q.objectives[i],s.objectives[i]);
+            z1 = WORSE(q.objectives[i],s.objectives[i]);
             vpq *= p.objectives[i];
             vpr *= p.objectives[i];
             vps *= p.objectives[i];
