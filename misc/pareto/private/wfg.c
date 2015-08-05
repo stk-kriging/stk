@@ -526,39 +526,33 @@ double hv (FRONT* ps)
 
     /* these points need sorting */
     qsort(&ps->points[safe], ps->nPoints - safe, sizeof(POINT), greater);
+
     /* n = 2 implies that safe = 0 */
     if (n == 2) return hv2 (ps, ps->nPoints);
+
     /* these points don't NEED sorting, but it helps */
     qsort(ps->points, safe, sizeof(POINT), greaterabbrev);
 
     if (n == 3 && safe > 0)
     {
         volume = ps->points[0].objectives[2] * (hv2 (ps, safe));
-
-        wfg_front_resize (ps, ps->nPoints, n - 1);
-
-        for (i = safe; i < ps->nPoints; i++)
-            /* we can ditch dominated points here, but they will be ditched anyway in makeDominatedBit */
-            volume += ps->points[i].objectives[n - 1] * (exclhv (ps, i));
-
-        wfg_front_resize (ps, ps->nPoints, n);
-
-        return volume;
+	i = safe;
     }
     else
     {
         volume = inclhv4 (ps->points[0], ps->points[1], ps->points[2], ps->points[3]);
-
-        wfg_front_resize (ps, ps->nPoints, n - 1);
-
-        for (i = 4; i < ps->nPoints; i++)
-            /* we can ditch dominated points here, but they will be ditched anyway in makeDominatedBit */
-            volume += ps->points[i].objectives[n - 1] * (exclhv (ps, i));
-
-        wfg_front_resize (ps, ps->nPoints, n);
-
-        return volume;
+	i = 4;
     }
+
+    wfg_front_resize (ps, ps->nPoints, n - 1);
+
+    for (; i < ps->nPoints; i++)
+	/* we can ditch dominated points here, but they will be ditched anyway in makeDominatedBit */
+	volume += ps->points[i].objectives[n - 1] * (exclhv (ps, i));
+
+    wfg_front_resize (ps, ps->nPoints, n);
+
+    return volume;
 }
 
 

@@ -1,5 +1,10 @@
 2015-08-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	wfg.c (hv): Code simplification
+
+	* misc/pareto/private/wfg.c (hv): Factorize some code for the
+	cases n == 3 and n >= 4.
+
 	wfg.c (inclhv4): Put all declarations at the beginning
 
 	* misc/pareto/private/wfg.c (inclhv4): Put all variable
