@@ -66,4 +66,30 @@ void wfg_front_init (FRONT* front, int nb_points, int nb_objectives);
 void wfg_front_destroy (FRONT* front);
 void wfg_front_resize (FRONT* f, int nb_points, int nb_objectives);
 
+
+/*****************************************/
+/* RLIST structure & associated funtions */
+/*****************************************/
+
+typedef struct
+{
+    int allocated_size;  /* maximal number of rectangles     */
+    int size;            /* current number of rectangles     */
+    int n;               /* dimension (number of objectives) */
+    double **xmin;       /* lower bounds                     */
+    double **xmax;       /* upper bounds                     */
+    int *sign;           /* inclusion/exclusion              */
+}
+RLIST;
+
+/* wfg_compute_decomposition: similar to wfg_compute_hv, but */
+/*   returns a decomposition of the dominated region into    */
+/*   hyper-rectangles (instead of its hyper-volume)          */
+void wfg_compute_decomposition (FRONT* ps, RLIST* Rlist);
+
+/* Memory management */
+RLIST* Rlist_alloc (int alloc_size, int n);
+void Rlist_extend (RLIST* Rlist, int k, int* p_Ridx);
+void Rlist_free (RLIST* Rlist);
+
 #endif

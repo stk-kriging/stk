@@ -1,5 +1,29 @@
 2015-08-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_dominatedhv can now return a decomposition in hyper-rectangles
+
+	* misc/pareto/private/wfg.c (Rlist_hv, Rlist_hv2, Rlist_inclhv)
+	(Rlist_inclhv2, Rlist_inclhv3, Rlist_inclhv4, Rlist_exclhv)
+	(wfg_compute_decomposition): For each original WFG function that
+	returns an hypervolume valume, provide a function that return the
+	corresponding decomposition as a collection of signed overlapping
+	hyper-rectangles (RLIST structure).
+	(Rlist_alloc, Rlist_extend, Rlist_free): Memory management for
+	RLIST structures.
+	* misc/pareto/private/wfg.h: Define RLIST structure and declare
+	some associated functions.
+	* misc/pareto/private/stk_dominatedhv_mex.c (compute_hv): Use
+	size_t instead of int for unsigned indices.
+	(compute_decomposition): New function, similar to compute_hv, but
+	return the decomposition instead of the hypervolume value.
+	(mexFunction): Use size_t instead of int for unsigned indices. Add
+	second input argument to select between computing the hypervolume
+	value and computing the decomposition.
+	* misc/pareto/stk_dominatedhv.m: Add optional input argument to
+	select whether the decomposition into overlapping hyper-rectangles
+	must be returned (instead of the hypervolume only). Add unit
+	tests.
+
         stk_mex.h: Define bool type
 
 	* misc/include/stk_mex.h: Define bool type.
