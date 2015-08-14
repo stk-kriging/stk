@@ -150,10 +150,9 @@ else  % Reference point provided
     
 end
 
-if ~ all (y >= 0);
-    stk_error ('All data points must be below the reference point', ...
-        'IncorrectArgument');
-end
+% Remove points that do not dominate the reference
+b = any (y < 0, 2);
+y(b, :) = [];
 
 end % function wfg_preprocessing
 
@@ -213,6 +212,18 @@ end % function wfg_postprocessing
 
 %-------------------------------------------------------------------------------
 
+%!shared y1, y2, y0
+%! y0 = [1.00 1.00];  % Reference point
+%! y1 = [1.50 1.50];  % Above the reference point => ignored (with a warning)
+%! y2 = [0.50 0.50];  % Below the reference point
+
+%!assert (isequal (0.00, stk_dominatedhv (y1, y0)));
+%!assert (isequal (0.25, stk_dominatedhv (y2, y0)));
+%!assert (isequal (0.25, stk_dominatedhv ([y1; y2], y0)));
+%!assert (isequal (0.25, stk_dominatedhv ([y2; y1; y2], y0)));
+
+%-------------------------------------------------------------------------------
+
 %!test
 %! for d = 1:10,
 %!    y = - 0.5 * ones (1, d);
@@ -245,7 +256,7 @@ end % function wfg_postprocessing
 %! hv1 = stk_dominatedhv (y, y_ref);
 %! assert (isequal (hv0, hv1));
 
-%!test 
+%!test
 %! r = stk_dominatedhv (y, y_ref, 1);
 %!
 %! % Check the first decomposition, which should be empty
