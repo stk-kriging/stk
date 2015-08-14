@@ -1,3 +1,10 @@
+2015-08-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dominatedhv.m: Tolerate points that do not dominate the ref
+
+	* misc/pareto/stk_dominatedhv.m: Tolerate points that do not
+	dominate the reference point.
+
 2015-08-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_dominatedhv can now return a decomposition in hyper-rectangles
