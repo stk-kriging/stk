@@ -4,8 +4,8 @@ Changes in version 2.4.0
 * Bug fixes
 
     o stk_dist, stk_filldist, stk_gpquadform, stk_mindist: Fix segmentation
-      faults occuring with very large matrices (related to signed integer-based
-      index computation in the underlying MEX-files).
+      faults occuring with very large matrices on some platforms (related to
+      signed integer-based index computation in the underlying MEX-files).
 
 * Optimizer objects
 
@@ -24,8 +24,11 @@ Changes in version 2.4.0
      misclassification or the expectation of the future probability of
      misclassification, with respect to a given threshold.
 
-   o stk_dominatedhv.m: New function to compute dominated hypervolumes, which
-     relies internally on the "Walking Fish Group" (WFG 1.10) algorithm.
+   o stk_dominatedhv.m: New function to compute Pareto-dominated hypervolumes,
+     which relies internally on the "Walking Fish Group" (WFG 1.10)
+     algorithm. The function can also return the underlying inclusion-exclusion
+     representation of the dominated region, i.e., its representation as a
+     collection of signed overlapping hyper-rectangles.
 
 * Examples
 
