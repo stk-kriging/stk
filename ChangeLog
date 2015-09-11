@@ -1,3 +1,11 @@
+2015-09-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init.m: Improve error message
+
+	* paramestim/stk_param_init.m: Improve error message for
+	unsupported covariance functions by reporting the original error
+	message.
+
 2015-08-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_dominatedhv.m: Tolerate points that do not dominate the ref
