@@ -1,3 +1,9 @@
+2015-09-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	README: Fix a typo
+
+	* README: Fix a typo
+
 2015-09-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_init.m: Improve error message
