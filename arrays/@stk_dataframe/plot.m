@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author: Julien Bect  <julien.bect@centralesupelec.fr>
@@ -26,19 +27,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function plot (varargin)
+function h = plot (varargin)
 
 % Parse the list of input arguments
-[h, plot_elem, keyval_pairs] = parse_args_ (varargin{:});
+[h_axes, plot_elem, keyval_pairs] = parse_args_ (varargin{:});
 
 % Read hold state
 b = ishold ();
 
 % Plot all
 n = length (plot_elem);
+h = [];
 for i = 1:n
     p = plot_elem(i);
-    plot_ (h, p.x, p.z, p.S, keyval_pairs{:});
+    hh = plot_ (h_axes, p.x, p.z, p.S, keyval_pairs{:});
+    h = [h; hh];  %#ok<AGROW>
     if (i == 1) && (n > 1),  hold on;  end
 end
 
@@ -48,7 +51,7 @@ if (~ b) && (n > 1),  hold off;  end
 end % function plot
 
 
-function plot_ (h, x, z, S, varargin)
+function h = plot_ (h_axes, x, z, S, varargin)
 
 %--- Handle stk_dataframe inputs ------------------------------------------
 
@@ -92,9 +95,9 @@ end
 %--- Plot and set labels --------------------------------------------------
 
 if isempty (S)
-    plot (h, x, z, varargin{:});
+    h = plot (h_axes, x, z, varargin{:});
 else
-    plot (h, x, z, S, varargin{:});
+    h = plot (h_axes, x, z, S, varargin{:});
 end
 
 if ~ isempty (xlab),
@@ -118,7 +121,7 @@ end % function plot_
 %#ok<*SPWRN,*TRYNC>
 
 
-function [h, plot_elem, keyval_pairs] = parse_args_ (arg1, varargin)
+function [h_axes, plot_elem, keyval_pairs] = parse_args_ (arg1, varargin)
 
 % Plot is highly polymorphic, making the task of parsing input arguments a
 % rather lengthy and painful one...
@@ -156,7 +159,7 @@ if isscalar (arg1) && isa (arg1, 'double'),
 end
 
 if arg1_handle,
-    h = arg1;
+    h_axes = arg1;
     if nargin == 1,
         stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
     else
@@ -164,7 +167,7 @@ if arg1_handle,
         varargin(1) = [];
     end
 else
-    h = gca;
+    h_axes = gca;
 end
 
 % Then, arg1 *must* be a "numeric" argument

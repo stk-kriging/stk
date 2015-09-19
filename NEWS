@@ -32,7 +32,8 @@ Changes in version 2.4.0
      representation of the dominated region, i.e., its representation as a
      collection of signed overlapping hyper-rectangles.
 
-   o stk_plot_shadedci.m: Return a handle to the graphical object
+   o stk_plot_shadedci.m, @stk_dataframe/plot.m: Return a (vector of) handle(s)
+     to the graphical object(s)
 
 * Examples
 
