@@ -35,6 +35,10 @@ Changes in version 2.4.0
    o stk_plot_shadedci.m, @stk_dataframe/plot.m: Return a (vector of) handle(s)
      to the graphical object(s)
 
+   o stk_plot1d.m: The DisplayName property is now filled in for all the
+     components of the plot, thus making it possible to create a default legend
+     automatically using: legend ('show').
+
 * Examples
 
    o stk_example_doe04.m: Example script that demonstrates the use of

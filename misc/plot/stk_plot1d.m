@@ -16,6 +16,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -45,27 +46,46 @@ function stk_plot1d (xi, zi, xt, zt, zp, zsim)
 
 % Shaded area representing pointwise confidence intervals
 if (nargin > 4) && (~ isempty (zp))
-    stk_plot_shadedci (xt, zp);  hold on;
+    h_ci = stk_plot_shadedci (xt, zp);
+    set (h_ci, 'DisplayName', '95% credible interval');
+    hold on;
+else
+    h_ci = [];
 end
 
 % Plot sample paths
 if (nargin > 5) && (~ isempty (zsim))
-    plot (xt, zsim, '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64]);  hold on;
+    h_sim = plot (xt, zsim, '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64]);
+    set (h_sim, 'DisplayName', 'Samplepaths');
+    hold on;
+else
+    h_sim = [];
 end
 
 % Ground truth
 if (nargin > 3) && (~ isempty (zt))
-    plot (xt, zt, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);  hold on;
+    h_truth = plot (xt, zt, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
+    set (h_truth, 'DisplayName', 'True function');
+    hold on;
+else
+    h_truth = [];
 end
 
 % Kriging predictor (posterior mean)
 if (nargin > 4) && (~ isempty (zp))
-    plot (xt, zp.mean, 'LineWidth', 3, 'Color', [0.95 0.25 0.3]);  hold on;
+    h_pred = plot (xt, zp.mean, 'LineWidth', 3, 'Color', [0.95 0.25 0.3]);
+    set (h_pred, 'DisplayName', 'Posterior mean');
+    hold on;
+else
+    h_pred = [];
 end
 
 % Evaluations
 if ~ isempty (zi)
-    plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
+    h_obs = plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
+    set (h_obs, 'DisplayName', 'Observations');
+else
+    h_obs = [];
 end
 
 hold off;  set (gca, 'box', 'off');  legend off;
