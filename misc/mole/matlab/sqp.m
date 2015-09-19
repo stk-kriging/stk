@@ -406,25 +406,39 @@ function [x, obj, info, iter, nf, lambda] = sqp (x0, objf, cef, cif, lb, ub, max
     % Compute search direction p by solving QP.
     g = -ce;
     d = -ci;
-
-    [p, obj_qp, INFO, lambda] = qp (x, B, c, F, g, [], [], d, C, ...
-                                    Inf (size (d)));
-
-    info = INFO.info;
-
-    % FIXME: check QP solution and attempt to recover if it has failed.
-    %        For now, just warn about possible problems.
-
-    id = 'Octave:SQP-QP-subproblem';
-    switch (info)
-      case 2
-        warning (id, 'sqp: QP subproblem is non-convex and unbounded');
-      case 3
-        warning (id, 'sqp: QP subproblem failed to converge in %d iterations', ...
-                 INFO.solveiter);
-      case 6
-        warning (id, 'sqp: QP subproblem is infeasible');
-    end % switch
+    
+    % [p, obj_qp, INFO, lambda] = qp (x, B, c, F, g, [], [], d, C, ...
+    %                                 Inf (size (d)));
+    
+    B = 0.5 * (B + B');  % Prevents quadprog warning
+    
+    % Call quadprog to solve the QP subproblem
+    [p, obj_qp, quadprog_exitflag, quadprog_output, lambda] = quadprog ...
+        (B, c, -C, -d, F, g, [], [], x);  %#ok<ASGLU> % with default options
+    
+    % Recreate a vector of Lagrange multipliers similar to qp's one
+    lambda = [- lambda.eqlin; lambda.ineqlin];
+    
+    % VERY crude processing of quadprog_exitflag
+    if quadprog_exitflag <= 0
+        error ('quadprog failed to solve QP subproblem');
+    end
+    
+    % info = INFO.info;
+    %
+    % % FIXME: check QP solution and attempt to recover if it has failed.
+    % %        For now, just warn about possible problems.
+    %
+    % id = 'Octave:SQP-QP-subproblem';
+    % switch (info)
+    %   case 2
+    %     warning (id, 'sqp: QP subproblem is non-convex and unbounded');
+    %   case 3
+    %     warning (id, 'sqp: QP subproblem failed to converge in %d iterations', ...
+    %              INFO.solveiter);
+    %   case 6
+    %     warning (id, 'sqp: QP subproblem is infeasible');
+    % end % switch
 
     % Choose mu such that p is a descent direction for the chosen
     % merit function phi.
