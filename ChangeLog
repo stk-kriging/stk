@@ -1,3 +1,11 @@
+2015-09-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot1d.m: Fill in DisplayName properties
+
+	* misc/plot/stk_plot1d.m: Fill in the DisplayName properties for
+	all the components of the plot, thus making it possible to create
+	a legend automatically using: legend ('show').
+
 2015-09-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/plot.m: Return vector of handles
