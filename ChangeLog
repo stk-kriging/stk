@@ -1,3 +1,10 @@
+2015-09-19  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot_shadedci.m: Delete invisible area object, return a handle
+
+	* misc/plot/stk_plot_shadedci.m: Delete invisible area object and
+	return a handle to the visible one.
+
 2015-09-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	README: Fix a typo

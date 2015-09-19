@@ -7,6 +7,8 @@ Changes in version 2.4.0
       faults occuring with very large matrices on some platforms (related to
       signed integer-based index computation in the underlying MEX-files).
 
+    o stk_plot_shadedci.m: Delete invisible area object
+
 * Optimizer objects
 
     o The choice of the optimization algorithm used in stk_param_estim is now
@@ -29,6 +31,8 @@ Changes in version 2.4.0
      algorithm. The function can also return the underlying inclusion-exclusion
      representation of the dominated region, i.e., its representation as a
      collection of signed overlapping hyper-rectangles.
+
+   o stk_plot_shadedci.m: Return a handle to the graphical object
 
 * Examples
 
