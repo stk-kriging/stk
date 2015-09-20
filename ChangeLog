@@ -1,5 +1,11 @@
 2015-09-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_plot_shadedci.m: Accept a handle as first input argument.
+
+	* misc/plot/stk_plot_shadedci.m: Accept a handle to an axes object
+	as (optional) first input argument and accepts additional
+	key-value pairs as well.
+
 	stk_plot1d.m: Fill in DisplayName properties
 
 	* misc/plot/stk_plot1d.m: Fill in the DisplayName properties for
