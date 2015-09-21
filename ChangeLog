@@ -1,3 +1,11 @@
+2015-09-25  Rémi Stroh  <remi.stroh@lne.fr>
+
+	stk_param_getdefaultbounds: new feature to define default bounds
+
+	* paramestim/stk_param_getdefaultbounds.m: make it possible to
+	define default bounds on parameters for user-defined covariance
+	functions.
+
 2015-09-21  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_plot_shadedci.m: Do not call set (h, opt{:}) when opt is empty
