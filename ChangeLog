@@ -1,3 +1,11 @@
+2015-09-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot_shadedci.m: Do not call set (h, opt{:}) when opt is empty
+
+	* misc/plot/stk_plot_shadedci.m: Do not call set (h, opt{:}) when
+	opt is empty (it makes Octave display all the settings of the
+	object with handle h, which was not intended).
+
 2015-09-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_plot_shadedci.m: Accept a handle as first input argument.
