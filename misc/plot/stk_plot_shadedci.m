@@ -42,7 +42,9 @@ delete (h(1));  h = h(2);
 
 c = [0.8 0.8 0.8];  % Light gray
 set (h, 'FaceColor', c, 'LineStyle', '-', 'LineWidth', 1, 'EdgeColor', c);
-set (h, opts{:});
+if ~ isempty (opts)
+    set (h, opts{:});
+end
 
 % Raise current axis to the top layer, to prevent it
 % from being hidden by the grayed area
