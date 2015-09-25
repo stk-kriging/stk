@@ -1,3 +1,11 @@
+2015-09-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Don't use UTF-8 in m-files
+
+	* misc/design/stk_phipcrit.m: Müller -> Muller
+	* misc/dist/stk_filldist.m: Idem
+	* misc/dist/stk_filldist_exact.m: Idem
+
 2015-09-25  Rémi Stroh  <remi.stroh@lne.fr>
 
 	stk_param_getdefaultbounds: new feature to define default bounds
