@@ -1,5 +1,11 @@
 2015-09-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_plot1d.m: Create a hidden legend and return a struct of handles
+
+	* misc/plot/stk_plot1d.m: Create a hidden legend, wich can be
+	displayed using lgend ('show'), and return a struct of handles to
+	make it possible to modify the plot more easily.
+
 	Don't use UTF-8 in m-files
 
 	* misc/design/stk_phipcrit.m: Müller -> Muller
