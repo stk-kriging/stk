@@ -1,4 +1,8 @@
-% STK_PARAM_GETDEFAULTBOUNDS [STK internal]
+% STK_PARAM_GETDEFAULTBOUNDS
+%
+% FIXME: Explain what this function does, and how it is possible to define
+% default bounds for user-defined covariance functions (there are two ways to do
+% this...).
 
 % Copyright Notice
 %

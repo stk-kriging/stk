@@ -1,5 +1,12 @@
 2015-09-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_param_getdefaultbounds: Documentation needed
+
+	* paramestim/stk_param_getdefaultbounds.m: This function is not
+	marked as "STK internal" any more, since this is obviously the
+	right place to document how default bounds can be specified for
+	user-defined functions. Documentation needed.
+
 	stk_plot1d.m: Create a hidden legend and return a struct of handles
 
 	* misc/plot/stk_plot1d.m: Create a hidden legend, wich can be
