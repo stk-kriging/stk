@@ -20,6 +20,12 @@ Changes in version 2.4.0
 
     o Automatic detection of available optimizers.
 
+* Covariance functions
+
+   o It is now possible to specify default bounds for the estimation of the
+     parameters in a user-defined covariance function. See the documentation of
+     stk_param_getdefaultbounds for more information.
+
 * Miscellaneous
 
    o stk_pmisclass.m: New function to compute either the current probability of
