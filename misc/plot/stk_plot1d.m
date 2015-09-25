@@ -42,12 +42,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_plot1d (xi, zi, xt, zt, zp, zsim)
+function h = stk_plot1d (xi, zi, xt, zt, zp, zsim)
+
+h_axes = gca;  % FIXME: Make it possible to pass a handle as first argument
 
 % Shaded area representing pointwise confidence intervals
 if (nargin > 4) && (~ isempty (zp))
-    h_ci = stk_plot_shadedci (xt, zp);
-    set (h_ci, 'DisplayName', '95% credible interval');
+    h_ci = stk_plot_shadedci (h_axes, xt, zp);
     hold on;
 else
     h_ci = [];
@@ -55,8 +56,8 @@ end
 
 % Plot sample paths
 if (nargin > 5) && (~ isempty (zsim))
-    h_sim = plot (xt, zsim, '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64]);
-    set (h_sim, 'DisplayName', 'Samplepaths');
+    h_sim = plot (h_axes, xt, zsim, ...
+        '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64]);
     hold on;
 else
     h_sim = [];
@@ -64,8 +65,8 @@ end
 
 % Ground truth
 if (nargin > 3) && (~ isempty (zt))
-    h_truth = plot (xt, zt, '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
-    set (h_truth, 'DisplayName', 'True function');
+    h_truth = plot (h_axes, xt, zt, ...
+        '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
     hold on;
 else
     h_truth = [];
@@ -73,8 +74,8 @@ end
 
 % Kriging predictor (posterior mean)
 if (nargin > 4) && (~ isempty (zp))
-    h_pred = plot (xt, zp.mean, 'LineWidth', 3, 'Color', [0.95 0.25 0.3]);
-    set (h_pred, 'DisplayName', 'Posterior mean');
+    h_pred = plot (h_axes, xt, zp.mean, ...
+        'LineWidth', 3, 'Color', [0.95 0.25 0.3]);
     hold on;
 else
     h_pred = [];
@@ -82,12 +83,48 @@ end
 
 % Evaluations
 if ~ isempty (zi)
-    h_obs = plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
-    set (h_obs, 'DisplayName', 'Observations');
+    h_obs = plot (h_axes, xi, zi, ...
+        'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
 else
     h_obs = [];
 end
 
-hold off;  set (gca, 'box', 'off');  legend off;
+hold off;  set (gca, 'box', 'off');
+
+% Prepare for the legend
+h_list = [];
+s_list = {};
+if ~ isempty (h_truth)
+    h_list = [h_list; h_truth];
+    s_list = [s_list; {'True function'}];
+end
+if ~ isempty (h_obs)
+    h_list = [h_list; h_obs];
+    s_list = [s_list; {'Observations'}];
+end
+if ~ isempty (h_pred)
+    h_list = [h_list; h_pred];
+    s_list = [s_list; {'Posterior mean'}];
+end
+if ~ isempty (h_ci)
+    h_list = [h_list; h_ci];
+    s_list = [s_list; {'95% credible interval'}];
+end
+if ~ isempty (h_sim)
+    h_list = [h_list; h_sim(1)];
+    s_list = [s_list; {'Samplepaths'}];
+end
+    
+% Create the legend
+h_legend = legend (h_list, s_list{:});
+set (h_legend, 'Color', 0.98 * [1 1 1]);
+legend (h_axes, 'hide');
+
+% Make it possible to recover all the handles easily, if needed
+h.truth = h_truth;
+h.obs   = h_obs;
+h.pred  = h_pred;
+h.ci    = h_ci;
+h.sim   = h_sim;
 
 end % function stk_plot1d
