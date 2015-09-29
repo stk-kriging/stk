@@ -38,22 +38,59 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_optim_octavesqp (opt)
+function x = stk_optim_octavesqp (user_options)
 
 if nargin > 1
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if ~ isoctave
-    errmsg = 'Function sqp is only available in Octave';
-    stk_error (errmsg, 'sqpNotAvailable');
+% Default options
+options.maxiter = 500;     % Octave's default is 100
+options.tol = sqrt (eps);  % This is Octave's default
+options.qp_solver = [];    % We provide a default choice below, if needed
+
+% Process user options
+if nargin > 0
+    fn = fieldnames (user_options);
+    for i = 1:(numel (fn))
+        switch lower (fn{i})
+            case 'maxiter'
+                options.maxiter = user_options.maxiter;
+            case 'tol'
+                options.tol = user_options.tol;
+            case 'qp_solver'
+                options.qp_solver = user_options.qp_solver;
+            otherwise
+                stk_error (sprintf ('Unknown option: %s.\n',fn{i}), ...
+                    'InvalidArgument');
+        end
+    end
 end
 
-if nargin == 0
-    opt = struct ('maxiter', 500, 'tol', 1e-5);
+% Provide default QP solver if needed
+if isempty (options.qp_solver)
+    if isoctave
+        % Octave's core qp function
+        options.qp_solver = 'qp';
+    else
+        % quadprog from Mathworks' Optimization toolbox or from MOSEK
+        options.qp_solver = 'quadprog';
+    end
 end
 
-x = struct ('options', opt);
+% Choose the appropriate optimizer, depending on the value of qp_solver
+switch options.qp_solver
+    case 'qp'
+        optimizer = @sqp;
+    case 'quadprog'
+        optimizer = @sqp_quadprog;
+    otherwise
+        stk_error (sprintf (['Incorrect value for option qp_solver %s.\n\n' ...
+            'qp_solver must be either ''qp'' or ''quadprog''.\n'], ...
+            options.qp_solver), 'InvalidArgument');
+end
+
+x = struct ('options', options, 'sqp', optimizer);
 x = class (x, 'stk_optim_octavesqp');
 
 end % function stk_optim_octavesqp
