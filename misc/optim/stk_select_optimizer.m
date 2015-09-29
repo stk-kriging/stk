@@ -41,33 +41,9 @@ function optim_num = stk_select_optimizer (bounds_available, display)
 
 warning (help ('stk_select_optimizer'));
 
-% Invocation with no arguments (setup) => recheck which optimizer to use
-force_recheck = (nargin == 0);
-
 % Get current optimization algorithm objects
 algo_con = stk_options_get ('stk_param_estim', 'stk_minimize_boxconstrained');
 algo_unc = stk_options_get ('stk_param_estim', 'stk_minimize_unconstrained');
-
-% Autmatically select optimizers
-% (note: copy-pasted from the selection logic implemented in stk_options_set)
-if (isempty (algo_con)) || force_recheck,
-    if isoctave
-        algo_con = stk_optim_octavesqp ();
-    else
-        try
-            algo_con = stk_optim_fmincon ();
-        catch
-            algo_con = stk_optim_fminsearch ();
-        end
-    end
-end
-if (isempty (algo_unc)) || force_recheck,
-    if isoctave
-        algo_unc = stk_optim_octavesqp ();
-    else
-        algo_unc = stk_optim_fminsearch ();
-    end
-end
 
 % Legacy: corresponding optim_num in stk <= 2.3.2
 optim_num_con = get_optim_num (algo_con);

@@ -138,10 +138,10 @@ end
 bounds_available = (~ isempty (lb)) && (~ isempty (ub));
 
 if bounds_available
-    A = stk_options_get ('stk_param_estim', 'stk_minimize_boxconstrained');
+    A = stk_options_get ('stk_param_estim', 'minimize_box');
     [u_opt, crit_opt] = stk_minimize_boxconstrained (A, f, u0, lb, ub);
 else
-    A = stk_options_get ('stk_param_estim', 'stk_minimize_unconstrained');
+    A = stk_options_get ('stk_param_estim', 'minimize_unc');
     [u_opt, crit_opt] = stk_minimize_unconstrained (A, f, u0);
 end
 
