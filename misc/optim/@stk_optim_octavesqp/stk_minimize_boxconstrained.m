@@ -16,6 +16,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
 %    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
@@ -48,8 +49,8 @@ if nargin>5
 end
 
 nabla_f = @(u)(nabla_f_ (f, u));
-
-[u_opt,lik] = sqp (u_init, {f nabla_f}, [] , [], lb, ub, ...
+      
+[u_opt,lik] = algo.sqp (u_init, {f nabla_f}, [] , [], lb, ub, ...
     algo.options.maxiter, algo.options.tol);
 
 end % function stk_minimize_boxconstrained
