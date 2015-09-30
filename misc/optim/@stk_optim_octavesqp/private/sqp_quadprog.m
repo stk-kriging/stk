@@ -1,22 +1,3 @@
-% Copyright (C) 2005-2015 John W. Eaton
-% Copyright (C) 2013-2015 Arun Giridhar
-%
-% This file is part of Octave.
-%
-% Octave is free software; you can redistribute it and/or modify it
-% under the terms of the GNU General Public License as published by
-% the Free Software Foundation; either version 3 of the License, or (at
-% your option) any later version.
-%
-% Octave is distributed in the hope that it will be useful, but
-% WITHOUT ANY WARRANTY; without even the implied warranty of
-% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-% General Public License for more details.
-%
-% You should have received a copy of the GNU General Public License
-% along with Octave; see the file COPYING.  If not, see
-% <http://www.gnu.org/licenses/>.
-
 % -*- texinfo -*-
 % @deftypefn  {Function File} {[@var{x}, @var{obj}, @var{info}, @var{iter}, @var{nf}, @var{lambda}] =} sqp (@var{x0}, @var{phi})
 % @deftypefnx {Function File} {[@dots{}] =} sqp (@var{x0}, @var{phi}, @var{g})
@@ -186,6 +167,57 @@
 %
 % @seealso{qp}
 % @end deftypefn
+
+% Copyright Notice
+%
+%    Copyright (C) 2015 CentraleSupelec
+%
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%
+%    This file is based on Octave's sqp function (distributed under the
+%    GPLv3 licence) with minor modifications to be usable under Matlab.
+%    The original copyright notice is as follows:
+%
+%       Copyright (C) 2005-2015 John W. Eaton
+%       Copyright (C) 2013-2015 Arun Giridhar
+
+% Copying Permission Statement
+%
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
+%
+%    STK is free software: you can redistribute it and/or modify it under
+%    the terms of the GNU General Public License as published by the Free
+%    Software Foundation,  either version 3  of the License, or  (at your
+%    option) any later version.
+%
+%    STK is distributed  in the hope that it will  be useful, but WITHOUT
+%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY
+%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public
+%    License for more details.
+%
+%    You should  have received a copy  of the GNU  General Public License
+%    along with STK.  If not, see <http://www.gnu.org/licenses/>.
+
+% Original Copying Permission Statement
+%
+%    This file is part of Octave.
+%
+%    Octave is free software; you can redistribute it and/or modify it
+%    under the terms of the GNU General Public License as published by
+%    the Free Software Foundation; either version 3 of the License, or (at
+%    your option) any later version.
+%
+%    Octave is distributed in the hope that it will be useful, but
+%    WITHOUT ANY WARRANTY; without even the implied warranty of
+%    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%    General Public License for more details.
+%
+%    You should have received a copy of the GNU General Public License
+%    along with Octave; see the file COPYING.  If not, see
+%    <http://www.gnu.org/licenses/>.
 
 function [x, obj, info, iter, nf, lambda] = sqp_quadprog ...
     (x0, objf, cef, cif, lb, ub, maxiter, tolerance)
