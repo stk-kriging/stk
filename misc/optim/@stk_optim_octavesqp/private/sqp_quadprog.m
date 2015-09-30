@@ -187,7 +187,8 @@
 % @seealso{qp}
 % @end deftypefn
 
-function [x, obj, info, iter, nf, lambda] = sqp (x0, objf, cef, cif, lb, ub, maxiter, tolerance)
+function [x, obj, info, iter, nf, lambda] = sqp_quadprog ...
+    (x0, objf, cef, cif, lb, ub, maxiter, tolerance)
 
   globals = struct (); % data and handles, needed and changed by subfunctions
 
@@ -411,11 +412,18 @@ function [x, obj, info, iter, nf, lambda] = sqp (x0, objf, cef, cif, lb, ub, max
     %                                 Inf (size (d)));
     
     B = 0.5 * (B + B');  % Prevents quadprog warning
-    
+
+    % Matlab's quadprog issues a warning when changing its default solver,
+    % but we don't want to see that in the output of sqp.
+    ws = warning ('off', 'all');
+
     % Call quadprog to solve the QP subproblem
+    quadprog_options = optimset ('Display', 'off');
     [p, obj_qp, quadprog_exitflag, quadprog_output, lambda] = quadprog ...
-        (B, c, -C, -d, F, g, [], [], x);  %#ok<ASGLU> % with default options
+        (B, c, -C, -d, F, g, [], [], x, quadprog_options);  %#ok<ASGLU>
     
+    warning (ws);
+
     % Recreate a vector of Lagrange multipliers similar to qp's one
     lambda = [- lambda.eqlin; lambda.ineqlin];
     
