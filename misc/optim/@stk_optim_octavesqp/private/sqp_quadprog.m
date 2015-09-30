@@ -753,21 +753,12 @@ end % function
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Test Code
 
-%!function r = __g (x)
-%!  r = [sum(abs(x).^2)-10;
-%!       x(2)*x(3)-5*x(4)*x(5);
-%!       x(1)^3+x(2)^3+1 ];
-%!end % function
-%!
-%!function obj = __phi (x)
-%!  obj = exp (prod (x)) - 0.5*(x(1)^3 + x(2)^3 + 1)^2;
-%!end % function
-%!
 %!test
 %!
 %! x0 = [-1.8; 1.7; 1.9; -0.8; -0.8];
 %!
-%! [x, obj, info, iter, nf, lambda] = sqp (x0, @__phi, @__g, []);
+%! [x, obj, info, iter, nf, lambda] = sqp_quadprog ...
+%!    (x0, @sqp_quadprog_testf, @sqp_quadprog_testg, []);
 %!
 %! x_opt = [-1.717143501952599;
 %!           1.595709610928535;
@@ -777,24 +768,24 @@ end % function
 %!
 %! obj_opt = 0.0539498477702739;
 %!
-%! assert (x, x_opt, 8*sqrt (eps));
-%! assert (obj, obj_opt, sqrt (eps));
+%! assert (stk_isequal_tolrel (x, x_opt, 8 * sqrt (eps)));
+%! assert (stk_isequal_tolrel (obj, obj_opt, sqrt (eps)));
 
 % Test input validation
-%!error sqp ()
-%!error sqp (1)
-%!error sqp (1,2,3,4,5,6,7,8,9)
-%!error sqp (1,2,3,4,5)
-%!error sqp (ones (2,2))
-%!error sqp (1, cell (4,1))
-%!error sqp (1, cell (3,1), cell (3,1))
-%!error sqp (1, cell (3,1), cell (2,1), cell (3,1))
-%!error sqp (1, cell (3,1), cell (2,1), cell (2,1), ones (2,2),[])
-%!error sqp (1, cell (3,1), cell (2,1), cell (2,1),[], ones (2,2))
-%!error sqp (1, cell (3,1), cell (2,1), cell (2,1),1,-1)
-%!error sqp (1, cell (3,1), cell (2,1), cell (2,1),[],[], ones (2,2))
-%!error sqp (1, cell (3,1), cell (2,1), cell (2,1),[],[],-1)
-%!error sqp (1, cell (3,1), cell (2,1), cell (2,1),[],[],1.5)
-%!error sqp (1, cell (3,1), cell (2,1), cell (2,1),[],[],[], ones (2,2))
-%!error sqp (1, cell (3,1), cell (2,1), cell (2,1),[],[],[],-1)
+%!error sqp_quadprog ()
+%!error sqp_quadprog (1)
+%!error sqp_quadprog (1,2,3,4,5,6,7,8,9)
+%!error sqp_quadprog (1,2,3,4,5)
+%!error sqp_quadprog (ones (2,2))
+%!error sqp_quadprog (1, cell (4,1))
+%!error sqp_quadprog (1, cell (3,1), cell (3,1))
+%!error sqp_quadprog (1, cell (3,1), cell (2,1), cell (3,1))
+%!error sqp_quadprog (1, cell (3,1), cell (2,1), cell (2,1), ones (2,2),[])
+%!error sqp_quadprog (1, cell (3,1), cell (2,1), cell (2,1),[], ones (2,2))
+%!error sqp_quadprog (1, cell (3,1), cell (2,1), cell (2,1),1,-1)
+%!error sqp_quadprog (1, cell (3,1), cell (2,1), cell (2,1),[],[], ones (2,2))
+%!error sqp_quadprog (1, cell (3,1), cell (2,1), cell (2,1),[],[],-1)
+%!error sqp_quadprog (1, cell (3,1), cell (2,1), cell (2,1),[],[],1.5)
+%!error sqp_quadprog (1, cell (3,1), cell (2,1), cell (2,1),[],[],[], ones (2,2))
+%!error sqp_quadprog (1, cell (3,1), cell (2,1), cell (2,1),[],[],[],-1)
 
