@@ -96,16 +96,39 @@ opts.stk_zlabel.properties = opts.stk_xlabel.properties;
 opts.stk_title.properties = {'FontSize', 10, 'FontWeight', 'bold'};
 opts.stk_axes.properties = {'FontSize', 8};
 
-if isoctave
-    opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_octavesqp ();
-    opts.stk_param_estim.stk_minimize_unconstrained = stk_optim_octavesqp ();
-else
+% Select optimizer for stk_param_estim
+if isoctave    
+    % In Octave we use sqp (which is always available) in both cases
+    opts.stk_param_estim.minimize_box = stk_optim_octavesqp ();
+    opts.stk_param_estim.minimize_unc = stk_optim_octavesqp ();    
+else    
+    A_fminsearch = stk_optim_fminsearch ();    
     try
-        opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_fmincon ();
+        % See if the Mathworks' Optimization toolbox is installed
+        opts.stk_param_estim.minimize_box = stk_optim_fmincon ();
+        opts.stk_param_estim.minimize_unc = A_fminsearch;  % FIXME: use fminunc !
+        check_both (opts.stk_param_estim);
     catch
-        opts.stk_param_estim.stk_minimize_boxconstrained = stk_optim_fminsearch ();
+        try
+            % See sqp can be used with MOSEK's quadprog
+            %   (or any other compatible replacement for quadprog)
+            A = stk_optim_octavesqp (struct ('qp_solver', 'quadprog'));
+            opts.stk_param_estim.minimize_box = A;
+            opts.stk_param_estim.minimize_unc = A;
+            check_both (opts.stk_param_estim);
+        catch
+            opts.stk_param_estim.minimize_box = A_fminsearch;
+            opts.stk_param_estim.minimize_unc = A_fminsearch;
+        end
     end
-    opts.stk_param_estim.stk_minimize_unconstrained = stk_optim_fminsearch ();
 end
 
 end % function init_options
+
+
+function check_both (opts)
+
+assert (stk_optim_testmin_box (opts.minimize_box));
+assert (stk_optim_testmin_unc (opts.minimize_unc));
+
+end % function check_both

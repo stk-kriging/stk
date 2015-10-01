@@ -1,3 +1,31 @@
+2015-09-30  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Bring Octave's sqp inside STK.
+
+	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog.m: New
+	function based on Octave's sqp function, with minor modifications
+	to be usable under Matlab with quadprog instead of qp.
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Complete
+	rewrite. A 'qp_solver' option is added for the choice between 'qp',
+	which is Octave's core qp solver, and 'quadprog', which is
+	available from Mathworks' Optimization toolbox or from MOSEK.
+	* misc/optim/@stk_optim_octavesqp/stk_minimize_boxconstrained.m:
+	Make it possible to use either Octave's sqp or our sqp_quadprog (a
+	handle to the function to be used is stored in algo.sqp).
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Do not try to
+	check if fmincon is present or not (this can be done using
+	stk_optim_testmin_box).
+	* misc/optim/stk_optim_testmin_box.m: Simple test to check that a
+	given box-constrained optimizer actually works.
+	* misc/optim/stk_optim_testmin_unc.m: Simple test to check that a
+	given unconstrained optimizer actually works.
+	* misc/optim/stk_optim_hasfmincon.m: Deprecated function..
+	* misc/optim/stk_select_optimizer.m: Deprecated function.
+	* misc/options/stk_options_set.m: Rewrite optimizer selection
+	logic. Shorten some option names.
+	* paramestim/stk_param_estim.m: Use shortened option names.
+        * INDEX: Add new functions and classes.
+
 2015-09-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_getdefaultbounds: Documentation needed
