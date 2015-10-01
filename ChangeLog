@@ -25,6 +25,10 @@
 	logic. Shorten some option names.
 	* paramestim/stk_param_estim.m: Use shortened option names.
         * INDEX: Add new functions and classes.
+	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog_testf.m:
+ 	Used in sqp_quadprog unit tests.
+	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog_testg.m:
+  	Used in sqp_quadprog unit tests.
 
 2015-09-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
