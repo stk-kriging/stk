@@ -9,7 +9,7 @@ Changes in version 2.4.0
 
    o stk_plot_shadedci.m: Delete invisible area object
 
-* Optimizer objects
+* Choosing the optimizer used in stk_param_estim
 
    o The choice of the optimization algorithm used in stk_param_estim is now
      much more flexible, thanks to a new interface based on "optimizer object"
@@ -17,6 +17,11 @@ Changes in version 2.4.0
 
    o The following classes are currently available: @stk_optim_octavesqp
      @stk_optim_fmincon, @stk_optim_fminsearch.
+
+   o stk_optim_octavesqp works both in Octave and in Matlab, with two possible
+     choices for the QP solver: 'qp' (available in Octave only, this is Octave's
+     core qp function) and 'quadprog' (available in Matlab from the Optimization
+     toolbox or from MOSEK; should be available in Octave's optim package soon).
 
    o Automatic detection of available optimizers.
 

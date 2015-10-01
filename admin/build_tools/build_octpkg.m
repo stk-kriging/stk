@@ -66,7 +66,7 @@ mkdir (fullfile (unpacked_dir, 'src'));
 mkdir (fullfile (unpacked_dir, 'doc'));
 
 % List of directories that must be ignored by process_directory ()
-ignore_list = {'.hg', 'admin', 'misc/mole/matlab', 'build'};
+ignore_list = {'.hg', 'admin', 'misc/mole/matlab', 'build', 'sandbox'};
 
 % Prepare sed program for renaming MEX-functions (prefix/suffix by __)
 sed_program = prepare_sed_rename_mex (root_dir, release_dir);
