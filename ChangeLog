@@ -1,3 +1,9 @@
+2015-09-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	README: Fix a typo
+
+	* README: Fix a typo
+
 2015-07-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Use size_t for computations on positive indices.
