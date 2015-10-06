@@ -5,8 +5,8 @@
  * Copyright Notice                                                          *
  *                                                                           *
  *    Copyright (C) 2014 SUPELEC                                             *
- *    Author:    Julien Bect  <julien.bect@supelec.fr>                       *
- *    URL:       http://sourceforge.net/projects/kriging/                    *
+ *                                                                           *
+ *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
  *                                                                           *
  * Copying Permission Statement                                              *
  *                                                                           *
