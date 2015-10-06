@@ -33,7 +33,7 @@
 %   [2] P. Audze and V. Eglais, "New approach for planning out experiments",
 %       Problems of Dynamics and Strengths, 35:104-107, 1977.
 %
-%   [3] Luc Pronzato and Werner G. Müller, "Design of computer
+%   [3] Luc Pronzato and Werner G. Muller, "Design of computer
 %       experiments: space filling and beyond", Statistics and Computing,
 %       22(3):681-701, 2012.
 %
