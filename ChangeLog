@@ -1,3 +1,19 @@
+2015-07-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Use size_t for computations on positive indices.
+
+	* misc/dist/private/stk_dist_matrixx.c: Use size_t for
+	computations on positive indices, otherwise we can get very
+	unpleasant surprises (aka segfaults) as a consequence of negative
+	indices...
+	* misc/dist/private/stk_dist_matrixy.c: idem
+	* misc/dist/private/stk_dist_pairwise.c: idem
+	* misc/dist/private/stk_filldist_discr_mex.c: idem
+	* misc/dist/private/stk_gpquadform_matrixx.c: idem
+	* misc/dist/private/stk_gpquadform_matrixy.c: idem
+	* misc/dist/private/stk_gpquadform_pairwise.c: idem
+	* misc/dist/private/stk_mindist_mex.c: idem
+
 2015-06-30  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	build_octpkg.m:	Fix the generated DESCRIPTION file

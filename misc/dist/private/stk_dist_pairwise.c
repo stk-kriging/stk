@@ -4,8 +4,10 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright  (C) 2012 SUPELEC                                            *
- *    Author:    Julien Bect <julien.bect@supelec.fr>                        *
+ *    Copyright (C) 2015 CentraleSupelec                                     *
+ *    Copyright (C) 2012 SUPELEC                                             *
+ *                                                                           *
+ *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
  *                                                                           *
  * Copying Permission Statement                                              *
  *                                                                           *
@@ -32,9 +34,9 @@
 #include "stk_mex.h"
 
 
-static void distance3(double* x, double* y, double* h, int n, int dim)
+static void distance3(double* x, double* y, double* h, size_t n, size_t dim)
 {
-  int i, k;
+  size_t i, k;
   double diff, lambda;
 
   for (i = 0; i < n; i++) {
@@ -56,7 +58,7 @@ static void distance3(double* x, double* y, double* h, int n, int dim)
 
 mxArray* compute_distance_xy_pairwise(const mxArray* x, const mxArray* y)
 {
-  unsigned int d, n;
+  size_t d, n;
   mxArray* h;
 
   if((!stk_is_realmatrix(x)) || (!stk_is_realmatrix(y)))
