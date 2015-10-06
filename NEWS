@@ -3,10 +3,6 @@ Changes in version 2.4.0
 
 * Bug fixes
 
-   o stk_dist, stk_filldist, stk_gpquadform, stk_mindist: Fix segmentation
-     faults occuring with very large matrices on some platforms (related to
-     signed integer-based index computation in the underlying MEX-files).
-
    o stk_plot_shadedci.m: Delete invisible area object
 
 * Choosing the optimizer used in stk_param_estim
@@ -57,6 +53,16 @@ Changes in version 2.4.0
 
    o stk_example_doe04.m: Example script that demonstrates the use of
      stk_pmisclass ().
+
+
+Changes in version 2.3.3
+========================
+
+ * Bug fixes
+
+   o stk_dist, stk_filldist, stk_gpquadform, stk_mindist: Fix segmentation
+     faults occuring with very large matrices (related to signed integer-based
+     index computation in the underlying MEX-files).
 
 
 Changes in version 2.3.2
