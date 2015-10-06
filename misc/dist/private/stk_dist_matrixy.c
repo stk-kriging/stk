@@ -4,6 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
+ *    Copyright (C) 2015 CentraleSupelec                                     *
  *    Copyright (C) 2011, 2012 SUPELEC                                       *
  *    Authors:   Julien Bect        <julien.bect@supelec.fr>                 *
  *               Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>            *
@@ -34,9 +35,9 @@
 #include "stk_mex.h"
 
 
-static void distance2(double* x, double* y, double* h, int nx, int ny, int dim)
+static void distance2(double* x, double* y, double* h, size_t nx, size_t ny, size_t dim)
 {
-  int i, j, kx, ky;
+  size_t i, j, kx, ky;
   double diff, lambda;
 
   for (i = 0; i < nx; i++) {
@@ -60,7 +61,7 @@ static void distance2(double* x, double* y, double* h, int nx, int ny, int dim)
 
 mxArray* compute_distance_xy(const mxArray* x, const mxArray* y)
 {
-  unsigned int d, mx, my;
+  size_t d, mx, my;
   mxArray* h;
 
   if((!stk_is_realmatrix(x)) || (!stk_is_realmatrix(y)))
@@ -88,9 +89,9 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 {
   if (nlhs > 1)  /* Check number of output arguments */
     mexErrMsgTxt("Too many output arguments.");
-  
+
   if (nrhs != 2)  /* Check number of input arguments */
     mexErrMsgTxt("Incorrect number of input arguments.");
-      
-  plhs[0] = compute_distance_xy(prhs[0], prhs[1]); 
+
+  plhs[0] = compute_distance_xy(prhs[0], prhs[1]);
 }
