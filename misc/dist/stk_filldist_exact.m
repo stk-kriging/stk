@@ -3,7 +3,7 @@
 % CALL: FD = stk_filldist_exact(X, BOX)
 %
 %    computes the fill distance FD of the dataset X in the hyper-rectangle
-%    BOX, using the computational-geometric algorithm of L. Pronzato and 
+%    BOX, using the computational-geometric algorithm of L. Pronzato and
 %    W. G. Muller [1]. Recall that
 %
 %       D = max_{Y in BOX} min_{1 <= i <= n} norm(X(i,:) - Y),         (1)
@@ -24,7 +24,7 @@
 %
 % REFERENCES
 %
-%   [1] Luc Pronzato and Werner G. Müller, "Design of computer 
+%   [1] Luc Pronzato and Werner G. Muller, "Design of computer
 %       experiments: space filling and beyond", Statistics and Computing,
 %       22(3):681-701, 2012.
 %
@@ -44,8 +44,8 @@
 %
 %    Maintainer: Julien Bect <julien.bect@supelec.fr>
 %
-%    Guillaume Carlier and Florian Pasanisi wrote a first implementation 
-%    of the algorithm  following the paper of  Pronzato & Müller (2011), 
+%    Guillaume Carlier and Florian Pasanisi wrote a first implementation
+%    of the algorithm  following the paper of  Pronzato & Muller (2011),
 %    which was subsequently  streamlined and adapted  to the STK toolbox
 %    by Julien Bect.
 
