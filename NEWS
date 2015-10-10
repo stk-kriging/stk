@@ -7,6 +7,13 @@ Changes in version 2.3.3
      faults occuring with very large matrices (related to signed integer-based
      index computation in the underlying MEX-files).
 
+   o stk_example_doe03.m: Use the appropriate flag for maximization.
+
+o Minor changes
+
+   o stk_example_doe03.m: Display pointwise credible intervals in the upper
+     panel.
+
 
 Changes in version 2.3.2
 ========================
