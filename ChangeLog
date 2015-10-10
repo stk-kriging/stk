@@ -1,3 +1,11 @@
+2015-10-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_example_doe03.m: Use the appropriate flag for maximization
+
+	* examples/02_design_of_experiments/stk_example_doe03.m: Use the
+	appropriate flag for maximization. Also, use stk_plot1d for the
+	upper panel plot to display pointwise credible intervals.
+
 2015-09-30  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Bring Octave's sqp inside STK.
@@ -157,7 +165,7 @@
 
 2015-07-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
-	Use size_t for computations on positive indices.
+	Use size_t for computations on positive indices
 
 	* misc/dist/private/stk_dist_matrixx.c: Use size_t for
 	computations on positive indices, otherwise we can get very
