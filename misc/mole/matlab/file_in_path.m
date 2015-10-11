@@ -7,6 +7,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2012 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
@@ -69,7 +70,7 @@ end % function file_in_path
 
 function loc = file_in_path_(dirlist, filename, flag)
 
-idx = [1 strfind(dirlist, pathsep), length(dirlist) + 1];
+idx = [0, strfind(dirlist, pathsep), length(dirlist) + 1];
 % note: using strtok() is more elegant... but much slower !
 
 get_all = strcmp(flag, 'all');
@@ -80,8 +81,12 @@ for i = 1:length(idx) - 1,
     pos2 = idx(i+1) - 1;
     dirname = dirlist(pos1:pos2);
     fullfn = fullfile(dirname, filename);
-    % note: fopen(fullfn, 'r') is much faster than exist(fullfn, 'file')
-    fid = fopen(fullfn, 'r');
+    try
+        % note: fopen (fullfn, 'r') is much faster than exist (fullfn, 'file')
+        fid = fopen (fullfn, 'r');
+    catch
+        fid = -1;
+    end
     if fid ~= -1,
         fclose(fid);
         if get_all,
