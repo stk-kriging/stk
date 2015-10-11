@@ -1,3 +1,9 @@
+2015-10-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	mole/matlab/file_in_path.m: Fix two bugs
+
+	* misc/mole/matlab/file_in_path.m: Fix two bugs.
+
 2015-10-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_example_doe03.m: Use the appropriate flag for maximization
