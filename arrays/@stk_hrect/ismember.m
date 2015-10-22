@@ -29,20 +29,15 @@
 
 function varargout = ismember (A, B, varargin)
 
-if ~ all (cellfun (@ischar, varargin))
-    stk_error ('Invalid flag (should be a string).', 'InvalidArgument');
-else
-    % At least of of the arguments (A or B) is an stk_hrect,
-    % therefore ismember should work on rows
-    flags = unique ([{'rows'} varargin{:}]);
-end
-
-varargout = cell (1, max (nargout, 1));
-
 if isa (B, 'stk_hrect'),
     
     % If B is an stk_hrect, ismember tests whether A (or the points in A)
     % belong to the hyper-rectangle B
+    
+    % The 'rows' flag is tolerated but unused in this case
+    if (nargin > 2) && (~ isequal (varargin, {'rows'}))
+        stk_error ('Invalid additional arguments', 'InvalidArgument');
+    end
     
     if nargout > 1,
         stk_error (['Cannot return member indices when testing for ' ...
@@ -50,15 +45,38 @@ if isa (B, 'stk_hrect'),
     end
     
     A = double (A);
-    b1 = bsxfun (@ge, A, B.stk_dataframe.data(1, :));
-    b2 = bsxfun (@le, A, B.stk_dataframe.data(2, :));
-    varargout{1} = all (b1 & b2, 2);
+    % bounds = get (B.stk_dataframe, 'data');
+    bounds = double (B);  % even faster than get (..., 'data')
+    b1 = bsxfun (@ge, A, bounds(1, :));
+    b2 = bsxfun (@le, A, bounds(2, :));
+    varargout = {all(b1 & b2, 2)};
     
-else
+else % A is an stk_hrect, treat it as any other stk_dataframe would be treated
     
-    % A is an stk_hrect, treat it as any other stk_dataframe would be treated    
-    [varargout{:}] = ismember (A.stk_dataframe, B, flags{:});
+    varargout = cell (1, max (nargout, 1));
     
+    if nargin == 2,
+        
+        [varargout{:}] = ismember (A.stk_dataframe, B, 'rows');
+        
+    else
+        
+        try
+            % At least of of the arguments (A or B) is an stk_hrect,
+            % therefore ismember should work on rows
+            flags = unique ([{'rows'} varargin{:}]);
+        catch
+            if ~ all (cellfun (@ischar, varargin))
+                stk_error ('Invalid flag (should be a string).', ...
+                    'InvalidArgument');
+            else
+                rethrow (lasterror ());
+            end
+        end
+        
+        [varargout{:}] = ismember (A.stk_dataframe, B, flags{:});
+        
+    end
 end
 
 end % function ismember
