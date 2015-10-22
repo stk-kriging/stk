@@ -4,7 +4,9 @@ Changes in version 2.3.4
 * Bug fixes
 
    o @stk_hrect/ismember.m: Fix a bug that prevented ismember from working on
-     more than one point at a time.
+     more than one point at a time, and another bug in the case where B is not
+     an stk_hrect object (it was incorrectly assumed to be an stk_dataframe in
+     this case).
 
 
 Changes in version 2.3.3
