@@ -1,5 +1,11 @@
 2015-10-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_hrect/subsref.m: Return an stk_hrect object if possible
+
+	* arrays/@stk_hrect/subsref.m: Make sure that the returned value
+	is still an stk_hrect object when the number of rows (which is
+	two) is unchanged.
+
 	@stk_hrect/ismember.m: Optimize for speed
 
 	* arrays/@stk_hrect/ismember.m: Optimize for speed
