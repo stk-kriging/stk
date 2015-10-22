@@ -39,23 +39,26 @@ end
 
 varargout = cell (1, max (nargout, 1));
 
-% If A is an stk_hrect, treat it as any other stk_dataframe would be treated
-if isa (A, 'stk_hrect'),  A = A.stk_dataframe;  end
-
 if isa (B, 'stk_hrect'),
+    
     % If B is an stk_hrect, ismember tests whether A (or the points in A)
     % belong to the hyper-rectangle B
+    
     if nargout > 1,
         stk_error (['Cannot return member indices when testing for ' ...
             'membership to an hyper-rectangle.'], 'TooManyOutputArgs');
     end
+    
     A = double (A);
     b1 = bsxfun (@ge, A, B.stk_dataframe.data(1, :));
-    b2 = bsxfun (@le, A, B.stk_dataframe.data(2, :));    
+    b2 = bsxfun (@le, A, B.stk_dataframe.data(2, :));
     varargout{1} = all (b1 & b2, 2);
+    
 else
-    % Otherwise, use @stk_dataframe/ismember
-    [varargout{:}] = ismember (A, B.stk_dataframe, flags{:});
+    
+    % A is an stk_hrect, treat it as any other stk_dataframe would be treated    
+    [varargout{:}] = ismember (A.stk_dataframe, B, flags{:});
+    
 end
 
 end % function ismember
