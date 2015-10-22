@@ -67,6 +67,9 @@ Changes in version 2.3.4
      an stk_hrect object (it was incorrectly assumed to be an stk_dataframe in
      this case).
 
+   o @stk_hrect/subsref.m: Make sure that the returned value is still an
+     stk_hrect object when the number of rows (which is two) is unchanged.
+
 
 Changes in version 2.3.3
 ========================
