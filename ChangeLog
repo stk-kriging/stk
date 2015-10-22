@@ -1,5 +1,9 @@
 2015-10-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_hrect/ismember.m: Optimize for speed
+
+	* arrays/@stk_hrect/ismember.m: Optimize for speed
+
 	@stk_hrect/ismember.m: Fix two bugs
 
 	* arrays/@stk_hrect/ismember.m: Fix a bug that prevented ismember

@@ -1,10 +1,6 @@
 Changes in version 2.4.0
 ========================
 
-* Bug fixes
-
-   o stk_plot_shadedci.m: Delete invisible area object
-
 * Choosing the optimizer used in stk_param_estim
 
    o The choice of the optimization algorithm used in stk_param_estim is now
@@ -53,6 +49,12 @@ Changes in version 2.4.0
 
    o stk_example_doe04.m: Example script that demonstrates the use of
      stk_pmisclass ().
+
+* Minor changes
+
+   o stk_plot_shadedci.m: Delete invisible area object
+
+   o @stk_hrect/ismember.m: Optimize for speed
 
 
 Changes in version 2.3.4
