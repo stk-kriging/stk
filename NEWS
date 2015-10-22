@@ -1,3 +1,12 @@
+Changes in version 2.3.4
+========================
+
+* Bug fixes
+
+   o @stk_hrect/ismember.m: Fix a bug that prevented ismember from working on
+     more than one point at a time.
+
+
 Changes in version 2.3.3
 ========================
 
@@ -11,7 +20,7 @@ Changes in version 2.3.3
 
    o mole/matlab/file_in_path.m: Fix two bugs (Matlab only)
 
-o Minor changes
+* Minor changes
 
    o stk_example_doe03.m: Display pointwise credible intervals in the upper
      panel.

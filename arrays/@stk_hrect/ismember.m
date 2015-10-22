@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -48,10 +49,10 @@ if isa (B, 'stk_hrect'),
         stk_error (['Cannot return member indices when testing for ' ...
             'membership to an hyper-rectangle.'], 'TooManyOutputArgs');
     end
-    Bmin = B.stk_dataframe.data(1, :);
-    Bmax = B.stk_dataframe.data(2, :);
     A = double (A);
-    varargout{1} = all ((A >= Bmin) & (A <= Bmax), 2);
+    b1 = bsxfun (@ge, A, B.stk_dataframe.data(1, :));
+    b2 = bsxfun (@le, A, B.stk_dataframe.data(2, :));    
+    varargout{1} = all (b1 & b2, 2);
 else
     % Otherwise, use @stk_dataframe/ismember
     [varargout{:}] = ismember (A, B.stk_dataframe, flags{:});
@@ -68,3 +69,7 @@ end % function ismember
 %!assert (ismember (.5 * ones (1, 5), box))
 %!assert (~ ismember (box(1, :) - 1, box))
 %!assert (~ ismember (box(2, :) + 1, box))
+
+%!test
+%! y = double (box);  y = [y; y + 2];
+%! assert (isequal (ismember (y, box), [1; 1; 0; 0]))
