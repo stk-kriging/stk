@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -30,8 +31,19 @@ function t = subsref (x, idx)
 
 switch idx(1).type
     
-    case {'()', '{}'}
+    case '()'
         
+        t = subsref (x.stk_dataframe, idx);
+        
+        if size (t, 1) == 2
+            x.stk_dataframe = t;
+            t = x;
+        end
+        
+    case '{}'
+        
+        % Currently {}-indexing is not supported for
+        % stk_dataframe objects, but who knows...
         t = subsref (x.stk_dataframe, idx);
         
     case '.'
@@ -45,3 +57,15 @@ switch idx(1).type
 end
 
 end % function subsref
+
+%!test
+%! B = stk_hrect ([0 0 0 0; 1 2 3 4]);
+%! B = B(:, [1 3 4]);
+%! assert (strcmp (class (B), 'stk_hrect'));
+%! assert (isequal (double (B), [0 0 0; 1 3 4]));
+
+%!test
+%! B = stk_hrect ([0 0 0 0; 1 2 3 4]);
+%! B = B(1, :);
+%! assert (strcmp (class (B), 'stk_dataframe'));
+%! assert (isequal (double (B), [0 0 0 0]));
