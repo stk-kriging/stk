@@ -5,7 +5,7 @@
 %    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -303,7 +303,7 @@ end % function subsasgn
 %! assert (isempty (x));
 
 %!test  % Delete the only row of a one-row dataframe
-%! y1 = stk_dataframe ([1.2 3.33], {'mean', 'var'})
+%! y1 = stk_dataframe ([1.2 3.33], {'mean', 'var'});
 %! y1(1, :) = [];  % Remove the only row of data
 %! assert (isequal (size (y1), [0 2]))
 %! assert (isequal (y1.colnames, {'mean', 'var'}))
@@ -330,7 +330,7 @@ end % function subsasgn
 %!error x(3, 1, 1) = 297;
 
 %!test % create a new row and a new column through subsasgn()
-%! x = stk_dataframe(rand(5, 2)); x(6, 3) = 7; disp(x)
+%! x = stk_dataframe (rand (5, 2));  x(6, 3) = 7;
 %! assert(isequal(size(x), [6, 3]));
 
 %--- tests adding row/columns through row/columns names ------------------------

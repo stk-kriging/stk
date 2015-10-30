@@ -26,11 +26,12 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2011-2013 SUPELEC
 %
-%    Authors:  Julien Bect        <julien.bect@supelec.fr>
-%              Emmanuel Vazquez   <emmanuel.vazquez@supelec.fr>
+%    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
 %              Ashwin Ravisankar  <ashwinr1993@gmail.com>
 
 % Copying Permission Statement
@@ -100,7 +101,7 @@ end % end function stk_param_gls
 
 %!test
 %! model.order = -1;
-%! [beta, sigma2] = stk_param_gls (model, xi, zi)
+%! [beta, sigma2] = stk_param_gls (model, xi, zi);
 
 %!assert (isequal (beta, zeros (0, 1)))
 %!assert (stk_isequal_tolabs (sigma2, 0.3977993, 1e-6))
