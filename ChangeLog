@@ -1,5 +1,16 @@
 2015-10-30  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Decrease unit test verbosity
+
+	* arrays/@stk_dataframe/double.m: decrease unit test verbosity.
+	* arrays/@stk_dataframe/sort.m: idem
+	* arrays/@stk_dataframe/subsasgn.m: idem
+	* arrays/@stk_factorialdesign/fieldnames.m: idem
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: idem
+	* arrays/@stk_hrect/horzcat.m: idem
+	* misc/text/stk_sprintf_colvect_scientific.m: idem
+	* paramestim/stk_param_gls.m: idem
+
 	Add a 'clean' target to the Octave package Makefile
 
 	* admin/octpkg/Makefile: Add a 'clean target'.

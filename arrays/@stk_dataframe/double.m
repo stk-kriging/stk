@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -45,7 +46,7 @@ end % function double
 %! assert (strcmp(class(v), 'double') && isequal(v, double(u)))
 
 %!test
-%! u = uint8(rand(4, 3) * 5)
+%! u = uint8 (rand (4, 3) * 5);
 %! x = stk_dataframe(u);
 %! v = double(x);
 %! assert (strcmp(class(v), 'double') && isequal(v, double(u)))

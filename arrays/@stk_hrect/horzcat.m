@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@supelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -82,7 +83,7 @@ end % function horzcat
 
 %!test
 %! lastwarn ('')
-%! y4 = horzcat (x1, x3)
+%! y4 = horzcat (x1, x3);
 %! assert (isequal (size (y4), [2 2*d]));
 %! assert (strcmp (class (y4), 'stk_dataframe'));
 %! [warn_msg, warn_id] = lastwarn ();
