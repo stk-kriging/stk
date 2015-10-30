@@ -26,6 +26,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2011-2013 SUPELEC
 %
@@ -100,7 +101,7 @@ end % end function stk_param_gls
 
 %!test
 %! model.order = -1;
-%! [beta, sigma2] = stk_param_gls (model, xi, zi)
+%! [beta, sigma2] = stk_param_gls (model, xi, zi);
 
 %!assert (isequal (beta, zeros (0, 1)))
 %!assert (stk_isequal_tolabs (sigma2, 0.3977993, 1e-6))

@@ -156,7 +156,7 @@ end % function sprintf_table_
 %!test format rat;      disp (x);
 %!test format long;     disp (x);
 %!test format short;    disp (x);
-%!     if ~isnan (fmt), set (0, 'Format', fmt); end
+%! if ~isnan (fmt), set (0, 'Format', fmt); end
 
 %!test disp (stk_dataframe (zeros (0, 1)))
 %!test disp (stk_dataframe (zeros (0, 2)))
