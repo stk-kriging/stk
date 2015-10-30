@@ -1,3 +1,9 @@
+2015-10-30  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Add a 'clean' target to the Octave package Makefile
+
+	* admin/octpkg/Makefile: Add a 'clean target'.
+
 2015-10-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_hrect/subsref.m: Return an stk_hrect object if possible
