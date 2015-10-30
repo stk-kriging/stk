@@ -23,3 +23,8 @@ MKOCTFILE ?= mkoctfile
 
 __%__.mex: %.c stk_mex.h
 	$(MKOCTFILE) --mex --output $@ $<
+
+.PHONY: clean
+
+clean:
+        rm -f *.o *.mex

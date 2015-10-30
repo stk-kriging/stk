@@ -11,6 +11,10 @@ Changes in version 2.3.4
    o @stk_hrect/subsref.m: Make sure that the returned value is still an
      stk_hrect object when the number of rows (which is two) is unchanged.
 
+* Minor changes
+
+   o Add a 'clean' target to the Octave package Makefile
+
 
 Changes in version 2.3.3
 ========================
