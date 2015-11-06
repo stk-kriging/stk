@@ -33,4 +33,4 @@ __stk_dominatedhv_mex__.mex: stk_dominatedhv_mex.c wfg.c
 .PHONY: clean
 
 clean:
-        rm -f *.o *.mex
+	rm -f *.o *.mex
