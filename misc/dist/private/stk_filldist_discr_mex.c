@@ -4,9 +4,10 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright  (C) 2012 SUPELEC                                            *
+ *    Copyright (C) 2015 CentraleSupelec                                     *
+ *    Copyright (C) 2012 SUPELEC                                             *
  *                                                                           *
- *    Author:    Julien Bect <julien.bect@centralesupelec.fr>                *
+ *    Author:  Julien Bect <julien.bect@centralesupelec.fr>                  *
  *                                                                           *
  * Copying Permission Statement                                              *
  *                                                                           *
@@ -39,16 +40,21 @@
 
 static double compute_filldist
 (
- double* x, unsigned int nx, 
- double* y, unsigned int ny,
- unsigned int dim, 
- unsigned int* argmax
+ double* x, size_t nx, 
+ double* y, size_t ny,
+ size_t dim, 
+ size_t* argmax
  )
 {
-  unsigned int i, j, k1, k2, j_max;
+  size_t i, j, k1, k2, j_max;
   double diff, sqdist_max, sqdist_j, sqdist_ij;
 
+  j_max = 0;
+  sqdist_max = 0.0;
+
   for (j = 0; j < ny; j++) {
+
+    sqdist_j = 0;  /* prevents a "may be uninitialized" warning */
 
     /* Compute the sqdist from y(j, :) to the set x */    
     for (i = 0; i < nx; i++) {
@@ -64,7 +70,7 @@ static double compute_filldist
     }
     
     /* Update sqdist_max */
-    if ((j == 0) || (sqdist_j > sqdist_max)) {
+    if (sqdist_j > sqdist_max) {
       j_max = j;
       sqdist_max = sqdist_j;
     }
@@ -78,7 +84,7 @@ static double compute_filldist
 
 void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray*prhs[])
 {
-  unsigned int mx, my, dim, argmax;
+  size_t mx, my, dim, argmax;
   double filldist, *px, *py;
 
   if (nlhs > 2)

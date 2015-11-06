@@ -4,6 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
+ *    Copyright (C) 2015 CentraleSupelec                                     *
  *    Copyright (C) 2011, 2012 SUPELEC                                       *
  *                                                                           *
  *    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>           *
@@ -33,9 +34,9 @@
 
 #include "stk_mex.h"
 
-static void distance1(double* x, double* h, int nx, int dim)
+static void distance1(double* x, double* h, size_t nx, size_t dim)
 {
-  int i, j, k1, k2;
+  size_t i, j, k1, k2;
   double diff, lambda;
 
   for (i = 0; i < nx; i++) {
@@ -64,7 +65,7 @@ static void distance1(double* x, double* h, int nx, int dim)
 
 mxArray* compute_distance_xx(const mxArray* x)
 {
-  unsigned int d, n;
+  size_t d, n;
   mxArray* h;
 
   if(!stk_is_realmatrix(x))

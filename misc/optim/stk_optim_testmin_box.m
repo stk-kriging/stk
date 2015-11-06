@@ -1,19 +1,8 @@
-% STK_OPTIM_HASFMINCON is a deprecated function
-%
-% stk_optim_fmincon is deprecated and will be removed
-% from future releases of STK. Use
-%
-%    algo = stk_optim_fmincon ();
-%    fmincon_available = stk_optim_testmin_box (algo);
-%
-% instead if you want to check whether fmincon is available or not.
-%
-% See also: stk_optim_fmincon
+% STK_OPTIM_TESTMIN_BOX [STK internal]
 
 % Copyright Notice
 %
 %    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -37,11 +26,40 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function fmincon_available = stk_optim_hasfmincon ()
+function b = stk_optim_testmin_box (algo)
 
-warning (help ('stk_optim_hasfmincon'));
+if nargin > 1
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
 
-algo = stk_optim_fmincon ();
-fmincon_available = stk_optim_testmin_box (algo);
+try
+    % Starting point
+    x_init = 0.0;  
+    
+    % Bounds
+    lb = -1.0;
+    ub = 0.1;
+    
+    [x_opt, obj_opt] = stk_minimize_boxconstrained ...
+        (algo, @objfun, x_init, lb, ub);
+    
+    assert (abs (x_opt - 0.1) < 1e-2);
+    assert (abs (obj_opt - 0.04) < 1e-2);
+        
+    b = true;
+    
+catch %#ok<CTCH>
+    
+    b = false;
+    
+end % try_catch
 
-end % function stk_optim_hasfmincon
+end % function stk_optim_testmin_box
+
+
+function [f, df] = objfun (x)
+
+f = (x - 0.3) .^ 2;
+df = 2 * (x - 0.3);
+
+end % function objfun

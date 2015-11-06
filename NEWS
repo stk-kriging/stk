@@ -1,16 +1,27 @@
 Changes in version 2.4.0
 ========================
 
-* Optimizer objects
+* Choosing the optimizer used in stk_param_estim
 
-    o The choice of the optimization algorithm used in stk_param_estim is now
-      much more flexible, thanks to a new interface based on "optimizer object"
-      classes.
+   o The choice of the optimization algorithm used in stk_param_estim is now
+     much more flexible, thanks to a new interface based on "optimizer object"
+     classes.
 
-    o The following classes are currently available: @stk_optim_octavesqp
-      @stk_optim_fmincon, @stk_optim_fminsearch.
+   o The following classes are currently available: @stk_optim_octavesqp
+     @stk_optim_fmincon, @stk_optim_fminsearch.
 
-    o Automatic detection of available optimizers.
+   o stk_optim_octavesqp works both in Octave and in Matlab, with two possible
+     choices for the QP solver: 'qp' (available in Octave only, this is Octave's
+     core qp function) and 'quadprog' (available in Matlab from the Optimization
+     toolbox or from MOSEK; should be available in Octave's optim package soon).
+
+   o Automatic detection of available optimizers.
+
+* Covariance functions
+
+   o It is now possible to specify default bounds for the estimation of the
+     parameters in a user-defined covariance function. See the documentation of
+     stk_param_getdefaultbounds for more information.
 
 * Miscellaneous
 
@@ -18,13 +29,71 @@ Changes in version 2.4.0
      misclassification or the expectation of the future probability of
      misclassification, with respect to a given threshold.
 
-   o stk_dominatedhv.m: New function to compute dominated hypervolumes, which
-     relies internally on the "Walking Fish Group" (WFG 1.10) algorithm.
+   o stk_dominatedhv.m: New function to compute Pareto-dominated hypervolumes,
+     which relies internally on the "Walking Fish Group" (WFG 1.10)
+     algorithm. The function can also return the underlying inclusion-exclusion
+     representation of the dominated region, i.e., its representation as a
+     collection of signed overlapping hyper-rectangles.
+
+   o stk_plot_shadedci.m, @stk_dataframe/plot.m: Return a (vector of) handle(s)
+     to the graphical object(s)
+
+   o stk_plot1d.m: A nice default legend can now be created painlessly using
+     legend ('show'), and a struct of handles to the graphical objects composing
+     the plot is returned to facilitate further customization.
+
+   o stk_plot_shadedci.m: Accept a handle to an axes object as (optional) first
+     input argument.
 
 * Examples
 
    o stk_example_doe04.m: Example script that demonstrates the use of
      stk_pmisclass ().
+
+* Minor changes
+
+   o stk_plot_shadedci.m: Delete invisible area object
+
+   o @stk_hrect/ismember.m: Optimize for speed
+
+
+Changes in version 2.3.4
+========================
+
+* Bug fixes
+
+   o @stk_hrect/ismember.m: Fix a bug that prevented ismember from working on
+     more than one point at a time, and another bug in the case where B is not
+     an stk_hrect object (it was incorrectly assumed to be an stk_dataframe in
+     this case).
+
+   o @stk_hrect/subsref.m: Make sure that the returned value is still an
+     stk_hrect object when the number of rows (which is two) is unchanged.
+
+* Minor changes
+
+   o Add a 'clean' target to the Octave package Makefile.
+
+   o Decrease unit test verbosity.
+
+
+Changes in version 2.3.3
+========================
+
+* Bug fixes
+
+   o stk_dist, stk_filldist, stk_gpquadform, stk_mindist: Fix segmentation
+     faults occuring with very large matrices (related to signed integer-based
+     index computation in the underlying MEX-files).
+
+   o stk_example_doe03.m: Use the appropriate flag for maximization.
+
+   o mole/matlab/file_in_path.m: Fix two bugs (Matlab only)
+
+* Minor changes
+
+   o stk_example_doe03.m: Display pointwise credible intervals in the upper
+     panel.
 
 
 Changes in version 2.3.2
@@ -207,7 +276,7 @@ Changes in version 2.2.1
 
 * Octave 4.0 compliance
 
-   o Fix unit tests   
+   o Fix unit tests
 
 * Octave package
 

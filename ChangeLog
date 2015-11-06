@@ -1,3 +1,233 @@
+2015-11-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Makefile: Fix 'clean' target (tab instead of spaces)
+
+	* admin/octpkg/Makefile: Fix 'clean' target (tabs instead of
+	spaces)
+
+2015-10-30  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Decrease unit test verbosity
+
+	* arrays/@stk_dataframe/double.m: decrease unit test verbosity.
+	* arrays/@stk_dataframe/sort.m: idem
+	* arrays/@stk_dataframe/subsasgn.m: idem
+	* arrays/@stk_factorialdesign/fieldnames.m: idem
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: idem
+	* arrays/@stk_hrect/horzcat.m: idem
+	* misc/text/stk_sprintf_colvect_scientific.m: idem
+	* paramestim/stk_param_gls.m: idem
+
+	Add a 'clean' target to the Octave package Makefile
+
+	* admin/octpkg/Makefile: Add a 'clean target'.
+
+2015-10-22  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_hrect/subsref.m: Return an stk_hrect object if possible
+
+	* arrays/@stk_hrect/subsref.m: Make sure that the returned value
+	is still an stk_hrect object when the number of rows (which is
+	two) is unchanged.
+
+	@stk_hrect/ismember.m: Optimize for speed
+
+	* arrays/@stk_hrect/ismember.m: Optimize for speed
+
+	@stk_hrect/ismember.m: Fix two bugs
+
+	* arrays/@stk_hrect/ismember.m: Fix a bug that prevented ismember
+	from working on more than one point at a time, and another bug
+	in the case where B is not an stk_hrect object (it was incorrectly
+	assumed to be an stk_dataframe in this case).
+
+2015-10-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	mole/matlab/file_in_path.m: Fix two bugs
+
+	* misc/mole/matlab/file_in_path.m: Fix two bugs.
+
+2015-10-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_example_doe03.m: Use the appropriate flag for maximization
+
+	* examples/02_design_of_experiments/stk_example_doe03.m: Use the
+	appropriate flag for maximization. Also, use stk_plot1d for the
+	upper panel plot to display pointwise credible intervals.
+
+2015-09-30  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Bring Octave's sqp inside STK.
+
+	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog.m: New
+	function based on Octave's sqp function, with minor modifications
+	to be usable under Matlab with quadprog instead of qp.
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Complete
+	rewrite. A 'qp_solver' option is added for the choice between 'qp',
+	which is Octave's core qp solver, and 'quadprog', which is
+	available from Mathworks' Optimization toolbox or from MOSEK.
+	* misc/optim/@stk_optim_octavesqp/stk_minimize_boxconstrained.m:
+	Make it possible to use either Octave's sqp or our sqp_quadprog (a
+	handle to the function to be used is stored in algo.sqp).
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Do not try to
+	check if fmincon is present or not (this can be done using
+	stk_optim_testmin_box).
+	* misc/optim/stk_optim_testmin_box.m: Simple test to check that a
+	given box-constrained optimizer actually works.
+	* misc/optim/stk_optim_testmin_unc.m: Simple test to check that a
+	given unconstrained optimizer actually works.
+	* misc/optim/stk_optim_hasfmincon.m: Deprecated function..
+	* misc/optim/stk_select_optimizer.m: Deprecated function.
+	* misc/options/stk_options_set.m: Rewrite optimizer selection
+	logic. Shorten some option names.
+	* paramestim/stk_param_estim.m: Use shortened option names.
+        * INDEX: Add new functions and classes.
+	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog_testf.m:
+ 	Used in sqp_quadprog unit tests.
+	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog_testg.m:
+  	Used in sqp_quadprog unit tests.
+
+2015-09-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_getdefaultbounds: Documentation needed
+
+	* paramestim/stk_param_getdefaultbounds.m: This function is not
+	marked as "STK internal" any more, since this is obviously the
+	right place to document how default bounds can be specified for
+	user-defined functions. Documentation needed.
+
+	stk_plot1d.m: Create a hidden legend and return a struct of handles
+
+	* misc/plot/stk_plot1d.m: Create a hidden legend, wich can be
+	displayed using lgend ('show'), and return a struct of handles to
+	make it possible to modify the plot more easily.
+
+	Don't use UTF-8 in m-files
+
+	* misc/design/stk_phipcrit.m: Müller -> Muller
+	* misc/dist/stk_filldist.m: Idem
+	* misc/dist/stk_filldist_exact.m: Idem
+
+2015-09-25  Rémi Stroh  <remi.stroh@lne.fr>
+
+	stk_param_getdefaultbounds: new feature to define default bounds
+
+	* paramestim/stk_param_getdefaultbounds.m: make it possible to
+	define default bounds on parameters for user-defined covariance
+	functions.
+
+2015-09-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot_shadedci.m: Do not call set (h, opt{:}) when opt is empty
+
+	* misc/plot/stk_plot_shadedci.m: Do not call set (h, opt{:}) when
+	opt is empty (it makes Octave display all the settings of the
+	object with handle h, which was not intended).
+
+2015-09-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot_shadedci.m: Accept a handle as first input argument.
+
+	* misc/plot/stk_plot_shadedci.m: Accept a handle to an axes object
+	as (optional) first input argument and accepts additional
+	key-value pairs as well.
+
+	stk_plot1d.m: Fill in DisplayName properties
+
+	* misc/plot/stk_plot1d.m: Fill in the DisplayName properties for
+	all the components of the plot, thus making it possible to create
+	a legend automatically using: legend ('show').
+
+2015-09-19  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/plot.m: Return vector of handles
+
+	* arrays/@stk_dataframe/plot.m: Return vector of handles
+
+	stk_plot_shadedci.m: Delete invisible area object, return a handle
+
+	* misc/plot/stk_plot_shadedci.m: Delete invisible area object and
+	return a handle to the visible one.
+
+2015-09-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	README: Fix a typo
+
+	* README: Fix a typo
+
+2015-09-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init.m: Improve error message
+
+	* paramestim/stk_param_init.m: Improve error message for
+	unsupported covariance functions by reporting the original error
+	message.
+
+2015-08-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dominatedhv.m: Tolerate points that do not dominate the ref
+
+	* misc/pareto/stk_dominatedhv.m: Tolerate points that do not
+	dominate the reference point.
+
+2015-08-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dominatedhv can now return a decomposition in hyper-rectangles
+
+	* misc/pareto/private/wfg.c (Rlist_hv, Rlist_hv2, Rlist_inclhv)
+	(Rlist_inclhv2, Rlist_inclhv3, Rlist_inclhv4, Rlist_exclhv)
+	(wfg_compute_decomposition): For each original WFG function that
+	returns an hypervolume valume, provide a function that return the
+	corresponding decomposition as a collection of signed overlapping
+	hyper-rectangles (RLIST structure).
+	(Rlist_alloc, Rlist_extend, Rlist_free): Memory management for
+	RLIST structures.
+	* misc/pareto/private/wfg.h: Define RLIST structure and declare
+	some associated functions.
+	* misc/pareto/private/stk_dominatedhv_mex.c (compute_hv): Use
+	size_t instead of int for unsigned indices.
+	(compute_decomposition): New function, similar to compute_hv, but
+	return the decomposition instead of the hypervolume value.
+	(mexFunction): Use size_t instead of int for unsigned indices. Add
+	second input argument to select between computing the hypervolume
+	value and computing the decomposition.
+	* misc/pareto/stk_dominatedhv.m: Add optional input argument to
+	select whether the decomposition into overlapping hyper-rectangles
+	must be returned (instead of the hypervolume only). Add unit
+	tests.
+
+        stk_mex.h: Define bool type
+
+	* misc/include/stk_mex.h: Define bool type.
+
+2015-08-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg.c (hv): Code simplification
+
+	* misc/pareto/private/wfg.c (hv): Factorize some code for the
+	cases n == 3 and n >= 4.
+
+	wfg.c (inclhv4): Put all declarations at the beginning
+
+	* misc/pareto/private/wfg.c (inclhv4): Put all variable
+	declarations at the beginning of the function (strict ANSI C).
+
+2015-07-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Use size_t for computations on positive indices
+
+	* misc/dist/private/stk_dist_matrixx.c: Use size_t for
+	computations on positive indices, otherwise we can get very
+	unpleasant surprises (aka segfaults) as a consequence of negative
+	indices...
+	* misc/dist/private/stk_dist_matrixy.c: idem
+	* misc/dist/private/stk_dist_pairwise.c: idem
+	* misc/dist/private/stk_filldist_discr_mex.c: idem
+	* misc/dist/private/stk_gpquadform_matrixx.c: idem
+	* misc/dist/private/stk_gpquadform_matrixy.c: idem
+	* misc/dist/private/stk_gpquadform_pairwise.c: idem
+	* misc/dist/private/stk_mindist_mex.c: idem
+
 2015-07-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Introduce optimizer objects.

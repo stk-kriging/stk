@@ -42,7 +42,7 @@ o General information
                   Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
 
     Description:  The STK is a (not so) Small Toolbox for Kriging. Its
-                  primary focus in on the interpolation/regression
+                  primary focus is on the interpolation/regression
                   technique known as kriging, which is very closely related
                   to Splines and Radial Basis Functions, and can be
                   interpreted as a non-parametric Bayesian method using a

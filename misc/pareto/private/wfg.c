@@ -46,6 +46,8 @@
 #include "wfg.h"
 
 double hv (FRONT*);
+/* and the RLIST-variant of hv: */
+void Rlist_hv (FRONT* ps, RLIST* Rlist, int sign);
 
 #define BEATS(x,y)   (x > y)
 #define WORSE(x,y)   (BEATS(y,x) ? (x) : (y))
@@ -250,6 +252,24 @@ double hv2 (FRONT* ps, int k)
     return volume;
 }
 
+/* RLIST-variant of hv2 */
+void Rlist_hv2 (FRONT* ps, int k, RLIST* Rlist, int sign)
+{
+    int i, Ridx;
+    double xmax0 = 0;
+
+    Rlist_extend (Rlist, k, &Ridx);
+
+    for (i = 0; i < k; i++, Ridx++)
+      {
+        Rlist->xmin[Ridx][0] = xmax0;
+        xmax0 = ps->points[i].objectives[0];
+        Rlist->xmax[Ridx][0] = xmax0;
+        Rlist->xmax[Ridx][1] = ps->points[i].objectives[1];
+        Rlist->sign[Ridx] = sign;
+      }
+}
+
 
 double inclhv (POINT p)
 /* returns the inclusive hypervolume of p */
@@ -261,6 +281,17 @@ double inclhv (POINT p)
         volume *= p.objectives[i];
 
     return volume;
+}
+
+/* RLIST-variant of inclhv */
+void Rlist_inclhv (POINT p, RLIST* Rlist, int sign)
+{
+    int Ridx;
+
+    Rlist_extend (Rlist, 1, &Ridx);
+
+    memcpy (Rlist->xmax[Ridx], p.objectives, p.n * sizeof (double));
+    Rlist->sign[Ridx] = sign;
 }
 
 
@@ -281,6 +312,22 @@ double inclhv2 (POINT p, POINT q)
     }
 
     return vp + vq - vpq;
+}
+
+/* RLIST-variant of inclhv2 */
+void Rlist_inclhv2 (POINT p, POINT q, RLIST* Rlist, int sign)
+{
+    int i, Ridx;
+    int n = p.n; /* assume that p and q have the same size */
+
+    Rlist_extend (Rlist, 3, &Ridx);
+
+    memcpy (Rlist->xmax[Ridx], p.objectives, n * sizeof (double));  Rlist->sign[Ridx++] = sign;
+    memcpy (Rlist->xmax[Ridx], q.objectives, n * sizeof (double));  Rlist->sign[Ridx++] = sign;
+
+    for (i = 0; i < n; i++)
+        Rlist->xmax[Ridx][i] = WORSE(p.objectives[i], q.objectives[i]);
+    Rlist->sign[Ridx] = -sign;
 }
 
 
@@ -335,6 +382,57 @@ double inclhv3 (POINT p, POINT q, POINT r)
     return vp + vq + vr - vpq - vpr - vqr + vpqr;
 }
 
+/* RLIST-variant of inclhv3 */
+void Rlist_inclhv3 (POINT p, POINT q, POINT r, RLIST* Rlist, int sign)
+{
+    int i, Ridx, Ridx_pq, Ridx_pr, Ridx_qr, Ridx_pqr;
+    int n = p.n; /* assume that p, q and r have the same size */
+
+    Rlist_extend (Rlist, 7, &Ridx);
+
+    memcpy (Rlist->xmax[Ridx], p.objectives, n * sizeof (double));  Rlist->sign[Ridx ++] = sign;
+    memcpy (Rlist->xmax[Ridx], q.objectives, n * sizeof (double));  Rlist->sign[Ridx ++] = sign;
+    memcpy (Rlist->xmax[Ridx], r.objectives, n * sizeof (double));  Rlist->sign[Ridx ++] = sign;
+
+    Ridx_pq  = Ridx ++;  Rlist->sign[Ridx_pq]  = -sign;
+    Ridx_pr  = Ridx ++;  Rlist->sign[Ridx_pr]  = -sign;
+    Ridx_qr  = Ridx ++;  Rlist->sign[Ridx_qr]  = -sign;
+    Ridx_pqr = Ridx;     Rlist->sign[Ridx_pqr] =  sign;
+
+    for (i = 0; i < n; i++)
+    {
+        if (BEATS(p.objectives[i], q.objectives[i]))
+            if (BEATS(q.objectives[i], r.objectives[i]))
+            {
+                Rlist->xmax[Ridx_pq][i]  = q.objectives[i];
+                Rlist->xmax[Ridx_pr][i]  = r.objectives[i];
+                Rlist->xmax[Ridx_qr][i]  = r.objectives[i];
+                Rlist->xmax[Ridx_pqr][i] = r.objectives[i];
+            }
+            else
+            {
+                Rlist->xmax[Ridx_pq][i]  = q.objectives[i];
+                Rlist->xmax[Ridx_pr][i]  = WORSE(p.objectives[i], r.objectives[i]);
+                Rlist->xmax[Ridx_qr][i]  = q.objectives[i];
+                Rlist->xmax[Ridx_pqr][i] = q.objectives[i];
+            }
+        else if (BEATS(p.objectives[i],r.objectives[i]))
+        {
+            Rlist->xmax[Ridx_pq][i]  = p.objectives[i];
+            Rlist->xmax[Ridx_pr][i]  = r.objectives[i];
+            Rlist->xmax[Ridx_qr][i]  = r.objectives[i];
+            Rlist->xmax[Ridx_pqr][i] = r.objectives[i];
+        }
+        else
+        {
+            Rlist->xmax[Ridx_pq][i]  = p.objectives[i];
+            Rlist->xmax[Ridx_pr][i]  = p.objectives[i];
+            Rlist->xmax[Ridx_qr][i]  = WORSE(q.objectives[i], r.objectives[i]);
+            Rlist->xmax[Ridx_pqr][i] = p.objectives[i];
+        }
+    }
+}
+
 
 double inclhv4 (POINT p, POINT q, POINT r, POINT s)
 /* returns the hypervolume of {p, q, r, s} */
@@ -356,6 +454,7 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
     double vprs = 1;
     double vqrs = 1;
     double vpqrs = 1;
+    OBJECTIVE z1, z2;
 
     for (i = 0; i < n; i++)
     {
@@ -381,7 +480,7 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
                 }
                 else
                 {
-                    OBJECTIVE z1 = WORSE(q.objectives[i],s.objectives[i]);
+                    z1 = WORSE(q.objectives[i],s.objectives[i]);
                     vpq *= q.objectives[i];
                     vpr *= r.objectives[i];
                     vps *= WORSE(p.objectives[i],s.objectives[i]);
@@ -410,7 +509,7 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
             }
             else
             {
-                OBJECTIVE z1 = WORSE(p.objectives[i],r.objectives[i]);
+                z1 = WORSE(p.objectives[i],r.objectives[i]);
                 vpq *= q.objectives[i];
                 vpr *= z1;
                 vps *= WORSE(p.objectives[i],s.objectives[i]);
@@ -426,8 +525,8 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
         else if (BEATS(q.objectives[i],r.objectives[i]))
             if (BEATS(p.objectives[i],s.objectives[i]))
             {
-                OBJECTIVE z1 = WORSE(p.objectives[i],r.objectives[i]);
-                OBJECTIVE z2 = WORSE(r.objectives[i],s.objectives[i]);
+                z1 = WORSE(p.objectives[i],r.objectives[i]);
+                z2 = WORSE(r.objectives[i],s.objectives[i]);
                 vpq *= p.objectives[i];
                 vpr *= z1;
                 vps *= s.objectives[i];
@@ -442,8 +541,8 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
             }
             else
             {
-                OBJECTIVE z1 = WORSE(p.objectives[i],r.objectives[i]);
-                OBJECTIVE z2 = WORSE(r.objectives[i],s.objectives[i]);
+                z1 = WORSE(p.objectives[i],r.objectives[i]);
+                z2 = WORSE(r.objectives[i],s.objectives[i]);
                 vpq *= p.objectives[i];
                 vpr *= z1;
                 vps *= p.objectives[i];
@@ -472,7 +571,7 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
         }
         else
         {
-            OBJECTIVE z1 = WORSE(q.objectives[i],s.objectives[i]);
+            z1 = WORSE(q.objectives[i],s.objectives[i]);
             vpq *= p.objectives[i];
             vpr *= p.objectives[i];
             vps *= p.objectives[i];
@@ -489,6 +588,162 @@ double inclhv4 (POINT p, POINT q, POINT r, POINT s)
     return vp + vq + vr + vs - vpq - vpr - vps - vqr - vqs - vrs + vpqr + vpqs + vprs + vqrs - vpqrs;
 }
 
+void Rlist_inclhv4 (POINT p, POINT q, POINT r, POINT s, RLIST* Rlist, int sign)
+/* returns the hypervolume of {p, q, r, s} */
+{
+    int i, Ridx;
+    int Ridx_pq, Ridx_pr, Ridx_ps, Ridx_qr, Ridx_qs, Ridx_rs;
+    int Ridx_pqr, Ridx_pqs, Ridx_prs, Ridx_qrs, Ridx_pqrs;
+
+    int n = p.n; /* assume that p, q, r and s have the same size */
+    OBJECTIVE z1, z2;
+
+    Rlist_extend (Rlist, 15, &Ridx); /* 15 = 2^4 - 1 */
+
+    memcpy (Rlist->xmax[Ridx], p.objectives, n * sizeof (double));  Rlist->sign[Ridx ++] = sign;
+    memcpy (Rlist->xmax[Ridx], q.objectives, n * sizeof (double));  Rlist->sign[Ridx ++] = sign;
+    memcpy (Rlist->xmax[Ridx], r.objectives, n * sizeof (double));  Rlist->sign[Ridx ++] = sign;
+    memcpy (Rlist->xmax[Ridx], s.objectives, n * sizeof (double));  Rlist->sign[Ridx ++] = sign;
+
+    Ridx_pq   = Ridx ++;  Rlist->sign[Ridx_pq]   = -sign;
+    Ridx_pr   = Ridx ++;  Rlist->sign[Ridx_pr]   = -sign;
+    Ridx_ps   = Ridx ++;  Rlist->sign[Ridx_ps]   = -sign;
+    Ridx_qr   = Ridx ++;  Rlist->sign[Ridx_qr]   = -sign;
+    Ridx_qs   = Ridx ++;  Rlist->sign[Ridx_qs]   = -sign;
+    Ridx_rs   = Ridx ++;  Rlist->sign[Ridx_rs]   = -sign;
+    Ridx_pqr  = Ridx ++;  Rlist->sign[Ridx_pqr]  =  sign;
+    Ridx_pqs  = Ridx ++;  Rlist->sign[Ridx_pqs]  =  sign;
+    Ridx_prs  = Ridx ++;  Rlist->sign[Ridx_prs]  =  sign;
+    Ridx_qrs  = Ridx ++;  Rlist->sign[Ridx_qrs]  =  sign;
+    Ridx_pqrs = Ridx;     Rlist->sign[Ridx_pqrs] = -sign;
+
+    for (i = 0; i < n; i++)
+    {
+        if (BEATS(p.objectives[i], q.objectives[i]))
+            if (BEATS(q.objectives[i], r.objectives[i]))
+                if (BEATS(r.objectives[i], s.objectives[i]))
+                {
+                    Rlist->xmax[Ridx_pq][i]   *= q.objectives[i];
+                    Rlist->xmax[Ridx_pr][i]   *= r.objectives[i];
+                    Rlist->xmax[Ridx_ps][i]   *= s.objectives[i];
+                    Rlist->xmax[Ridx_qr][i]   *= r.objectives[i];
+                    Rlist->xmax[Ridx_qs][i]   *= s.objectives[i];
+                    Rlist->xmax[Ridx_rs][i]   *= s.objectives[i];
+                    Rlist->xmax[Ridx_pqr][i]  *= r.objectives[i];
+                    Rlist->xmax[Ridx_pqs][i]  *= s.objectives[i];
+                    Rlist->xmax[Ridx_prs][i]  *= s.objectives[i];
+                    Rlist->xmax[Ridx_qrs][i]  *= s.objectives[i];
+                    Rlist->xmax[Ridx_pqrs][i] *= s.objectives[i];
+                }
+                else
+                {
+                    z1 = WORSE(q.objectives[i], s.objectives[i]);
+                    Rlist->xmax[Ridx_pq][i]   *= q.objectives[i];
+                    Rlist->xmax[Ridx_pr][i]   *= r.objectives[i];
+                    Rlist->xmax[Ridx_ps][i]   *= WORSE(p.objectives[i], s.objectives[i]);
+                    Rlist->xmax[Ridx_qr][i]   *= r.objectives[i];
+                    Rlist->xmax[Ridx_qs][i]   *= z1;
+                    Rlist->xmax[Ridx_rs][i]   *= r.objectives[i];
+                    Rlist->xmax[Ridx_pqr][i]  *= r.objectives[i];
+                    Rlist->xmax[Ridx_pqs][i]  *= z1;
+                    Rlist->xmax[Ridx_prs][i]  *= r.objectives[i];
+                    Rlist->xmax[Ridx_qrs][i]  *= r.objectives[i];
+                    Rlist->xmax[Ridx_pqrs][i] *= r.objectives[i];
+                }
+            else if (BEATS(q.objectives[i], s.objectives[i]))
+            {
+                Rlist->xmax[Ridx_pq][i]   *= q.objectives[i];
+                Rlist->xmax[Ridx_pr][i]   *= WORSE(p.objectives[i], r.objectives[i]);
+                Rlist->xmax[Ridx_ps][i]   *= s.objectives[i];
+                Rlist->xmax[Ridx_qr][i]   *= q.objectives[i];
+                Rlist->xmax[Ridx_qs][i]   *= s.objectives[i];
+                Rlist->xmax[Ridx_rs][i]   *= s.objectives[i];
+                Rlist->xmax[Ridx_pqr][i]  *= q.objectives[i];
+                Rlist->xmax[Ridx_pqs][i]  *= s.objectives[i];
+                Rlist->xmax[Ridx_prs][i]  *= s.objectives[i];
+                Rlist->xmax[Ridx_qrs][i]  *= s.objectives[i];
+                Rlist->xmax[Ridx_pqrs][i] *= s.objectives[i];
+            }
+            else
+            {
+                z1 = WORSE(p.objectives[i], r.objectives[i]);
+                Rlist->xmax[Ridx_pq][i]   *= q.objectives[i];
+                Rlist->xmax[Ridx_pr][i]   *= z1;
+                Rlist->xmax[Ridx_ps][i]   *= WORSE(p.objectives[i], s.objectives[i]);
+                Rlist->xmax[Ridx_qr][i]   *= q.objectives[i];
+                Rlist->xmax[Ridx_qs][i]   *= q.objectives[i];
+                Rlist->xmax[Ridx_rs][i]   *= WORSE(r.objectives[i], s.objectives[i]);
+                Rlist->xmax[Ridx_pqr][i]  *= q.objectives[i];
+                Rlist->xmax[Ridx_pqs][i]  *= q.objectives[i];
+                Rlist->xmax[Ridx_prs][i]  *= WORSE(z1, s.objectives[i]);
+                Rlist->xmax[Ridx_qrs][i]  *= q.objectives[i];
+                Rlist->xmax[Ridx_pqrs][i] *= q.objectives[i];
+            }
+        else if (BEATS(q.objectives[i], r.objectives[i]))
+            if (BEATS(p.objectives[i], s.objectives[i]))
+            {
+                z1 = WORSE(p.objectives[i], r.objectives[i]);
+                z2 = WORSE(r.objectives[i], s.objectives[i]);
+                Rlist->xmax[Ridx_pq][i]   *= p.objectives[i];
+                Rlist->xmax[Ridx_pr][i]   *= z1;
+                Rlist->xmax[Ridx_ps][i]   *= s.objectives[i];
+                Rlist->xmax[Ridx_qr][i]   *= r.objectives[i];
+                Rlist->xmax[Ridx_qs][i]   *= s.objectives[i];
+                Rlist->xmax[Ridx_rs][i]   *= z2;
+                Rlist->xmax[Ridx_pqr][i]  *= z1;
+                Rlist->xmax[Ridx_pqs][i]  *= s.objectives[i];
+                Rlist->xmax[Ridx_prs][i]  *= z2;
+                Rlist->xmax[Ridx_qrs][i]  *= z2;
+                Rlist->xmax[Ridx_pqrs][i] *= z2;
+            }
+            else
+            {
+                z1 = WORSE(p.objectives[i], r.objectives[i]);
+                z2 = WORSE(r.objectives[i], s.objectives[i]);
+                Rlist->xmax[Ridx_pq][i]   *= p.objectives[i];
+                Rlist->xmax[Ridx_pr][i]   *= z1;
+                Rlist->xmax[Ridx_ps][i]   *= p.objectives[i];
+                Rlist->xmax[Ridx_qr][i]   *= r.objectives[i];
+                Rlist->xmax[Ridx_qs][i]   *= WORSE(q.objectives[i], s.objectives[i]);
+                Rlist->xmax[Ridx_rs][i]   *= z2;
+                Rlist->xmax[Ridx_pqr][i]  *= z1;
+                Rlist->xmax[Ridx_pqs][i]  *= p.objectives[i];
+                Rlist->xmax[Ridx_prs][i]  *= z1;
+                Rlist->xmax[Ridx_qrs][i]  *= z2;
+                Rlist->xmax[Ridx_pqrs][i] *= z1;
+            }
+        else if (BEATS(p.objectives[i], s.objectives[i]))
+        {
+            Rlist->xmax[Ridx_pq][i]   *= p.objectives[i];
+            Rlist->xmax[Ridx_pr][i]   *= p.objectives[i];
+            Rlist->xmax[Ridx_ps][i]   *= s.objectives[i];
+            Rlist->xmax[Ridx_qr][i]   *= q.objectives[i];
+            Rlist->xmax[Ridx_qs][i]   *= s.objectives[i];
+            Rlist->xmax[Ridx_rs][i]   *= s.objectives[i];
+            Rlist->xmax[Ridx_pqr][i]  *= p.objectives[i];
+            Rlist->xmax[Ridx_pqs][i]  *= s.objectives[i];
+            Rlist->xmax[Ridx_prs][i]  *= s.objectives[i];
+            Rlist->xmax[Ridx_qrs][i]  *= s.objectives[i];
+            Rlist->xmax[Ridx_pqrs][i] *= s.objectives[i];
+        }
+        else
+        {
+            z1 = WORSE(q.objectives[i], s.objectives[i]);
+            Rlist->xmax[Ridx_pq][i]   *= p.objectives[i];
+            Rlist->xmax[Ridx_pr][i]   *= p.objectives[i];
+            Rlist->xmax[Ridx_ps][i]   *= p.objectives[i];
+            Rlist->xmax[Ridx_qr][i]   *= q.objectives[i];
+            Rlist->xmax[Ridx_qs][i]   *= z1;
+            Rlist->xmax[Ridx_rs][i]   *= WORSE(r.objectives[i], s.objectives[i]);
+            Rlist->xmax[Ridx_pqr][i]  *= p.objectives[i];
+            Rlist->xmax[Ridx_pqs][i]  *= p.objectives[i];
+            Rlist->xmax[Ridx_prs][i]  *= p.objectives[i];
+            Rlist->xmax[Ridx_qrs][i]  *= z1;
+            Rlist->xmax[Ridx_pqrs][i] *= p.objectives[i];
+        }
+    }
+}
+
 
 double exclhv (FRONT* ps, int p)
 /* returns the exclusive hypervolume of ps[p] relative to ps[0 .. p-1] */
@@ -500,6 +755,16 @@ double exclhv (FRONT* ps, int p)
     fr--;
 
     return volume;
+}
+
+/* RLIST-variant of exclhv */
+void Rlist_exclhv (FRONT* ps, int p, RLIST* Rlist, int sign)
+{
+    makeDominatedBit (ps, p);
+    Rlist_inclhv (ps->points[p], Rlist, sign);
+    Rlist_hv (&fs[fr - 1], Rlist, -sign);
+
+    fr --;
 }
 
 
@@ -525,41 +790,126 @@ double hv (FRONT* ps)
 
     /* these points need sorting */
     qsort(&ps->points[safe], ps->nPoints - safe, sizeof(POINT), greater);
+
     /* n = 2 implies that safe = 0 */
     if (n == 2) return hv2 (ps, ps->nPoints);
+
     /* these points don't NEED sorting, but it helps */
     qsort(ps->points, safe, sizeof(POINT), greaterabbrev);
 
     if (n == 3 && safe > 0)
     {
         volume = ps->points[0].objectives[2] * (hv2 (ps, safe));
-
-        wfg_front_resize (ps, ps->nPoints, n - 1);
-
-        for (i = safe; i < ps->nPoints; i++)
-            /* we can ditch dominated points here, but they will be ditched anyway in makeDominatedBit */
-            volume += ps->points[i].objectives[n - 1] * (exclhv (ps, i));
-
-        wfg_front_resize (ps, ps->nPoints, n);
-
-        return volume;
+	i = safe;
     }
     else
     {
         volume = inclhv4 (ps->points[0], ps->points[1], ps->points[2], ps->points[3]);
-
-        wfg_front_resize (ps, ps->nPoints, n - 1);
-
-        for (i = 4; i < ps->nPoints; i++)
-            /* we can ditch dominated points here, but they will be ditched anyway in makeDominatedBit */
-            volume += ps->points[i].objectives[n - 1] * (exclhv (ps, i));
-
-        wfg_front_resize (ps, ps->nPoints, n);
-
-        return volume;
+	i = 4;
     }
+
+    wfg_front_resize (ps, ps->nPoints, n - 1);
+
+    for (; i < ps->nPoints; i++)
+	/* we can ditch dominated points here, but they will be ditched anyway in makeDominatedBit */
+	volume += ps->points[i].objectives[n - 1] * (exclhv (ps, i));
+
+    wfg_front_resize (ps, ps->nPoints, n);
+
+    return volume;
 }
 
+/* RLIST-variant of hv */
+void Rlist_hv (FRONT* ps, RLIST* Rlist, int sign)
+{
+    int i, j, Ridx;
+    int n = ps->n;
+
+    /* process small fronts with the IEA */
+    switch (ps->nPoints)
+      {
+      case 1:
+        Rlist_inclhv  (ps->points[0], Rlist, sign);
+        return;
+      case 2:
+        Rlist_inclhv2 (ps->points[0], ps->points[1], Rlist, sign);
+        return;
+      case 3:
+        Rlist_inclhv3 (ps->points[0], ps->points[1], ps->points[2],
+                       Rlist, sign);  return;
+      case 4:
+        Rlist_inclhv4 (ps->points[0], ps->points[1], ps->points[2],
+                       ps->points[3], Rlist, sign);  return;
+      }
+
+    /* these points need sorting */
+    qsort (&ps->points[safe], ps->nPoints - safe, sizeof(POINT), greater);
+
+    /* n = 2 implies that safe = 0 */
+    if (n == 2)
+      {
+        Rlist_hv2 (ps, ps->nPoints, Rlist, sign);
+        return;
+      }
+
+    /* these points don't NEED sorting, but it helps */
+    qsort (ps->points, safe, sizeof(POINT), greaterabbrev);
+
+    Ridx = Rlist->size;
+    if ((n == 3) && (safe > 0))
+      {
+        Rlist_hv2 (ps, safe, Rlist, sign);
+        i = safe;
+      }
+    else
+      {
+        Rlist_inclhv4 (ps->points[0], ps->points[1], ps->points[2],
+                       ps->points[3], Rlist, sign);
+        i = 4;
+      }
+    for (j = Ridx; j < Rlist->size; j++)
+      Rlist->xmax[j][n - 1] = ps->points[0].objectives[n - 1];
+
+    wfg_front_resize (ps, ps->nPoints, n - 1);
+
+    for (; i < ps->nPoints; i++)
+    {
+      Ridx = Rlist->size;
+      Rlist_exclhv (ps, i, Rlist, sign);
+      for (j = Ridx; j < Rlist->size; j++)
+        Rlist->xmax[j][n - 1] = ps->points[i].objectives[n - 1];
+    }
+
+    wfg_front_resize (ps, ps->nPoints, n);
+}
+
+
+/**************************/
+/***** MAIN FUNCTIONS *****/
+/**************************/
+
+double wfg_compute_hv (FRONT* ps)
+{
+  /* Set global variables */
+  safe = 0;
+  fr = 0;
+
+  return hv (ps);
+}
+
+void wfg_compute_decomposition (FRONT* ps, RLIST* Rlist)
+{
+  /* Set global variables */
+  safe = 0;
+  fr = 0;
+
+  Rlist_hv (ps, Rlist, 1);
+}
+
+
+/********************************************/
+/***** ALLOC/FREE GLOBAL LIST OF FRONTS *****/
+/********************************************/
 
 void wfg_alloc (int maxm, int maxn)
 /* Allocate memory for several auxiliary fronts */
@@ -587,16 +937,6 @@ void wfg_free (int maxm, int maxn)
         wfg_front_destroy (&fs[i]);
       mxFree (fs);
     }
-}
-
-
-double wfg_compute_hv (FRONT* ps)
-{
-  /* Set global variables */
-  safe = 0;
-  fr = 0;
-
-  return hv (ps);
 }
 
 
@@ -651,4 +991,85 @@ void wfg_front_resize (FRONT* f, int nb_points, int nb_objectives)
 
   for (j = 0; j < nb_points; j++)
     f->points[j].n = nb_objectives;
+}
+
+
+/***************************************/
+/***** BASIC OPERATIONS ON RLIST's *****/
+/***************************************/
+
+RLIST* Rlist_alloc (int alloc_size, int n)
+{
+  int i, j;
+
+  RLIST* Rlist = (RLIST*) mxMalloc (sizeof (RLIST));
+
+  Rlist->size = 0;
+  Rlist->allocated_size = alloc_size;
+  Rlist->n = n;
+
+  Rlist->xmin = (double**) mxMalloc (alloc_size * sizeof (double*));
+  Rlist->xmax = (double**) mxMalloc (alloc_size * sizeof (double*));
+  Rlist->sign = (int*) mxMalloc (alloc_size * sizeof (int));
+
+  for (i = 0; i < alloc_size; i++)
+    {
+      Rlist->xmin[i] = (double*) mxMalloc (Rlist->n * sizeof (double));
+      Rlist->xmax[i] = (double*) mxMalloc (Rlist->n * sizeof (double));
+
+      /* Set all components of xmin to 0 (the reference) */
+      for (j = 0; j < Rlist->n; j++)
+        Rlist->xmin[i][j] = 0.0;
+    }
+
+  return Rlist;
+}
+
+void Rlist_extend (RLIST* Rlist, int k, int* p_Ridx)
+{
+  int i, j;
+  int old_size = Rlist->size;
+  int new_size = old_size + k;
+
+  if (new_size > Rlist->allocated_size)
+    {
+      Rlist->allocated_size *= 2;
+
+      Rlist->xmin = (double**) mxRealloc
+        (Rlist->xmin, Rlist->allocated_size * sizeof (double*));
+      Rlist->xmax = (double**) mxRealloc
+        (Rlist->xmax, Rlist->allocated_size * sizeof (double*));
+      Rlist->sign = (int*) mxRealloc
+        (Rlist->sign, Rlist->allocated_size * sizeof (int));
+
+      for (i = Rlist->allocated_size; i < new_size; i++)
+        {
+          Rlist->xmin[i] = (double*) mxMalloc (Rlist->n * sizeof (double));
+          Rlist->xmax[i] = (double*) mxMalloc (Rlist->n * sizeof (double));
+
+          /* Set all components of xmin to 0 (the reference) */
+          for (j = 0; j < Rlist->n; j++)
+            Rlist->xmin[i][j] = 0.0;
+        }
+    }
+
+  Rlist->size = new_size;
+
+  *p_Ridx = old_size;
+}
+
+void Rlist_free (RLIST* Rlist)
+{
+  int i;
+
+  for (i = 0; i < Rlist->allocated_size; i++)
+    {
+      mxFree (Rlist->xmin[i]);
+      mxFree (Rlist->xmax[i]);
+    }
+
+  mxFree (Rlist->xmin);
+  mxFree (Rlist->xmax);
+  mxFree (Rlist->sign);
+  mxFree (Rlist);
 }

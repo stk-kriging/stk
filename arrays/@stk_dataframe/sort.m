@@ -76,8 +76,8 @@ end % function sort
 
 
 %!shared x, y
-%! x = stk_dataframe ([3; 2; 1], {}, {'a', 'b', 'c'})
-%! y = sort (x)
+%! x = stk_dataframe ([3; 2; 1], {}, {'a', 'b', 'c'});
+%! y = sort (x);
 
 %!assert (strcmp (class (y), 'stk_dataframe'))
 %!assert (isequal (y.data, [1; 2; 3])) 

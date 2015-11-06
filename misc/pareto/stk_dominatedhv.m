@@ -1,6 +1,7 @@
 % STK_DOMINATEHV computes the hypervolume dominated by a set of points
 %
 % CALL: HV = stk_dominatedhv (Y, Y_REF)
+% CALL: HV = stk_dominatedhv (Y, Y_REF, 0)
 %
 %    computes the hypervolume dominated by the rows of Y, with respect to the
 %    reference point Y_REF (a row vector with the same number of columns as Y).
@@ -8,13 +9,29 @@
 %    (multi-objective minimization framework).
 %
 % CALL: HV = stk_dominatedhv (Y)
+% CALL: HV = stk_dominatedhv (Y, [], 0)
 %
 %    uses [0 0 ... 0] as a reference point.
 %
+% CALL: DECOMP = stk_dominatedhv (Y, Y_REF, 1)
+%
+%    computes a signed decomposition of the dominated hyper-region delimited by
+%    the reference point Y_REF into overlapping rectangles. Assuming that Y is
+%    of size N x D, the result DECOMP is a structure with field .sign (N x 1),
+%    .xmin (N x D) and .xmax (N x D). The hypervolume can be recovered from this
+%    decomposition using
+%
+%      HV = sum (DECOMP.sign .* prod (DECOMP.xmax - DECOMP.xmin, 2))
+%
+%    provided that the resulting decomposition is not empty.
+%
+% CALL: HV = stk_dominatedhv (Y, [], 1)
+%
+%    computed a signed decomposition using [0 0 ... 0] as a reference point.
+%
 % NOTE:
 %
-%    This function relies internally of the WFG algorithm, release 1.10, by
-%    Lyndon While, Lucas Bradstreet and Luigi Barone [1, 2].
+%    This function relies internally on the WFG algorithm [1, 2].
 %
 % REFERENCES:
 %
@@ -23,7 +40,7 @@
 %       Computation, 16(1):86-95, 2012
 %       http://dx.doi.org/10.1109/TEVC.2010.2077298
 %
-%   [2] WFG 1.10, release under the GPLv2 licence, available online from:
+%   [2] WFG 1.10, released under the GPLv2 licence, available online from:
 %       http://www.wfg.csse.uwa.edu.au/hypervolume/
 %
 % See also: sortrows, stk_isdominated, stk_paretofind
@@ -54,43 +71,60 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function hv = stk_dominatedhv (y, y_ref)
+function result = stk_dominatedhv (y, y_ref, do_decomposition)
 
-if nargin > 2,
+if nargin > 3,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % Missing or empty y_ref: will use [0 0 ... 0] as a reference point
 if nargin < 2,
     y_ref = [];
-elseif ~ isrow (y_ref)
-    stk_error ('y_ref should be a row vector.', 'IncorrectSize');
+elseif ~ ((isnumeric (y_ref)) && ((isempty (y_ref)) || (isrow (y_ref))))
+    stk_error ('y_ref should be a numeric row vector.', 'IncorrectSize');
 end
 
-if ~ iscell (y),  % y is a matrix
-    
+% Return the decomposition or just the value of the volume ?
+if nargin < 3
+    do_decomposition = false;
+else
+    do_decomposition = logical (do_decomposition);
+end
+
+% Pre-processing
+if iscell (y),
+    y = cellfun (@(z) wfg_preprocessing (z, y_ref), y, 'UniformOutput', false);
+else % y is a matrix
     if (~ ismatrix (y))
         stk_error ('y should be a matrix or a cell array', 'IncorrectArgument');
     end
+    y = wfg_preprocessing (y, y_ref);
+end
+
+% COMPUTE
+if ~ do_decomposition,
     
-    % Pre-processing
-    y = wfg_prepocessing (y, y_ref);
-    
-    hv = stk_dominatedhv_mex (y);
+    % Compute the hypervolume only
+    result = stk_dominatedhv_mex (y, false);
     
 else
     
-    % Pre-processing
-    y = cellfun (@(z) wfg_prepocessing (z, y_ref), y, 'UniformOutput', false);
+    % Compute the decomposition into hyper-rectangles
+    result = stk_dominatedhv_mex (y, true);
     
-    hv = stk_dominatedhv_mex (y);
-    
+    % Post-processing
+    if iscell (y)
+        result = arrayfun (@(hv) wfg_postprocessing (hv, y_ref), ...
+            result, 'UniformOutput', true);
+    else
+        result = wfg_postprocessing (result, y_ref);
+    end
 end
 
 end % function stk_dominatedhv
 
 
-function y = wfg_prepocessing (y, y_ref)
+function y = wfg_preprocessing (y, y_ref)
 
 y = double (y);
 
@@ -116,15 +150,37 @@ else  % Reference point provided
     
 end
 
-if ~ all (y >= 0);
-    stk_error ('All data points must be below the reference point', ...
-        'IncorrectArgument');
+% Remove points that do not dominate the reference
+b = any (y < 0, 2);
+y(b, :) = [];
+
+end % function wfg_preprocessing
+
+
+function hv = wfg_postprocessing (hv, y_ref)
+
+p = size (hv.xmin, 2);
+xmin = hv.xmin;
+
+if isempty (y_ref)
+    hv.xmin = - hv.xmax;
+    hv.xmax = - xmin;
+else
+    hv.xmin = bsxfun (@minus, y_ref(1:p), hv.xmax);
+    hv.xmax = bsxfun (@minus, y_ref(1:p), xmin);
 end
 
-end
+end % function wfg_postprocessing
 
 
-%!shared y, hv0 % Example from README.TXT in WFg 1.10
+%!error hv = stk_dominatedhv ();
+%!error hv = stk_dominatedhv (-y, 'incorrect ref type');
+%!error hv = stk_dominatedhv (-y, [0 0]);
+%!error hv = stk_dominatedhv (-y, [0 0 0 0 0], 0, 'too many input args');
+
+%-------------------------------------------------------------------------------
+
+%!shared y, hv0 % Example from README.TXT in WFG 1.10
 %!
 %! y = [ ...
 %!     0.598 0.737 0.131 0.916 6.745; ...
@@ -133,11 +189,12 @@ end
 %!
 %! hv0 = 1.1452351120;
 
-%!error hv = stk_dominatedhv ();
-%!error hv = stk_dominatedhv (-y, [0 0 0 0 0], 'too many input args');
-
 %!test
 %! hv = stk_dominatedhv (-y);
+%! assert (stk_isequal_tolrel (hv, hv0, 1e-10));
+
+%!test
+%! hv = stk_dominatedhv (-y, [], 0);
 %! assert (stk_isequal_tolrel (hv, hv0, 1e-10));
 
 %!test
@@ -149,12 +206,42 @@ end
 %! assert (stk_isequal_tolrel (hv, hv0, 1e-10));
 
 %!test
+%! r = stk_dominatedhv (-y, [], 1);
+%! hv = sum (r.sign .* prod (r.xmax - r.xmin, 2));
+%! assert (stk_isequal_tolrel (hv, hv0, 1e-10));
+
+%-------------------------------------------------------------------------------
+
+%!shared y1, y2, y0
+%! y0 = [1.00 1.00];  % Reference point
+%! y1 = [1.50 1.50];  % Above the reference point => ignored (with a warning)
+%! y2 = [0.50 0.50];  % Below the reference point
+
+%!assert (isequal (0.00, stk_dominatedhv (y1, y0)));
+%!assert (isequal (0.25, stk_dominatedhv (y2, y0)));
+%!assert (isequal (0.25, stk_dominatedhv ([y1; y2], y0)));
+%!assert (isequal (0.25, stk_dominatedhv ([y2; y1; y2], y0)));
+
+%-------------------------------------------------------------------------------
+
+%!test
 %! for d = 1:10,
 %!    y = - 0.5 * ones (1, d);
+%!    hv = stk_dominatedhv (y);
 %!    assert (isequal (stk_dominatedhv (y), 0.5 ^ d));
 %! end
 
 %!test
+%! for d = 1:10,
+%!    y = - 0.5 * ones (1, d);
+%!    r = stk_dominatedhv (y, [], 1);
+%!    hv = sum (r.sign .* prod (r.xmax - r.xmin, 2));
+%!    assert (isequal (stk_dominatedhv (y), 0.5 ^ d));
+%! end
+
+%-------------------------------------------------------------------------------
+
+%!shared y, y_ref, dv, hv0
 %! y1 = [0.25 0.75];
 %! y2 = [0.50 0.50];
 %! y3 = [0.75 0.25];
@@ -163,9 +250,31 @@ end
 %!
 %! y = {[], y1, y2, y3; [y1; y2], [y1; y3], [y2; y3], [y1; y2; y3]};
 %!
-%! dv = 0.25 ^ 2;
+%! dv = 0.25 ^ 2;  hv0 = [0 3 4 3; 5 5 5 6] * dv;
+
+%!test
+%! hv1 = stk_dominatedhv (y, y_ref);
+%! assert (isequal (hv0, hv1));
+
+%!test
+%! r = stk_dominatedhv (y, y_ref, 1);
 %!
-%! hv0 = [0 3 4 3; 5 5 5 6] * dv
-%! hv1 = stk_dominatedhv (y, y_ref)
+%! % Check the first decomposition, which should be empty
+%! assert (isempty (r(1).sign));
+%! assert (isempty (r(1).xmin));
+%! assert (isempty (r(1).xmax));
 %!
-%! assert (isequal (hv0, hv1))
+%! % Check the other decompositions
+%! for i = 2:6,
+%!    hv2 = sum (r(i).sign .* prod (r(i).xmax - r(i).xmin, 2));
+%!    assert (isequal (hv0(i), hv2));
+%! end
+
+%-------------------------------------------------------------------------------
+
+%!test
+%! y = (0.3:0.1:0.8)';
+%! hv0 = 0.7;
+%! hv1 = stk_dominatedhv (y, 1);
+%! r = stk_dominatedhv (y, 1, true);
+%! hv2 = sum (r.sign .* prod (r.xmax - r.xmin, 2));

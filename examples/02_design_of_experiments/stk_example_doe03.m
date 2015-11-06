@@ -13,6 +13,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -130,10 +131,6 @@ EI_max_stop = (max (z_grid) - min (z_grid)) / 1e5;
 % Iteration number
 iter = 0;
 
-% Plot options
-DOE_STYLE  = {'ko', 'MarkerFaceColor', 'k'};
-NEXT_STYLE = {'ro', 'MarkerFaceColor', 'y'};
-
 while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     % Trick: add a small "regularization" noise to our model
@@ -144,22 +141,22 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     % Compute the Expected Improvement (EI) criterion
     % (the fourth argument indicates that we want to MAXIMIZE f)
-    EI = stk_distrib_normal_ei (max (data.z), z_post.mean, sqrt (z_post.var), true);
+    EI = stk_distrib_normal_ei (max (data.z), ...
+        z_post.mean, sqrt (z_post.var), false);
     
     % Pick the point where the EI is maximum as our next evaluation point
     [EI_max, i_max] = max (EI);
     
     % Figure: upper panel
     stk_subplot (2, 1, 1);  cla;
-    plot (x_grid, z_grid);  xlim (BOX);  hold on;
-    plot (x_grid, z_post.mean, 'r-');
-    plot (data.x, data.z, DOE_STYLE{:});
-    plot (x_grid(i_max), z_grid(i_max), NEXT_STYLE{:});
+    stk_plot1d (data.x, data.z, x_grid, z_grid, z_post);
+    xlim (BOX);  hold on;
+    plot (x_grid(i_max), z_grid(i_max), 'ro', 'MarkerFaceColor', 'y');
     
     % Figure: lower panel
     stk_subplot (2, 1, 2);  cla;
     plot (x_grid, EI); xlim (BOX); hold on;
-    plot (x_grid(i_max), EI_max, NEXT_STYLE{:});
+    plot (x_grid(i_max), EI_max, 'ro', 'MarkerFaceColor', 'y');
     stk_ylabel ('EI');
     
     if EI_max > EI_max_stop,

@@ -4,6 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
+ *    Copyright (C) 2015 CentraleSupelec                                     *
  *    Copyright (C) 2013 SUPELEC                                             *
  *                                                                           *
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
@@ -36,10 +37,10 @@
 static void gpquadform_pairwise
 (
  double* x, double* y, double* rx, double* ry, 
- double* h, int m, int dim
+ double* h, size_t m, size_t dim
  )
 {
-  int i, kx, ky;
+  size_t i, kx, ky;
   double diff, lambda, rxi, ryi;
 
   for (i = 0; i < m; i++)
@@ -68,7 +69,7 @@ mxArray* compute_qxy_matrixy
  const mxArray* ry
  )
 {
-  unsigned int d, m;
+  size_t d, m;
   mxArray *h;
 
   if((!stk_is_realmatrix(x))  || (!stk_is_realmatrix(y)) ||

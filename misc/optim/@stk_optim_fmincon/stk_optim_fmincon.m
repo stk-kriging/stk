@@ -44,38 +44,24 @@ if nargin > 1
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-persistent has_fmincon
-if isempty (has_fmincon)
-    has_fmincon = check_has_fmincon ();
-    mlock ();
-end
-
-if ~ has_fmincon
-    errmsg = 'fmincon () doesn''t seem to be available';
-    stk_error (errmsg, 'fminconNotAvailable');
-end
-
 if nargin == 0,
     
-    options = optimset (            ...
+    options = optimset (        ...
         'Display',      'off',  ...
         'GradObj',      'on',   ...
         'MaxFunEvals',  500,    ...
         'TolFun',       1e-5,   ...
         'TolX',         1e-6    );
     
+    % The 'algorithm' option is not supported by optimset in Octave
+    %  (e.g., 4.0.0) and in some old versions of Matlab (e.g., r2007a)
+    ws = warning ('off', 'all');
     try
-        % try to use the interior-point algorithm, which has been
+        % Try to use the interior-point algorithm, which has been
         % found to provide satisfactory results in many cases
         options = optimset (options, 'algorithm', 'interior-point');
-    catch
-        % the 'algorithm' option does not exist in some old versions of
-        % matlab (e.g., version 3.1.1 provided with r2007a)...
-        err = lasterror ();
-        if ~ strcmpi (err.identifier, 'matlab:optimset:invalidparamname')
-            rethrow (err);
-        end
     end
+    warning (ws);
     
     % TODO: see if the 'UseParallel' option can be useful
     
@@ -85,25 +71,3 @@ x = struct ('options', options);
 x = class (x, 'stk_optim_fmincon');
 
 end % function stk_optim_fmincon
-
-
-function has_fmincon = check_has_fmincon ()
-
-try
-    opt = optimset ('Display', 'off', 'GradObj', 'on');
-    z = fmincon (@objfun, 0, [], [], [], [], -1, 1, [], opt);
-    assert (abs (z - 0.3) < 1e-2);
-    has_fmincon = true;
-catch %#ok<CTCH>
-    has_fmincon = false;
-end
-
-end % function check_has_fmincon
-
-
-function [f, df] = objfun (x)
-
-f = (x - 0.3) .^ 2;
-df = 2 * (x - 0.3);
-
-end % function objfun
