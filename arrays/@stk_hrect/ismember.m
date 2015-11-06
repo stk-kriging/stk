@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -28,33 +29,54 @@
 
 function varargout = ismember (A, B, varargin)
 
-if ~ all (cellfun (@ischar, varargin))
-    stk_error ('Invalid flag (should be a string).', 'InvalidArgument');
-else
-    % At least of of the arguments (A or B) is an stk_hrect,
-    % therefore ismember should work on rows
-    flags = unique ([{'rows'} varargin{:}]);
-end
-
-varargout = cell (1, max (nargout, 1));
-
-% If A is an stk_hrect, treat it as any other stk_dataframe would be treated
-if isa (A, 'stk_hrect'),  A = A.stk_dataframe;  end
-
 if isa (B, 'stk_hrect'),
+    
     % If B is an stk_hrect, ismember tests whether A (or the points in A)
     % belong to the hyper-rectangle B
+    
+    % The 'rows' flag is tolerated but unused in this case
+    if (nargin > 2) && (~ isequal (varargin, {'rows'}))
+        stk_error ('Invalid additional arguments', 'InvalidArgument');
+    end
+    
     if nargout > 1,
         stk_error (['Cannot return member indices when testing for ' ...
             'membership to an hyper-rectangle.'], 'TooManyOutputArgs');
     end
-    Bmin = B.stk_dataframe.data(1, :);
-    Bmax = B.stk_dataframe.data(2, :);
+    
     A = double (A);
-    varargout{1} = all ((A >= Bmin) & (A <= Bmax), 2);
-else
-    % Otherwise, use @stk_dataframe/ismember
-    [varargout{:}] = ismember (A, B.stk_dataframe, flags{:});
+    % bounds = get (B.stk_dataframe, 'data');
+    bounds = double (B);  % even faster than get (..., 'data')
+    b1 = bsxfun (@ge, A, bounds(1, :));
+    b2 = bsxfun (@le, A, bounds(2, :));
+    varargout = {all(b1 & b2, 2)};
+    
+else % A is an stk_hrect, treat it as any other stk_dataframe would be treated
+    
+    varargout = cell (1, max (nargout, 1));
+    
+    if nargin == 2,
+        
+        [varargout{:}] = ismember (A.stk_dataframe, B, 'rows');
+        
+    else
+        
+        try
+            % At least of of the arguments (A or B) is an stk_hrect,
+            % therefore ismember should work on rows
+            flags = unique ([{'rows'} varargin{:}]);
+        catch
+            if ~ all (cellfun (@ischar, varargin))
+                stk_error ('Invalid flag (should be a string).', ...
+                    'InvalidArgument');
+            else
+                rethrow (lasterror ());
+            end
+        end
+        
+        [varargout{:}] = ismember (A.stk_dataframe, B, flags{:});
+        
+    end
 end
 
 end % function ismember
@@ -68,3 +90,7 @@ end % function ismember
 %!assert (ismember (.5 * ones (1, 5), box))
 %!assert (~ ismember (box(1, :) - 1, box))
 %!assert (~ ismember (box(2, :) + 1, box))
+
+%!test
+%! y = double (box);  y = [y; y + 2];
+%! assert (isequal (ismember (y, box), [1; 1; 0; 0]))

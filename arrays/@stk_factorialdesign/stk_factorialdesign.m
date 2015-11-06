@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -93,7 +94,7 @@ end % function stk_factorialdesign
 %! assert (strcmp (class (x), 'stk_factorialdesign'));
 
 %!test % constructor with two factors + column names
-%! x = stk_factorialdesign ({[0 1], [1 2 3]}, {'a', 'b'})
+%! x = stk_factorialdesign ({[0 1], [1 2 3]}, {'a', 'b'});
 %! assert (isequal(x.colnames, {'a', 'b'}));
 %! assert (isequal(get (x, 'colnames'), {'a', 'b'}));
 
@@ -117,7 +118,7 @@ end % function stk_factorialdesign
 %!test format rat;    disp (x);
 %!test format long;   disp (x);
 %!test format short;  disp (x);
-%!     if ~ isnan (fmt), set (0, 'Format', fmt); end
+%! if ~ isnan (fmt), set (0, 'Format', fmt); end
 
 %!test disp (stk_sampling_regulargrid (0^1, 1));
 %!test disp (stk_sampling_regulargrid (0^2, 2));

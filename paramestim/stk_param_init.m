@@ -78,7 +78,10 @@ cov_list = { ...
     'stk_gausscov_aniso'};
     
 if ismember (model.covariance_type, cov_list)
+    
+    % An initialization for this covariance type is provided in STK
     [param, lnv] = stk_param_init_ (model, varargin{:});
+    
 else
     try
         % Undocumented feature: make it possible to define a XXXX_param_init
@@ -87,13 +90,18 @@ else
         fname = [model.covariance_type '_param_init'];
         [param, lnv] = feval (fname, model, varargin{:});
     catch
-        stk_error (sprintf (['Unable to initialize covariance parameters ' ...
-            'automatically for covariance functions of type %s'], ...
-            model.covariance_type), 'IncorrectArgument');
+        err = lasterror ();
+        msg = strrep (err.message, sprintf ('\n'), sprintf ('\n|| '));
+        msg = sprintf (['Unable to initialize covariance parameters ' ...
+            'automatically for covariance functions of type ''%s''.\n\nThe ' ...
+            'original error message was:\n|| %s\n'], model.covariance_type, msg);
+        stk_error (msg, 'UnableToInitialize');
     end % try_catch
 end % if
 
 end % function stk_param_init
+
+%#ok<*CTCH,*LERR>
 
 
 function [param, lnv] = stk_param_init_ (model, xi, zi, box, do_estim_lnv)

@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -201,28 +202,28 @@ end % function round_
 
 %!shared x, s
 %! x = [0.9; 0.91; 0.99; 0.999];
-%!test s = stk_sprintf_colvect_scientific (x, 4)
+%!test s = stk_sprintf_colvect_scientific (x, 4);
 %!assert (isequal(s, ['####'; '####'; '####'; '####']))
-%!test s = stk_sprintf_colvect_scientific (x, 5)
+%!test s = stk_sprintf_colvect_scientific (x, 5);
 %!assert (isequal(s, ['9e-01'; '9e-01'; '1e+00'; '1e+00']))
-%!test s = stk_sprintf_colvect_scientific (x, 6)
+%!test s = stk_sprintf_colvect_scientific (x, 6);
 %!assert (isequal(s, ['9e-01'; '9e-01'; '1e+00'; '1e+00']))
-%!test s = stk_sprintf_colvect_scientific (x, 7)
+%!test s = stk_sprintf_colvect_scientific (x, 7);
 %!assert (isequal(s, ['9.0e-01'; '9.1e-01'; '9.9e-01'; '1.0e+00']))
-%!test s = stk_sprintf_colvect_scientific (x, 8)
+%!test s = stk_sprintf_colvect_scientific (x, 8);
 %!assert (isequal(s, ['9.00e-01'; '9.10e-01'; '9.90e-01'; '9.99e-01']))
 
 %!shared x, s
 %! x = [0.9; -0.91; 0.99; 0.999];
-%!test s = stk_sprintf_colvect_scientific (x, 4)
+%!test s = stk_sprintf_colvect_scientific (x, 4);
 %!assert (isequal(s, ['####'; '####'; '####'; '####']))
-%!test s = stk_sprintf_colvect_scientific (x, 5)
+%!test s = stk_sprintf_colvect_scientific (x, 5);
 %!assert (isequal(s, ['#####'; '#####'; '#####'; '#####']))
-%!test s = stk_sprintf_colvect_scientific (x, 6)
+%!test s = stk_sprintf_colvect_scientific (x, 6);
 %!assert (isequal(s, [' 9e-01'; '-9e-01'; ' 1e+00'; ' 1e+00']))
-%!test s = stk_sprintf_colvect_scientific (x, 7)
+%!test s = stk_sprintf_colvect_scientific (x, 7);
 %!assert (isequal(s, [' 9e-01'; '-9e-01'; ' 1e+00'; ' 1e+00']))
-%!test s = stk_sprintf_colvect_scientific (x, 8)
+%!test s = stk_sprintf_colvect_scientific (x, 8);
 %!assert (isequal(s, [' 9.0e-01'; '-9.1e-01'; ' 9.9e-01'; ' 1.0e+00']))
 
 %!test

@@ -5,6 +5,7 @@
  * Copyright Notice                                                          *
  *                                                                           *
  *    Copyright (C) 2013 SUPELEC                                             *
+ *                                                                           *
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
  *                                                                           *
  * Copying Permission Statement                                              *

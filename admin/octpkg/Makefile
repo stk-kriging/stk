@@ -29,3 +29,8 @@ __%__.mex: %.c
 
 __stk_dominatedhv_mex__.mex: stk_dominatedhv_mex.c wfg.c
 	$(MKOCTFILE) --mex --output $@ $< wfg.c
+	
+.PHONY: clean
+
+clean:
+	rm -f *.o *.mex

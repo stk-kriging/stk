@@ -1,12 +1,17 @@
-% STK_PARAM_GETDEFAULTBOUNDS [STK internal]
+% STK_PARAM_GETDEFAULTBOUNDS
+%
+% FIXME: Explain what this function does, and how it is possible to define
+% default bounds for user-defined covariance functions (there are two ways to do
+% this...).
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015 CentraleSupelec & LNE
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
 %              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%              Remi Stroh        <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -89,12 +94,24 @@ else
             ub = [logvar_ub; range_ub];
             
         otherwise
-            
-            warning (sprintf (['Unknown covariance type: %s, ' ...
-                'returning empty bounds.'], covariance_type)); %#ok<WNTAG,SPWRN>
-            
-            lb = [];
-            ub = [];
+            try
+                % Undocumented feature: make it possible to define a
+                % XXXX_getdefaultbounds function that provides parameter
+                % bounds during estimation for a user-defined covariance
+                % function called XXXX (in the case, where this covariance
+                % has parameters type double).
+                fname = [covariance_type '_getdefaultbounds'];
+                [lb, ub] = feval (fname, param0, xi, zi);
+            catch
+                err = lasterror ();
+                msg = strrep (err.message, sprintf ('\n'), sprintf ('\n|| '));
+                warning(['Unable to initialize covariance parameters ' ...
+                    'automatically for covariance functions of type ''%s''.'...
+                    '\n\nEmpty bounds are returned.\n\nThe original error ' ...
+                    'message was:\n|| %s\n'], covariance_type, msg);
+                lb = [];
+                ub = [];
+            end
             
     end % switch
     

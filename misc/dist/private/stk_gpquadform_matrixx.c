@@ -4,6 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
+ *    Copyright (C) 2015 CentraleSupelec                                     *
  *    Copyright (C) 2013 SUPELEC                                             *
  *                                                                           *
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
@@ -35,10 +36,10 @@
 
 static void gpquadform_matrixx
 (
- double* x, double* rx2, double* h, int n, int dim
+ double* x, double* rx2, double* h, size_t n, size_t dim
  )
 {
-  int i, j, k1, k2;
+  size_t i, j, k1, k2;
   double diff, lambda;
 
   for (i = 0; i < (n - 1); i++)
@@ -69,7 +70,7 @@ mxArray* compute_gpquadform_matrixx
  const mxArray* rx
  )
 {
-  unsigned int k, d, mx;
+  size_t k, d, mx;
   double u, *p, *rx2;
   mxArray *h;
 
