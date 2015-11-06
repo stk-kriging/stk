@@ -1,3 +1,10 @@
+2015-11-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Makefile: Fix 'clean' target (tab instead of spaces)
+
+	* admin/octpkg/Makefile: Fix 'clean' target (tabs instead of
+	spaces)
+
 2015-10-30  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Decrease unit test verbosity
