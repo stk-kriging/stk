@@ -27,4 +27,4 @@ __%__.mex: %.c stk_mex.h
 .PHONY: clean
 
 clean:
-        rm -f *.o *.mex
+	rm -f *.o *.mex
