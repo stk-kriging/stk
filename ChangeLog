@@ -1,5 +1,9 @@
 2015-11-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Hide experimental IAGO implementation in the INDEX
+
+	* admin/octpkg/INDEX: hide experimental IAGO implementation
+
 	Ignore IAGO design notes when building Octave package
 
 	* iago/NOTES.temp: Renamed to DESIGN-NOTES.md
