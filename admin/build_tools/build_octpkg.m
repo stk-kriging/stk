@@ -66,13 +66,19 @@ mkdir (fullfile (unpacked_dir, 'src'));
 mkdir (fullfile (unpacked_dir, 'doc'));
 
 % List of directories that must be ignored by process_directory ()
-ignore_list = {'.hg', 'admin', 'misc/mole/matlab', 'build', 'sandbox'};
+ignore_list = {'.hg', '.pc', 'admin', 'misc/mole/matlab', 'build', 'sandbox'};
 
 % Prepare sed program for renaming MEX-functions (prefix/suffix by __)
 sed_program = prepare_sed_rename_mex (root_dir, release_dir);
 
+% Apply patches
+assert (system ('quilt push -a') == 0);
+
 % Process directories recursively
 process_directory ('', unpacked_dir, ignore_list, sed_program);
+
+% Cleanup: unapply patches
+assert (system ('quilt pop -a') == 0);
 
 % Cleanup: delete sed program
 delete (sed_program);
@@ -113,13 +119,6 @@ index_file = fullfile (pkg_bits_dir, 'INDEX');
 check_index_file (index_file, ...
     get_public_mfile_list (fullfile (unpacked_dir, 'inst')));
 copyfile (index_file, unpacked_dir);
-
-% Modify stk_init and stk_config_path for STK to work as an octave package
-cmd = 'sed -i "s/STK_OCTAVE_PACKAGE = false/STK_OCTAVE_PACKAGE = true/" %s';
-system (sprintf (cmd, fullfile ...
-    (unpacked_dir, 'inst', 'stk_init.m')));
-system (sprintf (cmd, fullfile ...
-    (unpacked_dir, 'inst', 'config', 'stk_config_path.m')));
 
 cd (here)
 
@@ -168,8 +167,6 @@ regex_copy_src = '\.[ch]$';
 
 if ~ isempty (regexp (s, regex_ignore, 'once')) ...
         || strcmp (s, 'Makefile') ...
-        || strcmp (s, 'config/stk_config_buildmex.m') ...
-        || strcmp (s, 'config/stk_config_makeinfo.m') ...
         || strcmp (s, 'misc/mole/README') ...
         || strcmp (s, 'misc/distrib/README') ...
         || strcmp (s, 'misc/pareto/private/wfg.README') ...

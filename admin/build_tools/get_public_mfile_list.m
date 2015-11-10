@@ -37,6 +37,7 @@ else
 end
 
 dir_list = stk_config_path (root);
+dir_list = [root dir_list];
 
 if do_rmpath,
     rmpath (config_dir);
