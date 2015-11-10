@@ -1,3 +1,12 @@
+2015-11-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	check_index_file.m: Fix a bug (column cell-arrays)
+
+	* admin/build_tools/check_index_file.m (parse_index_file): Make
+	sure that 'ignored' and 'indexed' are formatted as *column*
+	cell-arrays; otherwise, check_index_file fails on vertcat
+	operations.
+
 2015-11-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Hide experimental IAGO implementation in the INDEX

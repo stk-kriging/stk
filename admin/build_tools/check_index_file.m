@@ -5,7 +5,7 @@
 %    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -92,12 +92,12 @@ while 1,
     
     if length (s) > 1,
         if s(1) == ' '
-            indexed = [indexed {strtrim(s)}];
+            indexed = [indexed; {strtrim(s)}];
         elseif (s(1) == '#') && (s(2) ~= '#')
             s(1) = '';
             i = regexp (s, '\[', 'once');
             if ~ isempty (i),  s = s(1:(i-1));  end
-            ignored = [ignored {strtrim(s)}];
+            ignored = [ignored; {strtrim(s)}];
         end
     end
     
