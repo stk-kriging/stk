@@ -1,3 +1,11 @@
+2015-11-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Ignore IAGO design notes when building Octave package
+
+	* iago/NOTES.temp: Renamed to DESIGN-NOTES.md
+	* iago/DESIGN-NOTES.md: Renamed from NOTES.temp and converted to md
+	* admin/build_tools/build_octpkg.m: Ignore DESIGN-NOTES.md
+
 2015-11-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Makefile: Fix 'clean' target (tab instead of spaces)
