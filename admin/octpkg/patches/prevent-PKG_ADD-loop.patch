@@ -1,0 +1,13 @@
+--- a/config/stk_config_path.m
++++ b/config/stk_config_path.m
+@@ -37,7 +37,9 @@
+ % even if STK has already been partially uninstalled or is not properly installed)
+ isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
+ 
+-path = {root};
++% Don't include the root in the path when STK is used as an Octave package
++% (otherwise we get an infinite PKG_ADD loop)
++path = {};
+ 
+ % main function folders
+ path = [path {...

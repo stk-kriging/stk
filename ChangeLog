@@ -1,5 +1,27 @@
 2015-11-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Use quilt patches instead of the STK_OCTAVE_PACKAGE variable
+
+	* .hgignore: Ignore quilt's .pc directory
+	* admin/build_tools/build_octpkg.m: Add .pc to the list of ignored
+	directories. Add a quilt push/pop pair around
+	process_directory. Remove STK_OCTAVE_PACKAGE stuff.
+	* admin/build_tools/get_public_mfile_list.m: Add root the list
+	returned by stk_config_path.
+	* config/stk_config_path.m: Remove STK_OCTAVE_PACKAGE stuff.
+	* stk_init.m: Remove STK_OCTAVE_PACKAGE stuff.
+	* admin/octpkg/patches/prevent-PKG_ADD-loop.patch: Patch for
+	stk_config_path to avoid PKG_ADD loop.
+	* admin/octpkg/patches/remove-buildmex.patch: Patch that removes
+	MEX-file building from stk_init (a Makefile is used instead in the
+	Octave package release). Removes stk_config_buildmex and
+	stk_config_makeinfo as well.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Patch that
+	removes all the code related to testing if MEX-file in private
+	directories are detected (since MEX-files are no longer in private
+	directories in the Octave package release).
+	* admin/octpkg/patches/series: Ordered list of patches.
+
 	check_index_file.m: Fix a bug (column cell-arrays)
 
 	* admin/build_tools/check_index_file.m (parse_index_file): Make

@@ -9,3 +9,4 @@ build
 *.asv
 *orig
 sandbox
+.pc
