@@ -1,3 +1,15 @@
+2015-11-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Include stk_runtests in the Octave package release
+
+	* admin/build_tools/build_octpkg.m: Do not ignore stk_runtests and
+	stk_tests when processing directories.
+	* admin/octpkg/INDEX: Add stk_runtests to the INDEX.
+	* admin/octpkg/patches/use-native-test-function.patch: Remove
+	stk_tests, and skrink stk_runtests to a simple wrapper around
+	__run_test_suite__.
+	* admin/octpkg/patches/series: Add new patch.
+
 2015-11-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	sqp_quadprog.m: Bypass unit test if quadprog is not available

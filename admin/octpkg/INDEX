@@ -304,6 +304,7 @@ Miscellaneous: options, plots...
  stk_plot1d
 #stk_plot2d           [deprecated]
 #stk_plot_shadedci    [internal]
+ stk_runtests
  stk_version
 
 #stk_gpquadform  [experimental]

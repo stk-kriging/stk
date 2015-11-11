@@ -1,3 +1,4 @@
 remove-testprivatemex.patch
 prevent-PKG_ADD-loop.patch
 remove-buildmex.patch
+use-native-test-function.patch
