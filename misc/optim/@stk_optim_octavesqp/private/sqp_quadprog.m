@@ -785,8 +785,8 @@ end % function
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Test Code
 
-%!test
-%!
+%!test if (exist ('quadprog', 'file') == 2)
+%! 
 %! x0 = [-1.8; 1.7; 1.9; -0.8; -0.8];
 %!
 %! [x, obj, info, iter, nf, lambda] = sqp_quadprog ...
@@ -802,6 +802,8 @@ end % function
 %!
 %! assert (stk_isequal_tolrel (x, x_opt, 8 * sqrt (eps)));
 %! assert (stk_isequal_tolrel (obj, obj_opt, sqrt (eps)));
+%!
+%! end
 
 % Test input validation
 %!error sqp_quadprog ()

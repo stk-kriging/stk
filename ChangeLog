@@ -1,5 +1,10 @@
 2015-11-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	sqp_quadprog.m: Bypass unit test if quadprog is not available
+
+	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog.m: Bypass
+	unit test if quadprog is not available.
+
 	Use quilt patches instead of the STK_OCTAVE_PACKAGE variable
 
 	* .hgignore: Ignore quilt's .pc directory
