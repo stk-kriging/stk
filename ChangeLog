@@ -1,5 +1,12 @@
 2015-11-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_plot1d.m: Do not create a legend for conditional simulations
+
+	* misc/plot/stk_plot1d.m: Prevent the automatic creation of a
+	legend when the array of conditional simulations has column names,
+	since stk_plot1d already creates a global legend for all of its
+	graphical elements (the two are not compatible).
+
 	Include stk_runtests in the Octave package release
 
 	* admin/build_tools/build_octpkg.m: Do not ignore stk_runtests and
