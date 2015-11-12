@@ -1,5 +1,9 @@
 2015-11-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_example_kb09.m: Show legend
+
+	* examples/01_kriging_basics/stk_example_kb09.m: Show legend.
+
 	stk_plot1d.m: Do not create a legend for conditional simulations
 
 	* misc/plot/stk_plot1d.m: Prevent the automatic creation of a

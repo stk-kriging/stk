@@ -97,7 +97,7 @@ zp = stk_predict (model, xi, zi, xt);
 z_sim_cond = stk_generate_samplepaths (model, xi, zi, xt, NB_PATHS);
 
 % Display the result
-stk_plot1d (xi, zi, xt, zt, zp, z_sim_cond);
+stk_plot1d (xi, zi, xt, zt, zp, z_sim_cond);  legend show;
 stk_title ('Prediction and credible intervals');
 stk_labels ('input variable x', 'response z');
 
