@@ -56,7 +56,10 @@ end
 
 % Plot sample paths
 if (nargin > 5) && (~ isempty (zsim))
-    zsim.colnames = {};  % prevents automatic creation of a legend
+    if isa (zsim, 'stk_dataframe')
+        % Prevents automatic creation of a legend by @stk_dataframe/plot
+        zsim.colnames = {};
+    end
     h_sim = plot (h_axes, xt, zsim, ...
         '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64]);
     hold on;
