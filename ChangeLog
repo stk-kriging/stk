@@ -1,3 +1,14 @@
+2015-11-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_config_path.m: Do not include STK's root in the list
+
+	* config/stk_config_path.m: Do not include STK's root in the list.
+	* config/stk_config_addpath.m: Rephrase one-line help text.
+	* stk_init.m: Add STK's root to the path.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+	* admin/octpkg/patches/prevent-PKG_ADD-loop.patch: Modify patch.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+
 2015-11-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_example_kb09.m: Show legend

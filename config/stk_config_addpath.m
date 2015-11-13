@@ -1,4 +1,4 @@
-% STK_CONFIG_ADDTOPATH adds STK subfolders to the search path
+% STK_CONFIG_ADDTOPATH adds STK subdirectories to the search path
 
 % Copyright Notice
 %

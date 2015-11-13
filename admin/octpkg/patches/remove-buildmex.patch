@@ -7,9 +7,9 @@
 -% Build MEX-files "in-place"
 -stk_config_buildmex ();
 -
- % Add STK folders to the path (note: doing this ATFER building the MEX-files
- % seems to solve the problem related to having MEX-files in private folders)
- stk_config_addpath (root);
+ % Add STK subdirectories to the path
+ %   (note: doing this ATFER building the MEX-files seems to solve
+ %    the problem related to having MEX-files in private folders)
 --- a/config/stk_config_buildmex.m
 +++ /dev/null
 @@ -1,115 +0,0 @@
