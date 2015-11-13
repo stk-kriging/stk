@@ -27,8 +27,8 @@
  end % function stk_config_path
 --- a/stk_init.m
 +++ b/stk_init.m
-@@ -70,12 +70,6 @@
- % seems to solve the problem related to having MEX-files in private folders)
+@@ -74,12 +74,6 @@
+ %    the problem related to having MEX-files in private folders)
  stk_config_addpath (root);
  
 -% Check that MEX-files located in private folders are properly detected (note:

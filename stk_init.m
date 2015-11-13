@@ -42,6 +42,9 @@ function stk_init (do_quit)
 root = fileparts (mfilename ('fullpath'));
 config = fullfile (root, 'config');
 
+% Add STK's root directory to the path
+addpath (root);
+
 % Add config to the path. It will be removed at the end of this script.
 addpath (config);
 
@@ -66,8 +69,9 @@ stk_config_mole (root);
 % Build MEX-files "in-place"
 stk_config_buildmex ();
 
-% Add STK folders to the path (note: doing this ATFER building the MEX-files
-% seems to solve the problem related to having MEX-files in private folders)
+% Add STK subdirectories to the path
+%   (note: doing this ATFER building the MEX-files seems to solve
+%    the problem related to having MEX-files in private folders)
 stk_config_addpath (root);
 
 % Check that MEX-files located in private folders are properly detected (note:

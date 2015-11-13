@@ -1,4 +1,4 @@
-% STK_CONFIG_PATH returns the searchpath of STK
+% STK_CONFIG_PATH returns the list of all STK "public" subdirectories
 
 % Copyright Notice
 %
@@ -37,7 +37,7 @@ end
 % even if STK has already been partially uninstalled or is not properly installed)
 isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
 
-path = {root};
+path = {};
 
 % main function folders
 path = [path {...
