@@ -1,77 +1,38 @@
---- a/config/stk_config_path.m
-+++ b/config/stk_config_path.m
-@@ -81,24 +81,4 @@
-     fullfile(root, 'examples', '03_miscellaneous'        ) ...
-     fullfile(root, 'examples', 'test_functions'          ) }];
- 
--% Fix a problem with private folders in Octave 3.2.x
--%   (add private folders to the path to make STK work...)
--if isoctave
--    v = version;
--    if strcmp (v(1:4), '3.2.')
--        test_path = [path {...
--            fullfile(root, 'arrays', '@stk_dataframe') ...
--            fullfile(root, 'arrays', '@stk_factorialdesign') ...
--            fullfile(root, 'core', '@stk_kreq_qr')}];
--        private_path = {};
--        for i = 1:(length (test_path))
--            p = fullfile (test_path{i}, 'private');
--            if exist (p, 'dir')
--                private_path = [private_path {p}];
--            end
--        end
--        path = [path private_path];
--    end
--end
--
- end % function stk_config_path
 --- a/stk_init.m
 +++ b/stk_init.m
-@@ -74,12 +74,6 @@
- %    the problem related to having MEX-files in private folders)
- stk_config_addpath (root);
+@@ -87,10 +87,6 @@
+         % Provide make information for STK's MEX-files
+         output = stk_init__get_make_info ();
+         
+-    case 'test_private_mex'
+-        % Check if the MEX-files located in private dirs are found
+-        stk_init__test_private_mex ();
+-        
+     otherwise
+         error ('Unknown command.');
+         
+@@ -114,16 +110,8 @@
+ stk_init__build_mex (root, false);
+ 
+ % Add STK subdirectories to the path
+-%   (note: doing this ATFER building the MEX-files seems to solve
+-%    the problem related to having MEX-files in private folders)
+ stk_init__addpath (root);
  
 -% Check that MEX-files located in private folders are properly detected (note:
 -% there are no MEX-files in private folders if STK is used as an Octave package)
 -if isoctave
--    stk_config_testprivatemex ();
+-    stk_init__test_private_mex ();
 -end
 -
- % Configure STK with default settings
- stk_config_setup;
+ % Set default options
+ stk_options_set ();
  
---- a/config/stk_config_testprivatemex.m
-+++ /dev/null
-@@ -1,62 +0,0 @@
--% STK_CONFIG_TESTPRIVATEMEX checks if the MEX-files located in private dirs are found
--
--% Copyright Notice
--%
--%    Copyright (C) 2014 SUPELEC
--%
--%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
--
--% Copying Permission Statement
--%
--%    This file is part of
--%
--%            STK: a Small (Matlab/Octave) Toolbox for Kriging
--%               (http://sourceforge.net/projects/kriging)
--%
--%    STK is free software: you can redistribute it and/or modify it under
--%    the terms of the GNU General Public License as published by the Free
--%    Software Foundation,  either version 3  of the License, or  (at your
--%    option) any later version.
--%
--%    STK is distributed  in the hope that it will  be useful, but WITHOUT
--%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY
--%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public
--%    License for more details.
--%
--%    You should  have received a copy  of the GNU  General Public License
--%    along with STK.  If not, see <http://www.gnu.org/licenses/>.
--
--function stk_config_testprivatemex ()
+@@ -498,40 +486,6 @@
+ end % function register_mex
+ 
+ 
+-function stk_init__test_private_mex ()
 -
 -try
 -    n = 5;  d = 2;
@@ -81,7 +42,7 @@
 -catch
 -    err = lasterror ();
 -    if (~ isempty (regexp (err.message, 'stk_dist_matrixx', 'once'))) ...
--        && (~ isempty (regexp (err.message, 'undefined', 'once')))
+-            && (~ isempty (regexp (err.message, 'undefined', 'once')))
 -        fprintf ('\n\n');
 -        warning (sprintf (['\n\n' ...
 -            '!>>>>>> PLEASE RESTART OCTAVE BEFORE USING STK <<<<<<!\n' ...
@@ -94,14 +55,17 @@
 -            '! related to a known Octave bug (bug #40824), that   !\n' ...
 -            '! will hopefully be fixed in the near future.        !\n' ...
 -            '! (see https://savannah.gnu.org/bugs/?40824)         !\n' ...
--            '!                                                    !\n' ...          
+-            '!                                                    !\n' ...
 -            '!>>>>>> PLEASE RESTART OCTAVE BEFORE USING STK <<<<<<!\n' ...
 -            '\n']));
 -    else
 -        rethrow (err);
 -    end
 -end
--    
--end % function stk_config_testprivatemex
 -
--%#ok<*LERR,*CTCH,*SPERR>
+-end % function stk_init__test_private_mex
+-
+-
+ function stk_init__config_mole (root, do_addpath, prune_unused)
+ 
+ mole_dir = fullfile (root, 'misc', 'mole');

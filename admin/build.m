@@ -34,7 +34,7 @@ admin_dir = fileparts (mfilename ('fullpath'));
 root_dir  = fileparts (admin_dir);
 
 % Addpaths
-addpath (root_dir);  % contains stk_version ()
+addpath (root_dir);  % contains stk_version and stk_init
 addpath (fullfile (admin_dir, 'build_tools'));
 
 % Build target

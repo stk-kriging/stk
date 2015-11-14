@@ -69,7 +69,7 @@ mkdir (fullfile (unpacked_dir, 'doc'));
 ignore_list = {'.hg', '.pc', 'admin', 'misc/mole/matlab', 'build', 'sandbox'};
 
 % Prepare sed program for renaming MEX-functions (prefix/suffix by __)
-sed_program = prepare_sed_rename_mex (root_dir, release_dir);
+sed_program = prepare_sed_rename_mex (release_dir);
 
 try
     % Apply patches
@@ -247,11 +247,9 @@ end
 end % function mkdir_recurs
 
 
-function sed_program = prepare_sed_rename_mex (root_dir, release_dir)
+function sed_program = prepare_sed_rename_mex (release_dir)
 
-cd (fullfile (root_dir, 'config'));
-info = stk_config_makeinfo ();
-cd (root_dir);
+info = stk_init ('get_make_info');
 
 sed_program = fullfile (release_dir, 'rename_mex.sed');
 fid = fopen_ (sed_program, 'w');
