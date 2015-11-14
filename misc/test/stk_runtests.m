@@ -47,9 +47,7 @@ function stk_runtests (directory)
 
 if nargin == 0
     % scan all STK directories if no input argument is provided
-    root = fileparts (fileparts (fileparts (mfilename ('fullpath'))));
-    config = fullfile (root, 'config');
-    addpath (config);  dirs = stk_config_path ();  rmpath (config);
+    dirs = stk_init ('genpath');
 else
     % otherwise, directory is expected to be a valid directory name
     if ~ exist (directory, 'dir')

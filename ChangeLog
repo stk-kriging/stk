@@ -1,3 +1,32 @@
+2015-11-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Merge config/* functions into stk_init
+
+	* config/stk_config_addpath.m: Replaced by stk_init__addpath.
+	* config/stk_config_buildmex.m: Replaced by stk_init__build_mex.
+	* config/stk_config_clearpersistents.m: Replaced by
+	stk_init__clear_persistents.
+	* config/stk_config_getroot.m: Removed.
+	* config/stk_config_makeinfo.m: Replaced by stk_init__get_make_info.
+	* config/stk_config_mole.m: Replaced by stk_init__config_mole.
+	* config/stk_config_path.m: Replaced by stk_init__genpath.
+	* config/stk_config_rmpath.m: Replaced by stk_init__rmpath.
+	* config/stk_config_setup.m: Merged into stk_init__pk_load.
+	* config/stk_config_testprivatemex.m: Replaced by
+	stk_init__test_private_mex.
+	* stk_runtests.m: Use stk_init genpath.
+	* stk_init.m: Integrate config/* functions as subfunctions and
+	introduce a public interface that makes it easy to call them
+	separately if needed.
+	* admin/octpkg/post_install.m: Use stk_init prune_mole.
+	* admin/build.m: Edit comment.
+	* admin/build_tools/build_octpkg.m: Use stk_init get_make_info.
+	* admin/build_tools/get_public_mfile_list.m: Use stk_init genpath.
+	* admin/octpkg/patches/prevent-PKG_ADD-loop.patch: Refresh patch.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+	* admin/octpkg/patches/use-native-test-function.patch: Refresh patch.
+
 2015-11-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	build_octpkg.m: Forced pop of quilt patches if an error occurs

@@ -707,7 +707,7 @@
  
  % Copying Permission Statement
  %
-@@ -33,244 +26,13 @@
+@@ -33,242 +26,13 @@
  %    You should  have received a copy  of the GNU  General Public License
  %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
  
@@ -725,9 +725,7 @@
  
  if nargin == 0
      % scan all STK directories if no input argument is provided
--    root = fileparts (fileparts (fileparts (mfilename ('fullpath'))));
--    config = fullfile (root, 'config');
--    addpath (config);  dirs = stk_config_path ();  rmpath (config);
+-    dirs = stk_init ('genpath');
 -else
 -    % otherwise, directory is expected to be a valid directory name
 -    if ~ exist (directory, 'dir')

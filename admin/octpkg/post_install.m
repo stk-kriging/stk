@@ -29,12 +29,14 @@
 
 function post_install (desc)
 
-  root = desc.dir;
-  config = fullfile (root, "config");
+  here = pwd ();
 
   # Prune unused functions from the MOLE
-  addpath (config);
-  stk_config_mole (root, false, true);
-  rmpath (config);
+  unwind_protect          
+    cd (desc.dir);
+    stk_init prune_mole
+  unwind_protect_cleanup
+    cd (here);
+  end_unwind_protect
 
 endfunction

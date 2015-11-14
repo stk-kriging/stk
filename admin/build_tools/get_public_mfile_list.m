@@ -28,19 +28,15 @@
 
 function L = get_public_mfile_list (root)
 
-if exist ('stk_config_path', 'file') ~= 2,
-    config_dir = fullfile (root, 'config');
-    addpath (config_dir);
-    do_rmpath = true;
-else
-    do_rmpath = false;
-end
-
-dir_list = stk_config_path (root);
-dir_list = [root dir_list];
-
-if do_rmpath,
-    rmpath (config_dir);
+here = pwd ();
+try
+    cd (root);
+    dir_list = stk_init ('genpath');
+    dir_list = [root dir_list];
+    cd (here);
+catch
+    cd (here);
+    rethrow (lasterror ());
 end
 
 L = {};
