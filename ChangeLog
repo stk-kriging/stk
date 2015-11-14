@@ -1,3 +1,10 @@
+2015-11-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	build_octpkg.m: Forced pop of quilt patches if an error occurs
+
+	* admin/build_tools/build_octpkg.m: Forced pop of quilt patches if
+	an error occurs.
+
 2015-11-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_config_path.m: Do not include STK's root in the list
