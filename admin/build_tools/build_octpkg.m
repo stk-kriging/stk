@@ -71,14 +71,20 @@ ignore_list = {'.hg', '.pc', 'admin', 'misc/mole/matlab', 'build', 'sandbox'};
 % Prepare sed program for renaming MEX-functions (prefix/suffix by __)
 sed_program = prepare_sed_rename_mex (root_dir, release_dir);
 
-% Apply patches
-assert (system ('quilt push -a') == 0);
-
-% Process directories recursively
-process_directory ('', unpacked_dir, ignore_list, sed_program);
-
-% Cleanup: unapply patches
-assert (system ('quilt pop -a') == 0);
+try
+    % Apply patches
+    assert (system ('quilt push -a') == 0);
+    
+    % Process directories recursively
+    process_directory ('', unpacked_dir, ignore_list, sed_program);
+    
+    % Cleanup: unapply patches
+    assert (system ('quilt pop -a') == 0);
+    
+catch
+    system ('quilt pop -af');
+    rethrow (lasterror ());
+end
 
 % Cleanup: delete sed program
 delete (sed_program);
