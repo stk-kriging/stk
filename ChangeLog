@@ -1,5 +1,13 @@
 2015-11-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_init.m: No need to remove other copies of STK from the path
+
+	* stk_init.m (stk_init__rmpath): No need to remove other copies of
+	STK from the search path. Even if several copies are on the path,
+	only the most recently installed is visible.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+
 	Merge config/* functions into stk_init
 
 	* config/stk_config_addpath.m: Replaced by stk_init__addpath.
