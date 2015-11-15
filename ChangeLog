@@ -1,5 +1,15 @@
 2015-11-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_init.m: Remove STK's root from the path if needed
+
+	* stk_init.m (stk_init__pkg_unload): Remove STK's root from the
+	path if needed.
+	(stk_init__rmpath): Remove verbose comment.
+	* admin/octpkg/patches/prevent-PKG_DEL-loop.patch: New patch.
+	* admin/octpkg/patches/series: Add new patch to the series.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+
 	stk_init.m: No need to remove other copies of STK from the path
 
 	* stk_init.m (stk_init__rmpath): No need to remove other copies of

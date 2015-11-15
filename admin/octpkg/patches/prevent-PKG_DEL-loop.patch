@@ -1,0 +1,12 @@
+--- a/stk_init.m
++++ b/stk_init.m
+@@ -136,9 +136,6 @@
+ % Remove STK subdirectories from the path
+ stk_init__rmpath (root);
+ 
+-% Remove STK root directory from the path
+-rmpath (root);
+-
+ end % function stk_init__pkg_unload
+ 
+ 

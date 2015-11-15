@@ -68,7 +68,7 @@ switch command
         stk_init__addpath (root);
         
     case 'rmpath'
-        % Remove STK subdirectories to the search path
+        % Remove STK subdirectories from the search path
         stk_init__rmpath (root);
         
     case 'genpath'
@@ -150,6 +150,9 @@ stk_init__clear_persistents ();
 
 % Remove STK subdirectories from the path
 stk_init__rmpath (root);
+
+% Remove STK root directory from the path
+rmpath (root);
 
 end % function stk_init__pkg_unload
 
@@ -303,18 +306,13 @@ while ~ isempty (s)
     [d, s] = strtok (s, pathsep);  %#ok<STTOK>
     
     if (~ isempty (regexp (d,  regex1, 'once'))) ...
-            && ((~ isoctave) || isempty (regexp (d,  regex2, 'once'))) ...
-            && (~ strcmp (d, root))  % See note below
+            && ((~ isoctave) || isempty (regexp (d, regex2, 'once'))) ...
+            && (~ strcmp (d, root))  % Only remove subdirectories, not the root
         
         rmpath (d);
         
     end
 end
-
-% Note: it is important NOT to remove STK's root folder at this point. Indeed,
-% in the case where STK is used as an Octave package, this would trigger the
-% PKG_DEL directive in stk_init.m, and therefore stk_init__genpath again,
-% causing an infinite loop.
 
 end % function stk_init__rmpath
 
