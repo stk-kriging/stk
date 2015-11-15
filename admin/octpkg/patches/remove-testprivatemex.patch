@@ -28,7 +28,7 @@
  % Set default options
  stk_options_set ();
  
-@@ -498,40 +486,6 @@
+@@ -482,40 +470,6 @@
  end % function register_mex
  
  

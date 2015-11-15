@@ -29,7 +29,7 @@
  % Add STK subdirectories to the path
  stk_init__addpath (root);
  
-@@ -350,139 +335,6 @@
+@@ -334,139 +319,6 @@
  end % function escape_regexp
  
  

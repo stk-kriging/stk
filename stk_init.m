@@ -200,22 +200,6 @@ end % function stk_init__clear_persistents
 
 function stk_init__addpath (root)
 
-while 1,  % Remove other copies of STK from the search path
-    
-    current_root = fileparts (which ('stk_param_relik'));
-    not_found_in_path = (isempty (current_root));
-    
-    if (not_found_in_path) || (strcmp (current_root, root))
-        break;
-    end
-    
-    warning (sprintf (['Removing another copy of STK from the ' ...
-        'search path.\n    (%s)\n'], current_root));
-    
-    stk_init__rmpath (current_root);
-    
-end
-
 % Add STK folders to the path
 path = stk_init__genpath (root);
 for i = 1:length (path),
