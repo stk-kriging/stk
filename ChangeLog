@@ -1,3 +1,10 @@
+2015-11-19  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_optim_fminsearch.m: Do not try to detect fminsearch
+
+	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m: Do not
+	try to detect at this point whether fminsearch is available.
+
 2015-11-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_init.m: Remove STK's root from the path if needed
