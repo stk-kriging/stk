@@ -152,10 +152,9 @@ function [h_axes, plot_elem, keyval_pairs] = parse_args_ (arg1, varargin)
 % then it always is.
 
 arg1_handle = false;
-if isscalar (arg1) && isa (arg1, 'double'),
-    try
-        arg1_handle = strcmp (get (arg1, 'Type'), 'axes');
-    end
+try
+    arg1_handle = (isscalar (arg1)) ...
+        && (strcmp (get (arg1, 'Type'), 'axes'));
 end
 
 if arg1_handle,

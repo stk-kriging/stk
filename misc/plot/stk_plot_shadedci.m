@@ -71,10 +71,9 @@ function [h, x, z, opts] = parse_args_ (arg1, varargin)
 % If the first argument can be interpreted as a handle, then it always is.
 
 arg1_handle = false;
-if isscalar (arg1) && isa (arg1, 'double'),
-    try
-        arg1_handle = strcmp (get (arg1, 'Type'), 'axes');
-    end
+try
+    arg1_handle = (isscalar (arg1)) ...
+        && (strcmp (get (arg1, 'Type'), 'axes'));
 end
 
 if arg1_handle,

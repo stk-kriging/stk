@@ -78,7 +78,10 @@ else
         
         % "factorial design" object
         x = struct ('levels', {levels});
-        x = class (x, 'stk_factorialdesign', df); 
+        x = class (x, 'stk_factorialdesign', df);
+        
+        % Starting with Matlab R2014b, graphics handles are objects
+        superiorto ('matlab.graphics.axis.Axes');
         
     end % if
     
