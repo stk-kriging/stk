@@ -45,11 +45,6 @@ if nargin > 1
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if exist ('fminsearch') ~= 2
-    errmsg = 'Function fminsearch does not exist or not added to path';
-    stk_error (errmsg,'fminsearch_does_not_exist');
-end
-
 if nargin == 0
     
     opt = optimset (            ...
