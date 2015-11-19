@@ -1,5 +1,16 @@
 2015-11-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Compatibility with Matlab >= R2014b: graphics handles are objects
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Enforce precedence over
+	the matlab.graphics.axis.Axes class.
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Enforce
+	precedence over the matlab.graphics.axis.Axes class.
+	* arrays/@stk_dataframe/plot.m: Do not assume that graphics
+	handles are doubles.
+	* misc/plot/stk_plot_shadedci.m: Do not assume that graphics
+	handles are doubles.
+
 	stk_optim_fminsearch.m: Do not try to detect fminsearch
 
 	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m: Do not
