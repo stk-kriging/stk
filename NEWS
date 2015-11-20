@@ -23,6 +23,10 @@ Changes in version 2.4.0
      parameters in a user-defined covariance function. See the documentation of
      stk_param_getdefaultbounds for more information.
 
+* IAGO
+
+   o TODO: DESCRIBE
+
 * Miscellaneous
 
    o stk_pmisclass.m: New function to compute either the current probability of
@@ -35,6 +39,11 @@ Changes in version 2.4.0
      representation of the dominated region, i.e., its representation as a
      collection of signed overlapping hyper-rectangles.
 
+   o stk_dataframe arrays now accept characters indices (row/column names) and
+     cell array indices (list of row/column names).
+
+* Graphics
+
    o stk_plot_shadedci.m, @stk_dataframe/plot.m: Return a (vector of) handle(s)
      to the graphical object(s)
 
@@ -44,9 +53,6 @@ Changes in version 2.4.0
 
    o stk_plot_shadedci.m: Accept a handle to an axes object as (optional) first
      input argument.
-
-   o stk_dataframe arrays now accept characters indices (row/column names) and
-     cell array indices (list of row/column names).
 
 * Examples
 
