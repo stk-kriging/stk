@@ -41,8 +41,21 @@ switch idx(1).type
             
         elseif L == 2,  % matrix-style indexing
             
+            % Process row indices
             I = idx(1).subs{1};
+            if ischar (I) && ~ isequal (I, ':')
+                I = process_char_indices (I, x.rownames, 'Row');
+            elseif iscell (I)
+                I = process_cell_indices (I, x.rownames, 'Row');
+            end
+            
+            % Process column indices
             J = idx(1).subs{2};
+            if ischar (J) && ~ isequal (J, ':')
+                J = process_cell_indices (J, x.colnames, 'Column');
+            elseif iscell (J)
+                J = process_cell_indices (J, x.colnames, 'Column');
+            end
             
             x.data = x.data(I, J);
             
