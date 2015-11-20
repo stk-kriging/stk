@@ -68,6 +68,30 @@ switch idx(1).type
             
             val_data = double (val);
             
+            if L == 2,  % matrix-style indexing
+                
+                % Process row indices
+                I = idx(1).subs{1};
+                if ischar (I) && ~ isequal (I, ':')
+                    I = process_char_indices (I, x.rownames, 'Row');
+                    idx(1).subs{1} = I;
+                elseif iscell (I)
+                    I = process_cell_indices (I, x.rownames, 'Row');
+                    idx(1).subs{1} = I;
+                end
+                
+                % Process column indices
+                J = idx(1).subs{2};
+                if ischar (J) && ~ isequal (J, ':')
+                    J = process_char_indices (J, x.colnames, 'Column');
+                    idx(1).subs{2} = J;
+                elseif iscell (J)
+                    J = process_cell_indices (J, x.colnames, 'Column');
+                    idx(1).subs{2} = J;
+                end
+                
+            end
+            
             if ~ isempty (val_data)  % assignment
                 
                 x.data = subsasgn (x.data, idx, val_data);
@@ -87,7 +111,7 @@ switch idx(1).type
                     val_is_an_stkdf = isa (val, 'stk_dataframe');
                     
                     % Column names
-                    if val_is_an_stkdf && (isequal (idx(1).subs{1}, ':'))
+                    if val_is_an_stkdf && (isequal (I, ':'))
                         
                         cn = val.colnames;
                         xcn = x.colnames;
@@ -112,7 +136,7 @@ switch idx(1).type
                     end
                     
                     % Row names
-                    if val_is_an_stkdf && (isequal (idx(1).subs{2}, ':'))
+                    if val_is_an_stkdf && (isequal (J, ':'))
                         
                         rn = val.rownames;
                         xrn = x.rownames;
@@ -156,8 +180,6 @@ switch idx(1).type
                     
                 else  % Matrix-style indexing
                     
-                    I = idx(1).subs{1};
-                    J = idx(1).subs{2};
                     remove_rows = strcmp (J, ':');
                     if ~ (remove_rows || (strcmp (I, ':')))
                         stk_error ('Illegal indexing.', 'IllegalIndexing');
@@ -167,7 +189,7 @@ switch idx(1).type
                 
                 if remove_rows  % Keep column names
                     
-                    x.data(I, :) = [];                    
+                    x.data(I, :) = [];
                     if ~ isempty (x.rownames)
                         x.rownames(I) = [];
                     end

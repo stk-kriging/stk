@@ -1,3 +1,16 @@
+2015-11-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	arrays/@stk_dataframe: Accept char and cell indices
+
+	* arrays/@stk_dataframe/subsasgn.m: Accept char and cell indices.
+	* arrays/@stk_dataframe/subsref.m: Accept char and cell indices.
+	* arrays/@stk_dataframe/private/process_cell_indices.m: Process
+	cell indices (cell arrays of row/column names).
+	* arrays/@stk_dataframe/private/process_char_indices.m: Process
+	char indices (row/column name).
+	* arrays/@stk_dataframe/private/names_errmsg.m: Error messages for
+	incorrect cell indices.
+
 2015-11-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Compatibility with Matlab >= R2014b: graphics handles are objects
