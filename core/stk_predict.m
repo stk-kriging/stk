@@ -94,23 +94,14 @@ end
 xt = double (xt);
 xi = double (xi);
 
-if strcmp (model.covariance_type, 'stk_discretecov') % use indices
-    if isempty (xt)
-        nt = size (model.param.K, 1);
-        xt = (1:nt)';
-    else
-        if ~ iscolumn (xt)
-            warning ('STK:stk_predict:IncorrectSize', sprintf(['xt should be ' ...
-                'a column.\n --> Trying to continue with xt = xt(:) ...']));
-            xt = xt(:);
-        end
-        nt = size (xt, 1);
-    end
+if (strcmp (model.covariance_type, 'stk_discretecov')) && (isempty (xt))
+    % In this case, predict on all points of the underlying discrete space
+    nt = size (model.param.K, 1);
+    xt = (1:nt)';    
 else
     nt = size (xt, 1);
     if ~ isequal (size (xt), [nt, size(xi, 2)]),
-        errmsg = 'The size of xt is not correct.';
-        stk_error (errmsg, 'IncorrectSize');
+        stk_error ('The size of xt is incorrect.', 'IncorrectSize');
     end
 end
 

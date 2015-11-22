@@ -1,3 +1,10 @@
+2015-11-22  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_predict.m: Stop accepting row input vectors in the discrete case
+
+	* core/stk_predict.m: Stop accepting row input vectors in the case
+	of discrete models (stk_discretecov covariance function).
+
 2015-11-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	arrays/@stk_dataframe: Accept char and cell indices
