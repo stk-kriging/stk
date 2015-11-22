@@ -1,3 +1,24 @@
+2015-12-03  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_model_gpposterior: A new class to represent posterior distributions
+
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Class
+	constructor.
+	* core/stk_predict.m: Transfer a large part of the predicition
+	code to the method @stk_model_gpposterior/predict.m.
+	* core/@stk_model_gpposterior/stk_predict.m: Overload stk_predict.
+	* core/@stk_model_gpposterior/disp.m: Overload base function
+	* core/@stk_model_gpposterior/display.m: Overload base function
+	* core/@stk_model_gpposterior/get.m: Overload base function
+	* core/@stk_model_gpposterior/subsref.m: Overload base function
+	* core/@stk_model_gpposterior/vertcat.m: Overload base function
+	* core/@stk_model_gpposterior/horzcat.m: Overload base function
+	* core/@stk_model_gpposterior/get_dim.m: Fast getter
+	* core/@stk_model_gpposterior/get_input_data.m: Fast getter
+	* core/@stk_model_gpposterior/get_lognoisevariance.m: Fast getter
+	* core/@stk_model_gpposterior/get_output_data.m: Fast getter
+	* core/@stk_model_gpposterior/get_param.m: Fast getter
+
 2015-11-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_isequal_tolrel.m: Bugfix and unit test.
