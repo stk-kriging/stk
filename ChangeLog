@@ -1,3 +1,10 @@
+2015-11-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Add minimalist display for stk_kreq objects
+
+	* core/@stk_kreq_qr/disp.m: Overload base function.
+	* core/@stk_kreq_qr/display.m: Overload base function.
+
 2015-11-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_predict.m: Stop accepting row input vectors in the discrete case
