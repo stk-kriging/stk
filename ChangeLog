@@ -1,5 +1,10 @@
 2015-11-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Improve display of size+type information
+
+	* arrays/generic/stk_sprintf_sizetype.m: Accept objects.
+	* arrays/@cell/stk_sprintf_sizetype.m: Removed.
+
 	Add minimalist display for stk_kreq objects
 
 	* core/@stk_kreq_qr/disp.m: Overload base function.

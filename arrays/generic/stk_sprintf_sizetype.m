@@ -2,10 +2,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -29,10 +30,9 @@
 
 function s = stk_sprintf_sizetype (x)
 
-if ~ isnumeric (x)
+if (isscalar (x)) && (isobject (x))
     
-    errmsg = sprintf ('Incorrect argument type: %s', class (x));
-    stk_error (errmsg, 'IncorrectType');
+    s = sprintf ('%s object', class (x));
     
 else
     
