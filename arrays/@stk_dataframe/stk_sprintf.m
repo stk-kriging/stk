@@ -1,12 +1,8 @@
-% DISP [overload base function]
-%
-% Example:
-%    format short
-%    x = [1 1e6 rand; 10 -1e10 rand; 100 1e-22 rand];
-%    disp (stk_dataframe (x))
+% STK_PRINTF [overload STK function]
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
