@@ -1,3 +1,9 @@
+2015-11-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/stk_sprintf.m: Fix header
+
+	* arrays/@stk_dataframe/stk_sprintf.m: Fix header.
+
 2015-11-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Improve display of size+type information
