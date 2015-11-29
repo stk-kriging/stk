@@ -84,10 +84,14 @@ if isstruct(a) && isstruct(b),
     
 elseif isnumeric(a) && isnumeric(b)
     
-    aa = a(:);
-    bb = b(:);
-    tolabs = max(abs(aa), abs(bb)) * tolrel;
-    res = all(abs(bb - aa) <= tolabs);
+    if ~ isequal (size (a), size (b))
+        res = false;
+    else
+        aa = a(:);
+        bb = b(:);
+        tolabs = max(abs(aa), abs(bb)) * tolrel;
+        res = all(abs(bb - aa) <= tolabs);
+    end
     
 elseif ischar (a) && ischar (b)
     
@@ -117,17 +121,19 @@ end
 end % function stk_isequal_tolrel
 
 
-%!shared r1, r2, a, b, tolrel
+%!shared r1, r2, r3, a, b, tolrel
 %! a = 1.01; b = 1.02; tolrel = 0.1;
 
 %!error rr = stk_isequal_tolrel();
 %!error rr = stk_isequal_tolrel(a);
 %!test  r1 = stk_isequal_tolrel(a, b);
 %!test  r2 = stk_isequal_tolrel(a, b, tolrel);
+%!test  r3 = stk_isequal_tolrel(a, [b b]);
 %!error rr = stk_isequal_tolrel(a, b, tolrel, pi);
 
-%!test assert(~r1);
-%!test assert(r2);
+%!test assert (isequal (r1, false));
+%!test assert (isequal (r2, true));
+%!test assert (isequal (r3, false));
 
 %!test
 %! a = struct('u', []); b = struct('v', []);

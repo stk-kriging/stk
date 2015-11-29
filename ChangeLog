@@ -1,3 +1,9 @@
+2015-11-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_isequal_tolrel.m: Bugfix and unit test.
+
+	* misc/test/stk_isequal_tolrel.m: Bugfix and unit test.
+
 2015-11-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/stk_sprintf.m: Fix header
