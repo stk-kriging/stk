@@ -60,7 +60,8 @@ Changes in version 2.4.0
 
    o stk_plot1d.m: A nice default legend can now be created painlessly using
      legend ('show'), and a struct of handles to the graphical objects composing
-     the plot is returned to facilitate further customization.
+     the plot is returned to facilitate further customization. See, e.g.,
+     examples 1 and 2 in the "kriging basics" series.
 
    o stk_plot_shadedci.m: Accept a handle to an axes object as (optional) first
      input argument.

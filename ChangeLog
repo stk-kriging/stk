@@ -1,5 +1,12 @@
 2015-12-03  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Display a legend in several "kriging basics" examples
+
+	* examples/01_kriging_basics/stk_example_kb01.m: Show legend
+	* examples/01_kriging_basics/stk_example_kb02.m: Show legend
+	* examples/01_kriging_basics/stk_example_kb04.m: Show legend
+	* examples/01_kriging_basics/stk_example_kb09.m: Show legend
+
 	@stk_model_gpposterior: A new class to represent posterior distributions
 
 	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Class
