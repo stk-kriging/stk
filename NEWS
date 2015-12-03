@@ -23,6 +23,17 @@ Changes in version 2.4.0
      parameters in a user-defined covariance function. See the documentation of
      stk_param_getdefaultbounds for more information.
 
+* stk_model_gpposterior objects
+
+   o A new 'stk_model_gpposterior' class is introduced to represent a Gaussian
+     process conditioned by observations (which is again Gaussian process).
+
+   o Internally, an stk_model_gpposterior object currently stores the QR
+     factorization of the associated kriging matrix (other representations will
+     be implemented in the future).
+
+   o stk_predict is overloaded for stk_model_gpposterior objects.
+
 * IAGO
 
    o TODO: DESCRIBE
