@@ -43,4 +43,4 @@ kreq.RS = [Kti Pt]';
 % kriging weights vector (weights + Lagrange multipliers)
 kreq.lambda_mu = linsolve (kreq);
 
-end % function stk_set_righthandside
+end % function

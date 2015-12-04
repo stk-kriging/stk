@@ -71,7 +71,7 @@ end
 
 opts = options;
 
-end % function stk_options_set
+end % function
 
 %#ok<*CTCH>
 
@@ -123,7 +123,7 @@ else
     end
 end
 
-end % function init_options
+end % function
 
 
 function check_both (opts)
@@ -131,4 +131,4 @@ function check_both (opts)
 assert (stk_optim_testmin_box (opts.minimize_box));
 assert (stk_optim_testmin_unc (opts.minimize_unc));
 
-end % function check_both
+end % function

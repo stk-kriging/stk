@@ -39,4 +39,4 @@ end
 
 octave_in_use = b;
 
-end % function isoctave
+end % function

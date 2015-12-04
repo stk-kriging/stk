@@ -30,7 +30,7 @@ function fn = fieldnames (x)
 
 fn = [x.colnames reserved_field_names()];
 
-end % function fieldnames
+end % function
 
 %!test
 %! x = stk_dataframe (rand (3, 2), {'u' 'v'});

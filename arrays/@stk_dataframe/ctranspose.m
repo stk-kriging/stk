@@ -33,7 +33,7 @@ cn = get(x, 'colnames');
 
 y = stk_dataframe(ctranspose(x.data), rn', cn');
 
-end % function ctranspose
+end % function
 
 % note: complex-valued dataframes are supported but, currently,
 %       not properly displayed

@@ -70,7 +70,7 @@ else
     
 end
 
-end % function stk_sf_matern52
+end % function
 
 
 %!shared h, diff

@@ -30,4 +30,4 @@ function stk_parallel_stop(eng) %#ok<INUSD>
 
 % nothing to do !
 
-end % function stk_parallel_stop
+end % function

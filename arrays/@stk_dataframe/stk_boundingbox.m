@@ -36,7 +36,7 @@ box = stk_boundingbox (x.data);
 
 box.colnames = x.colnames;
 
-end % function @stk_dataframe.stk_boundingbox
+end % function
 
 
 %!shared x, y, cn

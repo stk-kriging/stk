@@ -54,4 +54,4 @@ c = 10 * (1 - 1 / (8 * pi));
 
 y = (x2 - a * x1 .* x1 + b * x1 - 6) .^ 2 + c * cos (x1) + 10;
 
-end % function stk_testfun_braninhoo
+end % function

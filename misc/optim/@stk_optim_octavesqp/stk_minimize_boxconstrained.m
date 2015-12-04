@@ -53,7 +53,7 @@ nabla_f = @(u)(nabla_f_ (f, u));
 [u_opt,lik] = algo.sqp (u_init, {f nabla_f}, [] , [], lb, ub, ...
     algo.options.maxiter, algo.options.tol);
 
-end % function stk_minimize_boxconstrained
+end % function
 
 
 function df = nabla_f_ (f, u)
@@ -63,4 +63,4 @@ function df = nabla_f_ (f, u)
 
 [f_val, df] = f (u);  %#ok<ASGLU>
 
-end % function nabla_f_
+end % function

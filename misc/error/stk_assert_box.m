@@ -73,4 +73,4 @@ if any (box(1, :) > box(2, :)),
     stk_error (errmsg, mnemonic, stack);
 end
 
-end % function stk_assert_box
+end % function

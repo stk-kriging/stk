@@ -30,4 +30,4 @@ function pareng = stk_parallel_engine_none()
 
 pareng = class(struct(), 'stk_parallel_engine_none');
 
-end % function stk_parallel_engine_none
+end % function

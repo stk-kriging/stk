@@ -30,7 +30,7 @@ function y = realpow(x1, x2)
 
 y = bsxfun(@realpow, x1, x2);
 
-end % function realpow
+end % function
 
 %!test  stk_test_dfbinaryop(@realpow, rand(7, 2), .1 + rand(7, 2));
 %!test  stk_test_dfbinaryop(@realpow, rand(7, 2), .1);

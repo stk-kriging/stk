@@ -73,7 +73,7 @@ M_post = stk_model_gpposterior (M_prior, x_obs, z_obs);
 varargout = cell (1, max (1, nargout));
 [varargout{:}] = stk_predict (M_post, x_prd);
 
-end % function stk_predict
+end % function
 
 
 %!shared n, m, model, x0, x_obs, z_obs, x_prd, y_prd1, idx_obs, idx_prd

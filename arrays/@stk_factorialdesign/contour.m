@@ -32,4 +32,4 @@ function contour (varargin)
 
 plot_surfmeshcontour (@contour, varargin{:});
 
-end % function contour
+end % function

@@ -36,7 +36,7 @@ end
 
 result = vertcat (varargin{:});
 
-end % function vertcat
+end % function
 
 
 %!shared d, x, y

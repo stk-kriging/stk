@@ -49,7 +49,7 @@ else
     end
 end
 
-end % function apply
+end % function
 
 %!shared x, t, u
 %! t = rand (3, 2);

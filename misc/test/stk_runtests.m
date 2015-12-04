@@ -86,7 +86,7 @@ if ~ isempty (err)
     end
 end
 
-end % function stk_runtests
+end % function
 
 
 %%%%%%%%%%%%%%%%%
@@ -190,7 +190,7 @@ end
 
 cd (here);
 
-end % function run_all_tests
+end % function
 
 
 %%%%%%%%%%%%%
@@ -209,7 +209,7 @@ else
     error ('runtests: fopen failed: %s', f);
 end
 
-end % function has_tests
+end % function
 
 
 %%%%%%%%%%%%%%%%%%%
@@ -226,7 +226,7 @@ if (n > 0)
     end
 end
 
-end % function print_pass_fail
+end % function
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -238,7 +238,7 @@ function print_test_file_name (nm)
 filler = repmat ('.', 1, 50 - length(nm));
 fprintf ('  %s %s', nm, filler);
 
-end % function print_test_file_name
+end % function
 
 
 %%%%%%%%%%%%%%%
@@ -268,7 +268,7 @@ end
 
 lastwarn ('');
 
-end % function warning_off
+end % function
 
 
 %#ok<*AGROW>

@@ -232,7 +232,7 @@ switch idx(1).type
         
 end
 
-end % function subsasgn
+end % function
 
 %!shared x, s, t, data
 %! x = stk_dataframe(rand(3, 2));

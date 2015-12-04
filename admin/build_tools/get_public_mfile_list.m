@@ -46,7 +46,7 @@ end
 
 L = L(:);  % better for direct display :)
 
-end % function get_public_mfile_list
+end % function
 
 %#ok<*AGROW>
 
@@ -72,4 +72,4 @@ for i = 1:(length (S))
     end
 end
 
-end % function get_public_mfile_list_
+end % function

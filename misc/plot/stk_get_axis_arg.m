@@ -43,4 +43,4 @@ end
 
 n_argin = length (argin);
 
-end % function stk_get_axis_arg
+end % function

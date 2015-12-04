@@ -66,4 +66,4 @@ if (~ isempty (labels))
     end
 end
 
-end % function axis
+end % function

@@ -227,7 +227,7 @@ if nargout > 1,
     aux = struct('M', M, 'S', S, 'X', x_integer_levels);
 end
 
-end % function stk_sampling_olhs
+end % function
 
 
 %%

@@ -39,7 +39,7 @@ fid = fopen_ (fullfile (unpacked_dir, 'CITATION'), 'wt');
 fwrite (fid, s);
 fclose (fid);
 
-end % function copy_citation
+end % function
 
 
 function version_number = get_version_number_ ()
@@ -58,4 +58,4 @@ if isempty (regexp (version_number, '^(?<x>[0-9]*)\.(?<y>[0-9]*)$'))
     version_number = [S.x '.' S.y];
 end
 
-end % function get_version_number_
+end % function

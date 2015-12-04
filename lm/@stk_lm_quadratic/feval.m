@@ -41,7 +41,7 @@ for i = 1:d
     end
 end
 
-end % function feval
+end % function
 
 
 %!test

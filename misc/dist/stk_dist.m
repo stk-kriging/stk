@@ -80,7 +80,7 @@ else
     end
 end
 
-end % function stk_dist
+end % function
 
 %%
 % Check that an error is raised in nargin is neither 1 nor 2

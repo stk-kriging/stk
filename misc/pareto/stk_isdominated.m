@@ -78,7 +78,7 @@ else
     end
 end
 
-end % function stk_isdominated
+end % function
 
 
 %!test

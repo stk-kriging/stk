@@ -30,7 +30,7 @@ function lm = stk_lm_null ()
 
 lm = class (struct (), 'stk_lm_null');
 
-end % function stk_lm_null
+end % function
 
 
 % Default constructor

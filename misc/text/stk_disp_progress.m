@@ -62,7 +62,7 @@ if n == N
     fprintf ('\n');
 end
 
-end % function stk_disp_progress
+end % function
 
 
 %!error stk_disp_progress ('toto ', 0, 1);

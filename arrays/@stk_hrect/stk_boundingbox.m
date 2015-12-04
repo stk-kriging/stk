@@ -35,7 +35,7 @@ end
 % An stk_hrect object is its own bounding box
 box = x;
 
-end % function @stk_hrect.stk_boundingbox
+end % function
 
 
 %!shared x, y

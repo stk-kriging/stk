@@ -33,4 +33,4 @@ function s = stk_sprintf_sizetype (x)
 
 s = sprintf ('%dx%d %s array', n, d, class (x));
 
-end % function stk_sprintf_sizetype
+end % function

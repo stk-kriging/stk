@@ -103,7 +103,7 @@ if any (is_minf)
     str(is_minf, :) = [repmat(' ', 1, max_width - 4) '-Inf'];
 end
 
-end % function stk_sprintf_colvect_fixedpoint
+end % function
 
 %!shared x, s
 %! x = [1.2; 3.48];

@@ -41,4 +41,4 @@ else
     
 end
 
-end % function stk_sprintf_info
+end % function

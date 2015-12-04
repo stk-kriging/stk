@@ -50,4 +50,4 @@ else % homoscedastic case
     
 end
 
-end % function get_lognoisevariance
+end % function

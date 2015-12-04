@@ -43,4 +43,4 @@ fprintf ('%s = ', name);
 
 disp (x);
 
-end % function @stk_model_gpposterior.display
+end % function

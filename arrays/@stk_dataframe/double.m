@@ -31,7 +31,7 @@ function xdata = double(x)
 
 xdata = double(x.data);
 
-end % function double
+end % function
 
 %!test
 %! u = rand(4, 3);

@@ -44,4 +44,4 @@ if ~ isempty (varargin)
     set (h, varargin{:});
 end
 
-end % function stk_subplot
+end % function

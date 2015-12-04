@@ -46,7 +46,7 @@ end
 
 y = stk_dataframe (x1_data * x2_data, colnames, rownames);
 
-end % function mtimes
+end % function
 
 
 %!shared x, y, z, w

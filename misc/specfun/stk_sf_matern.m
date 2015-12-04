@@ -132,7 +132,7 @@ end
 
 k = reshape (k, N, M);
 
-end % function stk_sf_matern
+end % function
 
 
 function y = besselk_ (nu, x)
@@ -145,7 +145,7 @@ else
     y = stk_parallel_feval(@(t)(besselk(nu, t)), x, true, opts.min_block_size);
 end
 
-end % function besselk_
+end % function
 
 
 %!shared nu, h, diff

@@ -30,4 +30,4 @@ function param = get_output_data (model)
     
 param = model.output_data;
 
-end % function @stk_model_gpposterior.get_output_data
+end % function

@@ -159,7 +159,7 @@ if nargout > 1,
     err = max (abs (x - mantissa_r .* 10 .^ (exponent_r)));
 end
 
-end % function stk_sprintf_colvect_scientific
+end % function
 
 
 function [mantissa_r, exponent_r] = round_ (mantissa, exponent, n1)
@@ -174,7 +174,7 @@ b = (abs (mantissa_r) == 10);
 mantissa_r(b) = sign (mantissa_r(b));
 exponent_r(b) = exponent_r(b) + 1;
 
-end % function round_
+end % function
 
 
 %!shared x, s

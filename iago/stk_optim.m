@@ -230,7 +230,7 @@ if nargout > 1,
 end
 
 
-end % function stk_optim
+end % function
 
 
 %--- SUBFUNCTIONS --------------------------------------------------------------
@@ -257,7 +257,7 @@ stk_optim_fig02 (algo, crit_xg);
 %   (useful for criterion that do not already display it)
 %   TODO
 
-end % function stk_optim_view_
+end % function
 
 
 %!shared f0, f, DIM, BOX, xi, MAX_ITER, options, xt, zt, xg, NOISEVARIANCE

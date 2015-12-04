@@ -48,4 +48,4 @@ stk_title ('Distribution of the maximizer');
 
 drawnow;
 
-end % function stk_optim_crit_fig02
+end % function

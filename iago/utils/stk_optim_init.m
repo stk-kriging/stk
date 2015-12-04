@@ -328,4 +328,4 @@ if ~ ((isscalar (fbs)) && (fbs > 0) && ...
         'InvalidArgument');
 end
 
-end % function stk_optim_init
+end % function

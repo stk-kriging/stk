@@ -50,4 +50,4 @@ if ~ (xor (heterosc, xor (b1, b2))), return; end
 
 b = true;
 
-end % function noise_params_consistency
+end % function

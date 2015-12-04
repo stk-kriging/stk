@@ -86,7 +86,7 @@ if any (b0)
     [p(b0), q(b0)] = stk_distrib_bivnorm0_cdf ([z1 z2], rho(b0));
 end
 
-end % function stk_distrib_bivnorm_cdf
+end % function
 
 
 function [p q] = handle_singular_case (b1, z1, z2, sigma2)
@@ -105,7 +105,7 @@ if any (b1p)
     [p(b1p) q(b1p)] = stk_distrib_normal_cdf (z2_(b1p), 0, sigma2_(b1p));
 end
 
-end % function handle_singular_case
+end % function
 
 %!test
 %!

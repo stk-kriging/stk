@@ -30,7 +30,7 @@ function y = gt(x1, x2)
 
 y = bsxfun(@gt, x1, x2);
 
-end % function gt
+end % function
 
 %!test  stk_test_dfbinaryop(@gt, floor(3*rand(7, 2)), floor(3*rand(7, 2)));
 %!test  stk_test_dfbinaryop(@gt, floor(3*rand(7, 2)), 1.0);

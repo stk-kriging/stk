@@ -78,7 +78,7 @@ else % heteroscedastic
     end
 end
 
-end % function stk_noisecov
+end % function
 
 
 %!shared ni, lognoisevariance, diff

@@ -79,4 +79,4 @@ else
     
 end
 
-end % function stk_commonsize
+end % function

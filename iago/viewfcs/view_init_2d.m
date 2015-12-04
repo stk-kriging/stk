@@ -63,4 +63,4 @@ stk_title('prediction');
 % h=gca;
 % set(h,'FontSize', 20)
 
-end % function view_init_2d
+end % function

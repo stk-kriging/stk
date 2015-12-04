@@ -63,7 +63,7 @@ else
     
 end
 
-end % function ndgrid
+end % function
 
 
 %--- general case -------------------------------------------------------------

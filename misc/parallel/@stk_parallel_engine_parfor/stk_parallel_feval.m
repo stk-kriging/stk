@@ -57,4 +57,4 @@ else % STK-style vectorization not supported => loop over the rows of x
     
 end
 
-end % function stk_parallel_feval
+end % function

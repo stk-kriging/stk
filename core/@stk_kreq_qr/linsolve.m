@@ -41,4 +41,4 @@ end
 
 w = linsolve (kreq.LS_R, kreq.LS_Q' * rs, struct ('UT', true));
 
-end % function linsolve
+end % function

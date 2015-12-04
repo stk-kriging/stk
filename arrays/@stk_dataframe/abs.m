@@ -30,7 +30,7 @@ function ydata = abs (x)
 
 ydata = abs (x.data);
 
-end % function abs
+end % function
 
 
 %!test

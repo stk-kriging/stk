@@ -30,7 +30,7 @@ function y = power(x1, x2)
 
 y = bsxfun(@power, x1, x2);
 
-end % function power
+end % function
 
 %!test  stk_test_dfbinaryop(@power, rand(7, 2), .1 + rand(7, 2));
 %!test  stk_test_dfbinaryop(@power, rand(7, 2), .1);

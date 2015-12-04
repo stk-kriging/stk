@@ -48,4 +48,4 @@ end
 % Return the current parallel engine
 pareng = current_pareng;
 
-end % function stk_parallel_engine_set
+end % function

@@ -30,7 +30,7 @@ function lm = stk_lm_quadratic ()
 
 lm = class (struct (), 'stk_lm_quadratic');
 
-end % function stk_lm_quadratic
+end % function
 
 
 % Default constructor

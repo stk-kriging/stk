@@ -44,4 +44,4 @@ warning (help ('stk_optim_hasfmincon'));
 algo = stk_optim_fmincon ();
 fmincon_available = stk_optim_testmin_box (algo);
 
-end % function stk_optim_hasfmincon
+end % function

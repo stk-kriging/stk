@@ -78,7 +78,7 @@ else
     
 end
 
-end % function stk_model
+end % function
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -105,7 +105,7 @@ model_out = struct ( ...
 
 model_out.lognoisevariance = model_base.lognoisevariance;
 
-end % function stk_model_discretecov
+end % function
 
 
 %%%%%%%%%%%%%%%%%%
@@ -157,7 +157,7 @@ end % switch
 
 model.lognoisevariance = - inf;
 
-end % function stk_model_
+end % function
 
 
 %!test model = stk_model();

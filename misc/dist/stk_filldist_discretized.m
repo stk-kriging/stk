@@ -64,7 +64,7 @@ y = double(y);
 [fd, idx_max] = stk_filldist_discr_mex(x, y);
 ymax = y(idx_max, :);
 
-end % function stk_filldist_discretized
+end % function
 
 
 %%

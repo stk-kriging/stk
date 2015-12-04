@@ -45,7 +45,7 @@ else
     
 end % if
 
-end % function cat
+end % function
 
 
 %!shared u, v, x, y

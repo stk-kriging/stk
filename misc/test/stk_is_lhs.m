@@ -96,4 +96,4 @@ end
 
 b = true;
 
-end % function stk_is_lhs
+end % function

@@ -31,4 +31,4 @@ function b = isrow (x)
 n = length (x);
 b = isequal (size (x), [1 n]);
 
-end % function isrow
+end % function

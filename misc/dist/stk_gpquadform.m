@@ -98,7 +98,7 @@ else
     end
 end
 
-end % function stk_gpquadform
+end % function
 
 
 %%%%%%%%%

@@ -234,4 +234,4 @@ end
 % Figure XX02: Distribution of the maximizer
 stk_optim_crit_fig02 (algo, xc, p);
 
-end % function view_current
+end % function

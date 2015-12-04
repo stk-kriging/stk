@@ -52,7 +52,7 @@ merge_index_overview (htmldoc_dir);
 mkdir (image_dir);
 copyfile (fullfile (htmldocparts_dir, '*.png'), image_dir);
 
-end % function build_allpurpose_htmldoc
+end % function
 
 
 %--- merge_index_overview ------------------------------------------------------
@@ -125,4 +125,4 @@ fclose (fid);
 
 delete (fn_overview);
 
-end % function merge_index_overview
+end % function

@@ -48,4 +48,4 @@ end
 
 [u_opt,lik] = fminsearch (f, u_init, algo.options);
 
-end % function stk_minimize_unconstrained
+end % function

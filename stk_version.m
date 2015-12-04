@@ -31,4 +31,4 @@ function v = stk_version ()
 
 v = '2.4-dev';
 
-end % function stk_version
+end % function

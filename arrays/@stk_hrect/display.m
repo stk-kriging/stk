@@ -36,4 +36,4 @@ disp (x);
 
 fprintf ('\n');
 
-end % function display
+end % function

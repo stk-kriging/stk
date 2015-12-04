@@ -310,7 +310,7 @@ if df_out
     z = stk_dataframe (z, colnames, rownames);
 end
 
-end % function stk_feval
+end % function
 
 %#ok<*CTCH,*LERR>
 

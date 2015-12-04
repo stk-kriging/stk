@@ -73,7 +73,7 @@ else
     end
 end
 
-end % function stk_ortho_func
+end % function
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -106,7 +106,7 @@ switch order
         
 end
 
-end % function stk_ortho_func_
+end % function
 
 
 %!shared model, x, n, d

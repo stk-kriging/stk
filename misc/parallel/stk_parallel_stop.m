@@ -30,4 +30,4 @@ function stk_parallel_stop ()
 
 stk_parallel_stop (stk_parallel_engine_get ());
 
-end % function stk_parallel_stop
+end % function

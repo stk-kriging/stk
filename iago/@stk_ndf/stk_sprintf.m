@@ -47,4 +47,4 @@ df.data(:, ncols+1) = x.noisevariance;
 df.colnames{ncols+1} = '__noisevariance__';
 s = stk_sprintf(df, verbosity, data_col_width);
 
-end % function stk_sprintf
+end % function

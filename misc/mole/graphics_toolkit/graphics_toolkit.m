@@ -64,6 +64,6 @@ else % Matlab
 
 end
 
-end % function graphics_toolkit
+end % function
 
 %#ok<*CTCH>

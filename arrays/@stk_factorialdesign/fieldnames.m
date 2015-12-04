@@ -32,7 +32,7 @@ function fn = fieldnames (x)
 fn = fieldnames (x.stk_dataframe);
 fn = [{'levels' 'stk_dataframe'} fn];
 
-end % function fieldnames
+end % function
 
 %!test
 %! x = stk_factorialdesign ({0:1, 3:5}, {'u' 'v'});

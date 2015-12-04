@@ -39,4 +39,4 @@ if ~ all (b)
     stk_error (errmsg, mnemo);
 end
 
-end % function process_cell_indices
+end % function

@@ -139,7 +139,7 @@ if isinf(fd) || any(isnan(ymax)),
     stk_error(errmsg, 'AlgorithmFailure');
 end
 
-end % function stk_filldist_exact -------------------------------------------------------
+end % function
 
 
 %%%%%%%%%%%%%%%
@@ -157,7 +157,7 @@ for j = 1:d
     y((k-j)*n+1:(k+1-j)*n, j) = 2 * box(2, j) - x(1:n, j);
 end
 
-end % function add_symm -----------------------------------------------------------------
+end % function
 
 
 %%

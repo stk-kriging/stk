@@ -118,7 +118,7 @@ else
     
 end
 
-end % function stk_isequal_tolrel
+end % function
 
 
 %!shared r1, r2, r3, a, b, tolrel

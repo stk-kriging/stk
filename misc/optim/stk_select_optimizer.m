@@ -87,7 +87,7 @@ if (nargin > 1) && display,
     
 end
 
-end % function stk_select_optimizer
+end % function
 
 
 function optim_num = get_optim_num (algo)
@@ -103,4 +103,4 @@ switch class (algo)
         optim_num = [];
 end
 
-end % function get_optim_num
+end % function

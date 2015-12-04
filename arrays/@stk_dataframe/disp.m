@@ -49,7 +49,7 @@ end
 s = stk_sprintf (x, verbosity, data_col_width);
 disp ([repmat(prefix, size(s, 1), 1) s]);
 
-end % function disp
+end % function
 
 
 %!shared x, fmt

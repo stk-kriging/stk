@@ -78,7 +78,7 @@ end
 
 y = stk_dataframe (ydata, colnames);
 
-end % function bsxfun
+end % function
 
 
 % DESIGN NOTES

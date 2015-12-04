@@ -30,4 +30,4 @@ function pareng = stk_parallel_engine_get()
 
 pareng = stk_parallel_engine_set();
 
-end % function stk_parallel_engine_get
+end % function

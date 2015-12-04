@@ -96,4 +96,4 @@ if nargin > 1,
     s.stk_dataframe.colnames = colnames;
 end
 
-end % function stk_hrect
+end % function

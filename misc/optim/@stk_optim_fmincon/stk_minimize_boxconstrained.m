@@ -49,4 +49,4 @@ end
 
 [u_opt,lik] = fmincon (f, u_init, [], [], [], [], lb, ub, [], algo.options);
 
-end % function stk_minimize_boxconstrained
+end % function

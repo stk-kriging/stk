@@ -196,7 +196,7 @@ if nargout > 3,
     K = K0 - 0.5 * (deltaK + deltaK');
 end
 
-end % function @stk_model_gpposterior.stk_predict
+end % function
 
 %#ok<*SPWRN>
 

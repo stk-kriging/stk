@@ -174,7 +174,7 @@ if nargout > 2,
     info.upper_bounds = ub;
 end
 
-end % function stk_param_estim -------------------------------------------------
+end % function
 
 %#ok<*CTCH,*LERR,*SPWRN,*WNTAG>
 
@@ -191,7 +191,7 @@ else
     [l, dl] = criterion (model, xi, zi);
 end
 
-end % function f_
+end % function
 
 
 function [l, dl] = f_with_noise_ (model, u, xi, zi, criterion)
@@ -206,7 +206,7 @@ else
     dl = [dl; dln];
 end
 
-end % function f_with_noise_
+end % function
 
 
 function [lblnv,ublnv] = get_default_bounds_lnv ... % --------------------------
@@ -225,7 +225,7 @@ if ~ isempty (lnv0)
     ublnv = max (ublnv, lnv0 + TOLVAR);
 end
 
-end % function get_default_bounds_lnv ------------------------------------------
+end % function
 
 
 function [param0, lnv0] = provide_param0_value ... % ---------------------------
@@ -265,7 +265,7 @@ if isempty (param0)
     [param0, lnv0] = stk_param_init (model, xi, zi);
 end
 
-end % function provide_param0_value
+end % function
 
 
 %!shared f, xi, zi, NI, param0, model

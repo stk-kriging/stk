@@ -46,4 +46,4 @@ switch nargin
         
 end
 
-end % function stk_options_get
+end % function

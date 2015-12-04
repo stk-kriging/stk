@@ -128,7 +128,7 @@ copyfile (index_file, unpacked_dir);
 
 cd (here)
 
-end % function make_octave_package
+end % function
 
 %#ok<*NOPRT,*SPWRN,*WNTAG,*SPERR,*AGROW>
 
@@ -160,7 +160,7 @@ for i = 1:(length (dir_content))
     end
 end
 
-end % function process_directory
+end % function
 
 
 
@@ -225,7 +225,7 @@ else
     
 end % if
 
-end % function process_file
+end % function
 
 
 function mkdir_recurs (d)
@@ -244,7 +244,7 @@ if ~ exist (d, 'dir')
     
 end
 
-end % function mkdir_recurs
+end % function
 
 
 function sed_program = prepare_sed_rename_mex (release_dir)
@@ -260,7 +260,7 @@ end
 
 fclose (fid);
 
-end % function prepare_sed_rename_mex
+end % function
 
 
 function descr = parse_description_field (root_dir)

@@ -60,7 +60,7 @@ end
 
 kreq.n = kreq.n + size (Kjj, 1);
 
-end % function stk_update
+end % function
 
 
 %!shared model, x, y

@@ -48,6 +48,6 @@ switch propname
         end
 end
 
-end % function get
+end % function
 
 %#ok<*CTCH>

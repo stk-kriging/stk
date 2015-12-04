@@ -35,4 +35,4 @@ function fid = stdout()
 
 fid = 1;
 
-end % function stdout
+end % function

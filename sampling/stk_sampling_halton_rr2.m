@@ -75,7 +75,7 @@ if nargin > 2,
     x = stk_rescale (x, [], box);
 end
 
-end % function stk_sampling_halton_rr2
+end % function
 
 
 %!error stk_sampling_halton_rr2 ()               % nargin < 1

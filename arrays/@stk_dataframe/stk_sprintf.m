@@ -56,7 +56,7 @@ if strcmp (verbosity, 'verbose'),
     
 end
 
-end % function stk_sprintf
+end % function
 
 %#ok<*CTCH>
 
@@ -138,7 +138,7 @@ else
     
 end % if
 
-end % function sprintf_table_
+end % function
 
 
 %!shared x, fmt

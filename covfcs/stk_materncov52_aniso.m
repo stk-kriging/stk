@@ -131,7 +131,7 @@ else
         'InvalidArgument');
 end
 
-end % function stk_materncov52_aniso
+end % function
 
 
 %%

@@ -36,4 +36,4 @@ end
 
 pareng = class(struct(), 'stk_parallel_engine_parfor');
 
-end % function stk_parallel_engine_parfor
+end % function

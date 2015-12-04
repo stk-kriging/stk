@@ -94,7 +94,7 @@ else
     phi = Inf;
 end
 
-end % function stk_phipcrit
+end % function
 
 
 %!shared x

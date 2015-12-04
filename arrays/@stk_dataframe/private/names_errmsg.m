@@ -41,4 +41,4 @@ else
     s = sprintf ('%s: there is no %s named %s.', s, type, n1{i});
 end
 
-end % function names_errmsg
+end % function

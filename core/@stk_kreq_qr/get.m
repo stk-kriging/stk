@@ -112,6 +112,6 @@ catch
     
 end % try_catch
 
-end % function get
+end % function
 
 %#ok<*CTCH>

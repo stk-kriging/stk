@@ -35,4 +35,4 @@ if isempty (s)
     s = stk_sprintf_info ([]);
 end
 
-end % function stk_sprintf_info
+end % function

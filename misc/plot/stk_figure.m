@@ -55,4 +55,4 @@ if ~ isempty (figname)
     set (h, 'Name', figname);
 end
 
-end % function stk_figure
+end % function

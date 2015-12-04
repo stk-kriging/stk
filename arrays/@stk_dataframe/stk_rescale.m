@@ -44,7 +44,7 @@ else
     [x, a, b] = stk_rescale (x, box1, varargin{:});
 end
 
-end % function stk_rescale
+end % function
 
 %!test
 %! u = rand(5, 1) * 2;

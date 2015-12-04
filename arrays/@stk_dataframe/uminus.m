@@ -30,4 +30,4 @@ function x = uminus (x)
 
 x.data = - x.data;
 
-end % function uminus
+end % function

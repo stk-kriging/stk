@@ -31,7 +31,7 @@ function x = uminus (x)
 x.stk_dataframe = - x.stk_dataframe;
 x.levels = cellfun (@uminus, x.levels, 'UniformOutput', false);
 
-end % function uminus
+end % function
 
 
 %!test

@@ -131,4 +131,4 @@ h.pred  = h_pred;
 h.ci    = h_ci;
 h.sim   = h_sim;
 
-end % function stk_plot1d
+end % function

@@ -45,4 +45,4 @@ if display_help
     help (demo_name);
 end
 
-end % function stk_disp_examplewelcome
+end % function

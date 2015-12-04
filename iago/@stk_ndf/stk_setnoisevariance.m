@@ -32,4 +32,4 @@ assert(isscalar(noisevariance), 'STK:setnoisevariance', ...
     'Error: noisevariance must be scalar');
 x.noisevariance = noisevariance * ones(stk_length(x), 1);
 
-end % function stk_setnoisevariance
+end % function

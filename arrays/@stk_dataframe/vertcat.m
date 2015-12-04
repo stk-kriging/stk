@@ -112,7 +112,7 @@ if ~ isempty (varargin),
     x = vertcat (x, varargin{:});
 end
 
-end % function @stk_dataframe.vertcat
+end % function
 
 
 % IMPORTANT NOTE: [x; y; ...] fails to give the same result as vertcat(x, y,

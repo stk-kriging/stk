@@ -31,4 +31,4 @@ function stk_labels (xlab, ylab, varargin)
 stk_xlabel (xlab, varargin{:});
 stk_ylabel (ylab, varargin{:});
 
-end % function stk_labels
+end % function

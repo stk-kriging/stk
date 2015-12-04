@@ -61,7 +61,7 @@ density(k) = 0.39894228040143268 * exp (- 0.5 * xx(k));
 
 density = bsxfun (@rdivide, density, sigma);
 
-end % function stk_distrib_normal_pdf
+end % function
 
 
 %!assert (stk_isequal_tolrel (stk_distrib_normal_pdf ([1; 3], 1, [1 10]),  ...

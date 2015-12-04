@@ -39,4 +39,4 @@ if isempty (regexp (version_number, '^[0-9]+\.[0-9]+\.[0-9]+$'))
     error ('Incorrect version number.');
 end
 
-end % function get_version_number
+end % function

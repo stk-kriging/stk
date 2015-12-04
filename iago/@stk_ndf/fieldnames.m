@@ -31,4 +31,4 @@ function fn = fieldnames (x)
 fn = fieldnames (x.stk_dataframe);
 fn = [{'noisevariance' 'stk_dataframe'} fn];
 
-end % function fieldnames
+end % function

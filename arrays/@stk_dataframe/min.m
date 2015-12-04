@@ -52,7 +52,7 @@ else  % Apply 'min' elementwise
     
 end % if
 
-end % function min
+end % function
 
 
 %!test  stk_test_dfbinaryop ('min', rand(7, 2), rand(7, 2));

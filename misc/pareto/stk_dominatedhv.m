@@ -121,7 +121,7 @@ else
     end
 end
 
-end % function stk_dominatedhv
+end % function
 
 
 function y = wfg_preprocessing (y, y_ref)
@@ -154,7 +154,7 @@ end
 b = any (y < 0, 2);
 y(b, :) = [];
 
-end % function wfg_preprocessing
+end % function
 
 
 function hv = wfg_postprocessing (hv, y_ref)
@@ -170,7 +170,7 @@ else
     hv.xmax = bsxfun (@minus, y_ref(1:p), xmin);
 end
 
-end % function wfg_postprocessing
+end % function
 
 
 %!error hv = stk_dominatedhv ();

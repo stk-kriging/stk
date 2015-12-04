@@ -50,7 +50,7 @@ switch propname
             end
         end
         
-end % function @stk_model_gpposterior.get
+end % function
 
 %#ok<*CTCH,*LERR>
 

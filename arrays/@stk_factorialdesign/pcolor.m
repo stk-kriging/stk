@@ -32,4 +32,4 @@ function pcolor (varargin)
 
 plot_surfmeshcontour (@pcolor, varargin{:});
 
-end % function pcolor
+end % function

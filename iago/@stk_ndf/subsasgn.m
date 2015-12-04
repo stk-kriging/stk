@@ -59,5 +59,5 @@ switch idx(1).type
         
 end
 
-end % function subsasgn
+end % function
 

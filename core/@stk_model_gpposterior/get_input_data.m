@@ -30,4 +30,4 @@ function param = get_input_data (model)
     
 param = model.input_data;
 
-end % function @stk_model_gpposterior.get_input_data
+end % function

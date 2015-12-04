@@ -130,7 +130,7 @@ else
         'InvalidArgument');
 end
 
-end % function stk_gausscov_aniso
+end % function
 
 
 %%

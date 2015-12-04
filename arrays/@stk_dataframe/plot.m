@@ -48,7 +48,7 @@ end
 % Restore hold state
 if (~ b) && (n > 1),  hold off;  end
 
-end % function plot
+end % function
 
 
 function h = plot_ (h_axes, x, z, S, varargin)
@@ -116,7 +116,7 @@ if ~ isempty (zlab)
     end
 end
 
-end % function plot_
+end % function
 
 %#ok<*SPWRN,*TRYNC>
 
@@ -200,7 +200,7 @@ else
     
 end
 
-end % function parse_args_
+end % function
 
 
 function [plot_elem, keyval_pairs] = parse_args__ (x, z, varargin)
@@ -250,7 +250,7 @@ else  % key, val, key, val, ...
     
 end
 
-end % function parse_args__
+end % function
 
 function keyval_pairs = parse_keyval_ (key, val, varargin)
 
@@ -275,7 +275,7 @@ else
     
 end
 
-end % function parse_keyval_
+end % function
 
 
 %!test % plot with x as a vector and z as a (univariate) dataframe

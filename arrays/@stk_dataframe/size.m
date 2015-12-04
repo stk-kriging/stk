@@ -31,7 +31,7 @@ function varargout = size(x, varargin)
 varargout = cell(1, max(nargout, 1));
 [varargout{:}] = size(x.data, varargin{:});
 
-end % function size
+end % function
 
 %!shared x
 %! x = stk_dataframe([1 2; 3 4; 5 6]);

@@ -30,4 +30,4 @@ function z = diff (x, varargin)
 
 z = diff (x.data, varargin{:});
 
-end % function diff
+end % function

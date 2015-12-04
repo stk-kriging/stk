@@ -88,7 +88,7 @@ if nargout > 1,
     P = stk_ortho_func (model, x0);
 end
 
-end % function stk_make_matcov
+end % function
 
 
 %!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc

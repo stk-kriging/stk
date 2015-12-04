@@ -62,7 +62,7 @@ else
     loc = file_in_path_(dirlist, filename, flag);
 end
 
-end % function file_in_path
+end % function
 
 %%%%%%%%%%%%%%%%%
 % file_in_path_ %
@@ -97,4 +97,4 @@ for i = 1:length(idx) - 1,
     end
 end
 
-end % function file_in_path_
+end % function

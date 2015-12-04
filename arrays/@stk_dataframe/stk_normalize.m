@@ -57,7 +57,7 @@ else % box is an stk_dataframe object
     
 end % if
 
-end % function stk_normalize
+end % function
 
 %!test
 %! u = rand (6, 2) * 2;

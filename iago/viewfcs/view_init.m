@@ -36,4 +36,4 @@ elseif algo.dim == 2
     view_init_2d (algo, xi, zi, xg);
 end
 
-end % function view_init
+end % function

@@ -49,4 +49,4 @@ s = zz' * (linsolve (kreq, zz));
 % Guard against numerical issues
 if s < 0, s = 0; end
 
-end % function stk_squared_seminorm
+end % function
