@@ -30,7 +30,7 @@ function y = and(x1, x2)
 
 y = bsxfun(@and, x1, x2);
 
-end % function and
+end % function
 
 %!test  stk_test_dfbinaryop(@and, floor(3*rand(7, 2)), floor(3*rand(7, 2)));
 %!test  stk_test_dfbinaryop(@and, floor(3*rand(7, 2)), 1.0);

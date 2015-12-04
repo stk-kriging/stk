@@ -48,4 +48,4 @@ if isempty(name),
     end
 end
 
-end % function file_in_loadpath
+end % function

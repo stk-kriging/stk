@@ -465,7 +465,7 @@ else
     x__ret3 = nb_expected_failures;
 end
 
-end % function stk_test
+end % function
 
 
 %%%%%%%%%%%%%%%%%%
@@ -515,7 +515,7 @@ for x__i = 1:length(x__list_shared),
     end
 end
 
-end % function eval_test_code
+end % function
 
 
 %%%%%%%%%%%%%%
@@ -541,7 +541,7 @@ elseif (strncmp (str, 'id=', 3))
     [id, rest] = strtok (str(4:end));
 end
 
-end % function getpattern
+end % function
 
 
 %%%%%%%%%%%
@@ -558,7 +558,7 @@ if (idx > 0)
 end
 msg = trimleft (deblank (msg));
 
-end % function trimerr
+end % function
 
 
 %%%%%%%%%%%%
@@ -575,7 +575,7 @@ if (~ isempty (leading))
     str = str(leading(end)+1:end);
 end
 
-end % function trimleft
+end % function
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -603,7 +603,7 @@ if (fid >= 0)
     fclose (fid);
 end
 
-end % function x__extract_test_code
+end % function
 
 
 %% Tests of 'assert' blocks

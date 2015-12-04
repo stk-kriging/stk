@@ -42,7 +42,7 @@ for j = 1:(length (x.levels))
     x.levels{j} = a(j) + b(j) * x.levels{j};
 end
 
-end % function stk_rescale
+end % function
 
 %!test
 %! x = stk_factorialdesign ({[1 2], [5 6]});

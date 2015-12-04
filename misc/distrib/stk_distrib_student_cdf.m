@@ -77,7 +77,7 @@ k = kn & (~ k_big_abs);
 p(k) = 0.5 * (1 - betainc (xx(k) ./ (nu(k) + xx(k)), 1/2, nu(k)/2));
 q(kn) = 1 - p(kn);
 
-end % function stk_distrib_student_cdf
+end % function
 
 
 %!assert (stk_isequal_tolrel ( ...

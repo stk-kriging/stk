@@ -102,4 +102,4 @@ if df_out,
     zsimc = stk_dataframe (zsimc, colnames, rownames);
 end
 
-end % function stk_conditioning
+end % function

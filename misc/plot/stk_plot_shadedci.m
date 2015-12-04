@@ -50,7 +50,7 @@ end
 % from being hidden by the grayed area
 set (gca, 'Layer', 'top');
 
-end % function stk_plot_shadedci
+end % function
 
 
 function [h, x, z, opts] = parse_args_ (arg1, varargin)
@@ -100,4 +100,4 @@ else
     
 end
 
-end % function parse_args_
+end % function

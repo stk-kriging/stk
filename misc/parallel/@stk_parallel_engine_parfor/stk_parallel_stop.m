@@ -36,4 +36,4 @@ end
 
 stk_parallel_engine_set(stk_parallel_engine_none());
     
-end % function stk_parallel_stop
+end % function

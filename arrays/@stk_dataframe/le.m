@@ -30,7 +30,7 @@ function y = le(x1, x2)
 
 y = bsxfun(@le, x1, x2);
 
-end % function le
+end % function
 
 %!test  stk_test_dfbinaryop(@le, floor(3*rand(7, 2)), floor(3*rand(7, 2)));
 %!test  stk_test_dfbinaryop(@le, floor(3*rand(7, 2)), 1.0);

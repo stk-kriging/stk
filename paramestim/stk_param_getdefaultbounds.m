@@ -117,5 +117,5 @@ else
     
 end % if
 
-end % function stk_param_getdefaultbounds
+end % function
 

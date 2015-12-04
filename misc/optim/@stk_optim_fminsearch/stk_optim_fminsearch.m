@@ -57,4 +57,4 @@ end
 x = struct ('options', opt);
 x = class (x, 'stk_optim_fminsearch');
 
-end % function stk_optim_fminsearch
+end % function

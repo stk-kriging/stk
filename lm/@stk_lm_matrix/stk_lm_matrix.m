@@ -36,7 +36,7 @@ end
 
 lm = class (lm, 'stk_lm_matrix');
 
-end % function stk_lm_matrix
+end % function
 
 
 %!test %%% Default constructor

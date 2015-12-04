@@ -110,7 +110,7 @@ else
     
 end
 
-end % function stk_isequal_tolabs
+end % function
 
 
 %!shared r1, r2, a, b, tolabs

@@ -41,7 +41,7 @@ function l = stk_length (x)
 
 l = size (x, 1);
 
-end % function stk_length
+end % function
 
 
 %!assert (isequal (stk_length ([1 2; 3 4; 5 6]), 3));

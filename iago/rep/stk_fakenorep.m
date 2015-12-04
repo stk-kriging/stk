@@ -74,4 +74,4 @@ end
 % Safety net
 assert (isequal (size (model.lognoisevariance), [n 1]));
 
-end % function stk_fakenorep
+end % function

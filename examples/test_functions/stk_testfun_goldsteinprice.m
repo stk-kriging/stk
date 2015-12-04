@@ -73,7 +73,7 @@ B  = 30 + B1 .* B2;  % 4th degree polynomial
 
 y = A .* B;  % 8th degree polynomial
 
-end % function stk_testfun_goldsteinprice
+end % function
 
 
 function visu_goldsteinprice ()
@@ -87,7 +87,7 @@ surf (xt, @stk_testfun_goldsteinprice);
 hold on;  plot3 (0, -1, 3, 'r.');
 colorbar;  stk_title (s);
 
-end % function visu_golsteinprice
+end % function
 
 
 %!test % Use with nargin == 0 for visualisation

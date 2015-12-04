@@ -158,7 +158,7 @@ if nargout >= 2
     
 end
 
-end % function stk_param_relik
+end % function
 
 
 

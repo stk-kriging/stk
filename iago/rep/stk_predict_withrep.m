@@ -42,4 +42,4 @@ varargout = cell (1, max (1, nargout));
 
 [varargout{:}] = stk_predict (model, xi, zi, xt);
 
-end % function stk_predict_withrep
+end % function

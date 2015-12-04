@@ -44,4 +44,4 @@ else % value must be an stk_hrect object
     
 end
 
-end % function subsasgn
+end % function

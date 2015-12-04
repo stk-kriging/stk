@@ -30,4 +30,4 @@ function xdata = double (x)
 
 xdata = x.a;
 
-end % function double
+end % function

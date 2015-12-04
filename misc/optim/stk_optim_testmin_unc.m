@@ -49,7 +49,7 @@ catch %#ok<CTCH>
     
 end % try_catch
 
-end % function stk_optim_testmin_unc
+end % function
 
 
 function [f, df] = objfun (x)
@@ -57,4 +57,4 @@ function [f, df] = objfun (x)
 f = (x - 0.3) .^ 2;
 df = 2 * (x - 0.3);
 
-end % function objfun
+end % function

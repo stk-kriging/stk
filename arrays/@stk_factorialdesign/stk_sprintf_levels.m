@@ -54,4 +54,4 @@ end
 
 s = char (line{:});
 
-end % function stk_sprintf_levels
+end % function

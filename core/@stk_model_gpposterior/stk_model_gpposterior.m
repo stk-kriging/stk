@@ -75,7 +75,7 @@ end % if
 
 M_post = class (M_post, 'stk_model_gpposterior');
 
-end % function stk_model_gpposterior
+end % function
 
 
 %!shared M_prior, x_obs, z_obs

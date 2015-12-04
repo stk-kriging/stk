@@ -86,7 +86,7 @@ end
 x = stk_factorialdesign (levels, box.colnames);
 x.info = 'Created by stk_sampling_regulargrid';
 
-end % function stk_sampling_regulargrid
+end % function
 
 %#ok<*TRYNC>
 

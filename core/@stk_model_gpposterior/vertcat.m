@@ -31,4 +31,4 @@ function varargout = vertcat (varargin)
 stk_error (['Arrays of stk_model_gpposterior objects are not supported. ', ...
     'Use cell arrays instead.'], 'IllegalOperation');
 
-end % function @stk_model_gpposterior.vertcat
+end % function

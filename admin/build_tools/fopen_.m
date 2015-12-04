@@ -36,4 +36,4 @@ if fid == -1,
     error (errmsg);
 end
 
-end % function fopen_
+end % function

@@ -120,7 +120,7 @@ ei(b) = max (0, delta(b));
 % Correct numerical inaccuracies
 ei(ei < 0) = 0;
 
-end % function stk_distrib_student_ei
+end % function
 
 
 %!assert (stk_isequal_tolrel (stk_distrib_student_ei (0, 2), 1 / sqrt (2), eps))

@@ -96,7 +96,7 @@ switch command
         
 end % switch
 
-end % function stk_init
+end % function
 
 %#ok<*NODEF,*WNTAG,*SPERR,*SPWRN,*LERR,*CTCH,*SPERR>
 
@@ -139,7 +139,7 @@ warning ('off', 'STK:stk_param_relik:NumericalAccuracyProblem');
 % of stk_dataframe and stk_factorialdesign objects:
 % stk_options_set ('stk_dataframe', 'disp_format', 'verbose');
 
-end % function stk_init__pkg_load
+end % function
 
 
 function stk_init__pkg_unload (root)
@@ -154,7 +154,7 @@ stk_init__rmpath (root);
 % Remove STK root directory from the path
 rmpath (root);
 
-end % function stk_init__pkg_unload
+end % function
 
 
 function stk_init__munlock ()
@@ -172,7 +172,7 @@ for i = 1:(length (filenames))
     end
 end
 
-end % function stk_init__munlock
+end % function
 
 
 function stk_init__clear_persistents ()
@@ -198,7 +198,7 @@ for i = 1:(length (filenames))
     clear (filenames{i});
 end
 
-end % function stk_init__clear_persistents
+end % function
 
 
 function stk_init__addpath (root)
@@ -217,7 +217,7 @@ end
 % Selectively add MOLE subdirectories to compensate for missing functions
 stk_init__config_mole (root, true, false);  % (add to path, but do not prune)
 
-end % function stk_init__addpath
+end % function
 
 
 function path = stk_init__genpath (root)
@@ -286,7 +286,7 @@ if (exist ('OCTAVE_VERSION', 'builtin') == 5)
     end
 end
 
-end % function stk_init__genpath
+end % function
 
 
 function stk_init__rmpath (root)
@@ -314,7 +314,7 @@ while ~ isempty (s)
     end
 end
 
-end % function stk_init__rmpath
+end % function
 
 
 function s = escape_regexp (s)
@@ -344,7 +344,7 @@ s = strrep (s, '\', '\\');
 s = strrep (s, '+', '\+');
 s = strrep (s, '.', '\.');
 
-end % function escape_regexp
+end % function
 
 
 function stk_init__build_mex (root, force_recompile)
@@ -363,7 +363,7 @@ end
 
 cd (here);
 
-end % function stk_init__build_mex
+end % function
 
 
 function stk_init__compile (d, opts, mexname, other_src, includes)
@@ -428,7 +428,7 @@ if compile,
     end
 end
 
-end % function stk_init__compile
+end % function
 
 
 function info = stk_init__get_make_info ()
@@ -457,7 +457,7 @@ info = register_mex (info, relpath, 'stk_paretofind_mex', {}, {'pareto.h'});
 info = register_mex (info, relpath, 'stk_isdominated_mex', {}, {'pareto.h'});
 info = register_mex (info, relpath, 'stk_dominatedhv_mex', {'wfg.c'}, {'wfg.h'});
 
-end % function stk_init__get_make_info
+end % function
 
 
 function info = register_mex (info, relpath, mexname, other_src, includes)
@@ -477,7 +477,7 @@ info(k).mexname = mexname;
 info(k).other_src = other_src;
 info(k).includes = [{'stk_mex.h'} includes];
 
-end % function register_mex
+end % function
 
 
 function stk_init__test_private_mex ()
@@ -511,7 +511,7 @@ catch
     end
 end
 
-end % function stk_init__test_private_mex
+end % function
 
 
 function stk_init__config_mole (root, do_addpath, prune_unused)
@@ -575,7 +575,7 @@ if isoctave
     confirm_recursive_rmdir (recursive_rmdir_state);
 end
 
-end % function stk_init__config_mole
+end % function
 
 
 function install_mole_function (funct_name, mole_dir, do_addpath, prune_unused)
@@ -605,4 +605,4 @@ elseif prune_unused && (exist (function_dir, 'dir'))
     
 end
 
-end % function install_mole_function
+end % function

@@ -30,4 +30,4 @@ function param = get_dim (model)
     
 param = model.dim;
 
-end % function @stk_model_gpposterior.get_dim
+end % function

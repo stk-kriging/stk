@@ -48,4 +48,4 @@ end
 
 [u_opt, lik] = stk_minimize_boxconstrained (algo, f, u_init, [], []);
 
-end % function stk_minimize_unconstrained
+end % function

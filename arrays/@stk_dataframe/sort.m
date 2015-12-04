@@ -72,7 +72,7 @@ else  % Sort rows
     
 end
         
-end % function sort
+end % function
 
 
 %!shared x, y

@@ -79,7 +79,7 @@ else % A is an stk_hrect, treat it as any other stk_dataframe would be treated
     end
 end
 
-end % function ismember
+end % function
 
 %!shared n, box
 %! n = 5;

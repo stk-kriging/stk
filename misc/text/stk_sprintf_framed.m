@@ -32,4 +32,4 @@ a = sprintf(['    ' fmt '    '], varargin{:});
 b = repmat('=', 1, length(a));
 s = sprintf('#%s#\n#%s#\n#%s#\n', b, a, b);
 
-end % function stk_sprintf_framed
+end % function

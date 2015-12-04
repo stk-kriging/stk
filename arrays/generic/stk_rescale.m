@@ -40,7 +40,7 @@ end
 % Call @stk_hrect/stk_rescale
 [x, a, b] = stk_rescale (x, box1, varargin{:});
 
-end % function stk_rescale
+end % function
 
 
 %!shared x

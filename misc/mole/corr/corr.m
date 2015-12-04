@@ -83,7 +83,7 @@ c = x' * y;
 s = sx' * sy;
 c = c ./ (n * s);
 
-end % function corr
+end % function
 
 
 %!test

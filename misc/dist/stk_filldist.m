@@ -113,7 +113,7 @@ else
             
 end % if
 
-end % function stk_filldist
+end % function
 
 
 %%

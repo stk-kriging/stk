@@ -44,7 +44,7 @@ disp (x, varargin{:});
 
 fprintf ('\n');
 
-end % function display
+end % function
 
 
 %!test display (stk_dataframe (rand (3, 2)));

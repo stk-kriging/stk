@@ -53,4 +53,4 @@ for b = 1:nb_blocks,
     
 end
 
-end % function stk_parallel_cutblocks
+end % function

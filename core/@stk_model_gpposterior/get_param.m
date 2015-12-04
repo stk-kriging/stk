@@ -30,4 +30,4 @@ function param = get_param (model)
     
 param = model.prior_model.param;
 
-end % function @stk_model_gpposterior.get_param
+end % function

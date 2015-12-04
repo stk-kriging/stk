@@ -70,4 +70,4 @@ end
 assert (size (zi, 1) == size (xi, 1));
 assert (noise_params_consistency (algo, xi));
 
-end % function stk_optim_addevals
+end % function

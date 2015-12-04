@@ -72,7 +72,7 @@ end
 x = stk_dataframe (xdata, box.colnames);
 x.info = 'Created by stk_sampling_randunif';
 
-end % function stk_sampling_randunif
+end % function
 
 
 %%

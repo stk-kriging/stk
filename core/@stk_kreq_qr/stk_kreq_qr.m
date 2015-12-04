@@ -54,4 +54,4 @@ if nargin > 2,
     kreq = stk_set_righthandside (kreq, Kti, Pt);
 end
 
-end % function stk_kreq_qr
+end % function

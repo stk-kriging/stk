@@ -32,6 +32,6 @@ function N = length (x) %#ok<STOUT>
 errmsg = ['length() is not defined for objects of class ' class(x)];
 stk_error (errmsg, 'MethodNotDefined');
 
-end % function length
+end % function
 
 %!error length (stk_dataframe ([1 2; 3 4; 5 6]))

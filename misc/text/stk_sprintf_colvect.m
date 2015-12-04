@@ -45,7 +45,7 @@ if err_fp > 0,
     end
 end
 
-end % function stk_sprintf_colvect
+end % function
 
 
 %!shared s

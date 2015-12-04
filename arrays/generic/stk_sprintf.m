@@ -83,6 +83,6 @@ else
     
 end % if
 
-end % function stk_sprintf
+end % function
 
 %#ok<*CTCH>

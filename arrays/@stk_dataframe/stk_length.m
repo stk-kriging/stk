@@ -31,7 +31,7 @@ function l = stk_length (x)
 
 l = size (x.data, 1);
 
-end % function stk_length
+end % function
 
 %!test
 %! x = stk_dataframe ([1 2; 3 4; 5 6]);

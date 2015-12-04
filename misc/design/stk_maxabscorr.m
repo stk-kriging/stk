@@ -66,7 +66,7 @@ c = triu (c, 1);
 
 mac = max (abs (c(:)));
 
-end % function stk_maxabscorr
+end % function
 
 
 %!assert (stk_isequal_tolabs (0.0, ...   % Test on an OLHS(5)

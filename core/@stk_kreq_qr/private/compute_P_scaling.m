@@ -33,4 +33,4 @@ t = sum (Pi .^ 2);
 s = ones (1, size (Pi, 2));
 s(t > 0) = sqrt ((max (sum (Kii .^ 2))) ./ t(t > 0));
 
-end % function compute_P_scaling
+end % function

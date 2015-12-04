@@ -39,4 +39,4 @@ if ~ b
     stk_error (errmsg, mnemo);
 end
 
-end % function process_char_indices
+end % function

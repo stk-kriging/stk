@@ -107,7 +107,7 @@ else
     error ('there must be something wrong here !');
 end
 
-end % function stk_materncov_iso
+end % function
 
 
 %%

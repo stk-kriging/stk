@@ -77,6 +77,6 @@ if p > 0,
     
 end
 
-end % function stk_cholcov
+end % function
 
 %#ok<*SPWRN>

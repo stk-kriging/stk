@@ -48,5 +48,5 @@ z_df = [x_df; y_df];
 z_noisevariance = [x_noisevariance; y_noisevariance];
 
 z = stk_ndf(z_df, z_noisevariance);
-end % function vertcat
+end % function
 

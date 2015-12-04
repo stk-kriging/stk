@@ -61,4 +61,4 @@ for i = [1 2 4]
     hold on, plot(xinew(1), xinew(2), NEWDOT_STYLE{:}); hold off
 end
 
-end % function view_samplingcrit_2d
+end % function

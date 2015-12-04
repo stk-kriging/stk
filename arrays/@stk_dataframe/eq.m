@@ -30,7 +30,7 @@ function y = eq(x1, x2)
 
 y = bsxfun(@eq, x1, x2);
 
-end % function eq
+end % function
 
 %!test  stk_test_dfbinaryop(@eq, floor(3*rand(7, 2)), floor(3*rand(7, 2)));
 %!test  stk_test_dfbinaryop(@eq, floor(3*rand(7, 2)), 1.0);

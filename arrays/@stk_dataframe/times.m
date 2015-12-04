@@ -30,7 +30,7 @@ function y = times(x1, x2)
 
 y = bsxfun(@times, x1, x2);
 
-end % function times
+end % function
 
 %!test  stk_test_dfbinaryop(@times, rand(7, 2), rand(7, 2));
 %!test  stk_test_dfbinaryop(@times, rand(7, 2), pi);

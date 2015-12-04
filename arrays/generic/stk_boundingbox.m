@@ -52,7 +52,7 @@ xmax = max (x, [], 1);
 
 box = stk_hrect ([xmin; xmax]);
 
-end % function stk_boundingbox
+end % function
 
 
 %!shared x, y, cn

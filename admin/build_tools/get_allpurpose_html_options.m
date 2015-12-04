@@ -107,4 +107,4 @@ options.header = strrep (options.header, "%date", date ());
 
 options.footer = ["</div>\n</body>\n</html>\n"];
 
-end % function get_allpurpose_html_options
+end % function

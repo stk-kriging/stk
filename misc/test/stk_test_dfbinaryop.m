@@ -60,4 +60,4 @@ catch
 
 end % try
 
-end % function stk_test_dfbinaryop
+end % function

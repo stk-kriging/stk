@@ -123,7 +123,7 @@ end
 
 zsimc = z_sim + lambda' * delta;
 
-end % function stk_conditioning
+end % function
 
 
 %!shared n, m, ni, xi_ind, lambda, zsim, zi

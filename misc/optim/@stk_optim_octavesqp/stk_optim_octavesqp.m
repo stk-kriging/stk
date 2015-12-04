@@ -93,4 +93,4 @@ end
 x = struct ('options', options, 'sqp', optimizer);
 x = class (x, 'stk_optim_octavesqp');
 
-end % function stk_optim_octavesqp
+end % function

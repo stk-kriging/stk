@@ -30,7 +30,7 @@ function lm = stk_lm_constant ()
 
 lm = class (struct (), 'stk_lm_constant');
 
-end % function stk_lm_constant
+end % function
 
 
 % Default constructor

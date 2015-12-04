@@ -42,4 +42,4 @@ stk_title ('Conditional samplepaths');
 
 drawnow;
 
-end % function stk_optim_crit_fig01
+end % function

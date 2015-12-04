@@ -38,4 +38,4 @@ fid = fopen_ (fullfile (unpacked_dir, 'README'), 'wt');
 fwrite (fid, s);
 fclose (fid);
 
-end % function copy_readme
+end % function

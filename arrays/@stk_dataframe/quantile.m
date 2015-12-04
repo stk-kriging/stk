@@ -34,7 +34,7 @@ end
 
 z = apply (x, dim, @quantile, p);
 
-end % function quantile
+end % function
 
 %!shared x1, df1, p
 %! x1 = rand (9, 3);

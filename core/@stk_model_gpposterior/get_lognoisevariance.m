@@ -30,4 +30,4 @@ function lnv = get_lognoisevariance (model)
 
 lnv = model.prior_model.lognoisevariance;
 
-end % function @stk_model_gpposterior.get_lognoisevariance
+end % function

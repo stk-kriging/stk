@@ -32,7 +32,7 @@ if nargin < 2, dim = 1; end
 
 z = apply(x, dim, @sum);
 
-end % function sum
+end % function
 
 
 %!shared x1, df1

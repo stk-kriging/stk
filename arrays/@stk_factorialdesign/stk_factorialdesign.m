@@ -87,7 +87,7 @@ else
     
 end % if
 
-end % function stk_factorialdesign
+end % function
 
 
 %--- constructor --------------------------------------------------------------

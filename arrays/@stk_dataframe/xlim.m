@@ -40,4 +40,4 @@ if isa (arg2, 'stk_dataframe'),  arg2 = double (arg2);  end
 
 [varargout{:}] = xlim (arg1, arg2);
 
-end % function xlim
+end % function

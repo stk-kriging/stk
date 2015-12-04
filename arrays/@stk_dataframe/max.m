@@ -52,7 +52,7 @@ else  % Apply 'max' elementwise
     
 end % if
 
-end % function max
+end % function
 
 
 %!test  stk_test_dfbinaryop ('max', rand(7, 2), rand(7, 2));

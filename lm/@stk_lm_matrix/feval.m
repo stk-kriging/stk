@@ -37,4 +37,4 @@ else
     z = lm.data(x, :);
 end
 
-end % function feval
+end % function

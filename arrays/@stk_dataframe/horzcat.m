@@ -112,7 +112,7 @@ if ~ isempty (varargin),
     x = horzcat (x, varargin{:});
 end
 
-end % function @stk_dataframe.horzcat
+end % function
 
 
 % IMPORTANT NOTE: [x y ...] fails to give the same result as horzcat (x, y,

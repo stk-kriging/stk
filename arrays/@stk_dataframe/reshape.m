@@ -36,7 +36,7 @@ function y = reshape (x, varargin)
 
 y = stk_dataframe (reshape (x.data, varargin{:}));
 
-end % function reshape
+end % function
 
 
 %!test

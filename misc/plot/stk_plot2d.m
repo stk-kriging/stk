@@ -44,4 +44,4 @@ end
 
 feval (plotfun, x, z, varargin{:});
 
-end % function stk_plot2d
+end % function

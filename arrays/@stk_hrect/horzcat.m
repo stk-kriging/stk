@@ -55,7 +55,7 @@ if nargin > 2,
     z = horzcat (z, varargin{:});
 end
 
-end % function horzcat
+end % function
 
 %#ok<*LERR,*CTCH>
 

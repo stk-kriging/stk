@@ -71,7 +71,7 @@ else
     K = param.K(idx);
 end
 
-end % function stk_discretecov
+end % function
 
 
 %!shared model, model2, x0

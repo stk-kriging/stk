@@ -47,7 +47,7 @@ end
 % call MEX-file
 md = stk_mindist_mex(double(x));
 
-end % function stk_mindist
+end % function
 
 
 %%

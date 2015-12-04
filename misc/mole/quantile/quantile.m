@@ -196,7 +196,7 @@ q = reshape (q, [numel(p), sx(2:end)]);
 % Permute the 1st index back to dim.
 q = ipermute (q, perm);
 
-end % function quantile
+end % function
 
 %!test
 %! p = 0.5;
@@ -461,5 +461,4 @@ if (any (k))
     end
 end
 
-end % function octave__quantile__
-
+end % function

@@ -39,4 +39,4 @@ end
 z = stk_parallel_feval(stk_parallel_engine_get(), ...
     f, x, vectorized, min_block_size);
 
-end % function stk_parallel_feval
+end % function

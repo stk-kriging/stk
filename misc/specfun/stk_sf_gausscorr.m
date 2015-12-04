@@ -74,7 +74,7 @@ else
     
 end
 
-end % function stk_sf_gausscorr
+end % function
 
 
 %!shared h, diff

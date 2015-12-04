@@ -35,5 +35,5 @@ function b = isequal (x, y)
 b = strcmp (class (x), class (y)) ...
     && isequal (struct (x), struct (y));
 
-end % function isequal
+end % function
 

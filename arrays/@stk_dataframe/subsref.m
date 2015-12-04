@@ -88,7 +88,7 @@ if (length (idx)) > 1,
     t = subsref (t, idx(2:end));
 end
 
-end % function @stk_dataframe.subsref
+end % function
 
 
 %!shared x, s, t, data

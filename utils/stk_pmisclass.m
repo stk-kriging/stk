@@ -75,4 +75,4 @@ else
     pmisclass = q + p1 - 2 * p2;
 end
 
-end % function stk_pmisclass
+end % function

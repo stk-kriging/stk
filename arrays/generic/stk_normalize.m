@@ -44,7 +44,7 @@ end
 % Call @stk_hrect/stk_normalize
 [x, a, b] = stk_normalize (x, box, varargin{:});
 
-end % function stk_normalize
+end % function
 
 
 %!shared x, box, y1, y2, y3, y4

@@ -32,4 +32,4 @@ function meshz (varargin)
 
 plot_surfmeshcontour (@meshz, varargin{:});
 
-end % function meshz
+end % function

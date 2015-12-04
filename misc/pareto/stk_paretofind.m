@@ -52,7 +52,7 @@ varargout = cell (1, max (1, nargout));
 
 [varargout{:}] = stk_paretofind_mex (double (x));
 
-end % function stk_paretofind
+end % function
 
 
 %!shared x, ndpos, drank

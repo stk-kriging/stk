@@ -208,7 +208,7 @@ try %#ok<TRYNC>
     zsim = stk_dataframe (zsim, zsim_colnames);
 end
 
-end % function stk_generate_samplepaths
+end % function
 
 
 %!shared model, xi, zi, xt, n, nb_paths

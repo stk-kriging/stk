@@ -65,4 +65,4 @@ stk_title ('Sampling criterion');
 
 drawnow;
 
-end % function stk_optim_fig02
+end % function

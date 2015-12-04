@@ -63,7 +63,7 @@ if ismember (func2str (plotfun), {'surf', 'pcolor'}),
     shading ('interp');
 end
 
-end % function plot_surfmeshcontour
+end % function
 
 %#ok<*TRYNC>
 
@@ -130,7 +130,7 @@ if dim ~= 2,
     stk_error (errmsg, 'IncorrectArgument');
 end
 
-end % function parse_args_
+end % function
 
 
 function call_plotfun (plotfun, h, x, y, z, varargin)
@@ -186,4 +186,4 @@ catch  %#ok<CTCH>
 
 end % try_catch
 
-end % function call_plotfun
+end % function

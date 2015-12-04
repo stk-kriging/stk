@@ -42,4 +42,4 @@ else
     s = [s sprintf('''%s''}', x.colnames{end})];
 end
 
-end % function stk_sprintf_colnames
+end % function

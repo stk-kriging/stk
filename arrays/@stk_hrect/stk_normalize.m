@@ -65,7 +65,7 @@ a = - xmin .* b;
 
 x(:) = bsxfun (@plus, a, x_data * diag (b));
 
-end % function stk_normalize
+end % function
 
 
 %!shared x, box, y1, y2, y3, y4

@@ -45,4 +45,4 @@ stk_title ('Evaluations and kriging prediction');
 
 drawnow;
 
-end % function stk_optim_fig01
+end % function

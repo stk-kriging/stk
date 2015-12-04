@@ -30,7 +30,7 @@ function l = stk_length (x)
 
 l = size (x.a, 1);
 
-end % function stk_length
+end % function
 
 
 %!test

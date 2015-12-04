@@ -47,4 +47,4 @@ if ~ isempty (user_options)
     set (h, user_options{:});
 end
 
-end % function stk_title
+end % function

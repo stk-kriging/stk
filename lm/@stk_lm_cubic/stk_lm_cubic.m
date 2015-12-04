@@ -30,7 +30,7 @@ function lm = stk_lm_cubic ()
 
 lm = class (struct (), 'stk_lm_cubic');
 
-end % function stk_lm_cubic
+end % function
 
 
 % Default constructor

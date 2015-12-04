@@ -141,6 +141,6 @@ else % model.response name does not exist or is empty
     
 end
 
-end % function stk_generate_samplepaths
+end % function
 
 %#ok<*CTCH>

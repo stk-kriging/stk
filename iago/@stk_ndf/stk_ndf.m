@@ -40,7 +40,7 @@ end
 ndf = struct ('noisevariance', noisevariance);
 ndf = class (ndf, 'stk_ndf', stk_dataframe (x));
 
-end % function stk_ndf
+end % function
 
 
 %!test

@@ -96,7 +96,7 @@ if any (k0)  % sigma == 0
     
 end
 
-end % function stk_distrib_normal_cdf
+end % function
 
 
 %!assert (stk_isequal_tolrel (stk_distrib_normal_cdf ([1; 3], 1, [1 10]),  ...

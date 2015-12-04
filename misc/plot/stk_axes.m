@@ -39,4 +39,4 @@ if ~ isempty (varargin)
     set (h, varargin{:});
 end
 
-end % function stk_axes
+end % function

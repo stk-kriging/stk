@@ -71,7 +71,7 @@ modify_index_html (htmldoc_dir);
 
 success = true;
 
-end % function generate_htmldoc
+end % function
 
 
 %--- enhance_copying -----------------------------------------------------------
@@ -105,7 +105,7 @@ fid = fopen_ (fn_copying, 'wt');
 fprintf (fid, "%s", s);
 fclose (fid);
 
-end % function enhance_copying
+end % function
 
 
 %--- modify_index_html ----------------------------------------------------
@@ -139,4 +139,4 @@ fid = fopen_ (fn_index, 'wt');
 fprintf (fid, "%s", s);
 fclose (fid);
 
-end % function modify_index_html
+end % function

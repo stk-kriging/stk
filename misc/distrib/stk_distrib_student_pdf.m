@@ -69,7 +69,7 @@ end
 
 density = bsxfun (@rdivide, density, sigma);
 
-end % function stk_distrib_student_pdf
+end % function
 
 
 %!assert (stk_isequal_tolrel ( ...

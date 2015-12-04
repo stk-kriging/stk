@@ -36,4 +36,4 @@ elseif algo.dim == 2
     view_samplingcrit_2d (algo, xg, xi, xinew, samplingcrit, h_fig);
 end
 
-end % function view_samplingcrit
+end % function

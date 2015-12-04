@@ -71,4 +71,4 @@ if strcmp (verbosity, 'verbose'),
     
 end
 
-end % function stk_sprintf
+end % function

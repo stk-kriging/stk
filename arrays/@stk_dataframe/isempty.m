@@ -30,4 +30,4 @@ function b = isempty(x)
 
 b = isempty(x.data);
 
-end % function isempty
+end % function

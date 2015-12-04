@@ -75,7 +75,7 @@ if ~ isempty (errmsg)
     error (horzcat (errmsg{:}));
 end
 
-end % function check_index_file
+end % function
 
  
 function [indexed, ignored] = parse_index_file (index_file)
@@ -105,6 +105,6 @@ end
 
 fclose (fid);
 
-end % function parse_index_file
+end % function
 
 %#ok<*AGROW>

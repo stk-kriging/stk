@@ -99,7 +99,7 @@ else
     end % try_catch
 end % if
 
-end % function stk_param_init
+end % function
 
 %#ok<*CTCH,*LERR>
 
@@ -254,7 +254,7 @@ switch model.covariance_type
         stk_error (errmsg, 'IncorrectArgument');
 end
 
-end % function stk_param_init_
+end % function
 
 
 function [param, lnv] = paraminit_ (xi, zi, box, nu, lm, lnv)
@@ -347,7 +347,7 @@ if (isscalar (lnv)) && (isnan (lnv))
     lnv = log (eta_best * sigma2_best);
 end
 
-end % function paraminit_
+end % function
 
 
 %!test

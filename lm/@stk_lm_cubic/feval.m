@@ -52,7 +52,7 @@ end
 
 z = horzcat (z2, z3);
 
-end % function feval
+end % function
 
 
 %!test

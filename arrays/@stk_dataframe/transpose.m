@@ -33,7 +33,7 @@ cn = get(x, 'colnames');
 
 y = stk_dataframe(transpose(x.data), rn', cn');
 
-end % function transpose
+end % function
 
 %!test
 %! u = rand(3, 2) + 1i * rand(3, 2);

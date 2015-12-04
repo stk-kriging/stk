@@ -41,7 +41,7 @@ else
     end
 end
 
-end % function end
+end % function
 
 
 %--- tests with a univariate dataframe ----------------------------------------

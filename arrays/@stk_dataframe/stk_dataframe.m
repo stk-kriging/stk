@@ -178,7 +178,7 @@ x = class (x, 'stk_dataframe');
 % Starting with Matlab R2014b, graphics handles are objects
 superiorto ('matlab.graphics.axis.Axes');
 
-end % function @stk_dataframe.stk_dataframe
+end % function
 
 
 %!error x = stk_dataframe (1, {}, {}, pi);

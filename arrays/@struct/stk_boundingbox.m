@@ -43,7 +43,7 @@ else
     box = stk_boundingbox (x.a);
 end
 
-end % function @struct.stk_boundingbox
+end % function
 
 
 %!shared x, y, cn

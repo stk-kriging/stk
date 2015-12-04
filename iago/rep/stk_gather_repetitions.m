@@ -144,6 +144,6 @@ end
 x = [x; x_new];
 z = [z; z_new_];
 
-end % function stk_gather_repetitions
+end % function
 
 %#ok<*ASGLU>

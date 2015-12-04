@@ -56,7 +56,7 @@ switch idx(1).type
         
 end
 
-end % function subsref
+end % function
 
 %!test
 %! B = stk_hrect ([0 0 0 0; 1 2 3 4]);

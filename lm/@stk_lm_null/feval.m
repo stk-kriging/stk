@@ -31,7 +31,7 @@ function z = feval (lm, x) %#ok<INUSL>
 n = size (x, 1);
 z = zeros (n, 0);
 
-end % function feval
+end % function
 
 %!test
 %! n = 15; d = 4;

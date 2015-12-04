@@ -42,7 +42,7 @@ else
     
 end
 
-end % function @stk_model_gpposterior.subsref
+end % function
 
 
 %!shared M_post, n

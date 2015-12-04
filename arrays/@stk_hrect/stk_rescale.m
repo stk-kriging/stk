@@ -84,7 +84,7 @@ b = b2 .* b1;
 a = a2 + a1 .* b2;
 x(:) = bsxfun (@plus, a, x_data * diag (b));
 
-end % function stk_rescale
+end % function
 
 %#ok<*CTCH>
 

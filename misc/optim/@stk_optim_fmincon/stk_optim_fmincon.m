@@ -70,4 +70,4 @@ end
 x = struct ('options', options);
 x = class (x, 'stk_optim_fmincon');
 
-end % function stk_optim_fmincon
+end % function

@@ -43,7 +43,7 @@ if isa (B, 'stk_dataframe'),  B = B.data;  end
 
 [varargout{:}] = ismember (A, B, flags{:});
 
-end % function ismember
+end % function
 
 
 %!shared u, x, u1, x1, u2, x2

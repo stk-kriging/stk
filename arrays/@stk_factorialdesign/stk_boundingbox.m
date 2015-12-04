@@ -39,7 +39,7 @@ box = stk_hrect ([xmin; xmax]);
 
 box.colnames = x.stk_dataframe.colnames;
 
-end % function @stk_factorialdesign.stk_boundingbox
+end % function
 
 
 %!shared x, y, cn

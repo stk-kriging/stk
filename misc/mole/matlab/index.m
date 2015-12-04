@@ -90,7 +90,7 @@ else
     error ('index: DIRECTION must be either "first" or "last"');
 end
 
-end % function index
+end % function
 
 
 %!assert (index ('foobarbaz', 'b') == 4 && index ('foobarbaz', 'z') == 9);

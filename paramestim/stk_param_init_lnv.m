@@ -91,7 +91,7 @@ end
 
 lnv = model.param(1) + log_eta_best;
 
-end % function stk_param_init_lnv
+end % function
 
 
 %!test

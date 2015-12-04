@@ -63,4 +63,4 @@ if loose_spacing
     fprintf ('\n');
 end
 
-end % function @stk_model_gpposterior.disp
+end % function

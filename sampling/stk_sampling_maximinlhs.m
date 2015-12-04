@@ -80,7 +80,7 @@ end
 x = stk_dataframe (xdata, box.colnames);
 x.info = 'Created by stk_sampling_maximinlhs';
 
-end % function stk_sampling_maximinlhs
+end % function
 
 
 %%%%%%%%%%%%%%%%%%
@@ -103,7 +103,7 @@ if niter > 1,
     end
 end
 
-end % function lhsdesign_
+end % function
 
 
 %%%%%%%%%%%%%%%%%%%%%%%
@@ -120,7 +120,7 @@ end
 
 x = (x - rand (size (x))) / n;
 
-end % function generatedesign_
+end % function
 
 
 %%

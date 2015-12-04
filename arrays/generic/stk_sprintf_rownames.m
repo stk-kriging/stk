@@ -45,4 +45,4 @@ else
     
 end
 
-end % function stk_sprintf_rownames
+end % function

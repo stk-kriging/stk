@@ -34,4 +34,4 @@ function fflush(fid) %#ok<INUSD>
 % "The default behavior for fprintf and fwrite is to flush the file buffer
 % after each call to either of these functions."...
 
-end % function fflush
+end % function

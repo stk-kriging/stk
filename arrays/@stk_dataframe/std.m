@@ -33,7 +33,7 @@ if nargin < 3, dim = 1; end % default: act along columns
     
 z = apply(x, dim, @std, flag);
 
-end % function std
+end % function
 
 
 %!shared x1, df1

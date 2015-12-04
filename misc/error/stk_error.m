@@ -67,7 +67,7 @@ errstruct = struct (...
 
 error (errstruct);
 
-end % function stk_error
+end % function
 
 
 %!shared errmsg, mnemonic, badstack

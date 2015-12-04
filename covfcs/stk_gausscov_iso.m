@@ -100,7 +100,7 @@ else
     error('there must be something wrong here !');
 end
 
-end % function stk_gausscov_iso
+end % function
 
 
 %%
