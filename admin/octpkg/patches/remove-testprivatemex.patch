@@ -1,0 +1,71 @@
+--- a/stk_init.m
++++ b/stk_init.m
+@@ -87,10 +87,6 @@
+         % Provide make information for STK's MEX-files
+         output = stk_init__get_make_info ();
+         
+-    case 'test_private_mex'
+-        % Check if the MEX-files located in private dirs are found
+-        stk_init__test_private_mex ();
+-        
+     otherwise
+         error ('Unknown command.');
+         
+@@ -114,16 +110,8 @@
+ stk_init__build_mex (root, false);
+ 
+ % Add STK subdirectories to the path
+-%   (note: doing this ATFER building the MEX-files seems to solve
+-%    the problem related to having MEX-files in private folders)
+ stk_init__addpath (root);
+ 
+-% Check that MEX-files located in private folders are properly detected (note:
+-% there are no MEX-files in private folders if STK is used as an Octave package)
+-if isoctave
+-    stk_init__test_private_mex ();
+-end
+-
+ % Set default options
+ stk_options_set ();
+ 
+@@ -480,40 +468,6 @@
+ end % function register_mex
+ 
+ 
+-function stk_init__test_private_mex ()
+-
+-try
+-    n = 5;  d = 2;
+-    x = rand (n, d);
+-    D = stk_dist (x);  % calls a MEX-file internally
+-    assert (isequal (size (D), [n n]));
+-catch
+-    err = lasterror ();
+-    if (~ isempty (regexp (err.message, 'stk_dist_matrixx', 'once'))) ...
+-            && (~ isempty (regexp (err.message, 'undefined', 'once')))
+-        fprintf ('\n\n');
+-        warning (sprintf (['\n\n' ...
+-            '!>>>>>> PLEASE RESTART OCTAVE BEFORE USING STK <<<<<<!\n' ...
+-            '!                                                    !\n' ...
+-            '! Some STK functions implemented as MEX-files have   !\n' ...
+-            '! just been compiled, but will not be detected until !\n' ...
+-            '! Octave is restarted.                               !\n' ...
+-            '!                                                    !\n' ...
+-            '! We apologize for this inconvenience, which is      !\n' ...
+-            '! related to a known Octave bug (bug #40824), that   !\n' ...
+-            '! will hopefully be fixed in the near future.        !\n' ...
+-            '! (see https://savannah.gnu.org/bugs/?40824)         !\n' ...
+-            '!                                                    !\n' ...
+-            '!>>>>>> PLEASE RESTART OCTAVE BEFORE USING STK <<<<<<!\n' ...
+-            '\n']));
+-    else
+-        rethrow (err);
+-    end
+-end
+-
+-end % function stk_init__test_private_mex
+-
+-
+ function stk_init__config_mole (root, do_addpath, prune_unused)
+ 
+ mole_dir = fullfile (root, 'misc', 'mole');
