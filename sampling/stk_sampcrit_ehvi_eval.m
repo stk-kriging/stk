@@ -49,9 +49,28 @@ EIr = stk_distrib_normal_ei (zr, zp_mean, zp_std, 1);  % m x p
 EIa = stk_distrib_normal_ei (Ra, zp_mean, zp_std, 1);  % m x p x R
 EIb = stk_distrib_normal_ei (Rb, zp_mean, zp_std, 1);  % m x p x R
 
-EHVI = prod (EIr, 2) - dot (Rs, prod (EIb - EIa, 2), 3);
+EHVI = prod (EIr, 2) - sum (bsxfun (@times, Rs, prod (EIb - EIa, 2)), 3);
 
 end % function
 
 
-% FIXME: add unit tests
+%!shared zr, zi
+%! zr = [1 1];
+%! zi = [0.25 0.75; 0.5 0.5; 0.75 0.25];
+ 
+%!test  % no improvement (1 computation)
+%! zp_mean = [0.6 0.6];  zp_std = [0 0];
+%! EHVI = stk_sampcrit_ehvi_eval (zp_mean, zp_std, zi, zr);
+%! assert (stk_isequal_tolabs (EHVI, 0, 1e-12));
+
+%!test  % guaranteed improvement (1 computation)
+%! zp_mean = [0 0];  zp_std = [0 0];
+%! EHVI = stk_sampcrit_ehvi_eval (zp_mean, zp_std, zi, zr);
+%! assert (stk_isequal_tolabs (EHVI, 10 * 0.25 ^ 2));
+
+%!test  % no improvement again
+%! zp_mean = [0.5 0.5; 0.6 0.6];  zp_std = [0 0; 0 0];
+%! EHVI = stk_sampcrit_ehvi_eval (zp_mean, zp_std, zi, zr);
+%! assert (stk_isequal_tolabs (EHVI, [0; 0], 1e-12));
+
+% FIXME: add MORE unit tests
