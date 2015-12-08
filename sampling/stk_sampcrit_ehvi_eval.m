@@ -37,19 +37,26 @@ if nargin > 4,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
+% EHVI with respect to the reference
+EIr = stk_distrib_normal_ei (zr, zp_mean, zp_std, 1);  % m x p
+EHVI = prod (EIr, 2);                                  % m x 1
+
 % Compute signed decomposition wrt to the reference zr
 S = stk_dominatedhv (zi, zr, 1);
 
-% Shift rectangle number to third dimension
-Rs = shiftdim (S.sign,  -2);
-Ra = shiftdim (S.xmin', -1);
-Rb = shiftdim (S.xmax', -1);
-
-EIr = stk_distrib_normal_ei (zr, zp_mean, zp_std, 1);  % m x p
-EIa = stk_distrib_normal_ei (Ra, zp_mean, zp_std, 1);  % m x p x R
-EIb = stk_distrib_normal_ei (Rb, zp_mean, zp_std, 1);  % m x p x R
-
-EHVI = prod (EIr, 2) - sum (bsxfun (@times, Rs, prod (EIb - EIa, 2)), 3);
+if ~ isempty (S.sign)
+    
+    % Shift rectangle number to third dimension
+    Rs = shiftdim (S.sign,  -2);
+    Ra = shiftdim (S.xmin', -1);
+    Rb = shiftdim (S.xmax', -1);    
+    
+    EIa = stk_distrib_normal_ei (Ra, zp_mean, zp_std, 1);  % m x p x R
+    EIb = stk_distrib_normal_ei (Rb, zp_mean, zp_std, 1);  % m x p x R
+    
+    EHVI = EHVI - sum (bsxfun (@times, Rs, prod (EIb - EIa, 2)), 3);
+    
+end % if
 
 end % function
 
@@ -57,7 +64,7 @@ end % function
 %!shared zr, zi
 %! zr = [1 1];
 %! zi = [0.25 0.75; 0.5 0.5; 0.75 0.25];
- 
+
 %!test  % no improvement (1 computation)
 %! zp_mean = [0.6 0.6];  zp_std = [0 0];
 %! EHVI = stk_sampcrit_ehvi_eval (zp_mean, zp_std, zi, zr);
@@ -68,9 +75,19 @@ end % function
 %! EHVI = stk_sampcrit_ehvi_eval (zp_mean, zp_std, zi, zr);
 %! assert (stk_isequal_tolabs (EHVI, 10 * 0.25 ^ 2));
 
-%!test  % no improvement again
+%!test  % no improvement again (2 computations)
 %! zp_mean = [0.5 0.5; 0.6 0.6];  zp_std = [0 0; 0 0];
 %! EHVI = stk_sampcrit_ehvi_eval (zp_mean, zp_std, zi, zr);
 %! assert (stk_isequal_tolabs (EHVI, [0; 0], 1e-12));
+
+%!test  % no observation -> EHVI wrt zr
+%! zp_mean = [0.6 0.6];  zp_std = 0.01 * [1 1];  zi = [];
+%! EHVI = stk_sampcrit_ehvi_eval (zp_mean, zp_std, zi, zr);
+%! assert (stk_isequal_tolabs (EHVI, (1 - 0.6)^2, 1e-12));
+
+%!test  % no observation below zr -> EHVI wrt zr
+%! zp_mean = [0.6 0.6];  zp_std = 0.01 * [1 1];  zi = [2 2];
+%! EHVI = stk_sampcrit_ehvi_eval (zp_mean, zp_std, zi, zr);
+%! assert (stk_isequal_tolabs (EHVI, (1 - 0.6)^2, 1e-12));
 
 % FIXME: add MORE unit tests
