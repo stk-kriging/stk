@@ -1,3 +1,10 @@
+2015-12-08  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg.c: Fix bug in Rlist_inclhv4
+
+	* misc/pareto/private/wfg.c (Rlist_inclhv4): Fix bug
+	* misc/pareto/stk_dominatedhv.m: Add unit tests
+
 2015-12-03  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Display a legend in several "kriging basics" examples

@@ -278,3 +278,22 @@ end % function
 %! hv1 = stk_dominatedhv (y, 1);
 %! r = stk_dominatedhv (y, 1, true);
 %! hv2 = sum (r.sign .* prod (r.xmax - r.xmin, 2));
+
+%!test % four non-dominated points (hypervolume)
+%! zr = [1 1];
+%! zi = [0.2 0.8; 0.4 0.6; 0.6 0.4; 0.8 0.2]
+%! P = perms (1:4);
+%! for i = 1:24
+%!     HV = stk_dominatedhv (zi(P(i, :), :), zr, 0);
+%!     assert (stk_isequal_tolrel (HV, 0.4, 1e-15));
+%! end
+
+%!test % four non-dominated points (decomposition)
+%! zr = [1 1];
+%! zi = [0.2 0.8; 0.4 0.6; 0.6 0.4; 0.8 0.2]
+%! P = perms (1:4);
+%! for i = 1:24
+%!     S = stk_dominatedhv (zi(P(i, :), :), zr, 1);
+%!     HV = sum (S.sign .* prod (S.xmax - S.xmin, 2));
+%!     assert (stk_isequal_tolrel (HV, 0.4, 1e-15));
+%! end

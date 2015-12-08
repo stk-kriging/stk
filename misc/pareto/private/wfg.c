@@ -623,123 +623,123 @@ void Rlist_inclhv4 (POINT p, POINT q, POINT r, POINT s, RLIST* Rlist, int sign)
             if (BEATS(q.objectives[i], r.objectives[i]))
                 if (BEATS(r.objectives[i], s.objectives[i]))
                 {
-                    Rlist->xmax[Ridx_pq][i]   *= q.objectives[i];
-                    Rlist->xmax[Ridx_pr][i]   *= r.objectives[i];
-                    Rlist->xmax[Ridx_ps][i]   *= s.objectives[i];
-                    Rlist->xmax[Ridx_qr][i]   *= r.objectives[i];
-                    Rlist->xmax[Ridx_qs][i]   *= s.objectives[i];
-                    Rlist->xmax[Ridx_rs][i]   *= s.objectives[i];
-                    Rlist->xmax[Ridx_pqr][i]  *= r.objectives[i];
-                    Rlist->xmax[Ridx_pqs][i]  *= s.objectives[i];
-                    Rlist->xmax[Ridx_prs][i]  *= s.objectives[i];
-                    Rlist->xmax[Ridx_qrs][i]  *= s.objectives[i];
-                    Rlist->xmax[Ridx_pqrs][i] *= s.objectives[i];
+                    Rlist->xmax[Ridx_pq][i]   = q.objectives[i];
+                    Rlist->xmax[Ridx_pr][i]   = r.objectives[i];
+                    Rlist->xmax[Ridx_ps][i]   = s.objectives[i];
+                    Rlist->xmax[Ridx_qr][i]   = r.objectives[i];
+                    Rlist->xmax[Ridx_qs][i]   = s.objectives[i];
+                    Rlist->xmax[Ridx_rs][i]   = s.objectives[i];
+                    Rlist->xmax[Ridx_pqr][i]  = r.objectives[i];
+                    Rlist->xmax[Ridx_pqs][i]  = s.objectives[i];
+                    Rlist->xmax[Ridx_prs][i]  = s.objectives[i];
+                    Rlist->xmax[Ridx_qrs][i]  = s.objectives[i];
+                    Rlist->xmax[Ridx_pqrs][i] = s.objectives[i];
                 }
                 else
                 {
                     z1 = WORSE(q.objectives[i], s.objectives[i]);
-                    Rlist->xmax[Ridx_pq][i]   *= q.objectives[i];
-                    Rlist->xmax[Ridx_pr][i]   *= r.objectives[i];
-                    Rlist->xmax[Ridx_ps][i]   *= WORSE(p.objectives[i], s.objectives[i]);
-                    Rlist->xmax[Ridx_qr][i]   *= r.objectives[i];
-                    Rlist->xmax[Ridx_qs][i]   *= z1;
-                    Rlist->xmax[Ridx_rs][i]   *= r.objectives[i];
-                    Rlist->xmax[Ridx_pqr][i]  *= r.objectives[i];
-                    Rlist->xmax[Ridx_pqs][i]  *= z1;
-                    Rlist->xmax[Ridx_prs][i]  *= r.objectives[i];
-                    Rlist->xmax[Ridx_qrs][i]  *= r.objectives[i];
-                    Rlist->xmax[Ridx_pqrs][i] *= r.objectives[i];
+                    Rlist->xmax[Ridx_pq][i]   = q.objectives[i];
+                    Rlist->xmax[Ridx_pr][i]   = r.objectives[i];
+                    Rlist->xmax[Ridx_ps][i]   = WORSE(p.objectives[i], s.objectives[i]);
+                    Rlist->xmax[Ridx_qr][i]   = r.objectives[i];
+                    Rlist->xmax[Ridx_qs][i]   = z1;
+                    Rlist->xmax[Ridx_rs][i]   = r.objectives[i];
+                    Rlist->xmax[Ridx_pqr][i]  = r.objectives[i];
+                    Rlist->xmax[Ridx_pqs][i]  = z1;
+                    Rlist->xmax[Ridx_prs][i]  = r.objectives[i];
+                    Rlist->xmax[Ridx_qrs][i]  = r.objectives[i];
+                    Rlist->xmax[Ridx_pqrs][i] = r.objectives[i];
                 }
             else if (BEATS(q.objectives[i], s.objectives[i]))
             {
-                Rlist->xmax[Ridx_pq][i]   *= q.objectives[i];
-                Rlist->xmax[Ridx_pr][i]   *= WORSE(p.objectives[i], r.objectives[i]);
-                Rlist->xmax[Ridx_ps][i]   *= s.objectives[i];
-                Rlist->xmax[Ridx_qr][i]   *= q.objectives[i];
-                Rlist->xmax[Ridx_qs][i]   *= s.objectives[i];
-                Rlist->xmax[Ridx_rs][i]   *= s.objectives[i];
-                Rlist->xmax[Ridx_pqr][i]  *= q.objectives[i];
-                Rlist->xmax[Ridx_pqs][i]  *= s.objectives[i];
-                Rlist->xmax[Ridx_prs][i]  *= s.objectives[i];
-                Rlist->xmax[Ridx_qrs][i]  *= s.objectives[i];
-                Rlist->xmax[Ridx_pqrs][i] *= s.objectives[i];
+                Rlist->xmax[Ridx_pq][i]   = q.objectives[i];
+                Rlist->xmax[Ridx_pr][i]   = WORSE(p.objectives[i], r.objectives[i]);
+                Rlist->xmax[Ridx_ps][i]   = s.objectives[i];
+                Rlist->xmax[Ridx_qr][i]   = q.objectives[i];
+                Rlist->xmax[Ridx_qs][i]   = s.objectives[i];
+                Rlist->xmax[Ridx_rs][i]   = s.objectives[i];
+                Rlist->xmax[Ridx_pqr][i]  = q.objectives[i];
+                Rlist->xmax[Ridx_pqs][i]  = s.objectives[i];
+                Rlist->xmax[Ridx_prs][i]  = s.objectives[i];
+                Rlist->xmax[Ridx_qrs][i]  = s.objectives[i];
+                Rlist->xmax[Ridx_pqrs][i] = s.objectives[i];
             }
             else
             {
                 z1 = WORSE(p.objectives[i], r.objectives[i]);
-                Rlist->xmax[Ridx_pq][i]   *= q.objectives[i];
-                Rlist->xmax[Ridx_pr][i]   *= z1;
-                Rlist->xmax[Ridx_ps][i]   *= WORSE(p.objectives[i], s.objectives[i]);
-                Rlist->xmax[Ridx_qr][i]   *= q.objectives[i];
-                Rlist->xmax[Ridx_qs][i]   *= q.objectives[i];
-                Rlist->xmax[Ridx_rs][i]   *= WORSE(r.objectives[i], s.objectives[i]);
-                Rlist->xmax[Ridx_pqr][i]  *= q.objectives[i];
-                Rlist->xmax[Ridx_pqs][i]  *= q.objectives[i];
-                Rlist->xmax[Ridx_prs][i]  *= WORSE(z1, s.objectives[i]);
-                Rlist->xmax[Ridx_qrs][i]  *= q.objectives[i];
-                Rlist->xmax[Ridx_pqrs][i] *= q.objectives[i];
+                Rlist->xmax[Ridx_pq][i]   = q.objectives[i];
+                Rlist->xmax[Ridx_pr][i]   = z1;
+                Rlist->xmax[Ridx_ps][i]   = WORSE(p.objectives[i], s.objectives[i]);
+                Rlist->xmax[Ridx_qr][i]   = q.objectives[i];
+                Rlist->xmax[Ridx_qs][i]   = q.objectives[i];
+                Rlist->xmax[Ridx_rs][i]   = WORSE(r.objectives[i], s.objectives[i]);
+                Rlist->xmax[Ridx_pqr][i]  = q.objectives[i];
+                Rlist->xmax[Ridx_pqs][i]  = q.objectives[i];
+                Rlist->xmax[Ridx_prs][i]  = WORSE(z1, s.objectives[i]);
+                Rlist->xmax[Ridx_qrs][i]  = q.objectives[i];
+                Rlist->xmax[Ridx_pqrs][i] = q.objectives[i];
             }
         else if (BEATS(q.objectives[i], r.objectives[i]))
             if (BEATS(p.objectives[i], s.objectives[i]))
             {
                 z1 = WORSE(p.objectives[i], r.objectives[i]);
                 z2 = WORSE(r.objectives[i], s.objectives[i]);
-                Rlist->xmax[Ridx_pq][i]   *= p.objectives[i];
-                Rlist->xmax[Ridx_pr][i]   *= z1;
-                Rlist->xmax[Ridx_ps][i]   *= s.objectives[i];
-                Rlist->xmax[Ridx_qr][i]   *= r.objectives[i];
-                Rlist->xmax[Ridx_qs][i]   *= s.objectives[i];
-                Rlist->xmax[Ridx_rs][i]   *= z2;
-                Rlist->xmax[Ridx_pqr][i]  *= z1;
-                Rlist->xmax[Ridx_pqs][i]  *= s.objectives[i];
-                Rlist->xmax[Ridx_prs][i]  *= z2;
-                Rlist->xmax[Ridx_qrs][i]  *= z2;
-                Rlist->xmax[Ridx_pqrs][i] *= z2;
+                Rlist->xmax[Ridx_pq][i]   = p.objectives[i];
+                Rlist->xmax[Ridx_pr][i]   = z1;
+                Rlist->xmax[Ridx_ps][i]   = s.objectives[i];
+                Rlist->xmax[Ridx_qr][i]   = r.objectives[i];
+                Rlist->xmax[Ridx_qs][i]   = s.objectives[i];
+                Rlist->xmax[Ridx_rs][i]   = z2;
+                Rlist->xmax[Ridx_pqr][i]  = z1;
+                Rlist->xmax[Ridx_pqs][i]  = s.objectives[i];
+                Rlist->xmax[Ridx_prs][i]  = z2;
+                Rlist->xmax[Ridx_qrs][i]  = z2;
+                Rlist->xmax[Ridx_pqrs][i] = z2;
             }
             else
             {
                 z1 = WORSE(p.objectives[i], r.objectives[i]);
                 z2 = WORSE(r.objectives[i], s.objectives[i]);
-                Rlist->xmax[Ridx_pq][i]   *= p.objectives[i];
-                Rlist->xmax[Ridx_pr][i]   *= z1;
-                Rlist->xmax[Ridx_ps][i]   *= p.objectives[i];
-                Rlist->xmax[Ridx_qr][i]   *= r.objectives[i];
-                Rlist->xmax[Ridx_qs][i]   *= WORSE(q.objectives[i], s.objectives[i]);
-                Rlist->xmax[Ridx_rs][i]   *= z2;
-                Rlist->xmax[Ridx_pqr][i]  *= z1;
-                Rlist->xmax[Ridx_pqs][i]  *= p.objectives[i];
-                Rlist->xmax[Ridx_prs][i]  *= z1;
-                Rlist->xmax[Ridx_qrs][i]  *= z2;
-                Rlist->xmax[Ridx_pqrs][i] *= z1;
+                Rlist->xmax[Ridx_pq][i]   = p.objectives[i];
+                Rlist->xmax[Ridx_pr][i]   = z1;
+                Rlist->xmax[Ridx_ps][i]   = p.objectives[i];
+                Rlist->xmax[Ridx_qr][i]   = r.objectives[i];
+                Rlist->xmax[Ridx_qs][i]   = WORSE(q.objectives[i], s.objectives[i]);
+                Rlist->xmax[Ridx_rs][i]   = z2;
+                Rlist->xmax[Ridx_pqr][i]  = z1;
+                Rlist->xmax[Ridx_pqs][i]  = p.objectives[i];
+                Rlist->xmax[Ridx_prs][i]  = z1;
+                Rlist->xmax[Ridx_qrs][i]  = z2;
+                Rlist->xmax[Ridx_pqrs][i] = z1;
             }
         else if (BEATS(p.objectives[i], s.objectives[i]))
         {
-            Rlist->xmax[Ridx_pq][i]   *= p.objectives[i];
-            Rlist->xmax[Ridx_pr][i]   *= p.objectives[i];
-            Rlist->xmax[Ridx_ps][i]   *= s.objectives[i];
-            Rlist->xmax[Ridx_qr][i]   *= q.objectives[i];
-            Rlist->xmax[Ridx_qs][i]   *= s.objectives[i];
-            Rlist->xmax[Ridx_rs][i]   *= s.objectives[i];
-            Rlist->xmax[Ridx_pqr][i]  *= p.objectives[i];
-            Rlist->xmax[Ridx_pqs][i]  *= s.objectives[i];
-            Rlist->xmax[Ridx_prs][i]  *= s.objectives[i];
-            Rlist->xmax[Ridx_qrs][i]  *= s.objectives[i];
-            Rlist->xmax[Ridx_pqrs][i] *= s.objectives[i];
+            Rlist->xmax[Ridx_pq][i]   = p.objectives[i];
+            Rlist->xmax[Ridx_pr][i]   = p.objectives[i];
+            Rlist->xmax[Ridx_ps][i]   = s.objectives[i];
+            Rlist->xmax[Ridx_qr][i]   = q.objectives[i];
+            Rlist->xmax[Ridx_qs][i]   = s.objectives[i];
+            Rlist->xmax[Ridx_rs][i]   = s.objectives[i];
+            Rlist->xmax[Ridx_pqr][i]  = p.objectives[i];
+            Rlist->xmax[Ridx_pqs][i]  = s.objectives[i];
+            Rlist->xmax[Ridx_prs][i]  = s.objectives[i];
+            Rlist->xmax[Ridx_qrs][i]  = s.objectives[i];
+            Rlist->xmax[Ridx_pqrs][i] = s.objectives[i];
         }
         else
         {
             z1 = WORSE(q.objectives[i], s.objectives[i]);
-            Rlist->xmax[Ridx_pq][i]   *= p.objectives[i];
-            Rlist->xmax[Ridx_pr][i]   *= p.objectives[i];
-            Rlist->xmax[Ridx_ps][i]   *= p.objectives[i];
-            Rlist->xmax[Ridx_qr][i]   *= q.objectives[i];
-            Rlist->xmax[Ridx_qs][i]   *= z1;
-            Rlist->xmax[Ridx_rs][i]   *= WORSE(r.objectives[i], s.objectives[i]);
-            Rlist->xmax[Ridx_pqr][i]  *= p.objectives[i];
-            Rlist->xmax[Ridx_pqs][i]  *= p.objectives[i];
-            Rlist->xmax[Ridx_prs][i]  *= p.objectives[i];
-            Rlist->xmax[Ridx_qrs][i]  *= z1;
-            Rlist->xmax[Ridx_pqrs][i] *= p.objectives[i];
+            Rlist->xmax[Ridx_pq][i]   = p.objectives[i];
+            Rlist->xmax[Ridx_pr][i]   = p.objectives[i];
+            Rlist->xmax[Ridx_ps][i]   = p.objectives[i];
+            Rlist->xmax[Ridx_qr][i]   = q.objectives[i];
+            Rlist->xmax[Ridx_qs][i]   = z1;
+            Rlist->xmax[Ridx_rs][i]   = WORSE(r.objectives[i], s.objectives[i]);
+            Rlist->xmax[Ridx_pqr][i]  = p.objectives[i];
+            Rlist->xmax[Ridx_pqs][i]  = p.objectives[i];
+            Rlist->xmax[Ridx_prs][i]  = p.objectives[i];
+            Rlist->xmax[Ridx_qrs][i]  = z1;
+            Rlist->xmax[Ridx_pqrs][i] = p.objectives[i];
         }
     }
 }
