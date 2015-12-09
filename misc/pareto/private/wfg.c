@@ -1030,10 +1030,13 @@ void Rlist_extend (RLIST* Rlist, int k, int* p_Ridx)
   int i, j;
   int old_size = Rlist->size;
   int new_size = old_size + k;
+  int old_allocated_size;
 
   if (new_size > Rlist->allocated_size)
     {
-      Rlist->allocated_size *= 2;
+      old_allocated_size = Rlist->allocated_size;
+      while (new_size > Rlist->allocated_size)
+        Rlist->allocated_size *= 2;
 
       Rlist->xmin = (double**) mxRealloc
         (Rlist->xmin, Rlist->allocated_size * sizeof (double*));
@@ -1042,7 +1045,7 @@ void Rlist_extend (RLIST* Rlist, int k, int* p_Ridx)
       Rlist->sign = (int*) mxRealloc
         (Rlist->sign, Rlist->allocated_size * sizeof (int));
 
-      for (i = Rlist->allocated_size; i < new_size; i++)
+      for (i = old_allocated_size; i < Rlist->allocated_size; i++)
         {
           Rlist->xmin[i] = (double*) mxMalloc (Rlist->n * sizeof (double));
           Rlist->xmax[i] = (double*) mxMalloc (Rlist->n * sizeof (double));
