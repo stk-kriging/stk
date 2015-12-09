@@ -1,8 +1,15 @@
+2015-12-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg.c: Fix a bug in Rlist_extend
+
+	* misc/pareto/private/wfg.c (Rlist_extend): Fix a bug
+	* misc/pareto/stk_dominatedhv.m: Add unit tests
+
 2015-12-08  Julien Bect  <julien.bect@centralesupelec.fr>
 
-	wfg.c: Fix bug in Rlist_inclhv4
+	wfg.c: Fix a bug in Rlist_inclhv4
 
-	* misc/pareto/private/wfg.c (Rlist_inclhv4): Fix bug
+	* misc/pareto/private/wfg.c (Rlist_inclhv4): Fix a bug
 	* misc/pareto/stk_dominatedhv.m: Add unit tests
 
 2015-12-03  Julien Bect  <julien.bect@centralesupelec.fr>

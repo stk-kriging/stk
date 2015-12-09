@@ -297,3 +297,26 @@ end % function
 %!     HV = sum (S.sign .* prod (S.xmax - S.xmin, 2));
 %!     assert (stk_isequal_tolrel (HV, 0.4, 1e-15));
 %! end
+
+%!test  % a case with 8 points and 5 objectives
+%!      % http://sourceforge.net/p/kriging/tickets/33
+%!
+%! yr = [1.03 0.91 0.96 1.99 16.2];
+%! 
+%! y = [ ...
+%!     0.8180    0.5600    0.1264    1.0755    1.2462; ...
+%!     0.8861    0.6928    0.2994    0.7228    0.9848; ...
+%!     0.9021    0.8829    0.6060    0.1642    0.4282; ...
+%!     0.9116    0.3097    0.8601    0.0468    0.2813; ...
+%!     0.9306    0.1429    0.6688    0.1462    1.3661; ...
+%!     0.9604    0.3406    0.4046    0.7239    1.8741; ...
+%!     0.9648    0.7764    0.5199    0.4098    1.3436; ...
+%!     0.9891    0.4518    0.7956    0.1164    1.2025];
+%! 
+%! S = stk_dominatedhv (y, yr, 1);
+%! hv = sum (S.sign .* prod (S.xmax - S.xmin, 2));
+%! 
+%! assert (isequal (size (S.sign), [87 1]));
+%! assert (isequal (size (S.xmin), [87 5]));
+%! assert (isequal (size (S.xmax), [87 5]));
+%! assert (stk_isequal_tolrel (hv, 1.5514, 1e-4));
