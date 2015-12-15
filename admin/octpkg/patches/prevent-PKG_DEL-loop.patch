@@ -7,6 +7,6 @@
 -% Remove STK root directory from the path
 -rmpath (root);
 -
- end % function stk_init__pkg_unload
+ end % function
  
  
