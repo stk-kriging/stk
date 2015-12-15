@@ -28,10 +28,11 @@
  % Set default options
  stk_options_set ();
  
-@@ -480,40 +468,6 @@
- end % function register_mex
+@@ -479,40 +467,6 @@
  
+ end % function
  
+-
 -function stk_init__test_private_mex ()
 -
 -try
@@ -63,9 +64,8 @@
 -    end
 -end
 -
--end % function stk_init__test_private_mex
+-end % function
 -
--
+ 
  function stk_init__config_mole (root, do_addpath, prune_unused)
  
- mole_dir = fullfile (root, 'misc', 'mole');
