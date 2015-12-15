@@ -545,14 +545,6 @@ end
 %    Our implementation returns either 'matlab-jvm' or 'matlab-nojvm'.
 install_mole_function ('graphics_toolkit', opts{:});
 
-
-% corr
-%  * For Octave users: corr belongs to Octave core in recent releases of Octave,
-%    but was missing in Octave 3.2.4 (when was it added ?)
-%  * For Matlab users: corr is missing from Matlab itself, but it provided by
-%    the Statistics toolbox if you're rich enough to afford it.
-install_mole_function ('corr', opts{:});
-
 % isrow
 %  * For Octave users: ?
 %  * For Matlab users: missing in R2007a
