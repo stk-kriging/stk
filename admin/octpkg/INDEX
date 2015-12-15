@@ -73,6 +73,8 @@ Kriging: Parameter estimation
  stk_param_relik
 
 ## The stk_kre_qr class -> not ready to be exposed
+#@stk_kreq_qr/disp                   [internal]
+#@stk_kreq_qr/display                [internal]
 #@stk_kreq_qr/get                    [internal]
 #@stk_kreq_qr/isequal                [internal]
 #@stk_kreq_qr/linsolve               [internal]
@@ -123,6 +125,21 @@ Kriging: Covariance functions
 #@stk_lm_null/feval                    [experimental]
 #@stk_lm_quadratic/stk_lm_quadratic    [experimental]
 #@stk_lm_quadratic/feval               [experimental]
+
+Posterior model objects
+ @stk_model_gpposterior/stk_model_gpposterior
+ @stk_model_gpposterior/stk_predict
+ @stk_model_gpposterior/get_dim
+ @stk_model_gpposterior/get_input_data
+ @stk_model_gpposterior/get_lognoisevariance
+ @stk_model_gpposterior/get_output_data
+ @stk_model_gpposterior/get_param
+#@stk_model_gpposterior/disp                   [overload base]
+#@stk_model_gpposterior/display                [overload base]
+#@stk_model_gpposterior/get                    [overload base]
+#@stk_model_gpposterior/horzcat                [overload base]
+#@stk_model_gpposterior/subsref                [overload base]
+#@stk_model_gpposterior/vertcat                [overload base]
 
 Design of experiments (non-sequential): sampling
  stk_sampling_halton_rr2
@@ -203,8 +220,6 @@ Miscellaneous: Pareto optimality
 #stk_sprintf_info            [internal]
 #stk_sprintf_rownames        [internal]
 #stk_sprintf_sizetype        [internal]
-
-#@cell/stk_sprintf_sizetype  [internal]
 
 ## Those are for legacy support of .a data structures
 ## (will be completely removed in the 3.x series)
