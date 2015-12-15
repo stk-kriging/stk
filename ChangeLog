@@ -1,3 +1,11 @@
+2015-12-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_maxabscorr.m: Rewrite without using corr
+
+	* misc/design/stk_maxabscorr.m: Rewrite without using corr.
+	* stk_init.m (stk_init__config_mole): Remove corr
+	* misc/mole/corr/corr.m: Deleted
+
 2015-12-09  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	wfg.c: Fix a bug in Rlist_extend
