@@ -1,3 +1,10 @@
+2016-01-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Speed stk_init.
+
+	* stk_init.m: Speed up by reducing the number of calls to addpath.
+	* misc/benchmarks/stk_benchmark_init.m: New benchmark script
+
 2015-12-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_maxabscorr.m: Rewrite without using corr

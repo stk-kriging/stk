@@ -203,16 +203,18 @@ end % function
 
 function stk_init__addpath (root)
 
-% Add STK folders to the path
 path = stk_init__genpath (root);
+
+% Check for missing directories
 for i = 1:length (path),
-    if exist (path{i}, 'dir')
-        addpath (path{i});
-    else
+    if ~ exist (path{i}, 'dir')
         error (sprintf (['Directory %s does not exist.\n' ...
             'Is there a problem in stk_init__genpath ?'], path{i}));
     end
 end
+
+% Add STK folders to the path
+addpath (path{:});
 
 % Selectively add MOLE subdirectories to compensate for missing functions
 stk_init__config_mole (root, true, false);  % (add to path, but do not prune)
