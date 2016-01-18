@@ -1,4 +1,4 @@
-% SURF  [overload base function]
+% SURF [overload base function]
 %
 % See also: stk_factorialdesign/contour, stk_factorialdesign/mesh, ...
 

@@ -1,4 +1,4 @@
-% MESHC  [overload base function]
+% MESHC [overload base function]
 %
 % See also: stk_factorialdesign/contour, stk_factorialdesign/surf, ...
 

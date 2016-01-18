@@ -1,4 +1,4 @@
-% DISP [overloaded base function]
+% DISP [overload base function]
 
 % Copyright Notice
 %
