@@ -57,6 +57,7 @@ Kriging: Core STK functions
 ## Why not group all these functions in the same folder ?
 ## Currently, some of them are in ./core/ and some others in ./utils/
  stk_model
+ stk_model_update
  stk_make_matcov
  stk_predict
  stk_conditioning
@@ -129,6 +130,7 @@ Kriging: Covariance functions
 Posterior model objects
  @stk_model_gpposterior/stk_model_gpposterior
  @stk_model_gpposterior/stk_predict
+ @stk_model_gpposterior/stk_model_update
  @stk_model_gpposterior/get_dim
  @stk_model_gpposterior/get_input_data
  @stk_model_gpposterior/get_lognoisevariance
