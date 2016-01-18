@@ -1,4 +1,4 @@
-% MESH  [overload base function]
+% MESH [overload base function]
 %
 % See also: stk_factorialdesign/contour, stk_factorialdesign/surf, ...
 

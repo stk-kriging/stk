@@ -1,4 +1,4 @@
-% AXIS [overloaded base function]
+% AXIS [overload base function]
 
 % Copyright Notice
 %
