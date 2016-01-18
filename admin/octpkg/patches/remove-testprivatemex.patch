@@ -28,7 +28,7 @@
  % Set default options
  stk_options_set ();
  
-@@ -479,40 +467,6 @@
+@@ -481,40 +469,6 @@
  
  end % function
  
