@@ -29,10 +29,11 @@
  % Add STK subdirectories to the path
  stk_init__addpath (root);
  
-@@ -329,139 +314,6 @@
- end % function escape_regexp
+@@ -330,139 +315,6 @@
  
+ end % function
  
+-
 -function stk_init__build_mex (root, force_recompile)
 -
 -here = pwd ();
@@ -49,7 +50,7 @@
 -
 -cd (here);
 -
--end % function stk_init__build_mex
+-end % function
 -
 -
 -function stk_init__compile (d, opts, mexname, other_src, includes)
@@ -114,7 +115,7 @@
 -    end
 -end
 -
--end % function stk_init__compile
+-end % function
 -
 -
 -function info = stk_init__get_make_info ()
@@ -143,7 +144,7 @@
 -info = register_mex (info, relpath, 'stk_isdominated_mex', {}, {'pareto.h'});
 -info = register_mex (info, relpath, 'stk_dominatedhv_mex', {'wfg.c'}, {'wfg.h'});
 -
--end % function stk_init__get_make_info
+-end % function
 -
 -
 -function info = register_mex (info, relpath, mexname, other_src, includes)
@@ -163,9 +164,8 @@
 -info(k).other_src = other_src;
 -info(k).includes = [{'stk_mex.h'} includes];
 -
--end % function register_mex
+-end % function
 -
--
+ 
  function stk_init__config_mole (root, do_addpath, prune_unused)
  
- mole_dir = fullfile (root, 'misc', 'mole');

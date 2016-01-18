@@ -34,6 +34,8 @@ Changes in version 2.4.0
 
    o stk_predict is overloaded for stk_model_gpposterior objects.
 
+   o stk_model_update: New function. Updates a model with new observations.
+
 * IAGO
 
    o TODO: DESCRIBE

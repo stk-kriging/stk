@@ -468,7 +468,7 @@
 -    x__ret3 = nb_expected_failures;
 -end
 -
--end % function stk_test
+-end % function
 -
 -
 -%%%%%%%%%%%%%%%%%%
@@ -518,7 +518,7 @@
 -    end
 -end
 -
--end % function eval_test_code
+-end % function
 -
 -
 -%%%%%%%%%%%%%%
@@ -544,7 +544,7 @@
 -    [id, rest] = strtok (str(4:end));
 -end
 -
--end % function getpattern
+-end % function
 -
 -
 -%%%%%%%%%%%
@@ -561,7 +561,7 @@
 -end
 -msg = trimleft (deblank (msg));
 -
--end % function trimerr
+-end % function
 -
 -
 -%%%%%%%%%%%%
@@ -578,7 +578,7 @@
 -    str = str(leading(end)+1:end);
 -end
 -
--end % function trimleft
+-end % function
 -
 -
 -%%%%%%%%%%%%%%%%%%%%%%%%
@@ -606,7 +606,7 @@
 -    fclose (fid);
 -end
 -
--end % function x__extract_test_code
+-end % function
 -
 -
 -%% Tests of 'assert' blocks
@@ -707,7 +707,7 @@
  
  % Copying Permission Statement
  %
-@@ -33,242 +26,13 @@
+@@ -33,240 +26,14 @@
  %    You should  have received a copy  of the GNU  General Public License
  %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
  
@@ -755,18 +755,16 @@
 -    fprintf ('*** Summary for all %d directories:\n', n_dirs);
 -    fprintf ('*** --> passed %d/%d tests\n', n_pass, n_total);
 -    fprintf ('*** --> %d/%d files had no tests\n\n', n_notest, n_files);
-+    directory = fileparts (fileparts (fileparts (mfilename ('fullpath'))));
- end
- 
+-end
+-
 -if ~ isempty (err)
 -    fprintf ('!!! Summary of failed tests:\n');
 -    for i = 1:(size (err, 1))
 -        fprintf ('!!! %s [%d/%d]\n', err{i,1}, err{i,2} - err{i,3}, err{i,2});
 -    end
 -end
-+__run_test_suite__ ({directory}, {});
- 
- end % function stk_runtests
+-
+-end % function
 -
 -
 -%%%%%%%%%%%%%%%%%
@@ -870,7 +868,7 @@
 -
 -cd (here);
 -
--end % function run_all_tests
+-end % function
 -
 -
 -%%%%%%%%%%%%%
@@ -889,7 +887,7 @@
 -    error ('runtests: fopen failed: %s', f);
 -end
 -
--end % function has_tests
+-end % function
 -
 -
 -%%%%%%%%%%%%%%%%%%%
@@ -906,7 +904,7 @@
 -    end
 -end
 -
--end % function print_pass_fail
+-end % function
 -
 -
 -%%%%%%%%%%%%%%%%%%%%%%%%
@@ -918,7 +916,7 @@
 -filler = repmat ('.', 1, 50 - length(nm));
 -fprintf ('  %s %s', nm, filler);
 -
--end % function print_test_file_name
+-end % function
 -
 -
 -%%%%%%%%%%%%%%%
@@ -944,11 +942,11 @@
 -            warning (s(i).state, s(i).identifier);
 -        end
 -    end
--end
--
++    directory = fileparts (fileparts (fileparts (mfilename ('fullpath'))));
+ end
+ 
 -lastwarn ('');
--
--end % function warning_off
--
--
--%#ok<*AGROW>
++__run_test_suite__ ({directory}, {});
+ 
+ end % function
+ 

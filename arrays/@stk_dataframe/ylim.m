@@ -1,4 +1,4 @@
-% YLIM [overloaded base function]
+% YLIM [overload base function]
 
 % Copyright Notice
 %

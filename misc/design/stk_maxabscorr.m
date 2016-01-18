@@ -28,9 +28,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author:   Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -58,13 +59,19 @@ if nargin > 1
    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% compute the correlation matrix
-c = corr (double (x));
+x = double (x);
+x = bsxfun (@minus, x, mean (x));
 
-% get rid of diagonal terms
-c = triu (c, 1);
+n = size (x, 2);
 
-mac = max (abs (c(:)));
+M = 0;
+for i = 1:(n-1)
+    for j = (i+1):n
+        M = max (M, abs (sum (x(:, i) .* x(:, j))));
+    end
+end
+
+mac = M / n;
 
 end % function
 
