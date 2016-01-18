@@ -1,3 +1,11 @@
+2016-01-18  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	New functions to update models with new observations
+
+	* core/@stk_model_gpposterior/stk_model_update.m: New function.
+	* core/stk_model_update.m: New function.
+	* admin/octpkg/INDEX: Add new functions to the index.
+
 2016-01-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Speed stk_init.
