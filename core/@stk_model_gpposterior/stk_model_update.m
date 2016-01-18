@@ -1,8 +1,8 @@
-% STK_BOUNDINGBOX [overload STK function]
+% STK_MODEL_UPDATE [overload STK function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,28 +26,24 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function box = stk_boundingbox (x)
+function M = stk_model_update (M, xi, zi)
 
-if nargin > 1,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
+M.input_data = [M.input_data; double(xi)];
+M.output_data = [M.output_data; double(zi)];
 
-xmin = cellfun (@min, x.levels);
-xmax = cellfun (@max, x.levels);
-
-box = stk_hrect ([xmin; xmax]);
-
-box.colnames = x.stk_dataframe.colnames;
+% FIXME: use @stk_kreq/stk_update ?
+M.kreq = stk_kreq_qr (M.prior_model, M.input_data);
 
 end % function
 
 
-%!shared x, y, cn
-%! cn = {'a', 'b', 'c'};
-%! x = stk_factorialdesign ({[1 2], [3 4 5], [0 2 8]}, cn);
+%!test M_prior, x_obs, z_obs
+%! x1 = (linspace (0, 1, 15))';
+%! z1 = sin (x1);
+%! x2 = (linspace (1, 2, 15))';
+%! z2 = sin (x2);
+%! M_prior = stk_model ('stk_materncov32_iso');
+%! M_prior.order = 0; % this is currently the default, but better safe than sorry
+%! M_prior.param = log ([1.0; 2.1]);
 
-%!error y = stk_boundingbox ();
-%!test  y = stk_boundingbox (x);
-%!error y = stk_boundingbox (x, 1);
-
-%!assert (isequal (y, stk_hrect ([1 3 0; 2 5 8], cn)));
+%!error M_post = stk_model_gpposterior (M_prior, x_obs, [z_obs; z_obs]);

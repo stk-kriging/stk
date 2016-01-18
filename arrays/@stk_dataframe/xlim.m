@@ -1,4 +1,4 @@
-% XLIM [overloaded base function]
+% XLIM [overload base function]
 
 % Copyright Notice
 %

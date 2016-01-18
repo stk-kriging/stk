@@ -1,3 +1,26 @@
+2016-01-18  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	New functions to update models with new observations
+
+	* core/@stk_model_gpposterior/stk_model_update.m: New function.
+	* core/stk_model_update.m: New function.
+	* admin/octpkg/INDEX: Add new functions to the index.
+
+2016-01-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Speed stk_init.
+
+	* stk_init.m: Speed up by reducing the number of calls to addpath.
+	* misc/benchmarks/stk_benchmark_init.m: New benchmark script
+
+2015-12-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_maxabscorr.m: Rewrite without using corr
+
+	* misc/design/stk_maxabscorr.m: Rewrite without using corr.
+	* stk_init.m (stk_init__config_mole): Remove corr
+	* misc/mole/corr/corr.m: Deleted
+
 2015-12-09  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	wfg.c: Fix a bug in Rlist_extend

@@ -1,8 +1,12 @@
-% STK_BOUNDINGBOX [overload STK function]
+% STK_BENCHMARK_INIT measures stk_init's runtime
+%
+% Loading STK should be as fast as possible...
+%
+% This script can be used to tic-toc or profile stk_init ().
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,28 +30,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function box = stk_boundingbox (x)
+NREP = 10;
 
-if nargin > 1,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+t0 = tic ();
+
+for i = 1:NREP,
+    stk_init ();
 end
 
-xmin = cellfun (@min, x.levels);
-xmax = cellfun (@max, x.levels);
+t = (toc (t0)) / NREP;
 
-box = stk_hrect ([xmin; xmax]);
-
-box.colnames = x.stk_dataframe.colnames;
-
-end % function
-
-
-%!shared x, y, cn
-%! cn = {'a', 'b', 'c'};
-%! x = stk_factorialdesign ({[1 2], [3 4 5], [0 2 8]}, cn);
-
-%!error y = stk_boundingbox ();
-%!test  y = stk_boundingbox (x);
-%!error y = stk_boundingbox (x, 1);
-
-%!assert (isequal (y, stk_hrect ([1 3 0; 2 5 8], cn)));
+fprintf ('Average runtime for a call to stk_init: %.3f seconds\n', t);

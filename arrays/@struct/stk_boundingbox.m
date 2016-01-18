@@ -1,4 +1,4 @@
-% STK_BOUNDINGBOX  [overload STK function]
+% STK_BOUNDINGBOX [overload STK function]
 %
 % CALL: 
 

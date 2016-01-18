@@ -203,16 +203,18 @@ end % function
 
 function stk_init__addpath (root)
 
-% Add STK folders to the path
 path = stk_init__genpath (root);
+
+% Check for missing directories
 for i = 1:length (path),
-    if exist (path{i}, 'dir')
-        addpath (path{i});
-    else
+    if ~ exist (path{i}, 'dir')
         error (sprintf (['Directory %s does not exist.\n' ...
             'Is there a problem in stk_init__genpath ?'], path{i}));
     end
 end
+
+% Add STK folders to the path
+addpath (path{:});
 
 % Selectively add MOLE subdirectories to compensate for missing functions
 stk_init__config_mole (root, true, false);  % (add to path, but do not prune)
@@ -544,14 +546,6 @@ end
 %  * For Matlab users: there is no function named graphics_toolkit in Matlab.
 %    Our implementation returns either 'matlab-jvm' or 'matlab-nojvm'.
 install_mole_function ('graphics_toolkit', opts{:});
-
-
-% corr
-%  * For Octave users: corr belongs to Octave core in recent releases of Octave,
-%    but was missing in Octave 3.2.4 (when was it added ?)
-%  * For Matlab users: corr is missing from Matlab itself, but it provided by
-%    the Statistics toolbox if you're rich enough to afford it.
-install_mole_function ('corr', opts{:});
 
 % isrow
 %  * For Octave users: ?
