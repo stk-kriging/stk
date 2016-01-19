@@ -52,8 +52,8 @@ mkdir (unpacked_dir);
 % Export files using 'hg archive'
 fprintf ('Exporting with "hg archive" ... ');
 cd (root_dir);
-system (sprintf (['hg archive --exclude admin --exclude ''.hg*'' ' ...
- '--exclude Makefile %s'], unpacked_dir));
+system (sprintf (['hg archive --exclude admin --exclude .pc ' ...
+ '--exclude ''.hg*'' --exclude Makefile %s'], unpacked_dir));
 fprintf ('done.\n');
 
 % Instantiate CITATION template
