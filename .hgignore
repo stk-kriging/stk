@@ -9,4 +9,6 @@ build
 *.asv
 *orig
 sandbox
-.pc
+
+.pc/applied-patches
+.pc/*.patch
