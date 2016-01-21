@@ -30,11 +30,10 @@ function M_post = stk_model_gpposterior (M_prior, xi, zi)
 
 if nargin == 0
     
-    M_post.prior_model  = [];
-    M_post.dim          = [];
-    M_post.input_data   = [];
-    M_post.output_data  = [];
-    M_post.kreq         = [];
+    M_post.prior_model  = stk_model ();
+    M_post.input_data   = zeros (0, M_post.prior_model.dim);
+    M_post.output_data  = zeros (0, 1);
+    M_post.kreq         = 1;
     
 elseif nargin == 3
     
@@ -62,7 +61,6 @@ elseif nargin == 3
     end
     
     M_post.prior_model  = M_prior;
-    M_post.dim          = size (xi, 2);
     M_post.input_data   = double (xi);
     M_post.output_data  = double (zi);
     M_post.kreq         = kreq;

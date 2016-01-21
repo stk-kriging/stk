@@ -36,6 +36,15 @@ switch propname
     case 'lognoisevariance'
         value = model.prior_model.lognoisevariance;
         
+    case {'input_dim', 'dim'}
+        % Note: 'dim' is kept for consistency with 'model structures'
+        %   (prior models described as ordinary structures, that is)
+        value = model.prior_model.dim;
+        
+    case 'output_dim'
+        % Only scalar-output models are supported at this point
+        value = 1;
+        
     otherwise
         try
             value = model.(propname);

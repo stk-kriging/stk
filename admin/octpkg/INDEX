@@ -131,9 +131,10 @@ Posterior model objects
  @stk_model_gpposterior/stk_model_gpposterior
  @stk_model_gpposterior/stk_predict
  @stk_model_gpposterior/stk_model_update
- @stk_model_gpposterior/get_dim
+ @stk_model_gpposterior/get_input_dim
  @stk_model_gpposterior/get_input_data
  @stk_model_gpposterior/get_lognoisevariance
+ @stk_model_gpposterior/get_output_dim
  @stk_model_gpposterior/get_output_data
  @stk_model_gpposterior/get_param
 #@stk_model_gpposterior/disp                   [overload base]

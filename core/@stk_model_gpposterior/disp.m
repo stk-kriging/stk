@@ -40,14 +40,29 @@ if ~ isscalar (model)
     return
 end
 
-fprintf ('         prior_model: <%s>\n', ...
-    stk_sprintf_sizetype (model.prior_model));
-fprintf ('          input_data: <%s>\n', ...
-    stk_sprintf_sizetype (model.input_data));
-fprintf ('         output_data: <%s>\n', ...
-    stk_sprintf_sizetype (model.output_data));
+if isempty (model.prior_model)
+    str_prior_model = '--';
+else
+    str_prior_model = ['<' stk_sprintf_sizetype(model.prior_model) '>'];
+end
 
-fprintf ('                 dim: %d\n', model.dim);
+if size (model.input_data, 1) == 0
+    str_input_data = '--';
+else
+    str_input_data = ['<' stk_sprintf_sizetype(model.input_data) '>'];
+end
+
+if size (model.output_data, 1) == 0
+    str_output_data = '--';
+else
+    str_output_data = ['<' stk_sprintf_sizetype(model.input_data) '>'];
+end
+
+fprintf ('         prior_model: %s\n', str_prior_model);
+fprintf ('           input_dim: %d\n', get_input_dim (model));
+fprintf ('          input_data: %s\n', str_input_data);
+fprintf ('          output_dim: %d\n', 1);
+fprintf ('         output_data: %s\n', str_output_data);
 fprintf ('               param: <%s>\n', ...
     stk_sprintf_sizetype (model.prior_model.param));
 
