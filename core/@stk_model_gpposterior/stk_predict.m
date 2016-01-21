@@ -79,7 +79,7 @@ if (strcmp (M_prior.covariance_type, 'stk_discretecov')) && (isempty (xt))
     xt = (1:nt)';    
 else
     nt = size (xt, 1);
-    if ~ isequal (size (xt), [nt, M_post.dim]),
+    if ~ isequal (size (xt), [nt, M_prior.dim]),
         stk_error ('The size of xt is incorrect.', 'IncorrectSize');
     end
 end
