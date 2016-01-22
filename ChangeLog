@@ -1,5 +1,9 @@
 2016-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_optim_init.m: Fix the value of algo.model.dim
+
+	* iago/utils/stk_optim_init.m: Fix the value of algo.model.dim.
+
 	More work on stk_model_gpposterior properties
 
 	* core/@stk_model_gpposterior/get_input_data.m: Rename variable.
