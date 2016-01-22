@@ -1,10 +1,21 @@
 2016-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	More work on stk_model_gpposterior properties
+
+	* core/@stk_model_gpposterior/get_input_data.m: Rename variable.
+	* core/@stk_model_gpposterior/get_output_data.m: Rename variable.
+	* core/@stk_model_gpposterior/fieldnames.m: New function.
+	* core/@stk_model_gpposterior/set.m: New function.
+	* core/@stk_model_gpposterior/subsasgn.m: New function.
+	* core/@stk_model_gpposterior/set_lognoisevariance.m: New function.
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Accept
+	prior model structure with missing 'dim' field.
+
 	Properties input_dim/output_dim for stk_model_gpposterior objects
 
 	* core/@stk_model_gpposterior/get.m: Add new properties
 	'input_dim', 'output_dim'. Make 'dim' an alias for 'input_dim'.
-	* core/@stk_model_gpposterior/get_dim.m: Renamed to
+	* core/@stk_model_gpposterior/get_dim.m: Rename to
 	get_input_dim.m.
 	* core/@stk_model_gpposterior/get_input_dim.m: Renamed from
 	get_dim.m.
