@@ -28,22 +28,10 @@
 
 function M = stk_model_update (M, xi, zi)
 
-M.input_data = [M.input_data; double(xi)];
-M.output_data = [M.output_data; double(zi)];
+M.input_data = [M.input_data; xi];
+M.output_data = [M.output_data; zi];
 
 % FIXME: use @stk_kreq/stk_update ?
 M.kreq = stk_kreq_qr (M.prior_model, M.input_data);
 
 end % function
-
-
-%!test M_prior, x_obs, z_obs
-%! x1 = (linspace (0, 1, 15))';
-%! z1 = sin (x1);
-%! x2 = (linspace (1, 2, 15))';
-%! z2 = sin (x2);
-%! M_prior = stk_model ('stk_materncov32_iso');
-%! M_prior.order = 0; % this is currently the default, but better safe than sorry
-%! M_prior.param = log ([1.0; 2.1]);
-
-%!error M_post = stk_model_gpposterior (M_prior, x_obs, [z_obs; z_obs]);

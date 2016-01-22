@@ -1,8 +1,8 @@
-% GET [overload base function]
+% SET [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,28 +26,25 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function value = get (model, propname)
+function model = set (model, propname, value)
 
 switch propname
     
     case 'param'
-        value = model.prior_model.param;
+        model.prior_model.param = value;
         
     case 'lognoisevariance'
-        value = model.prior_model.lognoisevariance;
+        model.prior_model.lognoisevariance = value;
         
-    case {'input_dim', 'dim'}
+    case {'input_dim', 'output_dim', 'dim'}
         % Note: 'dim' is kept for consistency with 'model structures'
         %   (prior models described as ordinary structures, that is)
-        value = model.prior_model.dim;
-        
-    case 'output_dim'
-        % Only scalar-output models are supported at this point
-        value = 1;
+        stk_error (sprintf ('Property %s is read-only.\n', ...
+            propname), 'ReadOnlyProperty');
         
     otherwise
         try
-            value = model.(propname);
+            model.(propname) = value;
         catch
             if (~ ischar (propname))
                 stk_error ('Invalid property name.', 'InvalidArgument');

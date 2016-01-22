@@ -1,8 +1,8 @@
-% GET_INTPUT_DATA returns the input data of the model
+% GET_INPUT_DIM returns the input dimension of the model
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function input_data = get_input_data (model)
+function input_dim = get_input_dim (model)
     
-input_data = model.input_data;
+input_dim = model.prior_model.dim;
 
 end % function

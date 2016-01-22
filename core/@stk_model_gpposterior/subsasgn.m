@@ -1,8 +1,8 @@
-% GET_INTPUT_DATA returns the input data of the model
+% SUBSASGN [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +26,23 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function input_data = get_input_data (model)
+function model = subsasgn (model, idx, value)
+
+switch idx(1).type
     
-input_data = model.input_data;
+    case '.'
+        
+        if length (idx) > 1
+            value = subsasgn (get (model, idx(1).subs), idx(2:end), value);
+        end
+        
+        model = set (model, idx(1).subs, value);
+        
+    case {'{}', '()'}
+        
+        errmsg = 'Illegal assignment';
+        stk_error (errmsg, 'IllegalAssignment');
+        
+end
 
 end % function

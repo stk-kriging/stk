@@ -79,7 +79,7 @@ if (strcmp (M_prior.covariance_type, 'stk_discretecov')) && (isempty (xt))
     xt = (1:nt)';    
 else
     nt = size (xt, 1);
-    if ~ isequal (size (xt), [nt, M_post.dim]),
+    if ~ isequal (size (xt), [nt, M_prior.dim]),
         stk_error ('The size of xt is incorrect.', 'IncorrectSize');
     end
 end
@@ -138,7 +138,7 @@ for block_num = 1:nb_blocks
     
     % compute the kriging mean
     if compute_prediction,
-        zp_a(idx) = kreq.lambda' * M_post.output_data;
+        zp_a(idx) = kreq.lambda' * (double (M_post.output_data));
     end
     
     % The full lambda_mu matrix is only needed when nargout > 1

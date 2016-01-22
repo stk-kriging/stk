@@ -1,8 +1,8 @@
-% GET_DIM returns the input dimension of the model
+% GET_OUTPUT_DIM returns the output dimension of the model
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function param = get_dim (model)
+function output_dim = get_output_dim (model)
     
-param = model.dim;
+output_dim = 1;
 
 end % function
