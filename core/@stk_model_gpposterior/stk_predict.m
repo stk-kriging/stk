@@ -138,7 +138,7 @@ for block_num = 1:nb_blocks
     
     % compute the kriging mean
     if compute_prediction,
-        zp_a(idx) = kreq.lambda' * M_post.output_data;
+        zp_a(idx) = kreq.lambda' * (double (M_post.output_data));
     end
     
     % The full lambda_mu matrix is only needed when nargout > 1

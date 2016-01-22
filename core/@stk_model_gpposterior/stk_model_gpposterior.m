@@ -68,8 +68,8 @@ elseif nargin == 3
     end
     
     M_post.prior_model  = M_prior;
-    M_post.input_data   = double (xi);
-    M_post.output_data  = double (zi);
+    M_post.input_data   = xi;
+    M_post.output_data  = zi;
     M_post.kreq         = kreq;
     
 else

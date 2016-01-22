@@ -28,8 +28,8 @@
 
 function M = stk_model_update (M, xi, zi)
 
-M.input_data = [M.input_data; double(xi)];
-M.output_data = [M.output_data; double(zi)];
+M.input_data = [M.input_data; xi];
+M.output_data = [M.output_data; zi];
 
 % FIXME: use @stk_kreq/stk_update ?
 M.kreq = stk_kreq_qr (M.prior_model, M.input_data);

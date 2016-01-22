@@ -1,5 +1,13 @@
 2016-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_model_gpposterior: Preserve row and column names
+
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Preserver
+	row and column names in input/output data.
+	* core/@stk_model_gpposterior/stk_model_update.m: Idem.
+	* core/@stk_model_gpposterior/stk_predict.m: Use double() to
+	extract the numerical content of the 'output_data' field.
+
 	stk_optim_init.m: Fix the value of algo.model.dim
 
 	* iago/utils/stk_optim_init.m: Fix the value of algo.model.dim.
