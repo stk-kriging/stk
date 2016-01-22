@@ -1,8 +1,8 @@
-% GET_INTPUT_DATA returns the input data of the model
+% SET_LOGNOISEVARIANCE sets the log of the variance of the noise
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function input_data = get_input_data (model)
-    
-input_data = model.input_data;
+function model = set_lognoisevariance (model, lnv)
+
+model.prior_model.lognoisevariance = lnv;
 
 end % function

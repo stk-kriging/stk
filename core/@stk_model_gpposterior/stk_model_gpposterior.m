@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -37,7 +37,8 @@ if nargin == 0
     
 elseif nargin == 3
     
-    % Backward compatiblity: accept model structures with missing lognoisevariance
+    % Backward compatiblity:
+    %   accept model structures with missing 'lognoisevariance' field
     if (~ isfield (M_prior, 'lognoisevariance')) ...
             || (isempty (M_prior.lognoisevariance))
         M_prior.lognoisevariance = - inf;
@@ -53,6 +54,12 @@ elseif nargin == 3
     end
     
     n = size (xi, 1);
+
+    % Backward compatiblity:
+    %   accept model structures with missing 'dim' field
+    if (~ isfield (M_prior, 'dim')) || (isempty (M_prior.dim))
+        M_prior.dim = size (xi, 2);
+    end
     
     % Check the size of z_obs
     if ~ (isempty (zi) || isequal (size (zi), [n 1]))
