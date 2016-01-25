@@ -1,3 +1,12 @@
+2016-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Remove stk_plot2d (had been deprecated for a while)
+
+	* misc/plot/stk_plot2d.m: Removed (deprecated since 2.2.0)
+	* admin/octpkg/INDEX: Remove stk_plot2d from the index
+	* arrays/@stk_factorialdesign/private/plot_surfmeshcontour.m:
+	Rearrange copyright information.
+
 2016-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_model_gpposterior: Preserve row and column names
