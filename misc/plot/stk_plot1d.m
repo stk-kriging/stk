@@ -13,10 +13,14 @@
 % CALL: stk_plot1d (XI, ZI, XT, ZT, ZP, ZSIM)
 %
 %    also plots a set ZSIM of samplepaths.
+%
+% CALL: stk_plot1d (H_AXES, ...)
+%
+%    plots into existing axes with axis handle H_AXES.
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015-2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -42,12 +46,33 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function h = stk_plot1d (xi, zi, xt, zt, zp, zsim)
+function h = stk_plot1d (varargin)
 
-h_axes = gca;  % FIXME: Make it possible to pass a handle as first argument
+% Check if the first argument is a handle to existing axes
+arg1_handle = false;
+try
+    arg1_handle = (isscalar (varargin{1})) ...
+        && (strcmp (get (varargin{1}, 'Type'), 'axes'));
+end
+
+% If it it so, remove the handle from the list of arguments
+if arg1_handle
+    h = stk_plot1d_ (varargin{:});    
+else
+    h = stk_plot1d_ (gca (), varargin{:});    
+end
+
+end % function
+
+
+function h = stk_plot1d_ (h_axes, xi, zi, xt, zt, zp, zsim)
+
+has_zt_arg   = (nargin > 4) && (~ isempty (zt));
+has_zp_arg   = (nargin > 5) && (~ isempty (zp));
+has_zsim_arg = (nargin > 6) && (~ isempty (zsim));
 
 % Shaded area representing pointwise confidence intervals
-if (nargin > 4) && (~ isempty (zp))
+if has_zp_arg
     h_ci = stk_plot_shadedci (h_axes, xt, zp);
     hold on;
 else
@@ -55,7 +80,7 @@ else
 end
 
 % Plot sample paths
-if (nargin > 5) && (~ isempty (zsim))
+if has_zsim_arg
     if isa (zsim, 'stk_dataframe')
         % Prevents automatic creation of a legend by @stk_dataframe/plot
         zsim.colnames = {};
@@ -68,7 +93,7 @@ else
 end
 
 % Ground truth
-if (nargin > 3) && (~ isempty (zt))
+if has_zt_arg
     h_truth = plot (h_axes, xt, zt, ...
         '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
     hold on;
@@ -77,7 +102,7 @@ else
 end
 
 % Kriging predictor (posterior mean)
-if (nargin > 4) && (~ isempty (zp))
+if has_zp_arg
     h_pred = plot (h_axes, xt, zp.mean, ...
         'LineWidth', 3, 'Color', [0.95 0.25 0.3]);
     hold on;
