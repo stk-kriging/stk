@@ -68,6 +68,8 @@ Changes in version 2.4.0
    o stk_plot_shadedci.m: Accept a handle to an axes object as (optional) first
      input argument.
 
+   o stk_plot2d: Removed (had been deprecated for a while).
+
 * Examples
 
    o stk_example_doe04.m: Example script that demonstrates the use of
