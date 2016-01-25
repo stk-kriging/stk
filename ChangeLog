@@ -1,5 +1,10 @@
 2016-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_plot2d: Accept a handle as optional first argument
+
+	* misc/plot/stk_plot1d.m: Accept a handle as optional first
+	argument.
+
 	Remove stk_plot2d (had been deprecated for a while)
 
 	* misc/plot/stk_plot2d.m: Removed (deprecated since 2.2.0)
