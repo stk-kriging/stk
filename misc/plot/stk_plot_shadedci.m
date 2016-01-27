@@ -2,11 +2,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2012, 2013 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -28,22 +28,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function h = stk_plot_shadedci (varargin)
+function h_plot = stk_plot_shadedci (varargin)
 
 [h_axes, x, z, opts] = parse_args_ (varargin{:});
 
 x = double (x);
 
 delta = 1.96 * sqrt (abs (z.var));
-h = area (h_axes, x, [z.mean - delta, 2 * delta]);
+h_plot = area (h_axes, x, [z.mean - delta, 2 * delta]);
 
 % Remove the first area object (between 0 and z.mean - delta)
-delete (h(1));  h = h(2);
+delete (h_plot(1));  h_plot = h_plot(2);
 
 c = [0.8 0.8 0.8];  % Light gray
-set (h, 'FaceColor', c, 'LineStyle', '-', 'LineWidth', 1, 'EdgeColor', c);
+set (h_plot, 'FaceColor', c, 'LineStyle', '-', 'LineWidth', 1, 'EdgeColor', c);
 if ~ isempty (opts)
-    set (h, opts{:});
+    set (h_plot, opts{:});
 end
 
 % Raise current axis to the top layer, to prevent it
@@ -53,51 +53,17 @@ set (gca, 'Layer', 'top');
 end % function
 
 
-function [h, x, z, opts] = parse_args_ (arg1, varargin)
+function [h_axes, x, z, opts] = parse_args_ (varargin)
 
-%--- Formal grammar for the list of arguments -----------------------------
-%
-% Terminal symbols
-%
-%    h = a handle to an axes object
-%    x = stk_factorial_design object
-%    z = ordinate argument
-%
-% Derivation rules
-%
-%	<arg_list>          ::= <arg_list_0> | h <arg_list_0>
-%   <arg_list_0>        ::= x z <optional_arguments>
+% Extract axis handle (if it is present)
+[h_axes, varargin, n_argin] = stk_plot_getaxesarg (varargin{:});
 
-% If the first argument can be interpreted as a handle, then it always is.
-
-arg1_handle = false;
-try
-    arg1_handle = (isscalar (arg1)) ...
-        && (strcmp (get (arg1, 'Type'), 'axes'));
+if n_argin < 2,
+    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
 end
 
-if arg1_handle,
-    
-    if nargin < 3,
-        stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
-    end
-    
-    h = arg1;
-    x = varargin{1};
-    z = varargin{2};
-    opts = varargin(3:end);
-    
-else
-    
-    if nargin < 2,
-        stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
-    end
-    
-    h = gca;
-    x = arg1;
-    z = varargin{1};
-    opts = varargin(2:end);
-    
-end
+x = varargin{1};
+z = varargin{2};
+opts = varargin(3:end);
 
 end % function

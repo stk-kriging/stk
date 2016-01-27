@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -26,9 +27,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_labels (xlab, ylab, varargin)
+function h_labels = stk_labels (varargin)
 
-stk_xlabel (xlab, varargin{:});
-stk_ylabel (ylab, varargin{:});
+% Extract axis handle (if it is present)
+[h_axes, varargin, n_argin] = stk_plot_getaxesarg (varargin{:});
+
+if n_argin < 2,
+    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+end
+
+xlab = varargin{1};
+ylab = varargin{2};
+options = varargin(3:end);
+
+h_labels = zeros (2, 1);
+h_labels(1) = stk_xlabel (h_axes, xlab, options{:});
+h_labels(2) = stk_ylabel (h_axes, ylab, options{:});
 
 end % function

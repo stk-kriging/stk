@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -26,26 +27,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function h = stk_zlabel (varargin)
+function h_label = stk_zlabel (varargin)
 
-[h, varargin] = stk_get_axis_arg (varargin{:});
+[h_axes, varargin] = stk_plot_getaxesarg (varargin{:});
 zlab = varargin{1};
 
 % Get global STK options
 stk_options = stk_options_get ('stk_zlabel', 'properties');
 user_options = varargin(2:end);
 
-% Apply to all axes
-for i = 1:(length (h))
-    
-    % Set y-label and apply STK options
-    zlabel (h(i), zlab, stk_options{:});
-    
-    % Apply user-provided options
-    if ~ isempty (user_options)
-        set (h(i), user_options{:});
-    end
-    
+% Set z-label and apply STK options
+h_label = zlabel (h_axes, zlab, stk_options{:});
+
+% Apply user-provided options
+if ~ isempty (user_options)
+    set (h_label, user_options{:});
 end
 
 end % function

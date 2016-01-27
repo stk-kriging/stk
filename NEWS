@@ -57,16 +57,14 @@ Changes in version 2.4.0
 
 * Graphics
 
-   o stk_plot_shadedci.m, @stk_dataframe/plot.m: Return a (vector of) handle(s)
-     to the graphical object(s)
+   o All STK functions related to graphics now accept a handle to existing axes
+     as optional first input argument, and return a handle (or a vector of
+     handles when appropriate) to the graphical object created by the function.
 
    o stk_plot1d.m: A nice default legend can now be created painlessly using
      legend ('show'), and a struct of handles to the graphical objects composing
      the plot is returned to facilitate further customization. See, e.g.,
      examples 1 and 2 in the "kriging basics" series.
-
-   o stk_plot_shadedci.m: Accept a handle to an axes object as (optional) first
-     input argument.
 
    o stk_plot2d: Removed (had been deprecated for a while).
 

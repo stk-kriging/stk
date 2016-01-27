@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -28,7 +29,7 @@
 
 function varargout = axis (varargin)
 
-[h, varargin, nargin] = stk_get_axis_arg (varargin{:});
+[h_axes, varargin, nargin] = stk_plot_getaxesarg (varargin{:});
 
 varargout = cell (1, nargout);
 labels = {};
@@ -55,14 +56,14 @@ for i = 1:nargin,
     end
 end
 
-[varargout{:}] = axis (h, varargin{:});
+[varargout{:}] = axis (h_axes, varargin{:});
 
 % Add labels if available
 if (~ isempty (labels))
-    stk_xlabel (h, labels{1});
-    stk_ylabel (h, labels{2});
+    stk_xlabel (h_axes, labels{1});
+    stk_ylabel (h_axes, labels{2});
     if (length (labels) > 2)
-        stk_zlabel (h, labels{3});
+        stk_zlabel (h_axes, labels{3});
     end
 end
 

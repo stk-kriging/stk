@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -26,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function h = stk_figure (varargin)
+function h_fig = stk_figure (varargin)
 
 if mod (length (varargin), 2) ~= 0
     figname = varargin{1};
@@ -40,19 +41,19 @@ end
 options = stk_options_get ('stk_figure', 'properties');
 
 % Create figure
-h = figure (options{:});
+h_fig = figure (options{:});
 
 % Create axes
 stk_axes;
 
 % Apply user-provided options
 if ~ isempty (user_options)
-    set (h, user_options{:});
+    set (h_fig, user_options{:});
 end
 
 % Set figure name and title
 if ~ isempty (figname)
-    set (h, 'Name', figname);
+    set (h_fig, 'Name', figname);
 end
 
 end % function

@@ -46,21 +46,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function h = stk_plot1d (varargin)
+function h_plot = stk_plot1d (varargin)
 
-% Check if the first argument is a handle to existing axes
-arg1_handle = false;
-try
-    arg1_handle = (isscalar (varargin{1})) ...
-        && (strcmp (get (varargin{1}, 'Type'), 'axes'));
-end
+% Extract axis handle (if it is present)
+[h_axes, varargin] = stk_plot_getaxesarg (varargin{:});
 
-% If it it so, remove the handle from the list of arguments
-if arg1_handle
-    h = stk_plot1d_ (varargin{:});    
-else
-    h = stk_plot1d_ (gca (), varargin{:});    
-end
+h_plot = stk_plot1d_ (h_axes, varargin{:});
 
 end % function
 

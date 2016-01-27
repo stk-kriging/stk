@@ -1,5 +1,33 @@
 2016-01-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Overhaul plotting functions
+
+	* misc/plot/stk_get_axis_arg.m: Rename to stk_plot_getaxisarg
+	* misc/plot/stk_plot_getaxisarg.m: Renamed from
+	stk_plot_getaxisarg, with some minor modifications along the way.
+	* admin/octpkg/INDEX: Update index following function rename.
+	* arrays/@stk_dataframe/plot.m: Rewrite to make use of
+	stk_plot_getaxisarg.  Rename variable h to h_plot.
+	* arrays/@stk_factorialdesign/private/plot_surfmeshcontour.m:
+	Rewrite to make use of stk_plot_getaxisarg.  Rename variable
+	h_axis to h_axes.
+	* arrays/@stk_hrect/axis.m: Rename variable h to h_axes.
+	* misc/plot/stk_figure.m: Rename variable h to h_fig.
+	* misc/plot/stk_labels.m: Add option axes handle input argument,
+	based on stk_plot_getaxisarg.  Return vector of handles to label
+	objects.
+	* misc/plot/stk_plot1d.m: Rewrite to make use of
+	stk_plot_getaxisarg.  Rename variable h to h_plot.
+	* misc/plot/stk_plot_shadedci.m: Rewrite to make use of
+	stk_plot_getaxisarg.  Rename variable h to h_plot.
+	* misc/plot/stk_subplot.m: Rename variable h to h_axes.
+	* misc/plot/stk_xlabel.m: Simplify source code by removing the
+	possibility of having a vector of axes handles (why did I ever do
+	that ?). Fix the confusion between axes handle and label handle.
+	Rename output handle h to h_label.
+	* misc/plot/stk_ylabel.m: Idem.
+	* misc/plot/stk_zlabel.m: Idem.
+
 	@stk_factorialdesign: Return handles from all plot functions
 
 	* arrays/@stk_factorialdesign/surf.m: Return a handle.
