@@ -29,9 +29,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function plot_surfmeshcontour (plotfun, varargin)
+function h_plot = plot_surfmeshcontour (plotfun, varargin)
 
-[h, x, z, opts] = parse_args_ (varargin{:});
+[h_axis, x, z, opts] = parse_args_ (varargin{:});
 
 %--- Deal with various possible types for the 'z' argument ----------------
 
@@ -45,16 +45,21 @@ end
 
 [xx1, xx2] = ndgrid (x);
 
-call_plotfun (plotfun, h, xx1, xx2, reshape (z, size (xx1)), opts{:});
+h_plot = call_plotfun (plotfun, h_axis, ...
+    xx1, xx2, reshape (z, size (xx1)), opts{:});
 
 % Create labels if x provides column names
 c = get (x.stk_dataframe, 'colnames');
-if ~ isempty (c),  stk_xlabel (c{1});  end
-if length (c) > 1,  stk_ylabel (c{2});  end
+if ~ isempty (c),
+    stk_xlabel (h_axis, c{1});
+end
+if length (c) > 1,
+    stk_ylabel (h_axis, c{2});
+end
 
 % Use interpolated shading for surf and pcolor plots
 if ismember (func2str (plotfun), {'surf', 'pcolor'}),
-    shading ('interp');
+    shading (h_axis, 'interp');
 end
 
 end % function
@@ -62,7 +67,7 @@ end % function
 %#ok<*TRYNC>
 
 
-function [h, x, z, opts] = parse_args_ (arg1, varargin)
+function [h_axis, x, z, opts] = parse_args_ (arg1, varargin)
 
 %--- Formal grammar for the list of arguments -----------------------------
 %
@@ -77,13 +82,10 @@ function [h, x, z, opts] = parse_args_ (arg1, varargin)
 %	<arg_list>          ::= <arg_list_0> | h <arg_list_0>
 %   <arg_list_0>        ::= x z <optional_arguments>
 
-% If the first argument can be interpreted as a handle, then it always is.
-
+% Check if the first argument is a handle to existing axes
 arg1_handle = false;
-if isscalar (arg1) && isa (arg1, 'double'),
-    try
-        arg1_handle = strcmp (get (arg1, 'Type'), 'axes');
-    end
+try
+    arg1_handle = (isscalar (arg1)) && (strcmp (get (arg1, 'Type'), 'axes'));
 end
 
 if arg1_handle,
@@ -92,7 +94,7 @@ if arg1_handle,
         stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
     end
     
-    h = arg1;
+    h_axis = arg1;
     x = varargin{1};
     z = varargin{2};
     opts = varargin(3:end);
@@ -103,7 +105,7 @@ else
         stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
     end
     
-    h = gca;
+    h_axis = gca;
     x = arg1;
     z = varargin{1};
     opts = varargin(2:end);
@@ -127,7 +129,7 @@ end
 end % function
 
 
-function call_plotfun (plotfun, h, x, y, z, varargin)
+function h_plot = call_plotfun (plotfun, h_axis, x, y, z, varargin)
 
 % In Octave 3.6.4, pcolor supports neither the axis handle argument nor
 % the optional parameter/value arguments. This function has been created to
@@ -138,7 +140,12 @@ try
     % When the full 'modern' syntax is supported, the result is usually better,
     % in particular when options are provided. Let's try that first.
     
-    plotfun (h, x, y, z, varargin{:});  return;
+    if strcmp (func2str (plotfun), 'contour')
+        [C_ignored, h_plot] = contour ...
+            (h_axis, x, y, z, varargin{:});  %#ok<ASGLU>
+    else
+        h_plot = plotfun (h_axis, x, y, z, varargin{:});
+    end
     
 catch  %#ok<CTCH>
     
@@ -157,18 +164,18 @@ catch  %#ok<CTCH>
     end
     
     % Select the axes to draw on
-    h1 = gca ();  axes (h);
-
+    h1 = gca ();  axes (h_axis);
+    
     try
         
         if strcmp (func2str (plotfun), 'contour')
-            [C_ignored, h2] = contour (x, y, z, numarg{:});  %#ok<ASGLU>
+            [C_ignored, h_plot] = contour (x, y, z, numarg{:});  %#ok<ASGLU>
         else
-            h2 = plotfun (x, y, z, numarg{:});
+            h_plot = plotfun (x, y, z, numarg{:});
         end
         
         if ~ isempty (opts)
-            set (h2, opts{:});
+            set (h_plot, opts{:});
         end
         
         axes (h1);
@@ -177,7 +184,7 @@ catch  %#ok<CTCH>
         axes (h1);
         rethrow (lasterror ());  %#ok<LERR>
     end
-
+    
 end % try_catch
 
 end % function
