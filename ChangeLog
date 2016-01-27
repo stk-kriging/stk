@@ -1,3 +1,17 @@
+2016-01-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_factorialdesign: Return handles from all plot functions
+
+	* arrays/@stk_factorialdesign/surf.m: Return a handle.
+	* arrays/@stk_factorialdesign/contour.m: Return a handle.
+	* arrays/@stk_factorialdesign/mesh.m: Return a handle.
+	* arrays/@stk_factorialdesign/meshc.m: Return a handle.
+	* arrays/@stk_factorialdesign/meshz.m: Return a handle.
+	* arrays/@stk_factorialdesign/pcolor.m: Return a handle.
+	* arrays/@stk_factorialdesign/private/plot_surfmeshcontour.m:
+	Return a handle to the plot object just constructed. Also, fix
+	some bugs related to the optional axis handle argument.
+
 2016-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_plot1d: Accept a handle as optional first argument

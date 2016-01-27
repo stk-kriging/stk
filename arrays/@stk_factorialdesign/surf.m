@@ -4,6 +4,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -28,8 +29,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function surf (varargin)
+function h_plot = surf (varargin)
 
-plot_surfmeshcontour (@surf, varargin{:});
+h_plot = plot_surfmeshcontour (@surf, varargin{:});
 
 end % function
