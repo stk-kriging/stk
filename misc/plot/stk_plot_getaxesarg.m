@@ -1,7 +1,8 @@
-% STK_GET_AXIS_ARG [STK internal]
+% STK_PLOT_GETAXISARG [STK internal]
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -26,21 +27,34 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [h, argin, n_argin] = stk_get_axis_arg (varargin)
+function [h_axes, argin, n_argin] = stk_plot_getaxesarg (varargin)
 
 if isempty (varargin)
-    h = [];
+    
+    h_axes = [];
     argin = {};
+    n_argin = 0;
+    
 else
-    h = varargin{1};
-    if (all (ishghandle (h))) && (all (strcmp (get (h, 'type'), 'axes')))
+    
+    % Check if the first argument is a handle to existing axes
+    arg1_is_a_handle = false;
+    try  %#ok<TRYNC>
+        arg1_is_a_handle = (isscalar (varargin{1})) ...
+            && (strcmp (get (varargin{1}, 'type'), 'axes'));
+    end
+    
+    % Separate axis handle from the rest of the arguments
+    if arg1_is_a_handle
+        h_axes = varargin{1};
         argin = varargin(2:end);
     else
-        h = gca;
+        h_axes = gca ();
         argin = varargin;
     end
+    
+    n_argin = length (argin);
+    
 end
-
-n_argin = length (argin);
 
 end % function

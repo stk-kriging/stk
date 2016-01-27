@@ -360,15 +360,15 @@ Miscellaneous: options, plots...
 ## Replacement for some base functions related to figures. Mostly for use
 ## in STK's examples, to keep consistent graphical options accross all
 ## examples. No need to let these appear in the INDEX.
-#stk_axes          [internal]
-#stk_figure        [internal]
-#stk_get_axis_arg  [internal]
-#stk_labels        [internal]
-#stk_subplot       [internal]
-#stk_title         [internal]
-#stk_xlabel        [internal]
-#stk_ylabel        [internal]
-#stk_zlabel        [internal]
+#stk_axes             [internal]
+#stk_figure           [internal]
+#stk_plot_getaxesarg  [internal]
+#stk_labels           [internal]
+#stk_subplot          [internal]
+#stk_title            [internal]
+#stk_xlabel           [internal]
+#stk_ylabel           [internal]
+#stk_zlabel           [internal]
 
 ## error/warning
 #stk_error [internal, not for public use]

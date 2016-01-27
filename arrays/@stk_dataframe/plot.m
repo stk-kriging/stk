@@ -2,10 +2,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function h = plot (varargin)
+function h_plot = plot (varargin)
 
 % Parse the list of input arguments
 [h_axes, plot_elem, keyval_pairs] = parse_args_ (varargin{:});
@@ -37,11 +37,11 @@ b = ishold ();
 
 % Plot all
 n = length (plot_elem);
-h = [];
+h_plot = [];
 for i = 1:n
     p = plot_elem(i);
     hh = plot_ (h_axes, p.x, p.z, p.S, keyval_pairs{:});
-    h = [h; hh];  %#ok<AGROW>
+    h_plot = [h_plot; hh];  %#ok<AGROW>
     if (i == 1) && (n > 1),  hold on;  end
 end
 
@@ -121,7 +121,7 @@ end % function
 %#ok<*SPWRN,*TRYNC>
 
 
-function [h_axes, plot_elem, keyval_pairs] = parse_args_ (arg1, varargin)
+function [h_axes, plot_elem, keyval_pairs] = parse_args_ (varargin)
 
 % Plot is highly polymorphic, making the task of parsing input arguments a
 % rather lengthy and painful one...
@@ -148,26 +148,16 @@ function [h_axes, plot_elem, keyval_pairs] = parse_args_ (arg1, varargin)
 %	<plot_elem>         ::= x z | x z S
 %   <special_plot_elem> ::= z | z S
 
-% First, the easy bit: if the first argument can be interpreted as a handle,
-% then it always is.
+% Extract axis handle (if it is present)
+[h_axes, varargin, n_argin] = stk_plot_getaxesarg (varargin{:});
 
-arg1_handle = false;
-try
-    arg1_handle = (isscalar (arg1)) ...
-        && (strcmp (get (arg1, 'Type'), 'axes'));
+if n_argin == 0,
+    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
 end
 
-if arg1_handle,
-    h_axes = arg1;
-    if nargin == 1,
-        stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
-    else
-        arg1 = varargin{1};
-        varargin(1) = [];
-    end
-else
-    h_axes = gca;
-end
+% Extract first element from the list of arguments
+arg1 = varargin{1};
+varargin(1) = [];
 
 % Then, arg1 *must* be a "numeric" argument
 if ischar (arg1)

@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -26,22 +27,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function h = stk_subplot (m, n, p, varargin)
+function h_axes = stk_subplot (m, n, p, varargin)
 
 % Get global STK options
 stk_options = stk_options_get ('stk_axes', 'properties');
 
 % Create axes
-h = subplot (m, n, p);
+h_axes = subplot (m, n, p);
 
 % Apply STK options first
 if ~ isempty (stk_options)
-  set (h, stk_options{:});
+  set (h_axes, stk_options{:});
 end
 
 % Apply user-provided options
 if ~ isempty (varargin)
-    set (h, varargin{:});
+    set (h_axes, varargin{:});
 end
 
 end % function
