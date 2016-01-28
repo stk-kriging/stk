@@ -1,3 +1,12 @@
+2016-01-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Rename the output argument in optimizer objects
+
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Rename the
+	output argument (optimizer object) to 'algo'.
+	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m: Idem.
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Idem.
+
 2016-01-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Overhaul plotting functions

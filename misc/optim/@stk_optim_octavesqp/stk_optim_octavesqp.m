@@ -1,18 +1,18 @@
 % STK_OPTIM_OCTAVESQP constructs an object of class 'stk_optim_octavesqp'.
 %
-% CALL: X = stk_optim_octavesqp ()
+% CALL: ALGO = stk_optim_octavesqp ()
 %
-%   constructs an object of class 'stk_optim_octavesqp' with a default set of
-%   options.
+%   constructs an algorithm object ALGO of class 'stk_optim_octavesqp'
+%   with a default set of options.
 %
-% CALL: X = stk_optim_octavesqp (opt)
+% CALL: ALGO = stk_optim_octavesqp (opt)
 %
-%   constructs an object of class 'stk_optim_octavesqp' with a user-defined
-%   set of options, defined by the structure opt.
+%   constructs an algorithm object ALGO of class 'stk_optim_octavesqp'
+%   with a user-defined set of options, defined by the structure opt.
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
 %    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
@@ -38,7 +38,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_optim_octavesqp (user_options)
+function algo = stk_optim_octavesqp (user_options)
 
 if nargin > 1
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -90,7 +90,7 @@ switch options.qp_solver
             options.qp_solver), 'InvalidArgument');
 end
 
-x = struct ('options', options, 'sqp', optimizer);
-x = class (x, 'stk_optim_octavesqp');
+algo = struct ('options', options, 'sqp', optimizer);
+algo = class (algo, 'stk_optim_octavesqp');
 
 end % function

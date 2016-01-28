@@ -1,18 +1,18 @@
 % STK_OPTIM_FMINCON constructs an object of class 'stk_optim_fmincon'.
 %
-% CALL: X = stk_optim_fmincon ()
+% CALL: ALGO = stk_optim_fmincon ()
 %
-%   constructs an object of class 'stk_optim_fmincon' with a default set of
-%   options.
+%   constructs an algorithm object ALGO of class 'stk_optim_fmincon'
+%   with a default set of options.
 %
-% CALL: X = stk_optim_fmincon (opt)
+% CALL: ALGO = stk_optim_fmincon (opt)
 %
-%   constructs an object of class 'stk_optim_fmincon' with a user-defined
-%   set of options, defined by the structure opt.
+%   constructs an algorithm object ALGO of class 'stk_optim_fmincon'
+%   with a user-defined set of options, defined by the structure opt.
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
 %    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
@@ -38,7 +38,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_optim_fmincon (options)
+function algo = stk_optim_fmincon (options)
 
 if nargin > 1
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -67,7 +67,7 @@ if nargin == 0,
     
 end
 
-x = struct ('options', options);
-x = class (x, 'stk_optim_fmincon');
+algo = struct ('options', options);
+algo = class (algo, 'stk_optim_fmincon');
 
 end % function
