@@ -2,7 +2,7 @@ stk >> STK, a Small Toolbox for Kriging
  
 ## Copyright Notice
 ##
-##    Copyright (C) 2015 CentraleSupelec
+##    Copyright (C) 2015, 2016 CentraleSupelec
 ##    Copyright (C) 2014 SUPELEC
 ##
 ##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -60,6 +60,7 @@ Kriging: Core STK functions
  stk_model_update
  stk_make_matcov
  stk_predict
+ stk_predict_leaveoneout
  stk_conditioning
  stk_generate_samplepaths
 #stk_ortho_func              [deprecated]
@@ -130,6 +131,7 @@ Kriging: Covariance functions
 Posterior model objects
  @stk_model_gpposterior/stk_model_gpposterior
  @stk_model_gpposterior/stk_predict
+ @stk_model_gpposterior/stk_predict_leaveoneout
  @stk_model_gpposterior/stk_model_update
  @stk_model_gpposterior/get_input_dim
  @stk_model_gpposterior/get_input_data
@@ -182,6 +184,7 @@ Examples: kriging basics
  stk_example_kb07
  stk_example_kb08
  stk_example_kb09
+ stk_example_kb10
 
 Examples: design of experiments
  stk_example_doe01
@@ -353,6 +356,8 @@ Miscellaneous: options, plots...
  stk_options_set
  stk_plot1d
 #stk_plot_shadedci    [internal]
+ stk_plot_histnormres
+ stk_plot_predvsobs
  stk_runtests
  stk_version
 

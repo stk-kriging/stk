@@ -1,5 +1,21 @@
 2016-02-02  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Add some basic support for LOO cross-validation
+
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: New
+	function that computes LOO predictions and residuals. Currently
+	implemented in a very basic manner (virtual-LOO formulas will be
+	implemented later).
+	* core/stk_predict_leaveoneout.m: Just a wrapper around the first
+	one (very inefficient as it is, since we create a "posterior" that
+	we don't really use... but we should).
+	* misc/plot/stk_plot_predvsobs.m: New graphical function, to
+	visualize predictions versus observations.
+	* misc/plot/stk_plot_histnormres.m: New graphical function, to the
+	distribution of normalized residuals.
+	* examples/01_kriging_basics/stk_example_kb10.m: Example script.
+	* stk_example_kb10.m: Add new functions to the index.
+
 	stk_testfun_borehole.m: New test function
 
 	* examples/test_functions/stk_testfun_borehole.m: New test
