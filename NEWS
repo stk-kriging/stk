@@ -55,6 +55,9 @@ Changes in version 2.4.0
    o stk_dataframe arrays now accept characters indices (row/column names) and
      cell array indices (list of row/column names).
 
+   o stk_predict_leaveoneout.m: New function that computes leave-one-out
+     predictions and residuals.
+
 * Graphics
 
    o All STK functions related to graphics now accept a handle to existing axes
@@ -68,10 +71,19 @@ Changes in version 2.4.0
 
    o stk_plot2d: Removed (had been deprecated for a while).
 
+   o stk_plot_predvsobs (new function): Plot predictions against observations.
+
+   o stk_plot_histnormres (new function): Plot histogram of normalized
+     residuals, together with the N(0, 1) pdf as a reference.
+
 * Examples
 
    o stk_example_doe04.m: Example script that demonstrates the use of
      stk_pmisclass ().
+
+   o stk_example_kb10.m: Example script that demonstrates the use of
+     leave-one-out cross-validation to produce goodness-of-fit graphical
+     diagnostics.
 
 * Minor changes
 
