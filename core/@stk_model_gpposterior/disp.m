@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -33,7 +33,7 @@ loose_spacing = strcmp (get (0, 'FormatSpacing'), 'loose');
 fprintf ('<%s>\n', stk_sprintf_sizetype (model));
 
 if loose_spacing
-    fprintf ('\n');
+    fprintf ('|\n');
 end
 
 if ~ isscalar (model)
@@ -55,18 +55,15 @@ end
 if size (model.output_data, 1) == 0
     str_output_data = '--';
 else
-    str_output_data = ['<' stk_sprintf_sizetype(model.input_data) '>'];
+    str_output_data = ['<' stk_sprintf_sizetype(model.output_data) '>'];
 end
 
-fprintf ('         prior_model: %s\n', str_prior_model);
-fprintf ('           input_dim: %d\n', get_input_dim (model));
-fprintf ('          input_data: %s\n', str_input_data);
-fprintf ('          output_dim: %d\n', 1);
-fprintf ('         output_data: %s\n', str_output_data);
-fprintf ('               param: <%s>\n', ...
+fprintf ('|        prior_model: %s\n', str_prior_model);
+
+fprintf ('|              param: <%s>\n', ...
     stk_sprintf_sizetype (model.prior_model.param));
 
-fprintf ('    lognoisevariance: ');
+fprintf ('|   lognoisevariance: ');
 lnv = model.prior_model.lognoisevariance;
 if isscalar (lnv)
     fprintf ('%s\n', num2str (lnv));
@@ -75,7 +72,21 @@ else
 end
 
 if loose_spacing
-    fprintf ('\n');
+    fprintf ('|\n');
+end
+
+fprintf ('|          input_dim: %d\n', get_input_dim (model));
+fprintf ('|         input_data: %s\n', str_input_data);
+
+if loose_spacing
+    fprintf ('|\n');
+end
+
+fprintf ('|         output_dim: %d\n', 1);
+fprintf ('|        output_data: %s\n', str_output_data);
+
+if loose_spacing
+    fprintf ('|\n\n');
 end
 
 end % function
