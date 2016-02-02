@@ -1,5 +1,14 @@
 2016-02-02  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_testfun_borehole.m: New test function
+
+	* examples/test_functions/stk_testfun_borehole.m: New test
+	function (the "borehole model" response function, from Harper &
+	Gupta 1983).
+	* admin/octpkg/INDEX: Add new function to the index (hidden for
+	now, as the other stk_testfun_* functions, bug perhaps should we
+	change that ?).
+
 	@stk_model_gpposterior/disp.m: Fix a bug and improve layout
 
 	* core/@stk_model_gpposterior/disp.m: Fix a bug and (try to)

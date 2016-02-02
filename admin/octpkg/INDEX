@@ -197,6 +197,7 @@ Examples: miscellaneous
 
 #stk_testfun_braninhoo
 #stk_testfun_goldsteinprice
+#stk_testfun_borehole
 
 ## Cf. misc/distrib/README
 #stk_distrib_normal_cdf      [internal]
