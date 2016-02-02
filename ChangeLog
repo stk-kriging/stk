@@ -1,3 +1,10 @@
+2016-02-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_model_gpposterior/disp.m: Fix a bug and improve layout
+
+	* core/@stk_model_gpposterior/disp.m: Fix a bug and (try to)
+	improve visual layout.
+
 2016-01-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Rename the output argument in optimizer objects
