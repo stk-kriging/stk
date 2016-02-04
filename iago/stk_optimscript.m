@@ -137,13 +137,13 @@ options = [options {'pause', false}];
 [x_opt, f_opt, ~, aux] = stk_optim (f, DIM, BOX, xi, [], MAX_ITER, options);
 
 
-%!shared MAX_ITER TESTCASE_NUM NOISY
+%!shared MAX_ITER, TESTCASE_NUM, NOISY
 %! MAX_ITER = 2;  TESTCASE_NUM = 1;  NOISY = true;
 
 %!test  CRIT = 'IAGO';  stk_optimscript;
 %!error CRIT = 'EI';    stk_optimscript;  % EI cannot be used in the noisy case
 
-%!shared MAX_ITER TESTCASE_NUM CRIT
+%!shared MAX_ITER, TESTCASE_NUM, CRIT
 %! MAX_ITER = 2;  TESTCASE_NUM = 2;  CRIT = 'IAGO';
 
 %!test  NOISY = false; stk_optimscript;
