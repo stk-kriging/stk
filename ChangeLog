@@ -1,3 +1,9 @@
+2016-02-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_optimscript.m: Fix %!shared blocks
+
+	* iago/stk_optimscript.m: Fix %!shared blocks.
+
 2016-02-02  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Add some basic support for LOO cross-validation
