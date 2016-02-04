@@ -50,16 +50,26 @@ switch algo
         algo = stk_optim_octavesqp ();
         
     otherwise        
-        if ~ ismethod (algo, 'stk_minimize_boxconstrained')            
-            stk_error (['The first input argument should be an algorithm ' ...
-                'object, implementing the stk_minimize_boxconstrained ', ...
-                'method.'], 'InvalidArgument');            
-        else            
-            stk_error ('Unexpected failure.', 'UnexpectedFailure');            
-        end
+        stk_error (['The first input argument should be an algorithm ' ...
+            'object, implementing the stk_minimize_boxconstrained ', ...
+            'method.'], 'InvalidArgument');
 end
 
 varargout = cell (1, max (1, nargout));
 [varargout{:}] = stk_minimize_boxconstrained (algo, varargin{:});
 
 end % function
+
+
+%!test
+%! if exist ('fmincon', 'file')
+%!     assert (stk_optim_testmin_box ('fmincon'));
+%! end
+
+%!test
+%! if isoctave  || (exist ('quadprog', 'file'))
+%!    assert (stk_optim_testmin_box ('octavesqp'));
+%! end
+
+%!error assert (stk_optim_testmin_box ('InexistentOptimizer'));
+%!error assert (stk_optim_testmin_box (100));
