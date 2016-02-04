@@ -1,5 +1,15 @@
 2016-02-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Provide generic stk_minimize_* functions
+
+	* misc/optim/stk_minimize_boxconstrained.m: Generic
+	stk_minimize_boxconstrained function, which accepts a char array
+	as first input argument, and provides a generic documentation for
+	all stk_minimize_boxconstrained methods.
+	* misc/optim/stk_minimize_unconstrained.m: Same thing for
+	stk_minimize_unconstrained methods.
+	* admin/octpkg/INDEX: Add new functions to the index.
+
 	Workaround for Octave bug #46350 (closes ticket #32)
 
 	* admin/octpkg/patches/workaround-octave-bug-46350.patch: New
