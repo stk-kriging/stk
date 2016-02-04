@@ -1,5 +1,11 @@
 2016-02-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Workaround for Octave bug #46350 (closes ticket #32)
+
+	* admin/octpkg/patches/workaround-octave-bug-46350.patch: New
+	patch that comments some unit tests out.
+	* admin/octpkg/patches/series: Add new patch to the series.
+
 	stk_optimscript.m: Fix %!shared blocks
 
 	* iago/stk_optimscript.m: Fix %!shared blocks.
