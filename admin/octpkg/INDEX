@@ -338,6 +338,8 @@ Miscellaneous: Pareto optimality
 #@stk_hrect/stk_rescale      [overload STK]
 
 ## Optimizers
+ stk_minimize_boxconstrained
+ stk_minimize_unconstrained
  @stk_optim_fmincon/stk_optim_fmincon
  @stk_optim_fminsearch/stk_optim_fminsearch
  @stk_optim_octavesqp/stk_optim_octavesqp
