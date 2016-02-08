@@ -1,6 +1,6 @@
 % STK_OPTIM_HASFMINCON is a deprecated function
 %
-% stk_optim_fmincon is deprecated and will be removed
+% stk_optim_hasfmincon is deprecated and will be removed
 % from future releases of STK. Use
 %
 %    algo = stk_optim_fmincon ();
@@ -8,11 +8,11 @@
 %
 % instead if you want to check whether fmincon is available or not.
 %
-% See also: stk_optim_fmincon
+% See also: stk_optim_fmincon, stk_optim_testmin_box
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -45,3 +45,7 @@ algo = stk_optim_fmincon ();
 fmincon_available = stk_optim_testmin_box (algo);
 
 end % function
+
+
+%!test
+% b = stk_optim_hasfmincon ();  assert ((b == 0) || (b == 1));

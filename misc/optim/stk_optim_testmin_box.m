@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -28,31 +28,37 @@
 
 function b = stk_optim_testmin_box (algo)
 
-if nargin > 1
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
-try
-    % Starting point
-    x_init = 0.0;  
+if nargin == 1
     
-    % Bounds
-    lb = -1.0;
-    ub = 0.1;
-    
-    [x_opt, obj_opt] = stk_minimize_boxconstrained ...
-        (algo, @objfun, x_init, lb, ub);
-    
-    assert (abs (x_opt - 0.1) < 1e-2);
-    assert (abs (obj_opt - 0.04) < 1e-2);
+    try
+        % Starting point
+        x_init = 0.0;
         
-    b = true;
+        % Bounds
+        lb = -1.0;
+        ub = 0.1;
+        
+        [x_opt, obj_opt] = stk_minimize_boxconstrained ...
+            (algo, @objfun, x_init, lb, ub);
+        
+        assert (abs (x_opt - 0.1) < 1e-2);
+        assert (abs (obj_opt - 0.04) < 1e-2);
+        
+        b = true;
+        
+    catch %#ok<CTCH>
+        
+        b = false;
+        
+    end % try_catch
     
-catch %#ok<CTCH>
+elseif nargin == 0
+    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
     
-    b = false;
+elseif nargin > 1
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
     
-end % try_catch
+end % if
 
 end % function
 
@@ -63,3 +69,15 @@ f = (x - 0.3) .^ 2;
 df = 2 * (x - 0.3);
 
 end % function
+
+
+%!shared algo
+%! algo = stk_options_get ('stk_param_estim', 'minimize_box');
+
+%!error b = stk_optim_testmin_box ();
+%!error b = stk_optim_testmin_box (algo, 33.51);
+
+%!assert (stk_optim_testmin_box (algo));
+%!assert (~ stk_optim_testmin_box ('dudule'));
+
+
