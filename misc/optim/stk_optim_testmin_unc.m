@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -28,26 +28,32 @@
 
 function b = stk_optim_testmin_unc (algo)
 
-if nargin > 1
+if nargin == 1
+    
+    try
+        % Starting point
+        x_init = 0.0;
+        
+        [x_opt, obj_opt] = stk_minimize_unconstrained (algo, @objfun, x_init);
+        
+        assert (abs (x_opt - 0.3) < 1e-2);
+        assert (abs (obj_opt - 0.0) < 1e-2);
+        
+        b = true;
+        
+    catch %#ok<CTCH>
+        
+        b = false;
+        
+    end % try_catch
+    
+elseif nargin == 0
+    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+    
+elseif nargin > 1    
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
-try
-    % Starting point
-    x_init = 0.0;
     
-    [x_opt, obj_opt] = stk_minimize_unconstrained (algo, @objfun, x_init);
-    
-    assert (abs (x_opt - 0.3) < 1e-2);
-    assert (abs (obj_opt - 0.0) < 1e-2);
-    
-    b = true;
-    
-catch %#ok<CTCH>
-    
-    b = false;
-    
-end % try_catch
+end % if
 
 end % function
 
@@ -58,3 +64,13 @@ f = (x - 0.3) .^ 2;
 df = 2 * (x - 0.3);
 
 end % function
+
+
+%!shared algo
+%! algo = stk_options_get ('stk_param_estim', 'minimize_unc');
+
+%!error b = stk_optim_testmin_unc ();
+%!error b = stk_optim_testmin_unc (algo, 33.51);
+
+%!assert (stk_optim_testmin_unc (algo));
+%!assert (~ stk_optim_testmin_unc ('dudule'));
