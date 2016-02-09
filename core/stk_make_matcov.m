@@ -56,6 +56,13 @@ if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
     model.lognoisevariance = - inf;
 end
 
+% Check if the covariance model contains parameters
+% that should have been estimated first
+if (isnumeric (model.param)) && (any (isnan (model.param)))
+    stk_error (['The covariance model contains undefined parameters, ' ...
+        'which must be estimated first.'], 'ParametersMustBeEstimated');
+end
+
 %=== process input arguments
 
 if nargin > 4,
