@@ -17,12 +17,13 @@ automatically generates an error, but unfortunately the Octave developpers have
 made a different choice; see:
 
 http://octave.1599824.n4.nabble.com/Too-many-arguments-td1637206.html
+https://www.gnu.org/software/octave/doc/interpreter/Defining-Functions.html
+http://octave.1599824.n4.nabble.com/Why-does-Octave-ignore-additional-input-arguments-td4674701.html
 
-The current recommendation for checking the value of nargin in STK is as
-follows:
+The current recommendation for checking the value of nargin in STK is as follows:
 
  * don't check for nargin being too small, unless there is a specific reason to
-   do so,
+   do so (typically, to provide a more readable error message),
 
  * check for nargin being too large this way:
 
