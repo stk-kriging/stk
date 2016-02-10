@@ -1,3 +1,10 @@
+2016-02-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_error.m: Use complete names in the stack
+
+	* misc/error/stk_error.m: Use complete names in the stack, to
+	obtain better-looking error messages in Matlab.
+
 2016-02-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Provide generic stk_minimize_* functions

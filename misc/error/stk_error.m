@@ -29,10 +29,10 @@
 
 function stk_error (errmsg, mnemonic, stack)
 
-% second component of error identifier = name of calling function
+% Second component of error identifier = name of calling function
 % (unless stk_error has been called directly from the base workspace)
 if nargin < 3,
-    stack = dbstack ();
+    stack = dbstack ('-completenames');
     if length (stack) == 1,
         caller = 'BaseWorkspace';
     else
@@ -42,7 +42,7 @@ if nargin < 3,
         caller = stack(1).name;
     end
 else
-    % if a "stack" has been provided by the user, we use it without asking
+    % If a "stack" has been provided by the user, we use it without asking
     % questions (if it's a struct)
     if ~ isstruct (stack) || ~ isfield (stack, 'name'),
         % We will throw an error, but not the one we were requested to!
@@ -53,17 +53,20 @@ else
     caller = stack(1).name;
 end
 
-% keep only subfunction name (Octave)
+% Keep only subfunction name (Octave)
 gt_pos = strfind (caller, '>');
 if ~ isempty (gt_pos),
     caller = caller((gt_pos + 1):end);
 end
 
-% construct the error structure
+% Construct the error structure
 errstruct = struct (...
     'message', errmsg, ...
     'identifier', sprintf ('STK:%s:%s', caller, mnemonic), ...
     'stack', stack);
+
+% Note: the 'stack' argument is ignore in Octave 4.0.0 and earlier
+%       releases (see https://savannah.gnu.org/bugs/?47107)
 
 error (errstruct);
 
