@@ -25,10 +25,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -59,51 +60,22 @@ end
 x = double (x);
 
 if strcmp (model.covariance_type, 'stk_discretecov')
-    P = model.param.P(x, :);
-else
-    if isfield (model, 'lm')
-        %--- BEGIN EXPERIMENTAL FEATURE: linear model ------------------------------------
-        if ~ isnan (model.order)
-            error ('To use the EXPERIMENTAL "lm" feature, please set model.order to NaN');
-        end
-        P = feval (model.lm, x);
-        %--- END EXPERIMENTAL FEATURE: linear model --------------------------------------
-    else
-        P = stk_ortho_func_ (model.order, x);
-    end
-end
-
-end % function
-
-
-%%%%%%%%%%%%%%%%%%%%%%%
-%%% stk_ortho_func_ %%%
-%%%%%%%%%%%%%%%%%%%%%%%
-
-function P = stk_ortho_func_ (order, x)
-
-n = size (x, 1);
-
-switch order
     
-    case -1, % 'simple' kriging
-        P = zeros (n, 0);
-        
-    case 0, % 'ordinary' kriging
-        P = ones (n, 1);
-        
-    case 1, % affine trend
-        P = [ones(n, 1) x];
-        
-    case 2, % quadratic trend
-        P = feval (stk_lm_quadratic, x);
-        
-    case 3, % cubic trend
-        P = feval (stk_lm_cubic, x);
-        
-    otherwise, % syntax error
-        error ('order should be in {-1, 0, 1, 2, 3}');
-        
+    P = model.param.P(x, :);
+
+else  % General case
+    
+    % We currently accept both model.order and model.lm
+    if isfield (model, 'lm')
+        if ~ isnan (model.order)
+            stk_error (['Invalid ''model'' argument: model.order should be' ...
+                'set to NaN when model.lm is present.'], 'InvalidArgument');            
+        end
+    else
+        model.lm = stk_lm_polynomial (model.order);
+    end
+    
+    P = feval (model.lm, x);
 end
 
 end % function
