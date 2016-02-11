@@ -127,6 +127,7 @@ Kriging: Covariance functions
 #@stk_lm_null/feval                    [experimental]
 #@stk_lm_quadratic/stk_lm_quadratic    [experimental]
 #@stk_lm_quadratic/feval               [experimental]
+#stk_lm_polynomial                     [experimental]
 
 Posterior model objects
  @stk_model_gpposterior/stk_model_gpposterior

@@ -39,7 +39,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -187,26 +187,16 @@ end
 
 %--- linear model --------------------------------------------------------------
 
-if isnan (model.order),
-    
-    lm = model.lm;
-    
-else
-    
-    switch model.order
-        case -1, % 'simple' kriging
-            lm = stk_lm_null;
-        case 0, % 'ordinary' kriging
-            lm = stk_lm_constant;
-        case 1, % affine trend
-            lm = stk_lm_affine;
-        case 2, % quadratic trend
-            lm = stk_lm_quadratic;
-        otherwise, % syntax error
-            error ('model.order should be in {-1,0,1,2}');
+% We currently accept both model.order and model.lm
+if isfield (model, 'lm')
+    if ~ isnan (model.order)
+        stk_error (['Invalid ''model'' argument: model.order should be' ...
+            'set to NaN when model.lm is present.'], 'InvalidArgument');
     end
-    
+else
+    model.lm = stk_lm_polynomial (model.order);
 end
+
 
 %--- then, each type of covariance is dealt with specifically ------------------
 
@@ -214,39 +204,39 @@ switch model.covariance_type
     
     case 'stk_materncov_iso'
         nu = 5/2 * size (xi, 2);
-        [param, lnv] = paraminit_ (xi, zi, box, nu, lm, lnv);
+        [param, lnv] = paraminit_ (xi, zi, box, nu, model.lm, lnv);
         
     case 'stk_materncov_aniso'
         nu = 5/2 * size (xi, 2);
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, zi, [], nu, lm, lnv);
+        [param, lnv] = paraminit_ (xi, zi, [], nu, model.lm, lnv);
         param = [param(1:2); param(3) - log(diff(box, [], 1))'];
         
     case 'stk_materncov32_iso'
-        [param, lnv] = paraminit_ (xi, zi, box, 3/2, lm, lnv);
+        [param, lnv] = paraminit_ (xi, zi, box, 3/2, model.lm, lnv);
         param = [param(1); param(3)];
         
     case 'stk_materncov32_aniso'
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, zi, [], 3/2, lm, lnv);
+        [param, lnv] = paraminit_ (xi, zi, [], 3/2, model.lm, lnv);
         param = [param(1); param(3) - log(diff(box, [], 1))'];
         
     case 'stk_materncov52_iso'
-        [param, lnv] = paraminit_ (xi, zi, box, 5/2, lm, lnv);
+        [param, lnv] = paraminit_ (xi, zi, box, 5/2, model.lm, lnv);
         param = [param(1); param(3)];
         
     case 'stk_materncov52_aniso'
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, zi, [], 5/2, lm, lnv);
+        [param, lnv] = paraminit_ (xi, zi, [], 5/2, model.lm, lnv);
         param = [param(1); param(3) - log(diff(box, [], 1))'];
         
     case 'stk_gausscov_iso'
-        [param, lnv] = paraminit_ (xi, zi, box, +Inf, lm, lnv);
+        [param, lnv] = paraminit_ (xi, zi, box, +Inf, model.lm, lnv);
         param = [param(1); param(3)];
         
     case 'stk_gausscov_aniso'
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, zi, [], +Inf, lm, lnv);
+        [param, lnv] = paraminit_ (xi, zi, [], +Inf, model.lm, lnv);
         param = [param(1); param(3) - log(diff(box, [], 1))'];
         
     otherwise
