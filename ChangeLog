@@ -1,3 +1,48 @@
+2016-02-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	First draft of a class hierarchy for sampling criteria
+
+	* sampling/@stk_sampcrit_base: New class
+	* sampling/@stk_sampcrit_base/disp.m: New function
+	* sampling/@stk_sampcrit_base/display.m: New function
+	* sampling/@stk_sampcrit_base/horzcat.m: New function
+	* sampling/@stk_sampcrit_base/stk_sampcrit_base.m: New function
+	* sampling/@stk_sampcrit_base/subsasgn.m: New function
+	* sampling/@stk_sampcrit_base/subsref.m: New function
+	* sampling/@stk_sampcrit_base/vertcat.m: New function
+	* sampling/@stk_sampcrit_modelbased: New class
+	* sampling/@stk_sampcrit_modelbased/feval.m: New function
+	* sampling/@stk_sampcrit_modelbased/get_input_data.m: New function
+	* sampling/@stk_sampcrit_modelbased/get_model.m: New function
+	* sampling/@stk_sampcrit_modelbased/get_output_data.m: New function
+	* sampling/@stk_sampcrit_modelbased/set_model.m: New function
+	* sampling/@stk_sampcrit_modelbased/stk_model_update.m: New function
+	* sampling/@stk_sampcrit_modelbased/stk_sampcrit_modelbased.m: New function
+	* sampling/@stk_sampcrit_singleobjoptim: New class
+	* sampling/@stk_sampcrit_singleobjoptim/get_bminimize.m: New function
+	* sampling/@stk_sampcrit_singleobjoptim/get_goal.m: New function
+	* sampling/@stk_sampcrit_singleobjoptim/set_goal.m: New function
+	* sampling/@stk_sampcrit_singleobjoptim/stk_sampcrit_singleobjoptim.m: New function
+	* sampling/@stk_sampcrit_thresholdbasedoptim: New class
+	* sampling/@stk_sampcrit_thresholdbasedoptim/disp.m: New function
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get.m: New function
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get_threshold_mode.m: New function
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get_threshold_value.m: New function
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set.m: New function
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_goal.m: New function
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_model.m: New function
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_threshold_mode.m: New function
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_threshold_value.m: New function
+	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_model_update.m: New function
+	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_sampcrit_thresholdbasedoptim.m: New function
+	* sampling/@stk_sampcrit_ei: New class
+	* sampling/@stk_sampcrit_ei/msfeval.m: New function
+	* sampling/@stk_sampcrit_ei/stk_sampcrit_ei.m: New function
+	* sampling/stk_sampcrit_ehvi_eval.m: New function
+	* sampling/stk_sampcrit_ei_eval.m: New function
+	* sampling/stk_sampcrit_emmi_eval.m: New function
+	* examples/02_design_of_experiments/stk_example_doe03.m: Use a sampling criterion object
+
 2016-02-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_lm_polynomial.m: Create polynomial LM object
