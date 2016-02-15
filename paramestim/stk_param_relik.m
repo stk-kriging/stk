@@ -15,8 +15,8 @@
 %    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -65,13 +65,16 @@ n = size (xi, 1);
 q = size (P, 2);
 
 if q == 0  % Special case: simple kriging
-    G = K;
+    
+    G = K;  % No need to filter anything out
     
 else  % General case
+    
+    % Construct a "filtering matrix" A = W'
     [Q, R_ignored] = qr (P);  %#ok<NASGU> %the second argument *must* be here
     W = Q(:, (q+1):n);
     
-    % Compute G = W' * K * W
+    % Compute G = W' * K * W  (covariance matrix of filtered observations)
     M = (stk_cholcov (K)) * W;
     G = (M') * M;
     

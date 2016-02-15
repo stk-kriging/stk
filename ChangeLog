@@ -1,5 +1,9 @@
 2016-02-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_param_relik.m: Add comments
+
+	* paramestim/stk_param_relik.m: Add comments.
+
 	First draft of a class hierarchy for sampling criteria
 
 	* sampling/@stk_sampcrit_base: New class
