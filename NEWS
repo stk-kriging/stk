@@ -36,6 +36,10 @@ Changes in version 2.4.0
 
    o stk_model_update: New function. Updates a model with new observations.
 
+* Sampling criterion objects
+
+   o TODO: DESCRIBE
+
 * IAGO
 
    o TODO: DESCRIBE
