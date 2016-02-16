@@ -28,6 +28,8 @@
 
 function crit = set_threshold_mode (crit, threshold_mode)
 
+threshold_mode = lower (strtrim (threshold_mode));
+
 switch threshold_mode
     
     case 'user-defined'
@@ -35,7 +37,7 @@ switch threshold_mode
         
     case {'best evaluation', 'best quantile'}
         crit.threshold_mode = threshold_mode;
-        crit = set_threshold (crit);
+        crit = set_threshold_value (crit);
         
     otherwise
         if ischar (threshold_mode)

@@ -45,17 +45,23 @@ else
 end
 
 % Use '--' when the threshold value is NaN (i.e., not specified)
-t = get_threshold_value (crit);
-if isnan (t)
-    str_t = '--';
+tv = crit.threshold_value;
+if isnan (tv)
+    str_tv = '--';
 else
-    str_t = num2str (t);
+    str_tv = num2str (tv);
 end
 
-fprintf ('              model: %s\n', str_model);
-fprintf ('               goal: ''%s''\n', get_goal (crit));
-fprintf ('     threshold_mode: ''%s''\n', get_threshold_mode (crit));
-fprintf ('    threshold_value: %s\n', str_t);
+str_tqo = num2str (crit.threshold_quantile_order);
+if ~ strcmp (crit.threshold_mode, 'best quantile')
+    str_tqo = [str_tqo ' [unused in current mode]'];
+end
+
+fprintf ('    model                    : %s\n', str_model);
+fprintf ('    goal                     : ''%s''\n', get_goal (crit));
+fprintf ('    threshold_mode           : ''%s''\n', crit.threshold_mode);
+fprintf ('    threshold_value          : %s\n', str_tv);
+fprintf ('    threshold_quantile_order : %s\n', str_tqo);
 
 if loose_spacing
     fprintf ('\n');

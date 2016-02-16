@@ -32,20 +32,25 @@ if nargin < 2  % Recompute threshold
     
     if strcmp (crit.threshold_mode, 'best evaluation')
         
+        % Quantity of Interest = evaluation results
         QoI = get_output_data (crit);
         
     elseif strcmp (crit.threshold_mode, 'best quantile')
         
+        % Quantity of Interest = quantiles
         xi = get_input_data (crit);
-        zp = stk_predict (get_model (crit), xi);
-        
-        % Compute quantile  (FIXME: add quantile order property --> constant c)
-        error ('not implemented yet');
-        QoI = zp.mean + c * (sqrt (zp.var));
+        if isempty (xi)
+            QoI = [];
+        else
+            zp = stk_predict (get_model (crit), xi);
+            QoI = zp.mean + crit.threshold_quantile_value * (sqrt (zp.var));
+        end
         
     end
     
-    if get_bminimize (crit)
+    if isempty (QoI)
+        crit.threshold_value = nan;
+    elseif get_bminimize (crit)
         crit.threshold_value = min (QoI);
     else
         crit.threshold_value = max (QoI);
@@ -57,19 +62,5 @@ else  % Argument 'threshold' has been provided
     crit.threshold_mode = 'user-defined';
     
 end
-
-%         case 'minimize'
-%             crit.do_minimize = true;
-%             if strcmp (crit.threshold_mode, 'best evaluation')
-%                 output_data = double (get_output_data (crit));
-%                 crit.threshold = min (output_data);
-%             end
-%
-%         case 'maximize'
-%             crit.do_minimize = false;
-%             if strcmp (crit.threshold_mode, 'best evaluation')
-%                 output_data = double (get_output_data (crit));
-%                 crit.threshold = max (output_data);
-%             end
 
 end % function
