@@ -7,10 +7,12 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
 %
 %    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
-%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%              Julien Bect       <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -47,9 +49,6 @@ end
 xg = algo.xg0;
 xi = xg(xi_ind, :);
 ni = stk_length(xi);
-
-% === SAFETY NET ===
-assert (noise_params_consistency (algo, xi));
 
 %% INITIAL PREDICTION
 model_xg = stk_model('stk_discretecov', algo.model, xg);

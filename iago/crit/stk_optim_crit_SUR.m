@@ -6,9 +6,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %
-%    Author:  Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%    Author:  Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%             Julien Bect       <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -48,9 +49,6 @@ xg = algo.xg0;
 ng = stk_length (xg);
 xi = xg(xi_ind, :);
 ni = stk_length (xi);
-
-% === SAFETY NET ===
-assert (noise_params_consistency (algo, xi));
 
 %% INITIAL PREDICTION
 % zp = stk_predict(algo.model, xi_ind, zi, xg);
