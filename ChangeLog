@@ -6,9 +6,15 @@
 
 2016-02-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Get rid of iago/utils/get_lognoisevariance.m
+
+	* iago/utils/get_lognoisevariance.m: Deleted.
+	* iago/crit/stk_optim_crit_SUR.m: Do without it.
+	* iago/crit/stk_optim_crit_iago.m: Idem.
+
 	Get rid of noise_params_consistency
 
-	* iago/utils/noise_params_consistency.m: Removed.
+	* iago/utils/noise_params_consistency.m: Deleted.
 	* iago/crit/stk_optim_crit_EI.m: Remove call to noise_params_consistency.
 	* iago/crit/stk_optim_crit_SUR.m: Idem.
 	* iago/crit/stk_optim_crit_iago.m: Idem.

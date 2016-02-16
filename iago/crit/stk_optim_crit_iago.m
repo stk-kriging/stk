@@ -112,16 +112,21 @@ while ~CONDH_OK
         ind_candi = ni + ic;
         
         % Noise variance
-        lnv = get_lognoisevariance (algo.model, algo.xg0, ic, true);
         if isinf (algo.futurebatchsize),
             % The future new observation will be noiseless
             noisevariance = 0;
             lnv = - inf;
         else
-            % Get the lnv for the future new observation
-            noisevariance = (exp (lnv)) / algo.futurebatchsize;
+            % First, get the value of noise variance for one noisy evaluation
+            if isa (xg, 'stk_ndf')  % heteroscedatic case
+                noisevariance = algo.xg0.noisevariance(ic);
+            else % homoscedastic case
+                noisevariance = exp (algo.model.lognoisevariance);
+            end
+            % Second, take algo.futurebatchsize into account
+            noisevariance = noisevariance / algo.futurebatchsize;
             lnv = log (noisevariance);
-        end        
+        end
         
         % Heteroscedastic case: store lnv in model.lognoisevariance
         % (because we called stk_fakenorep, model_.lognoisevariance is a vector)

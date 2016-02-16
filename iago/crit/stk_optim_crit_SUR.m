@@ -75,8 +75,12 @@ for test_ind = 1:ng
     xi = xg(xi_ind, :);
     
     % Noise variance
-    lnv = get_lognoisevariance (algo.model, algo.xg0, test_ind, true);
-    noisevariance = exp (lnv);
+    if isa (xg, 'stk_ndf')  % heteroscedatic case
+        noisevariance = algo.xg0.noisevariance(test_ind);
+    else  % homoscedastic case
+        noisevariance = exp (algo.model.lognoisevariance);
+    end
+    lnv = log (noisevariance);
     
     % Heteroscedastic case: store lnv in model.lognoisevariance
     model_ = model_xg;
