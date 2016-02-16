@@ -10,7 +10,8 @@
 %
 %    Copyright (C) 2016 CentraleSupelec
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect      <julien.bect@centralesupelec.fr>
+%             Stefano Duhamel  <stefano.duhamel@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -44,3 +45,12 @@ varargout = cell (1, max (1, nargout));
 [varargout{:}] = stk_predict_leaveoneout (M_post);
 
 end % function
+
+
+%!test  % heteroscedastic noise case
+%! x_obs = stk_sampling_regulargrid (20, 1, [0; 2*pi]);
+%! z_obs = stk_feval (@sin, x_obs);
+%! model = stk_model ('stk_materncov32_iso');
+%! model.param = log ([1; 5]);
+%! model.lognoisevariance = linspace (0.1, 1, 20);
+%! [loo_pred, loo_res] = stk_predict_leaveoneout (model, x_obs, z_obs);
