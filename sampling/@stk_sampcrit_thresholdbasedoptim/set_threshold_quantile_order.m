@@ -1,4 +1,4 @@
-% SET [overload base function]
+% SET_THRESHOLD_QUANTILE_ORDER ...
 
 % Copyright Notice
 %
@@ -26,37 +26,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = set (crit, propname, value)
+function crit = set_threshold_quantile_order (crit, value)
 
-switch propname
-    
-    case 'model'
-        crit = set_model (crit, value);
-        
-    case 'input_data'
-        stk_error ('Property ''input_data'' is read-only.', ...
-            'ReadOnlyProperty');
-        
-    case 'output_data'
-        stk_error ('Property ''output_data'' is read-only.', ...
-            'ReadOnlyProperty');
-        
-    case 'goal'
-        crit = set_goal (crit, value);
-        
-    case 'threshold_mode'
-        crit = set_threshold_mode (crit, value);
-        
-    case 'threshold_value'
-        crit = set_threshold_value (crit, value);
+% Convert to double if possible (instead of checking with isnumeric)
+value = double (value);
 
-    case 'threshold_quantile_order'
-        crit = set_threshold_quantile_order (crit, value);
-
-    otherwise
-        errmsg = sprintf ('There is no field named %s', propname);
-        stk_error (errmsg, 'InvalidArgument');
-        
+if (~ isscalar (value)) || (value < 0) || (value > 1)
+    stk_error (['The value of property ''threshold_quantile_order'' ' ...
+        'must be a scalar between 0 and 1.'], 'InvalidArgument');
+else
+    crit.threshold_quantile_order = value;
+    crit.threshold_quantile_value = norminv (value);
 end
 
 end % function

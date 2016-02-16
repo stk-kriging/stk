@@ -1,4 +1,4 @@
-% SET [overload base function]
+% GET_THRESHOLD_QUANTILE_ORDER ...
 
 % Copyright Notice
 %
@@ -26,37 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = set (crit, propname, value)
+function value = get_threshold_quantile_order (crit)
 
-switch propname
-    
-    case 'model'
-        crit = set_model (crit, value);
-        
-    case 'input_data'
-        stk_error ('Property ''input_data'' is read-only.', ...
-            'ReadOnlyProperty');
-        
-    case 'output_data'
-        stk_error ('Property ''output_data'' is read-only.', ...
-            'ReadOnlyProperty');
-        
-    case 'goal'
-        crit = set_goal (crit, value);
-        
-    case 'threshold_mode'
-        crit = set_threshold_mode (crit, value);
-        
-    case 'threshold_value'
-        crit = set_threshold_value (crit, value);
-
-    case 'threshold_quantile_order'
-        crit = set_threshold_quantile_order (crit, value);
-
-    otherwise
-        errmsg = sprintf ('There is no field named %s', propname);
-        stk_error (errmsg, 'InvalidArgument');
-        
-end
+value = crit.threshold_quantile_order;
 
 end % function

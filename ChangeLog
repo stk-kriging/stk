@@ -1,3 +1,29 @@
+2016-02-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Improve @stk_sampcrit_thresholdbasedoptim class
+
+	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_sampcrit_thresholdbasedoptim.m:
+	Add properties threshold_quantile_order (public) and
+	theshold_quantile_value (private).  Streamline input arguments processing.
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get_threshold_quantile_order.m:
+	Fast getter for new public property.
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_threshold_quantile_order.m:
+	Fast setter for new public property.
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get_threshold_mode.m:
+	Rename output argument.
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get_threshold_value.m:
+	Rename output argument.
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_threshold_mode.m:
+	Fix bug. Accept mixed-case variants of mode string.
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_threshold_value.m:
+	Fix bug. Implement quantile case.
+	* sampling/@stk_sampcrit_thresholdbasedoptim/disp.m:
+	Display new public property. Change display layout.
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get.m:
+	Use direct access to properties whenever possible.
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set.m:
+	Add new public property.
+
 2016-02-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_relik.m: Add comments

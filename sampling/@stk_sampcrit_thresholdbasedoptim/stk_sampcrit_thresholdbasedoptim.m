@@ -27,7 +27,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function crit = stk_sampcrit_thresholdbasedoptim ...
-    (model, goal, threshold_mode, threshold_value)
+    (model, goal, threshold_mode, threshold_value, threshold_quantile_order)
 
 if nargin > 4
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -40,6 +40,8 @@ if nargin == 0,  % No input argument case
     
     crit.threshold_mode = 'best evaluation';
     crit.threshold_value = NaN;
+    crit.threshold_quantile_order = 0.5;
+    crit.threshold_quantile_value = 0;  % private
     
     crit = class (crit, 'stk_sampcrit_thresholdbasedoptim', crit0, crit1);
     return
@@ -49,36 +51,43 @@ end
 crit0 = stk_sampcrit_modelbased (model);
 crit1 = stk_sampcrit_singleobjoptim (goal);
 
-if nargin < 3  % Two input arguments: use 'best evaluation' as a default
-    
-    % FIXME: use 'best quantile' in case of noisy evaluations
+% Default value for property threshold_mode
+model = get_model (crit0);
+if model.lognoisevariance == -inf
     crit.threshold_mode = 'best evaluation';
-    crit.threshold_value = NaN;
-    crit = class (crit, 'stk_sampcrit_thresholdbasedoptim', crit0, crit1);
-    crit = set_threshold_value (crit);
-    
-elseif nargin < 4  % Three input arguments: threshold_mode has been specified
-    
-    crit.threshold_mode = threshold_mode;
-    crit.threshold_value = NaN;
-    crit = class (crit, 'stk_sampcrit_thresholdbasedoptim', crit0, crit1);
-    crit = set_threshold_value (crit);
-    
-else  % Four input argument: user-defined threshold
-    
-    if (~ isempty (threshold_mode)) ...
-            && (~ strcmp (threshold_mode, 'user-defined'))
-        
-        stk_error (['Argument threshold_mode must be set to ''user-' ...
-            'defined'' or [] when threshold_value is provided.'], ...
-            'IncompatibleArguments');
-        
+else
+    crit.threshold_mode = 'best quantile';
+end
+
+% Create object with default properties
+crit.threshold_value = NaN;
+crit.threshold_quantile_order = 0.5;
+crit.threshold_quantile_value = 0;  % private
+crit = class (crit, 'stk_sampcrit_thresholdbasedoptim', crit0, crit1);
+
+if nargin >= 3
+    % Process threshold_mode argument
+    if (~ isempty (threshold_mode))
+        crit = set_threshold_mode (crit, threshold_mode);
     end
     
-    crit.threshold_mode = 'user-defined';
-    crit.threshold_value = threshold_value;
-    crit = class (crit, 'stk_sampcrit_thresholdbasedoptim', crit0, crit1);
-    
+    if nargin >= 4
+        % Process threshold_value argument
+        if ~ isempty (threshold_value)
+            if ~ strcmp (threshold_mode, 'user-defined')
+                stk_error (['Argument threshold_mode must be set to ''user-' ...
+                    'defined'' or [] when threshold_value is provided.'], ...
+                    'IncompatibleArguments');
+            end
+            crit = set_threshold_value (crit, threshold_value);
+        end
+        
+        % Process threshold_quantile_order argument
+        if nargin >= 5
+            crit = set_threshold_quantile_order ...
+                (crit, threshold_quantile_order);
+        end
+    end
 end
 
 end % function

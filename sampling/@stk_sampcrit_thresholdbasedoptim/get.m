@@ -43,10 +43,13 @@ switch propname
         value = get_goal (crit);
         
     case 'threshold_mode'
-        value = get_threshold_mode (crit);
+        value = crit.threshold_mode;
         
-    case 'threshold'
-        value = get_threshold (crit);
+    case 'threshold_value'
+        value = crit.threshold_value;
+        
+    case 'threshold_quantile_order'
+        value = crit.threshold_quantile_order;
         
     otherwise
         errmsg = sprintf ('There is no field named %s', propname);

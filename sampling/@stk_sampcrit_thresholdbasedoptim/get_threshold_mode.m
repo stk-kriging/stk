@@ -26,8 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function threshold_mode = get_threshold_mode (crit)
+function value = get_threshold_mode (crit)
 
-threshold_mode = crit.threshold_mode;
+value = crit.threshold_mode;
 
 end % function
