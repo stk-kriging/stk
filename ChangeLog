@@ -1,3 +1,9 @@
+2016-02-16  Stefano Duhamel  <stefano.duhamel@supelec.fr>
+
+	stk_predict_leaveoneout.m: Add a (currently failing) unit test
+
+	* core/stk_predict_leaveoneout.m: Add a (currently failing) unit test.
+
 2016-02-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Improve @stk_sampcrit_thresholdbasedoptim class
