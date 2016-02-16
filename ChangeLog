@@ -6,6 +6,14 @@
 
 2016-02-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Get rid of noise_params_consistency
+
+	* iago/utils/noise_params_consistency.m: Removed.
+	* iago/crit/stk_optim_crit_EI.m: Remove call to noise_params_consistency.
+	* iago/crit/stk_optim_crit_SUR.m: Idem.
+	* iago/crit/stk_optim_crit_iago.m: Idem.
+	* iago/utils/stk_optim_addevals.m: Idem.
+
 	Improve @stk_sampcrit_thresholdbasedoptim class
 
 	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_sampcrit_thresholdbasedoptim.m:

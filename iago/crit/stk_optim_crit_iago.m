@@ -6,11 +6,12 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
 %
 %    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
-%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
-%              Julien Bect       <julien.bect@supelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%              Julien Bect       <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -39,9 +40,6 @@ if (~ isfield (algo.model, 'lognoisevariance')) ...
         || (isempty (algo.model.lognoisevariance))
     algo.model.lognoisevariance = - inf;
 end
-
-% === SAFETY NET ===
-assert (noise_params_consistency (algo, xi));
 
 
 %% SIMULATION + INITIAL PREDICTION
