@@ -1,6 +1,14 @@
-2016-02-16  Stefano Duhamel  <stefano.duhamel@supelec.fr>
+2016-02-17  Julien Bect  <julien.bect@centralesupelec.fr>
 
-	stk_predict_leaveoneout.m: Bugfix for the heteroscedastic (bug #43)
+	@stk_model_gpposterior: Make sure that lognoisevariance is a column
+
+	* core/@stk_model_gpposterior/set_lognoisevariance.m: Make sure
+	that prior_model.lognoisevariance is a column vector.
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Idem.
+
+2016-02-17  Stefano Duhamel  <stefano.duhamel@supelec.fr>
+
+	stk_predict_leaveoneout.m: Bugfix for the heteroscedastic case (bug #43)
 
 	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Delete
 	the lognoisevariance of the left-out point in the heteroscedastic

@@ -28,6 +28,17 @@
 
 function model = set_lognoisevariance (model, lnv)
 
+% Check lnv
+if ~ isscalar (lnv)    
+    n = size (model.input_data, 1);
+    if (~ isvector (lnv)) || (length (lnv) ~= n)
+        stk_error (['lnv must be either a scalar or a vector' ...
+            ' of length size (xi, 1).'], 'InvalidArgument');
+    end    
+    % Make sure that lnv is a column vector
+    lnv = lnv(:);
+end
+
 model.prior_model.lognoisevariance = lnv;
 
 end % function
