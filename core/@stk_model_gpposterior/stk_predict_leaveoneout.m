@@ -37,6 +37,10 @@ if nargin > 1,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
+% Heteroscedatic noise ?
+heteroscedastic = ~ isscalar (M_post.prior_model.lognoisevariance);
+
+% Compute residuals ?
 compute_LOO_res = (nargout > 1);
 
 n = size (M_post.input_data, 1);
@@ -46,22 +50,38 @@ zp_var = zeros (n, 1);
 if compute_LOO_res
     res = zeros (n, 1);
     res_norm = zeros (n, 1);
-    sigma = exp (0.5 * get_lognoisevariance (M_post)); %sqrt(s^2)
+    sigma = exp (0.5 * M_post.prior_model.lognoisevariance);
 end
-
+    
 for i = 1:n  % FIXME: use "virtual cross-validation" formulae
     
     xx = M_post.input_data;   xx(i, :) = [];  xt = M_post.input_data(i, :);
     zz = M_post.output_data;  zz(i, :) = [];  zt = M_post.output_data(i, :);
     
-    zp = stk_predict (M_post.prior_model, xx, zz, xt);
+    prior_model = M_post.prior_model;
+    
+    % In the heteroscedastic case, the vector of log-variances for the
+    % noise is stored in prior_model.lognoisevariance.  This vector must be
+    % modified too, when performing cross-validation.
+    if heteroscedastic
+        prior_model.lognoisevariance(i) = [];
+    end
+    
+    zp = stk_predict (prior_model, xx, zz, xt);  
     
     zp_mean(i) = zp.mean;
     zp_var(i) = zp.var;
     
     if compute_LOO_res
+        
+        % Compute "raw" residual
         res(i) = zt - zp_mean(i);
-        res_norm(i) = res(i) / (sqrt (sigma^2 + zp.var));
+        
+        % Compute normalized residual
+        if heteroscedastic
+            res_norm(i) = res(i) / (sqrt (sigma(i)^2 + zp.var)); 
+        else
+            res_norm(i) = res(i) / (sqrt (sigma^2 + zp.var)); 
     end
 end
 
