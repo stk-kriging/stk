@@ -61,6 +61,17 @@ elseif nargin == 3
         M_prior.dim = size (xi, 2);
     end
     
+    % Check M_prior.lognoisevariance
+    if ~ isscalar (M_prior.lognoisevariance)
+        if (~ isvector (M_prior.lognoisevariance)) ...
+                && (length (M_prior.lognoisevariance) == n)
+            stk_error (['M_prior.lognoisevariance must be either a scalar ' ...
+                'or a vector of length size (xi, 1).'], 'InvalidArgument');
+        end
+        % Make sure that lnv is a column vector
+        M_prior.lognoisevariance = M_prior.lognoisevariance(:);
+    end
+    
     % Check the size of z_obs
     if ~ (isempty (zi) || isequal (size (zi), [n 1]))
         stk_error (['z_obs must either be empty or have the ' ...
