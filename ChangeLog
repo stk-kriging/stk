@@ -1,5 +1,13 @@
 2016-02-16  Stefano Duhamel  <stefano.duhamel@supelec.fr>
 
+	stk_predict_leaveoneout.m: Bugfix for the heteroscedastic (bug #43)
+
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Delete
+	the lognoisevariance of the left-out point in the heteroscedastic
+	case (fixes bug #43).
+
+2016-02-16  Stefano Duhamel  <stefano.duhamel@supelec.fr>
+
 	stk_predict_leaveoneout.m: Add a (currently failing) unit test
 
 	* core/stk_predict_leaveoneout.m: Add a (currently failing) unit test.
