@@ -35,11 +35,6 @@ function [xi, zi, algo, zi_new] = stk_optim_addevals (algo, xi, zi, xi_new)
 
 assert (size (xi, 1) == size (zi, 1));
 
-% DESIGN CHOICE: the noise variance associated with the observations is stored
-%   in algo.model.lognoisevariance, as everywhere else in STK. Therefore, we
-%   should *not* use stk_ndf objects for xi and xinew
-assert (~ isa (xi, 'stk_ndf'));  assert (~ isa (xi_new, 'stk_ndf'));
-
 % Evaluate
 zi_new = stk_feval (algo.f, xi_new);
 
@@ -59,11 +54,12 @@ else
 end
 
 % HETEROSCEDATIC case: Fetch the value of the variance of the noise from
-%    algo.xg0 and update algo.model.lognoisevariance with it.
-if isa (algo.xg0, 'stk_ndf')
-    [b, pos] = ismember (xi_new, algo.xg0, 'rows');  assert (all (b));
-    lnv_new = log (algo.xg0.noisevariance(pos));
-    algo.model.lognoisevariance = [algo.model.lognoisevariance; lnv_new];
+%    algo.noisevariance and update algo.model.lognoisevariance with it.
+if ~ isscalar (algo.noisevariance)
+    [b, pos] = ismember (xi, algo.xg0, 'rows');  assert (all (b));    
+    algo.model.lognoisevariance = log (algo.noisevariance(pos));
+    % CAREFUL: algo.model.lognoisevariance contains the lnv for *one*
+    % evaluation => repetitions will be taken into account elsewhere
 end
 
 % === SAFETY NETS ===

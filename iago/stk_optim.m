@@ -87,34 +87,15 @@ iter_history = struct ('x_opt', {}, 'f_opt', {});
 for i = 1:N
     fprintf ('* iteration .. %d/%d\n', i, N);
     
-    % ESTIMATE MODEL PARAMETERS
+    % Estimate model parameters
     if algo.estimparams
         fprintf('parameter estimation ..');
-        
-        if isa (algo.xg0, 'stk_ndf')  % noisy heteroscedatic case
-            known_var = algo.noisevariance{1};
-            % If known_var is true (known variance) then model.lognoisevariance
-            % should *already* contain the vector of log-variances. Otherwise,
-            % we call an appropriate estimation procedure.
-            if known_var
-                % Nothing to do. Just a safety net.
-                ni = stk_length (xi);  lnv = algo.model.lognoisevariance;
-                assert ((isnumeric (lnv)) && (isvector (lnv)) ...
-                    && (length (lnv) == ni));
-            else
-                var_fun = algo.noisevariance{2};
-                algo.model.lognoisevariance = var_fun (algo, xi, zi);
-                % Preliminary attempt / other parameters could be useful ?
-            end
-        end
-        
-        % All other cases should be dealt with transparently by STK
+        % Note: in the case of heteroscedastic noise, model.lognoisevariance
+        % should *already* contain the vector of log-variances.
         [algo.model.param, algo.model.lognoisevariance] = ...
-            stk_param_estim_withrep (algo.model, xi, zi);
-        
-        fprintf('done\n');
+            stk_param_estim_withrep (algo.model, xi, zi);  fprintf('done\n');
     end
-
+    
     % Compute sampling criterion
     [zp, crit_xg] = algo.samplingcrit (algo, xi, zi);
     assert ((stk_length (algo.xg0)) == (stk_length (crit_xg)));  %%%TEMP
@@ -150,7 +131,7 @@ for i = 1:N
     end
     
     % FIXME: the choice of a stopping rule should not be directly tied to the
-    %   choice of a sampling criterion. It makes it impossible to use stopping   
+    %   choice of a sampling criterion. It makes it impossible to use stopping
     %   rules in conjunction with user-defined criterions. Moreover, early
     %   stopping should be associated with specific return codes. Finally, each
     %   of these stopping rules involve one or two numerical constants that

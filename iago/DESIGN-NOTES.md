@@ -2,19 +2,16 @@
 
 ### Observations: `xi`, `xinew`
 
- * they are *not* `stk_ndf` objects
- * therefore, they do not carry the value of the noise variance
+ * they do not carry the value of the noise variance
  * the noise variance is in `algo.model.lognoisevariance`
 
 ### Homoscedastic / heteroscedastic
 
  * Homoscedastic case
-    * `algo.xg0` is *not* an `stk_ndf` object
     * `algo.noisevariance` is a scalar (`nan` means 'unknown')
     * `algo.model.lognoisevariance` is a scalar also
  * Heteroscedastic case
-    * `algo.xg0` is an `stk_ndf` object
-    * `algo.noisevariance` a pair `{known_var, var_fun}`
+    * `algo.noisevariance` a vector of length size (algo.xg0, 1)
     * `algo.model.lognoisevariance` is a vector of length `ni`
 
 ### Noiseless/noisy
@@ -25,7 +22,7 @@
 ### To declare that the variance of the noise is unknown
 
  * homoscedastic case: set `algo.noisevariance` to `nan`
- * heteroscedastic case: set `algo.noisevariance{1}` to `false`
+ * heteroscedastic case: NOT SUPPORTED YET
 
 ### Search grid
 
