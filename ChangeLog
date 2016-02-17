@@ -1,5 +1,21 @@
 2016-02-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Get rid of the half-baked @stk_ndf class
+
+	* iago/@stk_ndf/fieldnames.m: Deleted
+	* iago/@stk_ndf/get.m: Deleted
+	* iago/@stk_ndf/set.m: Deleted
+	* iago/@stk_ndf/stk_ndf.m: Deleted
+	* iago/@stk_ndf/stk_setnoisevariance.m: Deleted
+	* iago/@stk_ndf/stk_sprintf.m: Deleted
+	* iago/@stk_ndf/subsasgn.m: Deleted
+	* iago/@stk_ndf/vertcat.m: Deleted
+	* iago/DESIGN-NOTES.md: Remove all references to  stk_ndf
+	* iago/stk_optim.m: Idem.
+	* iago/utils/stk_optim_addevals.m: Idem.
+	* iago/crit/stk_optim_crit_SUR.m: Idem.
+	* iago/crit/stk_optim_crit_iago.m: Idem.
+
 	stk_sampcrit_thresholdbasedoptim.m: Add unit tests
 
 	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_sampcrit_thresholdbasedoptim.m:

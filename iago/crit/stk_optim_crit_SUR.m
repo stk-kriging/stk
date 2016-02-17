@@ -53,6 +53,7 @@ ni = stk_length (xi);
 %% INITIAL PREDICTION
 % zp = stk_predict(algo.model, xi_ind, zi, xg);
 model_xg = stk_model('stk_discretecov', algo.model, xg);
+[model_xg, zi] = stk_fakenorep (model_xg, zi);
 zp = stk_predict(model_xg, xi_ind, zi, []);
 zpmean = zp.mean;
 zpvar  = zp.var;
@@ -65,6 +66,20 @@ if algo.disp; view_init(algo, xi, zi, xg); end
 % allocate sampling criterion vector
 samplingcrit = zeros(ng, 1);
 
+% Heteroscedastic noise ?
+heteroscedastic_noise = ~ isscalar (algo.noisevariance);
+
+% Prepare future noise variance
+if isinf (algo.futurebatchsize),
+    % Pretend that the future observation will be noiseless
+    heteroscedastic_noise = false;
+    noisevariance = 0;
+    lnv = - inf;
+elseif ~ heteroscedastic_noise
+    noisevariance = algo.noisevariance / algo.futurebatchsize;
+    lnv = log (noisevariance);
+end
+
 for test_ind = 1:ng
     
     if algo.showprogress,
@@ -75,19 +90,16 @@ for test_ind = 1:ng
     xi = xg(xi_ind, :);
     
     % Noise variance
-    if isa (xg, 'stk_ndf')  % heteroscedatic case
-        noisevariance = algo.xg0.noisevariance(test_ind);
-    else  % homoscedastic case
-        noisevariance = exp (algo.model.lognoisevariance);
+    if heteroscedastic_noise
+        noisevariance = algo.noisevariance(test_ind) / algo.futurebatchsize;
+        lnv = log (noisevariance);
     end
-    lnv = log (noisevariance);
     
     % Heteroscedastic case: store lnv in model.lognoisevariance
+    % (because we called stk_fakenorep, model_.lognoisevariance is a vector)
     model_ = model_xg;
-    if isa (xg, 'stk_ndf')  % heteroscedastic case
-        model_.lognoisevariance = [model_.lognoisevariance; lnv];
-    end
-    
+    model_.lognoisevariance = [model_.lognoisevariance; lnv];
+        
     if size(xi.data, 1) == size(unique(xi.data, 'rows'), 1) || noisevariance > 0.0
         
         % [zpcond, lambda] = stk_predict(algo.model, xi, [], xg);

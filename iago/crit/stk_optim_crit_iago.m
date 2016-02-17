@@ -101,6 +101,20 @@ CONDH_OK = false;
 % FIXME: numerical constant should go in the options
 std_tol = (max (zc_pred.mean) - median (zc_pred.mean)) * 1e-10;
 
+% Heteroscedastic noise ?
+heteroscedastic_noise = ~ isscalar (algo.noisevariance);
+
+% Prepare future noise variance
+if isinf (algo.futurebatchsize),
+    % Pretend that the future observation will be noiseless
+    heteroscedastic_noise = false;
+    noisevariance = 0;
+    lnv = - inf;
+elseif ~ heteroscedastic_noise
+    noisevariance = algo.noisevariance / algo.futurebatchsize;
+    lnv = log (noisevariance);
+end
+
 while ~CONDH_OK
     for ic = 1:nc
         
@@ -112,19 +126,8 @@ while ~CONDH_OK
         ind_candi = ni + ic;
         
         % Noise variance
-        if isinf (algo.futurebatchsize),
-            % The future new observation will be noiseless
-            noisevariance = 0;
-            lnv = - inf;
-        else
-            % First, get the value of noise variance for one noisy evaluation
-            if isa (xg, 'stk_ndf')  % heteroscedatic case
-                noisevariance = algo.xg0.noisevariance(ic);
-            else % homoscedastic case
-                noisevariance = exp (algo.model.lognoisevariance);
-            end
-            % Second, take algo.futurebatchsize into account
-            noisevariance = noisevariance / algo.futurebatchsize;
+        if heteroscedastic_noise
+            noisevariance = algo.noisevariance(ic) / algo.futurebatchsize;
             lnv = log (noisevariance);
         end
         
