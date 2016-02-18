@@ -4,12 +4,12 @@
 %
 % CALL: [LOO_PRED, LOO_RES] = stk_predict_leaveoneout (M_POSTERIOR)
 
-
 % Copyright Notice
 %
 %    Copyright (C) 2016 CentraleSupelec
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect      <julien.bect@centralesupelec.fr>
+%             Stefano Duhamel  <stefano.duhamel@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -40,56 +40,44 @@ end
 % Heteroscedatic noise ?
 heteroscedastic = ~ isscalar (M_post.prior_model.lognoisevariance);
 
-% Compute residuals ?
-compute_LOO_res = (nargout > 1);
-
 n = size (M_post.input_data, 1);
 zp_mean = zeros (n, 1);
 zp_var = zeros (n, 1);
 
-if compute_LOO_res
-    res = zeros (n, 1);
-    res_norm = zeros (n, 1);
-    sigma = exp (0.5 * M_post.prior_model.lognoisevariance);
-end
-    
+prior_model = M_post.prior_model;
+
 for i = 1:n  % FIXME: use "virtual cross-validation" formulae
     
     xx = M_post.input_data;   xx(i, :) = [];  xt = M_post.input_data(i, :);
-    zz = M_post.output_data;  zz(i, :) = [];  zt = M_post.output_data(i, :);
-    
-    prior_model = M_post.prior_model;
+    zz = M_post.output_data;  zz(i, :) = [];
     
     % In the heteroscedastic case, the vector of log-variances for the
     % noise is stored in prior_model.lognoisevariance.  This vector must be
     % modified too, when performing cross-validation.
     if heteroscedastic
+        prior_model = M_post.prior_model;
         prior_model.lognoisevariance(i) = [];
     end
     
-    zp = stk_predict (prior_model, xx, zz, xt);  
+    zp = stk_predict (prior_model, xx, zz, xt);
     
     zp_mean(i) = zp.mean;
     zp_var(i) = zp.var;
     
-    if compute_LOO_res
-        
-        % Compute "raw" residual
-        res(i) = zt - zp_mean(i);
-        
-        % Compute normalized residual
-        if heteroscedastic
-            res_norm(i) = res(i) / (sqrt (sigma(i)^2 + zp.var)); 
-        else
-            res_norm(i) = res(i) / (sqrt (sigma^2 + zp.var)); 
-    end
 end
 
 % Prepare outputs
 LOO_pred = stk_dataframe ([zp_mean zp_var], {'mean', 'var'});
-if compute_LOO_res
-    LOO_res.raw = res;
-    LOO_res.normalized = res_norm;
+
+% Compute residuals ?
+if nargout > 1
+    
+    % Compute "raw" residuals
+    LOO_res.raw = M_post.output_data - zp_mean;
+    
+    % Compute normalized residual
+    noisevariance = exp (M_post.prior_model.lognoisevariance);
+    LOO_res.normalized = LOO_res.raw ./ (sqrt (noisevariance + zp_var));
 end
 
 end % function

@@ -1,3 +1,10 @@
+2016-02-18  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_predict_leaveoneout.m: Compute residuals outside the CV loop
+
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Compute
+	residuals outside the cross-validation loop.
+
 2016-02-17  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_model_gpposterior: Make sure that lognoisevariance is a column
