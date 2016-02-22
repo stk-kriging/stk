@@ -29,7 +29,7 @@
 function crit = stk_sampcrit_thresholdbasedoptim ...
     (model, goal, threshold_mode, threshold_value, threshold_quantile_order)
 
-if nargin > 4
+if nargin > 5  
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
