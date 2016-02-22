@@ -1,3 +1,10 @@
+2016-02-23  Tom Assouline  <tom.assouline@supelec.fr>
+
+	stk_sampcrit_thresholdbasedoptim.m: Fix nargin check
+
+	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_sampcrit_thresholdbasedoptim.m:
+	Fix nargin check.
+
 2016-02-18  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_predict_leaveoneout.m: Compute residuals outside the CV loop
