@@ -1,5 +1,10 @@
 2016-02-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_param_relik.m: Introduce a 'simple_kriging' flag
+
+	* paramestim/stk_param_relik.m: Introduce a 'simple_kriging' flag
+	to clarify the meaning of the tests for q == 0.
+
 	Get rid of the half-baked @stk_ndf class
 
 	* iago/@stk_ndf/fieldnames.m: Deleted
