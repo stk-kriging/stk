@@ -29,7 +29,7 @@
  % Add STK subdirectories to the path
  stk_init__addpath (root);
  
-@@ -330,139 +315,6 @@
+@@ -330,142 +315,6 @@
  
  end % function
  
@@ -138,6 +138,9 @@
 -
 -relpath = 'sampling';
 -info = register_mex (info, relpath, 'stk_sampling_vdc_rr2', {}, {'primes.h'});
+-
+-relpath = fullfile ('sampling', 'private');
+-info = register_mex (info, relpath, 'stk_sampling_sobol_mex');
 -
 -relpath = fullfile ('misc', 'pareto', 'private');
 -info = register_mex (info, relpath, 'stk_paretofind_mex', {}, {'pareto.h'});

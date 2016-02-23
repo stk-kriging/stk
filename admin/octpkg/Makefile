@@ -12,6 +12,7 @@ all: \
  __stk_gpquadform_pairwise__.mex \
  __stk_paretofind_mex__.mex \
  __stk_sampling_vdc_rr2__.mex \
+ __stk_sampling_sobol_mex__.mex \
  __stk_distrib_bivnorm0_cdf__.mex \
  __stk_dominatedhv_mex__.mex
 
