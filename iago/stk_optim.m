@@ -287,3 +287,100 @@ end % function
 %! options = [options {'searchgrid_xvals', xg}];
 %! xi = xi.data;
 %! res = stk_optim (f, DIM, BOX, xi, [], MAX_ITER, options);  close all;
+
+
+function stk_optim_fig01 (algo, xi, zi, xi_new)
+
+xt0 = algo.disp_xvals;
+zt0 = algo.disp_zvals;
+
+zp = stk_predict_withrep (algo.model, xi, zi, algo.xg0);
+
+figure (algo.disp_fignum_base + 1);
+
+plot_1 (xi, zi, algo.xg0, zp, xt0, zt0);  hold on;
+plot (xi_new * [1 1], ylim, '--', 'Color', 0.2 * [1 1 1]);  hold off;
+
+stk_labels ('x', 'f(x)');
+stk_title ('Evaluations and kriging prediction');
+
+drawnow;
+
+end % function
+
+
+function stk_optim_fig02 (algo, crit_xg)
+
+figure (algo.disp_fignum_base + 2);
+
+% x-axis: actual x-values in 1D, indices otherwise
+[~, idx_min] = min(crit_xg);
+if algo.dim == 1,
+    xx = algo.xg0;
+    xnew = algo.xg0(idx_min, :);
+    xlab = 'x';
+else
+    xx = (1:(stk_length (algo.xg0)))';
+    xnew = idx_min;
+    xlab = 'index';
+end
+
+% Plot criterion
+plot (xx, crit_xg, 'r', 'LineWidth', 2);  hold on;
+
+% Plot position of next evaluation
+plot (xnew * [1 1], ylim, '--', 'Color', 0.2 * [1 1 1]);  hold off;
+
+% Set y-lim
+Jmin = min (crit_xg);
+Jmax = max (crit_xg);
+deltaJ = Jmax - Jmin;
+if deltaJ > 0,
+    Jmin = Jmin - 0.05 * deltaJ;
+    Jmax = Jmax + 0.05 * deltaJ;
+    ylim ([Jmin Jmax]);
+end
+
+stk_labels (xlab, 'J(x)');
+stk_title ('Sampling criterion');
+
+drawnow;
+
+end % function
+
+
+function plot_1 (xi, zi, xg, zp, xt, zt)
+
+LINE1 = {'--', 'LineWidth', 2, 'Color', [0.39, 0.47, 0.64]};
+LINE2 = {'-', 'LineWidth', 2, 'Color', [0.95 0.25 0.3]};
+MARKER1 = {'mo', 'MarkerSize', 5, 'MarkerFaceColor', 'y'};
+
+h = area (double (xg), [zp.mean-2*sqrt(zp.var), 4*sqrt(zp.var)]);
+set(h(1),'FaceColor','none');
+set(h(2),'FaceColor',[0.8 0.8 0.8]);
+set(h,'LineStyle','-','LineWidth', 1, 'EdgeColor', 'none');
+
+hold on
+
+if nargin > 4
+    plot (xt, zt, LINE1{:})
+end
+
+plot (xg, zp.mean, LINE2{:})
+
+if ~ isempty (zi)
+    plot(xi, zi(:, 1), MARKER1{:})
+    if size (zi, 2) == 3
+        nb_obs = zi.nb_obs; 
+        for i = 1:(stk_length (zi))
+            if nb_obs(i) > 1
+                h = text (xi(i), zi(i), sprintf ('%d', nb_obs(i)));
+                set (h, 'Color', 'k', 'FontWeight', 'bold', 'FontSize', 13);
+            end
+        end
+    end
+end
+
+hold off
+
+end % function
