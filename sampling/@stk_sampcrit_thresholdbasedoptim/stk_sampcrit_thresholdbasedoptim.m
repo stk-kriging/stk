@@ -29,7 +29,7 @@
 function crit = stk_sampcrit_thresholdbasedoptim ...
     (model, goal, threshold_mode, threshold_value, threshold_quantile_order)
 
-if nargin > 5  
+if nargin > 5
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
@@ -92,5 +92,12 @@ end
 
 end % function
 
+%!shared M
+%! M = stk_model ()
 
-%!test crit = stk_sampcrit_thresholdbasedoptim ();
+%!test  crit = stk_sampcrit_thresholdbasedoptim ();
+%!test  crit = stk_sampcrit_thresholdbasedoptim (M, 'minimize');
+%!test  crit = stk_sampcrit_thresholdbasedoptim (M, 'minimize', 'best quantile');
+%!test  crit = stk_sampcrit_thresholdbasedoptim (M, 'minimize', 'user-defined', 3.4);
+%!test  crit = stk_sampcrit_thresholdbasedoptim (M, 'minimize', 'best quantile', [], 0.3);
+%!error crit = stk_sampcrit_thresholdbasedoptim (M, 'minimize', 'best quantile', [], 0.3, 0.12345);
