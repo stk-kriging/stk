@@ -48,6 +48,7 @@
 
 #include <stdlib.h>
 #include <math.h>
+#include <limits.h>
 
 /* Sobol' low-discrepancy-sequence generation */
 typedef struct nlopt_soboldata_s *nlopt_sobol;
@@ -58,18 +59,12 @@ extern void nlopt_sobol_next(nlopt_sobol s, double *x,
         const double *lb, const double *ub);
 extern void nlopt_sobol_skip(nlopt_sobol s, unsigned n, double *x);
 
-#if defined(HAVE_STDINT_H)
-#  include <stdint.h>
-#endif
-
-#ifndef HAVE_UINT32_T
-#  if SIZEOF_UNSIGNED_LONG == 4
-      typedef unsigned long uint32_t;
-#  elif SIZEOF_UNSIGNED_INT == 4
-      typedef unsigned int uint32_t;
-#  else
-#    error No 32-bit unsigned integer type
-#  endif
+#if UINT_MAX == 4294967295U
+   typedef unsigned int uint32_t;
+#elif ULONG_MAX == 4294967295U
+   typedef unsigned long uint32_t;
+#else
+#  error No 32-bit unsigned integer type
 #endif
 
 typedef struct nlopt_soboldata_s {
