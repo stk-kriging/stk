@@ -66,7 +66,7 @@ options = {
     'searchgrid_adapt', false
     'searchgrid_size', 200
     'searchgrid_noise', []
-    'nsamplepaths', 800
+    'nsamplepaths', 100
     'quadtype', []
     'quadorder', nan
     'stoprule', false
