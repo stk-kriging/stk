@@ -1,3 +1,136 @@
+/*****************************************************************************
+ *                                                                           *
+ *                  Small (Matlab/Octave) Toolbox for Kriging                *
+ *                                                                           *
+ * Copyright Notice                                                          *
+ *                                                                           *
+ *    Copyright (C) 2016 CentraleSupelec                                     *
+ *                                                                           *
+ *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
+ *                                                                           *
+ *    The Sobol sequence implementation contained in this file is due to     *
+ *    Steven G. Johnson and was obtained from the NLopt toolbox, v2.4.2,     *
+ *    released under the MIT licence.  The original copyright notice was     *
+ *    as follows:                                                            *
+ *                                                                           *
+ *       Copyright (c) 2007 Massachusetts Institute of Technology            *
+ *                                                                           *
+ *    A copy of the original (MIT) licence is included below.                *
+ *                                                                           *
+ * Copying Permission Statement                                              *
+ *                                                                           *
+ *    This file is part of                                                   *
+ *                                                                           *
+ *            STK: a Small (Matlab/Octave) Toolbox for Kriging               *
+ *               (http://sourceforge.net/projects/kriging)                   *
+ *                                                                           *
+ *    STK is free software: you can redistribute it and/or modify it under   *
+ *    the terms of the GNU General Public License as published by the Free   *
+ *    Software Foundation,  either version 3  of the License, or  (at your   *
+ *    option) any later version.                                             *
+ *                                                                           *
+ *    STK is distributed  in the hope that it will  be useful, but WITHOUT   *
+ *    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY   *
+ *    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public   *
+ *    License for more details.                                              *
+ *                                                                           *
+ *    You should  have received a copy  of the GNU  General Public License   *
+ *    along with STK.  If not, see <http://www.gnu.org/licenses/>.           *
+ *                                                                           *
+ ****************************************************************************/
+
+#include <stdlib.h>
+#include <math.h>
+#include <limits.h>
+#include "stk_mex.h"
+
+/* Sobol' low-discrepancy-sequence generation */
+typedef struct nlopt_soboldata_s *nlopt_sobol;
+static nlopt_sobol nlopt_sobol_create (unsigned int sdim);
+static void nlopt_sobol_destroy (nlopt_sobol s);
+static void nlopt_sobol_skip (nlopt_sobol s, unsigned int n, double *x);
+static int nlopt_sobol_gen (nlopt_sobol s, double *x);
+
+
+/*****************************************************************************
+ *                                                                           *
+ *  MEX entry point (mexFunction)                                            *
+ *                                                                           *
+ *  CALL: X = stk_sampling_sobol_mex (N, DIM, DO_SKIP)                       *
+ *                                                                           *
+ ****************************************************************************/
+
+#define  N_IN        prhs[0]
+#define  DIM_IN      prhs[1]
+#define  DO_SKIP_IN  prhs[2]
+#define  X_OUT       plhs[0]
+
+void mexFunction
+(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
+{
+  int n_, dim_, i;
+  unsigned int n, dim;
+  double *h;
+  nlopt_sobol s;
+  bool do_skip;
+
+  n_ = 0;  dim_ = 0;
+
+  /*--- Read input arguments -----------------------------------------------*/
+
+  if (nrhs < 3)
+    mexErrMsgIdAndTxt ("STK:stk_sampling_sobol_mex:NotEnoughInputArgs",
+            "Not enough input arguments (exactly two required).");
+  else if (nrhs > 3)
+    mexErrMsgIdAndTxt ("STK:stk_sampling_sobol_mex:TooManyInputArgs",
+            "Too many input arguments (exactly two required).");
+
+  if ((mxReadScalar_int (N_IN, &n_) != 0) || (n_ <= 0))
+    mexErrMsgIdAndTxt ("STK:stk_sampling_sobol_mex:IncorrectArgument",
+                       "First argument (n) must be a strictly positive "
+                       "scalar integer.");
+
+  n = (unsigned int) n_;
+
+  if (n > 4294967295U)
+    mexErrMsgIdAndTxt ("STK:stk_sampling_sobol_mex:IncorrectArgument",
+                       "This is a 32-bits implementation of the Sobol "
+                       "sequence: it cannot generate more than 2^32 - 1"
+                       "terms");
+
+  if ((mxReadScalar_int (DIM_IN, &dim_) != 0) || (dim_ <= 0))
+    mexErrMsgIdAndTxt ("STK:stk_sampling_sobol_mex:IncorrectArgument",
+                       "Second argument (dim) must be a scrictly positive "
+                       "scalar integer.");
+
+  dim = (unsigned int) dim_;
+
+  if (dim > 1111)
+    mexErrMsgIdAndTxt ("STK:stk_sampling_sobol_mex:IncorrectArgument",
+                       "This implementation is restricted to dim <= 1111.");
+
+  if (! mxIsLogicalScalar (DO_SKIP_IN))
+    mexErrMsgIdAndTxt ("STK:stk_sampling_sobol_mex:IncorrectArgument",
+                       "Third argument (do_skip) must be a logical scalar.");
+  
+  do_skip = mxIsLogicalScalarTrue (DO_SKIP_IN);
+
+  /*--- Generate a segment of the Sobol sequence ---------------------------*/
+
+  X_OUT = mxCreateDoubleMatrix (dim, n, mxREAL);
+  h = mxGetPr (X_OUT);
+
+  s = nlopt_sobol_create (dim);
+  if (do_skip)
+    nlopt_sobol_skip (s, n, h);
+  for (i = 0; i < n; i++, h += dim)
+    nlopt_sobol_gen (s, h);
+  nlopt_sobol_destroy (s);
+
+}
+
+
+
 /* Copyright (c) 2007 Massachusetts Institute of Technology
  *
  * Permission is hereby granted, free of charge, to any person obtaining
@@ -7,23 +140,23 @@
  * distribute, sublicense, and/or sell copies of the Software, and to
  * permit persons to whom the Software is furnished to do so, subject to
  * the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be
  * included in all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
  * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
  * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
  * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
  * LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
- * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+ * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 /* Generation of Sobol sequences in up to 1111 dimensions, based on the
    algorithms described in:
         P. Bratley and B. L. Fox, Algorithm 659, ACM Trans.
-	Math. Soft. 14 (1), 88-100 (1988),
+        Math. Soft. 14 (1), 88-100 (1988),
    as modified by:
         S. Joe and F. Y. Kuo, ACM Trans. Math. Soft 29 (1), 49-57 (2003).
 
@@ -45,19 +178,6 @@
    their clear description of the algorithm (and their tabulation of
    the critical numbers).  Please cite them.  Just that I needed
    a free/open-source implementation. */
-
-#include <stdlib.h>
-#include <math.h>
-#include <limits.h>
-
-/* Sobol' low-discrepancy-sequence generation */
-typedef struct nlopt_soboldata_s *nlopt_sobol;
-extern nlopt_sobol nlopt_sobol_create(unsigned sdim);
-extern void nlopt_sobol_destroy(nlopt_sobol s);
-extern void nlopt_sobol_next01(nlopt_sobol s, double *x);
-extern void nlopt_sobol_next(nlopt_sobol s, double *x,
-        const double *lb, const double *ub);
-extern void nlopt_sobol_skip(nlopt_sobol s, unsigned n, double *x);
 
 #if UINT_MAX == 4294967295U
    typedef unsigned int uint32_t;
@@ -81,7 +201,7 @@ typedef struct nlopt_soboldata_s {
  * This code uses a 32-bit version of algorithm to find the rightmost
  * one bit in Knuth, _The Art of Computer Programming_, volume 4A
  * (draft fascicle), section 7.1.3, "Bitwise tricks and
- * techniques." 
+ * techniques."
  *
  * Assumes n has a zero bit, i.e. n < 2^32 - 1.
  *
@@ -93,7 +213,9 @@ static unsigned rightzero32(uint32_t n)
      return __builtin_ctz(~n); /* gcc builtin for version >= 3.4 */
 #else
      const uint32_t a = 0x05f66a47; /* magic number, found by brute force */
-     static const unsigned decode[32] = {0,1,2,26,23,3,15,27,24,21,19,4,12,16,28,6,31,25,22,14,20,18,11,5,30,13,17,10,29,9,8,7};
+     static const unsigned decode[32] = {0,1,2,26,23,3,15,27,24,21,19,4,12,16,
+                                         28,6,31,25,22,14,20,18,11,5,30,13,17,
+                                         10,29,9,8,7};
      n = ~n; /* change to rightmost-one problem */
      n = a * (n & (-n)); /* store in n to make sure mult. is 32 bits */
      return decode[n >> 27];
@@ -103,26 +225,26 @@ static unsigned rightzero32(uint32_t n)
 /* generate the next term x_{n+1} in the Sobol sequence, as an array
    x[sdim] of numbers in (0,1).  Returns 1 on success, 0 on failure
    (if too many #'s generated) */
-static int sobol_gen(soboldata *sd, double *x)
+int nlopt_sobol_gen(soboldata *sd, double *x)
 {
      unsigned c, b, i, sdim;
 
      if (sd->n == 4294967295U) return 0; /* n == 2^32 - 1 ... we would
-					    need to switch to a 64-bit version
-					    to generate more terms. */
+                                          need to switch to a 64-bit version
+                                          to generate more terms. */
      c = rightzero32(sd->n++);
      sdim = sd->sdim;
      for (i = 0; i < sdim; ++i) {
-	  b = sd->b[i];
-	  if (b >= c) {
-	       sd->x[i] ^= sd->m[c][i] << (b - c);
-	       x[i] = ((double) (sd->x[i])) / (1U << (b+1));
-	  }
-	  else {
-	       sd->x[i] = (sd->x[i] << (c - b)) ^ sd->m[c][i];
-	       sd->b[i] = c;
-	       x[i] = ((double) (sd->x[i])) / (1U << (c+1));
-	  }
+          b = sd->b[i];
+          if (b >= c) {
+               sd->x[i] ^= sd->m[c][i] << (b - c);
+               x[i] = ((double) (sd->x[i])) / (1U << (b+1));
+          }
+          else {
+               sd->x[i] = (sd->x[i] << (c - b)) ^ sd->m[c][i];
+               sd->b[i] = c;
+               x[i] = ((double) (sd->x[i])) / (1U << (c+1));
+          }
      }
      return 1;
 }
@@ -131,7 +253,7 @@ static int sobol_gen(soboldata *sd, double *x)
    starting values m, for Sobol sequences in up to 1111 dimensions,
    taken from:
         P. Bratley and B. L. Fox, Algorithm 659, ACM Trans.
-	Math. Soft. 14 (1), 88-100 (1988),
+        Math. Soft. 14 (1), 88-100 (1988),
    as modified by:
         S. Joe and F. Y. Kuo, ACM Trans. Math. Soft 29 (1), 49-57 (2003). */
 
@@ -253,7 +375,43 @@ static const uint32_t sobol_a[MAXDIM-1] = {
  * degree-d primitive polynomial sobol_a[j]. */
 static const uint32_t sobol_minit[MAXDEG+1][MAXDIM-1] = {
      /* [0][*] */
-     { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
+     { 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+       1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1 },
      /* [1][*] */
      { 0,
        1,3,1,3,1,3,3,1,3,1,3,1,3,1,1,3,1,3,1,3,
@@ -561,8 +719,8 @@ static const uint32_t sobol_minit[MAXDEG+1][MAXDIM-1] = {
      59,109,35,49,23,33,107,55,33,57,79,73,69,59,107,55,11,63,95,
      103,23,125,91,31,91,51,65,61,75,69,107,65,101,59,35,15},
      /* [7][*] */
-     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-       7,23,39,217,141,27,53,181,169,35,15,
+     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,7,23,39,217,141,27,53,181,169,35,15,
      207,45,247,185,117,41,81,223,151,81,189,61,95,185,23,73,113,
      239,85,9,201,83,53,183,203,91,149,101,13,111,239,3,205,253,
      247,121,189,169,179,197,175,217,249,195,95,63,19,7,5,75,217,
@@ -630,7 +788,8 @@ static const uint32_t sobol_minit[MAXDEG+1][MAXDIM-1] = {
      15,89,9,11,47,133,227,75,9,91,19,171,163,79,7,103,5,119,155,
      75,11,71,95,17,13,243,207,187},
      /* [8][*] */
-     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
        235,307,495,417,57,151,19,119,375,451,
      55,449,501,53,185,317,17,21,487,13,347,393,15,391,307,189,
      381,71,163,99,467,167,433,337,257,179,47,385,23,117,369,425,
@@ -704,8 +863,10 @@ static const uint32_t sobol_minit[MAXDEG+1][MAXDIM-1] = {
      15,271,37,87,451,299,83,451,311,441,47,455,47,253,13,109,369,
      347,11,409,275,63,441,15},
      /* [9][*] */
-     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-       519,307,931,1023,517,771,151,1023,
+     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,519,307,931,1023,517,771,151,1023,
      539,725,45,927,707,29,125,371,275,279,817,389,453,989,1015,
      29,169,743,99,923,981,181,693,309,227,111,219,897,377,425,
      609,227,19,221,143,581,147,919,127,725,793,289,411,835,921,
@@ -778,8 +939,12 @@ static const uint32_t sobol_minit[MAXDEG+1][MAXDIM-1] = {
      703,41,777,163,95,831,79,975,235,633,723,297,589,317,679,981,
      195,399,1003,121,501,155},
      /* [10][*] */
-     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-       7,2011,1001,49,825,415,1441,383,1581,
+     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,7,2011,1001,49,825,415,1441,383,1581,
      623,1621,1319,1387,619,839,217,75,1955,505,281,1629,1379,53,
      1111,1399,301,209,49,155,1647,631,129,1569,335,67,1955,1611,
      2021,1305,121,37,877,835,1457,669,1405,935,1735,665,551,789,
@@ -856,8 +1021,18 @@ static const uint32_t sobol_minit[MAXDEG+1][MAXDIM-1] = {
      493,549,783,1653,397,895,233,759,1505,677,1449,1573,1297,
      1821,1691,791,289,1187,867,1535,575,183},
      /* [11][*] */
-     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-       3915,97,3047,937,2897,953,127,1201,
+     { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+       0,0,0,0,0,0,3915,97,3047,937,2897,953,127,1201,
      3819,193,2053,3061,3759,1553,2007,2493,603,3343,3751,1059,
      783,1789,1589,283,1093,3919,2747,277,2605,2169,2905,721,4069,
      233,261,1137,3993,3619,2881,1275,3865,1299,3757,1193,733,993,
@@ -923,7 +1098,22 @@ static const uint32_t sobol_minit[MAXDEG+1][MAXDIM-1] = {
      3805,3073,2837,1567,3783,451,2441,1181,487,543,1201,3735,
      2517,733,1535,2175,3613,3019},
      /* [12][*] */
-     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+     {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+      0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
      2319,653,1379,1675,1951,7075,2087,
      7147,1427,893,171,2019,7235,5697,3615,1961,7517,6849,2893,
      1883,2863,2173,4543,73,381,3893,6045,1643,7669,1027,1549,
@@ -984,39 +1174,39 @@ static const uint32_t sobol_minit[MAXDEG+1][MAXDIM-1] = {
 static int sobol_init(soboldata *sd, unsigned sdim)
 {
      unsigned i,j;
-     
+
      if (!sdim || sdim > MAXDIM) return 0;
 
      sd->mdata = (uint32_t *) malloc(sizeof(uint32_t) * (sdim * 32));
      if (!sd->mdata) return 0;
 
      for (j = 0; j < 32; ++j) {
-	  sd->m[j] = sd->mdata + j * sdim;
-	  sd->m[j][0] = 1; /* special-case Sobol sequence */
+          sd->m[j] = sd->mdata + j * sdim;
+          sd->m[j][0] = 1; /* special-case Sobol sequence */
      }
      for (i = 1; i < sdim; ++i) {
-	  uint32_t a = sobol_a[i-1];
-	  unsigned d = 0, k;
+          uint32_t a = sobol_a[i-1];
+          unsigned d = 0, k;
 
-	  while (a) {
-	       ++d;
-	       a >>= 1;
-	  }
-	  d--; /* d is now degree of poly */
+          while (a) {
+               ++d;
+               a >>= 1;
+          }
+          d--; /* d is now degree of poly */
 
-	  /* set initial values of m from table */
-	  for (j = 0; j < d; ++j)
-	       sd->m[j][i] = sobol_minit[j][i-1];
-	  
-	  /* fill in remaining values using recurrence */
-	  for (j = d; j < 32; ++j) {
-	       a = sobol_a[i-1];
-	       sd->m[j][i] = sd->m[j - d][i];
-	       for (k = 0; k < d; ++k) {
-		    sd->m[j][i] ^= ((a & 1) * sd->m[j-d+k][i]) << (d-k);
-		    a >>= 1;
-	       }
-	  }
+          /* set initial values of m from table */
+          for (j = 0; j < d; ++j)
+               sd->m[j][i] = sobol_minit[j][i-1];
+
+          /* fill in remaining values using recurrence */
+          for (j = d; j < 32; ++j) {
+               a = sobol_a[i-1];
+               sd->m[j][i] = sd->m[j - d][i];
+               for (k = 0; k < d; ++k) {
+                    sd->m[j][i] ^= ((a & 1) * sd->m[j-d+k][i]) << (d-k);
+                    a >>= 1;
+               }
+          }
      }
 
      sd->x = (uint32_t *) malloc(sizeof(uint32_t) * sdim);
@@ -1026,8 +1216,8 @@ static int sobol_init(soboldata *sd, unsigned sdim)
      if (!sd->b) { free(sd->x); free(sd->mdata); return 0; }
 
      for (i = 0; i < sdim; ++i) {
-	  sd->x[i] = 0;
-	  sd->b[i] = 0;
+          sd->x[i] = 0;
+          sd->b[i] = 0;
      }
 
      sd->n = 0;
@@ -1058,31 +1248,9 @@ nlopt_sobol nlopt_sobol_create(unsigned sdim)
 extern void nlopt_sobol_destroy(nlopt_sobol s)
 {
      if (s) {
-	  sobol_destroy(s);
-	  free(s);
+          sobol_destroy(s);
+          free(s);
      }
-}
-
-/* next vector x[sdim] in Sobol sequence, with each x[i] in (0,1) */
-void nlopt_sobol_next01(nlopt_sobol s, double *x)
-{
-     if (!sobol_gen(s, x)) {
-	  /* fall back on pseudo random numbers in the unlikely event
-	     that we exceed 2^32-1 points */
-	  unsigned i;
-	  for (i = 0; i < s->sdim; ++i)
-	       x[i] = nlopt_urand(0.0,1.0);
-     }
-}
-
-/* next vector in Sobol sequence, scaled to (lb[i], ub[i]) interval */
-void nlopt_sobol_next(nlopt_sobol s, double *x,
-		      const double *lb, const double *ub)
-{
-     unsigned i, sdim;
-     nlopt_sobol_next01(s, x);
-     for (sdim = s->sdim, i = 0; i < sdim; ++i)
-	  x[i] = lb[i] + (ub[i] - lb[i]) * x[i];
 }
 
 /* if we know in advance how many points (n) we want to compute, then
@@ -1092,8 +1260,8 @@ void nlopt_sobol_next(nlopt_sobol s, double *x,
 void nlopt_sobol_skip(nlopt_sobol s, unsigned n, double *x)
 {
      if (s) {
-	  unsigned k = 1;
-	  while (k*2 < n) k *= 2;
-	  while (k-- > 0) sobol_gen(s, x);
+          unsigned k = 1;
+          while (k*2 < n) k *= 2;
+          while (k-- > 0) nlopt_sobol_gen(s, x);
      }
 }

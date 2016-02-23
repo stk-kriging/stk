@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -453,6 +453,9 @@ info = register_mex (info, relpath, 'get_column_number');
 
 relpath = 'sampling';
 info = register_mex (info, relpath, 'stk_sampling_vdc_rr2', {}, {'primes.h'});
+
+relpath = fullfile ('sampling', 'private');
+info = register_mex (info, relpath, 'stk_sampling_sobol_mex');
 
 relpath = fullfile ('misc', 'pareto', 'private');
 info = register_mex (info, relpath, 'stk_paretofind_mex', {}, {'pareto.h'});
