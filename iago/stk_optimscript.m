@@ -50,10 +50,10 @@ switch TESTCASE_NUM
         
         NOISEVARIANCE = 0.1 ^ 2;
         
-        NT = 400;
+        NT = 100;
         xt = stk_sampling_regulargrid (NT, DIM, BOX);
         
-        xi_ind = [90 230 290 350];
+        xi_ind = [22 57 72 87];
         xi = xt(xi_ind, :);
         
     case 2,  % A two-dimensional test case

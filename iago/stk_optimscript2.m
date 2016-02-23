@@ -56,7 +56,7 @@ xi = repmat (xc(1:6:nc, :), 5, 1);
 %% Parameters of the optimization procedure
 
 % Maximum number of iterations
-MAX_ITER = 5000;
+MAX_ITER = 1000;
 
 % Sampling criterion: conditional entropy of the maximizer
 options = {'samplingcritname', 'CEM'};  % (IAGO algorithm)

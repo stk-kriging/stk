@@ -33,7 +33,7 @@
 %       'searchgrid_unique', true
 %       'searchgrid_adapt', false     adapt search points (not implemented yet)
 %       'searchgrid_size', 200        number of search points
-%       'nsamplepaths', 800           number of sample paths for IAGO
+%       'nsamplepaths', 100           number of sample paths for IAGO
 %       'quadtype', []                type of quadrature
 %       'quadorder', nan              order of the quadrature
 %       'stoprule', false             stop rule
