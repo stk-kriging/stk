@@ -1,5 +1,16 @@
 2016-02-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_sampling_sobol.m: new function
+
+	* sampling/stk_sampling_sobol.m: New function to generate points
+	from a Sobol sequence.
+	* sampling/private/stk_sampling_sobol_mex.c: New MEX-file.
+	* admin/octpkg/INDEX: Add new function to the INDEX
+	* admin/octpkg/Makefile: Add new MEX-file to the Makefile.
+	* stk_init.m: Add new MEX-file to the build system.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+
 	stk_param_relik.m: Introduce a 'simple_kriging' flag
 
 	* paramestim/stk_param_relik.m: Introduce a 'simple_kriging' flag
