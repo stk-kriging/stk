@@ -63,12 +63,13 @@ n = size (xi, 1);
 
 [K, P] = stk_make_matcov (model, xi);
 q = size (P, 2);
+simple_kriging = (q == 0);
 
-if q == 0  % Special case: simple kriging
+if simple_kriging
     
     G = K;  % No need to filter anything out
     
-else  % General case
+else
     
     % Construct a "filtering matrix" A = W'
     [Q, R_ignored] = qr (P);  %#ok<NASGU> %the second argument *must* be here
@@ -94,11 +95,9 @@ C = stk_cholcov (G);
 ldetWKW = 2 * sum (log (diag (C)));
 
 % Compute (W' yi)' * G^(-1) * (W' yi) as u' * u, with u = C' \ (W' * yi)
-if q == 0
-    % Simple kriging
+if simple_kriging
     u = linsolve (C, double (yi), struct ('UT', true, 'TRANSA', true));
 else
-    % General case
     u = linsolve (C, W' * double (yi), struct ('UT', true, 'TRANSA', true));
 end
 attache = sum (u .^ 2);
@@ -126,11 +125,9 @@ if nargout >= 2
     nbparam = length(param);
     drl_param = zeros(nbparam, 1);
     
-    if q == 0
-        % Simple kriging
+    if simple_kriging
         H = inv (G);
     else
-        % General case
         F = linsolve (C, W', struct ('UT', true, 'TRANSA', true));
         H = F' * F;  % = W * G^(-1) * W'
     end
