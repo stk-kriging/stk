@@ -13,6 +13,11 @@
 %    the recommendation of [2] and [3], a number of points equal to the largest
 %    power of 2 smaller than n is skipped.
 %
+% NOTE: Implementation
+%
+%    The C implementation under the hood is due to Steven G. Johnson, and
+%    was borrowed from the NLopt toolbox [4] (version 2.4.2).
+%
 % REFERENCE
 %
 %    [1] Paul Bratley and Bennett L. Fox, "Algorithm 659: Implementing Sobol's
@@ -27,6 +32,9 @@
 %    [3] Stephen Joe and Frances Y. Kuo, "Remark on Algorithm 659: Implementing
 %        Sobol's Quasirandom Sequence Generator', ACM Transactions on
 %        Mathematical Software, 29(1):49-57, 2003.
+%
+%    [4] Steven G. Johnson, The NLopt nonlinear-optimization package,
+%        http://ab-initio.mit.edu/nlopt.
 %
 % SEE ALSO: stk_sampling_halton_rr2
 
