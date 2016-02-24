@@ -1,0 +1,12 @@
+--- a/stk_init.m
++++ b/stk_init.m
+@@ -99,9 +99,6 @@
+ 
+ function stk_init__pkg_load (root)
+ 
+-% Add STK's root directory to the path
+-addpath (root);
+-
+ % Unlock all possibly mlock-ed STK files and clear all STK functions
+ % that contain persistent variables
+ stk_init__clear_persistents ();

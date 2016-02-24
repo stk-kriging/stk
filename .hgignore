@@ -1,0 +1,14 @@
+syntax: glob
+build
+*.mex
+*.mexa64
+*.mexglx
+*.mexw64
+*.o
+*~
+*.asv
+*orig
+sandbox
+
+.pc/applied-patches
+.pc/*.patch
