@@ -44,6 +44,13 @@ Changes in version 2.4.0
 
    o TODO: DESCRIBE
 
+* Space-filling designs
+
+   o stk_sampling_sobol: New function to generate points from a Sobol sequence
+     using the algorithm of Bratley and Fox (1988), as modified by Joe and Kuo
+     (2003).  The C implementation under the hood is due to Steven G. Johnson,
+     and was borrowed from the NLopt toolbox (version 2.4.2).
+
 * Miscellaneous
 
    o stk_pmisclass.m: New function to compute either the current probability of

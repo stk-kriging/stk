@@ -1,3 +1,10 @@
+2016-02-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampling_sobol.m: Cite the NLopt toolbox in the documentation
+
+	* sampling/stk_sampling_sobol.m: Cite the NLopt toolbox in the
+	documentation.
+
 2016-02-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_sampling_sobol.m: new function
