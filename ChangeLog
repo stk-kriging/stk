@@ -1,3 +1,10 @@
+2016-02-26  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_kreq_qr.m: Add default constructor
+
+	* core/@stk_kreq_qr/stk_kreq_qr.m: Add a default constructor,
+	corresponding to the case where nargin == 0.
+
 2016-02-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_sampling_sobol.m: Cite the NLopt toolbox in the documentation
