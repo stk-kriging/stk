@@ -1,4 +1,4 @@
-% SET_LOGNOISEVARIANCE sets the log of the variance of the noise
+% SET_PARAM sets the parameters of the covariance function
 
 % Copyright Notice
 %
@@ -26,24 +26,39 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function model = set_lognoisevariance (model, lnv, recompute)
+function model = set_prior_model (model, prior_model, recompute)
 
-% Check lnv
-if ~ isscalar (lnv)    
-    n = size (model.input_data, 1);
-    if (~ isvector (lnv)) || (length (lnv) ~= n)
-        stk_error (['lnv must be either a scalar or a vector' ...
-            ' of length size (xi, 1).'], 'InvalidArgument');
-    end    
-    % Make sure that lnv is a column vector
-    lnv = lnv(:);
+% Backward compatibility:
+%   accept model structures with missing 'lognoisevariance' field
+if (~ isfield (prior_model, 'lognoisevariance')) ...
+        || (isempty (prior_model.lognoisevariance))
+    prior_model.lognoisevariance = - inf;
 end
 
-model.prior_model.lognoisevariance = lnv;
+% Backward compatibility:
+%   accept model structures with missing 'dim' field
+if (~ isfield (prior_model, 'dim')) || (isempty (prior_model.dim))
+    prior_model.dim = size (model.input_data, 2);
+end
+
+% Check M_prior.lognoisevariance
+if ~ isscalar (prior_model.lognoisevariance)
+    if (~ isvector (prior_model.lognoisevariance)) && (length ...
+            (prior_model.lognoisevariance) == size (model.input_data, 1))
+        stk_error (['M_prior.lognoisevariance must be either ' ...
+            'a scalar or a vector of length size (model.input_data, 1).'], ...
+            'InvalidArgument');
+    end
+    % Make sure that lnv is a column vector
+    prior_model.lognoisevariance = prior_model.lognoisevariance(:);
+end
+
+% Set prior_model field
+model.prior_model = prior_model;
 
 % Update kreq field: recompute QR factorization
 if (nargin < 3) || (recompute)
     model.kreq = stk_kreq_qr (model.prior_model, model.input_data);
 end
-    
+
 end % function

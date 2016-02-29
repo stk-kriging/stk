@@ -1,4 +1,4 @@
-% SET_LOGNOISEVARIANCE sets the log of the variance of the noise
+% GET_PRIOR_MODEL returns the prior_model structure
 
 % Copyright Notice
 %
@@ -26,24 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function model = set_lognoisevariance (model, lnv, recompute)
+function prior_model = get_prior_model (model)
 
-% Check lnv
-if ~ isscalar (lnv)    
-    n = size (model.input_data, 1);
-    if (~ isvector (lnv)) || (length (lnv) ~= n)
-        stk_error (['lnv must be either a scalar or a vector' ...
-            ' of length size (xi, 1).'], 'InvalidArgument');
-    end    
-    % Make sure that lnv is a column vector
-    lnv = lnv(:);
-end
+prior_model = model.prior_model;
 
-model.prior_model.lognoisevariance = lnv;
-
-% Update kreq field: recompute QR factorization
-if (nargin < 3) || (recompute)
-    model.kreq = stk_kreq_qr (model.prior_model, model.input_data);
-end
-    
 end % function
