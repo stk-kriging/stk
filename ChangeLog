@@ -1,3 +1,20 @@
+2016-02-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Getters and setters for the @stk_model_gpposterior class
+
+	* core/@stk_model_gpposterior/get_prior_model.m: New getter.
+	* core/@stk_model_gpposterior/set_param.m: New setter.
+	* core/@stk_model_gpposterior/set_prior_model.m: New setter,
+	ensuring backward compatibility with partially defined prior model
+	structures (missing dim or lognoisevariance fields).
+	* core/@stk_model_gpposterior/set.m: Use setters when it is useful
+	for argument checking.  Prevent modification of the kreq field.
+	* core/@stk_model_gpposterior/set_lognoisevariance.m: Add optional
+	`recompute` input argument.
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Re-organize
+	to avoid code duplication with set_prior_model.
+	* admin/octpkg/INDEX: Update index.
+
 2016-02-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_kreq_qr.m: Add default constructor

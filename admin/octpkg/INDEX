@@ -141,6 +141,9 @@ Posterior model objects
  @stk_model_gpposterior/get_output_dim
  @stk_model_gpposterior/get_output_data
  @stk_model_gpposterior/get_param
+ @stk_model_gpposterior/set_param
+ @stk_model_gpposterior/get_prior_model
+ @stk_model_gpposterior/set_prior_model
 #@stk_model_gpposterior/disp                   [overload base]
 #@stk_model_gpposterior/display                [overload base]
 #@stk_model_gpposterior/fieldnames             [overload base]

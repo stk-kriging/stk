@@ -26,70 +26,53 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function M_post = stk_model_gpposterior (M_prior, xi, zi)
+function model = stk_model_gpposterior (prior_model, xi, zi)
 
-if nargin == 0
+if nargin == 3
     
-    M_post.prior_model  = stk_model ();
-    M_post.input_data   = zeros (0, M_post.prior_model.dim);
-    M_post.output_data  = zeros (0, 1);
-    M_post.kreq         = 1;
-    
-elseif nargin == 3
-    
-    % Backward compatiblity:
-    %   accept model structures with missing 'lognoisevariance' field
-    if (~ isfield (M_prior, 'lognoisevariance')) ...
-            || (isempty (M_prior.lognoisevariance))
-        M_prior.lognoisevariance = - inf;
-    end
-    
-    % Prepare the lefthand side of the KRiging EQuation
     if iscell (xi)
-        % WARNING: experimental HIDDEN feature, use at your own risk !!!
-        kreq = xi{2}; % already computed, I hope you know what you're doing ;-)
-        xi = xi{1};
+        % Legacy support for experimental hidden feature, to be removed
+        kreq = xi{2};  xi = xi{1};
     else
-        kreq = stk_kreq_qr (M_prior, xi);
+        kreq = [];
     end
     
+    % Check the size of zi
     n = size (xi, 1);
-
-    % Backward compatiblity:
-    %   accept model structures with missing 'dim' field
-    if (~ isfield (M_prior, 'dim')) || (isempty (M_prior.dim))
-        M_prior.dim = size (xi, 2);
-    end
-    
-    % Check M_prior.lognoisevariance
-    if ~ isscalar (M_prior.lognoisevariance)
-        if (~ isvector (M_prior.lognoisevariance)) ...
-                && (length (M_prior.lognoisevariance) == n)
-            stk_error (['M_prior.lognoisevariance must be either a scalar ' ...
-                'or a vector of length size (xi, 1).'], 'InvalidArgument');
-        end
-        % Make sure that lnv is a column vector
-        M_prior.lognoisevariance = M_prior.lognoisevariance(:);
-    end
-    
-    % Check the size of z_obs
     if ~ (isempty (zi) || isequal (size (zi), [n 1]))
-        stk_error (['z_obs must either be empty or have the ' ...
+        stk_error (['zi must either be empty or have the ' ...
             'same number of rows as x_obs.'], 'IncorrectSize');
     end
     
-    M_post.prior_model  = M_prior;
-    M_post.input_data   = xi;
-    M_post.output_data  = zi;
-    M_post.kreq         = kreq;
+elseif nargin == 0
+    
+    prior_model = [];
+    xi = [];
+    zi = [];
+    kreq = [];
     
 else
-    
     stk_error ('Incorrect number of input arguments.', 'SyntaxError');
-    
-end % if
+end
 
-M_post = class (M_post, 'stk_model_gpposterior');
+% Prepare object fields
+model.prior_model  = [];
+model.input_data   = xi;
+model.output_data  = zi;
+model.kreq         = kreq;
+
+% Create object
+model = class (model, 'stk_model_gpposterior');
+
+% Set prior model
+if ~ isempty (prior_model)
+    if isempty (kreq)
+        model = set_prior_model (model, prior_model);
+    else
+        % Legacy support for experimental hidden feature (continued)
+        model = set_prior_model (model, prior_model, false);
+    end
+end
 
 end % function
 
