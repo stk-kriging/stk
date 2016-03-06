@@ -203,9 +203,11 @@ Examples: miscellaneous
  stk_example_misc03
  stk_example_misc04
 
-#stk_testfun_braninhoo
-#stk_testfun_goldsteinprice
-#stk_testfun_borehole
+Examples: test functions
+ stk_testfun_borehole
+ stk_testfun_braninhoo
+ stk_testfun_goldsteinprice
+ stk_testfun_twobumps
 
 ## Cf. misc/distrib/README
 #stk_distrib_normal_cdf      [internal]

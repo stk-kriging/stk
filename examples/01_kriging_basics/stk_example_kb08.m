@@ -39,7 +39,7 @@ NB_PATHS = 10;  % number of sample paths that we want to produce
 
 %% Define a 1d test function, generate observations
 
-f = @(x)(- (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
+f = @stk_testfun_twobumps;
 DIM = 1;            % dimension of the factor space
 BOX = [-1.0; 1.0];  % factor space
 

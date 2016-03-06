@@ -1,3 +1,17 @@
+2016-03-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Give a name (TwoBumps) to our oldest test function
+
+	* examples/test_functions/stk_testfun_twobumps.m: Our oldest test
+	function now as its own M-file and a name.
+	* examples/01_kriging_basics/stk_example_kb01.m: Use the newly
+	created stk_testfun_twobumps function.
+	* examples/01_kriging_basics/stk_example_kb05.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb08.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb09.m: Idem.
+	* admin/octpkg/INDEX: Add stk_testfun_twobumps.  Make test
+	functions visible in the documentation.
+
 2016-02-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Getters and setters for the @stk_model_gpposterior class

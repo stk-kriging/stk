@@ -48,7 +48,7 @@ stk_options_set ('stk_dataframe', 'disp_format', 'verbose');
 
 %% Define a 1d test function
 
-f   = @(x)(- (0.7 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)));
+f   = @stk_testfun_twobumps;
 DIM = 1;            % dimension of the factor space
 BOX = [-1.0; 1.0];  % factor space
 
