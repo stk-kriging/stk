@@ -20,10 +20,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -48,27 +49,19 @@
 stk_disp_examplewelcome;  stk_figure ('stk_example_kb05');
 
 
-%% Define a 1d test function
+%% Dataset
 
-f = @stk_testfun_twobumps;
-DIM = 1;            % dimension of the factor space
-BOX = [-1.0; 1.0];  % factor space
+% Load a 1D noiseless dataset
+[xi, zi, ref] = stk_dataset_twobumps ('noiseless');
 
-NT = 400;  % nb of points in the grid
-xt = stk_sampling_regulargrid (NT, DIM, BOX);
-zt = stk_feval (f, xt);
+% The grid where predictions must be made
+xt = ref.xt;
 
+% Reference values on the grid
+zt = ref.zt;
 
-%% Generate observations
-%
-% The objective is to construct an approximation of f and to simulate
-% conditioned sample paths from NI observations. The observation locations
-% are chosen as a subset of xt.
-%
-
-xi_ind = [1 20 90 200 300 350];  % indices of evaluation points in xt
-xi = xt(xi_ind, 1);              % evaluation points
-zi = stk_feval (f, xi);          % evaluation results
+% Indices of the evaluation points xi in the grid
+xi_ind = ref.xi_ind;
 
 
 %% Specification of the model

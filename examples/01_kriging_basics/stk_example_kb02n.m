@@ -1,13 +1,13 @@
-% STK_EXAMPLE_KB02  Ordinary kriging in 1D with parameter estimation
+% STK_EXAMPLE_KB02N  Noisy ordinary kriging in 1D with parameter estimation
 %
 % This example shows how to estimate covariance parameters and compute
-% ordinary kriging predictions on a one-dimensional noiseless dataset.
+% ordinary kriging predictions on a one-dimensional noisy dataset.
 %
-% The model and data are the same as in stk_example_kb01, but this time the
-% parameters of the covariance function are estimated using the Restricted
-% Maximum Likelihood (ReML) method.
+% The model and data are the same as in stk_example_kb02, but this time the
+% parameters of the covariance function and the variance of the noise are
+% jointly estimated using the Restricted Maximum Likelihood (ReML) method.
 %
-% See also: stk_example_kb01, stk_example_kb02n
+% See also: stk_example_kb01n, stk_example_kb02
 
 % Copyright Notice
 %
@@ -42,8 +42,8 @@ stk_disp_examplewelcome
 
 %% Dataset
 
-% Load a 1D noiseless dataset
-[xi, zi, ref] = stk_dataset_twobumps ('noiseless');
+% Load a 1D noisy dataset (homoscedastic Gaussian noise)
+[xi, zi, ref] = stk_dataset_twobumps ('noisy1');
 
 % The grid where predictions must be made
 xt = ref.xt;
@@ -51,9 +51,9 @@ xt = ref.xt;
 % Reference values on the grid
 zt = ref.zt;
 
-stk_figure ('stk_example_kb02 (a)');
+stk_figure ('stk_example_kb02n (a)');
 stk_plot1d (xi, zi, xt, zt);  legend show;
-stk_title  ('True function and observed data');
+stk_title  ('True function and noisy observed data');
 
 
 %% Specification of the model
@@ -63,14 +63,20 @@ stk_title  ('True function and observed data');
 % estimated from the data.
 model = stk_model ('stk_materncov_iso');
 
+% Indicate that with the noise variance to be estimated
+model.lognoisevariance = nan;
+
 
 %% Parameter estimation
 
 % Here, the parameters of the Matern covariance function are estimated
 % by the REML (REstricted Maximum Likelihood) method.
-model.param = stk_param_estim (model, xi, zi);
+[model.param, model.lognoisevariance] = stk_param_estim (model, xi, zi);
 
 display (model);
+
+fprintf ('True noise variance = %.4f\n', ref.noise_std ^ 2);
+fprintf ('Estimated noise variance = %.4f\n\n', exp (model.lognoisevariance));
 
 
 %% Carry out the kriging prediction and display the result
@@ -78,10 +84,10 @@ display (model);
 % Compute the kriging predictor (and the kriging variance) on the grid
 zp = stk_predict (model, xi, zi, xt);
 
-stk_figure ('stk_example_kb02 (b)');
+stk_figure ('stk_example_kb02n (b)');
 stk_plot1d (xi, zi, xt, zt, zp);  legend show;
 stk_title  ('Kriging prediction with estimated parameters');
 stk_labels ('input variable x', 'response z');
 
 
-%!test stk_example_kb02;  close all;
+%!test stk_example_kb02n;  close all;

@@ -181,9 +181,11 @@ Design of experiments (sequential): criterions
 
 Examples: kriging basics
  stk_example_kb01
+ stk_example_kb01n
  stk_example_kb02
+ stk_example_kb02n
  stk_example_kb03
- stk_example_kb04
+#stk_example_kb04
  stk_example_kb05
  stk_example_kb06
  stk_example_kb07
@@ -203,7 +205,8 @@ Examples: miscellaneous
  stk_example_misc03
  stk_example_misc04
 
-Examples: test functions
+Examples: test functions, datasets, etc.
+ stk_dataset_twobumps
  stk_testfun_borehole
  stk_testfun_braninhoo
  stk_testfun_goldsteinprice

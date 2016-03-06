@@ -1,19 +1,17 @@
-% STK_EXAMPLE_KB01  Ordinary kriging in 1D, with noiseless data
+% STK_EXAMPLE_KB01N  Ordinary kriging in 1D, with noisy data
 %
 % This example shows how to compute ordinary kriging predictions on a
-% one-dimensional noiseless dataset.
+% one-dimensional noisy dataset.
 %
-% The word 'ordinary' indicates that the mean function of the GP prior is
-% assumed to be constant and unknown.
+% The Gaussian Process (GP) prior is the same as in stk_example_kb01.
 %
-% A Matern covariance function is used for the Gaussian Process (GP) prior.
-% The parameters of this covariance function are assumed to be known (i.e.,
-% no parameter estimation is performed here).
+% The observation noise is Gaussian and homoscedastic (constant variance). 
+% Its variance is assumed to be known.
 %
 % Note that the kriging predictor, which is the posterior mean of the GP,
-% interpolates the data in this noiseless example.
+% does NOT interpolate the data in this noisy example.
 %
-% See also: stk_example_kb01n, stk_example_kb02
+% See also: stk_example_kb01, stk_example_kb02n
 
 % Copyright Notice
 %
@@ -48,8 +46,8 @@ stk_disp_examplewelcome
 
 %% Dataset
 
-% Load a 1D noiseless dataset
-[xi, zi, ref] = stk_dataset_twobumps ('noiseless');
+% Load a 1D noisy dataset (homoscedastic Gaussian noise)
+[xi, zi, ref] = stk_dataset_twobumps ('noisy1');
 
 % The grid where predictions must be made
 xt = ref.xt;
@@ -57,7 +55,7 @@ xt = ref.xt;
 % Reference values on the grid
 zt = ref.zt;
 
-stk_figure ('stk_example_kb01 (a)');
+stk_figure ('stk_example_kb01n (a)');
 stk_plot1d (xi, zi, xt, zt);  legend show;
 stk_title  ('True function and observed data');
 stk_labels ('input variable x', 'response z');
@@ -85,6 +83,9 @@ NU     = 4.0;  % regularity parameter
 RHO1   = 0.4;  % scale (range) parameter
 model.param = log ([SIGMA2; NU; 1/RHO1]);
 
+% It is assumed in this example that the variance of the noise is known
+model.lognoisevariance = 2 * log (ref.noise_std);
+
 display (model);
 
 
@@ -99,10 +100,10 @@ display (model);
 zp = stk_predict (model, xi, zi, xt);
 
 % Display the result
-stk_figure ('stk_example_kb01 (b)');
+stk_figure ('stk_example_kb01n (b)');
 stk_plot1d (xi, zi, xt, zt, zp);  legend show;
-stk_title  ('Kriging prediction based on noiseless observations');
+stk_title  ('Kriging prediction based on noisy observations');
 stk_labels ('input variable x', 'response z');
 
 
-%!test stk_example_kb01;  close all;
+%!test stk_example_kb01n;  close all;

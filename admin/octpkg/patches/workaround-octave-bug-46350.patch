@@ -1,6 +1,6 @@
 --- a/examples/01_kriging_basics/stk_example_kb09.m
 +++ b/examples/01_kriging_basics/stk_example_kb09.m
-@@ -103,5 +103,10 @@
+@@ -82,5 +82,10 @@
  stk_labels ('input variable x', 'response z');
  
  
