@@ -1,6 +1,6 @@
-% STK_EXAMPLE_KB05  Generation of conditioned sample paths made easy
+% STK_EXAMPLE_KB08  Generation of conditioned sample paths made easy
 %
-% It has been demonstrated, in stk_exampke_kb05, how to generate conditioned
+% It has been demonstrated, in stk_example_kb05, how to generate conditioned
 % sample paths using unconditioned sample paths and conditioning by kriging.
 %
 % This example shows how to do the same in a more concise way, letting STK
@@ -8,6 +8,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -37,19 +38,19 @@ stk_disp_examplewelcome;  stk_figure ('stk_example_kb08');
 NB_PATHS = 10;  % number of sample paths that we want to produce
 
 
-%% Define a 1d test function, generate observations
+%% Dataset
 
-f = @stk_testfun_twobumps;
-DIM = 1;            % dimension of the factor space
-BOX = [-1.0; 1.0];  % factor space
+% Load a 1D noiseless dataset
+[xi, zi, ref] = stk_dataset_twobumps ('noiseless');
 
-NT = 400;  % nb of points in the grid
-xt = stk_sampling_regulargrid (NT, DIM, BOX);
-zt = stk_feval (f, xt);
+% The grid where predictions must be made
+xt = ref.xt;
 
-xi_ind = [1 20 90 200 300 350];  % indices of evaluation points in xt
-xi = xt(xi_ind, 1);              % evaluation points
-zi = stk_feval (f, xi);          % evaluation results
+% Reference values on the grid
+zt = ref.zt;
+
+% Indices of the evaluation points xi in the grid
+xi_ind = ref.xi_ind;
 
 
 %% Specification of the model

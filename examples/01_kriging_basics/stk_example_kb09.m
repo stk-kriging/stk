@@ -11,7 +11,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -40,52 +40,30 @@
 stk_disp_examplewelcome;  stk_figure ('stk_example_kb09');
 
 
-%% Example parameters
+%% Dataset
 
-% One-dimensional test function
-f = @stk_testfun_twobumps;
-DIM = 1;            % Dimension of the factor space
-BOX = [-1.0; 1.0];  % Factor space
+% Load a 1D noisy dataset (heteroscedastic Gaussian noise)
+[xi, zi, ref] = stk_dataset_twobumps ('noisy2');
 
-% Simulation grid
-NT = 400;
-xt = stk_sampling_regulargrid (NT, DIM, BOX);
-zt = stk_feval (f, xt);
+% The grid where predictions must be made
+xt = ref.xt;
 
-% Default: homoscedastic noise
-if ~ exist ('HOMOSCEDASTIC_NOISE', 'var')
-   HOMOSCEDASTIC_NOISE = true;
-end
-
-% Standard deviation of the noise
-if HOMOSCEDASTIC_NOISE
-    NOISE_STD_FUNC = @(x) 0.5;
-else
-    NOISE_STD_FUNC = @(x) (0.1 + (x + 1) .^ 2);
-end
-
-
-%% Choose observation points and generate noisy observations
-
-% Evaluate on set of locations composed of a regular grid of 30 points augmented
-% with 100 point uniformly distributed on [0 0.5]
-xi1 = stk_sampling_regulargrid (30, DIM, BOX);
-xi2 = stk_sampling_randunif (100, DIM, [0; 1]);
-xi = [xi1; xi2];
-
-% Simulate noisy evaluations
-zi = stk_feval (f, xi);                    % Noiseless evaluation results
-noise_std = NOISE_STD_FUNC (xi.data);      % Standard deviation of the noise
-zi = zi + noise_std .* randn (size (zi));  % Noisy evaluation results
+% Reference values on the grid
+zt = ref.zt;
 
 
 %% Gaussian process model
-%
-% In this example, the variance of the noise assumed to be known beforehand.
-%
 
+% Define a model with a constant but unknown mean (ordinary kriging)
+% and a Matern 5/2 covariance function, the parameters of which will be
+% estimated from the data.
 model = stk_model ('stk_materncov52_iso');
-model.lognoisevariance = 2 * log (noise_std);  % assumed known
+
+% Variance of the heteroscedastic noise (assumed to be known).
+% Note that ref.noise_std is a *vector* in this case.
+model.lognoisevariance = 2 * log (ref.noise_std);
+
+% ReML parameter estimation
 model.param = stk_param_estim (model, xi, zi);
 
 
@@ -98,7 +76,8 @@ zp = stk_predict (model, xi, zi, xt);
 z_sim_cond = stk_generate_samplepaths (model, xi, zi, xt, NB_PATHS);
 
 % Display the result
-stk_plot1d (xi, zi, xt, zt, zp, z_sim_cond);  legend show;
+stk_plot1d (xi, zi, xt, zt, zp, z_sim_cond);
+h = legend ('show');  set (h, 'Location', 'NorthWest');
 stk_title ('Prediction and credible intervals');
 stk_labels ('input variable x', 'response z');
 

@@ -1,5 +1,29 @@
 2016-03-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Define and use three datasets based on TwoBumps
+
+	* examples/datasets/stk_dataset_twobumps.m: New function, which
+	defines three datasets based on TwoBumps.
+	* examples/01_kriging_basics/stk_example_kb01.m: Use dataset
+	'noiseless'. Move the noisy case to stk_example_kb01n.
+	* examples/01_kriging_basics/stk_example_kb01n.m: New example
+	script, which corresponds to the noisy case of the previous
+	version of stk_example_kb01.
+	* examples/01_kriging_basics/stk_example_kb02.m: Use dataset
+	'noiseless'. Move the noisy case to stk_example_kb02n.
+	* examples/01_kriging_basics/stk_example_kb02n.m: New example
+	script, which corresponds to the noisy case of the previous
+	version of stk_example_kb02.
+	* examples/01_kriging_basics/stk_example_kb04.m: This example no
+	longer exists (replaced by /stk_example_kb02n).
+	* examples/01_kriging_basics/stk_example_kb05.m: Use dataset
+	'noiseless'.
+	* examples/01_kriging_basics/stk_example_kb08.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb05.m: Use dataset
+	'noisy2'.
+	* stk_init.m: Add examples/datasets to the path.
+	* admin/octpkg/INDEX: Update index.
+
 	Give a name (TwoBumps) to our oldest test function
 
 	* examples/test_functions/stk_testfun_twobumps.m: Our oldest test
