@@ -1,3 +1,14 @@
+2016-03-08  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Make it possible to update heteroscedastic models
+
+	* core/@stk_model_gpposterior/set_lognoisevariance.m: Provide a
+	more informative error message when the size is wrong. Add unit
+	tests.
+	* core/@stk_model_gpposterior/stk_model_update.m: Handle the
+	heteroscedastic case thanks to a new input argument. Provide
+	informative error messages. Add unit tests.
+
 2016-03-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Define and use three datasets based on TwoBumps
