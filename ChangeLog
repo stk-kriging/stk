@@ -8,6 +8,10 @@
 	* core/@stk_model_gpposterior/stk_model_update.m: Handle the
 	heteroscedastic case thanks to a new input argument. Provide
 	informative error messages. Add unit tests.
+	* sampling/@stk_sampcrit_modelbased/stk_model_update.m: Pass the
+	additional input argument, unchaged.
+	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_model_update.m:
+	Idem.
 
 2016-03-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
