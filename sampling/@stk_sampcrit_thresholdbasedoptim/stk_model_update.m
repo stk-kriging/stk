@@ -1,4 +1,4 @@
-% STK_MODEL_UPDATE ...
+% STK_MODEL_UPDATE updates the underlying model
 
 % Copyright Notice
 %
@@ -26,10 +26,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = stk_model_update (crit, x, y)
+function crit = stk_model_update (crit, varargin)
 
 crit.stk_sampcrit_modelbased = stk_model_update ...
-    (crit.stk_sampcrit_modelbased, x, y);
+    (crit.stk_sampcrit_modelbased, varargin{:});
 
 crit = set_threshold_value (crit);
 

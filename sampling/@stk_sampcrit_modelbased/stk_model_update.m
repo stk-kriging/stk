@@ -1,4 +1,4 @@
-% STK_SET_MODEL ...
+% STK_SET_MODEL updates the underlying model
 
 % Copyright Notice
 %
@@ -26,8 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = stk_model_update (crit, x, y)
+function crit = stk_model_update (crit, varargin)
 
-crit.model = stk_model_update (crit.model, x, y);
+crit.model = stk_model_update (crit.model, varargin{:});
 
 end % function
