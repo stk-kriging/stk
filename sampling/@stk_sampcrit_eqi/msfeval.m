@@ -27,31 +27,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = msfeval (crit, mean, std)
+function crit_val = msfeval (crit, mean, std, tau2)
 
 threshold = get_threshold_value (crit);
 bminimize = get_bminimize (crit);
 quantile_order = get_threshold_quantile_order (crit);
-model = get_model (crit);
 
-Ne = 30; %number of observation
-N_EQI = 10^5;  % Test
-
-% eval_budget = get_eval_budget(crit);
-
-% Definition of the variance of the noise
-noise_var = exp (get_lognoisevariance (model));
-% if noise_var is real (homoscedastic variance)
-if stk_length(noise_var)==1
-    
-    noise_var = noise_var ./ (N_EQI - Ne);
-    
-else   % case heteroscedastic variance
-    noise_var = zeros(stk_length(std),1);
-end
-
-tmp = (std .^ 2) ./ (noise_var + std .^ 2);
-quantile_moy = mean + (norminv (quantile_order)) * (sqrt (noise_var .* tmp));
+tmp = (std .^ 2) ./ (tau2 + std .^ 2);
+quantile_moy = mean + (norminv (quantile_order)) * (sqrt (tau2 .* tmp));
 quantile_var = (std .^ 2) .* tmp;
 
 crit_val = stk_distrib_normal_ei (threshold, ...

@@ -30,10 +30,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [crit_val, zp] = feval (crit, x)
+function [crit_val, zp] = feval (crit, x, vargin)
 
 zp = stk_predict (crit.model, x);
 
-crit_val = msfeval (crit, zp.mean, sqrt (zp.var));
+crit_val = msfeval (crit, zp.mean, sqrt (zp.var), vargin{:});
 
 end % function
