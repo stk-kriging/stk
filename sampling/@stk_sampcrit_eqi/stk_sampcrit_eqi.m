@@ -4,7 +4,8 @@
 %
 %    Copyright (C) 2016 CentraleSupelec
 %
-%    Author:  Tom Assouline  <tom.assouline@supelec.fr>
+%    Authors:  Tom Assouline  <tom.assouline@supelec.fr>
+%              Julien Bect    <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,12 +27,33 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = stk_sampcrit_eqi (varargin)
+function crit = stk_sampcrit_eqi (model, goal, ...
+    threshold_quantile_order, varargin)
 
-crit0 = stk_sampcrit_thresholdbasedoptim (varargin{:});
+if nargin > 3
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
+% No input argument case
+if nargin == 0,
+    crit0 = stk_sampcrit_thresholdbasedoptim ();
+    crit0 = set_threshold_mode (crit0, 'best quantile');
+    crit = class (struct (), 'stk_sampcrit_eqi', crit0);
+    return
+end
+
+% Create parent object
+if nargin < 3
+    % threshold_quantile_order not provided
+    crit0 = stk_sampcrit_thresholdbasedoptim (model, goal, 'best quantile');
+else
+    % threshold_quantile_order provided
+    crit0 = stk_sampcrit_thresholdbasedoptim ...
+        (model, goal, 'best quantile', [], ...
+        threshold_quantile_order, varargin{:});
+end
+
+% Create stk_sampcrit_eqi object
 crit = class (struct (), 'stk_sampcrit_eqi', crit0);
-
-% In EQI we are working with quantiles
-crit = set_threshold_mode (crit, 'best quantile');
 
 end % function
