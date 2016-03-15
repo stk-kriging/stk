@@ -6,7 +6,7 @@
 %
 %    The TwoBumps function is defined as:
 %
-%       TwoBumps(x) = 0.7x + sin(5x + 1) + 0.1 sin(10x)
+%       TwoBumps(x) = - (0.7x + sin(5x + 1) + 0.1 sin(10x))
 %
 %    for x in [-1.0; 1.0].
 
@@ -17,8 +17,8 @@
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
 %              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 %
-%    This response function has been present as an example in the STK toolbox
-%    since the very first releases (STK 1.0, released in 2011).
+%    This response function (its opposite, actually) has been present as an
+%    example in the STK toolbox since the very first releases (STK 1.0, 2011).
 
 % Copying Permission Statement  (STK toolbox)
 %
@@ -52,6 +52,6 @@ function z = stk_testfun_twobumps (x)
 
 x = double (x);
 
-z = 0.7 * x + (sin (5 * x + 1)) + 0.1 * (sin (10 * x));
+z = -(0.7 * x + (sin (5 * x + 1)) + 0.1 * (sin (10 * x)));
 
 end % function
