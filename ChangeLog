@@ -1,3 +1,11 @@
+2016-03-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_testfun_twobumps.m: Change the sign of the test function
+
+	* examples/test_functions/stk_testfun_twobumps.m: Change the sign
+	of the test function (it looked more like "two hollows" than "two
+	bumps"...).
+
 2016-03-08  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Make it possible to update heteroscedastic models
