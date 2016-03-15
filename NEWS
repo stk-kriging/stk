@@ -38,11 +38,7 @@ Changes in version 2.4.0
 
 * Sampling criterion objects
 
-   o TODO: DESCRIBE
-
-* IAGO
-
-   o TODO: DESCRIBE
+   o TODO: DESCRIBE  (EI, EQI, IAGO...)
 
 * Space-filling designs
 
@@ -91,6 +87,9 @@ Changes in version 2.4.0
 
    o stk_example_doe04.m: Example script that demonstrates the use of
      stk_pmisclass ().
+
+   o stk_example_doe05.m: Example script that the use of the EQI criterion for
+     noisy optimization.  FIXME: Make it possible to use IAGO as well ?
 
    o stk_example_kb10.m: Example script that demonstrates the use of
      leave-one-out cross-validation to produce goodness-of-fit graphical
