@@ -1,3 +1,19 @@
+2016-03-15  Tom Assouline  <tom.assouline@supelec.fr>
+
+	Implement EQI criterion for noisy optimization
+
+	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: New function.
+	* sampling/@stk_sampcrit_eqi/msfeval.m: New function.
+	* examples/02_design_of_experiments/stk_example_doe05.m: Example.
+	script
+
+2016-03-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_sampcrit_modelbased/feval.m: Pass additional args to msfeval
+
+	* sampling/@stk_sampcrit_modelbased/feval.m: Make it possible to
+	pass additional arguments to msfeval.
+
 2016-03-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_testfun_twobumps.m: Change the sign of the test function
