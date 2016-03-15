@@ -152,14 +152,8 @@ EQI_max = +inf;
 EQI_max_stop = (max (zg) - min (zg)) / 1e5;
 
 % Construct sampling criterion object
-EQI_crit = stk_sampcrit_eqi (model, 'maximize');
-
-EQI_crit = set_threshold_quantile_order (EQI_crit, 0.6);
-
-if EQI_crit.threshold_quantile_order > 0.5
-    warning('Quantile order is too high !')
-end
-
+EQI_QUANTILE_ORDER = 0.5;
+EQI_crit = stk_sampcrit_eqi (model, 'maximize', EQI_QUANTILE_ORDER);
 EQI_crit = stk_model_update (EQI_crit, x0, z0_n);
 
 % Iteration number
