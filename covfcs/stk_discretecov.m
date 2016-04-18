@@ -21,7 +21,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -86,21 +86,21 @@ end % function
 %! model.lognoisevariance = - inf;
 %! model2 = stk_model ('stk_discretecov', model, x0);
 %! idx = [1 4 9];
-%! [K1, P1] = stk_make_matcov (model,  x0(idx, :));
-%! [K2, P2] = stk_make_matcov (model2, idx');
+%! [K1, P1] = stk_covmat (model, x0(idx, :));
+%! [K2, P2] = stk_covmat (model2, idx');
 %! assert (stk_isequal_tolrel (K1, K2));
 %! assert (stk_isequal_tolrel (P1, P2));
 
 %!test % without noise, pairwise = true
-%! K1 = stk_make_matcov (model,  x0([2 5 6], :), [], true);
-%! K2 = stk_make_matcov (model2, [2 5 6]', [], true);
+%! K1 = stk_covmat (model, x0([2 5 6], :), [], -1, true);
+%! K2 = stk_covmat (model2, [2 5 6]', [], -1, true);
 %! assert (stk_isequal_tolrel (K1, K2));
 
 %!test % with noise, pairwise = false
 %! model.lognoisevariance = log (0.01);
 %! model2 = stk_model ('stk_discretecov', model, x0);
 %! idx = [1 4 9];
-%! [K1, P1] = stk_make_matcov (model,  x0(idx, :));
-%! [K2, P2] = stk_make_matcov (model2, idx');
+%! [K1, P1] = stk_covmat (model, 'response', x0(idx, :));
+%! [K2, P2] = stk_covmat (model2, 'response', idx');
 %! assert (stk_isequal_tolrel (K1, K2));
 %! assert (stk_isequal_tolrel (P1, P2));

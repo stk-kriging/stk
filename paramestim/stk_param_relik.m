@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -61,7 +61,7 @@ n = size (xi, 1);
 
 %% Compute the (opposite of) the restricted log-likelihood
 
-[K, P] = stk_make_matcov (model, xi);
+[K, P] = stk_covmat_response (model, xi);
 q = size (P, 2);
 simple_kriging = (q == 0);
 
@@ -148,7 +148,7 @@ if nargout >= 2
             drl_lnv = nan;
         else
             diff = 1;
-            V = stk_noisecov (n, model.lognoisevariance, diff);
+            V = stk_covmat_noise (model, xi, [], diff);
             drl_lnv = 1/2 * (sum (sum (H .* V)) - z' * V * z);
             if NOISEPRIOR
                 drl_lnv = drl_lnv + delta_lnv / model.noiseprior.var;

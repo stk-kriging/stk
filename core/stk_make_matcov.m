@@ -1,19 +1,8 @@
-% STK_MAKE_MATCOV computes a covariance matrix (and a design matrix)
+% STK_MAKE_MATCOV computes a covariance matrix [DEPRECATED]
 %
-% CALL: [K, P] = stk_make_matcov (MODEL, X0)
+% This function is deprecated and will be removed in future versions of STK.
 %
-%    computes the covariance matrix K and the design matrix P for the model
-%    MODEL at the set of points X0, which is expected to be an N x DIM
-%    array. As a result, a matrix K of size N x N and a matrix P of size
-%    N x L are obtained, where L is the number of regression functions in
-%    the linear part of the model; e.g., L = 1 if MODEL.order is zero
-%    (ordinary kriging).
-%
-% CALL: K = stk_make_matcov (MODEL, X0, X1)
-%
-%    computes the covariance matrix K for the model MODEL between the sets
-%    of points X0 and X1. The resulting K matrix is of size N0 x N1, where
-%    N0 is the number of rows of XO and N1 the number of rows of X1.
+% FIXME: In the meantime, provide correspondence with the new syntax
 %
 % BE CAREFUL:
 %
@@ -23,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -49,50 +38,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [K, P] = stk_make_matcov (model, x0, x1, pairwise)
+function [K, P] = stk_make_matcov (model, x0, x1, varargin)
 
-% Backward compatiblity: accept model structures with missing lognoisevariance
-if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
-    model.lognoisevariance = - inf;
-end
-
-% Check if the covariance model contains parameters
-% that should have been estimated first
-if (isnumeric (model.param)) && (any (isnan (model.param)))
-    stk_error (['The covariance model contains undefined parameters, ' ...
-        'which must be estimated first.'], 'ParametersMustBeEstimated');
-end
-
-%=== process input arguments
-
-if nargin > 4,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
-x0 = double (x0);
-
-if (nargin > 2) && (~ isempty (x1)),
-    x1 = double (x1);
-    make_matcov_auto = false;
+if nargin < 3
+    [K, P] = stk_covmat_response (model, x0);
 else
-    x1 = x0;
-    make_matcov_auto = true;
-end
-
-pairwise = (nargin > 3) && pairwise;
-
-%=== compute the covariance matrix
-
-K = feval (model.covariance_type, model.param, x0, x1, -1, pairwise);
-
-if make_matcov_auto && (any (model.lognoisevariance ~= -inf))
-    K = K + stk_noisecov (size (K,1), model.lognoisevariance, -1, pairwise);
-end
-
-%=== compute the regression functions
-
-if nargout > 1,
-    P = stk_ortho_func (model, x0);
+    [K, P] = stk_covmat_response (model, x0, x1, -1, varargin{:});
 end
 
 end % function
