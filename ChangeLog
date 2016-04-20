@@ -1,3 +1,10 @@
+2016-04-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix a bug in stk_example_doe05
+
+	* examples/02_design_of_experiments/stk_example_doe05.m: Pass a
+	value for tau2_new when evaluating the EQI criterion.
+
 2016-03-15  Tom Assouline  <tom.assouline@supelec.fr>
 
 	Implement EQI criterion for noisy optimization

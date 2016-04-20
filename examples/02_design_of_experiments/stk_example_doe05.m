@@ -159,12 +159,16 @@ EQI_crit = stk_model_update (EQI_crit, x0, z0_n);
 % Iteration number
 iter = 0;
 
+% Future noise variance = 0  (infinite future batch size)
+tau2_new = 0;
+
+
 %%
 
 while (iter < NB_ITER) && (EQI_max > EQI_max_stop),
     
     % Compute the Expected Quantile Improvement (EQI) criterion on the grid
-    [EQI_val, z_pred] = EQI_crit (xg);
+    [EQI_val, z_pred] = EQI_crit (xg, tau2_new);
     
     % Pick the point where the EQI is maximum as our next evaluation point
     [EQI_max, i_max] = max (EQI_val);
