@@ -2,13 +2,13 @@
 %
 % This function is deprecated and will be removed in future versions of STK.
 %
-% FIXME: In the meantime, provide correspondence with the new syntax
+% Please use
 %
-% BE CAREFUL:
+%    stk_covmat (model, 'response', ...)
 %
-%    stk_make_matcov (MODEL, X0) and stk_makematcov (MODEL, X0, X0) are NOT
-%    equivalent if model.lognoisevariance > - inf  (in the first case, the
-%    noise variance is added on the diagonal of the covariance matrix).
+% instead.
+%
+% See also: stk_covmat
 
 % Copyright Notice
 %
@@ -38,31 +38,31 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [K, P] = stk_make_matcov (model, x0, x1, varargin)
+function [K, P] = stk_make_matcov (model, x1, x2, varargin)
 
 if nargin < 3
-    [K, P] = stk_covmat_response (model, x0);
+    [K, P] = stk_covmat (model, 'response', x1);
 else
-    [K, P] = stk_covmat_response (model, x0, x1, -1, varargin{:});
+    [K, P] = stk_covmat (model, 'response', x1, x2, -1, varargin{:});
 end
 
 end % function
 
 
-%!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
+%!shared model, model2, x1, x2, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
 %! n0 = 20;  n1 = 10;  d = 4;
 %! model = stk_model ('stk_materncov52_aniso', d);  model.order = 1;
 %! model.param = log ([1.0; 2.1; 2.2; 2.3; 2.4]);
 %! model2 = model;  model2.lognoisevariance = log(0.01);
-%! x0 = stk_sampling_randunif (n0, d);
-%! x1 = stk_sampling_randunif (n1, d);
+%! x1 = stk_sampling_randunif (n0, d);
+%! x2 = stk_sampling_randunif (n1, d);
 
 %!error [KK, PP] = stk_make_matcov ();
 %!error [KK, PP] = stk_make_matcov (model);
-%!test  [Ka, Pa] = stk_make_matcov (model, x0);           % (1)
-%!test  [Kb, Pb] = stk_make_matcov (model, x0, x0);       % (2)
-%!test  [Kc, Pc] = stk_make_matcov (model, x0, x1);       % (3)
-%!error [KK, PP] = stk_make_matcov (model, x0, x1, pi);
+%!test  [Ka, Pa] = stk_make_matcov (model, x1);           % (1)
+%!test  [Kb, Pb] = stk_make_matcov (model, x1, x1);       % (2)
+%!test  [Kc, Pc] = stk_make_matcov (model, x1, x2);       % (3)
+%!error [KK, PP] = stk_make_matcov (model, x1, x2, pi);
 
 %!assert (isequal (size (Ka), [n0 n0]));
 %!assert (isequal (size (Kb), [n0 n0]));
@@ -76,10 +76,10 @@ end % function
 %!assert (isequal (Kb, Ka));
 
 % In the noisy case, however...
-%!test  [Ka, Pa] = stk_make_matcov (model2, x0);           % (1')
-%!test  [Kb, Pb] = stk_make_matcov (model2, x0, x0);       % (2')
+%!test  [Ka, Pa] = stk_make_matcov (model2, x1);           % (1')
+%!test  [Kb, Pb] = stk_make_matcov (model2, x1, x1);       % (2')
 %!error assert (isequal (Kb, Ka));
 
-% The second output depends on x0 only => should be the same for (1)--(3)
+% The second output depends on x1 only => should be the same for (1)--(3)
 %!assert (isequal (Pa, Pb));
 %!assert (isequal (Pa, Pc));
