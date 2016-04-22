@@ -43,10 +43,8 @@ if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
 end
 
 % Number of evaluations points
-x1 = double (x1);  % Do not remove: necessary for legacy .a structures
 n1 = size (x1, 1);
 if (nargin > 2) && (~ isempty (x2))
-    x2 = double (x2);  % Do not remove: necessary for legacy .a structures
     n2 = size (x2, 1);
     autocov = false;  % In this case the result is zero
 else

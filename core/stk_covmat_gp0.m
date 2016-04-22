@@ -57,10 +57,8 @@ else
 end
 
 % Evaluation points
-x1 = double (x1);  % Do not remove: necessary for legacy .a structures
 n1 = size (x1, 1);
 if (nargin > 2) && (~ isempty (x2)),
-    x2 = double (x2);  % Do not remove: necessary for legacy .a structures
     n2 = size (x2, 1);
 else
     x2 = x1;

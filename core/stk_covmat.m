@@ -127,9 +127,21 @@ elseif ~ ischar (output)
     stk_error ('output should be a string.', 'IncorrectArgument');
 end
 
+% Maintain support for legacy ".a structures" at this level
+% (but, not in internal stk_covmat_* functions)
+if (isstruct (x1) && isfield (x1, 'a'))
+    x1 = x1.a;
+end
+
 % Provide default value for 'x2' if missing  (argin #4)
 if nargin < 4
     x2 = [];
+else
+    % Maintain support for legacy ".a structures" at this level
+    % (but, not in internal stk_covmat_* functions)
+    if (isstruct (x2) && isfield (x2, 'a'))
+        x2 = x2.a;
+    end
 end
 
 % Check 'diff' argument  (argin #5)
