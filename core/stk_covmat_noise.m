@@ -1,5 +1,9 @@
 % STK_COVMAT_NOISE [STK internal]
 %
+% CALL: [K, P1, P2] = stk_covmat_noise (M, X1, X2, DIFF, PAIRWISE)
+%
+% DIFF can be -1, 0, or 1
+%
 % See also: stk_covmat
 
 % Copyright Notice
@@ -31,10 +35,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [K, P1, P2] = stk_covmat_noise (model, x1, x2, diff, pairwise)
-
-if nargin > 5,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
+% STK internal function => no check for nargin > 5
 
 % Backward compatiblity: accept model structures with missing lognoisevariance
 if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
@@ -44,13 +45,13 @@ end
 % Number of evaluations points
 x1 = double (x1);  % Do not remove: necessary for legacy .a structures
 n1 = size (x1, 1);
-if (nargin > 2) && (~ isempty (x2)),
+if (nargin > 2) && (~ isempty (x2))
     x2 = double (x2);  % Do not remove: necessary for legacy .a structures
     n2 = size (x2, 1);
-    make_matcov_auto = false;  % In this case the result is zero
+    autocov = false;  % In this case the result is zero
 else
     n2 = n1;
-    make_matcov_auto = true;   % In this case the result is a diagonal matrix
+    autocov = true;   % In this case the result is a diagonal matrix
 end
 
 % Defaut value for 'diff' (arg #4): -1
@@ -59,16 +60,14 @@ if nargin < 4,  diff = -1;  end
 % Default value for 'pairwise' (arg #5): false
 pairwise = (nargin > 4) && pairwise;
 
-%%
-% Compute the covariance matrix
-
-if make_matcov_auto && (any (model.lognoisevariance ~= -inf))
+if autocov && (diff ~= 0) && (any (model.lognoisevariance ~= -inf))
     
     if isscalar (model.lognoisevariance) % Homoscedastic case
         
         % Note: the value of x1 is ignored in this case, which is normal.
         %       Only the size of x1 actually matters.
         
+        % Currently there is only one parameter (lognoisevariance).
         % This will change when we implement parameterized variance models...
         if (diff ~= -1) && (diff ~= 1)
             stk_error (['diff should be either -1 or +1 in the ' ...
@@ -105,6 +104,7 @@ if make_matcov_auto && (any (model.lognoisevariance ~= -inf))
                 'scalar or a vector of length %d\n'], n1), 'IncorrectSize');
         end
         
+        % Currently there are no parameters in this case.
         % This will change when we implement parameterized variance models...
         if diff ~= -1,
             error ('diff ~= -1 is not allowed in the heteroscedastic case');
@@ -117,15 +117,22 @@ if make_matcov_auto && (any (model.lognoisevariance ~= -inf))
         end
     end
     
-else % Cross-covariance between independent noise values OR noiseless case
+else  % Return a null matrix
+    
+    % There are several cases where we return a null matrix:
+    % a) autocov is false: we are actually computing a *cross*-covariance matrix
+    % b) diff = 0: derivative with respect to a parameter that does not modify
+    %    the covariance matrix of the noise
+    % c) we are in the noiseless case.
     
     K = zeros (n1, n2);
     
 end
 
-%%
-% No linear part for the 'noise' output: return empty matrices if required
 
+%% Compute matrices for the linear part
+
+% No linear part for the 'noise' output: return empty matrices if required
 if nargout > 1
     P1 = zeros (n1, 0);
     

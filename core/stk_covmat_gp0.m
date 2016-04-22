@@ -1,5 +1,9 @@
 % STK_COVMAT_GP0 [STK internal]
 %
+% CALL: [K, P1, P2] = stk_covmat_gp0 (M, X1, X2, DIFF, PAIRWISE)
+%
+% DIFF can be -1, 0, or anything <= NCOVPARAM
+%
 % See also: stk_covmat
 
 % Copyright Notice
@@ -31,24 +35,36 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [K, P1, P2] = stk_covmat_gp0 (model, x1, x2, diff, pairwise)
-
-if nargin > 5,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
+% STK internal function => no check for nargin > 5
 
 % Check if the covariance model contains parameters
 % that should have been estimated first
-if (isnumeric (model.param)) && (any (isnan (model.param)))
-    stk_error (['The covariance model contains undefined parameters, ' ...
-        'which must be estimated first.'], 'ParametersMustBeEstimated');
+if ~ isstruct (model.param)
+    param = model.param(:);
+    if any (isnan (param))
+        stk_error (['The covariance model contains undefined parameters, ' ...
+            'which must be estimated first.'], 'ParametersMustBeEstimated');
+    end
+else
+    % Note: there is currently one case where model.param is a struct: the case
+    % of a discrete covariance (struct with fields .K and .P).  In this case the
+    % syntax model.param(:), which is used everywhere to allow the use of
+    % parameter objects, does not work. Ugly...
+    
+    % Until we find a more elegant solution:
+    assert (isfield (model.param, 'K') && isfield (model.param, 'P'));
+    param = [];
 end
 
 % Evaluation points
-x1 = double (x1);
+x1 = double (x1);  % Do not remove: necessary for legacy .a structures
+n1 = size (x1, 1);
 if (nargin > 2) && (~ isempty (x2)),
-    x2 = double (x2);
+    x2 = double (x2);  % Do not remove: necessary for legacy .a structures
+    n2 = size (x2, 1);
 else
     x2 = x1;
+    n2 = n1;
 end
 
 % Defaut value for 'diff' (arg #4): -1
@@ -57,8 +73,21 @@ if nargin < 4,  diff = -1;  end
 % Default value for 'pairwise' (arg #5): false
 pairwise = (nargin > 4) && pairwise;
 
-% Compute the covariance matrix
-K = feval (model.covariance_type, model.param, x1, x2, diff, pairwise);
+if (diff == -1) || (diff <= length (param))
+    
+    % Compute the covariance matrix
+    K = feval (model.covariance_type, model.param, x1, x2, diff, pairwise);
+    
+elseif diff == 0
+    
+    % Derivation wrt a parameter that does not modify the gp0 part
+    K = zeros (n1, n2);
+    
+else % Incorrect valuefor the 'diff' argument
+    
+    stk_error ('Incorrect diff value.', 'IncorrectArgument');
+    
+end % if
 
 % No linear part for the 'gp0' component: return empty matrices if required
 if nargout > 1

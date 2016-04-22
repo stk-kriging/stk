@@ -1,5 +1,9 @@
 % STK_COVMAT_LATENT [STK internal]
 %
+% CALL: [K, P1, P2] = stk_covmat_latent (M, X1, X2, DIFF, PAIRWISE)
+%
+% DIFF can be -1, 0, or anything <= NCOVPARAM
+%
 % See also: stk_covmat
 
 % Copyright Notice
@@ -31,6 +35,8 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [K, P1, P2] = stk_covmat_latent (varargin)
+% Input arguments: model, x1, x2, diff, pairwise
+% STK internal function => no check for nargin > 5
 
 K = stk_covmat_gp0 (varargin{:});
 

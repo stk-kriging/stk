@@ -135,7 +135,7 @@ if nargout >= 2
     z = H * double (yi);
     
     for diff = 1:nbparam,
-        V = feval (model.covariance_type, model.param, xi, xi, diff);
+        V = stk_covmat_gp0 (model, xi, [], diff);
         drl_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
     end
     

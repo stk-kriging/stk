@@ -1,5 +1,9 @@
 % STK_COVMAT_LM [STK internal]
 %
+% CALL: [K, P1, P2] = stk_covmat_lm (M, X1, X2, DIFF, PAIRWISE)
+%
+% DIFF can be -1 or 0
+%
 % See also: stk_covmat
 
 % Copyright Notice
@@ -31,19 +35,16 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [K, P1, P2] = stk_covmat_lm (model, x1, x2, diff, pairwise)
+% STK internal function => no check for nargin > 5
 
 % Note: the 'diff' argument is currently unused.  It will
 %   become useful to implement parameterized linear models.
 
-if nargin > 5,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
 % Evaluation points
-x1 = double (x1);
+x1 = double (x1);  % Do not remove: necessary for legacy .a structures
 n1 = size (x1, 1);
 if (nargin > 2) && (~ isempty (x2)),
-    x2 = double (x2);
+    x2 = double (x2);  % Do not remove: necessary for legacy .a structures
     n2 = size (x2, 1);
 else
     x2 = x1;
@@ -58,14 +59,32 @@ else
     K = zeros (n1, n2);
 end
 
-% Compute matrices for the linear part
-if nargout > 1,
-    P1 = stk_ortho_func (model, x1);
+if (nargin < 4) || (diff == -1)
     
-    if nargout > 2,
-        P2 = stk_ortho_func (model, x2);
+    % Compute matrices for the linear part
+    if nargout > 1,
+        P1 = stk_ortho_func (model, x1);
+        
+        if nargout > 2,
+            P2 = stk_ortho_func (model, x2);
+        end
     end
-end
+    
+elseif diff == 0
+    
+    % Derivation wrt a parameter that does not modify the linear models
+    if nargout > 1
+        P1 = zeros (n1, 0);
+        if nargout > 2
+            P2 = zeros (n2, 0);
+        end
+    end
+    
+else % diff is neither -1 nor 0
+    
+    stk_error ('Incorrect diff value.', 'IncorrectArgument');
+    
+end % if
 
 end % function
 

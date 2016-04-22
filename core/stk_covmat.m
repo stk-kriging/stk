@@ -25,10 +25,10 @@
 %   The argument X is expected to be an N x DIM array, where DIM is the input
 %   space dimension for model M. The result is a symmetric N x N matrix.
 %
-%   The OUTPUT argument can be omitted in the case of a noiseless model, in
-%   which case K is the covariance matrix of the latent GP, which is also the
-%   covariance matrix of future responses (since repeated measurements yield
-%   identical responses in the noiseless case).
+%   The OUTPUT argument can be omitted (i.e., set to []) in the case of a
+%   noiseless model, in which case K is the covariance matrix of the latent GP,
+%   which is also the covariance matrix of future responses (since repeated
+%   measurements yield identical responses in the noiseless case).
 %
 %   The prior models used in STK are in general improper models, since an
 %   improper uniform prior is assumed for the coefficient of the linear model.
@@ -97,10 +97,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function varargout = stk_covmat (prior_model, varargin)
+function varargout = stk_covmat (prior_model, output, x1, x2, diff, pairwise)
 
-if nargin < 2,
-    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+if nargin > 6
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % Note: stk_covmat is overloaded for posterior model objects (i.e., objects of
@@ -115,32 +115,92 @@ if (~ isfield (prior_model, 'lognoisevariance')) ...
     prior_model.lognoisevariance = - inf;
 end
 
-% Check if 'output' has been provided
-if ischar (varargin{1})
-    output = varargin{1};
-    varargin = varargin(2:end);
-else
+% Check if 'output' has been explicitely provided  (argin #2)
+if isempty (output)
     if isequal (prior_model.lognoisevariance, -inf)
         output = 'latent';
     else
         stk_error (['The ''output'' argument of stk_covmat can only be ' ...
             'omitted for noiseless models.'], 'SyntaxError');
     end
+elseif ~ ischar (output)
+    stk_error ('output should be a string.', 'IncorrectArgument');
+end
+
+% Provide default value for 'x2' if missing  (argin #4)
+if nargin < 4
+    x2 = [];
+end
+
+% Check 'diff' argument  (argin #5)
+if (nargin < 5) || (isempty (diff))
+    diff = -1;
+else
+    try
+        diff = double (diff);
+        assert (isscalar (diff));
+    catch
+        stk_error ('diff should be scalar.', 'IncorrectArgument');
+    end
+end
+
+% Check 'pairwise' argument  (argin #6)
+if (nargin < 6) || (isempty (pairwise))
+    pairwise = false;
+else
+    try
+        pairwise = logical (pairwise);
+        assert (isscalar (pairwise));
+    catch
+        stk_error ('pairwise should be a scalar boolean.', 'IncorrectArgument');
+    end
 end
 
 % Call the appropriate function to compute the result(s)
 varargout = cell (1, max (1, nargout));
 switch output
+    
     case 'response'
-        [varargout{:}] = stk_covmat_response (prior_model, varargin{:});
-    case 'latent'
-        [varargout{:}] = stk_covmat_latent (prior_model, varargin{:});
+        [varargout{:}] = stk_covmat_response ...
+            (prior_model, x1, x2, diff, pairwise);
+        
     case 'noise'
-        [varargout{:}] = stk_covmat_noise (prior_model, varargin{:});
+        if diff == -1  % plain value
+            [varargout{:}] = stk_covmat_noise ...
+                (prior_model, x1, x2, -1, pairwise);
+        else  % derivative => modify diff value
+            ncovparam = length (model.param(:));
+            [varargout{:}] = stk_covmat_noise ...
+                (prior_model, x1, x2, max (0, diff - ncovparam), pairwise);
+        end
+        
+    case 'latent'
+        if diff == -1  % plain value
+            [varargout{:}] = stk_covmat_latent ...
+                (prior_model, x1, x2, -1, pairwise);
+        else  % derivative => modify diff value
+            ncovparam = length (model.param(:));
+            if diff > ncovparam,  diff = 0;  end
+            [varargout{:}] = stk_covmat_latent ...
+                (prior_model, x1, x2, diff, pairwise);
+        end
+        
     case 'lm'
-        [varargout{:}] = stk_covmat_lm (prior_model, varargin{:});
+        % Parameterized linear models are not supported yet
+        if diff ~= 1,  diff = 0;  end
+        [varargout{:}] = stk_covmat_lm (prior_model, x1, x2, diff, pairwise);
+        
     case 'gp0'
-        [varargout{:}] = stk_covmat_gp0 (prior_model, varargin{:});
+        if diff == -1  % plain value
+            [varargout{:}] = stk_covmat_gp0 ...
+                (prior_model, x1, x2, -1, pairwise);
+        else  % derivative => modify diff value
+            ncovparam = length (model.param(:));
+            if diff > ncovparam,  diff = 0;  end
+            [varargout{:}] = stk_covmat_gp0 ...
+                (prior_model, x1, x2, diff, pairwise);
+        end
+        
     otherwise
         stk_error (sprintf ('Incorrect output name: %s', output), ...
             'IncorrectArgument');
@@ -160,29 +220,29 @@ end % function
 %!error [KK, PP] = stk_covmat ();
 %!error [KK, PP] = stk_covmat (model);
 
-%!test  [Ka, Pa] = stk_covmat (model, x1);                         % (1)
-%!test  [K1, P1] = stk_covmat (model, x1, []);
-%!test  [K2, P2] = stk_covmat (model, x1, [], -1);
-%!test  [K3, P3] = stk_covmat (model, x1, [], -1, false);
-%!error [KK, PP] = stk_covmat (model, x1, [], -1, false, pi);
+%!test  [Ka, Pa] = stk_covmat (model, [], x1);                             % (1)
+%!test  [K1, P1] = stk_covmat (model, [], x1, []);
+%!test  [K2, P2] = stk_covmat (model, [], x1, [], -1);
+%!test  [K3, P3] = stk_covmat (model, [], x1, [], -1, false);
+%!error [KK, PP] = stk_covmat (model, [], x1, [], -1, false, pi);
 %!assert (isequal (size (Ka), [n1 n1]));
 %!assert (isequal (size (Pa), [n1 d+1]));
 %!assert (isequal (P1, Pa) && (isequal (K1, Ka)))
 %!assert (isequal (P2, Pa) && (isequal (K2, Ka)))
 %!assert (isequal (P3, Pa) && (isequal (K3, Ka)))
 
-%!test  [Kb, Pb] = stk_covmat (model, x1, x1);                    % (2)
-%!test  [K1, P1] = stk_covmat (model, x1, x1, -1);
-%!test  [K2, P2] = stk_covmat (model, x1, x1, -1, false);
+%!test  [Kb, Pb] = stk_covmat (model, [], x1, x1);                         % (2)
+%!test  [K1, P1] = stk_covmat (model, [], x1, x1, -1);
+%!test  [K2, P2] = stk_covmat (model, [], x1, x1, -1, false);
 %!assert (isequal (size (Kb), [n1 n1]));
 %!assert (isequal (size (Pb), [n1 d+1]));
 %!assert (isequal (P1, Pb) && (isequal (K1, Kb)))
 %!assert (isequal (P2, Pb) && (isequal (K2, Kb)))
 
-%!test  [Kc, Pc] = stk_covmat (model, x1, x2);                    % (3)
-%!test  [K1, P1] = stk_covmat (model, x1, x2, -1);
-%!test  [K2, P2] = stk_covmat (model, x1, x2, -1, false);
-%!error [KK, PP] = stk_covmat (model, x1, x2, -1, false, pi);
+%!test  [Kc, Pc] = stk_covmat (model, [], x1, x2);                         % (3)
+%!test  [K1, P1] = stk_covmat (model, [], x1, x2, -1);
+%!test  [K2, P2] = stk_covmat (model, [], x1, x2, -1, false);
+%!error [KK, PP] = stk_covmat (model, [], x1, x2, -1, false, pi);
 %!assert (isequal (size (Kc), [n1 n2]));
 %!assert (isequal (size (Pc), [n1 d+1]));
 %!assert (isequal (P1, Pc) && (isequal (K1, Kc)))
@@ -192,8 +252,8 @@ end % function
 %!assert (isequal (Kb, Ka));
 
 % In the noisy case, however...
-%!test  [Ka, Pa] = stk_covmat (model2, 'response', x1);           % (1')
-%!test  [Kb, Pb] = stk_covmat (model2, 'response', x1, x1);       % (2')
+%!test  [Ka, Pa] = stk_covmat (model2, 'response', x1);                   % (1')
+%!test  [Kb, Pb] = stk_covmat (model2, 'response', x1, x1);               % (2')
 %!error assert (isequal (Kb, Ka));
 
 % The second output depends on x1 only => should be the same for (1)--(3)

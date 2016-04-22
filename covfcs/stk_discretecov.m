@@ -86,14 +86,14 @@ end % function
 %! model.lognoisevariance = - inf;
 %! model2 = stk_model ('stk_discretecov', model, x0);
 %! idx = [1 4 9];
-%! [K1, P1] = stk_covmat (model, x0(idx, :));
-%! [K2, P2] = stk_covmat (model2, idx');
+%! [K1, P1] = stk_covmat (model, [], x0(idx, :));
+%! [K2, P2] = stk_covmat (model2, [], idx');
 %! assert (stk_isequal_tolrel (K1, K2));
 %! assert (stk_isequal_tolrel (P1, P2));
 
 %!test % without noise, pairwise = true
-%! K1 = stk_covmat (model, x0([2 5 6], :), [], -1, true);
-%! K2 = stk_covmat (model2, [2 5 6]', [], -1, true);
+%! K1 = stk_covmat (model, [], x0([2 5 6], :), [], -1, true);
+%! K2 = stk_covmat (model2, [], [2 5 6]', [], -1, true);
 %! assert (stk_isequal_tolrel (K1, K2));
 
 %!test % with noise, pairwise = false
