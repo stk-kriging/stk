@@ -95,7 +95,7 @@ if ~ isempty (lnv0)
 else
     % Otherwise, noise variance estimation happens when lnv has NaNs
     lnv0 = model.lognoisevariance;
-    do_estim_lnv = any (isnan (lnv0));
+    do_estim_lnv = any (isnan (lnv0(:)));
     if do_estim_lnv && (~ isscalar (lnv0))
         stk_error (['Estimating the variance of the noise is not possible ' ...
             'in the hetereoscedastic case yet. Sorry.'], 'IncorrectArgument');
@@ -107,15 +107,17 @@ if isempty (criterion)
     criterion = @stk_param_relik;
 end
 
+%% Default value for param0 and lnv0
 % param0: provide a value (if not provided as input argument)
 [param0, lnv0] = provide_param0_value (model, xi, zi, param0, lnv0);
 
 % lnv0: try stk_param_init_lnv if we still have no acceptable value
-if do_estim_lnv && (isnan (lnv0))
+if do_estim_lnv && (any(isnan (lnv0(:))))
     model.param = param0;
     lnv0 = stk_param_init_lnv (model, xi, zi);
 end
 
+%% Define bounds for optimization
 % TODO: allow user-defined bounds
 [lb, ub] = stk_param_getdefaultbounds (model.covariance_type, param0, xi, zi);
 
@@ -123,18 +125,22 @@ if do_estim_lnv
     [lblnv, ublnv] = get_default_bounds_lnv (model, lnv0, xi, zi);
     lb = [lb ; lblnv];
     ub = [ub ; ublnv];
-    u0 = [param0(:); lnv0];
+    u0 = [param0(:); lnv0(:)];
 else
     u0 = param0(:);
 end
 
+%% Define the function to optimize
+model.param = param0;
 switch do_estim_lnv
     case false,
         f = @(u)(f_ (model, u, xi, zi, criterion));
     case true,
+        model.lognoisevariance = lnv0;
         f = @(u)(f_with_noise_ (model, u, xi, zi, criterion));
 end
 
+%% Optimize
 bounds_available = (~ isempty (lb)) && (~ isempty (ub));
 
 if bounds_available
@@ -145,9 +151,12 @@ else
     [u_opt, crit_opt] = stk_minimize_unconstrained (A, f, u0);
 end
 
+%% Return result
 if do_estim_lnv
-    lnvopt = u_opt(end);
-    u_opt(end) = [];
+    index_lnv = (length(model.param) + 1):length(u_opt);
+    lnvopt = lnv0;          % Return an object with the same class as lnv0
+    lnvopt(:) = u_opt(index_lnv);
+    u_opt(index_lnv) = [];
 else
     lnvopt = model.lognoisevariance;
 end
@@ -196,33 +205,16 @@ end % function
 
 function [l, dl] = f_with_noise_ (model, u, xi, zi, criterion)
 
-model.param(:) = u(1:end-1);
-model.lognoisevariance  = u(end);
+nbParam = length(model.param(:));
+
+model.param(:) = u(1:nbParam);
+model.lognoisevariance(:)  = u((nbParam + 1):end);
 
 if nargout == 1,
     l = criterion (model, xi, zi);
 else
     [l, dl, dln] = criterion (model, xi, zi);
     dl = [dl; dln];
-end
-
-end % function
-
-
-function [lblnv,ublnv] = get_default_bounds_lnv ... % --------------------------
-    (model, lnv0, xi, zi) %#ok<INUSL>
-
-TOLVAR = 0.5;
-
-% Bounds for the variance parameter
-empirical_variance = var(zi);
-lblnv = log (eps);
-ublnv = log (empirical_variance) + TOLVAR;
-
-% Make sure that lnv0 falls within the bounds
-if ~ isempty (lnv0)
-    lblnv = min (lblnv, lnv0 - TOLVAR);
-    ublnv = max (ublnv, lnv0 + TOLVAR);
 end
 
 end % function

@@ -150,8 +150,13 @@ end
 %  * if not, estimation occurs when lnv is nan
 if nargin < 5
     if isscalar (lnv)
+        % Warning : isscalar returns true if "lnv" is a stk_param.
+        
         % In the homoscedastic case, estimate noise variance iff lnv is nan
-        do_estim_lnv = isnan (lnv);
+        do_estim_lnv = any(isnan (lnv(:)));
+        if isnoisy(lnv)
+            lnv(:) = nan;
+        end
     else
         % Noise variance estimation is not supported in the heteroscedastic
         % case (see above). Heteroscedastic case with known noise variance:
@@ -159,9 +164,10 @@ if nargin < 5
     end
 else  % do_estim_lnv has been provided
     if isscalar (lnv)
+        % isscalar(lnv) == (isnumeric(lnv) && issclar(lnv)) || (isa(lnv, 'stk_noisevar_param'))
         if do_estim_lnv
-            lnv = nan;
-        elseif isnan (lnv)
+            lnv(:) = nan;
+        elseif any(isnan (lnv(:)))
             stk_error (sprintf ...
                 (['do_estim_lnv is false, but model.lognoisevariance ' ...
                 'is nan. If you don''t want the noise variance to be ' ...
@@ -253,7 +259,7 @@ function [param, lnv] = paraminit_ (xi, zi, box, nu, lm, lnv)
 if (std (double (zi)) == 0)
     warning ('STK:stk_param_init:ConstantResponse', ...
         'Parameter estimation is impossible with constant-response data.');
-    param = [0 log(nu) 0];  if any (isnan (lnv)), lnv = 0; end
+    param = [0 log(nu) 0];  if any (isnan (lnv(:))), lnv(:) = 0; end
     return  % Return some default values
 end
 
@@ -264,8 +270,9 @@ model.order = nan;  model.lm = lm;
 model.lognoisevariance = lnv;
 
 % list of possible values for the ratio eta = sigma2_noise / sigma2
-if (isscalar (lnv) && (lnv ~= -inf))
+if (isscalar (lnv) && (isnoisy(lnv)))
     % Homoscedastic noisy case, with known or unknown noise variance
+    % or parametered noise variance case
     eta_list = 10 .^ (-6:3:0);
 else
     % Noiseless case or heteroscedastic noisy case (known noise variance)
@@ -284,13 +291,13 @@ rho_min  = box_diameter / 50;
 rho_list = logspace (log10 (rho_min), log10 (rho_max), 5);
 
 % Initialize parameter search
-eta_best    = NaN;
 rho_best    = NaN;
 sigma2_best = NaN;
+lnv_best    = NaN;
 aLL_best    = +Inf;
 
 % Homoscedastic case ?
-homoscedastic = (isscalar (lnv));
+homoscedastic = (isnumeric(lnv) && isscalar (lnv));
 
 % Try all possible combinations of rho and eta from the lists
 for eta = eta_list
@@ -301,12 +308,21 @@ for eta = eta_list
         
         % The same code works for the noiseless case and for the case where lnv
         % must be estimated (in the first case, eta = 0 and thus lnv is -inf)
-        if (eta == 0) || (homoscedastic && (isnan (lnv)))
+        if isa(lnv, 'stk_noisevar_param')
+            model.param = [-log(eta), log(nu), -log(rho)];
+            
+            model.lognoisevariance = stk_param_init_lnv(lnv, model, xi, zi);
+            
+            lognoisevar_xi = log( stk_noisecov(model.lognoisevariance, xi, -1, true, []));
+            log_sigma2 = mean(lognoisevar_xi) - log(eta);
+            sigma2 = exp(log_sigma2);
+            
+        elseif (eta == 0) || (homoscedastic && (isnan (lnv)))
             model.lognoisevariance = log (eta);
             [beta_ignored, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU>
             if ~ (sigma2 > 0), continue; end
             log_sigma2 = log (sigma2);
-            model.lognoisevariance = log  (eta * sigma2);
+            model.lognoisevariance = log(eta * sigma2);
         else % Known variances (homo- and hetero-scedastic cases)
             model.param = [0.0, log(nu), -log(rho)];
             log_sigma2 = (mean (lnv)) - (log (eta));
@@ -317,10 +333,10 @@ for eta = eta_list
         model.param(1) = log_sigma2;
         aLL = stk_param_relik (model, xi, zi);
         if ~isnan(aLL) && (aLL < aLL_best)
-            eta_best    = eta;
             rho_best    = rho;
             aLL_best    = aLL;
             sigma2_best = sigma2;
+            lnv_best    = model.lognoisevariance;
         end
     end
 end
@@ -332,9 +348,10 @@ end
 
 param = log ([sigma2_best; nu; 1/rho_best]);
 
-if (isscalar (lnv)) && (isnan (lnv))
-    % Homoscedatic case with unknown variance... Here is our estimate:
-    lnv = log (eta_best * sigma2_best);
+if (isscalar (lnv)) && (any(isnan (lnv(:))))
+    % Homoscedatic case with unknown variance, or parametered case
+    % ... Here is our estimate:
+    lnv = lnv_best;
 end
 
 end % function

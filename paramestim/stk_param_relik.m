@@ -52,6 +52,7 @@ end
 % Ensure that param is a column vector (note: in the case where model.param is
 % an object, this is actually a call to subsasgn() in disguise).
 param = model.param(:);
+lnv   = model.lognoisevariance(:);
 
 PARAMPRIOR = isfield (model, 'prior');
 NOISEPRIOR = isfield (model, 'noiseprior');
@@ -113,8 +114,12 @@ if PARAMPRIOR
 end
 
 if NOISEPRIOR
-    delta_lnv = model.lognoisevariance - model.noiseprior.mean;
-    rl = rl + 0.5 * (delta_lnv ^ 2) / model.noiseprior.var;
+    delta_lnv = lnv(:) - model.noiseprior.mean;
+    if isfield (model.noiseprior, 'invcov')
+        rl = rl + 0.5 * (delta_lnv' * model.noiseprior.invcov * delta_lnv);
+    else % assume isfield (model.noiseprior, 'var')
+        rl = rl + 0.5 * (delta_lnv' * (model.noiseprior.var\delta_lnv) );
+    end
 end
 
 
@@ -145,9 +150,12 @@ if nargout >= 2
     
     if nargout >= 3,
         
-        nb_noise_param = 1;  % For now
-                
-        if model.lognoisevariance == -inf
+        nb_noise_param = length(lnv);  % For now
+        
+        if ~isnoisy(model.lognoisevariance) ||... % case 1 : model without noise
+                ( isnumeric(model.lognoisevariance) && ~isscalar(model.lognoisevariance) )
+            % case 2 : numeric non-scalar == hetero-scedastic case ==> no
+            % optimization
             drl_noise_param = nan (nb_noise_param, 1);
         else
             drl_noise_param = zeros (nb_noise_param, 1);
@@ -155,12 +163,15 @@ if nargout >= 2
             for diff = 1:nb_noise_param,
                 V = stk_covmat_noise (model, xi, [], diff);
                 drl_noise_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
-            end            
+            end
         end
         
-        % WARNING: this still assumes nb_noise_param == 1
         if NOISEPRIOR
-            drl_noise_param = drl_noise_param + delta_lnv / model.noiseprior.var;
+            if isfield (model.noiseprior, 'invcov')
+                drl_noise_param = drl_noise_param + model.noiseprior.invcov * delta_lnv;
+            else % assume isfield (model.noiseprior, 'var')
+                drl_noise_param = drl_noise_param + (model.noiseprior.var\delta_lnv);
+            end
         end
         
     end

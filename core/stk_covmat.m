@@ -117,7 +117,7 @@ end
 
 % Check if 'output' has been explicitely provided  (argin #2)
 if isempty (output)
-    if isequal (prior_model.lognoisevariance, -inf)
+    if ~ isnoisy (prior_model.lognoisevariance)
         output = 'latent';
     else
         stk_error (['The ''output'' argument of stk_covmat can only be ' ...
