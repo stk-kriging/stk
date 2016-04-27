@@ -56,13 +56,17 @@ Nu = 5/2;
 C  = 2 * sqrt (Nu);   % dt/dh
 t  = C * abs (h);
 
+k = exp (- t);
+b = (k > 0);
+t = t(b);
+
 if diff <= 0,  % value of the covariance function
     
-    k = (1 + t + t.^2/3) .* exp (-t);
+    k(b) = (1 + t + t.^2/3) .* k(b);
     
 elseif diff == 1,  % derivative wrt h
     
-    k = C * -t/3 .* (1 + t) .* exp (-t);
+    k(b) = C * -t/3 .* (1 + t) .* k(b);
     
 else
     
@@ -98,3 +102,5 @@ end % function
 %!   y = stk_sf_matern52 (h, 1);
 %!   assert (stk_isequal_tolrel (x, y, 1e-8));
 %! end
+
+%!assert (stk_sf_matern52 (inf) == 0)

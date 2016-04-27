@@ -1,3 +1,10 @@
+2016-04-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sf_matern32.m, stk_sf_matern52.m: Bugfix for large h
+
+	* misc/specfun/stk_sf_matern32.m: Return 0 when h is large.
+	* misc/specfun/stk_sf_matern52.m: Idem.
+
 2016-04-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Fix a bug in stk_example_doe05
