@@ -56,13 +56,16 @@ Nu = 3/2;
 C  = 2 * sqrt (Nu);   % dt/dh
 t  = C * abs (h);
 
+k = exp (- t);
+b = (k > 0);
+
 if diff <= 0,  % value of the covariance function
     
-    k = (1 + t) .* exp (-t);
+    k(b) = (1 + t(b)) .* k(b);
     
 elseif diff == 1,  % derivative wrt h
     
-    k = - C * t .* exp (-t);
+    k(b) = - C * t(b) .* k(b);
     
 else
     
@@ -98,3 +101,6 @@ end % function
 %!   y = stk_sf_matern32 (h, 1);
 %!   assert (stk_isequal_tolrel (x, y, 1e-8));
 %! end
+
+%!assert (stk_sf_matern32 (inf) == 0)
+
