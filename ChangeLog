@@ -1,3 +1,12 @@
+2016-05-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_optim_octavesqp.m: Use a string for the 'optimizer' property
+
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Use a
+	string, instead of a handle, for the 'optimizer' property.
+	* misc/optim/@stk_optim_octavesqp/stk_minimize_boxconstrained.m:
+	Use feval to call the optimizer, since it is no longer a handle.
+
 2016-04-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_sf_matern32.m, stk_sf_matern52.m: Bugfix for large h
