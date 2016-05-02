@@ -81,14 +81,17 @@ end
 % Choose the appropriate optimizer, depending on the value of qp_solver
 switch options.qp_solver
     case 'qp'
-        optimizer = @sqp;
+        optimizer = 'sqp';
     case 'quadprog'
-        optimizer = @sqp_quadprog;
+        optimizer = 'sqp_quadprog';
     otherwise
         stk_error (sprintf (['Incorrect value for option qp_solver %s.\n\n' ...
             'qp_solver must be either ''qp'' or ''quadprog''.\n'], ...
             options.qp_solver), 'InvalidArgument');
 end
+
+% Note: do NOT rewrite to use handles instead of strings for optimizer
+%    (see bug report https://savannah.gnu.org/bugs/index.php?47828)
 
 algo = struct ('options', options, 'sqp', optimizer);
 algo = class (algo, 'stk_optim_octavesqp');
