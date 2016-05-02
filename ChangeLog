@@ -1,5 +1,10 @@
 2016-05-02  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_example_doe05.m: Reduce NB_ITER.
+
+	* examples/02_design_of_experiments/stk_example_doe05.m: Reduce
+	NB_ITER to make stk_runtests run faster.
+
 	stk_optim_octavesqp.m: Use a string for the 'optimizer' property
 
 	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Use a

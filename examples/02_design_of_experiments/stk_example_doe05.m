@@ -143,7 +143,7 @@ model.param = stk_param_estim (model, x0, z0_n);
 %
 
 % Number of points to be added adaptively
-NB_ITER = 300;
+NB_ITER = 50;
 
 % Current value of the maximum of the Expected Improvement
 EQI_max = +inf;
