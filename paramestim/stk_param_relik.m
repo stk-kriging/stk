@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -38,7 +38,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [rl, drl_param, drl_lnv] = stk_param_relik (model, xi, yi)
+function [rl, drl_cov_param, drl_noise_param] = stk_param_relik (model, xi, yi)
 
 if nargin > 3,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -61,7 +61,7 @@ n = size (xi, 1);
 
 %% Compute the (opposite of) the restricted log-likelihood
 
-[K, P] = stk_make_matcov (model, xi);
+[K, P] = stk_covmat_response (model, xi);
 q = size (P, 2);
 simple_kriging = (q == 0);
 
@@ -122,8 +122,8 @@ end
 
 if nargout >= 2
     
-    nbparam = length(param);
-    drl_param = zeros(nbparam, 1);
+    nb_cov_param = length (param);
+    drl_cov_param = zeros (nb_cov_param, 1);
     
     if simple_kriging
         H = inv (G);
@@ -134,26 +134,35 @@ if nargout >= 2
     
     z = H * double (yi);
     
-    for diff = 1:nbparam,
-        V = feval (model.covariance_type, model.param, xi, xi, diff);
-        drl_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
+    for diff = 1:nb_cov_param,
+        V = stk_covmat_gp0 (model, xi, [], diff);
+        drl_cov_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
     end
     
     if PARAMPRIOR
-        drl_param = drl_param + model.prior.invcov * delta_p;
+        drl_cov_param = drl_cov_param + model.prior.invcov * delta_p;
     end
     
     if nargout >= 3,
+        
+        nb_noise_param = 1;  % For now
+                
         if model.lognoisevariance == -inf
-            drl_lnv = nan;
+            drl_noise_param = nan (nb_noise_param, 1);
         else
-            diff = 1;
-            V = stk_noisecov (n, model.lognoisevariance, diff);
-            drl_lnv = 1/2 * (sum (sum (H .* V)) - z' * V * z);
-            if NOISEPRIOR
-                drl_lnv = drl_lnv + delta_lnv / model.noiseprior.var;
-            end
+            drl_noise_param = zeros (nb_noise_param, 1);
+            
+            for diff = 1:nb_noise_param,
+                V = stk_covmat_noise (model, xi, [], diff);
+                drl_noise_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
+            end            
         end
+        
+        % WARNING: this still assumes nb_noise_param == 1
+        if NOISEPRIOR
+            drl_noise_param = drl_noise_param + delta_lnv / model.noiseprior.var;
+        end
+        
     end
     
 end
