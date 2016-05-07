@@ -46,15 +46,37 @@ end
 
 % Ensure that param is a column vector (note: in the case where model.param is
 % an object, this is actually a call to subsasgn() in disguise).
-param = model.param(:);
-lnv   = model.lognoisevariance(:);
+cov_param = model.param(:);
 
 PARAMPRIOR = isfield (model, 'prior');
 NOISEPRIOR = isfield (model, 'noiseprior');
 
-% Make sure that lognoisevariance is -inf for noiseless models
-if ~ stk_isnoisy (model)
-    model.lognoisevariance = -inf;
+% Extract lnv parameters, if we need them
+if (nargout >= 3) || NOISEPRIOR
+    if stk_isnoisy (model)
+        if isnumeric (model.lognoisevariance)
+            if isscalar (model.lognoisevariance)
+                % Homoscedastic case
+                noisevar_param = model.lognoisevariance;
+                noisevar_nbparam = 1;
+            else
+                % Old-style heteroscedastic case: don't optimize
+                noisevar_param = [];
+                noisevar_nbparam = 0;
+            end
+        else
+            % model.lognoisevariance is a parameter object
+            noisevar_param = vectorize_param (model.lognoisevariance);
+            noisevar_nbparam = length (noisevar_param);
+            % Make sure we have a column vector
+            noisevar_param = reshape (noisevar_param, 1, noisevar_nbparam);
+        end
+    else
+        % If NOISEPRIOR is true, this is very likely going to cause an error
+        % below, unless the prior is zero-dimensional...  Wait and see...
+        noisevar_param = [];
+        noisevar_nbparam = 0;
+    end
 end
 
 n = size (xi, 1);
@@ -109,16 +131,16 @@ rl = 0.5 * ((n - q) * log(2 * pi) + ldetWKW + attache);
 %% Add priors
 
 if PARAMPRIOR
-    delta_p = param - model.prior.mean;
+    delta_p = cov_param - model.prior.mean;
     rl = rl + 0.5 * delta_p' * model.prior.invcov * delta_p;
 end
 
 if NOISEPRIOR
-    delta_lnv = lnv(:) - model.noiseprior.mean;
+    delta_lnv = noisevar_param - model.noiseprior.mean;
     if isfield (model.noiseprior, 'invcov')
         rl = rl + 0.5 * (delta_lnv' * model.noiseprior.invcov * delta_lnv);
     else % assume isfield (model.noiseprior, 'var')
-        rl = rl + 0.5 * (delta_lnv' * (model.noiseprior.var\delta_lnv) );
+        rl = rl + 0.5 * (delta_lnv' * (model.noiseprior.var \ delta_lnv));
     end
 end
 
@@ -127,8 +149,8 @@ end
 
 if nargout >= 2
     
-    nb_cov_param = length (param);
-    drl_cov_param = zeros (nb_cov_param, 1);
+    cov_nbparam = length (cov_param);
+    drl_cov_param = zeros (cov_nbparam, 1);
     
     if simple_kriging
         H = inv (G);
@@ -139,7 +161,7 @@ if nargout >= 2
     
     z = H * double (yi);
     
-    for diff = 1:nb_cov_param,
+    for diff = 1:cov_nbparam,
         V = stk_covmat_gp0 (model, xi, [], diff);
         drl_cov_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
     end
@@ -148,22 +170,17 @@ if nargout >= 2
         drl_cov_param = drl_cov_param + model.prior.invcov * delta_p;
     end
     
-    if nargout >= 3,
+    if nargout >= 3        
         
-        nb_noise_param = length(lnv);  % For now
+        % NOTE/JB: Minor compatibility-breaking change here, we're returning |]
+        % instead of NaN is drl_noise_param is requested for a noiseless model
+        % FIXME: If we keep this, advertise in the NEWS file when we merge
         
-        if ~isnoisy(model.lognoisevariance) ||... % case 1 : model without noise
-                ( isnumeric(model.lognoisevariance) && ~isscalar(model.lognoisevariance) )
-            % case 2 : numeric non-scalar == hetero-scedastic case ==> no
-            % optimization
-            drl_noise_param = nan (nb_noise_param, 1);
-        else
-            drl_noise_param = zeros (nb_noise_param, 1);
+        drl_noise_param = zeros (noisevar_nbparam, 1);
             
-            for diff = 1:nb_noise_param,
-                V = stk_covmat_noise (model, xi, [], diff);
-                drl_noise_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
-            end
+        for diff = 1:noisevar_nbparam,
+            V = stk_covmat_noise (model, xi, [], diff);
+            drl_noise_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
         end
         
         if NOISEPRIOR
@@ -207,7 +224,7 @@ end % function
 %! TOL_REL = 0.01;
 %! assert (stk_isequal_tolrel (J, 21.6, TOL_REL));
 %! assert (stk_isequal_tolrel (dJ1, [4.387 -0.1803 0.7917 0.1392 2.580]', TOL_REL));
-%! assert (isnan (dJ2));
+%! assert (isempty (dJ2));
 
 %!shared xi, zi, model, TOL_REL
 %! xi = [-1 -.6 -.2 .2 .6 1]';

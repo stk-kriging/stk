@@ -179,11 +179,6 @@ else  % General case
     end
 end
 
-% Make sure that lnv == -inf in the noiseless case
-if ~ isnoisy (lnv)
-    lnv = -inf;
-end
-
 if (do_estim_lnv) && (nargout < 2)
     warning (['stk_param_init will be computing an estimation of the ' ...
         'variance of the noise, perhaps should you call the function ' ...
