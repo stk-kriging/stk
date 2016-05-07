@@ -35,10 +35,9 @@
 
 function [zc_pred, CondH ] = stk_optim_crit_iago (algo, xi, zi)
 
-% Backward compatiblity: accept model structures with missing lognoisevariance
-if (~ isfield (algo.model, 'lognoisevariance')) ...
-        || (isempty (algo.model.lognoisevariance))
-    algo.model.lognoisevariance = - inf;
+% Make sure that lognoisevariance is -inf for noiseless models
+if ~ stk_isnoisy (algo.model)
+    algo.model.lognoisevariance = -inf;
 end
 
 

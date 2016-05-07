@@ -53,10 +53,10 @@ crit1 = stk_sampcrit_singleobjoptim (goal);
 
 % Default value for property threshold_mode
 model = get_model (crit0);
-if model.lognoisevariance == -inf
-    crit.threshold_mode = 'best evaluation';
-else
+if stk_isnoisy (model)
     crit.threshold_mode = 'best quantile';
+else
+    crit.threshold_mode = 'best evaluation';
 end
 
 % Create object with default properties

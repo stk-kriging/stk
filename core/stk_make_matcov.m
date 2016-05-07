@@ -23,7 +23,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -50,11 +50,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [K, P] = stk_make_matcov (model, x0, x1, pairwise)
-
-% Backward compatiblity: accept model structures with missing lognoisevariance
-if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
-    model.lognoisevariance = - inf;
-end
 
 % Check if the covariance model contains parameters
 % that should have been estimated first
@@ -85,7 +80,7 @@ pairwise = (nargin > 3) && pairwise;
 
 K = feval (model.covariance_type, model.param, x0, x1, -1, pairwise);
 
-if make_matcov_auto && (any (model.lognoisevariance ~= -inf))
+if make_matcov_auto && stk_isnoisy (model)
     K = K + stk_noisecov (size (K,1), model.lognoisevariance, -1, pairwise);
 end
 

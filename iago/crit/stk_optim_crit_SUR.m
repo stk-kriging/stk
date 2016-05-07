@@ -39,10 +39,9 @@ if nargin < 4
     type = 1;
 end
 
-% Backward compatiblity: accept model structures with missing lognoisevariance
-if (~ isfield (algo.model, 'lognoisevariance')) ...
-        || (isempty (algo.model.lognoisevariance))
-    algo.model.lognoisevariance = - inf;
+% Make sure that lognoisevariance is -inf for noiseless models
+if ~ stk_isnoisy (algo.model)
+    algo.model.lognoisevariance = -inf;
 end
 
 xg = algo.xg0;
