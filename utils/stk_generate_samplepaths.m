@@ -151,10 +151,9 @@ if duplicates_detected,  zsim = zsim(j, :);  end
 
 if conditional,
     
-    % Backward compatiblity: tolerate missing lognoisevariance
-    if (~ isfield (model, 'lognoisevariance')) ...
-            || (isempty (model.lognoisevariance))
-        model.lognoisevariance = - inf;
+    % Make sure that lognoisevariance is -inf for noiseless models
+    if ~ stk_isnoisy (model)
+        model.lognoisevariance = -inf;
     end
     
     % Carry out the kriging prediction at points xt

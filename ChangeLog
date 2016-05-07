@@ -1,3 +1,28 @@
+2016-05-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_isnoisy: new function to test for a noisy model
+
+	* core/stk_isnoisy.m: New function, which returns false for a
+	noiseless model and true otherwise.  This is the base
+	implementation for (prior) model structures.
+	* core/@stk_model_gpposterior/set_prior_model.m: New function.
+	Overload stk_isnoisy for posterior model objects.
+	* admin/BACKWARD_COMPATIBILITY.md: Indicate that stk_noisy is the
+	preferred way of handling the "missing lognoisevariance" backward
+	compatibility issue.
+	* core/@stk_model_gpposterior/set_prior_model.m: Use stk_isnoisy.
+	* core/stk_make_matcov.m: Idem.
+	* core/stk_model.m: Idem.
+	* iago/crit/stk_optim_crit_EI.m: Idem.
+	* iago/crit/stk_optim_crit_SUR.m: Idem.
+	* iago/crit/stk_optim_crit_iago.m: Idem.
+	* paramestim/stk_param_estim.m: Idem.
+	* paramestim/stk_param_init.m: Idem.
+	* paramestim/stk_param_init_lnv.m: Idem.
+	* paramestim/stk_param_relik.m: Idem.
+	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_sampcrit_thresholdbasedoptim.m: Idem.
+	* utils/stk_generate_samplepaths.m: Idem.
+
 2016-05-02  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_example_doe05.m: Reduce NB_ITER.
