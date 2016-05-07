@@ -133,8 +133,8 @@ end
 
 %--- lognoisevariance ? --------------------------------------------------------
 
-% Backward compatiblity: accept model structures with missing lognoisevariance
-if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
+% Make sure that lognoisevariance is -inf for noiseless models
+if ~ stk_isnoisy (model)
     if (nargin < 5) || (~ do_estim_lnv)
         % Assume a noiseless model
         model.lognoisevariance = - inf;

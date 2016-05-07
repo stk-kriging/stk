@@ -27,7 +27,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -91,10 +91,9 @@ if nargin > 2,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% Backward compatiblity: accept model structures with missing lognoisevariance
-if (~ isfield (model_base, 'lognoisevariance')) ...
-        || (isempty (model_base.lognoisevariance))
-    model_base.lognoisevariance = - inf;
+% Make sure that lognoisevariance is -inf for noiseless models
+if ~ stk_isnoisy (model_base)
+    model_base.lognoisevariance = -inf;
 end
 
 [K, P] = stk_make_matcov (model_base, x, x);
@@ -103,7 +102,11 @@ model_out = struct ( ...
     'covariance_type', 'stk_discretecov', ...
     'param', struct ('K', K, 'P', P));
 
-model_out.lognoisevariance = model_base.lognoisevariance;
+if ~ isscalar (model_base.lognoisevariance)
+    error ('This case is not supported.');
+else
+    model_out.lognoisevariance = model_base.lognoisevariance;
+end
 
 end % function
 

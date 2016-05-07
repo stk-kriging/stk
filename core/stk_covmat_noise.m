@@ -37,11 +37,6 @@
 function [K, P1, P2] = stk_covmat_noise (model, x1, x2, diff, pairwise)
 % STK internal function => no check for nargin > 5
 
-% Backward compatiblity: accept model structures with missing lognoisevariance
-if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
-    model.lognoisevariance = - inf;
-end
-
 % Number of evaluations points
 n1 = size (x1, 1);
 if (nargin > 2) && (~ isempty (x2))
@@ -58,7 +53,7 @@ if nargin < 4,  diff = -1;  end
 % Default value for 'pairwise' (arg #5): false
 pairwise = (nargin > 4) && pairwise;
 
-if autocov && (diff ~= 0) && (isnoisy(model.lognoisevariance))
+if autocov && (diff ~= 0) && (stk_isnoisy (model))
     
     if isa(model.lognoisevariance, 'stk_noisevar_param')
         K = stk_noisecov(model.lognoisevariance, x1, diff, pairwise, []);

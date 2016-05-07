@@ -44,11 +44,6 @@ if nargin > 3,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% Backward compatiblity: accept model structures with missing lognoisevariance
-if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
-    model.lognoisevariance = - inf;
-end
-
 % Ensure that param is a column vector (note: in the case where model.param is
 % an object, this is actually a call to subsasgn() in disguise).
 param = model.param(:);
@@ -56,6 +51,11 @@ lnv   = model.lognoisevariance(:);
 
 PARAMPRIOR = isfield (model, 'prior');
 NOISEPRIOR = isfield (model, 'noiseprior');
+
+% Make sure that lognoisevariance is -inf for noiseless models
+if ~ stk_isnoisy (model)
+    model.lognoisevariance = -inf;
+end
 
 n = size (xi, 1);
 

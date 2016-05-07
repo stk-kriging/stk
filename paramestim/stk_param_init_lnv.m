@@ -60,8 +60,8 @@ if (std (double (zi)) == 0)
         'to be unreliable.']);
 end
 
-% Backward compatiblity: accept model structures with missing lognoisevariance
-if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
+% Make sure that lognoisevariance is -inf for noiseless models
+if ~ stk_isnoisy (model)
     model.lognoisevariance = -inf;
 end
 

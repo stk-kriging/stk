@@ -108,16 +108,16 @@ end
 % argument is a prior model structure (although perhaps it would be cleaner to
 % check it).
 
-% Backward compatibility:
-%   accept model structures with missing 'lognoisevariance' field
-if (~ isfield (prior_model, 'lognoisevariance')) ...
-        || (isempty (prior_model.lognoisevariance))
+noiseless = ~ stk_isnoisy (prior_model);
+
+% Make sure that lognoisevariance is -inf for noiseless models
+if noiseless
     prior_model.lognoisevariance = - inf;
 end
 
 % Check if 'output' has been explicitely provided  (argin #2)
 if isempty (output)
-    if ~ isnoisy (prior_model.lognoisevariance)
+    if noiseless
         output = 'latent';
     else
         stk_error (['The ''output'' argument of stk_covmat can only be ' ...
