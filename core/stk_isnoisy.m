@@ -17,6 +17,11 @@
 %     * MODEL.lognoisevariance is a vector of -inf  (heteroscedastic case with
 %       all variances set to zero).
 %
+%    Note that in the case of a parameterized noise variance model (i.e., when
+%    MODEL.lognoisevariance is an object), the MODEL is automatically considered
+%    noisy, even when the parameters of the variance model are set to values
+%    such that the noise variance function vanishes.
+%
 % See also: stk_model
 
 % Copyright Notice
