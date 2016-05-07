@@ -28,11 +28,9 @@
 
 function model = set_prior_model (model, prior_model, recompute)
 
-% Backward compatibility:
-%   accept model structures with missing 'lognoisevariance' field
-if (~ isfield (prior_model, 'lognoisevariance')) ...
-        || (isempty (prior_model.lognoisevariance))
-    prior_model.lognoisevariance = - inf;
+% Make sure that lognoisevariance is -inf for noiseless models
+if ~ stk_isnoisy (prior_model)
+    prior_model.lognoisevariance = -inf;
 end
 
 % Backward compatibility:

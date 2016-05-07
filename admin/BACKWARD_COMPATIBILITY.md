@@ -11,3 +11,6 @@ considered mandatory.
 For backward compatiblity, all functions that explicitely manipulate this field
 must consider that the model is noiseless (`lognoisevariance = -inf`) if the
 `lognoisevariance` field is missing.
+
+The preferred way of dealing with this backward compatibility issue is through
+the `stk_isnoisy` function.

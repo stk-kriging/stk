@@ -29,7 +29,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2011-2013 SUPELEC
 %
@@ -83,8 +83,8 @@ if (std (zi_data) == 0)
         'data: the output of stk_param_estim is likely to be unreliable.']);
 end
 
-% Backward compatiblity: accept model structures with missing lognoisevariance
-if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
+% Make sure that lognoisevariance is -inf for noiseless models
+if ~ stk_isnoisy (model)
     model.lognoisevariance = -inf;
 end
 

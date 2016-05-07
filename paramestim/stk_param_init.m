@@ -76,7 +76,7 @@ cov_list = { ...
     'stk_materncov52_aniso', ...
     'stk_gausscov_iso', ...
     'stk_gausscov_aniso'};
-    
+
 if ismember (model.covariance_type, cov_list)
     
     % An initialization for this covariance type is provided in STK
@@ -131,9 +131,9 @@ end
 
 %--- lognoisevariance ? --------------------------------------------------------
 
-% Backward compatiblity: accept model structures with missing lognoisevariance
-if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
-    model.lognoisevariance = - inf;
+% Make sure that lognoisevariance is -inf for noiseless models
+if ~ stk_isnoisy (model)
+    model.lognoisevariance = -inf;
 end
 
 lnv = model.lognoisevariance;

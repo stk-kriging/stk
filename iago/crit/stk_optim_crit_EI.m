@@ -38,12 +38,11 @@ function [zp, samplingcrit] = stk_optim_crit_EI (algo, xi_ind, zi)
 
 error ('This function needs a big rehaul (see stk_optim_crit_iago).');
 
-% Backward compatiblity: accept model structures with missing lognoisevariance
-if (~ isfield (algo.model, 'lognoisevariance')) ...
-        || (isempty (algo.model.lognoisevariance))
-    algo.model.lognoisevariance = - inf;
-elseif ~ isequal (algo.model.lognoisevariance, - inf)
+if stk_isnoisy (algo.model)
     error ('The EI criterion is not defined for noisy evaluations');
+else
+    % Make sure that lognoisevariance is -inf for noiseless models
+    algo.model.lognoisevariance = -inf;
 end
 
 xg = algo.xg0;
