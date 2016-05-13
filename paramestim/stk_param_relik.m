@@ -44,9 +44,8 @@ if nargin > 3,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% Ensure that param is a column vector (note: in the case where model.param is
-% an object, this is actually a call to subsasgn() in disguise).
-param = model.param(:);
+% Get numerical parameter vector from parameter object
+paramvec = stk_get_paramvec (model.param);
 
 PARAMPRIOR = isfield (model, 'prior');
 NOISEPRIOR = isfield (model, 'noiseprior');
@@ -108,7 +107,7 @@ rl = 0.5 * ((n - q) * log(2 * pi) + ldetWKW + attache);
 %% Add priors
 
 if PARAMPRIOR
-    delta_p = param - model.prior.mean;
+    delta_p = paramvec - model.prior.mean;
     rl = rl + 0.5 * delta_p' * model.prior.invcov * delta_p;
 end
 
@@ -122,8 +121,8 @@ end
 
 if nargout >= 2
     
-    nbparam = length(param);
-    drl_param = zeros(nbparam, 1);
+    nbparam = length (paramvec);
+    drl_param = zeros (nbparam, 1);
     
     if simple_kriging
         H = inv (G);

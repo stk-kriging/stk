@@ -58,7 +58,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [paramopt, lnvopt, info] = stk_param_estim ...
+function [param_opt, lnv_opt, info] = stk_param_estim ...
     (model, xi, zi, param0, lnv0, criterion)
 
 if nargin > 6,
@@ -119,13 +119,14 @@ end
 % TODO: allow user-defined bounds
 [lb, ub] = stk_param_getdefaultbounds (model.covariance_type, param0, xi, zi);
 
+% Get vector of numerical parameters
+u0 = stk_get_paramvec (param0);
+
 if do_estim_lnv
     [lblnv, ublnv] = get_default_bounds_lnv (model, lnv0, xi, zi);
     lb = [lb ; lblnv];
     ub = [ub ; ublnv];
-    u0 = [param0(:); lnv0];
-else
-    u0 = param0(:);
+    u0 = [u0; lnv0];
 end
 
 switch do_estim_lnv
@@ -146,25 +147,14 @@ else
 end
 
 if do_estim_lnv
-    lnvopt = u_opt(end);
+    lnv_opt = u_opt(end);
     u_opt(end) = [];
 else
-    lnvopt = model.lognoisevariance;
+    lnv_opt = model.lognoisevariance;
 end
 
-if isfloat (param0)
-    % if a floating-point array was provided, return one also
-    paramopt = u_opt;
-else
-    % if an object of some user-defined class was provided, try to return an
-    % object of the same class
-    try
-        paramopt = param0;
-        paramopt(:) = u_opt;
-    catch
-        paramopt = u_opt;
-    end
-end % if
+% Create parameter object
+param_opt = stk_set_paramvec (model.param, u_opt);
 
 % Create 'info' structure, if requested
 if nargout > 2,
@@ -183,7 +173,7 @@ end % function
 
 function [l, dl] = f_ (model, u, xi, zi, criterion)
 
-model.param(:) = u;
+model.param = stk_set_paramvec (model.param, u);
 
 if nargout == 1,
     l = criterion (model, xi, zi);
@@ -196,8 +186,8 @@ end % function
 
 function [l, dl] = f_with_noise_ (model, u, xi, zi, criterion)
 
-model.param(:) = u(1:end-1);
-model.lognoisevariance  = u(end);
+model.param = stk_set_paramvec (model.param, u(1:end-1));
+model.lognoisevariance = u(end);
 
 if nargout == 1,
     l = criterion (model, xi, zi);
@@ -233,29 +223,19 @@ function [param0, lnv0] = provide_param0_value ... % ---------------------------
 
 % param0: try to use input argument first
 if ~ isempty (param0)
-    
+
     % Cast param0 into an object of the appropriate type
-    if isfloat (model.param)
-        param0 = double (param0);
-    elseif isfloat (param0)
-        param_tmp = model.param;
-        param_tmp(:) = param0;
-        % Note: if model.param is an object, this is actually a call to subsasgn
-        % in disguise => parameter classes *must* support this form of indexing.
-        param0 = param_tmp;
-    elseif ~ isa (param0, class (model.param))
-        stk_error ('Incorrect type for param0.', 'TypeMismatch');
-    end
-    
+    param0 = stk_set_paramvec (model.param, param0);
+        
     % Test if param0 contains nans
-    if any (isnan (param0(:)))
+    if any (isnan (stk_get_paramvec (param0)))
         warning ('param0 has nans, using model.param instead');
         param0 = [];
     end
 end
 
 % param0: try to use model.param if we still have no acceptable value
-if (isempty (param0)) && (~ any (isnan (model.param(:))))
+if isempty (param0) && ~ any (isnan (stk_get_paramvec (model.param)))
     param0 = model.param;
 end
 
