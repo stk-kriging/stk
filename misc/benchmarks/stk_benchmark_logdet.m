@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -32,6 +33,7 @@ NREP = 100; n = 200; % test on large matrices
 d = 2;
 x = stk_sampling_maximinlhs (n, d, [], 10);
 model = stk_model ('stk_materncov52_aniso', d);
+model.param = zeros (size (model.param));
 
 propname = {                       ...
     'log_det_covariance_matrix_a', ...
@@ -45,7 +47,7 @@ t = zeros (L, 1);
 v = zeros (L, 1);
 
 for k = 1:L
-    fprintf('Method %d/%d...', k, L);
+    fprintf ('Method %d/%d: %s...', k, L, propname{k});
     tic;
     for i = 1:NREP,
         kreq = stk_kreq_qr (model, x);
@@ -53,7 +55,7 @@ for k = 1:L
     end
     t(k) = toc / NREP;
     v(k) = logdet;
-    fprintf('\n');
+    fprintf ('\n');
 end
 
 display (t)
