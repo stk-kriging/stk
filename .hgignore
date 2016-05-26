@@ -8,7 +8,9 @@ build
 *~
 *.asv
 *orig
+
 sandbox
+profile_results
 
 .pc/applied-patches
 .pc/*.patch

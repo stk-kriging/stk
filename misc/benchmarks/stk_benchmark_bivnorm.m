@@ -30,7 +30,7 @@ mu = [1 2];     % means
 sigma = [3 4];  % standard deviations
 rho = 0.37;     % correlation coefficients
 
-n = 10000;
+n = 1e5;
 z = 10 * (rand (n, 2) - 0.5);
 
 % Covariance matrix (for use with mvncdf)
@@ -53,7 +53,7 @@ fprintf ('t_stk = %.1f µs/eval\n', t_stk / n * 1e6);
 fprintf ('t_mvncdf = %.1f µs/eval\n', t_mvncdf / n * 1e6);
 fprintf ('t_mvncdf / t_stk = %.1f\n', t_mvncdf / t_stk);
 fprintf ('maximal absolute difference: %.2g\n', max (err))
-fprintf ('maximal relative difference: %.2g\n', max (err  ./ p1))
+fprintf ('maximal relative difference: %.2g\n', max (err  ./ p_stk))
 
 
 %%% Example of a "large" difference (approx. 1e-8 relative error)
@@ -65,6 +65,5 @@ fprintf ('maximal relative difference: %.2g\n', max (err  ./ p1))
 % % -> 1.0015256831575151e-02
 %
 % p2 = mvncdf ([z1 z2], [1 2], [9 4.44; 4.44 16]);
-% % -> 1.0015256938405132e-02     (Matlab R2012a)
-%
-%%%%%%%% Which one is more accurate ???
+% % -> 1.0015256938405132e-02   (Matlab R2012a)
+% % -> 1.0015256831575156e-02   (Matlab R2016a)

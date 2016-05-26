@@ -2,10 +2,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -29,18 +30,20 @@
 
 function stk_benchmark_paramestim ()
 
-NREP = 10;
-
-t = zeros (1, NREP);
+NREP = 20;
 
 for noise_std = [0 0.1],
     for ni = [10 50],
         
-        for i = 1:NREP,
+        t = zeros (1, NREP + 1);
+        
+        for i = 1:(NREP + 1),
             tic;
             test_function (ni, noise_std);
             t(i) = toc;
         end
+        
+        t = t(2:end);
         
         fprintf ('noise_std = %.1f  ', noise_std);
         fprintf ('ni = %d  ', ni);
@@ -49,6 +52,7 @@ for noise_std = [0 0.1],
         t_mad = mean (abs (t - t_est));
         fprintf ('t = %.3f [%.3f]\n', t_est, t_mad);
         
+        drawnow ();
     end
 end
 
