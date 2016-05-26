@@ -1,5 +1,10 @@
 2016-05-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_example_doe05.m: Plot only once in a while
+
+	* examples/02_design_of_experiments/stk_example_doe05.m: Plot only
+	once in a while (default: PLOT_PERIOD = 10).
+
 	stk_example_doe05.m: Remove stopping condition based on EQI_max
 
 	* examples/02_design_of_experiments/stk_example_doe05.m: Remove
