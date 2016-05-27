@@ -1,3 +1,10 @@
+2016-05-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_benchmark_examples.m: new benchmark script
+
+	* misc/benchmarks/stk_benchmark_examples.m: new benchmark script,
+	which benchmarks all examples in the toolbox.
+
 2016-05-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_example_doe05.m: Plot only once in a while
