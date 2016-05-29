@@ -45,7 +45,7 @@ if nargin > 3,
 end
 
 % Get numerical parameter vector from parameter object
-paramvec = stk_get_paramvec (model.param);
+paramvec = stk_get_optimizable_parameters (model.param);
 
 PARAMPRIOR = isfield (model, 'prior');
 NOISEPRIOR = isfield (model, 'noiseprior');
