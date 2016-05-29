@@ -148,16 +148,10 @@ NB_ITER = 50;
 % Current value of the maximum of the Expected Improvement
 EQI_max = +inf;
 
-% Value of EQI_max for the stopping criterion
-EQI_max_stop = (max (zg) - min (zg)) / 1e5;
-
 % Construct sampling criterion object
 EQI_QUANTILE_ORDER = 0.5;
 EQI_crit = stk_sampcrit_eqi (model, 'maximize', EQI_QUANTILE_ORDER);
 EQI_crit = stk_model_update (EQI_crit, x0, z0_n);
-
-% Iteration number
-iter = 0;
 
 % Future noise variance = 0  (infinite future batch size)
 tau2_new = 0;
@@ -165,7 +159,10 @@ tau2_new = 0;
 
 %%
 
-while (iter < NB_ITER) && (EQI_max > EQI_max_stop),
+% Plot only once in a while
+PLOT_PERIOD = 10;
+
+for iter = 1:NB_ITER
     
     % Compute the Expected Quantile Improvement (EQI) criterion on the grid
     [EQI_val, z_pred] = EQI_crit (xg, tau2_new);
@@ -173,41 +170,40 @@ while (iter < NB_ITER) && (EQI_max > EQI_max_stop),
     % Pick the point where the EQI is maximum as our next evaluation point
     [EQI_max, i_max] = max (EQI_val);
     
-    % Figure: upper panel
-    stk_subplot (2, 1, 1);  cla;
-    stk_plot1d ([],[], xg, zg, z_pred);
-    hold on;
-    dataunique = unique(EQI_crit.model.input_data.x);
-    for k = 1:length(dataunique)
-        MINIMUM = 10^10;
-        MAXIMUM = -10^10;
-        for i = 1:length(EQI_crit.model.input_data.x)
-            if EQI_crit.model.input_data.x(i) == dataunique(k)
-                MINIMUM = min(MINIMUM, EQI_crit.model.output_data.z(i));
-                MAXIMUM = max(MAXIMUM, EQI_crit.model.output_data.z(i));
-            end
-        end
-        plot([dataunique(k) dataunique(k)],[MINIMUM MAXIMUM],'b-o','LineWidth',1)
+    if mod (iter, PLOT_PERIOD) == 1
+        
+        % Figure: upper panel
+        stk_subplot (2, 1, 1);  cla;
+        stk_plot1d ([],[], xg, zg, z_pred);
         hold on;
+        dataunique = unique(EQI_crit.model.input_data.x);
+        for k = 1:length(dataunique)
+            MINIMUM = 10^10;
+            MAXIMUM = -10^10;
+            for i = 1:length(EQI_crit.model.input_data.x)
+                if EQI_crit.model.input_data.x(i) == dataunique(k)
+                    MINIMUM = min(MINIMUM, EQI_crit.model.output_data.z(i));
+                    MAXIMUM = max(MAXIMUM, EQI_crit.model.output_data.z(i));
+                end
+            end
+            plot([dataunique(k) dataunique(k)],[MINIMUM MAXIMUM],'b-o','LineWidth',1)
+            hold on;
+        end
+        
+        % Figure: lower panel
+        stk_subplot (2, 1, 2);  cla;
+        plot (xg, EQI_val); xlim (BOX); hold on;
+        plot (xg(i_max), EQI_max, 'ro', 'MarkerFaceColor', 'y');
     end
     
-    % Figure: lower panel
-    stk_subplot (2, 1, 2);  cla;
-    plot (xg, EQI_val); xlim (BOX); hold on;
-    plot (xg(i_max), EQI_max, 'ro', 'MarkerFaceColor', 'y');
+    % Add the new evaluation to the DoE
+    x_new = xg(i_max, :);
+    z_new = zg(i_max, :) + sqrt (NOISEVARIANCE) * randn;
+    EQI_crit = stk_model_update (EQI_crit, x_new, z_new);
     
-    if EQI_max > EQI_max_stop,
-        % Add the new evaluation to the DoE
-        x_new = xg(i_max, :);
-        z_new = zg(i_max, :) + sqrt (NOISEVARIANCE) * randn;
-        EQI_crit = stk_model_update (EQI_crit, x_new, z_new);
-        
-        % Update model parameters
-        EQI_crit.model.param = stk_param_estim (model, ...
-            EQI_crit.model.input_data, EQI_crit.model.output_data);
-        
-        iter = iter + 1;
-    end
+    % Update model parameters
+    EQI_crit.model.param = stk_param_estim (model, ...
+        EQI_crit.model.input_data, EQI_crit.model.output_data);
     
     drawnow;  %pause (0.2);
     
@@ -218,7 +214,8 @@ data = [EQI_crit.model.input_data EQI_crit.model.output_data];
 data = stk_dataframe (data, {'x', 'z'});  disp (data);
 
 % Total number of evaluations ?
-fprintf ('\nNumber of evaluations: %d + %d = %d.\n\n', N0, iter, N0 + iter);
+fprintf ('\nNumber of evaluations: %d + %d = %d.\n\n', ...
+    N0, NB_ITER, N0 + NB_ITER);
 
 
 %!test stk_example_doe05;  close all;

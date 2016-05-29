@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -28,20 +29,21 @@
 
 %% Benchmark parameters
 
-DIM = 1; N = 500; REP = 5;
+DIM = 1;  N = 500;  REP = 5;
 
 covname = 'stk_materncov_iso';
 
 
 %% Evaluate computation time
     
-model = stk_model(covname, DIM);
+model = stk_model (covname, DIM);
+model.param = [0 0 0];
 
 tic;
 for i = 1:REP,
-    x = stk_sampling_regulargrid(N, DIM);
-    K = stk_make_matcov(model, x, x);
+    x = stk_sampling_regulargrid (N, DIM);
+    K = stk_make_matcov (model, x, x);
 end
 t = toc / REP;
 
-fprintf('% 20s: %.3f seconds\n', covname, t);
+fprintf ('% 20s: %.3f seconds\n', covname, t);

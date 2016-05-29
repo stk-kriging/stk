@@ -1,3 +1,38 @@
+2016-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	New function to get/set optimizable parameters.
+
+	* paramestim/private/stk_get_optimizable_parameters.m: New
+	function get the value of optizable parameters.
+	* paramestim/private/stk_set_optimizable_parameters.m: New
+	function set the value of optizable parameters.
+	* paramestim/stk_param_estim.m: Use the new functions wherever it
+	is appropriate.
+	* paramestim/stk_param_relik.m: Idem.
+
+	INDEX: Bring up to date
+
+	* admin/octpkg/INDEX: Bring up to date.
+
+2016-05-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_benchmark_examples.m: new benchmark script
+
+	* misc/benchmarks/stk_benchmark_examples.m: new benchmark script,
+	which benchmarks all examples in the toolbox.
+
+2016-05-26  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_example_doe05.m: Plot only once in a while
+
+	* examples/02_design_of_experiments/stk_example_doe05.m: Plot only
+	once in a while (default: PLOT_PERIOD = 10).
+
+	stk_example_doe05.m: Remove stopping condition based on EQI_max
+
+	* examples/02_design_of_experiments/stk_example_doe05.m: Remove
+	stopping condition based on EQI_max, which is never met anyway.
+
 2016-05-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_isnoisy: new function to test for a noisy model
