@@ -1,14 +1,13 @@
-% STK_SET_PARAMVEC [internal] sets the value of property 'paramvec'
+% STK_GET_OPTIMIZABLE_PARAMETERS [internal]
 %
-% CALL: PARAM = stk_set_paramvec (PARAM, PARAMVEC)
+% CALL: VALUE = stk_get_optimizable_parameters (PARAM)
 %
-%    sets the numerical parameter property 'paramvec' of parameter object PARAM
-%    to the value PARAMVEC.
+%    returns the value of the 'optimizable_parameters' property of PARAM.
 %
 % NOTE:
 %
 %    Numerical arrays are considered as a special kind of parameter object, for
-%    which the 'paramvec' property is taken to be PARAM(:).
+%    which the 'optimizable_parameters' property is taken to be PARAM(:).
 %
 % INTERNAL FUNCTION WARNING:
 %
@@ -17,7 +16,7 @@
 %    parameter classes can already overload it, but should be aware that
 %    API-breaking changes are likely to happen in future releases of STK.
 %
-% See also: stk_get_paramvec
+% See also: stk_set_optimizable_parameters
 
 % Copyright Notice
 %
@@ -45,27 +44,32 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function param = stk_set_paramvec (param, paramvec)
+function value = stk_get_optimizable_parameters (param)
 
-% This function will catch all calls to set_paramvec for which neither param
-% nor value is an object of a "parameter class" (more precisely, a class that
-% implements set_paramvec)
+% This function will catch all calls to stk_get_optimizable_parameters for which
+% param is not an object of a "parameter class" (more precisely, a class that
+% implements stk_get_optimizable_parameters)
 
-if isnumeric (param) ...
-        || (isobject (param) && ismethod (param, 'subsasgn')) % Backward compat.
+if isnumeric (param)
     
-    % If param is numeric, we preserve its size and type of param:
-    param(:) = paramvec;
+    % Make sure that the result is a column vector
+    value = param(:);
     
-    % Note: if param is an object, the previous line is actually a call to
-    % subsasgn in disguise. This way of supporting parameter objects has been
-    % introduced in STK 2.0.0 as an "experimental" feature. It is now
-    % deprecated.
+elseif isobject (param) && ismethod (param, 'subsref') % Backward compat.
+    
+    % This way of supporting parameter objects has been introduced in STK 2.0.0
+    % as an "experimental" feature. It is now deprecated.
+    
+    % Call subsasgn
+    value = param(:);
+    
+    % Make sure that the result is a column vector
+    value = value(:);
     
 else
     
-    stk_error (['set_paramvec is not implemented for objects of class ', ...
-        class (param), '.'], 'TypeMismatch');
+    stk_error (['stk_get_optimizable_parameters is not implemented for ' ...
+        'objects of class ', class (param), '.'], 'TypeMismatch');
     
 end % if
 

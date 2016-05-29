@@ -120,7 +120,7 @@ end
 [lb, ub] = stk_param_getdefaultbounds (model.covariance_type, param0, xi, zi);
 
 % Get vector of numerical parameters
-u0 = stk_get_paramvec (param0);
+u0 = stk_get_optimizable_parameters (param0);
 
 if do_estim_lnv
     [lblnv, ublnv] = get_default_bounds_lnv (model, lnv0, xi, zi);
@@ -154,7 +154,7 @@ else
 end
 
 % Create parameter object
-param_opt = stk_set_paramvec (model.param, u_opt);
+param_opt = stk_set_optimizable_parameters (model.param, u_opt);
 
 % Create 'info' structure, if requested
 if nargout > 2,
@@ -173,7 +173,7 @@ end % function
 
 function [l, dl] = f_ (model, u, xi, zi, criterion)
 
-model.param = stk_set_paramvec (model.param, u);
+model.param = stk_set_optimizable_parameters (model.param, u);
 
 if nargout == 1,
     l = criterion (model, xi, zi);
@@ -186,7 +186,7 @@ end % function
 
 function [l, dl] = f_with_noise_ (model, u, xi, zi, criterion)
 
-model.param = stk_set_paramvec (model.param, u(1:end-1));
+model.param = stk_set_optimizable_parameters (model.param, u(1:end-1));
 model.lognoisevariance = u(end);
 
 if nargout == 1,
@@ -225,17 +225,17 @@ function [param0, lnv0] = provide_param0_value ... % ---------------------------
 if ~ isempty (param0)
 
     % Cast param0 into an object of the appropriate type
-    param0 = stk_set_paramvec (model.param, param0);
+    param0 = stk_set_optimizable_parameters (model.param, param0);
         
     % Test if param0 contains nans
-    if any (isnan (stk_get_paramvec (param0)))
+    if any (isnan (stk_get_optimizable_parameters (param0)))
         warning ('param0 has nans, using model.param instead');
         param0 = [];
     end
 end
 
 % param0: try to use model.param if we still have no acceptable value
-if isempty (param0) && ~ any (isnan (stk_get_paramvec (model.param)))
+if isempty (param0) && ~ any (isnan (stk_get_optimizable_parameters (model.param)))
     param0 = model.param;
 end
 
