@@ -1,4 +1,4 @@
-% STK_SET_PARAMVEC sets the numerical parameter property 'paramvec'
+% STK_SET_PARAMVEC [internal] sets the value of property 'paramvec'
 %
 % CALL: PARAM = stk_set_paramvec (PARAM, PARAMVEC)
 %
@@ -9,6 +9,13 @@
 %
 %    Numerical arrays are considered as a special kind of parameter object, for
 %    which the 'paramvec' property is taken to be PARAM(:).
+%
+% INTERNAL FUNCTION WARNING:
+%
+%    This function is currently considered as internal, which is why it is
+%    located in a private directory.  STK users that which to experiment with
+%    parameter classes can already overload it, but should be aware that
+%    API-breaking changes are likely to happen in future releases of STK.
 %
 % See also: stk_get_paramvec
 
@@ -54,7 +61,7 @@ if isnumeric (param) ...
     % subsasgn in disguise. This way of supporting parameter objects has been
     % introduced in STK 2.0.0 as an "experimental" feature. It is now
     % deprecated.
-
+    
 else
     
     stk_error (['set_paramvec is not implemented for objects of class ', ...
