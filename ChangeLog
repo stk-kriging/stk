@@ -1,5 +1,15 @@
 2016-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	New function to get/set optimizable parameters.
+
+	* paramestim/private/stk_get_optimizable_parameters.m: New
+	function get the value of optizable parameters.
+	* paramestim/private/stk_set_optimizable_parameters.m: New
+	function set the value of optizable parameters.
+	* paramestim/stk_param_estim.m: Use the new functions wherever it
+	is appropriate.
+	* paramestim/stk_param_relik.m: Idem.
+
 	INDEX: Bring up to date
 
 	* admin/octpkg/INDEX: Bring up to date.
