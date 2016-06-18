@@ -26,24 +26,31 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (xt, arg2, varargin)
+function crit_val = stk_sampcrit_ei_eval (xt, arg2, goal)
 
 if isa (arg2, 'stk_model_gpposterior')
     
-    % Construct a complete stk_sampcrit object (with an underlying model)
-    crit = stk_sampcrit_ei (arg2, varargin{:});
-    
-    % Evaluate
-    crit_val = feval (crit, xt);
+    zp = stk_predict (arg2, xt);
     
 else  % Assume that arg2 is an stk_dataframe with 'mean' and 'var' columns
     
-    % Construct an incomplete stk_sampcrit object (without an underlying model)
-    crit = stk_sampcrit_ei ([], varargin{:});
-    
-    % Evaluate
-    crit_val = msfeval (crit, arg2.mean, sqrt (arg2.var));
+    zp = arg2;
     
 end
+
+% Minimize or maximize?
+if (nargin < 3) || (strcmp (goal, 'minimize'))
+    minimize = true;
+    threshold = min (zp.mean);
+elseif strcmp (goal, 'maximize')
+    minimize = false;
+    threshold = max (zp.mean);
+else
+    stk_error (['Incorrect value for argumen ''goal'': should be either ' ...
+        '''minimize'' or ''maximize''.'], 'InvalidArgument');
+end
+
+% Evaluate the sampling criterion
+crit_val = stk_distrib_normal_ei (threshold, zp.mean, sqrt (zp.var), minimize);
 
 end % function
