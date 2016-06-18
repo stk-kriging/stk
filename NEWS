@@ -36,10 +36,6 @@ Changes in version 2.4.0
 
    o stk_model_update: New function. Updates a model with new observations.
 
-* Sampling criterion objects
-
-   o TODO: DESCRIBE  (EI, EQI...)
-
 * Space-filling designs
 
    o stk_sampling_sobol: New function to generate points from a Sobol sequence
@@ -87,9 +83,6 @@ Changes in version 2.4.0
 
    o stk_example_doe04.m: Example script that demonstrates the use of
      stk_pmisclass ().
-
-   o stk_example_doe05.m: Example script that the use of the EQI criterion for
-     noisy optimization.
 
    o stk_example_kb10.m: Example script that demonstrates the use of
      leave-one-out cross-validation to produce goodness-of-fit graphical
