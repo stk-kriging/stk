@@ -1,10 +1,10 @@
-% STK_BOUNDINGBOX [overload STK function]
+% STK_BOUNDINGBOX [overload STK function, deprecated]
 %
-% CALL: 
+% DEPRECATION WARNING: The use of .a structures is deprecated.
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
