@@ -1,3 +1,14 @@
+2016-06-22  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Indicate internal and deprecated functions more systematically
+
+	* admin/octpkg/INDEX: Indicate internal and deprecated functions
+	more systematically.
+	* arrays/@struct/double.m: Indicate deprecation (was already
+	mentioned in the INDEX file).
+	* arrays/@struct/stk_boundingbox.m: Idem.
+	* arrays/@struct/stk_length.m: Idem.
+
 2016-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	New function to get/set optimizable parameters.
