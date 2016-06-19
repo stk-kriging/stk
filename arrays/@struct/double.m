@@ -1,8 +1,10 @@
-% DOUBLE [overload base function]
+% DOUBLE [overload base function, deprecated]
+%
+% DEPRECATION WARNING: The use of .a structures is deprecated.
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2013, 2016 SUPELEC
 %
 %    Author: Julien Bect  <julien.bect@centralesupelec.fr>
 

@@ -249,9 +249,9 @@ Miscellaneous: Pareto optimality
 
 ## Those are for legacy support of .a data structures
 ## (will be completely removed in the 3.x series)
-#@struct/double
-#@struct/stk_boundingbox
-#@struct/stk_length
+#@struct/double              [overload base + deprecated]
+#@struct/stk_boundingbox     [overload STK + deprecated]
+#@struct/stk_length          [overload STK + deprecated]
 
 #@stk_dataframe/stk_boundingbox           [overload STK]
 #@stk_dataframe/stk_conditioning          [overload STK]
@@ -398,19 +398,19 @@ Miscellaneous: options, plots...
 ##stk_warning does not exist yet, but it should (?)
 
 ## misc/text
-#stk_disp_examplewelcome
-#stk_disp_progress
-#stk_sprintf_colvect
-#stk_sprintf_colvect_fixedpoint
-#stk_sprintf_colvect_scientific
-#stk_sprintf_framed
+#stk_disp_examplewelcome         [internal]
+#stk_disp_progress               [internal]
+#stk_sprintf_colvect             [internal]
+#stk_sprintf_colvect_fixedpoint  [internal]
+#stk_sprintf_colvect_scientific  [internal]
+#stk_sprintf_framed              [internal]
 
 ## testing STK
-#stk_assert_box       [internal]
-#stk_isequal_tolabs
-#stk_isequal_tolrel
-#stk_is_lhs
-#stk_test_dfbinaryop
+#stk_assert_box        [internal]
+#stk_isequal_tolabs    [internal]
+#stk_isequal_tolrel    [internal]
+#stk_is_lhs            [internal]
+#stk_test_dfbinaryop   [internal]
 
 ## (embryonic) parallelization engine
 #@stk_parallel_engine_none/stk_parallel_engine_none      [experimental]
