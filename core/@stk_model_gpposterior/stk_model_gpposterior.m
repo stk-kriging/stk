@@ -82,7 +82,6 @@ end % function
 %! z_obs = sin (x_obs);
 %!
 %! M_prior = stk_model ('stk_materncov32_iso');
-%! M_prior.order = 0; % this is currently the default, but better safe than sorry
 %! M_prior.param = log ([1.0; 2.1]);
 
 %!test  M_post = stk_model_gpposterior ();

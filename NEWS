@@ -37,6 +37,20 @@ Changes in version 2.4.0
      parameters in a user-defined covariance function. See the documentation of
      stk_param_getdefaultbounds for more information.
 
+* Linear models
+
+   o model.lm and linear model objects (stk_lm_* classes), introduced
+     as an experimental feature in STK 2.2.0, are now the recommended
+     way of setting the linear part of Gaussian process models.
+
+   o model.order is deprecated (but still supported).
+
+   o As an example, the following define a Gaussian process with a
+     Matern 5/2 covarianc function and a quadratic trend:
+
+        model = stk_model ('stk_materncov52_aniso');
+        model.lm = stk_lm_quadratic;
+
 * stk_model_gpposterior objects
 
    o A new 'stk_model_gpposterior' class is introduced to represent a Gaussian

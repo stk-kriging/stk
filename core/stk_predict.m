@@ -36,7 +36,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -92,7 +92,6 @@ end % function
 %! x_prd = x0(idx_prd);
 %!
 %! model = stk_model('stk_materncov32_iso');
-%! model.order = 0; % this is currently the default, but better safe than sorry
 %! model.param = log ([1.0; 2.1]);
 
 %!error y_prd1 = stk_predict();

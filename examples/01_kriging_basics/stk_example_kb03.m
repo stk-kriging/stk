@@ -6,13 +6,14 @@
 % method.
 %
 % The mean function of the GP prior is assumed to be constant and unknown. This
-% default choice can be overridden by means of the model.order property.
+% default choice can be overridden by means of the model.lm property.
 %
 % The function is sampled on a space-filling Latin Hypercube design, and the
 % data is assumed to be noiseless.
 
 % Copyright Notice
 %
+%    Copyright 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
@@ -92,9 +93,9 @@ axis (BOX);  stk_title ('function to be approximated');
 model = stk_model ('stk_materncov_aniso', DIM);
 
 % As a default choice, a constant (but unknown) mean is used,
-% i.e.,  model.order = 0.
-% model.order = 1;  %%% UNCOMMENT TO USE A LINEAR TREND %%%
-% model.order = 2;  %%% UNCOMMENT TO USE A "FULL QUADRATIC" TREND %%%
+% i.e.,  model.lm = stk_lm_constant.
+% model.lm = stk_lm_affine;     %%% UNCOMMENT TO USE A LINEAR TREND
+% model.lm = stk_lm_quadratic;  %%% UNCOMMENT TO USE A "FULL QUADRATIC" TREND
 
 
 %% EVALUATE THE FUNCTION ON A "MAXIMIN LHS" DESIGN

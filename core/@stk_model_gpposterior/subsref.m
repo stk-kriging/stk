@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -51,7 +51,6 @@ end % function
 %! z_obs = sin (x_obs);
 %!
 %! M_prior = stk_model ('stk_materncov32_iso');
-%! M_prior.order = 0; % this is currently the default, but better safe than sorry
 %! M_prior.param = log ([1.0; 2.1]);
 %!
 %! M_post = stk_model_gpposterior (M_prior, x_obs, z_obs);
@@ -61,8 +60,6 @@ end % function
 %!assert (isequal (size (M_post.input_data), [n, 1]));
 %!assert (isequal (size (M_post.output_data), [n, 1]));
 %!assert (isa (M_post.kreq, 'stk_kreq_qr'));
-
-%!assert (M_post.prior_model.order == 0);
 
 %!error M_post(1);
 %!error M_post{1};

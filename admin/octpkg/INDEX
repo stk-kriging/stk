@@ -53,7 +53,7 @@ stk >> STK, a Small Toolbox for Kriging
 ##  4) Experimental features: not ready yet for use by everyone.
 ##
 
-Kriging: Core STK functions
+Core STK functions
 ## Why not group all these functions in the same folder ?
 ## Currently, some of them are in ./core/ and some others in ./utils/
  stk_model
@@ -66,69 +66,15 @@ Kriging: Core STK functions
  stk_isnoisy
 #stk_ortho_func              [deprecated]
 #stk_cholcov                 [internal]
+#stk_model_fixlm             [internal]
 
-Kriging: Parameter estimation
+Parameter estimation
  stk_param_estim
 #stk_param_getdefaultbounds  [internal]
  stk_param_gls
  stk_param_init
  stk_param_init_lnv
  stk_param_relik
-
-## The stk_kre_qr class -> not ready to be exposed
-#@stk_kreq_qr/disp                   [internal]
-#@stk_kreq_qr/display                [internal]
-#@stk_kreq_qr/get                    [internal]
-#@stk_kreq_qr/isequal                [internal]
-#@stk_kreq_qr/linsolve               [internal]
-#@stk_kreq_qr/stk_kreq_qr            [internal]
-#@stk_kreq_qr/stk_set_righthandside  [internal]
-#@stk_kreq_qr/stk_squared_seminorm   [internal]
-#@stk_kreq_qr/stk_update             [internal]
-#@stk_kreq_qr/subsref                [internal]
-
-Kriging: Covariance functions
- stk_gausscov_aniso
- stk_gausscov_iso
- stk_materncov32_aniso
- stk_materncov32_iso
- stk_materncov52_aniso
- stk_materncov52_iso
- stk_materncov_aniso
- stk_materncov_iso
- stk_noisecov
- stk_discretecov
-
-## The prefix 'sf' for 'special functions' is not appropriate, since the
-## expression 'special function' refers to specific rather specific in the
-## traditional math vocabulary... Because of that, these functions are
-## likely to be renamed in future versions of STK. Until then, let us
-## consider them as "internal" (they are never used directly in any of the
-## example scripts)
-#stk_sf_gausscorr    [internal]
-#stk_sf_matern       [internal]
-#stk_sf_matern32     [internal]
-#stk_sf_matern52     [internal]
-
-## The use of stk_lm_* objects is currently considered as an experimental
-## feature. It is not advertised in any of the example scripts. Moreover,
-## it requires to set model.order to NaN, a "cheat code" feature which
-## is very weakly documented (only in stk_example_misc03). stk_lm_*
-## should become the standard way of of defining the "linear part" of a
-## model in the next major release of STK.
-#@stk_lm_affine/stk_lm_affine          [experimental]
-#@stk_lm_affine/feval                  [experimental]
-#@stk_lm_constant/stk_lm_constant      [experimental]
-#@stk_lm_constant/feval                [experimental]
-#@stk_lm_cubic/stk_lm_cubic            [experimental]
-#@stk_lm_cubic/feval                   [experimental]
-#@stk_lm_matrix/stk_lm_matrix          [experimental]
-#@stk_lm_matrix/feval                  [experimental]
-#@stk_lm_null/stk_lm_null              [experimental]
-#@stk_lm_null/feval                    [experimental]
-#@stk_lm_quadratic/stk_lm_quadratic    [experimental]
-#@stk_lm_quadratic/feval               [experimental]
-#stk_lm_polynomial                     [experimental]
 
 Posterior model objects
  @stk_model_gpposterior/stk_model_gpposterior
@@ -155,6 +101,56 @@ Posterior model objects
 #@stk_model_gpposterior/subsref                [overload base]
 #@stk_model_gpposterior/horzcat                [overload base]
 #@stk_model_gpposterior/vertcat                [overload base]
+
+## The stk_kre_qr class -> not ready to be exposed
+#@stk_kreq_qr/disp                   [internal]
+#@stk_kreq_qr/display                [internal]
+#@stk_kreq_qr/get                    [internal]
+#@stk_kreq_qr/isequal                [internal]
+#@stk_kreq_qr/linsolve               [internal]
+#@stk_kreq_qr/stk_kreq_qr            [internal]
+#@stk_kreq_qr/stk_set_righthandside  [internal]
+#@stk_kreq_qr/stk_squared_seminorm   [internal]
+#@stk_kreq_qr/stk_update             [internal]
+#@stk_kreq_qr/subsref                [internal]
+
+Model components: Covariance functions
+ stk_gausscov_aniso
+ stk_gausscov_iso
+ stk_materncov32_aniso
+ stk_materncov32_iso
+ stk_materncov52_aniso
+ stk_materncov52_iso
+ stk_materncov_aniso
+ stk_materncov_iso
+ stk_noisecov
+ stk_discretecov
+
+## The prefix 'sf' for 'special functions' is not appropriate, since the
+## expression 'special function' refers to specific rather specific in the
+## traditional math vocabulary... Because of that, these functions are
+## likely to be renamed in future versions of STK. Until then, let us
+## consider them as "internal" (they are never used directly in any of the
+## example scripts)
+#stk_sf_gausscorr    [internal]
+#stk_sf_matern       [internal]
+#stk_sf_matern32     [internal]
+#stk_sf_matern52     [internal]
+
+Model components: Linear model objects
+ @stk_lm_affine/stk_lm_affine
+ @stk_lm_constant/stk_lm_constant
+ @stk_lm_cubic/stk_lm_cubic
+ @stk_lm_matrix/stk_lm_matrix
+ @stk_lm_null/stk_lm_null
+ @stk_lm_quadratic/stk_lm_quadratic
+ stk_lm_polynomial
+#@stk_lm_affine/feval     [overload base]
+#@stk_lm_constant/feval   [overload base]
+#@stk_lm_cubic/feval      [overload base]
+#@stk_lm_matrix/feval     [overload base]
+#@stk_lm_null/feval       [overload base]
+#@stk_lm_quadratic/feval  [overload base]
 
 Design of experiments (non-sequential): sampling
  stk_sampling_halton_rr2

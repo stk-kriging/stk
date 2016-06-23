@@ -21,7 +21,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -79,7 +79,7 @@ end % function
 %! x0 = stk_sampling_randunif (n0, dim);
 %! x1 = stk_sampling_randunif (n1, dim);
 %! model = stk_model ('stk_materncov52_aniso', dim);
-%! model.order = 1;
+%! model.lm = stk_lm_affine ();
 %! model.param = log ([1.0; 2.1; 2.2; 2.3; 2.4]);
 
 %!test % without noise, pairwise = false

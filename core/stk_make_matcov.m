@@ -6,8 +6,7 @@
 %    MODEL at the set of points X0, which is expected to be an N x DIM
 %    array. As a result, a matrix K of size N x N and a matrix P of size
 %    N x L are obtained, where L is the number of regression functions in
-%    the linear part of the model; e.g., L = 1 if MODEL.order is zero
-%    (ordinary kriging).
+%    the linear part of the model.
 %
 % CALL: K = stk_make_matcov (MODEL, X0, X1)
 %
@@ -87,7 +86,9 @@ end
 %=== compute the regression functions
 
 if nargout > 1,
+    
     P = stk_ortho_func (model, x0);
+    
 end
 
 end % function
@@ -95,7 +96,8 @@ end % function
 
 %!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
 %! n0 = 20;  n1 = 10;  d = 4;
-%! model = stk_model ('stk_materncov52_aniso', d);  model.order = 1;
+%! model = stk_model ('stk_materncov52_aniso', d);
+%! model.lm = stk_lm_affine;
 %! model.param = log ([1.0; 2.1; 2.2; 2.3; 2.4]);
 %! model2 = model;  model2.lognoisevariance = log(0.01);
 %! x0 = stk_sampling_randunif (n0, d);

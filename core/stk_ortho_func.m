@@ -10,13 +10,12 @@
 %    where L is the number of regression functions in the linear part of the
 %    model; e.g., L = 1 if MODEL.order is zero (ordinary kriging).
 %
-% DEPRECATED:
+% DEPRECATION WARNINGS:
 %
-%    At the present time, stk_ortho_func() only handles polynomial regressions,
-%    up to order 3 through the "historical" mechanism based on model.order.
-%
-%    An experimental mechanisme that uses "linear model" objects is already
-%    available (see the code for details on how to activate this feature).
+%    The use of a .order field in model structures is deprecated and will be
+%    removed in a future release of STK.  The recommended approach is now to use
+%    a .lm field, which contains a function handle or any object that behaves
+%    like one (see stk_lm_*).
 %
 %    stk_orth_func is deprecated and will be removed from future versions of
 %    STK (http://sourceforge.net/p/kriging/tickets/12).
@@ -62,20 +61,14 @@ x = double (x);
 if strcmp (model.covariance_type, 'stk_discretecov')
     
     P = model.param.P(x, :);
-
+    
 else  % General case
     
-    % We currently accept both model.order and model.lm
-    if isfield (model, 'lm')
-        if ~ isnan (model.order)
-            stk_error (['Invalid ''model'' argument: model.order should be' ...
-                'set to NaN when model.lm is present.'], 'InvalidArgument');            
-        end
-    else
-        model.lm = stk_lm_polynomial (model.order);
-    end
+    % Ensure backward compatiblity
+    model = stk_model_fixlm (model);
     
     P = feval (model.lm, x);
+    
 end
 
 end % function
@@ -85,6 +78,7 @@ end % function
 %! n = 15; d = 4;
 %! model = stk_model ('stk_materncov_aniso', d);
 %! x = stk_sampling_randunif (n, d);
+%! model = rmfield (model, 'lm');  % Test the old .order approach
 
 %!error P = stk_ortho_func ();
 %!error P = stk_ortho_func (model);
