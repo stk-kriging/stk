@@ -1,3 +1,32 @@
+2016-06-23  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Linear model objects are no more considered as an experimental feature
+
+	* core/stk_model.m: Create objects with a .lm field as a default.
+	* core/stk_model_fixlm.m: New internal function that ensures
+	backward compatiblity for model structures with a .order field.
+	* core/stk_ortho_func.m: Indicate deprecation of .order.  Call
+	stk_model_fixlm to ensure backward compatibility.
+	* admin/octpkg/INDEX: Show stk_lm_* functions in the INDEX.
+	* examples/01_kriging_basics/stk_example_kb03.m: Use model.lm
+	field instead of model.order.
+	* paramestim/stk_param_init.m: Use model.lm field instead of
+	model.order.  Call stk_model_fixlm to ensure backward
+	compatibility.
+	* examples/01_kriging_basics/stk_example_kb06.m: Idem.
+	* examples/03_miscellaneous/stk_example_misc03.m: Idem.
+	* core/@stk_model_gpposterior/get.m: Fix unit tests.
+	* core/@stk_model_gpposterior/set.m: Fix unit tests.
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Fix unit tests.
+	* core/@stk_model_gpposterior/stk_predict.m: Fix unit tests.
+	* core/@stk_model_gpposterior/subsref.m: Fix unit tests.
+	* core/stk_make_matcov.m: Fix help and unit tests.
+	* core/stk_model_update.m: Fix unit tests.
+	* core/stk_predict.m: Fix unit tests.
+	* covfcs/stk_discretecov.m: Fix unit tests.
+	* paramestim/stk_param_gls.m: Fix unit tests.
+	* paramestim/stk_param_relik.m: Fix unit tests.
+
 2016-06-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Indicate internal and deprecated functions more systematically

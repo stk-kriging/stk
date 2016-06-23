@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -202,8 +202,8 @@ end % function
 %! assert (stk_isequal_tolrel (dARL_dtheta, [0.268 0.0149 -0.636]', TOL_REL));
 %! assert (stk_isequal_tolrel (dARL_dLNV, -1.581e-04, TOL_REL));
 
-%!test  % Same 1D test, with model.order = -1, to test simple kriging
-%! model.order = - 1;
+%!test  % Same 1D test with simple kriging
+%! model.lm = stk_lm_null;
 %! [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (model, xi, zi);
 %! assert (stk_isequal_tolrel (ARL, 7.475, TOL_REL));
 %! assert (stk_isequal_tolrel (dARL_dtheta, [0.765 0.0238 -1.019]', TOL_REL));
