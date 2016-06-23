@@ -20,8 +20,8 @@
 % In STK, a Gaussian process model is described by a 'model' structure,
 % which has mandatory fields and optional fields.
 %
-%   MANDATORY FIELDS: covariance_type, param, order, lognoisevariance
-%   OPTIONAL FIELD: param_prior, noise_prior, response_name, lm
+%   MANDATORY FIELDS: covariance_type, param, lm, lognoisevariance
+%   OPTIONAL FIELD: param_prior, noise_prior, response_name
 %
 % See also stk_materncov_iso, stk_materncov_aniso, ...
 
@@ -126,7 +126,7 @@ model = struct();
 model.covariance_type = covariance_type;
 
 % use ordinary kriging as a default choice
-model.order = 0;
+model.lm = stk_lm_constant ();
 
 % default dimension is d = 1
 if nargin < 2,

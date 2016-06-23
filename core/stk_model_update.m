@@ -46,7 +46,6 @@ end % function
 %! 
 %! % Prior model
 %! M0 = stk_model ('stk_materncov32_iso');
-%! M0.order = 0; % this is currently the default, but better safe than sorry
 %! M0.param = log ([1.0; 2.1]);
 %! 
 %! M1 = stk_model_update (M0, x1, z1);

@@ -12,6 +12,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CantraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
@@ -68,7 +69,7 @@ param0 = log ([SIGMA2; NU; 1/RHO1]);
 
 model = stk_model ('stk_materncov_iso', DIM);
 model.lognoisevariance = 2 * log (1e-10);
-model.order = 0;
+% model.lm = stk_lm_constant is the default
 
 % Estimate the parameters of the covariance
 model.param = stk_param_estim (model, xi, zi, param0);
@@ -84,7 +85,7 @@ stk_title ('Ordinary kriging');  ylim ([-5 5]);
 %% Linear trend (aka "universal kriging")
 
 % We just need to change the value of 'order' in the model
-model.order = 1;
+model.lm = stk_lm_affine;
 
 % Re-estimate the parameters of the covariance
 model.param = stk_param_estim (model, xi, zi, param0);
