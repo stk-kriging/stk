@@ -129,12 +129,19 @@ if ~ isa (box, 'stk_hrect')
     end
 end
 
-%--- lognoisevariance ? --------------------------------------------------------
+
+%--- backward compatiblity -----------------------------------------------------
 
 % Make sure that lognoisevariance is -inf for noiseless models
 if ~ stk_isnoisy (model)
     model.lognoisevariance = -inf;
 end
+
+% Ensure backward compatiblity with respect to model.order / model.lm
+model = stk_model_fixlm (model);
+
+
+%--- lognoisevariance ? --------------------------------------------------------
 
 lnv = model.lognoisevariance;
 
@@ -182,19 +189,6 @@ if (do_estim_lnv) && (nargout < 2)
     warning (['stk_param_init will be computing an estimation of the ' ...
         'variance of the noise, perhaps should you call the function ' ...
         'with two output arguments?']);
-end
-
-
-%--- linear model --------------------------------------------------------------
-
-% We currently accept both model.order and model.lm
-if isfield (model, 'lm')
-    if ~ isnan (model.order)
-        stk_error (['Invalid ''model'' argument: model.order should be' ...
-            'set to NaN when model.lm is present.'], 'InvalidArgument');
-    end
-else
-    model.lm = stk_lm_polynomial (model.order);
 end
 
 
@@ -260,7 +254,7 @@ end
 d = size (xi, 2);
 
 model = stk_model ('stk_materncov_iso');
-model.order = nan;  model.lm = lm;
+model.lm = lm;
 model.lognoisevariance = lnv;
 
 % list of possible values for the ratio eta = sigma2_noise / sigma2

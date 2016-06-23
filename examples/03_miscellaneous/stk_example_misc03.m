@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -63,9 +64,8 @@ hold on;  plot (t, S_posterior.mean, 'r-');
 % Periodicity assumed to be known
 T0 = 2 * pi;
 
-% Here we use an EXPERIMENTAL feature of STK
+% Construct a prior model with sinusoidal trend
 model2 = stk_model ('stk_materncov52_iso');
-model2.order = nan;
 model2.lm = @(t)([ones(length(t),1) sin(2*pi*t/T0) cos(2*pi*t/T0)]);
 
 % Initial guess for the parameters of the Matern covariance
