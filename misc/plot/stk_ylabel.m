@@ -1,4 +1,6 @@
-% STK_YLABEL is a replacement for 'ylabel' for use in STK's examples
+% STK_YLABEL [STK internal]
+%
+% STK_YLABEL is a replacement for 'ylabel' for use in STK's examples.
 
 % Copyright Notice
 %

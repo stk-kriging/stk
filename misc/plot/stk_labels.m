@@ -1,4 +1,6 @@
-% STK_LABELS is a shortcut for stk_xlabel + stk_ylabel
+% STK_LABELS [STK internal]
+%
+% STK_LABELS is a shortcut for stk_xlabel + stk_ylabel.
 
 % Copyright Notice
 %

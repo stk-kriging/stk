@@ -1,4 +1,6 @@
-% STK_XLABEL is a replacement for 'xlabel' for use in STK's examples
+% STK_XLABEL [STK internal]
+%
+% STK_XLABEL is a replacement for 'xlabel' for use in STK's examples.
 
 % Copyright Notice
 %

@@ -1,4 +1,4 @@
-% STK_MODEL_FIXLM  [internal]
+% STK_MODEL_FIXLM  [STK internal]
 %
 % This internal STK function ensures backward compatiblity for model structures
 % with a .order field.
