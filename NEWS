@@ -25,17 +25,20 @@ Changes in version 2.4.0
 
 * Linear models
 
-   o model.lm and linear model objects (stk_lm_* classes), introduced
-     as an experimental feature in STK 2.2.0, are now the recommended
-     way of setting the linear part of Gaussian process models.
+   o model.lm and linear model objects (stk_lm_* classes), introduced as an
+     experimental feature in STK 2.2.0, are now the recommended way of setting
+     the linear part of Gaussian process models.
 
    o model.order is deprecated (but still supported).
 
-   o As an example, the following define a Gaussian process with a
-     Matern 5/2 covarianc function and a quadratic trend:
+   o As an example, the following define a Gaussian process with a Matern 5/2
+     covariance function and a quadratic trend:
 
         model = stk_model ('stk_materncov52_aniso');
         model.lm = stk_lm_quadratic;
+
+   o stk_lm_polynomial (new function): Create a polynomial model of given
+     degree, up to cubic models.
 
 * stk_model_gpposterior objects
 
@@ -48,15 +51,30 @@ Changes in version 2.4.0
 
    o stk_predict is overloaded for stk_model_gpposterior objects.
 
-   o stk_model_update: New function. Updates a model with new observations.
+   o stk_model_update.m: New function. Updates a model with new observations.
 
 * Space-filling designs
 
-   o stk_sampling_sobol: New function to generate points from a Sobol sequence
+   o stk_sampling_sobol.m: New function to generate points from a Sobol sequence
      using the algorithm of Bratley and Fox (1988), as modified by Joe and Kuo
      (2003).  The C implementation under the hood is due to Steven G. Johnson,
      and was borrowed from the NLopt toolbox (version 2.4.2).
 
+* Sampling criterions for sequential designs
+
+   o stk_sampcrit_ei_eval.m (new function): Compute the expected improvement
+     (EI) criterion for single-objective noiseless optimization.
+   
+   o stk_sampcrit_ehvi_eval.m (new function): Compute the expect hyper-volume
+     improvement (EHVI) criterion (Emmerich, Giannakoglou & Naujoks, 2006) for
+     multi-objective noiseless optimization.  This function implements an exact
+     computation of the EHVI criterion, using a decomposition of the dominated
+     region into hyper-rectangles.
+
+   o stk_sampcrit_emmi_eval.m (new function): Compute the expected maximin
+     improvement (EMMI) criterion for multi-objective noiseless optimization
+     (Svenson & Santner, 2010).
+   
 * Miscellaneous
 
    o stk_pmisclass.m: New function to compute either the current probability of
