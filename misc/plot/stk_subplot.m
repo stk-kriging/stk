@@ -1,4 +1,6 @@
-% STK_SUBPLOT is a replacement for 'subplot' for use in STK's examples
+% STK_SUBPLOT [STK internal]
+%
+% STK_SUBPLOT is a replacement for 'subplot' for use in STK's examples.
 
 % Copyright Notice
 %

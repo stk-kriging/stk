@@ -1,4 +1,4 @@
-% STK_GET_OPTIMIZABLE_PARAMETERS [internal]
+% STK_GET_OPTIMIZABLE_PARAMETERS [STK internal]
 %
 % CALL: VALUE = stk_get_optimizable_parameters (PARAM)
 %
