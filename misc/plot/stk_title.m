@@ -1,7 +1,10 @@
-% STK_TITLE is a replacement for 'title' for use in STK's examples
+% STK_TITLE [STK internal]
+%
+% STK_TITLE is a replacement for 'title' for use in STK's examples.
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
