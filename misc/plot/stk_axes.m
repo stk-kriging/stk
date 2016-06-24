@@ -1,7 +1,10 @@
-% STK_AXES is a replacement for 'axes' for use in STK's examples
+% STK_AXES [STK internal]
+%
+% STK_AXES is a replacement for 'axes' for use in STK's examples.
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>

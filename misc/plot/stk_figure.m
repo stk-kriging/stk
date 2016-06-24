@@ -1,4 +1,6 @@
-% STK_FIGURE is a replacement for 'figure' for use in STK's examples
+% STK_FIGURE [STK internal]
+%
+% STK_FIGURE is a replacement for 'figure' for use in STK's examples.
 
 % Copyright Notice
 %

@@ -1,4 +1,6 @@
-% STK_ZLABEL is a replacement for 'zlabel' for use in STK's examples
+% STK_ZLABEL [STK internal]
+%
+% STK_ZLABEL is a replacement for 'zlabel' for use in STK's examples.
 
 % Copyright Notice
 %

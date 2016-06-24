@@ -1,4 +1,7 @@
-% STK_PLOT_SHADEDCI represents pointwise confidence itervals using a shaded area
+% STK_PLOT_SHADEDCI [STK internal]
+%
+% STK_PLOT_SHADEDCI represents pointwise confidence itervals using a shaded
+% area.
 
 % Copyright Notice
 %
