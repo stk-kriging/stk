@@ -1,5 +1,10 @@
 2016-07-21  Rémi Stroh  <remi.stroh@lne.fr>
 
+	arrays/@stk_dataframe/logical.m: New overloaded base function
+
+	* arrays/@stk_dataframe/logical.m: New overloaded base function.
+	* admin/octpkg/INDEX: Add new function to the INDEX.
+
 	arrays/@stk_dataframe/bsxfun.m: Preserve row names if possible
 
 	* arrays/@stk_dataframe/bsxfun.m: Preserve row names if possible.

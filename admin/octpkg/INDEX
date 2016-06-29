@@ -321,6 +321,7 @@ Miscellaneous: Pareto optimality
 #@stk_dataframe/ldivide                   [overload base]
 #@stk_dataframe/le                        [overload base]
 #@stk_dataframe/length                    [overload base]
+#@stk_dataframe/logical                   [overload base]
 #@stk_dataframe/lt                        [overload base]
 #@stk_dataframe/ne                        [overload base]
 #@stk_dataframe/or                        [overload base]
