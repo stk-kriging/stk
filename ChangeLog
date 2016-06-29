@@ -1,3 +1,9 @@
+2016-07-21  Rémi Stroh  <remi.stroh@lne.fr>
+
+	arrays/@stk_dataframe/bsxfun.m: Preserve row names if possible
+
+	* arrays/@stk_dataframe/bsxfun.m: Preserve row names if possible.
+
 2016-06-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Linear model objects are no more considered as an experimental feature
