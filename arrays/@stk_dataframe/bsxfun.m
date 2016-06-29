@@ -2,9 +2,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec & LNE
 %    Copyright (C) 2013 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
+%    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
+%              Remi Stroh   <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -47,18 +49,22 @@ catch
     end
 end
 
-%---- Choose column names -----------------------------------------------
+%---- Choose column and row names ---------------------------------------
 
 if isa (x1, 'stk_dataframe'),
     c1 = x1.colnames;
+    r1 = x1.rownames;
 else
     c1 = {};
+    r1 = {};
 end
 
 if isa (x2, 'stk_dataframe'),
     c2 = x2.colnames;
+    r2 = x2.rownames;
 else
     c2 = {};
+    r2 = {};
 end
 
 if isempty (c1)
@@ -74,9 +80,22 @@ else
     end
 end
 
+if isempty (r1)
+    rownames = r2;
+elseif isempty (r2)
+    rownames = r1;
+else
+    if (~ isequal (size (r1), size (r2))) || (any (~ strcmp (r1, r2)))
+        warning ('STK:bsxfun:IncompatibleRowNames', ...
+            'Incompatible row names.');  rownames = {};
+    else
+        rownames = r1;
+    end
+end
+
 %--- Create output ------------------------------------------------------
 
-y = stk_dataframe (ydata, colnames);
+y = stk_dataframe (ydata, colnames, rownames);
 
 end % function
 
