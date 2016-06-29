@@ -1,5 +1,34 @@
 2016-07-21  Rémi Stroh  <remi.stroh@lne.fr>
 
+	arrays/@stk_dataframe: Overload 25 additional unary base functions (sin, exp...)
+
+	* arrays/@stk_dataframe/acos.m: New overloaded base function
+	* arrays/@stk_dataframe/acosd.m: Idem.
+	* arrays/@stk_dataframe/acosh.m: Idem.
+	* arrays/@stk_dataframe/asin.m: Idem.
+	* arrays/@stk_dataframe/asind.m: Idem.
+	* arrays/@stk_dataframe/asinh.m: Idem.
+	* arrays/@stk_dataframe/atan.m: Idem.
+	* arrays/@stk_dataframe/atand.m: Idem.
+	* arrays/@stk_dataframe/atanh.m: Idem.
+	* arrays/@stk_dataframe/cos.m: Idem.
+	* arrays/@stk_dataframe/cosd.m: Idem.
+	* arrays/@stk_dataframe/cosh.m: Idem.
+	* arrays/@stk_dataframe/exp.m: Idem.
+	* arrays/@stk_dataframe/expm1.m: Idem.
+	* arrays/@stk_dataframe/log.m: Idem.
+	* arrays/@stk_dataframe/log10.m: Idem.
+	* arrays/@stk_dataframe/log1p.m: Idem.
+	* arrays/@stk_dataframe/log2.m: Idem.
+	* arrays/@stk_dataframe/sin.m: Idem.
+	* arrays/@stk_dataframe/sind.m: Idem.
+	* arrays/@stk_dataframe/sinh.m: Idem.
+	* arrays/@stk_dataframe/sqrt.m: Idem.
+	* arrays/@stk_dataframe/tan.m: Idem.
+	* arrays/@stk_dataframe/tand.m: Idem.
+	* arrays/@stk_dataframe/tanh.m: Idem.
+	* admin/octpkg/INDEX: Add new functions to the INDEX
+
 	arrays/@stk_dataframe/logical.m: New overloaded base function
 
 	* arrays/@stk_dataframe/logical.m: New overloaded base function.
