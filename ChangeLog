@@ -1,5 +1,33 @@
 2016-12-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_model_gpposterior/disp.m: Clarify display.
+
+	* core/@stk_model_gpposterior/disp.m: Clarify display.
+
+	@stk_model_gpposterior: Make all properties read-only.
+
+	* core/@stk_model_gpposterior/set.m: Make all properties
+	read-only.  Provide meaningful hints in error messages.
+	* core/@stk_model_gpposterior/set_prior_model.m: Removed.
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Set
+	prior_model directly since set_prior_model no longer exists.
+	* admin/octpkg/INDEX: Update index.
+
+	@stk_model_gpposterior: Remove somes properties
+
+	* core/@stk_model_gpposterior/get_input_dim.m: Removed.
+	* core/@stk_model_gpposterior/get_output_dim.m: Removed.
+	* core/@stk_model_gpposterior/get_lognoisevariance.m: Removed.
+	* core/@stk_model_gpposterior/get_lognoisevariance.m: Removed.
+	* core/@stk_model_gpposterior/get_param.m: Removed.
+	* core/@stk_model_gpposterior/set_param.m: Removed.
+	* core/@stk_model_gpposterior/fieldnames.m: Remove properties.
+	* core/@stk_model_gpposterior/disp.m: Idem.
+	* core/@stk_model_gpposterior/get.m: Idem.
+	* core/@stk_model_gpposterior/set.m: Idem.
+	* core/@stk_model_gpposterior/subsref.m: Remove one unit test.
+	* admin/octpkg/INDEX: Update index.
+
 	README.md: Use numeric references
 
 	* README.md: Use numeric references instead of author-year.

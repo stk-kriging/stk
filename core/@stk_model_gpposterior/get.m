@@ -30,35 +30,20 @@ function value = get (model, propname)
 
 switch propname
     
-    case 'param'
-        value = model.prior_model.param;
-        
-    case 'lognoisevariance'
-        value = model.prior_model.lognoisevariance;
-        
-    case {'input_dim', 'dim'}
-        % Note: 'dim' is kept for consistency with 'model structures'
-        %   (prior models described as ordinary structures, that is)
-        value = model.prior_model.dim;
-        
-    case 'output_dim'
-        % Only scalar-output models are supported at this point
-        value = 1;
+    case {'prior_model', 'input_data', 'output_data', 'kreq'}
+        % rem: kreq is a hidden property
+        value = model.(propname);
         
     otherwise
-        try
-            value = model.(propname);
-        catch
-            if (~ ischar (propname))
-                stk_error ('Invalid property name.', 'InvalidArgument');
-            elseif (ischar (propname)) && (~ isfield (model, propname))
-                errmsg = sprintf ('There is no field named %s.', propname);
-                stk_error (errmsg, 'InvalidArgument');
-            else
-                rethrow (lasterror ());
-            end
+        if ~ ischar (propname)
+            errmsg = 'Invalid property name.';
+        else
+            errmsg = sprintf ('There is no field named %s.', propname);
         end
+        stk_error (errmsg, 'InvalidArgument');
         
+end % switch
+
 end % function
 
 %#ok<*CTCH,*LERR>
