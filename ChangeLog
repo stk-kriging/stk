@@ -1,3 +1,9 @@
+2016-07-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	core/stk_model_fixlm.m: Fix error message
+
+	* core/stk_model_fixlm.m: Fix error message.
+
 2016-07-21  Rémi Stroh  <remi.stroh@lne.fr>
 
 	arrays/@stk_dataframe: Overload 25 additional unary base functions (sin, exp...)
