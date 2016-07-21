@@ -37,10 +37,10 @@ if nargin == 0
     
     kreq = struct ('n', 0, 'r', 0, 'P_scaling', [], ...
         'LS_Q', [], 'LS_R', [], 'RS', [], 'lambda_mu', []);
-
+    
 else
     
-    [Kii, Pi] = stk_make_matcov (model, xi);
+    [Kii, Pi] = stk_covmat_response (model, xi);
     [n, r] = size (Pi);
     
     % heuristics: scale Pi to (try to) avoid conditioning issues later
@@ -59,9 +59,9 @@ end
 
 kreq = class (kreq, 'stk_kreq_qr');
 
-% prepare the right-hand side of the kriging equation
+% Prepare the right-hand side of the kriging equation
 if nargin > 2,
-    [Kti, Pt] = stk_make_matcov (model, xt, xi);
+    [Kti, Pt] = stk_covmat_latent (model, xt, xi);
     kreq = stk_set_righthandside (kreq, Kti, Pt);
 end
 
