@@ -89,7 +89,8 @@ end % function
 
 %!shared model, model2, x1, x2, n1, n2, d, Ka, Kb, Kc, Pa, Pb, Pc, K1, K2, K3, P1, P2, P3
 %! n1 = 20;  n2 = 10;  d = 4;
-%! model = stk_model ('stk_materncov52_aniso', d);  model.order = 1;
+%! model = stk_model ('stk_materncov52_aniso', d);
+%! model.lm = stk_lm_affine;
 %! model.param = log ([1.0; 2.1; 2.2; 2.3; 2.4]);
 %! model2 = model;  model2.lognoisevariance = log(0.01);
 %! x1 = stk_sampling_randunif (n1, d);
