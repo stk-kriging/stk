@@ -51,8 +51,9 @@ if isfield (model, 'lm')  % Modern style: .lm field
                 
             else
                 
-                stk_error (['Invalid ''model'' argument: model.order should be' ...
-                    'set to NaN when model.lm is present.'], 'InvalidArgument');
+                stk_error (['Invalid ''model'' argument: model.order ' ...
+                    'should be set to NaN when model.lm is present.'], ...
+                    'InvalidArgument');
                 
             end
             
