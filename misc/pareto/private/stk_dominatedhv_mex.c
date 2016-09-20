@@ -4,7 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright (C) 2015 CentraleSupelec                                     *
+ *    Copyright (C) 2015, 2016 CentraleSupelec                               *
  *                                                                           *
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
  *                                                                           *
@@ -85,6 +85,7 @@ void compute_decomposition (mxArray* f, FRONT *buffer,
   size_t i, j;           /* loop indices */
   size_t nb_points;      /* number of points */
   size_t nb_objectives;  /* number of objectives */
+  size_t rect_alloc;     /* initial number of rectangles */
   double t, u;           /* aux variables */
   double *data;          /* pointer to input data */
   RLIST* Rlist;          /* list of hyper-rectangles */
@@ -129,8 +130,13 @@ void compute_decomposition (mxArray* f, FRONT *buffer,
         for (j = 0; j < nb_objectives; j++)
           buffer->points[i].objectives[j] = data[j * nb_points + i];
 
-      /* Rule of thumb: allocate 10 * nb_points for a start */
-      Rlist = Rlist_alloc (10 * nb_points, nb_objectives);
+      /* Rule of thumb: allocate initially for
+         ((2 ^ nb_objectives) * nb_points) rectangles */
+      rect_alloc = nb_objectives;
+      for (i = 0; i < nb_objectives; i++)
+        rect_alloc *= 2;
+
+      Rlist = Rlist_alloc (rect_alloc, nb_objectives);
 
       wfg_compute_decomposition (buffer, Rlist);
 

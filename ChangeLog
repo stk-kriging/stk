@@ -1,3 +1,13 @@
+2016-09-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Reduce the number of allocations in WFG
+
+	* misc/pareto/private/wfg.c: Reduce the number of allocations in WFG by
+	allocating large blocks of size n * allocated_size for xmin and xmax.
+	* misc/pareto/private/wfg.h: Add fields xmin_data and xmax_data to Rlist
+	structures.
+	* misc/pareto/private/stk_dominatedhv_mex.c: Change rule of thumb.
+
 2016-09-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Fix two bugs in stk_dominatedhv.
