@@ -4,7 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright (C) 2015 CentraleSupelec                                     *
+ *    Copyright (C) 2015, 2016 CentraleSupelec                               *
  *                                                                           *
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
  *                                                                           *
@@ -238,7 +238,7 @@ void makeDominatedBit (FRONT* ps, int p)
 }
 
 
-double hv2 (FRONT* ps, int k)
+double hv_2dim (FRONT* ps, int k)
 /* returns the hypervolume of ps[0 .. k-1] in 2D
    assumes that ps is sorted improving */
 {
@@ -252,8 +252,8 @@ double hv2 (FRONT* ps, int k)
     return volume;
 }
 
-/* RLIST-variant of hv2 */
-void Rlist_hv2 (FRONT* ps, int k, RLIST* Rlist, int sign)
+/* RLIST-variant of hv_2dim */
+void Rlist_hv_2dim (FRONT* ps, int k, RLIST* Rlist, int sign)
 {
     int i, Ridx;
     double xmax0 = 0;
@@ -792,27 +792,29 @@ double hv (FRONT* ps)
     qsort(&ps->points[safe], ps->nPoints - safe, sizeof(POINT), greater);
 
     /* n = 2 implies that safe = 0 */
-    if (n == 2) return hv2 (ps, ps->nPoints);
+    if (n == 2) return hv_2dim (ps, ps->nPoints);
 
     /* these points don't NEED sorting, but it helps */
     qsort(ps->points, safe, sizeof(POINT), greaterabbrev);
 
     if (n == 3 && safe > 0)
     {
-        volume = ps->points[0].objectives[2] * (hv2 (ps, safe));
-	i = safe;
+        volume = ps->points[0].objectives[2] * (hv_2dim (ps, safe));
+        i = safe;
     }
     else
     {
-        volume = inclhv4 (ps->points[0], ps->points[1], ps->points[2], ps->points[3]);
-	i = 4;
+        volume = inclhv4 (ps->points[0], ps->points[1],
+                          ps->points[2], ps->points[3]);
+        i = 4;
     }
 
     wfg_front_resize (ps, ps->nPoints, n - 1);
 
     for (; i < ps->nPoints; i++)
-	/* we can ditch dominated points here, but they will be ditched anyway in makeDominatedBit */
-	volume += ps->points[i].objectives[n - 1] * (exclhv (ps, i));
+        /* we can ditch dominated points here,
+           but they will be ditched anyway in makeDominatedBit */
+        volume += ps->points[i].objectives[n - 1] * (exclhv (ps, i));
 
     wfg_front_resize (ps, ps->nPoints, n);
 
@@ -836,10 +838,12 @@ void Rlist_hv (FRONT* ps, RLIST* Rlist, int sign)
         return;
       case 3:
         Rlist_inclhv3 (ps->points[0], ps->points[1], ps->points[2],
-                       Rlist, sign);  return;
+                       Rlist, sign);
+        return;
       case 4:
         Rlist_inclhv4 (ps->points[0], ps->points[1], ps->points[2],
-                       ps->points[3], Rlist, sign);  return;
+                       ps->points[3], Rlist, sign);
+        return;
       }
 
     /* these points need sorting */
@@ -848,17 +852,24 @@ void Rlist_hv (FRONT* ps, RLIST* Rlist, int sign)
     /* n = 2 implies that safe = 0 */
     if (n == 2)
       {
-        Rlist_hv2 (ps, ps->nPoints, Rlist, sign);
+        Rlist_hv_2dim (ps, ps->nPoints, Rlist, sign);
         return;
       }
 
     /* these points don't NEED sorting, but it helps */
     qsort (ps->points, safe, sizeof(POINT), greaterabbrev);
 
-    Ridx = Rlist->size;
     if ((n == 3) && (safe > 0))
       {
-        Rlist_hv2 (ps, safe, Rlist, sign);
+        /* Take note of the number of rectangles before calling Rlist_hv_2dim */
+        Ridx = Rlist->size;
+
+        Rlist_hv_2dim (ps, safe, Rlist, sign);
+
+        /* Add last coordinate to all new rectangles */
+        for (j = Ridx; j < Rlist->size; j++)
+          Rlist->xmax[j][2] = ps->points[0].objectives[2];
+
         i = safe;
       }
     else
@@ -867,15 +878,17 @@ void Rlist_hv (FRONT* ps, RLIST* Rlist, int sign)
                        ps->points[3], Rlist, sign);
         i = 4;
       }
-    for (j = Ridx; j < Rlist->size; j++)
-      Rlist->xmax[j][n - 1] = ps->points[0].objectives[n - 1];
 
     wfg_front_resize (ps, ps->nPoints, n - 1);
 
     for (; i < ps->nPoints; i++)
     {
+      /* Take note of the number of rectangles before calling Rlist_exclhv */
       Ridx = Rlist->size;
+
       Rlist_exclhv (ps, i, Rlist, sign);
+
+      /* Add last coordinate to all new rectangles */
       for (j = Ridx; j < Rlist->size; j++)
         Rlist->xmax[j][n - 1] = ps->points[i].objectives[n - 1];
     }

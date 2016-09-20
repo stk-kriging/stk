@@ -1,3 +1,11 @@
+2016-09-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix two bugs in stk_dominatedhv.
+
+	* misc/pareto/private/wfg.c: Fix two bugs affecting the case where
+	the decomposition is returned.
+	* misc/pareto/stk_dominatedhv.m: Unit tests.
+
 2016-07-21  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	core/stk_model_fixlm.m: Fix error message
