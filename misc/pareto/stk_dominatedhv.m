@@ -313,10 +313,32 @@ end % function
 %!     0.9648    0.7764    0.5199    0.4098    1.3436; ...
 %!     0.9891    0.4518    0.7956    0.1164    1.2025];
 %! 
+%! hv1 = stk_dominatedhv (y, yr, 0);
+%!
 %! S = stk_dominatedhv (y, yr, 1);
-%! hv = sum (S.sign .* prod (S.xmax - S.xmin, 2));
+%! hv2 = sum (S.sign .* prod (S.xmax - S.xmin, 2));
 %! 
 %! assert (isequal (size (S.sign), [87 1]));
 %! assert (isequal (size (S.xmin), [87 5]));
 %! assert (isequal (size (S.xmax), [87 5]));
-%! assert (stk_isequal_tolrel (hv, 1.5514, 1e-4));
+%! assert (stk_isequal_tolrel (hv1, 1.538677420906463, 2 * eps));
+%! assert (stk_isequal_tolrel (hv1, hv2, eps));
+
+%!test % with random data
+%! NREP = 5;
+%! for p = 1:5
+%!     for n = 1:10
+%!         for i = 1:NREP
+%!             % Draw random data
+%!             y = rand (n, p);
+%!             y = - y ./ (norm (y));
+%!             % Compute hypervolume directly
+%!             hv1 = stk_dominatedhv (y, [], 0);
+%!             % Compute decomposition, then hypervolume
+%!             R = stk_dominatedhv (y, [], 1);
+%!             hv2 = sum (R.sign .* prod (R.xmax - R.xmin, 2));
+%!             % Compare results
+%!             assert (stk_isequal_tolabs (hv1, hv2, eps));
+%!         end
+%!     end
+%! end
