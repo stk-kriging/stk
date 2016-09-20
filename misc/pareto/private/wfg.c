@@ -970,7 +970,7 @@ void wfg_front_init (FRONT* front, int nb_points, int nb_objectives)
   front->points = (POINT*) mxMalloc (sizeof (POINT) * nb_points);
 
   for (j = 0; j < nb_points; j++)
-    { 
+    {
       front->points[j].n = nb_objectives;
       front->points[j].objectives = (OBJECTIVE*)
         mxMalloc (sizeof (OBJECTIVE) * nb_objectives);
@@ -1014,6 +1014,7 @@ void wfg_front_resize (FRONT* f, int nb_points, int nb_objectives)
 RLIST* Rlist_alloc (int alloc_size, int n)
 {
   int i, j;
+  int block_size = n * alloc_size;
 
   RLIST* Rlist = (RLIST*) mxMalloc (sizeof (RLIST));
 
@@ -1025,15 +1026,8 @@ RLIST* Rlist_alloc (int alloc_size, int n)
   Rlist->xmax = (double**) mxMalloc (alloc_size * sizeof (double*));
   Rlist->sign = (int*) mxMalloc (alloc_size * sizeof (int));
 
-  for (i = 0; i < alloc_size; i++)
-    {
-      Rlist->xmin[i] = (double*) mxMalloc (Rlist->n * sizeof (double));
-      Rlist->xmax[i] = (double*) mxMalloc (Rlist->n * sizeof (double));
-
-      /* Set all components of xmin to 0 (the reference) */
-      for (j = 0; j < Rlist->n; j++)
-        Rlist->xmin[i][j] = 0.0;
-    }
+  Rlist->xmin_data = (double*) mxMalloc (block_size * sizeof (double));
+  Rlist->xmax_data = (double*) mxMalloc (block_size * sizeof (double));
 
   return Rlist;
 }
@@ -1041,15 +1035,19 @@ RLIST* Rlist_alloc (int alloc_size, int n)
 void Rlist_extend (RLIST* Rlist, int k, int* p_Ridx)
 {
   int i, j;
+  int n = Rlist->n;
   int old_size = Rlist->size;
   int new_size = old_size + k;
-  int old_allocated_size;
+  int old_allocated_size, block_size, old_block_size;
 
   if (new_size > Rlist->allocated_size)
     {
       old_allocated_size = Rlist->allocated_size;
+      old_block_size = n * old_allocated_size;
+
       while (new_size > Rlist->allocated_size)
         Rlist->allocated_size *= 2;
+      block_size = n * Rlist->allocated_size;
 
       Rlist->xmin = (double**) mxRealloc
         (Rlist->xmin, Rlist->allocated_size * sizeof (double*));
@@ -1058,34 +1056,44 @@ void Rlist_extend (RLIST* Rlist, int k, int* p_Ridx)
       Rlist->sign = (int*) mxRealloc
         (Rlist->sign, Rlist->allocated_size * sizeof (int));
 
-      for (i = old_allocated_size; i < Rlist->allocated_size; i++)
-        {
-          Rlist->xmin[i] = (double*) mxMalloc (Rlist->n * sizeof (double));
-          Rlist->xmax[i] = (double*) mxMalloc (Rlist->n * sizeof (double));
+      Rlist->xmin_data = (double*) mxRealloc
+        (Rlist->xmin_data, block_size * sizeof (double));
+      Rlist->xmax_data = (double*) mxRealloc
+        (Rlist->xmax_data, block_size * sizeof (double));
 
-          /* Set all components of xmin to 0 (the reference) */
-          for (j = 0; j < Rlist->n; j++)
-            Rlist->xmin[i][j] = 0.0;
+      /* We have to fill xmin and xmax entirely again
+         (since xmin_data and xmax_data might have been moved during realloc */
+      for (i = 0, j = 0; i < new_size; i++, j += n)
+        {
+          Rlist->xmin[i] = &(Rlist->xmin_data[j]);
+          Rlist->xmax[i] = &(Rlist->xmax_data[j]);
+        }
+    }
+  else
+    {
+      /* No realloc: we just have to fill up from old_size */
+      for (i = old_size, j = n * old_size; i < new_size; i++, j += n)
+        {
+          Rlist->xmin[i] = &(Rlist->xmin_data[j]);
+          Rlist->xmax[i] = &(Rlist->xmax_data[j]);
         }
     }
 
   Rlist->size = new_size;
+
+  /* Set all components of xmin to 0 (the reference) */
+  for (j = n * old_size; j < n * new_size; j++)
+    Rlist->xmin_data[j] = 0.0;
 
   *p_Ridx = old_size;
 }
 
 void Rlist_free (RLIST* Rlist)
 {
-  int i;
-
-  for (i = 0; i < Rlist->allocated_size; i++)
-    {
-      mxFree (Rlist->xmin[i]);
-      mxFree (Rlist->xmax[i]);
-    }
-
   mxFree (Rlist->xmin);
+  mxFree (Rlist->xmin_data);
   mxFree (Rlist->xmax);
+  mxFree (Rlist->xmax_data);
   mxFree (Rlist->sign);
   mxFree (Rlist);
 }
