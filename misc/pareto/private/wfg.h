@@ -8,7 +8,7 @@
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
  *                                                                           *
  *    Based on the file wfg.h from WFG 1.10 by Lyndon While, Lucas           *
- *    Bradstreet, Luigi Barone, released under the GPLv2 licence. The        *
+ *    Bradstreet, Luigi Barone, released under the GPLv2+ licence. The       *
  *    original copyright notice is:                                          *
  *                                                                           *
  *       Copyright (C) 2010 Lyndon While, Lucas Bradstreet                   *
