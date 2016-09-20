@@ -5,7 +5,7 @@
 %
 %    computes the hypervolume dominated by the rows of Y, with respect to the
 %    reference point Y_REF (a row vector with the same number of columns as Y).
-%    It is expected that all the rows of Y_DATA are smaller than Y
+%    It is expected that all the rows of Y are smaller than Y_REF
 %    (multi-objective minimization framework).
 %
 % CALL: HV = stk_dominatedhv (Y)
