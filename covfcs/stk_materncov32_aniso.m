@@ -29,7 +29,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -110,15 +110,15 @@ end
 
 if diff == -1,
     %%% compute the value (not a derivative)
-    k = Sigma2 * stk_sf_matern32 (D, -1);
+    k = Sigma2 * stk_rbf_matern32 (D, -1);
 elseif diff == 1,
     %%% diff wrt param(1) = log(Sigma2)
-    k = Sigma2 * stk_sf_matern32 (D, -1);
+    k = Sigma2 * stk_rbf_matern32 (D, -1);
 elseif (diff >= 2) && (diff <= nb_params),
     %%% diff wrt param(diff) = - log(invRho(diff-1))
     ind = diff - 1;
     if compute_Kx_cache || isempty (Kx_cache)
-        Kx_cache  = 1 ./ (D + eps) .* (Sigma2 * stk_sf_matern32 (D, 1));
+        Kx_cache  = 1 ./ (D + eps) .* (Sigma2 * stk_rbf_matern32 (D, 1));
         compute_Kx_cache = false;
     end
     if pairwise,

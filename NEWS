@@ -23,6 +23,9 @@ Changes in version 2.4.0
      parameters in a user-defined covariance function. See the documentation of
      stk_param_getdefaultbounds for more information.
 
+   o Radial basis functions: stk_rbf_matern, stk_rbf_matern32, stk_rbf_matern52
+     and stk_rbf_gauss  (previously available internally as stk_sf_* functions)
+
 * Linear models
 
    o model.lm and linear model objects (stk_lm_* classes), introduced as an

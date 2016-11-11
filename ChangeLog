@@ -1,3 +1,35 @@
+2016-11-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Rename stk_sf_* functions to stk_rbf_* and make them public
+
+	* misc/specfun/stk_sf_gausscorr.m: Moved to covfcs/rbf and renamed.
+	* misc/specfun/stk_sf_matern.m: Moved to covfcs/rbf and renamed.
+	* misc/specfun/stk_sf_matern32.m: Moved to covfcs/rbf and renamed.
+	* misc/spfun/stk_sf_matern52.m: Moved to covfcs/rbf and renamed.
+	* covfcs/rbf/stk_rbf_gauss.m: Renamed from stk_sf_gausscorr.
+	* covfcs/rbf/stk_rbf_matern.m: Renamed from stk_sf_matern.
+	* covfcs/rbf/stk_rbf_matern32.m: Renamed from stk_sf_matern32.
+	* covfcs/rbf/stk_rbf_matern52.m: Renamed from stk_sf_matern52.
+	* covfcs/rbf/stk_sf_gausscorr.m: Deprecated.
+	* covfcs/rbf/stk_sf_matern.m: Deprecated.
+	* covfcs/rbf/stk_sf_matern32.m: Deprecated.
+	* covfcs/rbf/stk_sf_matern52.m: Deprecated.
+	* covfcs/stk_gausscov_aniso.m: Use new function names.
+	* covfcs/stk_gausscov_iso.m: Use new function names.
+	* covfcs/stk_materncov32_aniso.m: Use new function names.
+	* covfcs/stk_materncov32_iso.m: Use new function names.
+	* covfcs/stk_materncov52_aniso.m: Use new function names.
+	* covfcs/stk_materncov52_iso.m: Use new function names.
+	* covfcs/stk_materncov_aniso.m: Use new function names.
+	* covfcs/stk_materncov_iso.m: Use new function names.
+	* misc/benchmarks/stk_benchmark_cov2.m: Use new function names.
+	* misc/options/stk_options_set.m: Rename options and ensure that
+	the old option names are still accepted (with a warning).
+	* misc/options/stk_options_get.m: Ensure that the old option names
+	are still accepted (with a warning).
+	* stk_init.m: Change path.
+	* admin/octpkg/INDEX: Update index.
+
 2016-09-21  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Reduce the number of allocations in WFG
