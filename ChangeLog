@@ -1,3 +1,18 @@
+2016-11-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	New covariance functions: exponential + spherical
+
+	* covfcs/rbf/stk_rbf_exponential.m: New function ("exponential" RBF)
+	* covfcs/rbf/stk_rbf_spherical.m: New function ("spherical" RBF)
+	* covfcs/stk_expcov_aniso.m: New covariance function.
+	* covfcs/stk_expcov_iso.m: New covariance function.
+	* covfcs/stk_sphcov_aniso.m: New covariance function.
+	* covfcs/stk_sphcov_iso.m: New covariance function.
+	* core/stk_model.m: Support new covariance functions.
+	* paramestim/stk_param_init.m: Idem.
+	* paramestim/stk_param_getdefaultbounds.m: Idem.
+	* admin/octpkg/INDEX: Update index.
+
 2016-11-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Rename stk_sf_* functions to stk_rbf_* and make them public
