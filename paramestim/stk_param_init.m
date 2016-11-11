@@ -68,14 +68,23 @@
 function [param, lnv] = stk_param_init (model, varargin)
 
 cov_list = { ...
+    'stk_expcov_iso', ...
+    'stk_expcov_aniso', ...
+    'stk_gausscov_iso', ...
+    'stk_gausscov_aniso', ...    
     'stk_materncov_iso', ...
     'stk_materncov_aniso', ...
     'stk_materncov32_iso', ...
     'stk_materncov32_aniso', ...
     'stk_materncov52_iso', ...
     'stk_materncov52_aniso', ...
-    'stk_gausscov_iso', ...
-    'stk_gausscov_aniso'};
+    'stk_sphcov_iso', ...
+    'stk_sphcov_aniso'};
+
+if ~ ischar (model.covariance_type)
+    % Assume that model.covariance_type is a handle
+    model.covariance_type = func2str (model.covariance_type);
+end
 
 if ismember (model.covariance_type, cov_list)
     
@@ -196,43 +205,33 @@ end
 
 switch model.covariance_type
     
+    case {'stk_expcov_iso', 'stk_materncov32_iso', 'stk_materncov52_iso', ...
+            'stk_gausscov_iso', 'stk_sphcov_iso'}
+        [param, lnv] = paraminit_ (model.covariance_type, ...
+            xi, zi, box, model.lm, lnv);
+
+    case {'stk_expcov_aniso', 'stk_materncov32_aniso', ...
+            'stk_materncov52_aniso', 'stk_gausscov_aniso', 'stk_sphcov_aniso'}        
+        xi = stk_normalize (xi, box);
+        c = [model.covariance_type(1:end-5) 'iso'];
+        [param, lnv] = paraminit_ (c, xi, zi, [], model.lm, lnv);
+        param = [param(1); param(2) - log(diff(box, [], 1))'];
+    
     case 'stk_materncov_iso'
         nu = 5/2 * size (xi, 2);
-        [param, lnv] = paraminit_ (xi, zi, box, nu, model.lm, lnv);
+        covname_iso = @(param, x, y, diff, pairwise) stk_materncov_iso ...
+            ([param(1) log(nu) param(2)], x, y, diff, pairwise);        
+        [param, lnv] = paraminit_ (covname_iso, xi, zi, box, model.lm, lnv);
+        param = [param(1); log(nu); param(2)];
         
     case 'stk_materncov_aniso'
         nu = 5/2 * size (xi, 2);
+        covname_iso = @(param, x, y, diff, pairwise) stk_materncov_iso ...
+            ([param(1) log(nu) param(2)], x, y, diff, pairwise);                
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, zi, [], nu, model.lm, lnv);
-        param = [param(1:2); param(3) - log(diff(box, [], 1))'];
-        
-    case 'stk_materncov32_iso'
-        [param, lnv] = paraminit_ (xi, zi, box, 3/2, model.lm, lnv);
-        param = [param(1); param(3)];
-        
-    case 'stk_materncov32_aniso'
-        xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, zi, [], 3/2, model.lm, lnv);
-        param = [param(1); param(3) - log(diff(box, [], 1))'];
-        
-    case 'stk_materncov52_iso'
-        [param, lnv] = paraminit_ (xi, zi, box, 5/2, model.lm, lnv);
-        param = [param(1); param(3)];
-        
-    case 'stk_materncov52_aniso'
-        xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, zi, [], 5/2, model.lm, lnv);
-        param = [param(1); param(3) - log(diff(box, [], 1))'];
-        
-    case 'stk_gausscov_iso'
-        [param, lnv] = paraminit_ (xi, zi, box, +Inf, model.lm, lnv);
-        param = [param(1); param(3)];
-        
-    case 'stk_gausscov_aniso'
-        xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (xi, zi, [], +Inf, model.lm, lnv);
-        param = [param(1); param(3) - log(diff(box, [], 1))'];
-        
+        [param, lnv] = paraminit_ (covname_iso, xi, zi, [], model.lm, lnv);
+        param = [param(1); log(nu); param(2) - log(diff(box, [], 1))'];
+                        
     otherwise
         errmsg = 'Unsupported covariance type.';
         stk_error (errmsg, 'IncorrectArgument');
@@ -241,19 +240,19 @@ end
 end % function
 
 
-function [param, lnv] = paraminit_ (xi, zi, box, nu, lm, lnv)
+function [param, lnv] = paraminit_ (covname_iso, xi, zi, box, lm, lnv)
 
 % Check for special case: constant response
 if (std (double (zi)) == 0)
     warning ('STK:stk_param_init:ConstantResponse', ...
         'Parameter estimation is impossible with constant-response data.');
-    param = [0 log(nu) 0];  if any (isnan (lnv)), lnv = 0; end
+    param = [0 0];  if any (isnan (lnv)), lnv = 0; end
     return  % Return some default values
 end
 
 d = size (xi, 2);
 
-model = stk_model ('stk_materncov_iso');
+model = stk_model (covname_iso);
 model.lm = lm;
 model.lognoisevariance = lnv;
 
@@ -291,7 +290,7 @@ for eta = eta_list
     for rho = rho_list
         
         % First use sigma2 = 1.0
-        model.param = [0.0, log(nu), -log(rho)];
+        model.param = [0.0, -log(rho)];
         
         % The same code works for the noiseless case and for the case where lnv
         % must be estimated (in the first case, eta = 0 and thus lnv is -inf)
@@ -302,7 +301,7 @@ for eta = eta_list
             log_sigma2 = log (sigma2);
             model.lognoisevariance = log  (eta * sigma2);
         else % Known variances (homo- and hetero-scedastic cases)
-            model.param = [0.0, log(nu), -log(rho)];
+            model.param = [0.0, -log(rho)];
             log_sigma2 = (mean (lnv)) - (log (eta));
             sigma2 = exp (log_sigma2);
         end
@@ -324,7 +323,7 @@ if isinf (aLL_best)
     stk_error (errmsg, 'AlgorithmFailure');
 end
 
-param = log ([sigma2_best; nu; 1/rho_best]);
+param = log ([sigma2_best; 1/rho_best]);
 
 if (isscalar (lnv)) && (isnan (lnv))
     % Homoscedatic case with unknown variance... Here is our estimate:
