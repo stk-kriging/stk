@@ -25,11 +25,11 @@
 %   the sets of locations X and Y.  The output K is a vector of length N,  where
 %   N is the common number of rows of X and Y.
 %
-% See also: stk_sf_gausscorr, stk_gausscov_iso
+% See also: stk_rbf_gauss, stk_gausscov_iso
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -109,15 +109,15 @@ end
 
 if diff == -1,
     % Compute the value (not a derivative)
-    k = Sigma2 * stk_sf_gausscorr (D, -1);
+    k = Sigma2 * stk_rbf_gauss (D, -1);
 elseif diff == 1,
     % Differentiate wrt param(1) = log (Sigma2)
-    k = Sigma2 * stk_sf_gausscorr (D, -1);
+    k = Sigma2 * stk_rbf_gauss (D, -1);
 elseif (diff >= 2) && (diff <= nb_params),
     % Differentiate wrt param(diff) = - log (invRho(diff-1))
     ind = diff - 1;
     if compute_Kx_cache || isempty (Kx_cache)
-        Kx_cache  = 1 ./ (D + eps) .* (Sigma2 * stk_sf_gausscorr (D, 1));
+        Kx_cache  = 1 ./ (D + eps) .* (Sigma2 * stk_rbf_gauss (D, 1));
         compute_Kx_cache = false;
     end
     if pairwise,

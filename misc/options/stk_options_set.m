@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2013 SUPELEC
 %
@@ -50,19 +50,44 @@ switch nargin
         end
         
     case 2,
-        if (strcmp (varargin{1}, 'stk_param_estim')) ...
-                && (strcmp (varargin{2}, 'optim_display_level'))
-            % TODO: Remove this warning in STK 3.x
-            warning (sprintf (['Options stk_param_estim.optim_display_level' ...
-                ' has been removed.\n\nDisplay options for optimization ' ...
-                'algorithms can be set through the properties of the ' ...
-                'algorithm objects instead.\n']));
-        else
-            options.(varargin{1}) = varargin{2};
+        switch varargin{1}
+            
+            case 'stk_sf_matern'
+                % TODO: Remove this warning in STK 3.x
+                warning (sprintf([ ...
+                    'stk_sf_matern and the corresponding options have been ' ...
+                    'deprecated.\n\nPlease use stk_rbf_matern instead.\n']));
+                options.stk_rbf_matern = varargin{2};
+                
+            otherwise
+                options.(varargin{1}) = varargin{2};
         end
         
     case 3,
-        options.(varargin{1}).(varargin{2}) = varargin{3};
+        switch varargin{1}
+            
+            case 'stk_param_estim'
+                if strcmp (varargin{2}, 'optim_display_level')
+                    % TODO: Remove this warning in STK 3.x
+                    warning (sprintf ([ ...
+                        'Options stk_param_estim.optim_display_level has ' ...
+                        'been removed.\n\nDisplay options for optimization ' ...
+                        'algorithms can be set through the properties of ' ...
+                        'the algorithm objects instead.\n']));
+                else
+                    options.stk_param_estim.(varargin{2}) = varargin{3};
+                end
+                
+            case 'stk_sf_matern'
+                % TODO: Remove this warning in STK 3.x
+                warning (sprintf([ ...
+                    'stk_sf_matern and the corresponding options have been ' ...
+                    'deprecated.\n\nPlease use stk_rbf_matern instead.\n']));
+                options.stk_rbf_matern.(varargin{2}) = varargin{3};
+                
+            otherwise
+                options.(varargin{1}).(varargin{2}) = varargin{3};
+        end
         
     otherwise
         stk_error ('Incorrect number of input arguments.', 'SyntaxError');
@@ -73,15 +98,15 @@ opts = options;
 
 end % function
 
-%#ok<*CTCH>
+%#ok<*CTCH,*SPWRN>
 
 
 function opts = init_options ()
 
 opts = struct ();
 
-opts.stk_sf_matern.min_size_for_parallelization = 1e5;
-opts.stk_sf_matern.min_block_size = 1e3;
+opts.stk_rbf_matern.min_size_for_parallelization = 1e5;
+opts.stk_rbf_matern.min_block_size = 1e3;
 
 opts.stk_dataframe.disp_format = 'basic'; % 'basic' or 'verbose'
 opts.stk_dataframe.disp_spstr = '    ';
@@ -97,12 +122,12 @@ opts.stk_title.properties = {'FontSize', 10, 'FontWeight', 'bold'};
 opts.stk_axes.properties = {'FontSize', 8};
 
 % Select optimizer for stk_param_estim
-if isoctave    
+if isoctave
     % In Octave we use sqp (which is always available) in both cases
     opts.stk_param_estim.minimize_box = stk_optim_octavesqp ();
-    opts.stk_param_estim.minimize_unc = stk_optim_octavesqp ();    
-else    
-    A_fminsearch = stk_optim_fminsearch ();    
+    opts.stk_param_estim.minimize_unc = stk_optim_octavesqp ();
+else
+    A_fminsearch = stk_optim_fminsearch ();
     try
         % See if the Mathworks' Optimization toolbox is installed
         opts.stk_param_estim.minimize_box = stk_optim_fmincon ();
