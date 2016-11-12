@@ -1,35 +1,33 @@
-% STK_MATERNCOV_ISO computes the isotropic Matern covariance
+% STK_EXPCOV_ISO computes the isotropic exponential covariance function
 %
-% CALL: K = stk_materncov_iso (PARAM, X, Y)
+% CALL: K = stk_expcov_iso (PARAM, X, Y)
 %
-%   computes the covariance matrix K between the sets of locations X and Y,
-%   using the isotropic Matern covariance kernel with parameters PARAM. The
-%   output matrix K has size NX x NY, where NX is the number of rows in X
-%   and NY the number of rows in Y. The vector of parameters must have
-%   three elements:
+%   computes the covariance matrix K between the sets of locations X and
+%   Y, using the isotropic exponential covariance function with parameters
+%   PARAM. The output matrix K has size NX x NY, where NX is the number of rows
+%   in X and NY the number of rows in Y. The vector of parameters must have two
+%   elements:
 %
-%    * PARAM(1) = log (SIGMA ^ 2), where SIGMA is the standard deviation,
+%     * PARAM(1) = log (SIGMA ^ 2), where SIGMA is the standard deviation,
 %
-%    * PARAM(2) = log(NU), where NU is the regularity parameter,
+%     * PARAM(2) = - log (RHO), where RHO is the range parameter.
 %
-%    * PARAM(3) = - log (RHO), where RHO is the range parameter.
-%
-% CALL: dK = stk_materncov_iso (PARAM, X, Y, DIFF)
+% CALL: dK = stk_expcov_iso (PARAM, X, Y, DIFF)
 %
 %   computes the derivative of the covariance matrix with respect to
 %   PARAM(DIFF) if DIFF~= -1, or the covariance matrix itself if DIFF is
 %   equal to -1 (in which case this is equivalent to stk_materncov_iso
 %   (PARAM, X, Y)).
 %
-% CALL: K = stk_materncov_iso (PARAM, X, Y, DIFF, PAIRWISE)
+% CALL: K = stk_expcov_iso (PARAM, X, Y, DIFF, PAIRWISE)
 %
 %   computes the covariance vector (or a derivative of it if DIFF > 0)
-%   between the sets of locations X and Y. The output K is a vector of
+%   between the sets of locations X and Y.  The output K is a vector of
 %   length N, where N is the common number of rows of X and Y.
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -56,7 +54,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function k = stk_materncov_iso (param, x, y, diff, pairwise)
+function k = stk_expcov_iso (param, x, y, diff, pairwise)
 
 if nargin > 5,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -72,11 +70,10 @@ if nargin < 5, pairwise = false; end
 
 % extract parameters from the "param" vector
 Sigma2 = exp (param(1));
-Nu     = exp (param(2));
-invRho = exp (param(3));
+invRho = exp (param(2));
 
 % check parameter values
-if ~ (Sigma2 > 0) || ~ (Nu > 0) || ~ (invRho >= 0),
+if ~ (Sigma2 > 0) || ~ (invRho >= 0),
     error ('Incorrect parameter value.');
 end
 
@@ -93,16 +90,13 @@ end
 
 if diff == -1,
     %%% compute the value (not a derivative)
-    k = Sigma2 * stk_rbf_matern (Nu, D, -1);
+    k = Sigma2 * stk_rbf_exponential (D, -1);
 elseif diff == 1,
     %%% diff wrt param(1) = log(Sigma2)
-    k = Sigma2 * stk_rbf_matern (Nu, D, -1);
+    k = Sigma2 * stk_rbf_exponential (D, -1);
 elseif diff == 2,
-    %%% diff wrt param(2) = log(Nu)
-    k = Nu * Sigma2 * stk_rbf_matern (Nu, D, 1);
-elseif diff == 3,
     %%% diff wrt param(3) = - log(invRho)
-    k = D .* (Sigma2 * stk_rbf_matern (Nu, D, 2));
+    k = D .* (Sigma2 * stk_rbf_exponential (D, 1));
 else
     error ('there must be something wrong here !');
 end
@@ -115,63 +109,62 @@ end % function
 
 %!shared param, x, y
 %! dim = 1;
-%! param = log ([1.0; 1.5; 2.9]);
-%! x = stk_sampling_randunif(5, dim);
-%! y = stk_sampling_randunif(5, dim);
+%! param = log ([1.0; 2.5]);
+%! x = stk_sampling_randunif (5, dim);
+%! y = stk_sampling_randunif (5, dim);
 
-%!error stk_materncov_iso();
-%!error stk_materncov_iso(param);
-%!error stk_materncov_iso(param, x);
-%!test  stk_materncov_iso(param, x, y);
-%!test  stk_materncov_iso(param, x, y, -1);
-%!test  stk_materncov_iso(param, x, y, -1, false);
-%!error stk_materncov_iso(param, x, y, -1, false, pi^2);
+%!error stk_expcov_iso ();
+%!error stk_expcov_iso (param);
+%!error stk_expcov_iso (param, x);
+%!test  stk_expcov_iso (param, x, y);
+%!test  stk_expcov_iso (param, x, y, -1);
+%!test  stk_expcov_iso (param, x, y, -1, false);
+%!error stk_expcov_iso (param, x, y, -1, false, pi^2);
 
-%!error stk_materncov_iso(param, x, y, -2);
-%!test  stk_materncov_iso(param, x, y, -1);
-%!error stk_materncov_iso(param, x, y,  0);
-%!test  stk_materncov_iso(param, x, y,  1);
-%!test  stk_materncov_iso(param, x, y,  2);
-%!test  stk_materncov_iso(param, x, y,  3);
-%!error stk_materncov_iso(param, x, y,  4);
-%!error stk_materncov_iso(param, x, y,  nan);
-%!error stk_materncov_iso(param, x, y,  inf);
+%!error stk_expcov_iso (param, x, y, -2);
+%!test  stk_expcov_iso (param, x, y, -1);
+%!error stk_expcov_iso (param, x, y,  0);
+%!test  stk_expcov_iso (param, x, y,  1);
+%!test  stk_expcov_iso (param, x, y,  2);
+%!error stk_expcov_iso (param, x, y,  3);
+%!error stk_expcov_iso (param, x, y,  nan);
+%!error stk_expcov_iso (param, x, y,  inf);
 
 %%
 % 3D, 4x10
 
 %!shared dim, param, x, y, nx, ny
 %! dim = 3;
-%! param = log ([1.0; 1.5; 2.9]);
-%! nx = 4;  ny = 10;
-%! x = stk_sampling_randunif (nx, dim);
+%! param = log ([1.0; 2.5]);
+%! nx = 4; ny = 10;
+%! x = stk_sampling_randunif (nx,  dim);
 %! y = stk_sampling_randunif (ny, dim);
 
 %!test
-%! K1 = stk_materncov_iso (param, x, y);
-%! K2 = stk_materncov_iso (param, x, y, -1);
+%! K1 = stk_expcov_iso (param, x, y);
+%! K2 = stk_expcov_iso (param, x, y, -1);
 %! assert (isequal (size (K1), [nx ny]));
 %! assert (stk_isequal_tolabs (K1, K2));
 
 %!test
-%! for i = 1:3,
-%!     dK = stk_materncov_iso (param, x, y,  i);
+%! for i = 1:2,
+%!     dK = stk_expcov_iso (param, x, y,  i);
 %!     assert (isequal (size (dK), [nx ny]));
 %! end
 
 %!test
 %! n = 7;
-%! x = stk_sampling_randunif(n, dim);
-%! y = stk_sampling_randunif(n, dim);
+%! x = stk_sampling_randunif (n, dim);
+%! y = stk_sampling_randunif (n, dim);
 %!
-%! K1 = stk_materncov_iso(param, x, y);
-%! K2 = stk_materncov_iso(param, x, y, -1, true);
-%! assert(isequal(size(K1), [n n]));
-%! assert(stk_isequal_tolabs(K2, diag(K1)));
+%! K1 = stk_expcov_iso (param, x, y);
+%! K2 = stk_expcov_iso (param, x, y, -1, true);
+%! assert (isequal (size (K1), [n n]));
+%! assert (stk_isequal_tolabs (K2, diag (K1)));
 %!
-%! for i = 1:3,
-%!     dK1 = stk_materncov_iso(param, x, y,  i);
-%!     dK2 = stk_materncov_iso(param, x, y,  i, true);
-%!     assert(isequal(size(dK1), [n n]));
-%!     assert(stk_isequal_tolabs(dK2, diag(dK1)));
+%! for i = 1:2,
+%!     dK1 = stk_expcov_iso (param, x, y,  i);
+%!     dK2 = stk_expcov_iso (param, x, y,  i, true);
+%!     assert (isequal (size (dK1), [n n]));
+%!     assert (stk_isequal_tolabs (dK2, diag (dK1)));
 %! end

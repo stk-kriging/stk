@@ -57,14 +57,14 @@ for j = 1:4,
         case 2
             disp ('parallelization on (if available) / msfb = Inf');
             stk_parallel_start ();
-            M = stk_options_get ('stk_sf_matern', 'min_size_for_parallelization');
-            stk_options_set ('stk_sf_matern', 'min_size_for_parallelization', +Inf);
+            M = stk_options_get ('stk_rbf_matern', 'min_size_for_parallelization');
+            stk_options_set ('stk_rbf_matern', 'min_size_for_parallelization', +Inf);
         case 3
             disp ('parallelization on (if available) / msfb = 1');
-            stk_options_set ('stk_sf_matern', 'min_size_for_parallelization', 1);
+            stk_options_set ('stk_rbf_matern', 'min_size_for_parallelization', 1);
         case 4
             fprintf ('parallelization on (if available) / msfb = %d (default)', M);
-            stk_options_set ('stk_sf_matern', 'min_size_for_parallelization', M);
+            stk_options_set ('stk_rbf_matern', 'min_size_for_parallelization', M);
     end
     
     for k = 1:nb_cov,  % loop over covariance functions
