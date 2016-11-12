@@ -27,7 +27,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -90,13 +90,13 @@ end
 
 if diff == -1,
     %%% compute the value (not a derivative)
-    k = Sigma2 * stk_sf_matern52 (D, -1);
+    k = Sigma2 * stk_rbf_matern52 (D, -1);
 elseif diff == 1,
     %%% diff wrt param(1) = log(Sigma2)
-    k = Sigma2 * stk_sf_matern52 (D, -1);
+    k = Sigma2 * stk_rbf_matern52 (D, -1);
 elseif diff == 2,
     %%% diff wrt param(3) = - log(invRho)
-    k = D .* (Sigma2 * stk_sf_matern52 (D, 1));
+    k = D .* (Sigma2 * stk_rbf_matern52 (D, 1));
 else
     error ('there must be something wrong here !');
 end

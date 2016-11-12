@@ -1,3 +1,74 @@
+2016-11-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	New covariance functions: exponential + spherical
+
+	* covfcs/rbf/stk_rbf_exponential.m: New function ("exponential" RBF)
+	* covfcs/rbf/stk_rbf_spherical.m: New function ("spherical" RBF)
+	* covfcs/stk_expcov_aniso.m: New covariance function.
+	* covfcs/stk_expcov_iso.m: New covariance function.
+	* covfcs/stk_sphcov_aniso.m: New covariance function.
+	* covfcs/stk_sphcov_iso.m: New covariance function.
+	* core/stk_model.m: Support new covariance functions.
+	* paramestim/stk_param_init.m: Idem.
+	* paramestim/stk_param_getdefaultbounds.m: Idem.
+	* admin/octpkg/INDEX: Update index.
+
+2016-11-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Rename stk_sf_* functions to stk_rbf_* and make them public
+
+	* misc/specfun/stk_sf_gausscorr.m: Moved to covfcs/rbf and renamed.
+	* misc/specfun/stk_sf_matern.m: Moved to covfcs/rbf and renamed.
+	* misc/specfun/stk_sf_matern32.m: Moved to covfcs/rbf and renamed.
+	* misc/spfun/stk_sf_matern52.m: Moved to covfcs/rbf and renamed.
+	* covfcs/rbf/stk_rbf_gauss.m: Renamed from stk_sf_gausscorr.
+	* covfcs/rbf/stk_rbf_matern.m: Renamed from stk_sf_matern.
+	* covfcs/rbf/stk_rbf_matern32.m: Renamed from stk_sf_matern32.
+	* covfcs/rbf/stk_rbf_matern52.m: Renamed from stk_sf_matern52.
+	* covfcs/rbf/stk_sf_gausscorr.m: Deprecated.
+	* covfcs/rbf/stk_sf_matern.m: Deprecated.
+	* covfcs/rbf/stk_sf_matern32.m: Deprecated.
+	* covfcs/rbf/stk_sf_matern52.m: Deprecated.
+	* covfcs/stk_gausscov_aniso.m: Use new function names.
+	* covfcs/stk_gausscov_iso.m: Use new function names.
+	* covfcs/stk_materncov32_aniso.m: Use new function names.
+	* covfcs/stk_materncov32_iso.m: Use new function names.
+	* covfcs/stk_materncov52_aniso.m: Use new function names.
+	* covfcs/stk_materncov52_iso.m: Use new function names.
+	* covfcs/stk_materncov_aniso.m: Use new function names.
+	* covfcs/stk_materncov_iso.m: Use new function names.
+	* misc/benchmarks/stk_benchmark_cov2.m: Use new function names.
+	* misc/options/stk_options_set.m: Rename options and ensure that
+	the old option names are still accepted (with a warning).
+	* misc/options/stk_options_get.m: Ensure that the old option names
+	are still accepted (with a warning).
+	* stk_init.m: Change path.
+	* admin/octpkg/INDEX: Update index.
+
+2016-09-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Reduce the number of allocations in WFG
+
+	* misc/pareto/private/wfg.c: Reduce the number of allocations in WFG by
+	allocating large blocks of size n * allocated_size for xmin and xmax.
+	* misc/pareto/private/wfg.h: Add fields xmin_data and xmax_data to Rlist
+	structures.
+	* misc/pareto/private/stk_dominatedhv_mex.c: Change rule of thumb.
+
+2016-09-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix two bugs in stk_dominatedhv.
+
+	* misc/pareto/private/wfg.c: Fix two bugs affecting the case where
+	the decomposition is returned.
+	* misc/pareto/stk_dominatedhv.m: Unit tests.
+
+2016-07-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	core/stk_model_fixlm.m: Fix error message
+
+	* core/stk_model_fixlm.m: Fix error message.
+
 2016-07-21  Rémi Stroh  <remi.stroh@lne.fr>
 
 	arrays/@stk_dataframe: Overload 25 additional unary base functions (sin, exp...)

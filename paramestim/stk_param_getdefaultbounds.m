@@ -68,6 +68,11 @@ else
     
     dim = size (xi, 2);
     
+    if ~ ischar (covariance_type)
+        % Assume that model.covariance_type is a handle
+        covariance_type = func2str (covariance_type);
+    end
+    
     switch covariance_type,
         
         case {'stk_materncov_aniso', 'stk_materncov_iso'}
@@ -84,7 +89,9 @@ else
             
         case {'stk_materncov32_aniso', 'stk_materncov32_iso', ...
               'stk_materncov52_aniso', 'stk_materncov52_iso', ...
-              'stk_gausscov_aniso',    'stk_gausscov_iso'}
+              'stk_expcov_aniso',      'stk_expcov_iso', ...
+              'stk_gausscov_aniso',    'stk_gausscov_iso', ...
+              'stk_sphcov_aniso',      'stk_sphcov_iso'}
             
             range_mid = param0(2:end);
             range_lb  = range_mid(:) - TOLSCALE;

@@ -55,18 +55,23 @@
 
 function model = stk_model (covariance_type, varargin)
 
-% Accept a handle instead of a function name
-% (completion works when typing @stk_... not when typing 'stk_...)
-if (nargin > 0) && (isa (covariance_type, 'function_handle'))
-    covariance_type = func2str (covariance_type);
+% Extract a handle and a name from what we are given
+if nargin > 0
+    if isa (covariance_type, 'function_handle')
+        covariance_name = func2str (covariance_type);
+    elseif ischar (covariance_type)
+        covariance_name = covariance_type;
+        covariance_type = str2func (covariance_type);
+    else
+        stk_error (['covariance_type should be a function name or a handle to ' ...
+            'a function.'], 'TypeMismatch');
+    end
+else
+    covariance_type = @stk_materncov_iso;
+    covariance_name = 'stk_materncov_iso';
 end
 
-if nargin < 1,
-    
-    % use the (isotropic, 1D) Matern covariance function as a default choice
-    model = stk_model_ ('stk_materncov_iso');
-    
-elseif strcmp (covariance_type, 'stk_discretecov')
+if strcmp (covariance_name, 'stk_discretecov')
     
     % special case: build a discrete model
     model = stk_model_discretecov (varargin{:});
@@ -74,7 +79,7 @@ elseif strcmp (covariance_type, 'stk_discretecov')
 else
     
     % general case
-    model = stk_model_ (covariance_type, varargin{:});
+    model = stk_model_ (covariance_type, covariance_name, varargin{:});
     
 end
 
@@ -115,9 +120,9 @@ end % function
 %%% stk_model_ %%%
 %%%%%%%%%%%%%%%%%%
 
-function model = stk_model_ (covariance_type, dim)
+function model = stk_model_ (covariance_type, covariance_name, dim)
 
-if nargin > 2,
+if nargin > 3,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
@@ -129,7 +134,7 @@ model.covariance_type = covariance_type;
 model.lm = stk_lm_constant ();
 
 % default dimension is d = 1
-if nargin < 2,
+if nargin < 3,
     model.dim = 1;
 else
     model.dim = dim;
@@ -138,19 +143,20 @@ end
 % For known covariance types, the field param is initialized with a vector of
 % nan of the appropriate size.  This serves as a reminder, for the user, of the
 % correct size for a parameter vector---nothing more.
-switch model.covariance_type
+switch covariance_name
     
     case 'stk_materncov_iso'
         model.param = nan (3, 1);
         
-    case {'stk_materncov32_iso', 'stk_materncov52_iso', 'stk_gausscov_iso'}
+    case {'stk_expcov_iso', 'stk_materncov32_iso', 'stk_materncov52_iso', ...
+            'stk_gausscov_iso', 'stk_sphcov_iso'}
         model.param = nan (2, 1);
         
     case 'stk_materncov_aniso'
         model.param = nan (2 + model.dim, 1);
         
-    case {'stk_materncov32_aniso', ...
-            'stk_materncov52_aniso', 'stk_gausscov_aniso'}
+    case {'stk_expcov_aniso', 'stk_materncov32_aniso', ...
+            'stk_materncov52_aniso', 'stk_gausscov_aniso', 'stk_sphcov_aniso'}
         model.param = nan (1 + model.dim, 1);
         
     otherwise
@@ -164,6 +170,14 @@ end % function
 
 
 %!test model = stk_model();
+
+%!test model = stk_model('stk_expcov_iso');
+%!test model = stk_model('stk_expcov_iso', 1);
+%!test model = stk_model('stk_expcov_iso', 3);
+
+%!test model = stk_model('stk_expcov_aniso');
+%!test model = stk_model('stk_expcov_aniso', 1);
+%!test model = stk_model('stk_expcov_aniso', 3);
 
 %!test model = stk_model('stk_materncov_iso');
 %!test model = stk_model('stk_materncov_iso', 1);
@@ -188,3 +202,19 @@ end % function
 %!test model = stk_model('stk_materncov52_aniso');
 %!test model = stk_model('stk_materncov52_aniso', 1);
 %!test model = stk_model('stk_materncov52_aniso', 3);
+
+%!test model = stk_model('stk_gausscov_iso');
+%!test model = stk_model('stk_gausscov_iso', 1);
+%!test model = stk_model('stk_gausscov_iso', 3);
+
+%!test model = stk_model('stk_gausscov_aniso');
+%!test model = stk_model('stk_gausscov_aniso', 1);
+%!test model = stk_model('stk_gausscov_aniso', 3);
+
+%!test model = stk_model('stk_sphcov_iso');
+%!test model = stk_model('stk_sphcov_iso', 1);
+%!test model = stk_model('stk_sphcov_iso', 3);
+
+%!test model = stk_model('stk_sphcov_aniso');
+%!test model = stk_model('stk_sphcov_aniso', 1);
+%!test model = stk_model('stk_sphcov_aniso', 3);

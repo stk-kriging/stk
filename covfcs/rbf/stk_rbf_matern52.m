@@ -1,21 +1,22 @@
-% STK_SF_MATERN52 computes the Matern correlation function of order 5/2.
+% STK_RBF_MATERN52 computes the Matern correlation function of order 5/2.
 %
-% CALL: K = stk_sf_matern52 (H)
+% CALL: K = stk_rbf_matern52 (H)
 %
 %    computes the value of the Matern correlation function of order 5/2 at
 %    distance H. Note that the Matern correlation function is a valid
 %    correlation function for all dimensions.
 %
-% CALL: K = stk_sf_matern52 (H, DIFF)
+% CALL: K = stk_rbf_matern52 (H, DIFF)
 %
 %    computes the derivative of the Matern correlation function of order 5/2, at
 %    distance H, with respect the distance H if DIFF is equal to 1. (If DIFF is
-%    equal to -1, this is the same as K = stk_sf_matern52(H).)
+%    equal to -1, this is the same as K = stk_rbf_matern52(H).)
 %
-% See also: stk_sf_matern, stk_sf_matern32
+% See also: stk_rbf_matern, stk_rbf_matern32
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2011, 2012 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
@@ -41,7 +42,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function k = stk_sf_matern52 (h, diff)
+function k = stk_rbf_matern52 (h, diff)
 
 if nargin > 2,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -80,27 +81,27 @@ end % function
 %!shared h, diff
 %! h = 1.0; diff = -1;
 
-%!error stk_sf_matern52 ();
-%!test  stk_sf_matern52 (h);
-%!test  stk_sf_matern52 (h, diff);
-%!error stk_sf_matern52 (h, diff, pi);
+%!error stk_rbf_matern52 ();
+%!test  stk_rbf_matern52 (h);
+%!test  stk_rbf_matern52 (h, diff);
+%!error stk_rbf_matern52 (h, diff, pi);
 
 %!test %% h = 0.0 => correlation = 1.0
-%! x = stk_sf_matern52 (0.0);
+%! x = stk_rbf_matern52 (0.0);
 %! assert (stk_isequal_tolrel (x, 1.0, 1e-8));
 
-%!test %% consistency with stk_sf_matern: function values
+%!test %% consistency with stk_rbf_matern: function values
 %! for h = 0.1:0.1:2.0,
-%!   x = stk_sf_matern (5/2, h);
-%!   y = stk_sf_matern52 (h);
+%!   x = stk_rbf_matern (5/2, h);
+%!   y = stk_rbf_matern52 (h);
 %!   assert (stk_isequal_tolrel (x, y, 1e-8));
 %! end
 
-%!test %% consistency with stk_sf_matern: derivatives
+%!test %% consistency with stk_rbf_matern: derivatives
 %! for h = 0.1:0.1:2.0,
-%!   x = stk_sf_matern (5/2, h, 2);
-%!   y = stk_sf_matern52 (h, 1);
+%!   x = stk_rbf_matern (5/2, h, 2);
+%!   y = stk_rbf_matern52 (h, 1);
 %!   assert (stk_isequal_tolrel (x, y, 1e-8));
 %! end
 
-%!assert (stk_sf_matern52 (inf) == 0)
+%!assert (stk_rbf_matern52 (inf) == 0)
