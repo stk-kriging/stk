@@ -85,7 +85,7 @@ NU     = 4.0;  % regularity parameter
 RHO1   = 0.4;  % scale (range) parameter
 model.param = log ([SIGMA2; NU; 1/RHO1]);
 
-display (model);
+model
 
 
 %% Carry out the kriging prediction and display the result
@@ -104,5 +104,7 @@ stk_plot1d (xi, zi, xt, zt, zp);  legend show;
 stk_title  ('Kriging prediction based on noiseless observations');
 stk_labels ('input variable x', 'response z');
 
+
+%#ok<*NOPTS>
 
 %!test stk_example_kb01;  close all;
