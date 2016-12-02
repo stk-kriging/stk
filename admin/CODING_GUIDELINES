@@ -51,3 +51,15 @@ defined classes. Some old releases of Octave (e.g., 3.2.4), however have a
 bug that make isequal (x, y) return false when x and y are objects, even if
 they are equal. Therefore, as long as we want to support those releases, we
 have have to overload isequal (see, e.g., @stk_dataframe).
+
+
+--- Calling display () on structures ----------------------------------------
+
+Octave fails when display is called on structures that contain strings
+containing '<class ' or objects that don't overload display (and
+therefore display as '<class ...' by default.
+
+https://savannah.gnu.org/bugs/index.php?49753
+
+As a workaround, we should avoid calling display on such structures
+(espacially, on model structures that contain an stk_lm_* object).
