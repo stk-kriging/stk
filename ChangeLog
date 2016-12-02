@@ -1,3 +1,15 @@
+2016-12-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Do not call display on model structures (closes ticket #47)
+
+	* examples/01_kriging_basics/stk_example_kb01.m: Do not call
+	display on model structures.
+	* examples/01_kriging_basics/stk_example_kb01n.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb02.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb02n.m: Idem.
+	* examples/03_miscellaneous/stk_example_misc03.m: Idem:
+	* admin/CODING_GUIDELINES: Explain why.
+
 2016-11-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	New covariance functions: exponential + spherical
