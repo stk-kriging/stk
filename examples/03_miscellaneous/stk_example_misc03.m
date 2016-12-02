@@ -84,7 +84,10 @@ hold on;  plot (t, S_posterior.mean, 'g-');
 
 %% Display models
 
-display (model)
-display (model2)
+model
+model2
+
+
+%#ok<*NOPTS>
 
 %!test stk_example_misc03;  close all;
