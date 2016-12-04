@@ -61,14 +61,26 @@ varargout = cell (1, max (1, nargout));
 end % function
 
 
-%!test
+%!test  % Call fminsearch using function name
 %! if exist ('fminsearch', 'file')
 %!     assert (stk_optim_testmin_unc ('fminsearch'));
 %! end
 
-%!test
+%!test  % Call fminsearch directly, using algorithm object
+%! if exist ('fminsearch', 'file')
+%!     algo = stk_optim_fminsearch ('TolX', 1e-12, 'TolFun', 1e-12);
+%!     assert (stk_optim_testmin_unc (algo));
+%! end
+
+%!test  % Call sqp using function name
 %! if isoctave || (exist ('quadprog', 'file'))
 %!    assert (stk_optim_testmin_unc ('octavesqp'));
+%! end
+
+%!test  % Call sqp directly, using algorithm object
+%! if isoctave  || (exist ('quadprog', 'file'))
+%!    algo = stk_optim_octavesqp ();
+%!    assert (stk_optim_testmin_unc (algo));
 %! end
 
 %!error assert (stk_optim_testmin_unc ('InexistentOptimizer'));

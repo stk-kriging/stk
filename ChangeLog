@@ -1,3 +1,13 @@
+2016-12-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_optim_fmincon, stk_optim_fminsearch: improve option processing
+
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Improve
+	option processing.
+	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m: Idem.
+	* misc/optim/stk_minimize_boxconstrained.m: Add tests.
+	* misc/optim/stk_minimize_unconstrained.m: Add tests.
+
 2016-12-02  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Do not call display on model structures (closes ticket #47)

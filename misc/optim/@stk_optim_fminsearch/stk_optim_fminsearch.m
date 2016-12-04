@@ -38,22 +38,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function algo = stk_optim_fminsearch (opt)
+function algo = stk_optim_fminsearch (varargin)
 
-if nargin > 1
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+% Some default options
+options = optimset (        ...
+    'Display',      'off',  ...
+    'MaxFunEvals',  500,    ...
+    'TolFun',       1e-5,   ...
+    'TolX',         1e-6    );
+
+% Take user options into account
+if nargin > 0
+    options = optimset (options, varargin{:});
 end
 
-if nargin == 0
-    
-    opt = optimset (            ...
-        'Display',      'off',  ...
-        'MaxFunEvals',  500,    ...
-        'TolFun',       1e-5,   ...
-        'TolX',         1e-6    );
-end
-
-algo = struct ('options', opt);
+algo = struct ('options', options);
 algo = class (algo, 'stk_optim_fminsearch');
 
 end % function
