@@ -110,6 +110,7 @@ opts.stk_rbf_matern.min_block_size = 1e3;
 
 opts.stk_dataframe.disp_format = 'basic'; % 'basic' or 'verbose'
 opts.stk_dataframe.disp_spstr = '    ';
+opts.stk_dataframe.openvar_warndlg = true;
 
 opts.stk_param_getdefaultbounds.tolvar = 5.0;
 opts.stk_param_getdefaultbounds.tolscale = 5.0;
