@@ -1,3 +1,9 @@
+2016-12-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_lm_polynomial.m: Add nargin check (closes ticket #52)
+
+	* lm/stk_lm_polynomial.m: Add nargin check.
+
 2016-12-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_optim_fmincon, stk_optim_fminsearch: improve option processing
