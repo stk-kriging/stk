@@ -1,4 +1,4 @@
-% STK_SAMPCRIT_EI_EVAL ...
+% SET_THRESHOLD_QUANTILE_ORDER ...
 
 % Copyright Notice
 %
@@ -26,24 +26,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (xt, arg2, varargin)
+function crit = set_threshold_quantile_order (crit, value)
 
-if isa (arg2, 'stk_model_gpposterior')
-    
-    % Construct a complete stk_sampcrit object (with an underlying model)
-    crit = stk_sampcrit_ei (arg2, varargin{:});
-    
-    % Evaluate
-    crit_val = feval (crit, xt);
-    
-else  % Assume that arg2 is an stk_dataframe with 'mean' and 'var' columns
-    
-    % Construct an incomplete stk_sampcrit object (without an underlying model)
-    crit = stk_sampcrit_ei ([], varargin{:});
-    
-    % Evaluate
-    crit_val = msfeval (crit, arg2.mean, sqrt (arg2.var));
-    
+% Convert to double if possible (instead of checking with isnumeric)
+value = double (value);
+
+if (~ isscalar (value)) || (value < 0) || (value > 1)
+    stk_error (['The value of property ''threshold_quantile_order'' ' ...
+        'must be a scalar between 0 and 1.'], 'InvalidArgument');
+else
+    crit.threshold_quantile_order = value;
+    crit.threshold_quantile_value = norminv (value);
 end
 
 end % function

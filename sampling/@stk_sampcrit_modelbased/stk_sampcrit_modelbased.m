@@ -1,4 +1,4 @@
-% STK_SAMPCRIT_EI_EVAL ...
+% STK_SAMPCRIT_MODELBASED ...
 
 % Copyright Notice
 %
@@ -26,24 +26,27 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (xt, arg2, varargin)
+function crit = stk_sampcrit_modelbased (model, varargin)
 
-if isa (arg2, 'stk_model_gpposterior')
+if nargin == 1
     
-    % Construct a complete stk_sampcrit object (with an underlying model)
-    crit = stk_sampcrit_ei (arg2, varargin{:});
+    crit.model = model;
     
-    % Evaluate
-    crit_val = feval (crit, xt);
+elseif nargin == 0
     
-else  % Assume that arg2 is an stk_dataframe with 'mean' and 'var' columns
+    % No input argument case: construct empty object
+    crit.model = [];
     
-    % Construct an incomplete stk_sampcrit object (without an underlying model)
-    crit = stk_sampcrit_ei ([], varargin{:});
+else
     
-    % Evaluate
-    crit_val = msfeval (crit, arg2.mean, sqrt (arg2.var));
+    % Catch syntax errors (Octave only)
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
     
-end
+end % if
+
+crit = class (crit, 'stk_sampcrit_modelbased', stk_sampcrit_base ());
 
 end % function
+
+
+%!test crit = stk_sampcrit_modelbased ();

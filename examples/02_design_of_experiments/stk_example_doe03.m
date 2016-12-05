@@ -116,9 +116,6 @@ model.param = log ([SIGMA2; 1/RHO1]);
 % the maximum of the EI criterion falls below some threshold.
 %
 
-% Start with the initial design defined above
-data = horzcat (x0, z0);
-
 % Number of points to be added adaptively
 NB_ITER = 20;
 
@@ -128,26 +125,28 @@ EI_max = +inf;
 % Value of EI_max for the stopping criterion
 EI_max_stop = (max (zg) - min (zg)) / 1e5;
 
+% Construct sampling criterion object
+EI_crit = stk_sampcrit_ei (model, 'maximize');
+EI_crit = stk_model_update (EI_crit, x0, z0);
+
 % Iteration number
 iter = 0;
 
 while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     % Trick: add a small "regularization" noise to our model
-    model.lognoisevariance = 2 * log (min (1e-4, EI_max / 1e3));
-    
-    % Carry out the kriging prediction
-    z_pred = stk_predict (model, data.x, data.z, xg);
+    EI_crit.model.lognoisevariance = 2 * log (min (1e-4, EI_max / 1e3));
     
     % Compute the Expected Improvement (EI) criterion on the grid
-    EI_val = stk_sampcrit_ei_eval (xg, z_pred);
+    [EI_val, z_pred] = EI_crit (xg);
     
     % Pick the point where the EI is maximum as our next evaluation point
     [EI_max, i_max] = max (EI_val);
     
     % Figure: upper panel
     stk_subplot (2, 1, 1);  cla;
-    stk_plot1d (data.x, data.z, xg, zg, z_pred);  xlim (BOX);  hold on;
+    stk_plot1d (EI_crit.model.input_data, EI_crit.model.output_data, ...
+        xg, zg, z_pred);  xlim (BOX);  hold on;
     plot (xg(i_max), zg(i_max), 'ro', 'MarkerFaceColor', 'y');
     
     % Figure: lower panel
@@ -158,8 +157,7 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     if EI_max > EI_max_stop,
         % Add the new evaluation to the DoE
-        new_row = horzcat (xg(i_max, :), zg(i_max, :));
-        data = vertcat (data, new_row);  %#ok<AGROW>
+        EI_crit = stk_model_update (EI_crit, xg(i_max, :), zg(i_max, :));        
         iter = iter + 1;
     end
     
@@ -168,7 +166,8 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
 end
 
 % Display the final DoE
-disp (data);
+data = [EI_crit.model.input_data EI_crit.model.output_data];
+data = stk_dataframe (data, {'x', 'z'});  disp (data);
 
 % Total number of evaluations ?
 fprintf ('\nNumber of evaluations: %d + %d = %d.\n\n', N0, iter, N0 + iter);

@@ -1,3 +1,17 @@
+Changes in version 2.x.y
+========================
+
+* WORK IN PROGRESS: Sampling criterion objects (EI, EQI...)
+
+* WORK IN PROGRESS: IAGO
+
+* Examples
+
+   o stk_example_doe05.m: Example script that the use of the EQI criterion for
+     noisy optimization.  FIXME: Make it possible to use IAGO as well ?
+
+
+
 Changes in version 2.4.0
 ========================
 

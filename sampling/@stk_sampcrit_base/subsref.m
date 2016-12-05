@@ -1,4 +1,4 @@
-% STK_SAMPCRIT_EI_EVAL ...
+% SUBSREF [overload base function]
 
 % Copyright Notice
 %
@@ -26,24 +26,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (xt, arg2, varargin)
+function [value, argout2] = subsref (crit, idx)
 
-if isa (arg2, 'stk_model_gpposterior')
+switch idx(1).type
     
-    % Construct a complete stk_sampcrit object (with an underlying model)
-    crit = stk_sampcrit_ei (arg2, varargin{:});
-    
-    % Evaluate
-    crit_val = feval (crit, xt);
-    
-else  % Assume that arg2 is an stk_dataframe with 'mean' and 'var' columns
-    
-    % Construct an incomplete stk_sampcrit object (without an underlying model)
-    crit = stk_sampcrit_ei ([], varargin{:});
-    
-    % Evaluate
-    crit_val = msfeval (crit, arg2.mean, sqrt (arg2.var));
-    
+    case '()'
+        [value, argout2] = feval (crit, idx(1).subs{:});
+        
+    case '{}'
+        
+        errmsg = 'Indexing with curly braces is not allowed.';
+        stk_error (errmsg, 'IllegalIndexing');
+        
+    case '.'
+        
+        value = get (crit, idx(1).subs);
+        
+end
+
+if (length (idx)) > 1,
+    value = subsref (value, idx(2:end));
 end
 
 end % function

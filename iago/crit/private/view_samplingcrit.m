@@ -1,10 +1,12 @@
-% STK_SAMPCRIT_EI_EVAL ...
+% VIEW_SAMPLINGCRIT view function
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,24 +28,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (xt, arg2, varargin)
+function view_samplingcrit (algo, xg, xi, xinew, samplingcrit, h_fig)
 
-if isa (arg2, 'stk_model_gpposterior')
-    
-    % Construct a complete stk_sampcrit object (with an underlying model)
-    crit = stk_sampcrit_ei (arg2, varargin{:});
-    
-    % Evaluate
-    crit_val = feval (crit, xt);
-    
-else  % Assume that arg2 is an stk_dataframe with 'mean' and 'var' columns
-    
-    % Construct an incomplete stk_sampcrit object (without an underlying model)
-    crit = stk_sampcrit_ei ([], varargin{:});
-    
-    % Evaluate
-    crit_val = msfeval (crit, arg2.mean, sqrt (arg2.var));
-    
+if algo.dim == 1
+    %view_samplingcrit_1d (algo, xg, xi, xinew, samplingcrit, h_fig); REMOVED
+elseif algo.dim == 2
+    view_samplingcrit_2d (algo, xg, xi, xinew, samplingcrit, h_fig);
 end
 
 end % function
