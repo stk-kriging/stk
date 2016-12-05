@@ -55,9 +55,15 @@ Core STK functions
 ## Currently, some of them are in ./core/ and some others in ./utils/
  stk_model
  stk_model_update
- stk_make_matcov
+#stk_make_matcov             [deprecated]
  stk_predict
  stk_predict_leaveoneout
+ stk_covmat
+#stk_covmat_gp0              [internal]
+#stk_covmat_latent           [internal]
+#stk_covmat_lm               [internal]
+#stk_covmat_noise            [internal]
+#stk_covmat_response         [internal]
  stk_conditioning
  stk_generate_samplepaths
  stk_isnoisy

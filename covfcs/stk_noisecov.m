@@ -1,7 +1,16 @@
-% STK_NOISECOV computes a noise covariance
+% STK_NOISECOV computes a (diagonal) noise covariance matrix [DEPRECATED]
+%
+% This function is deprecated and will, sooner or later, be removed.  Use:
+%
+%    stk_covmat (model, 'noise', ...)
+%
+% instead.
+%
+% See also: stk_covmat
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
