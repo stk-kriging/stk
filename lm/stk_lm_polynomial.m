@@ -29,6 +29,11 @@
 
 function lm = stk_lm_polynomial (order)
 
+% nargin check neded here.  See https://sourceforge.net/p/kriging/tickets/52.
+if nargin < 1    
+    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+end
+
 switch order
     
     case -1, % 'simple' kriging
