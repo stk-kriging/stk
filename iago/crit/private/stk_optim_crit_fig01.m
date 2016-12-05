@@ -1,10 +1,12 @@
-% STK_SAMPCRIT_EI_EVAL ...
+% STK_OPTIM_CRIT_FIG01 ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2015 CentraleSupelec
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,24 +28,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (xt, arg2, varargin)
+function stk_optim_crit_fig01 (algo, xi, zi, x, z_pred, z_sim)
 
-if isa (arg2, 'stk_model_gpposterior')
-    
-    % Construct a complete stk_sampcrit object (with an underlying model)
-    crit = stk_sampcrit_ei (arg2, varargin{:});
-    
-    % Evaluate
-    crit_val = feval (crit, xt);
-    
-else  % Assume that arg2 is an stk_dataframe with 'mean' and 'var' columns
-    
-    % Construct an incomplete stk_sampcrit object (without an underlying model)
-    crit = stk_sampcrit_ei ([], varargin{:});
-    
-    % Evaluate
-    crit_val = msfeval (crit, arg2.mean, sqrt (arg2.var));
-    
-end
+figure (algo.disp_fignum_base + algo.disp_fignum_critshift + 1);
+
+% Do not display all samplepaths
+L = min (size (z_sim, 2), 50);
+
+stk_plot1d (xi, zi, x, [], z_pred, z_sim(:, 1:L));
+
+stk_labels ('x', 'f(x)');
+stk_title ('Conditional samplepaths');
+
+drawnow;
 
 end % function

@@ -183,7 +183,47 @@ Design of experiments (sequential): criterions
  stk_pmisclass
  stk_sampcrit_ehvi_eval
  stk_sampcrit_ei_eval
+ @stk_sampcrit_ei/stk_sampcrit_ei
+#@stk_sampcrit_ei/msfeval               [internal]
+ @stk_sampcrit_eqi/stk_sampcrit_eqi
+#@stk_sampcrit_eqi/msfeval              [internal]
+
  stk_sampcrit_emmi_eval
+ 
+#@stk_sampcrit_base/stk_sampcrit_base   [internal]
+#@stk_sampcrit_base/disp                [overload base]
+#@stk_sampcrit_base/display             [overload base]
+#@stk_sampcrit_base/horzcat             [overload base]
+#@stk_sampcrit_base/subsasgn            [overload base]
+#@stk_sampcrit_base/subsref             [overload base]
+#@stk_sampcrit_base/vertcat             [overload base]
+
+#@stk_sampcrit_modelbased/stk_sampcrit_modelbased   [internal]
+#@stk_sampcrit_modelbased/feval                     [overload base]
+#@stk_sampcrit_modelbased/stk_model_update          [overload STK]
+#@stk_sampcrit_modelbased/get_model                 [overload STK; FIXME: missing generic function]
+#@stk_sampcrit_modelbased/set_model                 [overload STK; FIXME: missing generic function]
+#@stk_sampcrit_modelbased/get_input_data            [overload STK; FIXME: missing generic function]
+#@stk_sampcrit_modelbased/get_output_data           [overload STK; FIXME: missing generic function]
+
+#@stk_sampcrit_singleobjoptim/stk_sampcrit_singleobjoptim   [internal]
+#@stk_sampcrit_singleobjoptim/get_bminimize                 [overload STK; FIXME: missing generic function]
+#@stk_sampcrit_singleobjoptim/get_goal                      [overload STK; FIXME: missing generic function]
+#@stk_sampcrit_singleobjoptim/set_goal                      [overload STK; FIXME: missing generic function]
+
+#@stk_sampcrit_thresholdbasedoptim/stk_sampcrit_thresholdbasedoptim   [internal]
+#@stk_sampcrit_thresholdbasedoptim/disp                               [overload base]
+#@stk_sampcrit_thresholdbasedoptim/get                                [overload base]
+#@stk_sampcrit_thresholdbasedoptim/set                                [overload base]
+#@stk_sampcrit_thresholdbasedoptim/stk_model_update                   [overload STK]
+#@stk_sampcrit_thresholdbasedoptim/get_threshold_mode                 [overload STK; FIXME: missing generic function]
+#@stk_sampcrit_thresholdbasedoptim/set_threshold_mode                 [overload STK; FIXME: missing generic function]
+#@stk_sampcrit_thresholdbasedoptim/get_threshold_quantile_order       [overload STK; FIXME: missing generic function]
+#@stk_sampcrit_thresholdbasedoptim/set_threshold_quantile_order       [overload STK; FIXME: missing generic function]
+#@stk_sampcrit_thresholdbasedoptim/get_threshold_value                [overload STK; FIXME: missing generic function]
+#@stk_sampcrit_thresholdbasedoptim/set_threshold_value                [overload STK; FIXME: missing generic function]
+#@stk_sampcrit_thresholdbasedoptim/set_goal                           [overload STK; FIXME: missing generic function]
+#@stk_sampcrit_thresholdbasedoptim/set_model                          [overload STK; FIXME: missing generic function]
 
 Examples: kriging basics
  stk_example_kb01
@@ -204,6 +244,7 @@ Examples: design of experiments
  stk_example_doe02
  stk_example_doe03
  stk_example_doe04
+ stk_example_doe05
 
 Examples: miscellaneous
  stk_example_misc01
@@ -452,3 +493,19 @@ Miscellaneous: options, plots...
 #stk_parallel_feval                                      [experimental]
 #stk_parallel_start                                      [experimental]
 #stk_parallel_stop                                       [experimental]
+
+## IAGO (preliminary form)
+#stk_fakenorep                   [experimental]
+#stk_gather_repetitions          [experimental]
+#stk_losscrit                    [experimental]
+#stk_optim                       [experimental]
+#stk_optim_addevals              [experimental]
+#stk_optim_crit_EI               [experimental]
+#stk_optim_crit_SUR              [experimental]
+#stk_optim_crit_iago             [experimental]
+#stk_optim_init                  [experimental]
+#stk_optimscript                 [experimental]
+#stk_optimscript2                [experimental]
+#stk_param_estim_withrep         [experimental]
+#stk_predict_withrep             [experimental]
+#stk_quadrature                  [experimental]

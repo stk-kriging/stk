@@ -1,4 +1,4 @@
-% STK_SAMPCRIT_EI_EVAL ...
+% SET_GOAL ...
 
 % Copyright Notice
 %
@@ -26,24 +26,30 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (xt, arg2, varargin)
+function crit = set_goal (crit, goal)
 
-if isa (arg2, 'stk_model_gpposterior')
+if strcmp (goal, 'minimize')
     
-    % Construct a complete stk_sampcrit object (with an underlying model)
-    crit = stk_sampcrit_ei (arg2, varargin{:});
+    crit.goal = 'minimize';
+    crit.bminimize = true;
     
-    % Evaluate
-    crit_val = feval (crit, xt);
+elseif strcmp (goal, 'maximize')
     
-else  % Assume that arg2 is an stk_dataframe with 'mean' and 'var' columns
+    crit.goal = 'maximize';
+    crit.bminimize = false;
     
-    % Construct an incomplete stk_sampcrit object (without an underlying model)
-    crit = stk_sampcrit_ei ([], varargin{:});
+elseif ischar (goal)  % Correct type but incorrect value
     
-    % Evaluate
-    crit_val = msfeval (crit, arg2.mean, sqrt (arg2.var));
+    stk_error (sprintf (['Incorrect value for property ''goal'': ' ...
+        '%s.\nThe value should be either ''minimize'' or ' ...
+        '''maximize''.'], goal), 'IncorrectValue');
     
-end
+else  % Incorrect type
+    
+    stk_error (sprintf (['Incorrect value type for property ''goal'': ' ...
+        '%s.\nThe value should a character string (char).'], ...
+        class (goal)), 'TypeMismatch');
+    
+end % if
 
 end % function

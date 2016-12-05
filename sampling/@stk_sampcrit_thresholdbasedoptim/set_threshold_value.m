@@ -1,4 +1,4 @@
-% STK_SAMPCRIT_EI_EVAL ...
+% SET_THRESHOLD_VALUE ...
 
 % Copyright Notice
 %
@@ -26,23 +26,40 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (xt, arg2, varargin)
+function crit = set_threshold_value (crit, threshold_value)
 
-if isa (arg2, 'stk_model_gpposterior')
+if nargin < 2  % Recompute threshold
     
-    % Construct a complete stk_sampcrit object (with an underlying model)
-    crit = stk_sampcrit_ei (arg2, varargin{:});
+    if strcmp (crit.threshold_mode, 'best evaluation')
+        
+        % Quantity of Interest = evaluation results
+        QoI = get_output_data (crit);
+        
+    elseif strcmp (crit.threshold_mode, 'best quantile')
+        
+        % Quantity of Interest = quantiles
+        xi = get_input_data (crit);
+        if isempty (xi)
+            QoI = [];
+        else
+            zp = stk_predict (get_model (crit), xi);
+            QoI = zp.mean + crit.threshold_quantile_value * (sqrt (zp.var));
+        end
+        
+    end
     
-    % Evaluate
-    crit_val = feval (crit, xt);
+    if isempty (QoI)
+        crit.threshold_value = nan;
+    elseif get_bminimize (crit)
+        crit.threshold_value = min (QoI);
+    else
+        crit.threshold_value = max (QoI);
+    end
     
-else  % Assume that arg2 is an stk_dataframe with 'mean' and 'var' columns
+else  % Argument 'threshold' has been provided
     
-    % Construct an incomplete stk_sampcrit object (without an underlying model)
-    crit = stk_sampcrit_ei ([], varargin{:});
-    
-    % Evaluate
-    crit_val = msfeval (crit, arg2.mean, sqrt (arg2.var));
+    crit.threshold_value = threshold_value;
+    crit.threshold_mode = 'user-defined';
     
 end
 

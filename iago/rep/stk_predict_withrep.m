@@ -1,10 +1,10 @@
-% STK_SAMPCRIT_EI_EVAL ...
+% STK_PREDICT_WITHREP ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2015 CentraleSupelec
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,24 +26,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (xt, arg2, varargin)
+function varargout = stk_predict_withrep (model, xi, zi, xt)
 
-if isa (arg2, 'stk_model_gpposterior')
-    
-    % Construct a complete stk_sampcrit object (with an underlying model)
-    crit = stk_sampcrit_ei (arg2, varargin{:});
-    
-    % Evaluate
-    crit_val = feval (crit, xt);
-    
-else  % Assume that arg2 is an stk_dataframe with 'mean' and 'var' columns
-    
-    % Construct an incomplete stk_sampcrit object (without an underlying model)
-    crit = stk_sampcrit_ei ([], varargin{:});
-    
-    % Evaluate
-    crit_val = msfeval (crit, arg2.mean, sqrt (arg2.var));
-    
+if nargin > 4,
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
+
+% NOTE: the fact that we need to write such a function shows that
+%   we should have a dedicated class for these three-columnd dataframes
+%   for which we could implement stk_predict (and probably other things too)
+
+[model, zi] = stk_fakenorep (model, zi);
+
+varargout = cell (1, max (1, nargout));
+
+[varargout{:}] = stk_predict (model, xi, zi, xt);
 
 end % function
