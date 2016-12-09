@@ -1,3 +1,13 @@
+2016-12-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Save M/O version info when compiling MEX-files (closes ticket #54)
+
+	* stk_init.m: Save Matlab/Octave version info in a text file with
+	the .info extension when compiling MEX-files.
+	* .hgignore: Ignore .info files.
+	* admin/octpkg/patches/remove-testprivatemex.patch: update patch
+	* admin/octpkg/patches/remove-buildmex.patch: update patch
+
 2016-12-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe: Overload openvar

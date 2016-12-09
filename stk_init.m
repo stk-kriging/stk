@@ -232,7 +232,7 @@ path = [path {...
     fullfile(root, 'arrays', 'generic' ) ...
     fullfile(root, 'core'              ) ...
     fullfile(root, 'covfcs'            ) ...
-    fullfile(root, 'covfcs', 'rbf'     ) ...    
+    fullfile(root, 'covfcs', 'rbf'     ) ...
     fullfile(root, 'lm'                ) ...
     fullfile(root, 'paramestim'        ) ...
     fullfile(root, 'sampling'          ) ...
@@ -349,10 +349,18 @@ here = pwd ();
 opts.force_recompile = force_recompile;
 opts.include_dir = fullfile (root, 'misc', 'include');
 
+% Get information about the MEX-files that need to be built
 info = stk_init__get_make_info ();
 
+% Matlab/Octave version info
+if exist ('OCTAVE_VERSION', 'builtin') == 5
+    version_info = ['OCTAVE ' OCTAVE_VERSION];
+else
+    version_info = ['MATLAB ' version];
+end
+
 for k = 1:(length (info)),
-    stk_init__compile (fullfile (root, info(k).relpath), ...
+    stk_init__compile (version_info, fullfile (root, info(k).relpath), ...
         opts, info(k).mexname, info(k).other_src, info(k).includes);
 end
 
@@ -361,41 +369,68 @@ cd (here);
 end % function
 
 
-function stk_init__compile (d, opts, mexname, other_src, includes)
+function stk_init__compile (version_info, d, opts, mexname, other_src, includes)
 
 mex_filename = [mexname '.' mexext];
 mex_fullpath = fullfile (d, mex_filename);
 
 src_filename = [mexname '.c'];
 
-dir_mex = dir (mex_fullpath);
-compile = opts.force_recompile || (isempty (dir_mex));
-
+% List of all source files (not counting include files)
 src_files = [{src_filename} other_src];
 
-for k = 1:(length (src_files))
-    % Look for src file in current directory
-    dir_src = dir (fullfile (d, src_files{k}));
-    if isempty (dir_src)
-        error ('STK:stk_init__build_mex:FileNotFound', ...
-            sprintf ('Source file %s not found', src_files{k}));
-    end
-    compile = compile || (dir_mex.datenum < dir_src.datenum);
-end
+compile = opts.force_recompile;
 
-if ~ isempty (includes)
-    for k = 1:(length (includes))
-        % Look for header file in current directory
-        dir_hdr = dir (fullfile (d, includes{k}));
-        if isempty (dir_hdr)
-            % Look for header file in include directory
-            dir_hdr = dir (fullfile (opts.include_dir, includes{k}));
-            if isempty (dir_hdr)
+if ~ compile
+    
+    % Compile if the MEX is not present or out-dated
+    dir_mex = dir (mex_fullpath);
+    compile = isempty (dir_mex);
+    
+    % Compile if different version of Matlab/Octave (better safe than sorry)
+    try
+        fid = fopen ([mex_fullpath '.info']);
+        assert (strcmp (version_info, fgetl (fid)));
+    catch
+        compile = true;
+    end
+    
+    if ~ compile
+        
+        % Compile if one of the source files is more recent than the MEX        
+        for k = 1:(length (src_files))
+            % Look for src file in current directory
+            dir_src = dir (fullfile (d, src_files{k}));
+            if isempty (dir_src)
                 error ('STK:stk_init__build_mex:FileNotFound', ...
-                    sprintf ('Header file %s not found', includes{k}));
+                    sprintf ('Source file %s not found', src_files{k}));
+            end
+            if dir_mex.datenum < dir_src.datenum
+                compile = true;
+                break;
             end
         end
-        compile = compile || (dir_mex.datenum < dir_hdr.datenum);
+        
+        if (~ compile) && (~ isempty (includes))
+            
+            % Compile if one of the include files is more recent than the MEX
+            for k = 1:(length (includes))
+                % Look for header file in current directory
+                dir_hdr = dir (fullfile (d, includes{k}));
+                if isempty (dir_hdr)
+                    % Look for header file in include directory
+                    dir_hdr = dir (fullfile (opts.include_dir, includes{k}));
+                    if isempty (dir_hdr)
+                        error ('STK:stk_init__build_mex:FileNotFound', ...
+                            sprintf ('Header file %s not found', includes{k}));
+                    end
+                end
+                if dir_mex.datenum < dir_hdr.datenum
+                    compile = true;
+                    break;
+                end
+            end
+        end
     end
 end
 
@@ -407,9 +442,13 @@ if compile,
     
     try  % Safely change directory
         cd (d);
-    
+        
         include = sprintf ('-I%s', opts.include_dir);
         mex (src_files{:}, include);
+        
+        fid = fopen ([mex_fullpath '.info'], 'wt');
+        fprintf (fid, version_info);
+        fclose (fid);
         
         fprintf ('ok.\n');
         if (exist ('OCTAVE_VERSION', 'builtin') == 5)
