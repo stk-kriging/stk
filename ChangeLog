@@ -5,8 +5,9 @@
 	* stk_init.m: Save Matlab/Octave version info in a text file with
 	the .info extension when compiling MEX-files.
 	* .hgignore: Ignore .info files.
-	* admin/octpkg/patches/remove-testprivatemex.patch: update patch
-	* admin/octpkg/patches/remove-buildmex.patch: update patch
+	* admin/octpkg/patches/remove-testprivatemex.patch: update patch.
+	* admin/octpkg/patches/remove-buildmex.patch: update patch.
+	* admin/build_tools/build_octpkg.m: Ignore *.info files.
 
 2016-12-05  Julien Bect  <julien.bect@centralesupelec.fr>
 

@@ -167,7 +167,7 @@ end % function
 function process_file (s, unpacked_dir, sed_program)
 
 % Regular expressions
-regex_ignore = '(~|\.(hgignore|hgtags|mexglx|mex|mexa64|mexw64|o|tmp|orig))$';
+regex_ignore = '(~|\.(hgignore|hgtags|mexglx|mex|mexa64|mexw64|o|tmp|orig|info))$';
 regex_mfile = '\.m$';
 regex_copy_src = '\.[ch]$';
 
