@@ -2,7 +2,7 @@
 %
 % CALL: K = stk_rbf_spherical (H)
 %
-%    computes the value of the sĥerical correlation function at distance H:
+%    computes the value of the spherical correlation function at distance H:
 %
 %            /
 %            |  1 - 3/2 |h| + 1/2 |h|^3     if |h| < 1,
