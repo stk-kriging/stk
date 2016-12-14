@@ -34,7 +34,7 @@ fclose (fid);
 
 s = strrep (s, 'See stk_version.m', get_version_number ());
 
-fid = fopen_ (fullfile (unpacked_dir, 'README'), 'wt');
+fid = fopen_ (fullfile (unpacked_dir, 'README.md'), 'wt');
 fwrite (fid, s);
 fclose (fid);
 
