@@ -207,9 +207,9 @@ else
         % Put AUTHORS in the documentation directory
         copyfile (s, fullfile (unpacked_dir, 'doc'));
         
-    elseif strcmp (s, 'README')
+    elseif strcmp (s, 'README.md')
         
-        % Put README in the documentation directory
+        % Put README.md in the documentation directory
         copy_readme (s, fullfile (unpacked_dir, 'doc'));
         
     elseif strcmp (s, 'CITATION')
@@ -264,7 +264,7 @@ end % function
 
 function descr = parse_description_field (root_dir)
 
-fid = fopen_ (fullfile (root_dir, 'README'), 'rt');
+fid = fopen_ (fullfile (root_dir, 'README.md'), 'rt');
 
 s = [];
 
@@ -274,7 +274,7 @@ while 1,
     
     L = fgetl (fid);
     if ~ ischar (L),
-        error ('Corrupted README file ?');
+        error ('Corrupted README.md file ?');
     end
     
     L = strtrim (L);
@@ -292,7 +292,7 @@ while 1,
     
     L = fgetl (fid);
     if ~ ischar (L),
-        error ('Corrupted README file ?');
+        error ('Corrupted README.md file ?');
     end
     
     L = strtrim (L);

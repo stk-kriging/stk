@@ -1,3 +1,16 @@
+2016-12-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Convert README to Markdown format
+
+	* README: Renamed to README.md.
+	* README.md: Renamed from README.md and converted to Markdown.
+	Removed copyright notice.
+	* admin/build_tools/build_allpurpose.m: Rename README -> README.md.
+	* admin/build_tools/build_octpkg.m: Idem.
+	* admin/build_tools/copy_readme.m: Idem.
+	* admin/find_nonstandard_characters.sh: Process all *README* files.
+	* admin/fix_eol.sh: Idem.
+
 2016-12-09  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Save M/O version info when compiling MEX-files (closes ticket #54)

@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -60,8 +60,8 @@ fprintf ('done.\n');
 cd (release_dir);
 copy_citation ('stk/CITATION', 'stk');
 
-% Write explicit version number in README
-copy_readme ('stk/README', 'stk');
+% Write explicit version number in README.md
+copy_readme ('stk/README.md', 'stk');
 
 % Build HTML doc
 htmldoc_dir = fullfile (unpacked_dir, 'doc', 'html');
