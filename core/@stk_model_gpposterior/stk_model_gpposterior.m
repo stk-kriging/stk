@@ -67,6 +67,12 @@ if nargin == 3
         prior_model.lognoisevariance = prior_model.lognoisevariance(:);
     end
     
+    % Check if the covariance model contains parameters
+    % that must be estimated first
+    if (isnumeric (prior_model.param)) && (any (isnan (prior_model.param)))
+        prior_model.param = stk_param_estim (prior_model, xi, zi);
+    end
+
     % Compute QR factorization
     if isempty (kreq)
         kreq = stk_kreq_qr (prior_model, xi);
@@ -110,3 +116,10 @@ end % function
 %!test % hidden feature
 %! kreq = stk_kreq_qr (M_prior, x_obs);
 %! M_post = stk_model_gpposterior (M_prior, {x_obs, kreq}, z_obs);
+
+%!test % NaNs in prior_model.param
+%! DIM = 1;  M = stk_model (@stk_materncov52_aniso, DIM);
+%! M.param = nan (2, 1);  % this is currently the default
+%! x = stk_sampling_regulargrid (20, DIM, [0; 1]);
+%! y = sin (double (x));
+%! zp = stk_predict (M, x, y, x);
