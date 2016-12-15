@@ -16,6 +16,7 @@
 	* arrays/@stk_dataframe/openvar.m: Overload base function.
 	* misc/options/stk_options_set.m: Add option openvar_warndlg with
 	default value true.
+	* INDEX: Add @stk_dataframe/openvar to the index.
 
 	stk_lm_polynomial.m: Add nargin check (closes ticket #52)
 
