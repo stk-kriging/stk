@@ -1,5 +1,11 @@
 2016-12-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	README.md: Move sentence about M/O compatiblity to "Quick start"
+
+	* README.md: Move the sentence about Matlab/Octave compatiblity to
+	the "Quick start" section.  Remove redundant sentence about the
+	meaning of STK.
+
 	README.md: Remove sentence about parallel computing
 
 	* README.md: Remove the sentence about parallel computing not
