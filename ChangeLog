@@ -1,5 +1,9 @@
 2016-12-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	README.md: Use numeric references
+
+	* README.md: Use numeric references instead of author-year.
+
 	README.md: Move sentence about M/O compatiblity to "Quick start"
 
 	* README.md: Move the sentence about Matlab/Octave compatiblity to
