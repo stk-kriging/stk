@@ -1,5 +1,10 @@
 2016-12-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_model_gpposterior.m: Estimate if param has NaNs (closes ticket #40)
+
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Estimate
+	parameters automatically if prior_model.param contains NaNs.
+
 	@stk_model_gpposterior/disp.m: Clarify display.
 
 	* core/@stk_model_gpposterior/disp.m: Clarify display.
