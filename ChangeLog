@@ -1,5 +1,9 @@
 2016-12-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	README.md: Remove redundant licence statement
+
+	* README.md: Remove redundant licence statement.
+
 	Makefile: download new icons for visual inspection of HTML doc
 
 	* Makefile: download new icons (news.png, homepage.png) for visual

@@ -93,11 +93,6 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
    to use  parallel computing in  some functions, are not yet available
    when using Octave.
 
-   The STK is free software and  is released under the terms of the GNU
-   General Public License, version 3, as published by the Free Software
-   Foundation,   and   is   made   available   at   the   web   address
-   <http://kriging.sourceforge.net>.
-
    By publishing this toolbox, the  idea is to provide a convenient and
    flexible research tool for  working with kriging-based methods.  The
    code of the  toolbox is meant to be  easily understandable, modular,
