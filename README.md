@@ -89,9 +89,7 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
    This toolbox is called the Small (Matlab/Octave) Toolbox for Kriging
    (STK). Note that  the STK is meant to be  compatible with Octave and
    Matlab(TM), and  can be automatically configured  with both software
-   products. However,  some optional features, such  as the possibility
-   to use  parallel computing in  some functions, are not yet available
-   when using Octave.
+   products.
 
    By publishing this toolbox, the  idea is to provide a convenient and
    flexible research tool for  working with kriging-based methods.  The

@@ -1,5 +1,12 @@
 2016-12-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	README.md: Remove sentence about parallel computing
+
+	* README.md: Remove the sentence about parallel computing not
+	being supported in Octave, since there is actually very little
+	support, currently, for parallel computing in *both* Matlab and
+	Octave.
+
 	README.md: Remove redundant licence statement
 
 	* README.md: Remove redundant licence statement.
