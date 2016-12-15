@@ -93,10 +93,10 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
    flexible research tool for  working with kriging-based methods.  The
    code of the  toolbox is meant to be  easily understandable, modular,
    and reusable.  By  way of illustration, it is very  easy to use this
-   toolbox  for implementing  the EGO  algorithm  (Jones et al. 98).
-   Besides, this toolbox  can serve as a basis  for  the implementation
-   of  advanced  algorithms  such  as  Stepwise  Uncertainty  Reduction
-   algorithms (see, e.g., Bect et al. 2010).
+   toolbox for implementing the EGO algorithm [1].
+   Besides, this toolbox  can serve  as a basis for  the implementation
+   of  advanced algorithms such as Stepwise Uncertainty Reduction (SUR)
+   algorithms [2].
 
    The toolbox consists of three parts:
 
@@ -115,17 +115,17 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
       form,  the STK has been optimized  to deal with  moderately large
       data sets.
 
+### References
 
-## References
+[1] D. R. Jones, M. Schonlau, and William J. Welch. *Efficient global
+optimization of expensive black-box functions*.  Journal of Global
+Optimization, 13(4):455-492, 1998.
 
-   J. Bect, D. Ginsbourger, L. Li, V. Picheny, and E. Vazquez.
-   Sequential design of computer experiments for the estimation of a
-   probability of failure.  Statistics and Computing, pages 1-21, 2011.
-   DOI: 10.1007/s11222-011-9241-4.
+[2] J. Bect, D. Ginsbourger, L. Li, V. Picheny, and E. Vazquez.
+*Sequential design of computer experiments for the estimation of a
+probability of failure*.  Statistics and Computing, pages 1-21, 2011.
+DOI: 10.1007/s11222-011-9241-4.
 
-   D. R. Jones, M. Schonlau, and William J. Welch. Efficient global
-   optimization of expensive black-box functions.  Journal of Global
-   Optimization, 13(4):455-492, 1998.
 
 
 ## Ways to get help, report bugs, ask for new features...
