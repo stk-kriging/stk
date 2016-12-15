@@ -60,7 +60,9 @@ OFGOODIES=\
   ${OF_DOC_INSPECT}/octave-forge.css \
   ${OF_DOC_INSPECT}/download.png \
   ${OF_DOC_INSPECT}/doc.png \
-  ${OF_DOC_INSPECT}/oct.png
+  ${OF_DOC_INSPECT}/oct.png \
+  ${OF_DOC_INSPECT}/news.png \
+  ${OF_DOC_INSPECT}/homepage.png
 
 
 ##### OCTPKG: Octave-Forge Release #####
