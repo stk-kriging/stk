@@ -53,6 +53,9 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 ## Quick Start
 
+   STK is meant to be compatible with Octave and Matlab(TM), and  can be
+   automatically configured  with both software products.
+
    Run stk_init.m in Matlab(TM) or GNU Octave.
 
    Once the STK  is properly initialized,  you should be able to run the
@@ -85,11 +88,6 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 
 ## Content
-
-   This toolbox is called the Small (Matlab/Octave) Toolbox for Kriging
-   (STK). Note that  the STK is meant to be  compatible with Octave and
-   Matlab(TM), and  can be automatically configured  with both software
-   products.
 
    By publishing this toolbox, the  idea is to provide a convenient and
    flexible research tool for  working with kriging-based methods.  The
