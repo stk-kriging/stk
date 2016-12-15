@@ -320,6 +320,7 @@ Miscellaneous: Pareto optimality
 #@stk_dataframe/minus                     [overload base]
 #@stk_dataframe/mode                      [overload base]
 #@stk_dataframe/mtimes                    [overload base]
+#@stk_dataframe/openvar                   [overload base]
 #@stk_dataframe/plus                      [overload base]
 #@stk_dataframe/power                     [overload base]
 #@stk_dataframe/prod                      [overload base]
