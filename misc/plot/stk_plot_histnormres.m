@@ -55,7 +55,7 @@ pdf = count / (n * (rr(2) - rr(1)));
 h.hist = bar (rr, pdf, 'hist');  hold on;
 
 % Center view
-M = max (3, max (xlim ()));  xlim ([-M, M]);
+M = max (3, max (abs (xlim ())));  xlim ([-M, M]);
 
 % Plot reference N(0, 1) pdf
 rr = linspace (-M, M, 100);
