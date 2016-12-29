@@ -1,3 +1,14 @@
+2016-12-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix one-line help for overloaded feval functions in lm
+
+	* lm/@stk_lm_affine/feval.m: Fix one-line help.
+	* lm/@stk_lm_constant/feval.m: Idem.
+	* lm/@stk_lm_cubic/feval.m: Idem.
+	* lm/@stk_lm_matrix/feval.m: Idem.
+	* lm/@stk_lm_null/feval.m: Idem.
+	* lm/@stk_lm_quadratic/feval.m: Idem.
+
 2016-12-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_model_gpposterior.m: Estimate if param has NaNs (closes ticket #40)
