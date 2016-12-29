@@ -1,5 +1,14 @@
 2016-12-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Polish new LOO cross-validation function
+
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Return
+	residuals in a dataframe (instead of a structure).
+	* core/stk_predict_leaveoneout.m: Add doc and unit tests.
+	* examples/01_kriging_basics/stk_example_kb10.m: Update name of
+	normalized residual field (second column of the new dataframe).
+	* misc/plot/stk_plot_histnormres.m: Fix a tiny bug.
+
 	Fix one-line help for overloaded feval functions in lm
 
 	* lm/@stk_lm_affine/feval.m: Fix one-line help.
