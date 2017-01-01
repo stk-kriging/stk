@@ -1,5 +1,9 @@
 2017-01-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_predict: Explain the Bayesian point of view
+
+	* core/stk_predict.m: Explain the Bayesian point of view.
+
 	Fix one-line help for overloaded STK functions
 
 	* arrays/@stk_dataframe/stk_conditioning.m: Fix one-line help.

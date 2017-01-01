@@ -17,6 +17,12 @@
 %     * the kriging predictor in the first column (ZP.mean), and
 %     * the kriging variance in the second column (ZP.var).
 %
+%    From a Bayesian point of view, ZP.mean and ZP.var are respectively the
+%    posterior mean and variance of the Gaussian process prior MODEL given the
+%    data (XI, ZI).  Note that, in the case of noisy data, ZP.var is the
+%    (posterior) variance of the latent Gaussian process, not the variance of a
+%    future noisy observation at location XP.
+%
 % CALL: [ZP, LAMBDA, MU] = stk_predict (MODEL, XI, ZI, XP)
 %
 %    also returns the matrix of kriging weights LAMBDA and the matrix of
