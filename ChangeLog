@@ -1,5 +1,10 @@
 2017-01-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_generate_samplepaths.m: Improve the documentation
+
+	* utils/stk_generate_samplepaths.m: Improve the documentation.  In
+	particular, warn about the case of noisy observations.
+
 	stk_predict: Explain the Bayesian point of view
 
 	* core/stk_predict.m: Explain the Bayesian point of view.
