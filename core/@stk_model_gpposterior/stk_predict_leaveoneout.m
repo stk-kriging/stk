@@ -1,8 +1,4 @@
-% STK_PREDICT_LEAVEONEOUT computes LOO predictions and residuals
-%
-% CALL: LOO_PRED = stk_predict_leaveoneout (M_POSTERIOR)
-%
-% CALL: [LOO_PRED, LOO_RES] = stk_predict_leaveoneout (M_POSTERIOR)
+% STK_PREDICT_LEAVEONEOUT [overload STK function]
 
 % Copyright Notice
 %

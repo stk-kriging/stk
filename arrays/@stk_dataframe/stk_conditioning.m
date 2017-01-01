@@ -1,6 +1,4 @@
-% STK_CONDITIONING [overload STK]
-%
-% See also stk_conditioning
+% STK_CONDITIONING [overload STK function]
 
 % Copyright Notice
 %

@@ -1,3 +1,15 @@
+2017-01-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix one-line help for overloaded STK functions
+
+	* arrays/@stk_dataframe/stk_conditioning.m: Fix one-line help.
+	* arrays/@stk_dataframe/stk_generate_samplepaths.m: Idem.
+	* arrays/@stk_hrect/stk_normalize.m: Idem.
+	* arrays/@stk_hrect/stk_rescale.m: Idem.
+	* core/@stk_model_gpposterior/stk_isnoisy.m: Idem.
+	* core/@stk_model_gpposterior/stk_predict.m: Idem.
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Idem.
+
 2016-12-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Polish new LOO cross-validation function
