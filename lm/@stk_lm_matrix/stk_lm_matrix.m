@@ -1,7 +1,14 @@
-% STK_LM_MATRIX ... [FIXME: missing documentation]
+% STK_LM_MATRIX creates a linear model object defined on a finite space
+%
+% CALL: LM = STK_LM_MATRIX (P)
+%
+%    creates a linear model object LM with "design matrix" P.  Such an object
+%    describes a linear model on a finite space of cardinality N, where N is the
+%    number of rows of P.
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>

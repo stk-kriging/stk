@@ -1,7 +1,12 @@
-% STK_LM_CUBIC ... [FIXME: missing documentation]
+% STK_LM_CUBIC creates a cubic linear model object
+%
+% CALL: LM = STK_LM_CUBIC ()
+%
+%    creates a cubic linear model object LM.
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>

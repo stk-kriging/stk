@@ -1,7 +1,12 @@
-% STK_LM_QUADRATIC ... [FIXME: missing documentation]
+% STK_LM_QUADRATIC creates a quadratic linear model object
+%
+% CALL: LM = STK_LM_QUADRATIC ()
+%
+%    creates a quadratic linear model object LM.
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>

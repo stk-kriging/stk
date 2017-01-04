@@ -1,8 +1,12 @@
-% STK_LM_POLYNOMIAL ... [FIXME: missing documentation]
+% STK_LM_POLYNOMIAL creates a polynomial linear model object
+%
+% CALL: LM = STK_LM_POLYNOMIAL (D)
+%
+%    creates a polynomial linear model object LM of degree D.
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
