@@ -1,5 +1,15 @@
 2017-01-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Provide help texts for stk_lm_* functions
+
+	* lm/@stk_lm_affine/stk_lm_affine.m: Add help text.
+	* lm/@stk_lm_constant/stk_lm_constant.m: Idem.
+	* lm/@stk_lm_cubic/stk_lm_cubic.m: Idem.
+	* lm/@stk_lm_matrix/stk_lm_matrix.m: Idem.
+	* lm/@stk_lm_null/stk_lm_null.m: Idem.
+	* lm/@stk_lm_quadratic/stk_lm_quadratic.m: Idem.
+	* lm/stk_lm_polynomial.m: Idem.
+
 	stk_dominatedhv.m: Remove dominated points before using WFG
 
 	* misc/pareto/stk_dominatedhv.m: Remove dominated points before
