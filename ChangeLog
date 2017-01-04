@@ -1,3 +1,10 @@
+2017-01-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dominatedhv.m: Remove dominated points before using WFG
+
+	* misc/pareto/stk_dominatedhv.m: Remove dominated points before
+	using WFG, since WFG assumes that there are no duplicated points.
+
 2017-01-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_generate_samplepaths.m: Improve the documentation
