@@ -1,3 +1,10 @@
+2017-01-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_example_kb09.m: Catch a legend-related bug (closes ticket #55)
+
+	* examples/01_kriging_basics/stk_example_kb09.m: Add a try/catch
+	block to catch a legend-related bug that shows up in Octave 4.0.x.
+
 2017-01-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Provide help texts for stk_lm_* functions
