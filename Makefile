@@ -64,6 +64,13 @@ OFGOODIES=\
   ${OF_DOC_INSPECT}/news.png \
   ${OF_DOC_INSPECT}/homepage.png
 
+# Extract date of hg changeset
+HG_ID   := $(shell hg id --id | sed -e 's/+//')
+HG_DATE := $(shell hg log --rev $(HG_ID) --template {date\|isodate})
+
+# Follows the recommendations of https://reproducible-builds.org/docs/archives
+REPRO_TAR = tar cf - --mtime="$(HG_DATE)" --sort=name --owner=root --group=root --numeric-owner
+
 
 ##### OCTPKG: Octave-Forge Release #####
 
@@ -79,7 +86,7 @@ octaveforge-package: ${OF_OCTPKG_TARBALL}
 ${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_UNPACKED} | ${OF_DIR}
 	@echo
 	@echo Create octpkg tarball: $@
-	tar cf - -C ${OF_DIR} $(notdir ${OF_OCTPKG_UNPACKED}) | gzip -9n > "$@"
+	$(REPRO_TAR) -C ${OF_DIR} $(notdir ${OF_OCTPKG_UNPACKED}) | gzip -9n > "$@"
 	@echo
 
 ${OF_OCTPKG_UNPACKED}: | ${OF_DIR}
@@ -93,7 +100,7 @@ octaveforge-htmldoc: ${OF_DOC_TARBALL}
 ${OF_DOC_TARBALL}: ${OF_DOC_UNPACKED}
 	@echo
 	@echo Create forgefoc tarball: $@
-	tar cf - -C ${OF_DIR} $(notdir ${OF_DOC_UNPACKED}) | gzip -9n > "$@"
+	$(REPRO_TAR) -C ${OF_DIR} $(notdir ${OF_DOC_UNPACKED}) | gzip -9n > "$@"
 	@echo
 
 ${OF_DOC_UNPACKED}: ${OF_OCTPKG_TARBALL} | ${OF_DIR}
@@ -112,7 +119,7 @@ sourceforge-allpurpose: ${SF_ALLPURP_TARBALL}
 ${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_UNPACKED} | ${SF_DIR}
 	@echo
 	@echo Create all-purpose tarball: $@
-	tar cf - -C ${SF_DIR} $(notdir ${SF_ALLPURP_UNPACKED}) | gzip -9n > "$@"
+	$(REPRO_TAR) -C ${SF_DIR} $(notdir ${SF_ALLPURP_UNPACKED}) | gzip -9n > "$@"
 
 ${SF_ALLPURP_UNPACKED}: ${SF_OCTPKG_TARBALL} | ${SF_DIR}
 	${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL}"
