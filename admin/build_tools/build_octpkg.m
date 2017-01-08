@@ -73,13 +73,13 @@ sed_program = prepare_sed_rename_mex (release_dir);
 
 try
     % Apply patches
-    assert (system ('quilt push -a') == 0);
+    assert (system ('quilt push -a -q') == 0);
     
     % Process directories recursively
     process_directory ('', unpacked_dir, ignore_list, sed_program);
     
     % Cleanup: unapply patches
-    assert (system ('quilt pop -a') == 0);
+    assert (system ('quilt pop -a -q') == 0);
     
 catch
     system ('quilt pop -af');
@@ -136,10 +136,7 @@ end % function
 function process_directory (d, unpacked_dir, ignore_list, sed_program)
 
 if ismember (d, ignore_list)
-    fprintf ('Ignoring directory %s\n', d);
     return;
-else
-    fprintf ('Processing directory %s\n', d);
 end
 
 if isempty (d)
@@ -179,11 +176,7 @@ if ~ isempty (regexp (s, regex_ignore, 'once')) ...
         || strcmp (s, 'misc/optim/stk_optim_hasfmincon.m') ...
         || strcmp (s, 'doc/dev/model.texi')
     
-    fprintf ('Ignoring file %s\n', s);
-    
 else
-    
-    fprintf ('Processing file %s\n', s);
     
     if ~ isempty (regexp (s, regex_mfile, 'once'))
         
