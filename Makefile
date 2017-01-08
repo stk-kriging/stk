@@ -1,6 +1,6 @@
 ## Copyright Notice
 ##
-##    Copyright (C) 2015 CentraleSupelec
+##    Copyright (C) 2015, 2017 CentraleSupelec
 ##
 ##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -76,6 +76,9 @@ REPRO_TAR = tar cf - --mtime="$(HG_DATE)" --sort=name --owner=root --group=root 
 
 octaveforge-release: ${OF_MD5SUM} \
  octaveforge-package octaveforge-htmldoc
+	@echo
+	ls -lh ${OF_DIR}
+	@echo
 
 ${OF_MD5SUM}: ${OF_OCTPKG_TARBALL} ${OF_DOC_TARBALL}
 	md5sum ${OF_OCTPKG_TARBALL} > ${OF_MD5SUM}
@@ -113,6 +116,9 @@ ${OF_DIR}:
 ##### ALLPURP: SourceForge Matlab/Octave Release #####
 
 sourceforge-release: sourceforge-allpurpose sourceforge-octpkg
+	@echo
+	ls -lh ${SF_DIR}
+	@echo
 
 sourceforge-allpurpose: ${SF_ALLPURP_TARBALL}
 
