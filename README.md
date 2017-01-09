@@ -74,10 +74,6 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
    instance,  this means installing octave3.2-headers in addition to the
    base octave3.2 package.
 
-   The sqp() function  internally relies on  the GLPK library,  which is
-   shipped with most (but not all) versions of Octave.  The STK will not
-   start if GLPK is not installed.
-
 ### Requirements and recommendations for use with Matlab
 
    The STK works with Matlab R2007a or newer.

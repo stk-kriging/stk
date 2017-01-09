@@ -1,3 +1,11 @@
+2017-01-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	README.md: Remove warning about STK not starting if GLPK is missing
+
+	* README.md: Remove useless warning about STK not starting is
+	Octave is configured without GLPK.  I only met this case once, a
+	long time ago, with Octave 3.0 on some BD distro...
+
 2017-01-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_example_kb09.m: Catch a legend-related bug (closes ticket #55)
