@@ -1,3 +1,10 @@
+2017-01-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	README.md: Explain that there are two releases (closes ticket #62)
+
+	* README.md: Explain that there are two releases, and the specific
+	"quick start" procedure for each release.
+
 2017-01-09  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	README.md: Remove warning about STK not starting if GLPK is missing

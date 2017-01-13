@@ -51,15 +51,58 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
    URL:          <http://sourceforge.net/projects/kriging>
 
 
+## One toolbox, two flavours
+
+The STK toolbox comes in two flavours:
+
+ * an "all purpose" release, which is suitable for use both with
+   [GNU Octave](http://www.gnu.org/software/octave/)
+   and with [Matlab](www.mathworks.com/products/matlab/).
+ * an Octave package, for people who want to install and use STK as a
+   regular [Octave package](http://www.gnu.org/software/octave/doc/interpreter/Packages.html#Packages).
+
+Hint: if you're not sure about the version that you have...
+
+ * the "all purpose" release has this file (`README.md`) and the `stk_init`
+   function (`stk_init.m`) in the top-level directory,
+ * the Octave package has a `DESCRIPTION` file in the top-level directory
+   and this file in the `doc/` subdirectory.
+
+
 ## Quick Start
 
-   STK is meant to be compatible with Octave and Matlab(TM), and  can be
-   automatically configured  with both software products.
+### Quick start with the "all purpose" release (Matlab/Octave)
 
-   Run stk_init.m in Matlab(TM) or GNU Octave.
+Download and unpack an archive of the "all purpose" release from the
+[STK project](https://sourceforge.net/projects/kriging/)
+[file release system](https://sourceforge.net/projects/kriging/files/)
+on SourceForge.
 
-   Once the STK  is properly initialized,  you should be able to run the
-   examples located in the 'examples' directory.
+Run `stk_init.m` in either Octave or Matlab.
+
+After that, you should be able to run the examples located in the `examples`
+directory.  All of them are scripts, the file name of which starts with
+the `stk_example_` prefix.
+
+For instance, type `stk_example_kb03` to run the third example in the "Kriging
+basics" series.
+
+### Quick start with the Octave package release (Octave only)
+
+Assuming that you have a working Internet connection, typing `pkg install -forge stk`
+(from within Octave) will automatically download the latest STK package tarball from the
+[Octave Forge](http://octave.sourceforge.net/stk/index.html)
+[file release system](https://sourceforge.net/projects/octave/files/)
+on SourceForge and install it for you.
+
+Alternatively, if you want to install an older (or beta) release, you can download
+the tarball from either the STK project FRS or the Octave Forge FRS, and install it
+with `pkg install FILENAME.tar.gz`.
+
+After that, you can load STK using `pkg load stk`.
+
+To check that STK is properly loaded, try for instance `stk_example_kb03` to run
+the third example in the "Kriging basics" series.
 
 
 ## Requirements and recommendations
