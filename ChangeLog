@@ -1,3 +1,12 @@
+2017-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_init.m: Display GCC version warning only once (Matlab only)
+
+	* stk_init.m (stk_init__compile): Capture GCC version warnings.
+	(stk_init__build_mex): Display GCC version warning only once.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+
 2017-01-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	README.md: Explain that there are two releases (closes ticket #62)

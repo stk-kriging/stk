@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -359,9 +359,15 @@ else
     version_info = ['MATLAB ' version];
 end
 
-for k = 1:(length (info)),
-    stk_init__compile (version_info, fullfile (root, info(k).relpath), ...
+for k = 1:(length (info))
+    gcc_version_warning = stk_init__compile ...
+        (version_info, fullfile (root, info(k).relpath), ...
         opts, info(k).mexname, info(k).other_src, info(k).includes);
+end
+
+% Matlab only: issue GCC version warning only once
+if ~ isempty (gcc_version_warning)
+    warning (gcc_version_warning.id, gcc_version_warning.msg);
 end
 
 cd (here);
@@ -369,7 +375,8 @@ cd (here);
 end % function
 
 
-function stk_init__compile (version_info, d, opts, mexname, other_src, includes)
+function gcc_version_warning = stk_init__compile ...
+    (version_info, d, opts, mexname, other_src, includes)
 
 mex_filename = [mexname '.' mexext];
 mex_fullpath = fullfile (d, mex_filename);
@@ -397,7 +404,7 @@ if ~ compile
     
     if ~ compile
         
-        % Compile if one of the source files is more recent than the MEX        
+        % Compile if one of the source files is more recent than the MEX
         for k = 1:(length (src_files))
             % Look for src file in current directory
             dir_src = dir (fullfile (d, src_files{k}));
@@ -434,7 +441,9 @@ if ~ compile
     end
 end
 
-if compile,
+gcc_version_warning = [];
+
+if compile
     
     fprintf ('Compiling MEX-file %s... ', mexname);
     
@@ -444,7 +453,20 @@ if compile,
         cd (d);
         
         include = sprintf ('-I%s', opts.include_dir);
-        mex (src_files{:}, include);
+        
+        if exist ('OCTAVE_VERSION', 'builtin') == 5
+            mex (src_files{:}, include);
+        else
+            warning_state = warning ('off', 'MATLAB:mex:GccVersion_link');
+            lastwarn ('');
+            mex ('-silent', src_files{:}, include);
+            [lastmsg, lastid] = lastwarn ();
+            if strfind (lastid, 'GccVersion')
+                gcc_version_warning.msg = lastmsg;
+                gcc_version_warning.id = lastid;
+            end
+            warning (warning_state);
+        end
         
         fid = fopen ([mex_fullpath '.info'], 'wt');
         fprintf (fid, version_info);
