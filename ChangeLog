@@ -1,5 +1,12 @@
 2017-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Makefile: Add "dist" rule expected by OF admins
+
+	* Makefile: Add "dist" rule to build packages only, as expected by
+	Octave Forge admins.
+
+2017-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
 	stk_init.m: Display GCC version warning only once (Matlab only)
 
 	* stk_init.m (stk_init__compile): Capture GCC version warnings.
