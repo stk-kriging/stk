@@ -1,5 +1,9 @@
 2017-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Makefile: Check if hg clone is clean before processing
+
+	* Makefile: Check if hg clone is clean before processing.
+
 	Makefile: Declare .PHONY targets
 
 	* Makefile: Declare .PHONY targets.

@@ -30,7 +30,7 @@ VERNUM=$(shell cat stk_version.m | grep -o "v = '.*'" \
 .PHONY: all release \
   octaveforge-release octaveforge-package octaveforge-htmldoc \
   sourceforge-release sourceforge-allpurpose sourceforge-octpkg \
-  forgedoc-inspect clean
+  forgedoc-inspect check_hg_clean clean
 
 all: release forgedoc-inspect
 
@@ -105,7 +105,7 @@ ${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_TIMESTAMP} | ${OF_DIR}
 	$(REPRO_TAR) -C ${OF_DIR} $(notdir ${OF_OCTPKG_UNPACKED}) | gzip -9n > "$@"
 	@echo
 
-${OF_OCTPKG_TIMESTAMP}: | ${OF_DIR}
+${OF_OCTPKG_TIMESTAMP}: | ${OF_DIR} check_hg_clean
 	${OCT_EVAL} "cd admin; build octpkg ${OF_DIR}"
 	touch ${OF_OCTPKG_TIMESTAMP}
 
@@ -118,7 +118,7 @@ ${OF_DOC_TARBALL}: ${OF_DOC_TIMESTAMP}
 	$(REPRO_TAR) -C ${OF_DIR} $(notdir ${OF_DOC_UNPACKED}) | gzip -9n > "$@"
 	@echo
 
-${OF_DOC_TIMESTAMP}: ${OF_OCTPKG_TARBALL} | ${OF_DIR}
+${OF_DOC_TIMESTAMP}: ${OF_OCTPKG_TARBALL} | ${OF_DIR} check_hg_clean
 	${OCT_EVAL} "cd admin; build forgedoc ${OF_DOC_UNPACKED} ${OF_OCTPKG_TARBALL}"
 	touch ${OF_DOC_TIMESTAMP}
 
@@ -142,7 +142,7 @@ ${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_TIMESTAMP} | ${SF_DIR}
 	@echo Create all-purpose tarball: $@
 	$(REPRO_TAR) -C ${SF_DIR} $(notdir ${SF_ALLPURP_UNPACKED}) | gzip -9n > "$@"
 
-${SF_ALLPURP_TIMESTAMP}: ${SF_OCTPKG_TARBALL} | ${SF_DIR}
+${SF_ALLPURP_TIMESTAMP}: ${SF_OCTPKG_TARBALL} | ${SF_DIR} check_hg_clean
 	${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL}"
 	touch ${SF_ALLPURP_TIMESTAMP}
 
@@ -172,6 +172,13 @@ ${OFGOODIES}: | ${OF_DOC_INSPECT}
 	cd ${OF_DOC_INSPECT} \
 	   && ${OFWGET}/$(notdir $@)
 
+
+##### Mercurial-related tricks #####
+
+check_hg_clean:
+ifneq ($(shell hg st),)
+	$(error Your hg clone is not clean, stopping here.  Use 'hg status' to see what's going on..)
+endif
 
 ##### Clean up #####
 
