@@ -27,6 +27,10 @@
 VERNUM=$(shell cat stk_version.m | grep -o "v = '.*'" \
  | cut -d \' -f 2 | sed s/-dev/.0/)
 
+.PHONY: all release \
+  octaveforge-release octaveforge-package octaveforge-htmldoc \
+  sourceforge-release sourceforge-allpurpose sourceforge-octpkg \
+  forgedoc-inspect clean
 
 all: release forgedoc-inspect
 
