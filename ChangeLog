@@ -1,5 +1,9 @@
 2017-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Makefile: Declare .PHONY targets
+
+	* Makefile: Declare .PHONY targets.
+
 	Makefile: Use timestamp files instead of directories as targets
 
 	* Makefile: Use timestamp files instead of directories as targets.
