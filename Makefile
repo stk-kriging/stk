@@ -32,6 +32,10 @@ all: release forgedoc-inspect
 
 release: octaveforge-release sourceforge-release
 
+# "dist rule" expected by OF admins
+# (build packages only, not OF html doc or forgedoc-inspect)
+dist: octaveforge-package sourceforge-release
+
 
 ## Directories
 BUILD_DIR=${CURDIR}/build
@@ -80,11 +84,13 @@ octaveforge-release: ${OF_MD5SUM} \
 	ls -lh ${OF_DIR}
 	@echo
 
+octaveforge-package: ${OF_OCTPKG_TARBALL}
+
+octaveforge-htmldoc: ${OF_DOC_TARBALL}
+
 ${OF_MD5SUM}: ${OF_OCTPKG_TARBALL} ${OF_DOC_TARBALL}
 	md5sum ${OF_OCTPKG_TARBALL} > ${OF_MD5SUM}
 	md5sum ${OF_DOC_TARBALL} >> ${OF_MD5SUM}
-
-octaveforge-package: ${OF_OCTPKG_TARBALL}
 
 ${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_UNPACKED} | ${OF_DIR}
 	@echo
@@ -94,8 +100,6 @@ ${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_UNPACKED} | ${OF_DIR}
 
 ${OF_OCTPKG_UNPACKED}: | ${OF_DIR}
 	${OCT_EVAL} "cd admin; build octpkg ${OF_DIR}"
-
-octaveforge-htmldoc: ${OF_DOC_TARBALL}
 
 # Create tar.gz archive (this should create a tarball
 #    with the expected structure, according to
@@ -122,6 +126,8 @@ sourceforge-release: sourceforge-allpurpose sourceforge-octpkg
 
 sourceforge-allpurpose: ${SF_ALLPURP_TARBALL}
 
+sourceforge-octpkg: ${SF_OCTPKG_TARBALL}
+
 ${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_UNPACKED} | ${SF_DIR}
 	@echo
 	@echo Create all-purpose tarball: $@
@@ -129,8 +135,6 @@ ${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_UNPACKED} | ${SF_DIR}
 
 ${SF_ALLPURP_UNPACKED}: ${SF_OCTPKG_TARBALL} | ${SF_DIR}
 	${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL}"
-
-sourceforge-octpkg: ${SF_OCTPKG_TARBALL}
 
 ${SF_OCTPKG_TARBALL}: ${OF_OCTPKG_TARBALL} | ${SF_DIR}
 	cp ${OF_OCTPKG_TARBALL} ${SF_OCTPKG_TARBALL}
