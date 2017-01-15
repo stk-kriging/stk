@@ -1,5 +1,9 @@
 2017-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Makefile: Use timestamp files instead of directories as targets
+
+	* Makefile: Use timestamp files instead of directories as targets.
+
 	Makefile: Add "dist" rule expected by OF admins
 
 	* Makefile: Add "dist" rule to build packages only, as expected by
