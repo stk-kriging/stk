@@ -75,9 +75,16 @@ OFGOODIES=\
   ${OF_DOC_INSPECT}/news.png \
   ${OF_DOC_INSPECT}/homepage.png
 
-# Extract date of hg changeset
-HG_ID   := $(shell hg id --id | sed -e 's/+//')
-HG_DATE := $(shell hg log --rev $(HG_ID) --template {date\|isodate})
+# File containing the hg id of the changeset being built
+HG_STAMP=${BUILD_DIR}/hg.id
+
+# Extract hg info
+HG_OLD_ID := $(shell test -e $(HG_STAMP) && cat $(HG_STAMP))
+HG_ID     := $(shell hg parent --template '{node}')
+HG_DATE   := $(shell hg log --rev $(HG_ID) --template {date\|isodate})
+
+# Update hg stamp file if the id has changed
+DUMMY := $(shell test "$(HG_OLD_ID)" != "$(HG_ID)" && mkdir -p $(BUILD_DIR) && echo "$(HG_ID)" > "$(HG_STAMP)")
 
 # Follows the recommendations of https://reproducible-builds.org/docs/archives
 REPRO_TAR = tar cf - --mtime="$(HG_DATE)" --sort=name --owner=root --group=root --numeric-owner
@@ -105,7 +112,7 @@ ${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_TIMESTAMP} | ${OF_DIR}
 	$(REPRO_TAR) -C ${OF_DIR} $(notdir ${OF_OCTPKG_UNPACKED}) | gzip -9n > "$@"
 	@echo
 
-${OF_OCTPKG_TIMESTAMP}: | ${OF_DIR} check_hg_clean
+${OF_OCTPKG_TIMESTAMP}: ${HG_STAMP} | check_hg_clean ${OF_DIR}
 	${OCT_EVAL} "cd admin; build octpkg ${OF_DIR}"
 	touch ${OF_OCTPKG_TIMESTAMP}
 
@@ -118,7 +125,7 @@ ${OF_DOC_TARBALL}: ${OF_DOC_TIMESTAMP}
 	$(REPRO_TAR) -C ${OF_DIR} $(notdir ${OF_DOC_UNPACKED}) | gzip -9n > "$@"
 	@echo
 
-${OF_DOC_TIMESTAMP}: ${OF_OCTPKG_TARBALL} | ${OF_DIR} check_hg_clean
+${OF_DOC_TIMESTAMP}: ${OF_OCTPKG_TARBALL} ${HG_STAMP} | check_hg_clean ${OF_DIR}
 	${OCT_EVAL} "cd admin; build forgedoc ${OF_DOC_UNPACKED} ${OF_OCTPKG_TARBALL}"
 	touch ${OF_DOC_TIMESTAMP}
 
@@ -142,7 +149,7 @@ ${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_TIMESTAMP} | ${SF_DIR}
 	@echo Create all-purpose tarball: $@
 	$(REPRO_TAR) -C ${SF_DIR} $(notdir ${SF_ALLPURP_UNPACKED}) | gzip -9n > "$@"
 
-${SF_ALLPURP_TIMESTAMP}: ${SF_OCTPKG_TARBALL} | ${SF_DIR} check_hg_clean
+${SF_ALLPURP_TIMESTAMP}: ${SF_OCTPKG_TARBALL} ${HG_STAMP} | check_hg_clean ${SF_DIR}
 	${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL}"
 	touch ${SF_ALLPURP_TIMESTAMP}
 
