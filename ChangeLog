@@ -1,5 +1,9 @@
 2017-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Makefile: Trigger build if hg id as changed
+
+	* Makefile: Trigger build if hg id as changed.
+
 	Makefile: Check if hg clone is clean before processing
 
 	* Makefile: Check if hg clone is clean before processing.
