@@ -87,7 +87,15 @@ HG_DATE   := $(shell hg log --rev $(HG_ID) --template {date\|isodate})
 DUMMY := $(shell test "$(HG_OLD_ID)" != "$(HG_ID)" && mkdir -p $(BUILD_DIR) && echo "$(HG_ID)" > "$(HG_STAMP)")
 
 # Follows the recommendations of https://reproducible-builds.org/docs/archives
-REPRO_TAR = tar cf - --mtime="$(HG_DATE)" --sort=name --owner=root --group=root --numeric-owner
+define create_tarball
+$(shell cd $(dir $(1)) \
+    && find $(notdir $(1)) -print0 \
+    | LC_ALL=C sort -z \
+    | tar c --mtime="$(HG_DATE)" \
+            --owner=root --group=root --numeric-owner \
+            --no-recursion --null -T - -f - \
+    | gzip -9n > "$(2)")
+endef
 
 
 ##### OCTPKG: Octave-Forge Release #####
@@ -109,7 +117,7 @@ ${OF_MD5SUM}: ${OF_OCTPKG_TARBALL} ${OF_DOC_TARBALL}
 ${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_TIMESTAMP} | ${OF_DIR}
 	@echo
 	@echo Create octpkg tarball: $@
-	$(REPRO_TAR) -C ${OF_DIR} $(notdir ${OF_OCTPKG_UNPACKED}) | gzip -9n > "$@"
+	$(call create_tarball,$(OF_OCTPKG_UNPACKED),$@)
 	@echo
 
 ${OF_OCTPKG_TIMESTAMP}: ${HG_STAMP} | check_hg_clean ${OF_DIR}
@@ -122,7 +130,7 @@ ${OF_OCTPKG_TIMESTAMP}: ${HG_STAMP} | check_hg_clean ${OF_DIR}
 ${OF_DOC_TARBALL}: ${OF_DOC_TIMESTAMP}
 	@echo
 	@echo Create forgefoc tarball: $@
-	$(REPRO_TAR) -C ${OF_DIR} $(notdir ${OF_DOC_UNPACKED}) | gzip -9n > "$@"
+	$(call create_tarball,$(OF_DOC_UNPACKED),$@)
 	@echo
 
 ${OF_DOC_TIMESTAMP}: ${OF_OCTPKG_TARBALL} ${HG_STAMP} | check_hg_clean ${OF_DIR}
@@ -147,7 +155,7 @@ sourceforge-octpkg: ${SF_OCTPKG_TARBALL}
 ${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_TIMESTAMP} | ${SF_DIR}
 	@echo
 	@echo Create all-purpose tarball: $@
-	$(REPRO_TAR) -C ${SF_DIR} $(notdir ${SF_ALLPURP_UNPACKED}) | gzip -9n > "$@"
+	$(call create_tarball,$(SF_ALLPURP_UNPACKED),$@)
 
 ${SF_ALLPURP_TIMESTAMP}: ${SF_OCTPKG_TARBALL} ${HG_STAMP} | check_hg_clean ${SF_DIR}
 	${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL}"
@@ -186,6 +194,7 @@ check_hg_clean:
 ifneq ($(shell hg st),)
 	$(error Your hg clone is not clean, stopping here.  Use 'hg status' to see what's going on..)
 endif
+
 
 ##### Clean up #####
 

@@ -1,3 +1,11 @@
+2017-01-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Makefile: Achieve reproducible builds without --sort=name
+
+	* Makefile: Achieve reproducible builds without using the option
+	--sort=name, which is only available is very recent versions of tar,
+	thanks to the recommendations of https://reproducible-builds.org/.
+
 2017-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Makefile: Trigger build if hg id as changed
