@@ -60,6 +60,10 @@ if ~ isfield (model, 'lognoisevariance')
     
     b = false;
     
+elseif isobject(model.lognoisevariance)
+    
+    b = true;
+    
 else
     
     b = ~ ((isempty (model.lognoisevariance)) ...

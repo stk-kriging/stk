@@ -88,7 +88,9 @@ if ~ ischar (model.covariance_type)
     model.covariance_type = func2str (model.covariance_type);
 end
 
-if ismember (model.covariance_type, cov_list)
+if isa(model.param, 'stk_covmodel')
+    [param, lnv] = stk_param_init (model.param, model, varargin{:});
+elseif ismember (model.covariance_type, cov_list)
     
     % An initialization for this covariance type is provided in STK
     [param, lnv] = stk_param_init_ (model, varargin{:});

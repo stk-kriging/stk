@@ -55,8 +55,8 @@ pairwise = (nargin > 4) && pairwise;
 
 if autocov && (diff ~= 0) && (stk_isnoisy (model))
     
-    if isa(model.lognoisevariance, 'stk_noisevar_param')
-        K = stk_noisecov(model.lognoisevariance, x1, diff, pairwise, []);
+    if isa(model.lognoisevariance, 'stk_noisemodel')
+        K = stk_noisevar_matrix(model.lognoisevariance, x1, diff, pairwise);
     else % if isnumeric(model.lognoisevariance) % old compatibility
         if isscalar (model.lognoisevariance) % Homoscedastic case
             
