@@ -68,7 +68,7 @@ if (nargout >= 3) || NOISEPRIOR
             noisevar_param = stk_get_optimizable_parameters (model.lognoisevariance);
             noisevar_nbparam = length (noisevar_param);
             % Make sure we have a column vector
-            noisevar_param = reshape (noisevar_param, 1, noisevar_nbparam);
+            noisevar_param = reshape (noisevar_param, noisevar_nbparam, 1);
         end
     else
         % If NOISEPRIOR is true, this is very likely going to cause an error
