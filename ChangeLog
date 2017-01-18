@@ -1,3 +1,11 @@
+2017-01-18  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Call @stk_dataframe/get instead of using dot indexing when possible
+
+	* arrays/@stk_hrect/stk_hrect.m: Call @stk_dataframe/get instead
+	of using dot indexing.
+	* arrays/@stk_hrect/subsasgn.m: Idem.
+
 2017-01-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Makefile: Achieve reproducible builds without --sort=name
