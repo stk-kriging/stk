@@ -33,6 +33,10 @@
 
 function lm = stk_lm_affine ()
 
+if nargin > 0
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
 lm = class (struct (), 'stk_lm_affine');
 
 end  % function stk_lm_affine
@@ -42,3 +46,5 @@ end  % function stk_lm_affine
 %!test
 %! lm = stk_lm_affine ();
 %! assert (isa (lm, 'stk_lm_affine'));
+
+%!error lm = stk_lm_affine (3.33);

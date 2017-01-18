@@ -33,6 +33,10 @@
 
 function lm = stk_lm_quadratic ()
 
+if nargin > 0
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
 lm = class (struct (), 'stk_lm_quadratic');
 
 end % function
@@ -42,3 +46,5 @@ end % function
 %!test
 %! lm = stk_lm_quadratic ();
 %! assert (isa (lm, 'stk_lm_quadratic'));
+
+%!error lm = stk_lm_quadratic (3.33);

@@ -35,7 +35,11 @@
 
 function lm = stk_lm_matrix (data)
 
-if nargin == 0,
+if nargin > 1
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
+if nargin == 0
     lm = struct ('data', []);
 else
     lm = struct ('data', data);
@@ -49,6 +53,8 @@ end % function
 %!test %%% Default constructor
 %! lm = stk_lm_matrix ();
 %! assert (isa (lm, 'stk_lm_matrix'));
+
+%!error lm = stk_lm_matrix ([], 3.33);
 
 %!test %%% dim 1
 %! data = rand (10, 1);  idx = 3:7;
