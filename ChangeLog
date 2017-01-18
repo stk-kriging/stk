@@ -1,5 +1,10 @@
 2017-01-18  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_dataframe/subsasgn.m:: Do not use isequalwithnans
+
+	* arrays/@stk_dataframe/subsasgn.m: Do not use isequalwithnans,
+	which is has been removed from Octave 4.2.0.
+
 	Add nargin checks for stk_lm_* functions
 
 	* lm/@stk_lm_affine/stk_lm_affine.m: Add nargin check and unit test.

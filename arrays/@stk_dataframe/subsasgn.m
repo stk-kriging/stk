@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -363,7 +363,7 @@ end % function
 %! x.rownames{2} = 'b';
 %! assert (isequal (x.rownames, {''; 'b'}));
 %! assert (isequal (x.colnames, {'' 'v'}));
-%! assert (isequalwithequalnans (x.data, nan (2)));
+%! assert (isequal (size (x.data), [2 2]) && (all (isnan (x.data(:)))))
 
 %--- test replacing one column using ':' ---------------------------------------
 
