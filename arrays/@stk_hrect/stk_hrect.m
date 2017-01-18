@@ -23,7 +23,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -92,8 +92,8 @@ else  % create a new stk_hrect object
 end
 
 % column names
-if nargin > 1,
-    s.stk_dataframe.colnames = colnames;
+if nargin > 1
+    s.stk_dataframe = set (s.stk_dataframe, 'colnames', colnames);
 end
 
 end % function
