@@ -33,6 +33,10 @@
 
 function lm = stk_lm_null ()
 
+if nargin > 0
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
 lm = class (struct (), 'stk_lm_null');
 
 end % function
@@ -42,3 +46,5 @@ end % function
 %!test
 %! lm = stk_lm_null ();
 %! assert (isa (lm, 'stk_lm_null'));
+
+%!error lm = stk_lm_null (3.33);
