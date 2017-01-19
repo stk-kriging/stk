@@ -1,3 +1,10 @@
+2017-01-19  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_error.m: Catch unsupported use of -completenames
+
+	* misc/error/stk_error.m: Catch unsupported use of option
+	-completenames for dbstack in Octave 3.2.4.
+
 2017-01-18  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/subsasgn.m:: Do not use isequalwithnans
