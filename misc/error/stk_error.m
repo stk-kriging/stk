@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2012 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
@@ -32,7 +33,15 @@ function stk_error (errmsg, mnemonic, stack)
 % Second component of error identifier = name of calling function
 % (unless stk_error has been called directly from the base workspace)
 if nargin < 3,
-    stack = dbstack ('-completenames');
+    
+    try
+        stack = dbstack ('-completenames');
+        % In Octave, -completenames is at best ignored (in recent versions)
+        % or generates an error (in, e.g., Octave 3.2.4).
+    catch
+        stack = dbstack ();
+    end
+    
     if length (stack) == 1,
         caller = 'BaseWorkspace';
     else
