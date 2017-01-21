@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -90,11 +90,9 @@ end % if
 end % function
 
 
-%--- constructor --------------------------------------------------------------
+%!test stk_test_class ('stk_factorialdesign')
 
-%!test % default constructor
-%! x = stk_factorialdesign ();
-%! assert (strcmp (class (x), 'stk_factorialdesign'));
+%--- constructor --------------------------------------------------------------
 
 %!test % constructor with two factors + column names
 %! x = stk_factorialdesign ({[0 1], [1 2 3]}, {'a', 'b'});

@@ -42,9 +42,6 @@ lm = class (struct (), 'stk_lm_cubic');
 end % function
 
 
-% Default constructor
-%!test
-%! lm = stk_lm_cubic ();
-%! assert (isa (lm, 'stk_lm_cubic'));
+%!test stk_test_class ('stk_lm_cubic')
 
 %!error lm = stk_lm_cubic (3.33);

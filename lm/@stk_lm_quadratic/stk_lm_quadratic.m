@@ -42,9 +42,6 @@ lm = class (struct (), 'stk_lm_quadratic');
 end % function
 
 
-% Default constructor
-%!test
-%! lm = stk_lm_quadratic ();
-%! assert (isa (lm, 'stk_lm_quadratic'));
+%!test stk_test_class ('stk_lm_quadratic')
 
 %!error lm = stk_lm_quadratic (3.33);

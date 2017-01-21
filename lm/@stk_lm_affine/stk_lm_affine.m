@@ -42,9 +42,6 @@ lm = class (struct (), 'stk_lm_affine');
 end  % function stk_lm_affine
 
 
-% Default constructor
-%!test
-%! lm = stk_lm_affine ();
-%! assert (isa (lm, 'stk_lm_affine'));
+%!test stk_test_class ('stk_lm_affine')
 
 %!error lm = stk_lm_affine (3.33);

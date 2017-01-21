@@ -42,9 +42,6 @@ lm = class (struct (), 'stk_lm_null');
 end % function
 
 
-% Default constructor
-%!test
-%! lm = stk_lm_null ();
-%! assert (isa (lm, 'stk_lm_null'));
+%!test stk_test_class ('stk_lm_null')
 
 %!error lm = stk_lm_null (3.33);

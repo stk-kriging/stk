@@ -97,3 +97,6 @@ if nargin > 1
 end
 
 end % function
+
+
+%!test stk_test_class ('stk_hrect')
