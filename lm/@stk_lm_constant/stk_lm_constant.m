@@ -42,9 +42,6 @@ lm = class (struct (), 'stk_lm_constant');
 end % function
 
 
-% Default constructor
-%!test
-%! lm = stk_lm_constant ();
-%! assert (isa (lm, 'stk_lm_constant'));
+%!test stk_test_class ('stk_lm_constant')
 
 %!error lm = stk_lm_constant (3.33);

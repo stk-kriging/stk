@@ -50,9 +50,7 @@ lm = class (lm, 'stk_lm_matrix');
 end % function
 
 
-%!test %%% Default constructor
-%! lm = stk_lm_matrix ();
-%! assert (isa (lm, 'stk_lm_matrix'));
+%!test stk_test_class ('stk_lm_matrix')
 
 %!error lm = stk_lm_matrix ([], 3.33);
 

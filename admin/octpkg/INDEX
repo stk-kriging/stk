@@ -431,6 +431,7 @@ Miscellaneous: options, plots...
 #stk_isequal_tolabs    [internal]
 #stk_isequal_tolrel    [internal]
 #stk_is_lhs            [internal]
+#stk_test_class        [internal]
 #stk_test_dfbinaryop   [internal]
 
 ## (embryonic) parallelization engine

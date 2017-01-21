@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -100,6 +100,8 @@ model = class (model, 'stk_model_gpposterior');
 
 end % function
 
+
+%!test stk_test_class ('stk_model_gpposterior')
 
 %!shared M_prior, x_obs, z_obs
 %! x_obs = (linspace (0, pi, 15))';

@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
 %    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
@@ -69,3 +69,6 @@ algo = struct ('options', options);
 algo = class (algo, 'stk_optim_fmincon');
 
 end % function
+
+
+%!test stk_test_class ('stk_optim_fmincon')

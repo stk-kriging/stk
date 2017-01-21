@@ -1,3 +1,27 @@
+2017-01-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_test_class.m: Standard unit tests for all STK classes
+
+	* misc/test/stk_test_class.m: New function, which performs a
+	series of standard unit tests that all STK classes should pass.
+	* admin/octpkg/INDEX: Add the new function to the INDEX.
+	* arrays/@stk_dataframe/stk_dataframe.m: Add unit test.
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Add unit test.
+	* arrays/@stk_hrect/stk_hrect.m: Add unit test.
+	* core/@stk_kreq_qr/stk_kreq_qr.m: Add unit test.
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Add unit test.
+	* lm/@stk_lm_affine/stk_lm_affine.m: Add unit test.
+	* lm/@stk_lm_constant/stk_lm_constant.m: Add unit test.
+	* lm/@stk_lm_cubic/stk_lm_cubic.m: Add unit test.
+	* lm/@stk_lm_matrix/stk_lm_matrix.m: Add unit test.
+	* lm/@stk_lm_null/stk_lm_null.m: Add unit test.
+	* lm/@stk_lm_quadratic/stk_lm_quadratic.m: Add unit test.
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Add unit test.
+	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m: Add unit test.
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Add unit test.
+	* misc/parallel/@stk_parallel_engine_none/stk_parallel_engine_none.m: Add unit test.
+	* misc/parallel/@stk_parallel_engine_parfor/stk_parallel_engine_parfor.m: Add unit test.
+
 2017-01-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_error.m: Catch unsupported use of -completenames
