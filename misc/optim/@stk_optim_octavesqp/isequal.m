@@ -37,8 +37,8 @@ end
 
 % First, make sure that x and y belong to the same class
 % (either stk_dataframe or some derived class)
-b = isa (x, 'stk_kreq_qr') && strcmp (class (y), class (x)) ...
-    && isequal (struct (x), struct (y));
+b = isa (x, 'stk_optim_octavesqp') && strcmp (class (y), class (x)) ...
+    && isequal (x.options, y.options) && isequal (x.sqp, y.sqp);
 
 if b && (nargin > 2)
     b = isequal (x, varargin{:});

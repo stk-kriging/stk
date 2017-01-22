@@ -181,7 +181,7 @@ superiorto ('matlab.graphics.axis.Axes');
 end % function
 
 
-%!test stk_test_class ('stk_datafame')
+%!test stk_test_class ('stk_dataframe')
 
 %!error x = stk_dataframe (1, {}, {}, pi);
 

@@ -1,3 +1,27 @@
+2017-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Implement isequal to maintain compatiblity with Octave 3.2.x.
+
+	* arrays/@stk_dataframe/isequal.m: Handle any number of input
+	arguments.
+	* core/@stk_kreq_qr/isequal.m: Idem.
+	* arrays/@stk_factorialdesign/isequal.m: Implement isequal to
+	maintain compatibility with Octave 3.2.x.
+	* core/@stk_model_gpposterior/isequal.m: Idem.
+	* lm/@stk_lm_affine/isequal.m: Idem.
+	* lm/@stk_lm_constant/isequal.m: Idem.
+	* lm/@stk_lm_cubic/isequal.m: Idem.
+	* lm/@stk_lm_matrix/isequal.m: Idem.
+	* lm/@stk_lm_null/isequal.m: Idem.
+	* lm/@stk_lm_quadratic/isequal.m: Idem.
+	* misc/optim/@stk_optim_fmincon/isequal.m: Idem.
+	* misc/optim/@stk_optim_fminsearch/isequal.m: Idem.
+	* misc/optim/@stk_optim_octavesqp/isequal.m: Idem.
+	* misc/parallel/@stk_parallel_engine_none/isequal.m: Idem.
+	* misc/parallel/@stk_parallel_engine_parfor/isequal.m: Idem.
+	* arrays/@stk_dataframe/stk_dataframe.m: Fix unit test.
+	* admin/octpkg/INDEX: Add new functions to the INDEX.
+
 2017-01-21  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_test_class.m: Standard unit tests for all STK classes
