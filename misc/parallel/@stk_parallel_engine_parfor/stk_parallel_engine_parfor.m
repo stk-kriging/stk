@@ -29,15 +29,37 @@
 
 function pareng = stk_parallel_engine_parfor()
 
-if matlabpool('size') > 0,
-    warning('A worker pool is already open.');
-else
-    matlabpool open;
+if exist ('parpool')
+    
+    try
+        parpool ();
+    catch
+        e = lasterror ();
+        if strfind (e.identifier, 'ConnectionOpen')
+            warning ('A worker pool is already open.');
+        else
+            rethrow (e);
+        end
+    end
+    
+else  % try the old syntax
+    
+    if matlabpool ('size') > 0
+        warning ('A worker pool is already open.');
+    else
+        matlabpool open;
+    end
+    
 end
 
-pareng = class(struct(), 'stk_parallel_engine_parfor');
+pareng = class (struct(), 'stk_parallel_engine_parfor');
 
 end % function
 
+%#ok<*DPOOL>
 
-%!test stk_test_class ('stk_parallel_engine_parfor')
+
+%!test
+%! if exist ('matlabpool') || exist ('parpool')
+%!     stk_test_class ('stk_parallel_engine_parfor')
+%! end
