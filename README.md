@@ -107,15 +107,13 @@ the third example in the "Kriging basics" series.
 
 ## Requirements and recommendations
 
+### Common requirement
+
+   Your installation must be able to compile C mex files.
+
 ### Requirements and recommendations for use with GNU Octave
 
    The STK works with GNU Octave 3.2.2 or newer.
-
-   Note that  the STK relies on some mex files  that are compiled during
-   the initialization.  Thus,  your installation must be able to compile
-   mex files.  In Debian 6.0 (Squeeze)  or  gNewSense 3.0 (Parkes),  for
-   instance,  this means installing octave3.2-headers in addition to the
-   base octave3.2 package.
 
 ### Requirements and recommendations for use with Matlab
 

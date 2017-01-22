@@ -1,5 +1,9 @@
 2017-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	README.md: Rewrite C compiler requirement
+
+	* README.md: Rewrite C compiler requirement
+
 	stk_parallel_engine_parfor.m: Adapt to the 'new' PCT syntax
 
 	* misc/parallel/@stk_parallel_engine_parfor/stk_parallel_engine_parfor.m:
