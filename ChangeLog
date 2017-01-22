@@ -1,5 +1,10 @@
 2017-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_parallel_engine_parfor.m: Adapt to the 'new' PCT syntax
+
+	* misc/parallel/@stk_parallel_engine_parfor/stk_parallel_engine_parfor.m:
+	Adapt to the 'new' PCT syntax, since matlabpool has been removed.
+
 	Implement isequal to maintain compatiblity with Octave 3.2.x.
 
 	* arrays/@stk_dataframe/isequal.m: Handle any number of input
