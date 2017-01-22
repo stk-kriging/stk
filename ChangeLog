@@ -1,5 +1,9 @@
 2017-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	README.md: Raise minimal Octave version to 3.2.4
+
+	* README.md: Raise minimal Octave version to 3.2.4.
+
 	README.md: Rewrite C compiler requirement
 
 	* README.md: Rewrite C compiler requirement
