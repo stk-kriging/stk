@@ -37,8 +37,7 @@ end
 
 % First, make sure that x and y belong to the same class
 % (either stk_dataframe or some derived class)
-b = isa (x, 'stk_kreq_qr') && strcmp (class (y), class (x)) ...
-    && isequal (struct (x), struct (y));
+b = isa (x, 'stk_lm_quadratic') && strcmp (class (y), class (x));
 
 if b && (nargin > 2)
     b = isequal (x, varargin{:});

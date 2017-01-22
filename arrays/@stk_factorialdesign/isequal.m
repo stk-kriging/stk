@@ -3,7 +3,7 @@
 % Copyright Notice
 %
 %    Copyright (C) 2017 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -37,11 +37,12 @@ end
 
 % First, make sure that x and y belong to the same class
 % (either stk_dataframe or some derived class)
-b = isa (x, 'stk_kreq_qr') && strcmp (class (y), class (x)) ...
-    && isequal (struct (x), struct (y));
+b = isa (x, 'stk_factorialdesign') && strcmp (class (y), class (x)) ...
+    && isequal (x.levels, y.levels) && isequal (x.stk_dataframe, y.stk_dataframe);
 
 if b && (nargin > 2)
     b = isequal (x, varargin{:});
 end
 
 end % function
+
