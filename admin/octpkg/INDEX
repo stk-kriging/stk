@@ -244,7 +244,6 @@ Miscellaneous: Pareto optimality
 #stk_commonsize              [internal]
 #stk_sprintf                 [internal]
 #stk_sprintf_colnames        [internal]
-#stk_sprintf_info            [internal]
 #stk_sprintf_rownames        [internal]
 #stk_sprintf_sizetype        [internal]
 
@@ -263,7 +262,6 @@ Miscellaneous: Pareto optimality
 #@stk_dataframe/apply                     [internal]
 #@stk_dataframe/stk_sprintf               [internal]
 #@stk_dataframe/stk_sprintf_colnames      [internal]
-#@stk_dataframe/stk_sprintf_info          [internal]
 #@stk_dataframe/stk_sprintf_rownames      [internal]
 #@stk_dataframe/stk_sprintf_sizetype      [internal]
 #@stk_dataframe/abs                       [overload base]

@@ -1,5 +1,22 @@
 2017-01-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_dataframe: Deprecate info field
+
+	* arrays/@stk_dataframe/stk_sprintf.m: Hide info field.
+	* arrays/@stk_factorialdesign/stk_sprintf.m: Hide info field.
+	* arrays/@stk_dataframe/stk_sprintf_info.m: Removed (was "internal").
+	* arrays/generic/stk_sprintf_info.m: Removed (was "internal").
+	* admin/octpkg/INDEX: Remove both functions from the index.
+	* core/@stk_model_gpposterior/stk_predict.m: Do not set info.
+	* sampling/stk_sampling_halton_rr2.m: Do not set info.
+	* sampling/stk_sampling_maximinlhs.m: Do not set info.
+	* sampling/stk_sampling_olhs.m: Do not set info.
+	* sampling/stk_sampling_randomlhs.m: Do not set info.
+	* sampling/stk_sampling_randunif.m: Do not set info.
+	* sampling/stk_sampling_regulargrid.m: Do not set info.
+	* sampling/stk_sampling_sobol.m: Do not set info.
+	* arrays/@stk_dataframe/isequal.m: Ignore info.
+
 	@stk_dataframe/subsref.m: Minor modif to make it work in Octave 3.2.4
 
 	* arrays/@stk_dataframe/subsref.m: Minor modification to make it

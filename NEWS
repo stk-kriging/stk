@@ -133,9 +133,11 @@ Changes in version 2.4.0
 
 * Minor changes
 
-   o stk_plot_shadedci.m: Delete invisible area object
+   o stk_plot_shadedci.m: Delete invisible area object.
 
-   o @stk_hrect/ismember.m: Optimize for speed
+   o @stk_hrect/ismember.m: Optimize for speed.
+
+   o The info field of stk_dataframe objects is deprecated.
 
 
 Changes in version 2.3.4
