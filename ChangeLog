@@ -1,3 +1,11 @@
+2017-01-23  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_feval.m: Use commas in cell arrays of function handles
+
+	* arrays/generic/stk_feval.m: Separate elements with commas when
+	creating cell arrays of function handles.
+	* admin/CODING_GUIDELINES: Explain why.
+
 2017-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	README.md: Raise minimal Octave version to 3.2.4
