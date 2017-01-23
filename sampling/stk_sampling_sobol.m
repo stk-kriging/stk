@@ -40,7 +40,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -106,7 +106,6 @@ x = transpose (stk_sampling_sobol_mex (n, dim, do_skip));
 
 % Create dataframe output
 x = stk_dataframe (x, colnames);
-x.info = 'Created by stk_sampling_sobol';
 
 if ~ isempty (box),
     x = stk_rescale (x, [], box);

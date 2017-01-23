@@ -38,7 +38,8 @@ end
 % First, make sure that x and y belong to the same class
 % (either stk_dataframe or some derived class)
 b = isa (x, 'stk_dataframe') && strcmp (class (y), class (x)) ...
-    && isequal (struct (x), struct (y));
+    && isequal (x.data, y.data) ...
+    && isequal (x.colnames, y.colnames) && isequal (x.rownames, y.rownames);
 
 if b && (nargin > 2)
     b = isequal (x, varargin{:});

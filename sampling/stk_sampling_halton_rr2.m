@@ -15,6 +15,7 @@
 
 % Copyright Notice
 %
+%    Copyright  (C) 2017 CentraleSupelec
 %    Copyright  (C) 2014 SUPELEC
 %    Copyright  (C) 2013 Alexandra Krauth, Elham Rahali & SUPELEC
 %
@@ -69,7 +70,6 @@ for j = 1:d,
 end
 
 x = stk_dataframe (xdata, colnames);
-x.info = 'Created by stk_sampling_halton_rr2';
 
 if nargin > 2,
     x = stk_rescale (x, [], box);

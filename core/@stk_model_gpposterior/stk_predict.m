@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -152,7 +152,6 @@ end
 %--- Prepare outputs -----------------------------------------------------------
 
 zp = stk_dataframe ([zp_a zp_v], {'mean' 'var'});
-zp.info = 'Created by stk_predict';
 
 if nargout > 1 % lambda requested
     lambda = lambda_mu(1:n_obs, :);
