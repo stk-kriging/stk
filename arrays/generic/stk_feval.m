@@ -21,7 +21,7 @@
 %
 % EXAMPLE:
 %
-%    f = {@sin @cos};
+%    f = {@sin, @cos};
 %    x = stk_sampling_regulargrid (100, 1, [0; 2*pi]);
 %    x.colnames = {'x'};
 %    y = stk_feval (f, x);
@@ -61,7 +61,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -346,7 +346,7 @@ end % function
 
 %!test
 %! t.colnames = {'time'};
-%! z = stk_feval ({@sin @cos}, t);
+%! z = stk_feval ({@sin, @cos}, t);
 %! assert (isa (z, 'stk_dataframe'));
 %! assert (isequal (z.data, z_ref));
 
@@ -357,7 +357,7 @@ end % function
 
 %!test
 %! t = stk_sampling_regulargrid (n, 1, [0; 2*pi]);
-%! F = {'sin' 'cos'};
+%! F = {'sin', 'cos'};
 %! z = stk_feval (F, t);
 %! assert (isequal (z.data, [sin(t.data) cos(t.data)]));
 %! assert (isequal (z.colnames, {'sin' 'cos'}));
@@ -365,13 +365,13 @@ end % function
 %!test  % vectorized
 %! F = @(t)([sin(t) cos(t)]);
 %! G = @(t)(0.365 * t.^2 + (cos ((t - 1).*(t - 2) + 0.579033)));
-%! z = stk_feval ({@sin @cos G F 'tan'}, t);
+%! z = stk_feval ({@sin, @cos, G, F, 'tan'}, t);
 %! assert (isequal (z.colnames, {'sin' 'cos' 'F3' 'F4_1' 'F4_2' 'tan'}));
 
 %!test  % not vectorized
 %! F = @(t)([sin(t) cos(t)]);
 %! G = @(t)(0.365 * t^2 + (cos ((t - 1)*(t - 2) + 0.579033)));
-%! z = stk_feval ({@sin @cos G F 'tan'}, t, [], [], false);
+%! z = stk_feval ({@sin, @cos, G, F, 'tan'}, t, [], [], false);
 %! assert (isequal (z.colnames, {'sin' 'cos' 'F3' 'F4_1' 'F4_2' 'tan'}));
 
 %!test  % backward compatibility with old-style STK structures
