@@ -1,5 +1,11 @@
 2017-01-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_dataframe/subsref.m: Minor modif to make it work in Octave 3.2.4
+
+	* arrays/@stk_dataframe/subsref.m: Minor modification to make it
+	work in Octave 3.2.4 despite a but that allows subsref to modify
+	its input argument.
+
 	stk_feval.m: Use commas in cell arrays of function handles
 
 	* arrays/generic/stk_feval.m: Separate elements with commas when

@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -57,17 +57,15 @@ switch idx(1).type
                 J = process_cell_indices (J, x.colnames, 'Column');
             end
             
-            x.data = x.data(I, J);
+            t = stk_dataframe (x.data(I, J));
             
-            if ~ isempty (x.colnames),
-                x.colnames = x.colnames(1, J);
+            if ~ isempty (x.colnames)
+                t.colnames = x.colnames(1, J);
             end
             
-            if ~ isempty (x.rownames),
-                x.rownames = x.rownames(I, 1);
+            if ~ isempty (x.rownames)
+                t.rownames = x.rownames(I, 1);
             end
-            
-            t = x;
             
         else
             stk_error ('Illegal indexing.', 'IllegalIndexing');
