@@ -1,5 +1,12 @@
 2017-01-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Do not use ismatrix.
+
+	* arrays/generic/stk_boundingbox.m: Do not use ismatrix.
+	* misc/pareto/stk_dominatedhv.m: Do not use ismatrix.
+	* admin/CODING_GUIDELINES: Explain why.
+	* misc/error/stk_assert_box.m: Refer to CODING_GUIDELINES.
+
 	stk_example_doe04.m: Do not use ~ to ignore unwanted outputs
 
 	* examples/02_design_of_experiments/stk_example_doe04.m: Do not

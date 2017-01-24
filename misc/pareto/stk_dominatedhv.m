@@ -47,7 +47,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -95,8 +95,9 @@ end
 if iscell (y),
     y = cellfun (@(z) wfg_preprocessing (z, y_ref), y, 'UniformOutput', false);
 else % y is a matrix
-    if (~ ismatrix (y))
-        stk_error ('y should be a matrix or a cell array', 'IncorrectArgument');
+    if (~ isnumeric (y)) || (ndims (y) ~= 2) %#ok<ISMAT> see CODING_GUDELINES
+        stk_error (['y should be a numeric matrix or ' ...
+            'a cell array'], 'IncorrectArgument');
     end
     y = wfg_preprocessing (y, y_ref);
 end

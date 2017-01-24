@@ -76,3 +76,20 @@ As a work-around, always use a comma-separated list: C = {@sin, @cos};
 
 Octave 3.2.x does not support the use of ~ to ignore unwanted output
 arguments.  Don't use this syntax as long as Octave 3.2.x is supported.
+
+
+--- Using ismatrix ----------------------------------------------------------
+
+The ismatrix function has only been introduced in Matlab R2010b.
+
+Octave has had ismatrix for a long time, but the ismatrix function
+that is present in Octave 3.8 and before is not compatible with the
+one introduced in Matlab R2010b.
+
+The simplest solution is to completely avoid ismatrix and use instead:
+
+    is_matrix = (ndims (x) == 2);
+
+or, to specifically test for a numeric matrix:
+
+    is_matrix = (isnumeric (x)) && (ndims (x) == 2);
