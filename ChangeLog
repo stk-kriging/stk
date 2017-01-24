@@ -1,4 +1,10 @@
-2017-01-23  Julien Bect  <julien.bect@centralesupelec.fr>
+2017-01-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_example_doe04.m: Do not use ~ to ignore unwanted outputs
+
+	* examples/02_design_of_experiments/stk_example_doe04.m: Do not
+	use ~ to ignore unwanted output arguments.
+	* admin/CODING_GUIDELINES: Explain why.
 
 	stk_plot1d.m: Ignore legend errors
 
