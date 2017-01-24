@@ -1,5 +1,10 @@
 2017-01-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_dataframe/subsasgn.m: Octave 3.2.x repmat hack
+
+	* arrays/@stk_dataframe/subsasgn.m: Hack for a problem related to
+	repmat in Octave 3.2.x.
+
 	Do not use ismatrix.
 
 	* arrays/generic/stk_boundingbox.m: Do not use ismatrix.
