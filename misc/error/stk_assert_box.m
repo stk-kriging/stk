@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2012 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -39,10 +40,7 @@ end
 % Pretend that the error has been thrown by the caller
 stack = dbstack;  stack = stack(2:end);
 
-% Check that box is a numeric matrix (the behaviour of ismatrix is inconsistent
-% between Matlab and Octave for arrays with more than two dimensions...)
-ismatrix = isnumeric (box) && (length( size (box)) == 2);
-if ~ ismatrix,
+if (~ isnumeric (box)) || (ndims (box) ~= 2) %#ok<ISMAT> see CODING_GUDELINES
     errmsg = sprintf ('%s is not a numeric matrix.', boxname);
     stk_error (errmsg, mnemonic, stack);
 end
