@@ -72,7 +72,11 @@ ylim ([0; 0.5]);  stk_ylabel ('pmisclass');
 
 xnew = 3.0;  % Location of the next evaluation
 
-[z_pred, ~, ~, Kpost_all] = stk_predict (model, x_obs, z_obs, [x; xnew]);
+[z_pred, ignore_lambda, ignore_mu, Kpost_all] = ...
+    stk_predict (model, x_obs, z_obs, [x; xnew]);
+% Note: in recent versions of Octave or Matlab, you can use ~ to
+% ignore unwanted output arguments
+
 xihat_xt = z_pred(1:n, :);
 
 K12 = Kpost_all(1:n, end);  % Posterior covariance between locations x and x_new

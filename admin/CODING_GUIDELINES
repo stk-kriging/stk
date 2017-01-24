@@ -70,3 +70,9 @@ As a workaround, we should avoid calling display on such structures
 Octave 3.6.2 fails to parse this: C = {@sin @cos};
 
 As a work-around, always use a comma-separated list: C = {@sin, @cos};
+
+
+--- Ignoring output arguments -----------------------------------------------
+
+Octave 3.2.x does not support the use of ~ to ignore unwanted output
+arguments.  Don't use this syntax as long as Octave 3.2.x is supported.
