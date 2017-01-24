@@ -1,5 +1,11 @@
 2017-01-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_plot1d.m: Ignore legend errors
+
+	* misc/plot/stk_plot1d.m: Ignore legend errors.
+
+2017-01-23  Julien Bect  <julien.bect@centralesupelec.fr>
+
 	@stk_dataframe: Deprecate info field
 
 	* arrays/@stk_dataframe/stk_sprintf.m: Hide info field.
