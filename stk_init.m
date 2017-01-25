@@ -639,7 +639,9 @@ function install_mole_function (funct_name, mole_dir, do_addpath, prune_unused)
 
 function_dir = fullfile (mole_dir, funct_name);
 
-if isempty (which (funct_name)),  % if the function is absent
+w = which (funct_name);
+
+if (isempty (w)) || (~ isempty (strfind (w, '@')))  % if the function is absent
     
     function_mfile = fullfile (function_dir, [funct_name '.m']);
     
