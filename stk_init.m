@@ -442,7 +442,7 @@ if ~ compile
 end
 
 gcc_version_warning = [];
-try_silent = true;  % Matlab-only
+use_silent = ~ isempty (strfind (help ('mex'), '-silent'));  % Matlab-only
 
 if compile
     
@@ -460,15 +460,9 @@ if compile
         else
             warning_state = warning ('off', 'MATLAB:mex:GccVersion_link');
             lastwarn ('');
-            if try_silent
-                try
-                    % -silent is only supported in recent versions of Mtlab
-                    mex ('-silent', src_files{:}, include);
-                catch
-                    % Don't try again for the next ones
-                    try_silent = false;
-                    mex (src_files{:}, include);
-                end
+            if use_silent
+                % -silent is only supported in recent versions of Mtlab
+                mex ('-silent', src_files{:}, include);
             else
                 mex (src_files{:}, include);
             end
