@@ -1,5 +1,9 @@
 2017-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_init: Fix install_mole_function
+
+	* stk_init: Fix install_mole_function.
+
 	stk_init: Use mex without -silent when it is not supported
 
 	* stk_init: Use mex without -silent when it is not supported.
