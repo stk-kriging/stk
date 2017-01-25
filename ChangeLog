@@ -1,3 +1,11 @@
+2017-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix minor issues in C source code
+
+	* misc/distrib/private/stk_distrib_bivnorm0_cdf.c: Insert braces
+	to avoid "Missing braces around initializer" warning.
+	* misc/pareto/private/wfg.c: Remove unused variables.
+
 2017-01-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/subsasgn.m: Octave 3.2.x repmat hack
