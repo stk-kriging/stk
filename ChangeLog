@@ -1,5 +1,9 @@
 2017-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_init: Use mex without -silent when it is not supported
+
+	* stk_init: Use mex without -silent when it is not supported.
+
 	Fix minor issues in C source code
 
 	* misc/distrib/private/stk_distrib_bivnorm0_cdf.c: Insert braces
