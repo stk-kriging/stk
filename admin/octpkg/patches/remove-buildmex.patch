@@ -29,7 +29,7 @@
  % Add STK subdirectories to the path
  stk_init__addpath (root);
  
-@@ -323,203 +308,6 @@
+@@ -323,209 +308,6 @@
  
  end % function
  
@@ -134,6 +134,7 @@
 -end
 -
 -gcc_version_warning = [];
+-use_silent = ~ isempty (strfind (help ('mex'), '-silent'));  % Matlab-only
 -
 -if compile
 -    
@@ -151,7 +152,12 @@
 -        else
 -            warning_state = warning ('off', 'MATLAB:mex:GccVersion_link');
 -            lastwarn ('');
--            mex ('-silent', src_files{:}, include);
+-            if use_silent
+-                % -silent is only supported in recent versions of Mtlab
+-                mex ('-silent', src_files{:}, include);
+-            else
+-                mex (src_files{:}, include);
+-            end
 -            [lastmsg, lastid] = lastwarn ();
 -            if strfind (lastid, 'GccVersion')
 -                gcc_version_warning.msg = lastmsg;

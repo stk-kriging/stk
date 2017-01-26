@@ -7,6 +7,8 @@
 	stk_init: Use mex without -silent when it is not supported
 
 	* stk_init: Use mex without -silent when it is not supported.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
 
 	Fix minor issues in C source code
 
