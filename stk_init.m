@@ -590,7 +590,7 @@ if isoctave
     recursive_rmdir_state = confirm_recursive_rmdir (0);
 end
 
-opts = {mole_dir, do_addpath, prune_unused};
+opts = {root, mole_dir, do_addpath, prune_unused};
 
 % isoctave
 install_mole_function ('isoctave', opts{:});
@@ -637,13 +637,14 @@ end
 end % function
 
 
-function install_mole_function (funct_name, mole_dir, do_addpath, prune_unused)
+function install_mole_function (funct_name, ...
+    root, mole_dir, do_addpath, prune_unused)
 
 function_dir = fullfile (mole_dir, funct_name);
 
 w = which (funct_name);
 
-if (isempty (w)) || (~ isempty (strfind (w, '@')))  % if the function is absent
+if (isempty (w)) || (~ isempty (strfind (w, root)))  % if the function is absent
     
     function_mfile = fullfile (function_dir, [funct_name '.m']);
     
