@@ -1,5 +1,13 @@
 2017-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_init.m: Set use_silent to zero in Octave
+
+	* stk_init.m: Set use_silent to zero in Octave.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+
+2017-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
 	stk_init: Fix install_mole_function
 
 	* stk_init: Fix install_mole_function.
