@@ -1,5 +1,9 @@
 2017-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_init: Fix install_mole_function (again)
+
+	* stk_init: Fix install_mole_function (again).
+
 	stk_init.m: Set use_silent to zero in Octave
 
 	* stk_init.m: Set use_silent to zero in Octave.
