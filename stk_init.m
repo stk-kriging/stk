@@ -442,7 +442,9 @@ if ~ compile
 end
 
 gcc_version_warning = [];
-use_silent = ~ isempty (strfind (help ('mex'), '-silent'));  % Matlab-only
+isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
+use_silent = (~ isoctave) && ...  % Matlab-only:
+    (~ isempty (strfind (help ('mex'), '-silent')));
 
 if compile
     
@@ -455,7 +457,7 @@ if compile
         
         include = sprintf ('-I%s', opts.include_dir);
         
-        if exist ('OCTAVE_VERSION', 'builtin') == 5
+        if isoctave
             mex (src_files{:}, include);
         else
             warning_state = warning ('off', 'MATLAB:mex:GccVersion_link');
@@ -479,7 +481,7 @@ if compile
         fclose (fid);
         
         fprintf ('ok.\n');
-        if (exist ('OCTAVE_VERSION', 'builtin') == 5)
+        if isoctave
             fflush (stdout);
         end
         cd (here);
