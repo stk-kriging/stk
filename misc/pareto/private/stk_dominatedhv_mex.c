@@ -4,7 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright (C) 2015, 2016 CentraleSupelec                               *
+ *    Copyright (C) 2015-2017 CentraleSupelec                                *
  *                                                                           *
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
  *                                                                           *
@@ -86,7 +86,7 @@ void compute_decomposition (mxArray* f, FRONT *buffer,
   size_t nb_points;      /* number of points */
   size_t nb_objectives;  /* number of objectives */
   size_t rect_alloc;     /* initial number of rectangles */
-  double t, u;           /* aux variables */
+  double t;              /* aux variables */
   double *data;          /* pointer to input data */
   RLIST* Rlist;          /* list of hyper-rectangles */
   double *sign_data, *xmin_data, *xmax_data;

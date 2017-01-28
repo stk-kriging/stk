@@ -1,4 +1,10 @@
-2017-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
+2017-01-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dominatedhv_mex.c: Remove unused variable
+
+	* misc/pareto/private/stk_dominatedhv_mex.c: Remove unused variable.
+
+2017-01-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_init: Fix install_mole_function (again)
 
