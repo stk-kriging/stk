@@ -1,3 +1,10 @@
+2017-02-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dataframe.m: Prevent error in Matlab <=R2014a using a try-end block
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Prevent superiorto() from
+	generating an error in Matlab <=R2014a using a try-end block.
+
 2017-01-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_dominatedhv_mex.c: Remove unused variable
