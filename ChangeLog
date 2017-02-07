@@ -1,5 +1,11 @@
 2017-02-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Oldest supported version of Octave is now 3.2.4
+
+	* admin/build_tools/build_octpkg.m: Modify supported version from
+	3.2.2 to 3.2.4 in DESCRIPTION, in accordance with README.md.
+	* NEWS: No need to advertise such a tiny change of version number.
+
 	stk_init.m: Use __octave_config_info__ instead of octave_config_info
 
 	* stk_init.m: Use __octave_config_info__ instead of

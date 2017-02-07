@@ -1,8 +1,6 @@
 Changes in version 2.4.0
 ========================
 
-* Required Octave version number has been raised to 3.2.4.
-
 * Choosing the optimizer used in stk_param_estim
 
    o The choice of the optimization algorithm used in stk_param_estim is now
