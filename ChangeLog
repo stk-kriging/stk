@@ -1,3 +1,12 @@
+2017-02-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Prevent errors in Matlab <=R2014a using try-end blocks (bis)
+
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Add try-end block.
+	* admin/octpkg/patches/matlab-graphics-axis-Axes.patch: New patch
+	to remove Matlab related blocks from Octave package release.
+	* admin/octpkg/patches/series: Insert new patch in the series.
+
 2017-02-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_dataframe.m: Prevent error in Matlab <=R2014a using a try-end block
