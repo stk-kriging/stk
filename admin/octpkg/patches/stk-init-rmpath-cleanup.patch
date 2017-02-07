@@ -1,0 +1,39 @@
+--- a/stk_init.m
++++ b/stk_init.m
+@@ -257,27 +257,22 @@
+ 
+ regex1 = strcat ('^', escape_regexp (root));
+ 
+-isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
+-
+-if isoctave
+-    try
+-      % Use the modern name (__octave_config_info__) if possible
+-      % NOTE: feval prevents Matlab from complaining about the underscores
+-      apiver = feval ('__octave_config_info__', 'api_version');
+-      assert (ischar (apiver));
+-    catch
+-      % Use the old name instead
+-      apiver = octave_config_info ('api_version');
+-    end
+-    regex2 = strcat (escape_regexp (apiver), '$');
++try
++    % Use the modern name (__octave_config_info__) if possible
++    apiver = __octave_config_info__ ('api_version');
++    assert (ischar (apiver));
++catch
++    % Use the old name instead
++    apiver = octave_config_info ('api_version');
+ end
++regex2 = strcat (escape_regexp (apiver), '$');
+ 
+ while ~ isempty (s)
+     
+     [d, s] = strtok (s, pathsep);  %#ok<STTOK>
+     
+     if (~ isempty (regexp (d,  regex1, 'once'))) ...
+-            && ((~ isoctave) || isempty (regexp (d, regex2, 'once'))) ...
++            && (isempty (regexp (d, regex2, 'once'))) ...
+             && (~ strcmp (d, root))  % Only remove subdirectories, not the root
+         
+         rmpath (d);
