@@ -1,5 +1,14 @@
 2017-02-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_init.m: Use __octave_config_info__ instead of octave_config_info
+
+	* stk_init.m: Use __octave_config_info__ instead of
+	octave_config_info, which is now deprecated.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+	* admin/octpkg/patches/stk-init-rmpath-cleanup.patch: New patch.
+	* admin/octpkg/patches/series: Insert new patch in the series.
+
 	Prevent errors in Matlab <=R2014a using try-end blocks (bis)
 
 	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Add try-end block.

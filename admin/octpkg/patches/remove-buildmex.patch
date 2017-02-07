@@ -29,7 +29,7 @@
  % Add STK subdirectories to the path
  stk_init__addpath (root);
  
-@@ -323,211 +308,6 @@
+@@ -332,211 +317,6 @@
  
  end % function
  

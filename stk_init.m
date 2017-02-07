@@ -292,8 +292,17 @@ regex1 = strcat ('^', escape_regexp (root));
 
 isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
 
-if isoctave,
-    regex2 = strcat (escape_regexp (octave_config_info ('api_version')), '$');
+if isoctave
+    try
+      % Use the modern name (__octave_config_info__) if possible
+      % NOTE: feval prevents Matlab from complaining about the underscores
+      apiver = feval ('__octave_config_info__', 'api_version');
+      assert (ischar (apiver));
+    catch
+      % Use the old name instead
+      apiver = octave_config_info ('api_version');
+    end
+    regex2 = strcat (escape_regexp (apiver), '$');
 end
 
 while ~ isempty (s)
