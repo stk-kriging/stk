@@ -80,8 +80,10 @@ else
         x = struct ('levels', {levels});
         x = class (x, 'stk_factorialdesign', df);
         
-        % Starting with Matlab R2014b, graphics handles are objects
-        superiorto ('matlab.graphics.axis.Axes');
+        try
+            % Starting with Matlab R2014b, graphics handles are objects
+            superiorto ('matlab.graphics.axis.Axes');
+        end
         
     end % if
     
