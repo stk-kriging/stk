@@ -1,5 +1,10 @@
 2017-02-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	sqp_quadprog.m: Restore warning state if quadprog fails
+
+	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog.m: Restore
+	warning state if quadprog fails.
+
 	Provide better tools to check for optimizer availability (ticket #64)
 
 	* misc/optim/@stk_optim_baseclass: New abstract base class for all
