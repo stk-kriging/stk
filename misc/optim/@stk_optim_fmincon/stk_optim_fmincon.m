@@ -65,8 +65,9 @@ if nargin > 0
     options = optimset (options, varargin{:});
 end
 
+base = stk_optim_baseclass (true, false);
 algo = struct ('options', options);
-algo = class (algo, 'stk_optim_fmincon');
+algo = class (algo, 'stk_optim_fmincon', base);
 
 end % function
 

@@ -2,7 +2,7 @@ stk >> STK, a Small Toolbox for Kriging
  
 ## Copyright Notice
 ##
-##    Copyright (C) 2015, 2016 CentraleSupelec
+##    Copyright (C) 2015-2017 CentraleSupelec
 ##    Copyright (C) 2014 SUPELEC
 ##
 ##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -382,6 +382,7 @@ Miscellaneous: Pareto optimality
 ## Optimizers
  stk_minimize_boxconstrained
  stk_minimize_unconstrained
+ stk_optim_isavailable
  @stk_optim_fmincon/stk_optim_fmincon
 #@stk_optim_fmincon/stk_minimize_boxconstrained    [overload STK]
 #@stk_optim_fmincon/isequal                        [overload base]
@@ -395,6 +396,9 @@ Miscellaneous: Pareto optimality
 #stk_optim_testmin_box                             [internal]
 #stk_optim_testmin_unc                             [internal]
 #stk_select_optimizer                              [deprecated]
+#@stk_optim_baseclass/stk_optim_baseclass          [internal]
+#@stk_optim_baseclass/stk_optim_isavailable        [overload STK]
+#@stk_optim_baseclass/isequal                      [overload base]
 
 Miscellaneous: options, plots...
  stk_dist

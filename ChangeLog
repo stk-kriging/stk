@@ -1,3 +1,26 @@
+2017-02-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Provide better tools to check for optimizer availability (ticket #64)
+
+	* misc/optim/@stk_optim_baseclass: New abstract base class for all
+	optimizer object classes.
+	* misc/optim/@stk_optim_baseclass/stk_optim_baseclass.m: New
+	function, constructor of the new base class.
+	* misc/optim/@stk_optim_baseclass/isequal.m: Overload isequal
+	Octave 3.2.x compatibility, see CODING_GUIDELINES.
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Derive from
+	the new class.
+	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m: Idem.
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Itou.
+	* misc/optim/stk_optim_isavailable.m: New function, which tests if
+	a given optimization algorithm is available.
+	* misc/optim/@stk_optim_baseclass/stk_optim_isavailable.m:
+	Overload the generic function stk_optim_isavailable for the
+	abstract base class.
+	* misc/optim/stk_minimize_boxconstrained.m: Fix unit tests.
+	* misc/optim/stk_minimize_unconstrained.m: Fix unit tests.
+	* admin/octpkg/INDEX: Add new functions to the INDEX.
+
 2017-02-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Oldest supported version of Octave is now 3.2.4
