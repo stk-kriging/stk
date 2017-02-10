@@ -93,8 +93,9 @@ end
 % Note: do NOT rewrite to use handles instead of strings for optimizer
 %    (see bug report https://savannah.gnu.org/bugs/index.php?47828)
 
+base = stk_optim_baseclass (true, true);
 algo = struct ('options', options, 'sqp', optimizer);
-algo = class (algo, 'stk_optim_octavesqp');
+algo = class (algo, 'stk_optim_octavesqp', base);
 
 end % function
 
