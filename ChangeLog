@@ -1,5 +1,13 @@
 2017-02-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Use fminsearch for box-constrained problems as last recourse
+
+	* misc/optim/@stk_optim_fminsearch/stk_minimize_boxconstrained.m:
+	New function, which allows to use fminsearch for box-constrained
+	problems, a as last recourse for Matlab users that have neither
+	the Optimization toolbox nor MOSEK.
+	* admin/octpkg/INDEX: Add new function to the INDEX.
+
 	sqp_quadprog.m: Restore warning state if quadprog fails
 
 	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog.m: Restore
