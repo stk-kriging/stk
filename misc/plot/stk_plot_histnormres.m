@@ -8,7 +8,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -41,6 +41,13 @@ if n_argin >= 1
     opts = varargin(2:end);
 else
     stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+end
+
+% Ignore infinite normalized residuals, with a warning
+b = isinf (norm_res);
+if any (b)
+    warning (sprintf ('Ignoring %d infinite normalized resiudals.', sum (b)));
+    norm_res = norm_res(~ b);
 end
 
 % Choose the number of bins using the Freedman-Diaconis rule
