@@ -103,7 +103,10 @@ endef
 octaveforge-release: ${OF_MD5SUM} \
  octaveforge-package octaveforge-htmldoc
 	@echo
-	ls -lh ${OF_DIR}
+	@echo === tarballs for the *Octave Forge* FRS ===
+	@ls -lh ${OF_DIR}/*.tar.gz
+	@echo 
+	@cat ${OF_MD5SUM}
 	@echo
 
 octaveforge-package: ${OF_OCTPKG_TARBALL}
@@ -111,8 +114,9 @@ octaveforge-package: ${OF_OCTPKG_TARBALL}
 octaveforge-htmldoc: ${OF_DOC_TARBALL}
 
 ${OF_MD5SUM}: ${OF_OCTPKG_TARBALL} ${OF_DOC_TARBALL}
-	md5sum ${OF_OCTPKG_TARBALL} > ${OF_MD5SUM}
-	md5sum ${OF_DOC_TARBALL} >> ${OF_MD5SUM}
+	@echo Compute checksums...
+	@md5sum ${OF_OCTPKG_TARBALL} > ${OF_MD5SUM}
+	@md5sum ${OF_DOC_TARBALL} >> ${OF_MD5SUM}
 
 ${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_TIMESTAMP} | ${OF_DIR}
 	@echo
@@ -121,8 +125,8 @@ ${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_TIMESTAMP} | ${OF_DIR}
 	@echo
 
 ${OF_OCTPKG_TIMESTAMP}: ${HG_STAMP} | check_hg_clean ${OF_DIR}
-	${OCT_EVAL} "cd admin; build octpkg ${OF_DIR}"
-	touch ${OF_OCTPKG_TIMESTAMP}
+	@${OCT_EVAL} "cd admin; build octpkg ${OF_DIR}"
+	@touch ${OF_OCTPKG_TIMESTAMP}
 
 # Create tar.gz archive (this should create a tarball
 #    with the expected structure, according to
@@ -134,18 +138,19 @@ ${OF_DOC_TARBALL}: ${OF_DOC_TIMESTAMP}
 	@echo
 
 ${OF_DOC_TIMESTAMP}: ${OF_OCTPKG_TARBALL} ${HG_STAMP} | check_hg_clean ${OF_DIR}
-	${OCT_EVAL} "cd admin; build forgedoc ${OF_DOC_UNPACKED} ${OF_OCTPKG_TARBALL}"
-	touch ${OF_DOC_TIMESTAMP}
+	@${OCT_EVAL} "cd admin; build forgedoc ${OF_DOC_UNPACKED} ${OF_OCTPKG_TARBALL}"
+	@touch ${OF_DOC_TIMESTAMP}
 
 ${OF_DIR}:
-	mkdir -p ${OF_DIR}
+	@mkdir -p ${OF_DIR}
 
 
 ##### ALLPURP: SourceForge Matlab/Octave Release #####
 
 sourceforge-release: sourceforge-allpurpose sourceforge-octpkg
 	@echo
-	ls -lh ${SF_DIR}
+	@echo === tarballs for the *stk project* FRS ===
+	@ls -lh ${SF_DIR}/*.tar.gz
 	@echo
 
 sourceforge-allpurpose: ${SF_ALLPURP_TARBALL}
@@ -158,14 +163,14 @@ ${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_TIMESTAMP} | ${SF_DIR}
 	$(call create_tarball,$(SF_ALLPURP_UNPACKED),$@)
 
 ${SF_ALLPURP_TIMESTAMP}: ${SF_OCTPKG_TARBALL} ${HG_STAMP} | check_hg_clean ${SF_DIR}
-	${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL}"
-	touch ${SF_ALLPURP_TIMESTAMP}
+	@${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL}"
+	@touch ${SF_ALLPURP_TIMESTAMP}
 
 ${SF_OCTPKG_TARBALL}: ${OF_OCTPKG_TARBALL} | ${SF_DIR}
-	cp ${OF_OCTPKG_TARBALL} ${SF_OCTPKG_TARBALL}
+	@cp ${OF_OCTPKG_TARBALL} ${SF_OCTPKG_TARBALL}
 
 ${SF_DIR}:
-	mkdir -p ${SF_DIR}
+	@mkdir -p ${SF_DIR}
 
 
 ##### forgedoc-inspect: a copy for visual inspection  #####
