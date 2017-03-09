@@ -1037,13 +1037,10 @@ void Rlist_extend (RLIST* Rlist, int k, int* p_Ridx)
   int n = Rlist->n;
   int old_size = Rlist->size;
   int new_size = old_size + k;
-  int old_allocated_size, block_size, old_block_size;
+  int block_size;
 
   if (new_size > Rlist->allocated_size)
     {
-      old_allocated_size = Rlist->allocated_size;
-      old_block_size = n * old_allocated_size;
-
       while (new_size > Rlist->allocated_size)
         Rlist->allocated_size *= 2;
       block_size = n * Rlist->allocated_size;
