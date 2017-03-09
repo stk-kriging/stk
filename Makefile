@@ -115,8 +115,8 @@ octaveforge-htmldoc: ${OF_DOC_TARBALL}
 
 ${OF_MD5SUM}: ${OF_OCTPKG_TARBALL} ${OF_DOC_TARBALL}
 	@echo Compute checksums...
-	@md5sum ${OF_OCTPKG_TARBALL} > ${OF_MD5SUM}
-	@md5sum ${OF_DOC_TARBALL} >> ${OF_MD5SUM}
+	@cd ${OF_DIR} && md5sum $(notdir ${OF_OCTPKG_TARBALL}) \
+	   $(notdir ${OF_DOC_TARBALL}) > ${OF_MD5SUM}
 
 ${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_TIMESTAMP} | ${OF_DIR}
 	@echo
