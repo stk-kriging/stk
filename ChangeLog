@@ -1,5 +1,11 @@
 2017-03-08  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_dataframe/ismember.m: Fix a bug
+
+	* arrays/@stk_dataframe/ismember.m: Handle the case where A is an
+	stk_dataframe object and B is an stk_hrect object (or any
+	specialized stk_dataframe object that implements ismember).
+
 	stk_plot_histnormres.m: Ignore infinite normalized residuals
 
 	* misc/plot/stk_plot_histnormres.m: Ignore infinite normalized
