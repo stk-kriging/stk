@@ -1,5 +1,10 @@
 2017-03-09  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_example_doe04.m: Add help text
+
+	* examples/02_design_of_experiments/stk_example_doe04.m: Add help
+	text.
+
 	stk_param_getdefaultbounds.m: Add help text
 
 	* paramestim/stk_param_getdefaultbounds.m: Add help text.
