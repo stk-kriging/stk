@@ -57,7 +57,7 @@ OF_OCTPKG_TIMESTAMP=${OF_OCTPKG_UNPACKED}.dir.timestamp
 OF_OCTPKG_TARBALL=${OF_DIR}/stk-${VERNUM}.tar.gz
 OF_DOC_UNPACKED=${OF_DIR}/stk-html
 OF_DOC_TIMESTAMP=${OF_DOC_UNPACKED}.dir.timestamp
-OF_DOC_TARBALL=${OF_DIR}/stk-${VERNUM}-html.tar.gz
+OF_DOC_TARBALL=${OF_DIR}/stk-html.tar.gz
 OF_DOC_INSPECT=${OF_DOC_UNPACKED}-inspect
 
 ## File names for the SF release
