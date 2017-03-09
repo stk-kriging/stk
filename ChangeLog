@@ -1,3 +1,9 @@
+2017-03-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_getdefaultbounds.m: Add help text
+
+	* paramestim/stk_param_getdefaultbounds.m: Add help text.
+
 2017-03-08  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/ismember.m: Fix a bug
