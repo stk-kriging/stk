@@ -88,12 +88,12 @@ DUMMY := $(shell test "$(HG_OLD_ID)" != "$(HG_ID)" && mkdir -p $(BUILD_DIR) && e
 
 # Follows the recommendations of https://reproducible-builds.org/docs/archives
 define create_tarball
-$(shell cd $(dir $(1)) \
-    && find $(notdir $(1)) -print0 \
-    | LC_ALL=C sort -z \
-    | tar c --mtime="$(HG_DATE)" \
-            --owner=root --group=root --numeric-owner \
-            --no-recursion --null -T - -f - \
+$(shell cd $(dir $(1))                                     \
+    && find $(notdir $(1)) -print0                         \
+    | LC_ALL=C sort -z                                     \
+    | tar c --mtime="$(HG_DATE)" --mode=a+rX,u+w,go-w,ug-s \
+            --owner=root --group=root --numeric-owner      \
+            --no-recursion --null -T - -f -                \
     | gzip -9n > "$(2)")
 endef
 
