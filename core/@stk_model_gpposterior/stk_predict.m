@@ -1,36 +1,8 @@
-% STK_PREDICT performs a kriging prediction from data
-%
-% CALL: ZP = stk_predict (M_POST, XI, ZI, XP)
-%
-%    performs a kriging prediction at the points XP, given the posterior model
-%    MODEL_POST. The input argument XP can be either a numerical matrix or a
-%    dataframe. On a factor space of dimension DIM, XP must have size NP x
-%    M_POST.DIM, where NP is the number of prediction points. The output ZP is
-%    a dataframe of size NP x 2, with:
-%
-%     * the kriging predictor in the first column (ZP.mean), and
-%     * the kriging variance in the second column (ZP.var).
-%
-% CALL: [ZP, LAMBDA, MU] = stk_predict (M_POST, XP)
-%
-%    also returns the matrix of kriging weights LAMBDA and the matrix of
-%    Lagrange multipliers MU.
-%
-% CALL: [ZP, LAMBDA, MU, K] = stk_predict (M_POST, XP)
-%
-%    also returns the posterior covariance matrix K at the locations XP (this is
-%    an NP x NP covariance matrix). From a frequentist point of view, K can be
-%    seen as the covariance matrix of the prediction errors.
-%
-% SPECIAL CASE
-%
-%    If M_POST.INPUT_DATA is empty, everything but ZP.mean is computed. Indeed,
-%    neither the kriging variance ZP.var nor the matrices LAMBDA and MU actually
-%    depend on the observed values.
+% STK_PREDICT [overload STK function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -180,7 +152,6 @@ end
 %--- Prepare outputs -----------------------------------------------------------
 
 zp = stk_dataframe ([zp_a zp_v], {'mean' 'var'});
-zp.info = 'Created by stk_predict';
 
 if nargout > 1 % lambda requested
     lambda = lambda_mu(1:n_obs, :);

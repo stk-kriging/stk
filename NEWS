@@ -31,16 +31,31 @@ Changes in version 2.4.0
 
    o Automatic detection of available optimizers.
 
+   o stk_minimize_boxconstrained.m (new function): Perform box-constrained
+     minimization of a function.  This function is overloaded for each optimizer
+     object class that supports box-constrained optimization.
+
+   o stk_minimize_unconstrained.m (new function): Perform unconstrained
+     minimization of a function.  This function is overloaded for each optimizer
+     object class that supports unconstrained optimization.
+
 * Covariance functions
 
    o It is now possible to specify default bounds for the estimation of the
      parameters in a user-defined covariance function. See the documentation of
      stk_param_getdefaultbounds for more information.
 
-   o Radial basis functions (old and new)
+   o Experimental/undocumented feature: it is possible to provide a specialized
+     stk_param_init function for user-defined covariance functions.  Read
+     stk_param_init.m if you need to do this.  (This feature might be removed or
+     modified in future releases.)
+
+   o Radial basis functions (old and new):
       o stk_rbf_matern, stk_rbf_matern32, stk_rbf_matern52 and stk_rbf_gauss
-        (previously available internally as stk_sf_* functions)
-      o New: stk_rbf_exponential, st_rbf_spherical
+        (previously available internally as stk_sf_* functions).	
+      o New: stk_rbf_exponential, st_rbf_spherical.
+      o Bugfix: stk_rbf_matern32, stk_rbf_matern52 return 0 for very large h,
+        where stk_sf_matern32 and stk_sf_matern52 returned NaN.
 
    o New covariance functions
       o Exponential (aka Matern 1/2): stk_expcov_iso, stk_expcov_aniso
@@ -74,7 +89,7 @@ Changes in version 2.4.0
 
    o stk_predict is overloaded for stk_model_gpposterior objects.
 
-   o stk_model_update.m: New function. Updates a model with new observations.
+   o stk_model_update.m (new function): Update a model with new observations.
 
 * Space-filling designs
 
@@ -87,7 +102,7 @@ Changes in version 2.4.0
 
    o stk_sampcrit_ei_eval.m (new function): Compute the expected improvement
      (EI) criterion for single-objective noiseless optimization.
-   
+
    o stk_sampcrit_ehvi_eval.m (new function): Compute the expect hyper-volume
      improvement (EHVI) criterion (Emmerich, Giannakoglou & Naujoks, 2006) for
      multi-objective noiseless optimization.  This function implements an exact
@@ -97,24 +112,24 @@ Changes in version 2.4.0
    o stk_sampcrit_emmi_eval.m (new function): Compute the expected maximin
      improvement (EMMI) criterion for multi-objective noiseless optimization
      (Svenson & Santner, 2010).
-   
+
 * Miscellaneous
 
-   o stk_pmisclass.m: New function to compute either the current probability of
+   o stk_pmisclass.m (new function): Compute either the current probability of
      misclassification or the expectation of the future probability of
      misclassification, with respect to a given threshold.
 
-   o stk_dominatedhv.m: New function to compute Pareto-dominated hypervolumes,
+   o stk_dominatedhv.m (new function): Compute Pareto-dominated hypervolumes,
      which relies internally on the "Walking Fish Group" (WFG 1.10)
      algorithm. The function can also return the underlying inclusion-exclusion
      representation of the dominated region, i.e., its representation as a
      collection of signed overlapping hyper-rectangles.
 
-   o stk_dataframe arrays now accept characters indices (row/column names) and
-     cell array indices (list of row/column names).
-
    o stk_predict_leaveoneout.m: New function that computes leave-one-out
      predictions and residuals.
+
+   o stk_isnoisy.m (new function): Returns false for a noiseless model and true
+     otherwise.
 
 * Graphics
 
@@ -122,16 +137,19 @@ Changes in version 2.4.0
      as optional first input argument, and return a handle (or a vector of
      handles when appropriate) to the graphical object created by the function.
 
+   o STK is now compatible with Matlab >= R2014b, where handles to graphical
+     objects are not numbers any more.
+
    o stk_plot1d.m: A nice default legend can now be created painlessly using
      legend ('show'), and a struct of handles to the graphical objects composing
      the plot is returned to facilitate further customization. See, e.g.,
      examples 1 and 2 in the "kriging basics" series.
 
-   o stk_plot2d: Removed (had been deprecated for a while).
+   o stk_plot2d.m: Removed (had been deprecated for a while).
 
-   o stk_plot_predvsobs (new function): Plot predictions against observations.
+   o stk_plot_predvsobs.m (new function): Plot predictions against observations.
 
-   o stk_plot_histnormres (new function): Plot histogram of normalized
+   o stk_plot_histnormres.m (new function): Plot histogram of normalized
      residuals, together with the N(0, 1) pdf as a reference.
 
 * Examples
@@ -143,11 +161,48 @@ Changes in version 2.4.0
      leave-one-out cross-validation to produce goodness-of-fit graphical
      diagnostics.
 
-* Minor changes
+   o stk_testfun_borehole.m (new function): New test function (the "borehole
+     model" response function, from Harper & Gupta 1983).
 
-   o stk_plot_shadedci.m: Delete invisible area object
+   o stk_testfun_twobumps.m (new function): A simple 1D test function.
 
-   o @stk_hrect/ismember.m: Optimize for speed
+   o stk_dataset_twobumps.m (new function): Define three datasets based on the
+     TwoBumps test function.
+
+* stk_dataframe class
+
+   o New overloaded functions for stk_dataframe objects: acos, acosd, acosh,
+     asin, asind, asinh, atan, atand, atanh, cos, cosd, cosh, exp, expm1, log,
+     log10, log1p, log2, logical, sin, sind, sinh, sqrt, tan, tand, tanh.
+
+   o @stk_dataframe/bsxfun.m: Now preserve row names if possible.
+
+   o @stk_dataframe/openvar.m (new function): Convert stk_dataframe object to
+     table or double array before opening it the variable editor.
+
+   o stk_dataframe arrays now accept characters indices (row/column names) and
+     cell array indices (list of row/column names).
+
+   o The 'info' field is deprecated.
+
+* Other minor changes
+
+   o stk_plot_shadedci.m: Delete invisible area object.
+
+   o @stk_hrect/ismember.m: Optimize for speed.
+
+   o stk_predict.m: In the case of discrete models, row input vectors are no
+     longer accepted.
+
+   o stk_runtests.m: Now also available in the Octave package release, to
+     provide a convenient wrapper around __run_test_suite__ ().
+
+   o stk_maxabscorr.m: No longer relies on corr ().
+
+   o stk_kreq_qr.m: Now has a default constructor, which allows to load saved
+     stk_kreq_qr objects properly.
+
+   o The info field of stk_dataframe objects is deprecated.
 
 
 Changes in version 2.3.4

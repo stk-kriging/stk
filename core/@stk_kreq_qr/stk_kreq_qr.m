@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -66,3 +66,6 @@ if nargin > 2,
 end
 
 end % function
+
+
+%!test stk_test_class ('stk_kreq_qr')

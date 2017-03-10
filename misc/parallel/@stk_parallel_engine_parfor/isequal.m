@@ -1,8 +1,9 @@
-% SET_PARAM sets the parameters of the covariance function
+% ISEQUAL [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,14 +27,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function model = set_param (model, param, recompute)
+% INTERNAL NOTE: overloaded for Octave 3.2.x compat / see CODING_GUIDELINES
 
-% Set parameter values
-model.prior_model.param = param;
+function b = isequal (x, y, varargin)
 
-% Update kreq field: recompute QR factorization
-if (nargin < 3) || (recompute)
-    model.kreq = stk_kreq_qr (model.prior_model, model.input_data);
+if nargin < 2
+    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
 end
-    
+
+% First, make sure that x and y belong to the same class
+% (either stk_dataframe or some derived class)
+b = isa (x, 'stk_parallel_engine_parfor') && strcmp (class (y), class (x));
+
+if b && (nargin > 2)
+    b = isequal (x, varargin{:});
+end
+
 end % function

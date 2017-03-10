@@ -4,7 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright (C) 2015, 2016 CentraleSupelec                               *
+ *    Copyright (C) 2015-2017 CentraleSupelec                                *
  *                                                                           *
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
  *                                                                           *
@@ -1013,7 +1013,6 @@ void wfg_front_resize (FRONT* f, int nb_points, int nb_objectives)
 
 RLIST* Rlist_alloc (int alloc_size, int n)
 {
-  int i, j;
   int block_size = n * alloc_size;
 
   RLIST* Rlist = (RLIST*) mxMalloc (sizeof (RLIST));
@@ -1038,13 +1037,10 @@ void Rlist_extend (RLIST* Rlist, int k, int* p_Ridx)
   int n = Rlist->n;
   int old_size = Rlist->size;
   int new_size = old_size + k;
-  int old_allocated_size, block_size, old_block_size;
+  int block_size;
 
   if (new_size > Rlist->allocated_size)
     {
-      old_allocated_size = Rlist->allocated_size;
-      old_block_size = n * old_allocated_size;
-
       while (new_size > Rlist->allocated_size)
         Rlist->allocated_size *= 2;
       block_size = n * Rlist->allocated_size;

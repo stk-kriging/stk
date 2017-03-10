@@ -2,7 +2,27 @@
 %
 % CALL: LOO_PRED = stk_predict_leaveoneout (M_prior, xi, zi)
 %
+%    computes LOO predictions for (xi, zi) using the prior model M_prior.  The
+%    result is a dataframe with n rows and two columns, where n is the number of
+%    rows of xi and zi.  The first column is named 'mean' and contains LOO
+%    prediction means.  The second column is named 'var' and contains LOO
+%    prediction variances.
+%
 % CALL: [LOO_PRED, LOO_RES] = stk_predict_leaveoneout (M_prior, xi, zi)
+%
+%    also returns LOO residuals.  The result LOO_RES is a dataframe with n rows
+%    and two columns.  The first column is named 'residuals' and contains raw
+%    (i.e., unnormalized) residuals.  The second column is named 'norm_res' and
+%    contains normalized residuals.
+%
+% CALL: [LOO_PRED, LOO_RES] = stk_predict_leaveoneout (M_post)
+%
+%    does the same as above using a posterior model object directly.
+%
+% REMARK
+%
+%    This function actually computes pseudo-LOO prediction and residuals,
+%    where the same parameter vector is used for all data points.
 %
 % See also stk_example_kb10
 
@@ -47,10 +67,42 @@ varargout = cell (1, max (1, nargout));
 end % function
 
 
-%!test  % heteroscedastic noise case
-%! x_obs = stk_sampling_regulargrid (20, 1, [0; 2*pi]);
+%!shared n, x_obs, z_obs, model
+%! n = 20;
+%! x_obs = stk_sampling_regulargrid (n, 1, [0; 2*pi]);
 %! z_obs = stk_feval (@sin, x_obs);
 %! model = stk_model ('stk_materncov32_iso');
 %! model.param = log ([1; 5]);
-%! model.lognoisevariance = linspace (0.1, 1, 20);
+
+%!test  % one output
+%!
+%! loo_pred = stk_predict_leaveoneout (model, x_obs, z_obs);
+%!
+%! assert (isequal (size (loo_pred), [n 2]));
+%! assert (isequal (loo_pred.colnames, {'mean', 'var'}));
+%! assert (all (isfinite (loo_pred(:))));
+
+%!test  % two outputs
+%!
 %! [loo_pred, loo_res] = stk_predict_leaveoneout (model, x_obs, z_obs);
+%!
+%! assert (isequal (size (loo_pred), [n 2]));
+%! assert (isequal (loo_pred.colnames, {'mean', 'var'}));
+%! assert (all (isfinite (loo_pred(:))));
+%!
+%! assert (isequal (size (loo_res), [n 2]));
+%! assert (isequal (loo_res.colnames, {'residuals', 'norm_res'}));
+%! assert (all (isfinite (loo_res(:))));
+
+%!test  % heteroscedastic noise case
+%!
+%! model.lognoisevariance = (1 + rand (n, 1)) * 1e-6;
+%! [loo_pred, loo_res] = stk_predict_leaveoneout (model, x_obs, z_obs);
+%!
+%! assert (isequal (size (loo_pred), [n 2]));
+%! assert (isequal (loo_pred.colnames, {'mean', 'var'}));
+%! assert (all (isfinite (loo_pred(:))));
+%!
+%! assert (isequal (size (loo_res), [n 2]));
+%! assert (isequal (loo_res.colnames, {'residuals', 'norm_res'}));
+%! assert (all (isfinite (loo_res(:))));

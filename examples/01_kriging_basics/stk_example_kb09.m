@@ -77,7 +77,9 @@ z_sim_cond = stk_generate_samplepaths (model, xi, zi, xt, NB_PATHS);
 
 % Display the result
 stk_plot1d (xi, zi, xt, zt, zp, z_sim_cond);
-h = legend ('show');  set (h, 'Location', 'NorthWest');
+try % Catch Octave 4.0.x bug (see https://sourceforge.net/p/kriging/tickets/55)
+    h = legend ('show');  set (h, 'Location', 'NorthWest');
+catch end;
 stk_title ('Prediction and credible intervals');
 stk_labels ('input variable x', 'response z');
 

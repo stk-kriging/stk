@@ -56,9 +56,8 @@ end % function
 %! M_post = stk_model_gpposterior (M_prior, x_obs, z_obs);
 
 %!assert (isstruct (M_post.prior_model));
-%!assert (M_post.dim == 1);
-%!assert (isequal (size (M_post.input_data), [n, 1]));
-%!assert (isequal (size (M_post.output_data), [n, 1]));
+%!assert (isequal (size (M_post.input_data), [n 1]));
+%!assert (isequal (size (M_post.output_data), [n 1]));
 %!assert (isa (M_post.kreq, 'stk_kreq_qr'));
 
 %!error M_post(1);

@@ -15,7 +15,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -62,23 +62,23 @@ end % function
 
 
 %!test  % Call fminsearch using function name
-%! if exist ('fminsearch', 'file')
+%! if stk_optim_isavailable ('fminsearch')
 %!     assert (stk_optim_testmin_unc ('fminsearch'));
 %! end
 
 %!test  % Call fminsearch directly, using algorithm object
-%! if exist ('fminsearch', 'file')
+%! if stk_optim_isavailable ('fminsearch')
 %!     algo = stk_optim_fminsearch ('TolX', 1e-12, 'TolFun', 1e-12);
 %!     assert (stk_optim_testmin_unc (algo));
 %! end
 
 %!test  % Call sqp using function name
-%! if isoctave || (exist ('quadprog', 'file'))
+%! if stk_optim_isavailable ('octavesqp')
 %!    assert (stk_optim_testmin_unc ('octavesqp'));
 %! end
 
 %!test  % Call sqp directly, using algorithm object
-%! if isoctave  || (exist ('quadprog', 'file'))
+%! if stk_optim_isavailable ('octavesqp')
 %!    algo = stk_optim_octavesqp ();
 %!    assert (stk_optim_testmin_unc (algo));
 %! end

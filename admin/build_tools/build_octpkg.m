@@ -73,13 +73,13 @@ sed_program = prepare_sed_rename_mex (release_dir);
 
 try
     % Apply patches
-    assert (system ('quilt push -a') == 0);
+    assert (system ('quilt push -a -q') == 0);
     
     % Process directories recursively
     process_directory ('', unpacked_dir, ignore_list, sed_program);
     
     % Cleanup: unapply patches
-    assert (system ('quilt pop -a') == 0);
+    assert (system ('quilt pop -a -q') == 0);
     
 catch
     system ('quilt pop -af');
@@ -108,7 +108,7 @@ fprintf (fid, '%s', parse_description_field (root_dir));
 fprintf (fid, '#\n');
 fprintf (fid, 'Url: https://sourceforge.net/projects/kriging/\n');
 fprintf (fid, '#\n');
-fprintf (fid, 'Depends: octave (>= 3.2.2)\n');
+fprintf (fid, 'Depends: octave (>= 3.2.4)\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Autoload: no\n');
 fclose (fid);
@@ -136,10 +136,7 @@ end % function
 function process_directory (d, unpacked_dir, ignore_list, sed_program)
 
 if ismember (d, ignore_list)
-    fprintf ('Ignoring directory %s\n', d);
     return;
-else
-    fprintf ('Processing directory %s\n', d);
 end
 
 if isempty (d)
@@ -167,7 +164,7 @@ end % function
 function process_file (s, unpacked_dir, sed_program)
 
 % Regular expressions
-regex_ignore = '(~|\.(hgignore|hgtags|mexglx|mex|mexa64|mexw64|o|tmp|orig))$';
+regex_ignore = '(~|\.(hgignore|hgtags|mexglx|mex|mexa64|mexw64|o|tmp|orig|info))$';
 regex_mfile = '\.m$';
 regex_copy_src = '\.[ch]$';
 
@@ -180,11 +177,7 @@ if ~ isempty (regexp (s, regex_ignore, 'once')) ...
         || strcmp (s, 'doc/dev/model.texi') ...
         || strcmp (s, 'iago/DESIGN-NOTES.md')
     
-    fprintf ('Ignoring file %s\n', s);
-    
 else
-    
-    fprintf ('Processing file %s\n', s);
     
     if ~ isempty (regexp (s, regex_mfile, 'once'))
         
@@ -208,9 +201,9 @@ else
         % Put AUTHORS in the documentation directory
         copyfile (s, fullfile (unpacked_dir, 'doc'));
         
-    elseif strcmp (s, 'README')
+    elseif strcmp (s, 'README.md')
         
-        % Put README in the documentation directory
+        % Put README.md in the documentation directory
         copy_readme (s, fullfile (unpacked_dir, 'doc'));
         
     elseif strcmp (s, 'CITATION')
@@ -265,7 +258,7 @@ end % function
 
 function descr = parse_description_field (root_dir)
 
-fid = fopen_ (fullfile (root_dir, 'README'), 'rt');
+fid = fopen_ (fullfile (root_dir, 'README.md'), 'rt');
 
 s = [];
 
@@ -275,7 +268,7 @@ while 1,
     
     L = fgetl (fid);
     if ~ ischar (L),
-        error ('Corrupted README file ?');
+        error ('Corrupted README.md file ?');
     end
     
     L = strtrim (L);
@@ -293,7 +286,7 @@ while 1,
     
     L = fgetl (fid);
     if ~ ischar (L),
-        error ('Corrupted README file ?');
+        error ('Corrupted README.md file ?');
     end
     
     L = strtrim (L);

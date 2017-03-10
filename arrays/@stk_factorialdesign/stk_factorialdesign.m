@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -80,8 +80,10 @@ else
         x = struct ('levels', {levels});
         x = class (x, 'stk_factorialdesign', df);
         
-        % Starting with Matlab R2014b, graphics handles are objects
-        superiorto ('matlab.graphics.axis.Axes');
+        try
+            % Starting with Matlab R2014b, graphics handles are objects
+            superiorto ('matlab.graphics.axis.Axes');
+        end
         
     end % if
     
@@ -90,11 +92,9 @@ end % if
 end % function
 
 
-%--- constructor --------------------------------------------------------------
+%!test stk_test_class ('stk_factorialdesign')
 
-%!test % default constructor
-%! x = stk_factorialdesign ();
-%! assert (strcmp (class (x), 'stk_factorialdesign'));
+%--- constructor --------------------------------------------------------------
 
 %!test % constructor with two factors + column names
 %! x = stk_factorialdesign ({[0 1], [1 2 3]}, {'a', 'b'});

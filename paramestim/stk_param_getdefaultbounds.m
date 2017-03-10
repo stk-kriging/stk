@@ -1,11 +1,26 @@
-% STK_PARAM_GETDEFAULTBOUNDS
+% STK_PARAM_GETDEFAULTBOUNDS provides lower/upper bounds for covariance parameters
 %
-% FIXME: Explain what this function does, and how it is possible to define
-% default bounds for user-defined covariance functions (there are two ways to do
-% this...).
+% CALL: [LB, UB] = stk_param_getdefaultbounds (COVARIANCE_TYPE, PARAM0, XI, ZI)
+%
+%    returns lower bounds LB and upper bounds UB for the optimization of the
+%    parameters of a parameterized covariance function COVARIANCE_TYPE, given
+%    the starting point PARAM0 of the optimization and the data (XI, ZI).
+%
+% NOTE: user-defined covariance functions
+%
+%    For user-defined covariance functions, lower/upper bounds can be provided
+%    using one of the following two approaches:
+%
+%       a) if the covariance uses a dedicated class C for parameter values,
+%          the prefered approach is to imlement stk_param_getdefaultbounds for
+%          this class;
+%
+%       b) otherwise, for a covariance function named mycov, simply provide a
+%          function named mycov_defaultbounds.
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2015 CentraleSupelec & LNE
 %    Copyright (C) 2011-2014 SUPELEC
 %
