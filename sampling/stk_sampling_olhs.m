@@ -42,6 +42,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -216,7 +217,6 @@ x = (2*x - 1) / (2*n);
 
 % And, finally, convert to box
 x = stk_dataframe (stk_rescale (x, [], box), box.colnames);
-x.info = 'Created by stk_sampling_olhs';
 
 % Note: the results reported in Cioppa & Lucas correspond to the scaling
 %   x = struct('a', stk_rescale(x, [min(x); max(x)], box));

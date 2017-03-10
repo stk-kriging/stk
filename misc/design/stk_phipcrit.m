@@ -5,7 +5,7 @@
 %    computes the phi_P criterion on the set of points X, which is defined for
 %    an n x d array X as
 %
-%       D = (sum_{1 <= i < j <= n} d_ij ^ (-p)) ^ (-1/p)
+%       D = (sum_{1 <= i < j <= n} d_ij ^ (-p)) ^ (1/p)
 %
 %    where d_ij is the Euclidean distance in R^d between X(i,:) and X(j,:).
 %
@@ -45,9 +45,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:   Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %

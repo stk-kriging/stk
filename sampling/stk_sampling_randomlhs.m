@@ -16,6 +16,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
@@ -62,7 +63,6 @@ end
 niter = 1;
 
 x = stk_sampling_maximinlhs (n, dim, box, niter);
-x.info = 'Created by stk_sampling_randomlhs';
 
 end % function
 

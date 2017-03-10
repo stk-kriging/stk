@@ -47,7 +47,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -95,8 +95,9 @@ end
 if iscell (y),
     y = cellfun (@(z) wfg_preprocessing (z, y_ref), y, 'UniformOutput', false);
 else % y is a matrix
-    if (~ ismatrix (y))
-        stk_error ('y should be a matrix or a cell array', 'IncorrectArgument');
+    if (~ isnumeric (y)) || (ndims (y) ~= 2) %#ok<ISMAT> see CODING_GUDELINES
+        stk_error (['y should be a numeric matrix or ' ...
+            'a cell array'], 'IncorrectArgument');
     end
     y = wfg_preprocessing (y, y_ref);
 end
@@ -128,7 +129,8 @@ function y = wfg_preprocessing (y, y_ref)
 
 y = double (y);
 
-p_ref = size (y_ref, 2);
+% Keep only non-dominated points, and remove duplicates
+y = unique (y(stk_paretofind (y), :), 'rows');
 
 if isempty (y_ref)  % Use [0 0 ... 0] as a reference point
     
@@ -138,6 +140,7 @@ if isempty (y_ref)  % Use [0 0 ... 0] as a reference point
 else  % Reference point provided
     
     p = size (y, 2);
+    p_ref = size (y_ref, 2);
     
     % Check the size of y
     if (p > p_ref)
@@ -212,15 +215,34 @@ end % function
 
 %-------------------------------------------------------------------------------
 
-%!shared y1, y2, y0
+%!shared y1, y2, y0, S, S1
 %! y0 = [1.00 1.00];  % Reference point
-%! y1 = [1.50 1.50];  % Above the reference point => ignored (with a warning)
+%! y1 = [1.50 1.50];  % Above the reference point
 %! y2 = [0.50 0.50];  % Below the reference point
 
 %!assert (isequal (0.00, stk_dominatedhv (y1, y0)));
 %!assert (isequal (0.25, stk_dominatedhv (y2, y0)));
 %!assert (isequal (0.25, stk_dominatedhv ([y1; y2], y0)));
 %!assert (isequal (0.25, stk_dominatedhv ([y2; y1; y2], y0)));
+
+% Check decompositions:
+
+%!test S = stk_dominatedhv (y1, y0, 1);    % empty decomposition
+%!assert (isequal (size (S.xmin, 1), 0));
+
+%!test S = stk_dominatedhv (y2, y0, 1);    % trivial decomposition
+%!assert (isequal (S.sign, 1));
+%!assert (isequal (S.xmin, y2));
+%!assert (isequal (S.xmax, y0));
+
+%!test S1 = stk_dominatedhv ([y2; y0], y0, 1);  % shoud be the same as before
+%!assert (isequal (S1, S));
+
+%!test S1 = stk_dominatedhv ([y2; y1], y0, 1);  % shoud be the same as before
+%!assert (isequal (S1, S));
+
+%!test S1 = stk_dominatedhv ([y2; y2], y0, 1);  % shoud be the same as before
+%!assert (isequal (S1, S));
 
 %-------------------------------------------------------------------------------
 
@@ -302,7 +324,7 @@ end % function
 %!      % http://sourceforge.net/p/kriging/tickets/33
 %!
 %! yr = [1.03 0.91 0.96 1.99 16.2];
-%! 
+%!
 %! y = [ ...
 %!     0.8180    0.5600    0.1264    1.0755    1.2462; ...
 %!     0.8861    0.6928    0.2994    0.7228    0.9848; ...
@@ -312,12 +334,12 @@ end % function
 %!     0.9604    0.3406    0.4046    0.7239    1.8741; ...
 %!     0.9648    0.7764    0.5199    0.4098    1.3436; ...
 %!     0.9891    0.4518    0.7956    0.1164    1.2025];
-%! 
+%!
 %! hv1 = stk_dominatedhv (y, yr, 0);
 %!
 %! S = stk_dominatedhv (y, yr, 1);
 %! hv2 = sum (S.sign .* prod (S.xmax - S.xmin, 2));
-%! 
+%!
 %! assert (isequal (size (S.sign), [87 1]));
 %! assert (isequal (size (S.xmin), [87 5]));
 %! assert (isequal (size (S.xmax), [87 5]));

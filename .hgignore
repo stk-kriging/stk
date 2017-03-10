@@ -8,6 +8,7 @@ build
 *~
 *.asv
 *orig
+*.info
 
 sandbox
 profile_results

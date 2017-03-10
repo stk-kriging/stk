@@ -1,6 +1,4 @@
 % STK_ISNOISY [overload STK function]
-%
-% See also: stk_isnoisy, stk_model
 
 % Copyright Notice
 %

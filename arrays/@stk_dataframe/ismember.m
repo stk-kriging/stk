@@ -2,9 +2,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -38,10 +39,15 @@ end
 
 varargout = cell (1, max (nargout, 1));
 
-if isa (A, 'stk_dataframe'),  A = A.data;  end
-if isa (B, 'stk_dataframe'),  B = B.data;  end
-
-[varargout{:}] = ismember (A, B, flags{:});
+if isa (A, 'stk_dataframe')
+    
+    [varargout{:}] = ismember (A.data, B, flags{:});
+    
+else % isa (B, 'stk_dataframe')
+    
+    [varargout{:}] = ismember (A, B.data, flags{:});
+    
+end
 
 end % function
 

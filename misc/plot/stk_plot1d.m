@@ -134,11 +134,17 @@ if ~ isempty (h_sim)
     h_list = [h_list; h_sim(1)];
     s_list = [s_list; {'Samplepaths'}];
 end
-    
+
 % Create the legend
-h_legend = legend (h_list, s_list{:});
-set (h_legend, 'Color', 0.98 * [1 1 1]);
-legend (h_axes, 'hide');
+try
+    h_legend = legend (h_list, s_list{:});
+    set (h_legend, 'Color', 0.98 * [1 1 1]);
+    legend (h_axes, 'hide');
+catch
+    % The above call to legend is expected to fail in octave 3.2.x since the
+    % syntax with a list of handles was not implemented back then.
+    warning ('Failed to create the legend object.');
+end
 
 % Make it possible to recover all the handles easily, if needed
 h.truth = h_truth;

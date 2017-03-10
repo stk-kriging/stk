@@ -1,6 +1,6 @@
 ## Copyright Notice
 ##
-##    Copyright (C) 2015 CentraleSupelec
+##    Copyright (C) 2015, 2017 CentraleSupelec
 ##
 ##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,10 +27,18 @@
 VERNUM=$(shell cat stk_version.m | grep -o "v = '.*'" \
  | cut -d \' -f 2 | sed s/-dev/.0/)
 
+.PHONY: all release \
+  octaveforge-release octaveforge-package octaveforge-htmldoc \
+  sourceforge-release sourceforge-allpurpose sourceforge-octpkg \
+  forgedoc-inspect check_hg_clean clean
 
 all: release forgedoc-inspect
 
 release: octaveforge-release sourceforge-release
+
+# "dist rule" expected by OF admins
+# (build packages only, not OF html doc or forgedoc-inspect)
+dist: octaveforge-package sourceforge-release
 
 
 ## Directories
@@ -45,13 +53,16 @@ OFWGET=wget --quiet http://octave.sourceforge.net
 ## File names for the OF release
 OF_MD5SUM=${OF_DIR}/stk-${VERNUM}.md5sum
 OF_OCTPKG_UNPACKED=${OF_DIR}/stk
+OF_OCTPKG_TIMESTAMP=${OF_OCTPKG_UNPACKED}.dir.timestamp
 OF_OCTPKG_TARBALL=${OF_DIR}/stk-${VERNUM}.tar.gz
 OF_DOC_UNPACKED=${OF_DIR}/stk-html
-OF_DOC_TARBALL=${OF_DIR}/stk-${VERNUM}-html.tar.gz
+OF_DOC_TIMESTAMP=${OF_DOC_UNPACKED}.dir.timestamp
+OF_DOC_TARBALL=${OF_DIR}/stk-html.tar.gz
 OF_DOC_INSPECT=${OF_DOC_UNPACKED}-inspect
 
 ## File names for the SF release
 SF_ALLPURP_UNPACKED=${SF_DIR}/stk
+SF_ALLPURP_TIMESTAMP=${SF_ALLPURP_UNPACKED}.dir.timestamp
 SF_ALLPURP_TARBALL=${SF_DIR}/stk-${VERNUM}-allpurpose.tar.gz
 SF_OCTPKG_TARBALL=${SF_DIR}/stk-${VERNUM}-octpkg.tar.gz
 
@@ -60,68 +71,106 @@ OFGOODIES=\
   ${OF_DOC_INSPECT}/octave-forge.css \
   ${OF_DOC_INSPECT}/download.png \
   ${OF_DOC_INSPECT}/doc.png \
-  ${OF_DOC_INSPECT}/oct.png
+  ${OF_DOC_INSPECT}/oct.png \
+  ${OF_DOC_INSPECT}/news.png \
+  ${OF_DOC_INSPECT}/homepage.png
+
+# File containing the hg id of the changeset being built
+HG_STAMP=${BUILD_DIR}/hg.id
+
+# Extract hg info
+HG_OLD_ID := $(shell test -e $(HG_STAMP) && cat $(HG_STAMP))
+HG_ID     := $(shell hg parent --template '{node}')
+HG_DATE   := $(shell hg log --rev $(HG_ID) --template {date\|isodate})
+
+# Update hg stamp file if the id has changed
+DUMMY := $(shell test "$(HG_OLD_ID)" != "$(HG_ID)" && mkdir -p $(BUILD_DIR) && echo "$(HG_ID)" > "$(HG_STAMP)")
+
+# Follows the recommendations of https://reproducible-builds.org/docs/archives
+define create_tarball
+$(shell cd $(dir $(1))                                     \
+    && find $(notdir $(1)) -print0                         \
+    | LC_ALL=C sort -z                                     \
+    | tar c --mtime="$(HG_DATE)" --mode=a+rX,u+w,go-w,ug-s \
+            --owner=root --group=root --numeric-owner      \
+            --no-recursion --null -T - -f -                \
+    | gzip -9n > "$(2)")
+endef
 
 
 ##### OCTPKG: Octave-Forge Release #####
 
 octaveforge-release: ${OF_MD5SUM} \
  octaveforge-package octaveforge-htmldoc
-
-${OF_MD5SUM}: ${OF_OCTPKG_TARBALL} ${OF_DOC_TARBALL}
-	md5sum ${OF_OCTPKG_TARBALL} > ${OF_MD5SUM}
-	md5sum ${OF_DOC_TARBALL} >> ${OF_MD5SUM}
+	@echo
+	@echo === tarballs for the *Octave Forge* FRS ===
+	@ls -lh ${OF_DIR}/*.tar.gz
+	@echo 
+	@cat ${OF_MD5SUM}
+	@echo
 
 octaveforge-package: ${OF_OCTPKG_TARBALL}
 
-${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_UNPACKED} | ${OF_DIR}
+octaveforge-htmldoc: ${OF_DOC_TARBALL}
+
+${OF_MD5SUM}: ${OF_OCTPKG_TARBALL} ${OF_DOC_TARBALL}
+	@echo Compute checksums...
+	@cd ${OF_DIR} && md5sum $(notdir ${OF_OCTPKG_TARBALL}) \
+	   $(notdir ${OF_DOC_TARBALL}) > ${OF_MD5SUM}
+
+${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_TIMESTAMP} | ${OF_DIR}
 	@echo
 	@echo Create octpkg tarball: $@
-	tar czf ${OF_OCTPKG_TARBALL} -C ${OF_DIR} $(notdir ${OF_OCTPKG_UNPACKED})
+	$(call create_tarball,$(OF_OCTPKG_UNPACKED),$@)
 	@echo
 
-${OF_OCTPKG_UNPACKED}: | ${OF_DIR}
-	${OCT_EVAL} "cd admin; build octpkg ${OF_DIR}"
-
-octaveforge-htmldoc: ${OF_DOC_TARBALL}
+${OF_OCTPKG_TIMESTAMP}: ${HG_STAMP} | check_hg_clean ${OF_DIR}
+	@${OCT_EVAL} "cd admin; build octpkg ${OF_DIR}"
+	@touch ${OF_OCTPKG_TIMESTAMP}
 
 # Create tar.gz archive (this should create a tarball
 #    with the expected structure, according to
 #    http://octave.sourceforge.net/developers.html)
-${OF_DOC_TARBALL}: ${OF_DOC_UNPACKED}
+${OF_DOC_TARBALL}: ${OF_DOC_TIMESTAMP}
 	@echo
 	@echo Create forgefoc tarball: $@
-	tar czf ${OF_DOC_TARBALL} -C ${OF_DIR} $(notdir ${OF_DOC_UNPACKED})
+	$(call create_tarball,$(OF_DOC_UNPACKED),$@)
 	@echo
 
-${OF_DOC_UNPACKED}: ${OF_OCTPKG_TARBALL} | ${OF_DIR}
-	${OCT_EVAL} "cd admin; build forgedoc ${OF_DOC_UNPACKED} ${OF_OCTPKG_TARBALL}"
+${OF_DOC_TIMESTAMP}: ${OF_OCTPKG_TARBALL} ${HG_STAMP} | check_hg_clean ${OF_DIR}
+	@${OCT_EVAL} "cd admin; build forgedoc ${OF_DOC_UNPACKED} ${OF_OCTPKG_TARBALL}"
+	@touch ${OF_DOC_TIMESTAMP}
 
 ${OF_DIR}:
-	mkdir -p ${OF_DIR}
+	@mkdir -p ${OF_DIR}
 
 
 ##### ALLPURP: SourceForge Matlab/Octave Release #####
 
 sourceforge-release: sourceforge-allpurpose sourceforge-octpkg
+	@echo
+	@echo === tarballs for the *stk project* FRS ===
+	@ls -lh ${SF_DIR}/*.tar.gz
+	@echo
 
 sourceforge-allpurpose: ${SF_ALLPURP_TARBALL}
 
-${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_UNPACKED} | ${SF_DIR}
-	@echo
-	@echo Create all-purpose tarball: $@
-	tar czf ${SF_ALLPURP_TARBALL} -C ${SF_DIR} $(notdir ${SF_ALLPURP_UNPACKED})
-
-${SF_ALLPURP_UNPACKED}: ${SF_OCTPKG_TARBALL} | ${SF_DIR}
-	${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL}"
-
 sourceforge-octpkg: ${SF_OCTPKG_TARBALL}
 
+${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_TIMESTAMP} | ${SF_DIR}
+	@echo
+	@echo Create all-purpose tarball: $@
+	$(call create_tarball,$(SF_ALLPURP_UNPACKED),$@)
+
+${SF_ALLPURP_TIMESTAMP}: ${SF_OCTPKG_TARBALL} ${HG_STAMP} | check_hg_clean ${SF_DIR}
+	@${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL}"
+	@touch ${SF_ALLPURP_TIMESTAMP}
+
 ${SF_OCTPKG_TARBALL}: ${OF_OCTPKG_TARBALL} | ${SF_DIR}
-	cp ${OF_OCTPKG_TARBALL} ${SF_OCTPKG_TARBALL}
+	@cp ${OF_OCTPKG_TARBALL} ${SF_OCTPKG_TARBALL}
 
 ${SF_DIR}:
-	mkdir -p ${SF_DIR}
+	@mkdir -p ${SF_DIR}
 
 
 ##### forgedoc-inspect: a copy for visual inspection  #####
@@ -132,7 +181,7 @@ ${SF_DIR}:
 
 forgedoc-inspect: ${OF_DOC_INSPECT} ${OFGOODIES}
 
-${OF_DOC_INSPECT}: ${OF_DOC_UNPACKED}
+${OF_DOC_INSPECT}: ${OF_DOC_TIMESTAMP}
 	@echo
 	@echo Create of copy of ${OF_DOC_UNPACKED} for visual inspection
 	cp -R ${OF_DOC_UNPACKED} ${OF_DOC_INSPECT}
@@ -142,6 +191,14 @@ ${OFGOODIES}: | ${OF_DOC_INSPECT}
 	@echo Download OF goodie: $@
 	cd ${OF_DOC_INSPECT} \
 	   && ${OFWGET}/$(notdir $@)
+
+
+##### Mercurial-related tricks #####
+
+check_hg_clean:
+ifneq ($(shell hg st),)
+	$(error Your hg clone is not clean, stopping here.  Use 'hg status' to see what's going on..)
+endif
 
 
 ##### Clean up #####

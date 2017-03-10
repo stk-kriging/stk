@@ -1,7 +1,12 @@
-% STK_LM_NULL ... [FIXME: missing documentation]
+% STK_LM_NULL creates a null linear model object
+%
+% CALL: LM = STK_LM_NULL ()
+%
+%    creates a null linear model object LM.
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -28,12 +33,15 @@
 
 function lm = stk_lm_null ()
 
+if nargin > 0
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
 lm = class (struct (), 'stk_lm_null');
 
 end % function
 
 
-% Default constructor
-%!test
-%! lm = stk_lm_null ();
-%! assert (isa (lm, 'stk_lm_null'));
+%!test stk_test_class ('stk_lm_null')
+
+%!error lm = stk_lm_null (3.33);

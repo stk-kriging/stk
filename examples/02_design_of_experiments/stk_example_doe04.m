@@ -1,8 +1,20 @@
-% STK_EXAMPLE_DOE04...  FIXME: missing documentation
+% STK_EXAMPLE_DOE04  Probability of misclassification
+%
+% The upper panel shows posterior means and variances as usual, and the
+% threshold of interest, which is at T = 0.85 (dashed line).
+%
+% The lower panel shows the probability of misclassification as a function of x
+% (blue curve), i.e., the probability that the actual value of the function is
+% not on the same side of the threshold as the prediction (posterior mean).
+%
+% We also plot the expected future probability of misclassification (magenta
+% curve), should a new evaluation be made at x = 3.
+%
+% Note that both probabilities are obtained using stk_pmisclass.
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -72,7 +84,11 @@ ylim ([0; 0.5]);  stk_ylabel ('pmisclass');
 
 xnew = 3.0;  % Location of the next evaluation
 
-[z_pred, ~, ~, Kpost_all] = stk_predict (model, x_obs, z_obs, [x; xnew]);
+[z_pred, ignore_lambda, ignore_mu, Kpost_all] = ...
+    stk_predict (model, x_obs, z_obs, [x; xnew]);
+% Note: in recent versions of Octave or Matlab, you can use ~ to
+% ignore unwanted output arguments
+
 xihat_xt = z_pred(1:n, :);
 
 K12 = Kpost_all(1:n, end);  % Posterior covariance between locations x and x_new
@@ -82,5 +98,6 @@ expected_pmisclass = stk_pmisclass (T, xihat_xt, K12, K22);
 
 hold on; plot (x, expected_pmisclass, 'm');
 
+legend ('current pmisclass', 'expected pmisclass', 'Location', 'SouthWest')
 
 %!test stk_example_doe04;  close all;

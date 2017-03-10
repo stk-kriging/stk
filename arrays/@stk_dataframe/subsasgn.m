@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -44,8 +44,13 @@ end
 
 if all (builtin ('size', x) == 0)
     % This happens in Octave 3.2.x when doing B(idx) = D if B does not exist and
-    % D is an stk_dataframe. In this case, x is a 0x0 stk_dataframe object.
-    x = stk_dataframe ();
+    % D is an stk_dataframe. In this case, x is a corrupted stk_dataframe object
+    % with underlying structure of size 0x0...
+    % The following hack should be sufficient to let repmat (x, ...) work
+    % when x is a scalar stk_dataframe (but row and column names will be lost):
+    x_data = subsasgn ([], idx, val.data);
+    x = stk_dataframe (x_data);
+    return
 end
 
 switch idx(1).type
@@ -363,7 +368,7 @@ end % function
 %! x.rownames{2} = 'b';
 %! assert (isequal (x.rownames, {''; 'b'}));
 %! assert (isequal (x.colnames, {'' 'v'}));
-%! assert (isequalwithequalnans (x.data, nan (2)));
+%! assert (isequal (size (x.data), [2 2]) && (all (isnan (x.data(:)))))
 
 %--- test replacing one column using ':' ---------------------------------------
 

@@ -1,14 +1,11 @@
-% ISEQUAL  [STK internal]
-%
-% CALL: b = isequal (x, y)
-%
-%    Overload base function 'isequal' for stk_kreq_qr objects.
+% ISEQUAL [overload base function]
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -30,10 +27,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function b = isequal (x, y)
+% INTERNAL NOTE: overloaded for Octave 3.2.x compat / see CODING_GUIDELINES
 
-b = strcmp (class (x), class (y)) ...
+function b = isequal (x, y, varargin)
+
+if nargin < 2
+    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+end
+
+% First, make sure that x and y belong to the same class
+% (either stk_dataframe or some derived class)
+b = isa (x, 'stk_kreq_qr') && strcmp (class (y), class (x)) ...
     && isequal (struct (x), struct (y));
 
-end % function
+if b && (nargin > 2)
+    b = isequal (x, varargin{:});
+end
 
+end % function

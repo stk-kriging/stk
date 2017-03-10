@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -31,3 +32,6 @@ function pareng = stk_parallel_engine_none()
 pareng = class(struct(), 'stk_parallel_engine_none');
 
 end % function
+
+
+%!test stk_test_class ('stk_parallel_engine_none')

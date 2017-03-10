@@ -53,9 +53,6 @@ if strcmp (verbosity, 'verbose'),
     
     s = char (...
         ... %--------------------------------------------------------------
-        '.info =', ...  % alias for .stk_dataframe.info
-        horzcat (spstr, stk_sprintf_info (df)), ...
-        ... %--------------------------------------------------------------
         '.colnames =', ...  % alias for .stk_dataframe.colnames
         horzcat (spstr, stk_sprintf_colnames (df)), ...
         ... %--------------------------------------------------------------

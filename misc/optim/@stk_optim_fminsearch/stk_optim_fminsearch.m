@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
 %    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
@@ -52,7 +52,11 @@ if nargin > 0
     options = optimset (options, varargin{:});
 end
 
+base = stk_optim_baseclass (false, true);
 algo = struct ('options', options);
-algo = class (algo, 'stk_optim_fminsearch');
+algo = class (algo, 'stk_optim_fminsearch', base);
 
 end % function
+
+
+%!test stk_test_class ('stk_optim_fminsearch')

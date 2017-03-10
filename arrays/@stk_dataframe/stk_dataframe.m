@@ -31,7 +31,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -175,11 +175,15 @@ x = struct ('data', x_data, ...
 
 x = class (x, 'stk_dataframe');
 
-% Starting with Matlab R2014b, graphics handles are objects
-superiorto ('matlab.graphics.axis.Axes');
+try
+    % Starting with Matlab R2014b, graphics handles are objects
+    superiorto ('matlab.graphics.axis.Axes');
+end
 
 end % function
 
+
+%!test stk_test_class ('stk_dataframe')
 
 %!error x = stk_dataframe (1, {}, {}, pi);
 

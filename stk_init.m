@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -232,7 +232,7 @@ path = [path {...
     fullfile(root, 'arrays', 'generic' ) ...
     fullfile(root, 'core'              ) ...
     fullfile(root, 'covfcs'            ) ...
-    fullfile(root, 'covfcs', 'rbf'     ) ...    
+    fullfile(root, 'covfcs', 'rbf'     ) ...
     fullfile(root, 'lm'                ) ...
     fullfile(root, 'paramestim'        ) ...
     fullfile(root, 'sampling'          ) ...
@@ -299,8 +299,17 @@ regex1 = strcat ('^', escape_regexp (root));
 
 isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
 
-if isoctave,
-    regex2 = strcat (escape_regexp (octave_config_info ('api_version')), '$');
+if isoctave
+    try
+      % Use the modern name (__octave_config_info__) if possible
+      % NOTE: feval prevents Matlab from complaining about the underscores
+      apiver = feval ('__octave_config_info__', 'api_version');
+      assert (ischar (apiver));
+    catch
+      % Use the old name instead
+      apiver = octave_config_info ('api_version');
+    end
+    regex2 = strcat (escape_regexp (apiver), '$');
 end
 
 while ~ isempty (s)
@@ -356,11 +365,25 @@ here = pwd ();
 opts.force_recompile = force_recompile;
 opts.include_dir = fullfile (root, 'misc', 'include');
 
+% Get information about the MEX-files that need to be built
 info = stk_init__get_make_info ();
 
-for k = 1:(length (info)),
-    stk_init__compile (fullfile (root, info(k).relpath), ...
+% Matlab/Octave version info
+if exist ('OCTAVE_VERSION', 'builtin') == 5
+    version_info = ['OCTAVE ' OCTAVE_VERSION];
+else
+    version_info = ['MATLAB ' version];
+end
+
+for k = 1:(length (info))
+    gcc_version_warning = stk_init__compile ...
+        (version_info, fullfile (root, info(k).relpath), ...
         opts, info(k).mexname, info(k).other_src, info(k).includes);
+end
+
+% Matlab only: issue GCC version warning only once
+if ~ isempty (gcc_version_warning)
+    warning (gcc_version_warning.id, gcc_version_warning.msg);
 end
 
 cd (here);
@@ -368,45 +391,78 @@ cd (here);
 end % function
 
 
-function stk_init__compile (d, opts, mexname, other_src, includes)
+function gcc_version_warning = stk_init__compile ...
+    (version_info, d, opts, mexname, other_src, includes)
 
 mex_filename = [mexname '.' mexext];
 mex_fullpath = fullfile (d, mex_filename);
 
 src_filename = [mexname '.c'];
 
-dir_mex = dir (mex_fullpath);
-compile = opts.force_recompile || (isempty (dir_mex));
-
+% List of all source files (not counting include files)
 src_files = [{src_filename} other_src];
 
-for k = 1:(length (src_files))
-    % Look for src file in current directory
-    dir_src = dir (fullfile (d, src_files{k}));
-    if isempty (dir_src)
-        error ('STK:stk_init__build_mex:FileNotFound', ...
-            sprintf ('Source file %s not found', src_files{k}));
-    end
-    compile = compile || (dir_mex.datenum < dir_src.datenum);
-end
+compile = opts.force_recompile;
 
-if ~ isempty (includes)
-    for k = 1:(length (includes))
-        % Look for header file in current directory
-        dir_hdr = dir (fullfile (d, includes{k}));
-        if isempty (dir_hdr)
-            % Look for header file in include directory
-            dir_hdr = dir (fullfile (opts.include_dir, includes{k}));
-            if isempty (dir_hdr)
+if ~ compile
+    
+    % Compile if the MEX is not present or out-dated
+    dir_mex = dir (mex_fullpath);
+    compile = isempty (dir_mex);
+    
+    % Compile if different version of Matlab/Octave (better safe than sorry)
+    try
+        fid = fopen ([mex_fullpath '.info']);
+        assert (strcmp (version_info, fgetl (fid)));
+    catch
+        compile = true;
+    end
+    
+    if ~ compile
+        
+        % Compile if one of the source files is more recent than the MEX
+        for k = 1:(length (src_files))
+            % Look for src file in current directory
+            dir_src = dir (fullfile (d, src_files{k}));
+            if isempty (dir_src)
                 error ('STK:stk_init__build_mex:FileNotFound', ...
-                    sprintf ('Header file %s not found', includes{k}));
+                    sprintf ('Source file %s not found', src_files{k}));
+            end
+            if dir_mex.datenum < dir_src.datenum
+                compile = true;
+                break;
             end
         end
-        compile = compile || (dir_mex.datenum < dir_hdr.datenum);
+        
+        if (~ compile) && (~ isempty (includes))
+            
+            % Compile if one of the include files is more recent than the MEX
+            for k = 1:(length (includes))
+                % Look for header file in current directory
+                dir_hdr = dir (fullfile (d, includes{k}));
+                if isempty (dir_hdr)
+                    % Look for header file in include directory
+                    dir_hdr = dir (fullfile (opts.include_dir, includes{k}));
+                    if isempty (dir_hdr)
+                        error ('STK:stk_init__build_mex:FileNotFound', ...
+                            sprintf ('Header file %s not found', includes{k}));
+                    end
+                end
+                if dir_mex.datenum < dir_hdr.datenum
+                    compile = true;
+                    break;
+                end
+            end
+        end
     end
 end
 
-if compile,
+gcc_version_warning = [];
+isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
+use_silent = (~ isoctave) && ...  % Matlab-only:
+    (~ isempty (strfind (help ('mex'), '-silent')));
+
+if compile
     
     fprintf ('Compiling MEX-file %s... ', mexname);
     
@@ -414,12 +470,34 @@ if compile,
     
     try  % Safely change directory
         cd (d);
-    
+        
         include = sprintf ('-I%s', opts.include_dir);
-        mex (src_files{:}, include);
+        
+        if isoctave
+            mex (src_files{:}, include);
+        else
+            warning_state = warning ('off', 'MATLAB:mex:GccVersion_link');
+            lastwarn ('');
+            if use_silent
+                % -silent is only supported in recent versions of Mtlab
+                mex ('-silent', src_files{:}, include);
+            else
+                mex (src_files{:}, include);
+            end
+            [lastmsg, lastid] = lastwarn ();
+            if strfind (lastid, 'GccVersion')
+                gcc_version_warning.msg = lastmsg;
+                gcc_version_warning.id = lastid;
+            end
+            warning (warning_state);
+        end
+        
+        fid = fopen ([mex_fullpath '.info'], 'wt');
+        fprintf (fid, version_info);
+        fclose (fid);
         
         fprintf ('ok.\n');
-        if (exist ('OCTAVE_VERSION', 'builtin') == 5)
+        if isoctave
             fflush (stdout);
         end
         cd (here);
@@ -528,7 +606,7 @@ if isoctave
     recursive_rmdir_state = confirm_recursive_rmdir (0);
 end
 
-opts = {mole_dir, do_addpath, prune_unused};
+opts = {root, mole_dir, do_addpath, prune_unused};
 
 % isoctave
 install_mole_function ('isoctave', opts{:});
@@ -575,11 +653,14 @@ end
 end % function
 
 
-function install_mole_function (funct_name, mole_dir, do_addpath, prune_unused)
+function install_mole_function (funct_name, ...
+    root, mole_dir, do_addpath, prune_unused)
 
 function_dir = fullfile (mole_dir, funct_name);
 
-if isempty (which (funct_name)),  % if the function is absent
+w = which (funct_name);
+
+if (isempty (w)) || (~ isempty (strfind (w, root)))  % if the function is absent
     
     function_mfile = fullfile (function_dir, [funct_name '.m']);
     

@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -42,9 +42,12 @@ if nargin > 1,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-if (~ ismatrix (x))
-    stk_error (['Arrays with more than two dimensions are not ' ...
-        'supported.'], 'IncorrectSize');
+if ~ isnumeric (x)
+    stk_error (['The input argument should be a ' ...
+        'numeric array.'], 'TypeMismatch');
+elseif ndims (x) ~= 2  %#ok<ISMAT> see CODING_GUDELINES
+    stk_error (['Arrays with more than two dimensions are ' ...
+        'not supported.'], 'IncorrectSize');
 end
 
 xmin = min (x, [], 1);
