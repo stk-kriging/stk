@@ -32,7 +32,7 @@ if ~ isa (x, 'stk_dataframe'),
     % Not what we expect: dim or mode is an stk_dataframe...
     stk_error ('x should be an stk_dataframe object here.', 'TypeMismatch');
 end
-    
+
 if (nargin < 2) || (isempty (dim)),
     % Sort along the first non-singleton dimension
     if (size (x.data, 1) > 1)
@@ -60,7 +60,7 @@ if dim == 1,  % Sort columns
     end
     
 else  % Sort rows
-        
+    
     [x.data, i] = sort (x.data, 2, mode);
     
     if (size (x.data, 1) > 1)
@@ -71,7 +71,7 @@ else  % Sort rows
     end
     
 end
-        
+
 end % function
 
 
@@ -80,7 +80,7 @@ end % function
 %! y = sort (x);
 
 %!assert (strcmp (class (y), 'stk_dataframe'))
-%!assert (isequal (y.data, [1; 2; 3])) 
+%!assert (isequal (y.data, [1; 2; 3]))
 %!assert (isequal (y.rownames, {'c'; 'b'; 'a'}))
 %!assert (isequal (sort (x, []), y))
 %!assert (isequal (sort (x,  1), y))

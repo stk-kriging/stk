@@ -34,7 +34,7 @@ try
     if ~ isempty (x.colnames)
         x_val.Properties.VariableNames = x.colnames;
     end
-    x_name = sprintf ('%s__CONVERTED_TO_TABLE', varname);        
+    x_name = sprintf ('%s__CONVERTED_TO_TABLE', varname);
 catch
     x_val = double (x);
     x_name = sprintf ('%s__CONVERTED_TO_DOUBLE', varname);

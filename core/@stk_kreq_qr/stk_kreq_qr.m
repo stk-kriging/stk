@@ -37,7 +37,7 @@ if nargin == 0
     
     kreq = struct ('n', 0, 'r', 0, 'P_scaling', [], ...
         'LS_Q', [], 'LS_R', [], 'RS', [], 'lambda_mu', []);
-
+    
 else
     
     [Kii, Pi] = stk_make_matcov (model, xi);

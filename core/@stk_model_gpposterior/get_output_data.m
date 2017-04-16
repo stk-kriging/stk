@@ -27,7 +27,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function output_data = get_output_data (model)
-    
+
 output_data = model.output_data;
 
 end % function
