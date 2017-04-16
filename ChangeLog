@@ -1,3 +1,10 @@
+2017-04-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_pmisclass.m: Handle K22 scalar negative or null
+
+	* utils/stk_pmisclass.m: Handle specifically, when K22 is scalar,
+	the case where K22 is negative or null.
+
 2017-03-09  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	wfg.c: Remove unused variables

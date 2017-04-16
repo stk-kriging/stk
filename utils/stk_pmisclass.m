@@ -56,7 +56,13 @@ else
     
     % Variance of the future predictor
     if isscalar (K22)
-        fpv = (K12 .^ 2) / K22;
+        if K22 < 0
+            stk_error ('K22 should be positive.', 'InvalidArgument');
+        elseif K22 == 0
+            fpv = v;
+        else
+            fpv = (K12 .^ 2) / K22;
+        end
     else
         R = stk_cholcov (K22);
         M = K12 / R;
