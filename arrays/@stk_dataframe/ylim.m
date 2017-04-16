@@ -30,7 +30,7 @@ function varargout = ylim (arg1, arg2)
 
 varargout = cell (1, nargout);
 
-if nargin == 1, 
+if nargin == 1,
     [varargout{:}] = ylim (double (arg1));
     return
 end

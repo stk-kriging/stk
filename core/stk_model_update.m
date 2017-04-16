@@ -43,16 +43,16 @@ end % function
 %! x1 = (linspace (0, 1, 15))';  z1 = sin (x1);
 %! x2 = (linspace (2, 3, 15))';  z2 = sin (x2);
 %! xt = (linspace (1, 2, 15))';  zt = sin (xt);
-%! 
+%!
 %! % Prior model
 %! M0 = stk_model ('stk_materncov32_iso');
 %! M0.param = log ([1.0; 2.1]);
-%! 
+%!
 %! M1 = stk_model_update (M0, x1, z1);
 %! M1 = stk_model_update (M1, x2, z2);  % this calls @stk_model_gpposterior/...
 %! zp1 = stk_predict (M1, xt);
-%! 
+%!
 %! M2 = stk_model_gpposterior (M0, [x1; x2], [z1; z2]);
 %! zp2 = stk_predict (M2, xt);
-%! 
+%!
 %! assert (stk_isequal_tolabs (double (zp2 - zp1), zeros (15, 2), 1e-10))

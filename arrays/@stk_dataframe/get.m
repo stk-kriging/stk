@@ -33,19 +33,19 @@ icol = get_column_number (x.colnames, propname);
 switch icol
     case -4 % 'info'
         value = x.info;
-    
+        
     case -3 % 'rownames'
         value = x.rownames;
         
     case -2 % 'colnames'
         value = x.colnames;
-            
+        
     case -1 % get entire array
         value = x.data;
         
     otherwise
         value = x.data(:, icol);
-
+        
 end
 
 end % function

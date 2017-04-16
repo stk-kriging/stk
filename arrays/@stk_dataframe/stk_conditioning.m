@@ -29,7 +29,7 @@
 function zsimc = stk_conditioning (lambda, zi, zsim, xi_ind, noise_sim)
 
 if nargin > 5,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 df_out = false;  % stk_dataframe output ?
@@ -78,7 +78,7 @@ else % nargin >= 4
     else
         xi_ind_ = xi_ind;
     end
-
+    
     if nargin < 5,
         
         zsimc = stk_conditioning (lambda_, zi_, zsim_, xi_ind_);
@@ -91,8 +91,8 @@ else % nargin >= 4
         else
             noise_sim_ = noise_sim;
         end
-
-        zsimc = stk_conditioning (lambda_, zi_, zsim_, xi_ind_, noise_sim_);        
+        
+        zsimc = stk_conditioning (lambda_, zi_, zsim_, xi_ind_, noise_sim_);
     end
 end
 

@@ -42,7 +42,7 @@ try
 catch
     
     switch propname
-                    
+        
         case 'lambda'
             value = kreq.lambda_mu(1:kreq.n, :);
             

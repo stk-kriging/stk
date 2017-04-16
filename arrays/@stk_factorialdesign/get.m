@@ -32,10 +32,10 @@ switch propname,
     
     case 'levels'
         t = x.levels;
-    
+        
     case 'stk_dataframe'  % Read-only access to the underlying df
         t = x.stk_dataframe;
-    
+        
     otherwise
         t = get (x.stk_dataframe, propname);
         
