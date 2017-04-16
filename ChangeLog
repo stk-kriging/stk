@@ -1,5 +1,9 @@
 2017-04-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_pmisclass.m: Add help text
+
+	* utils/stk_pmisclass.m: Add help text.
+
 	stk_pmisclass.m: Handle K22 scalar negative or null
 
 	* utils/stk_pmisclass.m: Handle specifically, when K22 is scalar,
