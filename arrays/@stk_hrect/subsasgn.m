@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -32,7 +33,7 @@ if isa (x, 'stk_hrect')
     
     x.stk_dataframe = subsasgn (x.stk_dataframe, idx, value);
     
-    data = x.stk_dataframe.data;
+    data = get (x.stk_dataframe, 'data');
     if any (data(1, :) > data(2, :))
         stk_error ('Lower bounds cannot be larger than upperbounds', ...
             'IllegalAssigment');

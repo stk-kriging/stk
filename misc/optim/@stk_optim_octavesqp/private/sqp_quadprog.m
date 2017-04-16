@@ -449,10 +449,15 @@ function [x, obj, info, iter, nf, lambda] = sqp_quadprog ...
     % but we don't want to see that in the output of sqp.
     ws = warning ('off', 'all');
 
-    % Call quadprog to solve the QP subproblem
-    quadprog_options = optimset ('Display', 'off');
-    [p, obj_qp, quadprog_exitflag, quadprog_output, lambda] = quadprog ...
-        (B, c, -C, -d, F, g, [], [], x, quadprog_options);  %#ok<ASGLU>
+    try
+        % Call quadprog to solve the QP subproblem
+        quadprog_options = optimset ('Display', 'off');
+        [p, obj_qp, quadprog_exitflag, quadprog_output, lambda] = quadprog ...
+            (B, c, -C, -d, F, g, [], [], x, quadprog_options);  %#ok<ASGLU>
+    catch
+        warning (ws);
+        rethrow (lasterror ());
+    end
     
     warning (ws);
 

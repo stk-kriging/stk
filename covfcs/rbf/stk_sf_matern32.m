@@ -1,11 +1,12 @@
-% STK_SPRINTF_INFO returns the 'info' string associated to an array
+% STK_SF_MATERN32 is deprecated, use stk_rbf_matern32 instead
+%
+% See also: stk_rbf_matern32
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
-%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,18 +28,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function s = stk_sprintf_info (x)
+function k = stk_sf_matern32 (h, diff)
 
-if ~ isnumeric (x)
-    
-    errmsg = sprintf ('Incorrect argument type: %s', class (x));
-    stk_error (errmsg, 'IncorrectType');
-    
-else
-    
-    % no info string for plain numeric arrays
-    s = ''''' (none)';
-    
-end
+k = stk_rbf_matern32 (h, diff);
 
 end % function

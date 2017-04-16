@@ -1,8 +1,9 @@
-% GET_INPUT_DIM returns the input dimension of the model
+% ISEQUAL [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +27,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function input_dim = get_input_dim (model)
-    
-input_dim = model.prior_model.dim;
+% INTERNAL NOTE: overloaded for Octave 3.2.x compat / see CODING_GUIDELINES
+
+function b = isequal (x, y, varargin)
+
+if nargin < 2
+    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+end
+
+% First, make sure that x and y belong to the same class
+% (either stk_dataframe or some derived class)
+b = isa (x, 'stk_lm_null') && strcmp (class (y), class (x));
+
+if b && (nargin > 2)
+    b = isequal (x, varargin{:});
+end
 
 end % function

@@ -17,6 +17,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
@@ -84,7 +85,6 @@ for j = 1:dim,
 end
 
 x = stk_factorialdesign (levels, box.colnames);
-x.info = 'Created by stk_sampling_regulargrid';
 
 end % function
 

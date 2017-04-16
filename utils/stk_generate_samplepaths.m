@@ -2,13 +2,24 @@
 %
 % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT)
 %
-%    generates one sample path ZSIM, using the kriging model MODEL and the
-%    evaluation points XT. Both XT and ZSIM are structures, whose field 'a'
-%    contains the actual numerical values.
+%    generates one sample path ZSIM of the Gaussian process MODEL discretized on
+%    the evaluation points XT.  The input argument XT can be either a numerical
+%    matrix or a dataframe.  The output argument ZSIM has the same number of
+%    rows as XT.  More precisely, on a factor space of dimension DIM,
+%
+%     * XT must have size NS x DIM,
+%     * ZSIM will have size NS x 1,
+%
+%    where NS is the number of simulation points.
+%
+%    Note that, in the case where MODEL is a model for noisy observations, this
+%    function simulates sample paths of the underlying (latent) Gaussian
+%    process, i.e., noiseless observations.
 %
 % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT, NB_PATHS)
 %
-%    generates NB_PATHS sample paths at once.
+%    generates NB_PATHS sample paths at once.  In this case, the output argument
+%    ZSIM has size NS x NB_PATHS.
 %
 % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT)
 %
@@ -237,3 +248,8 @@ end % function
 %! zsim = stk_generate_samplepaths (model, [xt; xt], nb_paths);
 %! assert (isequal (size (zsim), [2 * n, nb_paths]));
 %! assert (isequal (zsim(1:n, :), zsim((n + 1):end, :)));
+
+%!xtest  % simulation points equal to observation points (noiseless model)
+%! % https://sourceforge.net/p/kriging/tickets/14/
+%! zsim = stk_generate_samplepaths (model, xt, zeros (n, 1), xt);
+%! assert (isequal (zsim, zeros (n, 1)));

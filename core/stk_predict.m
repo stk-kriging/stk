@@ -17,6 +17,12 @@
 %     * the kriging predictor in the first column (ZP.mean), and
 %     * the kriging variance in the second column (ZP.var).
 %
+%    From a Bayesian point of view, ZP.mean and ZP.var are respectively the
+%    posterior mean and variance of the Gaussian process prior MODEL given the
+%    data (XI, ZI).  Note that, in the case of noisy data, ZP.var is the
+%    (posterior) variance of the latent Gaussian process, not the variance of a
+%    future noisy observation at location XP.
+%
 % CALL: [ZP, LAMBDA, MU] = stk_predict (MODEL, XI, ZI, XP)
 %
 %    also returns the matrix of kriging weights LAMBDA and the matrix of
@@ -131,3 +137,11 @@ end % function
 %! z_obs = stk_feval (@sin, x_obs);
 %! x_prd = stk_sampling_regulargrid (1e5, 1, [0; pi]);
 %! y_prd = stk_predict (model, x_obs, z_obs, x_prd);
+
+%!xtest  % predict on an observation point
+%! % https://sourceforge.net/p/kriging/tickets/49/
+%! [zp, lambda] = stk_predict (model, x_obs, z_obs, x_obs(4))
+%! assert (isequal (z_obs(4), zp.mean))
+%! assert (isequal (zp.var, 0))
+%! lambda_ref = zeros (n, 1);  lambda_ref(4) = 1;
+%! assert (isequal (lambda, lambda_ref))

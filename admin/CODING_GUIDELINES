@@ -47,7 +47,49 @@ through MEX-files. Octave 3.8.x probably won't. So don't think of it.
 --- Overloading isequal -----------------------------------------------------
 
 Overloading the base function 'isequal' is usually not required for user-
-defined classes. Some old releases of Octave (e.g., 3.2.4), however have a
+defined classes. Some old releases of Octave (e.g., 3.2.4), however, have a
 bug that make isequal (x, y) return false when x and y are objects, even if
 they are equal. Therefore, as long as we want to support those releases, we
 have have to overload isequal (see, e.g., @stk_dataframe).
+
+
+--- Calling display () on structures ----------------------------------------
+
+Octave fails when display is called on structures that contain strings
+containing '<class ' or objects that don't overload display (and
+therefore display as '<class ...' by default.
+
+https://savannah.gnu.org/bugs/index.php?49753
+
+As a workaround, we should avoid calling display on such structures
+(espacially, on model structures that contain an stk_lm_* object).
+
+
+--- Cell arrays of handles --------------------------------------------------
+
+Octave 3.6.2 fails to parse this: C = {@sin @cos};
+
+As a work-around, always use a comma-separated list: C = {@sin, @cos};
+
+
+--- Ignoring output arguments -----------------------------------------------
+
+Octave 3.2.x does not support the use of ~ to ignore unwanted output
+arguments.  Don't use this syntax as long as Octave 3.2.x is supported.
+
+
+--- Using ismatrix ----------------------------------------------------------
+
+The ismatrix function has only been introduced in Matlab R2010b.
+
+Octave has had ismatrix for a long time, but the ismatrix function
+that is present in Octave 3.8 and before is not compatible with the
+one introduced in Matlab R2010b.
+
+The simplest solution is to completely avoid ismatrix and use instead:
+
+    is_matrix = (ndims (x) == 2);
+
+or, to specifically test for a numeric matrix:
+
+    is_matrix = (isnumeric (x)) && (ndims (x) == 2);

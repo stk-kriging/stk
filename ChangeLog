@@ -1,3 +1,597 @@
+2017-03-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	wfg.c: Remove unused variables
+
+	* misc/pareto/private/wfg.c: Remove unused variables.
+
+	stk_example_doe04.m: Add help text
+
+	* examples/02_design_of_experiments/stk_example_doe04.m: Add help
+	text.
+
+	stk_param_getdefaultbounds.m: Add help text
+
+	* paramestim/stk_param_getdefaultbounds.m: Add help text.
+
+2017-03-08  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/ismember.m: Fix a bug
+
+	* arrays/@stk_dataframe/ismember.m: Handle the case where A is an
+	stk_dataframe object and B is an stk_hrect object (or any
+	specialized stk_dataframe object that implements ismember).
+
+	stk_plot_histnormres.m: Ignore infinite normalized residuals
+
+	* misc/plot/stk_plot_histnormres.m: Ignore infinite normalized
+	residuals, with a warning.
+
+2017-02-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_phipcrit.m: Fix a typo in the help text
+
+	* misc/design/stk_phipcrit.m: Fix a typo in the help text.
+
+2017-02-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Use fminsearch for box-constrained problems as last recourse
+
+	* misc/optim/@stk_optim_fminsearch/stk_minimize_boxconstrained.m:
+	New function, which allows to use fminsearch for box-constrained
+	problems, a as last recourse for Matlab users that have neither
+	the Optimization toolbox nor MOSEK.
+	* admin/octpkg/INDEX: Add new function to the INDEX.
+
+	sqp_quadprog.m: Restore warning state if quadprog fails
+
+	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog.m: Restore
+	warning state if quadprog fails.
+
+	Provide better tools to check for optimizer availability (ticket #64)
+
+	* misc/optim/@stk_optim_baseclass: New abstract base class for all
+	optimizer object classes.
+	* misc/optim/@stk_optim_baseclass/stk_optim_baseclass.m: New
+	function, constructor of the new base class.
+	* misc/optim/@stk_optim_baseclass/isequal.m: Overload isequal
+	Octave 3.2.x compatibility, see CODING_GUIDELINES.
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Derive from
+	the new class.
+	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m: Idem.
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Itou.
+	* misc/optim/stk_optim_isavailable.m: New function, which tests if
+	a given optimization algorithm is available.
+	* misc/optim/@stk_optim_baseclass/stk_optim_isavailable.m:
+	Overload the generic function stk_optim_isavailable for the
+	abstract base class.
+	* misc/optim/stk_minimize_boxconstrained.m: Fix unit tests.
+	* misc/optim/stk_minimize_unconstrained.m: Fix unit tests.
+	* admin/octpkg/INDEX: Add new functions to the INDEX.
+
+2017-02-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Oldest supported version of Octave is now 3.2.4
+
+	* admin/build_tools/build_octpkg.m: Modify supported version from
+	3.2.2 to 3.2.4 in DESCRIPTION, in accordance with README.md.
+	* NEWS: No need to advertise such a tiny change of version number.
+
+	stk_init.m: Use __octave_config_info__ instead of octave_config_info
+
+	* stk_init.m: Use __octave_config_info__ instead of
+	octave_config_info, which is now deprecated.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+	* admin/octpkg/patches/stk-init-rmpath-cleanup.patch: New patch.
+	* admin/octpkg/patches/series: Insert new patch in the series.
+
+	Prevent errors in Matlab <=R2014a using try-end blocks (bis)
+
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Add try-end block.
+	* admin/octpkg/patches/matlab-graphics-axis-Axes.patch: New patch
+	to remove Matlab related blocks from Octave package release.
+	* admin/octpkg/patches/series: Insert new patch in the series.
+
+2017-02-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dataframe.m: Prevent error in Matlab <=R2014a using a try-end block
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Prevent superiorto() from
+	generating an error in Matlab <=R2014a using a try-end block.
+
+2017-01-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dominatedhv_mex.c: Remove unused variable
+
+	* misc/pareto/private/stk_dominatedhv_mex.c: Remove unused variable.
+
+2017-01-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_init: Fix install_mole_function (again)
+
+	* stk_init: Fix install_mole_function (again).
+
+	stk_init.m: Set use_silent to zero in Octave
+
+	* stk_init.m: Set use_silent to zero in Octave.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+
+2017-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_init: Fix install_mole_function
+
+	* stk_init: Fix install_mole_function.
+
+	stk_init: Use mex without -silent when it is not supported
+
+	* stk_init: Use mex without -silent when it is not supported.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+
+	Fix minor issues in C source code
+
+	* misc/distrib/private/stk_distrib_bivnorm0_cdf.c: Insert braces
+	to avoid "Missing braces around initializer" warning.
+	* misc/pareto/private/wfg.c: Remove unused variables.
+
+2017-01-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/subsasgn.m: Octave 3.2.x repmat hack
+
+	* arrays/@stk_dataframe/subsasgn.m: Hack for a problem related to
+	repmat in Octave 3.2.x.
+
+	Do not use ismatrix.
+
+	* arrays/generic/stk_boundingbox.m: Do not use ismatrix.
+	* misc/pareto/stk_dominatedhv.m: Do not use ismatrix.
+	* admin/CODING_GUIDELINES: Explain why.
+	* misc/error/stk_assert_box.m: Refer to CODING_GUIDELINES.
+
+	stk_example_doe04.m: Do not use ~ to ignore unwanted outputs
+
+	* examples/02_design_of_experiments/stk_example_doe04.m: Do not
+	use ~ to ignore unwanted output arguments.
+	* admin/CODING_GUIDELINES: Explain why.
+
+	stk_plot1d.m: Ignore legend errors
+
+	* misc/plot/stk_plot1d.m: Ignore legend errors.
+
+2017-01-23  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe: Deprecate info field
+
+	* arrays/@stk_dataframe/stk_sprintf.m: Hide info field.
+	* arrays/@stk_factorialdesign/stk_sprintf.m: Hide info field.
+	* arrays/@stk_dataframe/stk_sprintf_info.m: Removed (was "internal").
+	* arrays/generic/stk_sprintf_info.m: Removed (was "internal").
+	* admin/octpkg/INDEX: Remove both functions from the index.
+	* core/@stk_model_gpposterior/stk_predict.m: Do not set info.
+	* sampling/stk_sampling_halton_rr2.m: Do not set info.
+	* sampling/stk_sampling_maximinlhs.m: Do not set info.
+	* sampling/stk_sampling_olhs.m: Do not set info.
+	* sampling/stk_sampling_randomlhs.m: Do not set info.
+	* sampling/stk_sampling_randunif.m: Do not set info.
+	* sampling/stk_sampling_regulargrid.m: Do not set info.
+	* sampling/stk_sampling_sobol.m: Do not set info.
+	* arrays/@stk_dataframe/isequal.m: Ignore info.
+
+	@stk_dataframe/subsref.m: Minor modif to make it work in Octave 3.2.4
+
+	* arrays/@stk_dataframe/subsref.m: Minor modification to make it
+	work in Octave 3.2.4 despite a but that allows subsref to modify
+	its input argument.
+
+	stk_feval.m: Use commas in cell arrays of function handles
+
+	* arrays/generic/stk_feval.m: Separate elements with commas when
+	creating cell arrays of function handles.
+	* admin/CODING_GUIDELINES: Explain why.
+
+2017-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	README.md: Raise minimal Octave version to 3.2.4
+
+	* README.md: Raise minimal Octave version to 3.2.4.
+
+	README.md: Rewrite C compiler requirement
+
+	* README.md: Rewrite C compiler requirement
+
+	stk_parallel_engine_parfor.m: Adapt to the 'new' PCT syntax
+
+	* misc/parallel/@stk_parallel_engine_parfor/stk_parallel_engine_parfor.m:
+	Adapt to the 'new' PCT syntax, since matlabpool has been removed.
+
+	Implement isequal to maintain compatiblity with Octave 3.2.x.
+
+	* arrays/@stk_dataframe/isequal.m: Handle any number of input
+	arguments.
+	* core/@stk_kreq_qr/isequal.m: Idem.
+	* arrays/@stk_factorialdesign/isequal.m: Implement isequal to
+	maintain compatibility with Octave 3.2.x.
+	* core/@stk_model_gpposterior/isequal.m: Idem.
+	* lm/@stk_lm_affine/isequal.m: Idem.
+	* lm/@stk_lm_constant/isequal.m: Idem.
+	* lm/@stk_lm_cubic/isequal.m: Idem.
+	* lm/@stk_lm_matrix/isequal.m: Idem.
+	* lm/@stk_lm_null/isequal.m: Idem.
+	* lm/@stk_lm_quadratic/isequal.m: Idem.
+	* misc/optim/@stk_optim_fmincon/isequal.m: Idem.
+	* misc/optim/@stk_optim_fminsearch/isequal.m: Idem.
+	* misc/optim/@stk_optim_octavesqp/isequal.m: Idem.
+	* misc/parallel/@stk_parallel_engine_none/isequal.m: Idem.
+	* misc/parallel/@stk_parallel_engine_parfor/isequal.m: Idem.
+	* arrays/@stk_dataframe/stk_dataframe.m: Fix unit test.
+	* admin/octpkg/INDEX: Add new functions to the INDEX.
+
+2017-01-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_test_class.m: Standard unit tests for all STK classes
+
+	* misc/test/stk_test_class.m: New function, which performs a
+	series of standard unit tests that all STK classes should pass.
+	* admin/octpkg/INDEX: Add the new function to the INDEX.
+	* arrays/@stk_dataframe/stk_dataframe.m: Add unit test.
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Add unit test.
+	* arrays/@stk_hrect/stk_hrect.m: Add unit test.
+	* core/@stk_kreq_qr/stk_kreq_qr.m: Add unit test.
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Add unit test.
+	* lm/@stk_lm_affine/stk_lm_affine.m: Add unit test.
+	* lm/@stk_lm_constant/stk_lm_constant.m: Add unit test.
+	* lm/@stk_lm_cubic/stk_lm_cubic.m: Add unit test.
+	* lm/@stk_lm_matrix/stk_lm_matrix.m: Add unit test.
+	* lm/@stk_lm_null/stk_lm_null.m: Add unit test.
+	* lm/@stk_lm_quadratic/stk_lm_quadratic.m: Add unit test.
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Add unit test.
+	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m: Add unit test.
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Add unit test.
+	* misc/parallel/@stk_parallel_engine_none/stk_parallel_engine_none.m: Add unit test.
+	* misc/parallel/@stk_parallel_engine_parfor/stk_parallel_engine_parfor.m: Add unit test.
+
+2017-01-19  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_error.m: Catch unsupported use of -completenames
+
+	* misc/error/stk_error.m: Catch unsupported use of option
+	-completenames for dbstack in Octave 3.2.4.
+
+2017-01-18  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/subsasgn.m:: Do not use isequalwithnans
+
+	* arrays/@stk_dataframe/subsasgn.m: Do not use isequalwithnans,
+	which is has been removed from Octave 4.2.0.
+
+	Add nargin checks for stk_lm_* functions
+
+	* lm/@stk_lm_affine/stk_lm_affine.m: Add nargin check and unit test.
+	* lm/@stk_lm_constant/stk_lm_constant.m: Idem.
+	* lm/@stk_lm_cubic/stk_lm_cubic.m: Idem.
+	* lm/@stk_lm_matrix/stk_lm_matrix.m: Idem.
+	* lm/@stk_lm_null/stk_lm_null.m: Idem.
+	* lm/@stk_lm_quadratic/stk_lm_quadratic.m: Idem.
+	* lm/stk_lm_polynomial.m: Idem.
+
+	Call @stk_dataframe/get instead of using dot indexing when possible
+
+	* arrays/@stk_hrect/stk_hrect.m: Call @stk_dataframe/get instead
+	of using dot indexing.
+	* arrays/@stk_hrect/subsasgn.m: Idem.
+
+2017-01-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Makefile: Achieve reproducible builds without --sort=name
+
+	* Makefile: Achieve reproducible builds without using the option
+	--sort=name, which is only available is very recent versions of tar,
+	thanks to the recommendations of https://reproducible-builds.org/.
+
+2017-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Makefile: Trigger build if hg id as changed
+
+	* Makefile: Trigger build if hg id as changed.
+
+	Makefile: Check if hg clone is clean before processing
+
+	* Makefile: Check if hg clone is clean before processing.
+
+	Makefile: Declare .PHONY targets
+
+	* Makefile: Declare .PHONY targets.
+
+	Makefile: Use timestamp files instead of directories as targets
+
+	* Makefile: Use timestamp files instead of directories as targets.
+
+	Makefile: Add "dist" rule expected by OF admins
+
+	* Makefile: Add "dist" rule to build packages only, as expected by
+	Octave Forge admins.
+
+2017-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_init.m: Display GCC version warning only once (Matlab only)
+
+	* stk_init.m (stk_init__compile): Capture GCC version warnings.
+	(stk_init__build_mex): Display GCC version warning only once.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+
+2017-01-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	README.md: Explain that there are two releases (closes ticket #62)
+
+	* README.md: Explain that there are two releases, and the specific
+	"quick start" procedure for each release.
+
+2017-01-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	README.md: Remove warning about STK not starting if GLPK is missing
+
+	* README.md: Remove useless warning about STK not starting is
+	Octave is configured without GLPK.  I only met this case once, a
+	long time ago, with Octave 3.0 on some BD distro...
+
+2017-01-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_example_kb09.m: Catch a legend-related bug (closes ticket #55)
+
+	* examples/01_kriging_basics/stk_example_kb09.m: Add a try/catch
+	block to catch a legend-related bug that shows up in Octave 4.0.x.
+
+2017-01-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Provide help texts for stk_lm_* functions
+
+	* lm/@stk_lm_affine/stk_lm_affine.m: Add help text.
+	* lm/@stk_lm_constant/stk_lm_constant.m: Idem.
+	* lm/@stk_lm_cubic/stk_lm_cubic.m: Idem.
+	* lm/@stk_lm_matrix/stk_lm_matrix.m: Idem.
+	* lm/@stk_lm_null/stk_lm_null.m: Idem.
+	* lm/@stk_lm_quadratic/stk_lm_quadratic.m: Idem.
+	* lm/stk_lm_polynomial.m: Idem.
+
+	stk_dominatedhv.m: Remove dominated points before using WFG
+
+	* misc/pareto/stk_dominatedhv.m: Remove dominated points before
+	using WFG, since WFG assumes that there are no duplicated points.
+
+2017-01-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_generate_samplepaths.m: Improve the documentation
+
+	* utils/stk_generate_samplepaths.m: Improve the documentation.  In
+	particular, warn about the case of noisy observations.
+
+	stk_predict: Explain the Bayesian point of view
+
+	* core/stk_predict.m: Explain the Bayesian point of view.
+
+	Fix one-line help for overloaded STK functions
+
+	* arrays/@stk_dataframe/stk_conditioning.m: Fix one-line help.
+	* arrays/@stk_dataframe/stk_generate_samplepaths.m: Idem.
+	* arrays/@stk_hrect/stk_normalize.m: Idem.
+	* arrays/@stk_hrect/stk_rescale.m: Idem.
+	* core/@stk_model_gpposterior/stk_isnoisy.m: Idem.
+	* core/@stk_model_gpposterior/stk_predict.m: Idem.
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Idem.
+
+2016-12-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Polish new LOO cross-validation function
+
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Return
+	residuals in a dataframe (instead of a structure).
+	* core/stk_predict_leaveoneout.m: Add doc and unit tests.
+	* examples/01_kriging_basics/stk_example_kb10.m: Update name of
+	normalized residual field (second column of the new dataframe).
+	* misc/plot/stk_plot_histnormres.m: Fix a tiny bug.
+
+	Fix one-line help for overloaded feval functions in lm
+
+	* lm/@stk_lm_affine/feval.m: Fix one-line help.
+	* lm/@stk_lm_constant/feval.m: Idem.
+	* lm/@stk_lm_cubic/feval.m: Idem.
+	* lm/@stk_lm_matrix/feval.m: Idem.
+	* lm/@stk_lm_null/feval.m: Idem.
+	* lm/@stk_lm_quadratic/feval.m: Idem.
+
+2016-12-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_model_gpposterior.m: Estimate if param has NaNs (closes ticket #40)
+
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Estimate
+	parameters automatically if prior_model.param contains NaNs.
+
+	@stk_model_gpposterior/disp.m: Clarify display.
+
+	* core/@stk_model_gpposterior/disp.m: Clarify display.
+
+	@stk_model_gpposterior: Make all properties read-only.
+
+	* core/@stk_model_gpposterior/set.m: Make all properties
+	read-only.  Provide meaningful hints in error messages.
+	* core/@stk_model_gpposterior/set_prior_model.m: Removed.
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Set
+	prior_model directly since set_prior_model no longer exists.
+	* admin/octpkg/INDEX: Update index.
+
+	@stk_model_gpposterior: Remove somes properties
+
+	* core/@stk_model_gpposterior/get_input_dim.m: Removed.
+	* core/@stk_model_gpposterior/get_output_dim.m: Removed.
+	* core/@stk_model_gpposterior/get_lognoisevariance.m: Removed.
+	* core/@stk_model_gpposterior/get_lognoisevariance.m: Removed.
+	* core/@stk_model_gpposterior/get_param.m: Removed.
+	* core/@stk_model_gpposterior/set_param.m: Removed.
+	* core/@stk_model_gpposterior/fieldnames.m: Remove properties.
+	* core/@stk_model_gpposterior/disp.m: Idem.
+	* core/@stk_model_gpposterior/get.m: Idem.
+	* core/@stk_model_gpposterior/set.m: Idem.
+	* core/@stk_model_gpposterior/subsref.m: Remove one unit test.
+	* admin/octpkg/INDEX: Update index.
+
+	README.md: Use numeric references
+
+	* README.md: Use numeric references instead of author-year.
+
+	README.md: Move sentence about M/O compatiblity to "Quick start"
+
+	* README.md: Move the sentence about Matlab/Octave compatiblity to
+	the "Quick start" section.  Remove redundant sentence about the
+	meaning of STK.
+
+	README.md: Remove sentence about parallel computing
+
+	* README.md: Remove the sentence about parallel computing not
+	being supported in Octave, since there is actually very little
+	support, currently, for parallel computing in *both* Matlab and
+	Octave.
+
+	README.md: Remove redundant licence statement
+
+	* README.md: Remove redundant licence statement.
+
+	Makefile: download new icons for visual inspection of HTML doc
+
+	* Makefile: download new icons (news.png, homepage.png) for visual
+	inspection of OctaveForge HTML doc.
+
+2016-12-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Convert README to Markdown format
+
+	* README: Renamed to README.md.
+	* README.md: Renamed from README.md and converted to Markdown.
+	Removed copyright notice.
+	* admin/build_tools/build_allpurpose.m: Rename README -> README.md.
+	* admin/build_tools/build_octpkg.m: Idem.
+	* admin/build_tools/copy_readme.m: Idem.
+	* admin/find_nonstandard_characters.sh: Process all *README* files.
+	* admin/fix_eol.sh: Idem.
+
+2016-12-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Save M/O version info when compiling MEX-files (closes ticket #54)
+
+	* stk_init.m: Save Matlab/Octave version info in a text file with
+	the .info extension when compiling MEX-files.
+	* .hgignore: Ignore .info files.
+	* admin/octpkg/patches/remove-testprivatemex.patch: update patch.
+	* admin/octpkg/patches/remove-buildmex.patch: update patch.
+	* admin/build_tools/build_octpkg.m: Ignore *.info files.
+
+2016-12-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe: Overload openvar
+
+	* arrays/@stk_dataframe/openvar.m: Overload base function.
+	* misc/options/stk_options_set.m: Add option openvar_warndlg with
+	default value true.
+	* INDEX: Add @stk_dataframe/openvar to the index.
+
+	stk_lm_polynomial.m: Add nargin check (closes ticket #52)
+
+	* lm/stk_lm_polynomial.m: Add nargin check.
+
+2016-12-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_optim_fmincon, stk_optim_fminsearch: improve option processing
+
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Improve
+	option processing.
+	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m: Idem.
+	* misc/optim/stk_minimize_boxconstrained.m: Add tests.
+	* misc/optim/stk_minimize_unconstrained.m: Add tests.
+
+2016-12-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Do not call display on model structures (closes ticket #47)
+
+	* examples/01_kriging_basics/stk_example_kb01.m: Do not call
+	display on model structures.
+	* examples/01_kriging_basics/stk_example_kb01n.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb02.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb02n.m: Idem.
+	* examples/03_miscellaneous/stk_example_misc03.m: Idem:
+	* admin/CODING_GUIDELINES: Explain why.
+
+2016-11-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	New covariance functions: exponential + spherical
+
+	* covfcs/rbf/stk_rbf_exponential.m: New function ("exponential" RBF)
+	* covfcs/rbf/stk_rbf_spherical.m: New function ("spherical" RBF)
+	* covfcs/stk_expcov_aniso.m: New covariance function.
+	* covfcs/stk_expcov_iso.m: New covariance function.
+	* covfcs/stk_sphcov_aniso.m: New covariance function.
+	* covfcs/stk_sphcov_iso.m: New covariance function.
+	* core/stk_model.m: Support new covariance functions.
+	* paramestim/stk_param_init.m: Idem.
+	* paramestim/stk_param_getdefaultbounds.m: Idem.
+	* admin/octpkg/INDEX: Update index.
+
+2016-11-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Rename stk_sf_* functions to stk_rbf_* and make them public
+
+	* misc/specfun/stk_sf_gausscorr.m: Moved to covfcs/rbf and renamed.
+	* misc/specfun/stk_sf_matern.m: Moved to covfcs/rbf and renamed.
+	* misc/specfun/stk_sf_matern32.m: Moved to covfcs/rbf and renamed.
+	* misc/spfun/stk_sf_matern52.m: Moved to covfcs/rbf and renamed.
+	* covfcs/rbf/stk_rbf_gauss.m: Renamed from stk_sf_gausscorr.
+	* covfcs/rbf/stk_rbf_matern.m: Renamed from stk_sf_matern.
+	* covfcs/rbf/stk_rbf_matern32.m: Renamed from stk_sf_matern32.
+	* covfcs/rbf/stk_rbf_matern52.m: Renamed from stk_sf_matern52.
+	* covfcs/rbf/stk_sf_gausscorr.m: Deprecated.
+	* covfcs/rbf/stk_sf_matern.m: Deprecated.
+	* covfcs/rbf/stk_sf_matern32.m: Deprecated.
+	* covfcs/rbf/stk_sf_matern52.m: Deprecated.
+	* covfcs/stk_gausscov_aniso.m: Use new function names.
+	* covfcs/stk_gausscov_iso.m: Use new function names.
+	* covfcs/stk_materncov32_aniso.m: Use new function names.
+	* covfcs/stk_materncov32_iso.m: Use new function names.
+	* covfcs/stk_materncov52_aniso.m: Use new function names.
+	* covfcs/stk_materncov52_iso.m: Use new function names.
+	* covfcs/stk_materncov_aniso.m: Use new function names.
+	* covfcs/stk_materncov_iso.m: Use new function names.
+	* misc/benchmarks/stk_benchmark_cov2.m: Use new function names.
+	* misc/options/stk_options_set.m: Rename options and ensure that
+	the old option names are still accepted (with a warning).
+	* misc/options/stk_options_get.m: Ensure that the old option names
+	are still accepted (with a warning).
+	* stk_init.m: Change path.
+	* admin/octpkg/INDEX: Update index.
+
+2016-09-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Reduce the number of allocations in WFG
+
+	* misc/pareto/private/wfg.c: Reduce the number of allocations in WFG by
+	allocating large blocks of size n * allocated_size for xmin and xmax.
+	* misc/pareto/private/wfg.h: Add fields xmin_data and xmax_data to Rlist
+	structures.
+	* misc/pareto/private/stk_dominatedhv_mex.c: Change rule of thumb.
+
+2016-09-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix two bugs in stk_dominatedhv.
+
+	* misc/pareto/private/wfg.c: Fix two bugs affecting the case where
+	the decomposition is returned.
+	* misc/pareto/stk_dominatedhv.m: Unit tests.
+
+2016-07-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	core/stk_model_fixlm.m: Fix error message
+
+	* core/stk_model_fixlm.m: Fix error message.
+
 2016-07-21  Rémi Stroh  <remi.stroh@lne.fr>
 
 	arrays/@stk_dataframe: Overload 25 additional unary base functions (sin, exp...)

@@ -1,6 +1,4 @@
-% STK_GENERATE_SAMPLEPATHS [overload STK]
-%
-% See also: stk_generate_samplepaths
+% STK_GENERATE_SAMPLEPATHS [overload STK function]
 
 % Copyright Notice
 %

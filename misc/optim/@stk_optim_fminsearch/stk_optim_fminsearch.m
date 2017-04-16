@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
 %    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
@@ -38,22 +38,25 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function algo = stk_optim_fminsearch (opt)
+function algo = stk_optim_fminsearch (varargin)
 
-if nargin > 1
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+% Some default options
+options = optimset (        ...
+    'Display',      'off',  ...
+    'MaxFunEvals',  500,    ...
+    'TolFun',       1e-5,   ...
+    'TolX',         1e-6    );
+
+% Take user options into account
+if nargin > 0
+    options = optimset (options, varargin{:});
 end
 
-if nargin == 0
-    
-    opt = optimset (            ...
-        'Display',      'off',  ...
-        'MaxFunEvals',  500,    ...
-        'TolFun',       1e-5,   ...
-        'TolX',         1e-6    );
-end
-
-algo = struct ('options', opt);
-algo = class (algo, 'stk_optim_fminsearch');
+base = stk_optim_baseclass (false, true);
+algo = struct ('options', options);
+algo = class (algo, 'stk_optim_fminsearch', base);
 
 end % function
+
+
+%!test stk_test_class ('stk_optim_fminsearch')

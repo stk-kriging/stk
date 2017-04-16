@@ -1,4 +1,6 @@
-% SET_PARAM sets the parameters of the covariance function
+% STK_SF_MATERN is deprecated, use stk_rbf_matern instead
+%
+% See also: stk_rbf_matern
 
 % Copyright Notice
 %
@@ -26,14 +28,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function model = set_param (model, param, recompute)
+function k = stk_sf_matern (nu, h, diff)
 
-% Set parameter values
-model.prior_model.param = param;
+k = stk_rbf_matern (h, diff);
 
-% Update kreq field: recompute QR factorization
-if (nargin < 3) || (recompute)
-    model.kreq = stk_kreq_qr (model.prior_model, model.input_data);
-end
-    
 end % function

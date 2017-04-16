@@ -73,7 +73,7 @@ model.lognoisevariance = nan;
 % by the REML (REstricted Maximum Likelihood) method.
 [model.param, model.lognoisevariance] = stk_param_estim (model, xi, zi);
 
-display (model);
+model
 
 fprintf ('True noise variance = %.4f\n', ref.noise_std ^ 2);
 fprintf ('Estimated noise variance = %.4f\n\n', exp (model.lognoisevariance));
@@ -89,5 +89,7 @@ stk_plot1d (xi, zi, xt, zt, zp);  legend show;
 stk_title  ('Kriging prediction with estimated parameters');
 stk_labels ('input variable x', 'response z');
 
+
+%#ok<*NOPTS>
 
 %!test stk_example_kb02n;  close all;

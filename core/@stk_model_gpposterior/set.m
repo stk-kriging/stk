@@ -31,41 +31,32 @@ function model = set (model, propname, value)
 switch propname
     
     case 'prior_model'
-        % by-passing set_prior_model, since no argument checking is done there
-        model.prior_model = value;
+        stk_error (sprintf (['Property prior_model is read-only.\n\nHINT: ' ...
+            'Construct a new stk_model_gpposterior object if you need to ' ...
+            'change the prior model.']), 'ReadOnlyProperty');
         
-        
-    case 'param'  % alias for prior_model.param
-        % by-passing set_param, since no argument checking is done there
-        model.prior_model.param = value;
-        
-    case 'lognoisevariance'  % alias for prior_model.lognoisevariance
-        model = set_lognoisevariance (model, value, false);
-        
-    case {'input_dim', 'output_dim', 'dim'}
-        % Note: 'dim' is kept for consistency with 'model structures'
-        %   (prior models described as ordinary structures, that is)
-        errmsg = sprintf ('Property %s is read-only.\n', propname);
-        stk_error (errmsg, 'ReadOnlyProperty');
+    case 'kreq'
+        % rem: kreq is a hidden property
+        stk_error (sprintf (['Property kreq is a hidden, read-only ' ...
+            'property.\n\nHINT: Don''t try to set kreq directly. It will ' ...
+            'be updated automatically whenever it is needed.']), ...
+            'ReadOnlyProperty');
         
     case {'input_data', 'output_data'}
-        stk_error (sprintf (['Property %s is read-only.  Use ' ...
+        stk_error (sprintf (['Property %s is read-only.\n\nHINT: Use ' ...
             'stk_model_update to add new evaluations results ' ...
             'to an existing stk_model_gpposterior object.'], ...
             propname), 'ReadOnlyProperty');
         
     otherwise
-        if (~ ischar (propname))
-            stk_error ('Invalid property name.', 'InvalidArgument');
-        elseif (ischar (propname)) && (~ isfield (model, propname))
+        if ~ ischar (propname)
+            errmsg = 'Invalid property name.';
+        else
             errmsg = sprintf ('There is no field named %s.', propname);
-            stk_error (errmsg, 'InvalidArgument');
         end
+        stk_error (errmsg, 'InvalidArgument');
         
 end % switch
-
-% Update kreq field: recompute QR factorization
-model.kreq = stk_kreq_qr (model.prior_model, model.input_data);
 
 end % function
 

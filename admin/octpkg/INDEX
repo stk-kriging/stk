@@ -2,7 +2,7 @@ stk >> STK, a Small Toolbox for Kriging
  
 ## Copyright Notice
 ##
-##    Copyright (C) 2015, 2016 CentraleSupelec
+##    Copyright (C) 2015-2017 CentraleSupelec
 ##    Copyright (C) 2014 SUPELEC
 ##
 ##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -84,21 +84,15 @@ Posterior model objects
  @stk_model_gpposterior/stk_predict
  @stk_model_gpposterior/stk_predict_leaveoneout
  @stk_model_gpposterior/stk_model_update
- @stk_model_gpposterior/get_input_dim
  @stk_model_gpposterior/get_input_data
- @stk_model_gpposterior/get_lognoisevariance
- @stk_model_gpposterior/set_lognoisevariance
- @stk_model_gpposterior/get_output_dim
  @stk_model_gpposterior/get_output_data
- @stk_model_gpposterior/get_param
- @stk_model_gpposterior/set_param
  @stk_model_gpposterior/get_prior_model
- @stk_model_gpposterior/set_prior_model
 #@stk_model_gpposterior/stk_isnoisy            [overload STK]
 #@stk_model_gpposterior/disp                   [overload base]
 #@stk_model_gpposterior/display                [overload base]
 #@stk_model_gpposterior/fieldnames             [overload base]
 #@stk_model_gpposterior/get                    [overload base]
+#@stk_model_gpposterior/isequal                [overload base]
 #@stk_model_gpposterior/set                    [overload base]
 #@stk_model_gpposterior/subsasgn               [overload base]
 #@stk_model_gpposterior/subsref                [overload base]
@@ -106,18 +100,20 @@ Posterior model objects
 #@stk_model_gpposterior/vertcat                [overload base]
 
 ## The stk_kre_qr class -> not ready to be exposed
-#@stk_kreq_qr/disp                   [internal]
-#@stk_kreq_qr/display                [internal]
-#@stk_kreq_qr/get                    [internal]
-#@stk_kreq_qr/isequal                [internal]
-#@stk_kreq_qr/linsolve               [internal]
+#@stk_kreq_qr/disp                   [overload base]
+#@stk_kreq_qr/display                [overload base]
+#@stk_kreq_qr/get                    [overload base]
+#@stk_kreq_qr/isequal                [overload base]
+#@stk_kreq_qr/linsolve               [overload base]
+#@stk_kreq_qr/subsref                [overload base]
 #@stk_kreq_qr/stk_kreq_qr            [internal]
 #@stk_kreq_qr/stk_set_righthandside  [internal]
 #@stk_kreq_qr/stk_squared_seminorm   [internal]
 #@stk_kreq_qr/stk_update             [internal]
-#@stk_kreq_qr/subsref                [internal]
 
 Model components: Covariance functions
+ stk_expcov_aniso
+ stk_expcov_iso
  stk_gausscov_aniso
  stk_gausscov_iso
  stk_materncov32_aniso
@@ -126,19 +122,25 @@ Model components: Covariance functions
  stk_materncov52_iso
  stk_materncov_aniso
  stk_materncov_iso
+ stk_sphcov_aniso
+ stk_sphcov_iso 
  stk_noisecov
  stk_discretecov
 
-## The prefix 'sf' for 'special functions' is not appropriate, since the
-## expression 'special function' refers to specific rather specific in the
-## traditional math vocabulary... Because of that, these functions are
-## likely to be renamed in future versions of STK. Until then, let us
-## consider them as "internal" (they are never used directly in any of the
-## example scripts)
-#stk_sf_gausscorr    [internal]
-#stk_sf_matern       [internal]
-#stk_sf_matern32     [internal]
-#stk_sf_matern52     [internal]
+Model components: Radial basis functions
+ stk_rbf_exponential
+ stk_rbf_gauss
+ stk_rbf_matern
+ stk_rbf_matern32
+ stk_rbf_matern52
+ stk_rbf_spherical
+
+## Note: stk_sf_* were previously considered as experimental
+##  -> in principle, they can be removed at any time
+#stk_sf_gausscorr    [deprecated]
+#stk_sf_matern       [deprecated]
+#stk_sf_matern32     [deprecated]
+#stk_sf_matern52     [deprecated]
 
 Model components: Linear model objects
  @stk_lm_affine/stk_lm_affine
@@ -148,12 +150,18 @@ Model components: Linear model objects
  @stk_lm_null/stk_lm_null
  @stk_lm_quadratic/stk_lm_quadratic
  stk_lm_polynomial
-#@stk_lm_affine/feval     [overload base]
-#@stk_lm_constant/feval   [overload base]
-#@stk_lm_cubic/feval      [overload base]
-#@stk_lm_matrix/feval     [overload base]
-#@stk_lm_null/feval       [overload base]
-#@stk_lm_quadratic/feval  [overload base]
+#@stk_lm_affine/feval       [overload base]
+#@stk_lm_affine/isequal     [overload base]
+#@stk_lm_constant/feval     [overload base]
+#@stk_lm_constant/isequal   [overload base]
+#@stk_lm_cubic/feval        [overload base]
+#@stk_lm_cubic/isequal      [overload base]
+#@stk_lm_matrix/feval       [overload base]
+#@stk_lm_matrix/isequal     [overload base]
+#@stk_lm_null/feval         [overload base]
+#@stk_lm_null/isequal       [overload base]
+#@stk_lm_quadratic/feval    [overload base]
+#@stk_lm_quadratic/isequal  [overload base]
 
 Design of experiments (non-sequential): sampling
  stk_sampling_halton_rr2
@@ -283,7 +291,6 @@ Miscellaneous: Pareto optimality
 #stk_commonsize              [internal]
 #stk_sprintf                 [internal]
 #stk_sprintf_colnames        [internal]
-#stk_sprintf_info            [internal]
 #stk_sprintf_rownames        [internal]
 #stk_sprintf_sizetype        [internal]
 
@@ -302,7 +309,6 @@ Miscellaneous: Pareto optimality
 #@stk_dataframe/apply                     [internal]
 #@stk_dataframe/stk_sprintf               [internal]
 #@stk_dataframe/stk_sprintf_colnames      [internal]
-#@stk_dataframe/stk_sprintf_info          [internal]
 #@stk_dataframe/stk_sprintf_rownames      [internal]
 #@stk_dataframe/stk_sprintf_sizetype      [internal]
 #@stk_dataframe/abs                       [overload base]
@@ -359,6 +365,7 @@ Miscellaneous: Pareto optimality
 #@stk_dataframe/minus                     [overload base]
 #@stk_dataframe/mode                      [overload base]
 #@stk_dataframe/mtimes                    [overload base]
+#@stk_dataframe/openvar                   [overload base]
 #@stk_dataframe/plus                      [overload base]
 #@stk_dataframe/power                     [overload base]
 #@stk_dataframe/prod                      [overload base]
@@ -391,6 +398,7 @@ Miscellaneous: Pareto optimality
 #@stk_factorialdesign/contour               [overload base]
 #@stk_factorialdesign/fieldnames            [overload base]
 #@stk_factorialdesign/get                   [overload base]
+#@stk_factorialdesign/isequal               [overload base]
 #@stk_factorialdesign/mesh                  [overload base]
 #@stk_factorialdesign/meshc                 [overload base]
 #@stk_factorialdesign/meshz                 [overload base]
@@ -421,16 +429,24 @@ Miscellaneous: Pareto optimality
 ## Optimizers
  stk_minimize_boxconstrained
  stk_minimize_unconstrained
+ stk_optim_isavailable
  @stk_optim_fmincon/stk_optim_fmincon
+#@stk_optim_fmincon/stk_minimize_boxconstrained    [overload STK]
+#@stk_optim_fmincon/isequal                        [overload base]
  @stk_optim_fminsearch/stk_optim_fminsearch
+#@stk_optim_fminsearch/stk_minimize_unconstrained  [overload STK]
+#@stk_optim_fminsearch/stk_minimize_boxconstrained [overload STK]
+#@stk_optim_fminsearch/isequal                     [overload base]
  @stk_optim_octavesqp/stk_optim_octavesqp
-#@stk_optim_fmincon/stk_minimize_boxconstrained     [overload STK]
-#@stk_optim_fminsearch/stk_minimize_unconstrained   [overload STK]
-#@stk_optim_octavesqp/stk_minimize_boxconstrained   [overload STK]
-#@stk_optim_octavesqp/stk_minimize_unconstrained    [overload STK]
-#stk_optim_testmin_box                              [internal]
-#stk_optim_testmin_unc                              [internal]
-#stk_select_optimizer                               [deprecated]
+#@stk_optim_octavesqp/stk_minimize_boxconstrained  [overload STK]
+#@stk_optim_octavesqp/stk_minimize_unconstrained   [overload STK]
+#@stk_optim_octavesqp/isequal                      [overload base]
+#stk_optim_testmin_box                             [internal]
+#stk_optim_testmin_unc                             [internal]
+#stk_select_optimizer                              [deprecated]
+#@stk_optim_baseclass/stk_optim_baseclass          [internal]
+#@stk_optim_baseclass/stk_optim_isavailable        [overload STK]
+#@stk_optim_baseclass/isequal                      [overload base]
 
 Miscellaneous: options, plots...
  stk_dist
@@ -476,15 +492,18 @@ Miscellaneous: options, plots...
 #stk_isequal_tolabs    [internal]
 #stk_isequal_tolrel    [internal]
 #stk_is_lhs            [internal]
+#stk_test_class        [internal]
 #stk_test_dfbinaryop   [internal]
 
 ## (embryonic) parallelization engine
 #@stk_parallel_engine_none/stk_parallel_engine_none      [experimental]
 #@stk_parallel_engine_none/stk_parallel_feval            [experimental]
 #@stk_parallel_engine_none/stk_parallel_stop             [experimental]
+#@stk_parallel_engine_none/isequal                       [overload base]
 #@stk_parallel_engine_parfor/stk_parallel_engine_parfor  [experimental]
 #@stk_parallel_engine_parfor/stk_parallel_feval          [experimental]
 #@stk_parallel_engine_parfor/stk_parallel_stop           [experimental]
+#@stk_parallel_engine_parfor/isequal                     [overload base]
 #stk_parallel_cutblocks                                  [experimental]
 #stk_parallel_engine_get                                 [experimental]
 #stk_parallel_engine_set                                 [experimental]

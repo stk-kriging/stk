@@ -1,7 +1,14 @@
-% STK_LM_MATRIX ... [FIXME: missing documentation]
+% STK_LM_MATRIX creates a linear model object defined on a finite space
+%
+% CALL: LM = STK_LM_MATRIX (P)
+%
+%    creates a linear model object LM with "design matrix" P.  Such an object
+%    describes a linear model on a finite space of cardinality N, where N is the
+%    number of rows of P.
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -28,7 +35,11 @@
 
 function lm = stk_lm_matrix (data)
 
-if nargin == 0,
+if nargin > 1
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
+if nargin == 0
     lm = struct ('data', []);
 else
     lm = struct ('data', data);
@@ -39,9 +50,9 @@ lm = class (lm, 'stk_lm_matrix');
 end % function
 
 
-%!test %%% Default constructor
-%! lm = stk_lm_matrix ();
-%! assert (isa (lm, 'stk_lm_matrix'));
+%!test stk_test_class ('stk_lm_matrix')
+
+%!error lm = stk_lm_matrix ([], 3.33);
 
 %!test %%% dim 1
 %! data = rand (10, 1);  idx = 3:7;

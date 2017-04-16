@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -36,10 +37,44 @@ switch nargin
         argout = opts;
         
     case 1,
-        argout = opts.(varargin{1});
+        switch varargin{1}
+            
+            case 'stk_sf_matern'
+                % TODO: Remove this warning in STK 3.x
+                warning (sprintf([ ...
+                    'stk_sf_matern and the corresponding options have been ' ...
+                    'deprecated.\n\nPlease use stk_rbf_matern instead.\n']));
+                argout = options.stk_rbf_matern;
+                
+            otherwise
+                argout = opts.(varargin{1});
+        end
         
     case 2,
-        argout = opts.(varargin{1}).(varargin{2});
+        switch varargin{1}
+            
+            case 'stk_param_estim'
+                if strcmp (varargin{2}, 'optim_display_level')
+                    % TODO: Remove this error in STK 3.x
+                    error (sprintf ([ ...
+                        'Options stk_param_estim.optim_display_level has ' ...
+                        'been removed.\n\nDisplay options for optimization ' ...
+                        'algorithms can be set through the properties of ' ...
+                        'the algorithm objects instead.\n']));
+                else
+                    argout = opts.stk_param_estim.(varargin{2});
+                end
+                
+            case 'stk_sf_matern'
+                % TODO: Remove this warning in STK 3.x
+                warning (sprintf([ ...
+                    'stk_sf_matern and the corresponding options have been ' ...
+                    'deprecated.\n\nPlease use stk_rbf_matern instead.\n']));
+                argout = options.stk_rbf_matern.(varargin{2});
+                
+            otherwise
+                argout = opts.(varargin{1}).(varargin{2});
+        end
         
     otherwise
         stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -47,3 +82,5 @@ switch nargin
 end
 
 end % function
+
+%#ok<*SPWRN,*SPERR>

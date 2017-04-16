@@ -1,8 +1,9 @@
-% GET_OUTPUT_DIM returns the output dimension of the model
+% ISEQUAL [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +27,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function output_dim = get_output_dim (model)
-    
-output_dim = 1;
+% INTERNAL NOTE: overloaded for Octave 3.2.x compat / see CODING_GUIDELINES
+
+function b = isequal (x, y, varargin)
+
+if nargin < 2
+    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+end
+
+% First, make sure that x and y belong to the same class
+% (either stk_dataframe or some derived class)
+b = isa (x, 'stk_parallel_engine_parfor') && strcmp (class (y), class (x));
+
+if b && (nargin > 2)
+    b = isequal (x, varargin{:});
+end
 
 end % function

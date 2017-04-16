@@ -1,14 +1,14 @@
-% STK_SF_GAUSSCORR computes the Gaussian correlation function
+% STK_RBF_GAUSS computes the Gaussian correlation function
 %
-% CALL: K = stk_sf_gausscorr (H)
+% CALL: K = stk_rbf_gauss (H)
 %
 %    computes the value of the Gaussian correlation function at distance H.
 %
-% CALL: K = stk_sf_gausscorr (H, DIFF)
+% CALL: K = stk_rbf_gauss (H, DIFF)
 %
 %    computes the derivative  of the Gaussian correlation function  with respect
 %    to the distance H  if DIFF is equal to 1.  If DIFF is equal to -1,  this is
-%    the same as K = stk_sf_gausscorr (H).
+%    the same as K = stk_rbf_gauss (H).
 %
 % NOTES:
 %
@@ -21,10 +21,11 @@
 %  * The Gaussian correlation function  is  the limit of  the Matern correlation
 %    function when the regularity parameters tends to infinity.
 %
-% See also: stk_sf_matern, stk_sf_matern52
+% See also: stk_rbf_matern, stk_rbf_matern52
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -49,7 +50,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function k = stk_sf_gausscorr (h, diff)
+function k = stk_rbf_gauss (h, diff)
 
 if nargin > 2,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -80,11 +81,11 @@ end % function
 %!shared h, diff
 %! h = 1.0;  diff = -1;
 
-%!error stk_sf_gausscorr ();
-%!test  stk_sf_gausscorr (h);
-%!test  stk_sf_gausscorr (h, diff);
-%!error stk_sf_gausscorr (h, diff, pi);
+%!error stk_rbf_gauss ();
+%!test  stk_rbf_gauss (h);
+%!test  stk_rbf_gauss (h, diff);
+%!error stk_rbf_gauss (h, diff, pi);
 
 %!test  % h = 0.0 => correlation = 1.0
-%! x = stk_sf_gausscorr (0.0);
+%! x = stk_rbf_gauss (0.0);
 %! assert (stk_isequal_tolrel (x, 1.0, 1e-8));

@@ -4,11 +4,12 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
- *    Copyright (C) 2015 CentraleSupelec                                     *
+ *    Copyright (C) 2015, 2016 CentraleSupelec                               *
+ *                                                                           *
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
  *                                                                           *
  *    Based on the file wfg.h from WFG 1.10 by Lyndon While, Lucas           *
- *    Bradstreet, Luigi Barone, released under the GPLv2 licence. The        *
+ *    Bradstreet, Luigi Barone, released under the GPLv2+ licence. The       *
  *    original copyright notice is:                                          *
  *                                                                           *
  *       Copyright (C) 2010 Lyndon While, Lucas Bradstreet                   *
@@ -77,7 +78,9 @@ typedef struct
     int size;            /* current number of rectangles     */
     int n;               /* dimension (number of objectives) */
     double **xmin;       /* lower bounds                     */
+    double *xmin_data;   /* lower bounds (one block)         */
     double **xmax;       /* upper bounds                     */
+    double *xmax_data;   /* upper bounds (one block)         */  
     int *sign;           /* inclusion/exclusion              */
 }
 RLIST;
@@ -91,5 +94,6 @@ void wfg_compute_decomposition (FRONT* ps, RLIST* Rlist);
 RLIST* Rlist_alloc (int alloc_size, int n);
 void Rlist_extend (RLIST* Rlist, int k, int* p_Ridx);
 void Rlist_free (RLIST* Rlist);
+
 
 #endif

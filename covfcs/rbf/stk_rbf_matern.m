@@ -1,22 +1,23 @@
-% STK_SF_MATERN computes the Matern correlation function.
+% STK_RBF_MATERN computes the Matern correlation function.
 %
-% CALL: K = stk_sf_matern (NU, H)
+% CALL: K = stk_rbf_matern (NU, H)
 %
 %    computes the value of the Matern correlation function of order NU at
 %    distance H. Note that the Matern correlation function is a valid
 %    correlation function for all dimensions.
 %
-% CALL: K = stk_sf_matern (NU, H, DIFF)
+% CALL: K = stk_rbf_matern (NU, H, DIFF)
 %
 %    computes the derivative of the Matern correlation function of order NU, at
 %    distance H, with respect to the order NU if DIFF is equal to 1, or with
 %    respect the distance H if DIFF is equal to 2. (If DIFF is equal to -1,
-%    this is the same as K = stk_sf_matern(NU, H).)
+%    this is the same as K = stk_rbf_matern(NU, H).)
 %
-% See also: stk_sf_matern32, stk_sf_matern52
+% See also: stk_rbf_matern32, stk_rbf_matern52
 
 % Copyright Notice
 %
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
@@ -42,7 +43,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function k = stk_sf_matern (nu, h, diff)
+function k = stk_rbf_matern (nu, h, diff)
 
 if nargin > 3,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -61,7 +62,7 @@ end
 if nu > 1e305,
     % nu = 1e306 is so large thatn even gammaln (nu) is not defined !
     if diff <= 0,
-        k = stk_sf_gausscorr (h);  return;
+        k = stk_rbf_gauss (h);  return;
     else
         % Cannot compute or approximate the derivative for such a large nu
         k = nan (size (h)); return;
@@ -77,11 +78,11 @@ if diff ~= 1,
     
     if abs (nu - 1.5) < TOL,
                 
-        k = stk_sf_matern32 (h, diff - 1);  return;
+        k = stk_rbf_matern32 (h, diff - 1);  return;
         
     elseif abs (nu - 2.5) < TOL,
         
-        k = stk_sf_matern52 (h, diff - 1);  return;
+        k = stk_rbf_matern52 (h, diff - 1);  return;
                
     end
     
@@ -102,7 +103,7 @@ if diff <= 0
     
     % When z == +Inf, it means nu is large and/or t is close to zero.
     % We approximate the result with the upper bound provided by the Gaussian case.
-    k(~I) = stk_sf_gausscorr (h(~I));
+    k(~I) = stk_rbf_gauss (h(~I));
     
 elseif diff == 1  % numerical derivative wrt Nu
     
@@ -137,7 +138,7 @@ end % function
 
 function y = besselk_ (nu, x)
 
-opts = stk_options_get('stk_sf_matern');
+opts = stk_options_get('stk_rbf_matern');
 
 if size(x, 1) < opts.min_size_for_parallelization,
     y = besselk(nu, x);
@@ -151,14 +152,14 @@ end % function
 %!shared nu, h, diff
 %! nu = 1.0;  h = 1.0;  diff = -1;
 
-%!error stk_sf_matern ();
-%!error stk_sf_matern (nu);
-%!test  stk_sf_matern (nu, h);
-%!test  stk_sf_matern (nu, h, diff);
-%!error stk_sf_matern (nu, h, diff, pi);
+%!error stk_rbf_matern ();
+%!error stk_rbf_matern (nu);
+%!test  stk_rbf_matern (nu, h);
+%!test  stk_rbf_matern (nu, h, diff);
+%!error stk_rbf_matern (nu, h, diff, pi);
 
 %!test %% h = 0.0 => correlation = 1.0
 %! for nu = 0.1:0.2:5.0,
-%!   x = stk_sf_matern (nu, 0.0);
+%!   x = stk_rbf_matern (nu, 0.0);
 %!   assert (stk_isequal_tolrel (x, 1.0, 1e-8));
 %! end

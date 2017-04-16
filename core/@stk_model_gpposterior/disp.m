@@ -59,34 +59,21 @@ else
 end
 
 fprintf ('|        prior_model: %s\n', str_prior_model);
-
-fprintf ('|              param: <%s>\n', ...
-    stk_sprintf_sizetype (model.prior_model.param));
-
-fprintf ('|   lognoisevariance: ');
-lnv = model.prior_model.lognoisevariance;
-if isscalar (lnv)
-    fprintf ('%s\n', num2str (lnv));
-else
-    fprintf ('<%s>\n', stk_sprintf_sizetype (lnv));
-end
-
-if loose_spacing
-    fprintf ('|\n');
-end
-
-fprintf ('|          input_dim: %d\n', get_input_dim (model));
 fprintf ('|         input_data: %s\n', str_input_data);
-
-if loose_spacing
-    fprintf ('|\n');
-end
-
-fprintf ('|         output_dim: %d\n', 1);
 fprintf ('|        output_data: %s\n', str_output_data);
 
 if loose_spacing
     fprintf ('|\n\n');
+end
+
+if ~ isempty (model.prior_model)
+    
+    fprintf ('with .prior_model =\n');
+    if loose_spacing
+        fprintf ('\n');
+    end
+    
+    disp (model.prior_model);
 end
 
 end % function

@@ -57,4 +57,4 @@ M_prior.param = stk_param_estim (M_prior, x, y);  % ReML parameter estimation
 [y_LOO, res_LOO] = stk_predict_leaveoneout (M_prior, x, y);
 
 stk_figure ('stk_example_kb10 (a)');  stk_plot_predvsobs (y, y_LOO);
-stk_figure ('stk_example_kb10 (b)');  stk_plot_histnormres (res_LOO.normalized);
+stk_figure ('stk_example_kb10 (b)');  stk_plot_histnormres (res_LOO.norm_res);

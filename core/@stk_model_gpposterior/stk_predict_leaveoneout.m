@@ -1,8 +1,4 @@
-% STK_PREDICT_LEAVEONEOUT computes LOO predictions and residuals
-%
-% CALL: LOO_PRED = stk_predict_leaveoneout (M_POSTERIOR)
-%
-% CALL: [LOO_PRED, LOO_RES] = stk_predict_leaveoneout (M_POSTERIOR)
+% STK_PREDICT_LEAVEONEOUT [overload STK function]
 
 % Copyright Notice
 %
@@ -73,11 +69,15 @@ LOO_pred = stk_dataframe ([zp_mean zp_var], {'mean', 'var'});
 if nargout > 1
     
     % Compute "raw" residuals
-    LOO_res.raw = M_post.output_data - zp_mean;
+    raw_res = M_post.output_data - zp_mean;
     
     % Compute normalized residual
     noisevariance = exp (M_post.prior_model.lognoisevariance);
-    LOO_res.normalized = LOO_res.raw ./ (sqrt (noisevariance + zp_var));
+    norm_res = raw_res ./ (sqrt (noisevariance + zp_var));
+    
+    % Pack results into a dataframe
+    LOO_res = stk_dataframe ([raw_res norm_res], ...
+        {'residuals', 'norm_res'});
 end
 
 end % function

@@ -1,4 +1,4 @@
-% FEVAL ... [FIXME: missing documentation]
+% FEVAL [overload base function]
 
 % Copyright Notice
 %

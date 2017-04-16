@@ -8,7 +8,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -43,6 +43,13 @@ else
     stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
 end
 
+% Ignore infinite normalized residuals, with a warning
+b = isinf (norm_res);
+if any (b)
+    warning (sprintf ('Ignoring %d infinite normalized resiudals.', sum (b)));
+    norm_res = norm_res(~ b);
+end
+
 % Choose the number of bins using the Freedman-Diaconis rule
 n = length (norm_res);
 q = quantile (norm_res, [0 0.25 0.75 1]);
@@ -55,7 +62,7 @@ pdf = count / (n * (rr(2) - rr(1)));
 h.hist = bar (rr, pdf, 'hist');  hold on;
 
 % Center view
-M = max (3, max (xlim ()));  xlim ([-M, M]);
+M = max (3, max (abs (xlim ())));  xlim ([-M, M]);
 
 % Plot reference N(0, 1) pdf
 rr = linspace (-M, M, 100);

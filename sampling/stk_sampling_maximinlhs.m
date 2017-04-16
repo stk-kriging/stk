@@ -21,6 +21,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
@@ -78,7 +79,6 @@ else % at least one input point
 end
 
 x = stk_dataframe (xdata, box.colnames);
-x.info = 'Created by stk_sampling_maximinlhs';
 
 end % function
 

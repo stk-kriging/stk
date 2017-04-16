@@ -28,9 +28,9 @@
 
 function fn = fieldnames (model)
 
-fn = {'prior_model', ...
-    'input_data', 'input_data', ...
-    'output_dim', 'output_data', ...
-    'dim', 'param', 'lognoisevariance'};
+fn = {'prior_model'; 'input_data'; 'output_data'};
+
+% Note: kreq is a 'hidden' field that might change in future versions of STK,
+% we don't want ordinary users to see it
 
 end % function
