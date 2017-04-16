@@ -1,13 +1,30 @@
-% STK_PMISCLASS...  FIXME: missing documentation
+% STK_PMISCLASS computes the (expected) probability of misclassification
 %
-% CALL: PMISCLASS = stk_pmisclass (U, Z_PRED)
+% CALL: P = stk_pmisclass (U, Z_PRED)
 %
-% CALL: PMISCLASS = stk_pmisclass (U, Z1_PRED, K12, K22)
+%    computes the probability of misclassification P with respect to the
+%    threshold U using the posterior means and variances contained in Z_PRED,
+%    where Z_PRED is a dataframe with column names 'mean' and 'var' (as
+%    returned by stk_predict).
 %
+% CALL: P = stk_pmisclass (U, Z1_PRED, K12, K22)
+%
+%    computes the expected probability of misclassification P with respect to
+%    the threshold U at a set of locations X1, assuming that observations are
+%    made at another set of location X2, where:
+%
+%     * Z1_PRED contains, as above, the posterior means and variances at X1;
+%
+%     * K12 is the posterior covariance matrix between the values of the process
+%       at X1 and the observations (at X2);
+%
+%     * K22 is the posterior covariance matrix of the observations.
+%
+% See also: stk_predict, stk_example_doe04
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
