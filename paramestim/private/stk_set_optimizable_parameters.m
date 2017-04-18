@@ -21,7 +21,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -65,7 +65,7 @@ if isnumeric (param) ...
 else
     
     stk_error (['stk_set_optimizable_parameters is not implemented for ' ...
-        'objects of class ', class (param), '.'], 'TypeMismatch');
+        'objects of class ', class(param), '.'], 'TypeMismatch');
     
 end % if
 
