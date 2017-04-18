@@ -1,5 +1,11 @@
 2017-04-18  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Rewrite two private functions with try-catch blocks instead of tests
+
+	* paramestim/private/stk_get_optimizable_parameters.m: Use a
+	try-catch block instead of testing what the input is.
+	* paramestim/private/stk_set_optimizable_parameters.m: Idem.
+
 	Fix syntax errors
 
 	* paramestim/private/stk_get_optimizable_parameters.m: Fix syntax error.
