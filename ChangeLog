@@ -1,3 +1,10 @@
+2017-04-18  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix syntax errors
+
+	* paramestim/private/stk_get_optimizable_parameters.m: Fix syntax error.
+	* paramestim/private/stk_set_optimizable_parameters.m: Fix syntax error.
+
 2017-04-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_pmisclass.m: Add help text
