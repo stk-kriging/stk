@@ -1,5 +1,12 @@
 2017-04-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Bring examples up to date with changes in stk_model_gpposterior
+
+	* examples/02_design_of_experiments/stk_example_doe03.m: Do not
+	modify directly the 'lognoisevariance' field of the prior.
+	* examples/02_design_of_experiments/stk_example_doe05.m: Do not
+	modify directly the 'param' field of the prior.
+
 	stk_sampcrit_thresholdbasedoptim.m: Fix input argument processing
 
 	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_sampcrit_thresholdbasedoptim.m:

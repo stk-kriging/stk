@@ -10,6 +10,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2016 CentraleSupelec & EDF R&D
 %    Copyright (C) 2015 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
@@ -202,7 +203,9 @@ for iter = 1:NB_ITER
     EQI_crit = stk_model_update (EQI_crit, x_new, z_new);
     
     % Update model parameters
-    EQI_crit.model.param = stk_param_estim (model, ...
+    model.param = stk_param_estim (model, ...
+        EQI_crit.model.input_data, EQI_crit.model.output_data);    
+    EQI_crit.model = stk_model_gpposterior (model, ...
         EQI_crit.model.input_data, EQI_crit.model.output_data);
     
     drawnow;  %pause (0.2);

@@ -13,7 +13,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -135,7 +135,9 @@ iter = 0;
 while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     % Trick: add a small "regularization" noise to our model
-    EI_crit.model.lognoisevariance = 2 * log (min (1e-4, EI_max / 1e3));
+    model.lognoisevariance = 2 * log (min (1e-4, EI_max / 1e3));
+    EI_crit.model = stk_model_gpposterior (model, ...
+        EI_crit.model.input_data, EI_crit.model.output_data);
     
     % Compute the Expected Improvement (EI) criterion on the grid
     [EI_val, z_pred] = EI_crit (xg);
@@ -157,7 +159,7 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     if EI_max > EI_max_stop,
         % Add the new evaluation to the DoE
-        EI_crit = stk_model_update (EI_crit, xg(i_max, :), zg(i_max, :));        
+        EI_crit = stk_model_update (EI_crit, xg(i_max, :), zg(i_max, :));
         iter = iter + 1;
     end
     
