@@ -123,13 +123,16 @@ for block_num = 1:nb_blocks
         RS(:, idx) = kreq.RS;
     end
     
-    % compute kriging variances (this does NOT include the noise variance)
-    zp_v(idx) = stk_make_matcov (M_prior, xt_, xt_, true) - kreq.delta_var;
+    % Compute posterior variances for the latent process
+    %   (note that this does NOT include the noise variance that will affect
+    %    future noisy evaluations)
+    zp_v(idx) = ...
+        stk_covmat_gp0 (M_prior, xt_, [], -1, true) - kreq.delta_var;
     
-    % note: the following modification computes prediction variances for noisy
-    % variance, i.e., including the noise variance also
-    % zp_v(idx) = stk_make_matcov (M_prior, xt_, [], true) ...
-    %     - dot (kreq.lambda_mu, kreq.RS);
+    % Note: the following modification would compute prediction variances for
+    % future noisy evaluations, i.e., including the noise variance also:
+    %   zp_v(idx) = ...
+    %      stk_covmat_response (M_prior, xt_, [], true)  - kreq.delta_var;
     
     b = (zp_v < 0);
     if any (b),
