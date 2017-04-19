@@ -1,5 +1,10 @@
 2017-04-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_sampcrit_thresholdbasedoptim.m: Fix input argument processing
+
+	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_sampcrit_thresholdbasedoptim.m:
+	Fix input argument processing.
+
 	Reorganize parameter-related functions
 
 	* param/classes: New directory, that will contain parameter

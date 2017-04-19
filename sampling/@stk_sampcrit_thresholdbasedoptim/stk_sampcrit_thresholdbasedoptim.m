@@ -51,46 +51,46 @@ end
 crit0 = stk_sampcrit_modelbased (model);
 crit1 = stk_sampcrit_singleobjoptim (goal);
 
-% Default value for property threshold_mode
+% Process threshold_mode argument
 model = get_model (crit0);
-if stk_isnoisy (model)
-    crit.threshold_mode = 'best quantile';
-else
-    crit.threshold_mode = 'best evaluation';
+if (nargin < 3) || (isempty (threshold_mode))
+    if stk_isnoisy (model)
+        threshold_mode = 'best quantile';
+    else
+        threshold_mode = 'best evaluation';
+    end
 end
 
-% Create object with default properties
-crit.threshold_value = NaN;
-crit.threshold_quantile_order = 0.5;
+% Process threshold_value argument
+if nargin < 4
+    threshold_value = [];
+end
+if ~ isempty (threshold_value) && ~ strcmp (threshold_mode, 'user-defined')
+    stk_error (['Argument threshold_mode must be set to ''user-' ...
+        'defined'' or [] when threshold_value is provided.'], ...
+        'IncompatibleArguments');
+end
+
+% Process threshold_quantile_order argument
+if nargin < 5
+    threshold_quantile_order = 0.5;
+end
+
+% Create object
+crit.threshold_mode = threshold_mode;
+crit.threshold_value = threshold_value;
+crit.threshold_quantile_order = threshold_quantile_order;
 crit.threshold_quantile_value = 0;  % private
 crit = class (crit, 'stk_sampcrit_thresholdbasedoptim', crit0, crit1);
 
-if nargin >= 3
-    % Process threshold_mode argument
-    if (~ isempty (threshold_mode))
-        crit = set_threshold_mode (crit, threshold_mode);
-    end
-    
-    if nargin >= 4
-        % Process threshold_value argument
-        if ~ isempty (threshold_value)
-            if ~ strcmp (threshold_mode, 'user-defined')
-                stk_error (['Argument threshold_mode must be set to ''user-' ...
-                    'defined'' or [] when threshold_value is provided.'], ...
-                    'IncompatibleArguments');
-            end
-            crit = set_threshold_value (crit, threshold_value);
-        end
-        
-        % Process threshold_quantile_order argument
-        if nargin >= 5
-            crit = set_threshold_quantile_order ...
-                (crit, threshold_quantile_order);
-        end
-    end
-end
+% Compute threshold value if needed
+crit = set_threshold_mode (crit, threshold_mode);
+
+% Check threshold_quantile_order's value and compute threshold_quantile_value
+crit = set_threshold_quantile_order (crit, threshold_quantile_order);
 
 end % function
+
 
 %!shared M
 %! M = stk_model ()
