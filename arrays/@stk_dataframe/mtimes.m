@@ -54,11 +54,11 @@ end % function
 %! u = [1 3 4; 2 7 6];   % 2 x 3
 %! v = [6 2; 1 7; 9 4];  % 3 x 2
 %! w = [45 39; 73 77];   % u * v
-%! 
+%!
 %! x = stk_dataframe (u, {}, {'a'; 'b'});
 %! y = stk_dataframe (v, {'c' 'd'});
 %! z = x * y;
- 
+
 %!assert (isa (z, 'stk_dataframe'));
 %!assert (isequal (z.data, w));
 %!assert (isequal (z.rownames, x.rownames));

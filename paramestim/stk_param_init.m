@@ -71,7 +71,7 @@ cov_list = { ...
     'stk_expcov_iso', ...
     'stk_expcov_aniso', ...
     'stk_gausscov_iso', ...
-    'stk_gausscov_aniso', ...    
+    'stk_gausscov_aniso', ...
     'stk_materncov_iso', ...
     'stk_materncov_aniso', ...
     'stk_materncov32_iso', ...
@@ -209,29 +209,29 @@ switch model.covariance_type
             'stk_gausscov_iso', 'stk_sphcov_iso'}
         [param, lnv] = paraminit_ (model.covariance_type, ...
             xi, zi, box, model.lm, lnv);
-
+        
     case {'stk_expcov_aniso', 'stk_materncov32_aniso', ...
-            'stk_materncov52_aniso', 'stk_gausscov_aniso', 'stk_sphcov_aniso'}        
+            'stk_materncov52_aniso', 'stk_gausscov_aniso', 'stk_sphcov_aniso'}
         xi = stk_normalize (xi, box);
         c = [model.covariance_type(1:end-5) 'iso'];
         [param, lnv] = paraminit_ (c, xi, zi, [], model.lm, lnv);
         param = [param(1); param(2) - log(diff(box, [], 1))'];
-    
+        
     case 'stk_materncov_iso'
         nu = 5/2 * size (xi, 2);
         covname_iso = @(param, x, y, diff, pairwise) stk_materncov_iso ...
-            ([param(1) log(nu) param(2)], x, y, diff, pairwise);        
+            ([param(1) log(nu) param(2)], x, y, diff, pairwise);
         [param, lnv] = paraminit_ (covname_iso, xi, zi, box, model.lm, lnv);
         param = [param(1); log(nu); param(2)];
         
     case 'stk_materncov_aniso'
         nu = 5/2 * size (xi, 2);
         covname_iso = @(param, x, y, diff, pairwise) stk_materncov_iso ...
-            ([param(1) log(nu) param(2)], x, y, diff, pairwise);                
+            ([param(1) log(nu) param(2)], x, y, diff, pairwise);
         xi = stk_normalize (xi, box);
         [param, lnv] = paraminit_ (covname_iso, xi, zi, [], model.lm, lnv);
         param = [param(1); log(nu); param(2) - log(diff(box, [], 1))'];
-                        
+        
     otherwise
         errmsg = 'Unsupported covariance type.';
         stk_error (errmsg, 'IncorrectArgument');

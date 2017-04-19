@@ -21,7 +21,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -51,10 +51,9 @@ function param = stk_set_optimizable_parameters (param, value)
 % neither param nor value is an object of a "parameter class" (more precisely,
 % a class that implements stk_set_optimizable_parameters)
 
-if isnumeric (param) ...
-        || (isobject (param) && ismethod (param, 'subsasgn')) % Backward compat.
+try
     
-    % If param is numeric, we preserve its size and type of param:
+    % If param is numeric, the following syntax preserves its size and type
     param(:) = value;
     
     % Note: if param is an object, the previous line is actually a call to
@@ -62,10 +61,10 @@ if isnumeric (param) ...
     % introduced in STK 2.0.0 as an "experimental" feature. It is now
     % deprecated.
     
-else
-    
+catch
+        
     stk_error (['stk_set_optimizable_parameters is not implemented for ' ...
-        'objects of class ', class (param), '.'], 'TypeMismatch');
+        'objects of class ', class(param), '.'], 'TypeMismatch');
     
 end % if
 

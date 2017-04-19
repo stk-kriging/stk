@@ -32,14 +32,14 @@ colnames = get (x.stk_dataframe, 'colnames');
 
 d = length (x.levels);
 
-for i = 1:d   
+for i = 1:d
     
     if isempty (colnames)
         line{i} = sprintf('levels for column #%d: ', i);
     else
         line{i} = sprintf('levels for variable %s: ', colnames{i});
     end
-        
+    
     L = x.levels{i};
     if isempty (L)
         line{i} = [line{i} '[]'];

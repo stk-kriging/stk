@@ -48,7 +48,7 @@ xt = double (xt);
 if (strcmp (M_prior.covariance_type, 'stk_discretecov')) && (isempty (xt))
     % In this case, predict on all points of the underlying discrete space
     nt = size (M_prior.param.K, 1);
-    xt = (1:nt)';    
+    xt = (1:nt)';
 else
     nt = size (xt, 1);
     if ~ isequal (size (xt), [nt, M_prior.dim]),

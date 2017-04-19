@@ -36,7 +36,7 @@ if nargin == 3
     else
         kreq = [];
     end
-
+    
     % Check the size of zi
     n = size (xi, 1);
     if ~ (isempty (zi) || isequal (size (zi), [n 1]))
@@ -48,13 +48,13 @@ if nargin == 3
     if ~ stk_isnoisy (prior_model)
         prior_model.lognoisevariance = -inf;
     end
-
+    
     % Backward compatibility:
     %   accept model structures with missing 'dim' field
     if (~ isfield (prior_model, 'dim')) || (isempty (prior_model.dim))
         prior_model.dim = size (xi, 2);
     end
-
+    
     % Check prior_model.lognoisevariance
     if ~ isscalar (prior_model.lognoisevariance)
         if (~ isvector (prior_model.lognoisevariance)) && (length ...
@@ -72,7 +72,7 @@ if nargin == 3
     if (isnumeric (prior_model.param)) && (any (isnan (prior_model.param)))
         prior_model.param = stk_param_estim (prior_model, xi, zi);
     end
-
+    
     % Compute QR factorization
     if isempty (kreq)
         kreq = stk_kreq_qr (prior_model, xi);

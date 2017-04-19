@@ -86,7 +86,7 @@ end % end function stk_param_gls
 %! model = stk_model ('stk_materncov52_iso');
 %! model.param = [0.0 0.0];
 
-%!test 
+%!test
 %! model.lm = stk_lm_constant ();
 %! [beta, sigma2] = stk_param_gls (model, xi, zi);
 %!assert (stk_isequal_tolabs (beta, 0.1346064, 1e-6))

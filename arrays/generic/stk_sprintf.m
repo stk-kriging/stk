@@ -68,12 +68,12 @@ else
     end
     
     nb_spaces_colsep = 2;
-       
+    
     s = repmat ('', n, 1); %#ok<*AGROW>
-        
-    for j = 1:d,        
-        xx = stk_sprintf_colvect (x(:, j), data_col_width);                
-        s = [s xx]; % formatted data        
+    
+    for j = 1:d,
+        xx = stk_sprintf_colvect (x(:, j), data_col_width);
+        s = [s xx]; % formatted data
         if j < d,
             % column separator
             s = [s repmat(' ', n,  nb_spaces_colsep)];
