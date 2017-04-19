@@ -223,10 +223,10 @@ function [param0, lnv0] = provide_param0_value ... % ---------------------------
 
 % param0: try to use input argument first
 if ~ isempty (param0)
-
+    
     % Cast param0 into an object of the appropriate type
     param0 = stk_set_optimizable_parameters (model.param, param0);
-        
+    
     % Test if param0 contains nans
     if any (isnan (stk_get_optimizable_parameters (param0)))
         warning ('param0 has nans, using model.param instead');

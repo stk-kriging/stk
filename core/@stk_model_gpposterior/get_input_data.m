@@ -27,7 +27,7 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function input_data = get_input_data (model)
-    
+
 input_data = model.input_data;
 
 end % function

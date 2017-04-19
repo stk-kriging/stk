@@ -30,7 +30,7 @@ function z = var(x, flag, dim)
 
 if nargin < 2, flag = 0; end % default: normalize by N-1
 if nargin < 3, dim = 1; end % default: act along columns
-    
+
 z = apply(x, dim, @var, flag);
 
 end % function

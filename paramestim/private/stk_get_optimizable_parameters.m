@@ -20,7 +20,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -50,27 +50,28 @@ function value = stk_get_optimizable_parameters (param)
 % param is not an object of a "parameter class" (more precisely, a class that
 % implements stk_get_optimizable_parameters)
 
-if isnumeric (param)
+if ~ isnumeric (param)
     
-    % Make sure that the result is a column vector
-    value = param(:);
-    
-elseif isobject (param) && ismethod (param, 'subsref') % Backward compat.
-    
-    % This way of supporting parameter objects has been introduced in STK 2.0.0
-    % as an "experimental" feature. It is now deprecated.
-    
-    % Call subsasgn
-    value = param(:);
-    
-    % Make sure that the result is a column vector
-    value = value(:);
-    
-else
-    
-    stk_error (['stk_get_optimizable_parameters is not implemented for ' ...
-        'objects of class ', class (param), '.'], 'TypeMismatch');
+    try
+        
+        % Extract parameter values
+        param = param(:);
+        
+        % Note: if param is an object, the previous line is actually a call to
+        % subsref in disguise.  This way of supporting parameter objects has
+        % been introduced in STK 2.0.0 as an "experimental" feature. It is now
+        % deprecated.
+        
+    catch
+        
+        stk_error (['stk_get_optimizable_parameters is not implemented for ' ...
+            'objects of class ', class(param), '.'], 'TypeMismatch');
+        
+    end
     
 end % if
+
+% Make sure that the result is a column vector
+value = param(:);
 
 end % function

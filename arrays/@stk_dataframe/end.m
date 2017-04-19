@@ -28,10 +28,10 @@
 
 function idx = end (x, k, nb_indices)
 
-if nb_indices == 2,    
+if nb_indices == 2,
     % using two indices (matrix-style indexing)
-    idx = size (x.data, k);    
-else    
+    idx = size (x.data, k);
+else
     if nb_indices ~= 1,
         errmsg = 'stk_dataframe objects only support linear or matrix-style indexing.';
         stk_error (errmsg, 'IllegalIndexing');
