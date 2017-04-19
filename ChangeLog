@@ -1,3 +1,28 @@
+2017-04-19  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Reorganize parameter-related functions
+
+	* param/classes: New directory, that will contain parameter
+	classes in the future.  There are no parameter classes currently,
+	but this is the place where they will be.
+	* paramestim/private/stk_get_optimizable_parameters.m: Moved to param/classes.
+	* paramestim/private/stk_set_optimizable_parameters.m: Idem.
+	* param/classes/stk_get_optimizable_parameters.m: Moved from paramestim/private.
+	* param/classes/stk_set_optimizable_parameters.m: Idem.
+	* paramestim/stk_param_estim.m: Moved to param/estim.
+	* paramestim/stk_param_getdefaultbounds.m: Idem.
+	* paramestim/stk_param_gls.m: Idem.
+	* paramestim/stk_param_init.m: Idem.
+	* paramestim/stk_param_init_lnv.m: Idem.
+	* paramestim/stk_param_relik.m: Idem.
+	* param/estim/stk_param_estim.m: Moved from paramestim/.
+	* param/estim/stk_param_getdefaultbounds.m: Idem.
+	* param/estim/stk_param_gls.m: Idem.
+	* param/estim/stk_param_init.m: Idem.
+	* param/estim/stk_param_init_lnv.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+	* stk_init.m: Update the path
+
 2017-04-18  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Rewrite two private functions with try-catch blocks instead of tests

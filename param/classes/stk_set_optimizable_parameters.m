@@ -12,10 +12,9 @@
 %
 % INTERNAL FUNCTION WARNING:
 %
-%    This function is currently considered as internal, which is why it is
-%    located in a private directory.  STK users that which to experiment with
-%    parameter classes can already overload it, but should be aware that
-%    API-breaking changes are likely to happen in future releases of STK.
+%    This function is currently considered as internal.  STK users that wish to
+%    experiment with parameter classes can already overload it, but should be
+%    aware that API-breaking changes are likely to happen in future releases.
 %
 % See also: stk_get_optimizable_parameters
 

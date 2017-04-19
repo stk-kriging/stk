@@ -72,6 +72,8 @@ Parameter estimation
  stk_param_init
  stk_param_init_lnv
  stk_param_relik
+#stk_get_optimizable_parameters
+#stk_set_optimizable_parameters
 
 Posterior model objects
  @stk_model_gpposterior/stk_model_gpposterior
