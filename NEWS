@@ -1,3 +1,18 @@
+Changes in version 2.4.1
+========================
+
+* Bug fixes
+
+   o stk_pmisclass.m: Handle properly the case where K22 is negative or null.
+
+   o stk_get_optimizable_parameters.m, stk_get_optimizable_parameters.m: Fix
+     syntax errors.
+
+* Documentation
+
+   o stk_pmisclass.m: Add help text
+
+
 Changes in version 2.4.0
 ========================
 
@@ -38,7 +53,7 @@ Changes in version 2.4.0
 
    o Radial basis functions (old and new):
       o stk_rbf_matern, stk_rbf_matern32, stk_rbf_matern52 and stk_rbf_gauss
-        (previously available internally as stk_sf_* functions).	
+        (previously available internally as stk_sf_* functions).
       o New: stk_rbf_exponential, st_rbf_spherical.
       o Bugfix: stk_rbf_matern32, stk_rbf_matern52 return 0 for very large h,
         where stk_sf_matern32 and stk_sf_matern52 returned NaN.
