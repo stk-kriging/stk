@@ -160,17 +160,12 @@ if duplicates_detected,  zsim = zsim(j, :);  end
 
 %--- Generate conditional sample paths ----------------------------------------
 
-if conditional,
-    
-    % Make sure that lognoisevariance is -inf for noiseless models
-    if ~ stk_isnoisy (model)
-        model.lognoisevariance = -inf;
-    end
-    
+if conditional
+       
     % Carry out the kriging prediction at points xt
     [zp_ignore, lambda] = stk_predict (model, xi, zi, xt);  %#ok<ASGLU>
     
-    if model.lognoisevariance == -inf,
+    if ~ stk_isnoisy (model)
         
         % Simulate sample paths conditioned on noiseless observations
         zsim = stk_conditioning (lambda, zi, zsim, xi_ind);
