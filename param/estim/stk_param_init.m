@@ -296,10 +296,10 @@ for eta = eta_list
         
         if do_estim_lnv
             
-            if isa (lnv, 'stk_noisevar_param')
+            if isa (lnv, 'stk_noisemodel')
                 % NOTE/JB: why -log(eta) ???
                 model.param = [-log(eta) -log(rho)];
-                model.lognoisevariance = stk_param_init_lnv (lnv, model, xi, zi);
+                model.lognoisevariance = stk_param_init (lnv, model, xi, zi);
                 nv = stk_noisecov (model.lognoisevariance, xi, -1, true, []);
                 log_sigma2 = log (mean (nv)) - log (eta);
                 sigma2 = exp(log_sigma2);
