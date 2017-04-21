@@ -114,7 +114,6 @@ end % function
 %!test  [K1, P1] = stk_covmat_gp0 (model, x1, []);
 %!test  [K2, P2] = stk_covmat_gp0 (model, x1, [], -1);
 %!test  [K3, P3] = stk_covmat_gp0 (model, x1, [], -1, false);
-%!error [KK, PP] = stk_covmat_gp0 (model, x1, [], -1, false, pi);
 %!assert (isequal (size (Ka), [n1 n1]));
 %!assert (isequal (size (Pa), [n1 0]));
 %!assert (isequal (P1, Pa) && (isequal (K1, Ka)))
@@ -124,7 +123,6 @@ end % function
 %!test  [Kb, Pb] = stk_covmat_gp0 (model, x1, x1);                    % (2)
 %!test  [K1, P1] = stk_covmat_gp0 (model, x1, x1, -1);
 %!test  [K2, P2] = stk_covmat_gp0 (model, x1, x1, -1, false);
-%!error [KK, PP] = stk_covmat_gp0 (model, x1, x1, -1, false, pi);
 %!assert (isequal (size (Kb), [n1 n1]));
 %!assert (isequal (size (Pb), [n1 0]));
 %!assert (isequal (P1, Pb) && (isequal (K1, Kb)))
@@ -133,7 +131,6 @@ end % function
 %!test  [Kc, Pc] = stk_covmat_gp0 (model, x1, x2);                    % (3)
 %!test  [K1, P1] = stk_covmat_gp0 (model, x1, x2, -1);
 %!test  [K2, P2] = stk_covmat_gp0 (model, x1, x2, -1, false);
-%!error [KK, PP] = stk_covmat_gp0 (model, x1, x2, -1, false, pi);
 %!assert (isequal (size (Kc), [n1 n2]));
 %!assert (isequal (size (Pc), [n1 0]));
 %!assert (isequal (P1, Pc) && (isequal (K1, Kc)))
