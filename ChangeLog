@@ -1,3 +1,11 @@
+2017-04-26  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_model_fixlm.m: Better error message (ticket #69)
+
+	* core/stk_model_fixlm.m: Display a better error message when both
+	model.lm and model.order are present, but their values are not
+	compatible.
+
 2017-04-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_generate_samplepaths.m: Do not set lognoisevariance to -inf
