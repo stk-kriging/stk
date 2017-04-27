@@ -1,10 +1,12 @@
-% STK_SAMPCRIT_EI_EVAL ...
+% STK_OPTIM_CRIT_FIG02 ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2015 CentraleSupelec
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,24 +28,24 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (xt, arg2, varargin)
+function stk_optim_crit_fig02 (algo, x, p)
 
-if isa (arg2, 'stk_model_gpposterior')
-    
-    % Construct a complete stk_sampcrit object (with an underlying model)
-    crit = stk_sampcrit_ei (arg2, varargin{:});
-    
-    % Evaluate
-    crit_val = feval (crit, xt);
-    
-else  % Assume that arg2 is an stk_dataframe with 'mean' and 'var' columns
-    
-    % Construct an incomplete stk_sampcrit object (without an underlying model)
-    crit = stk_sampcrit_ei ([], varargin{:});
-    
-    % Evaluate
-    crit_val = msfeval (crit, arg2.mean, sqrt (arg2.var));
-    
+figure (algo.disp_fignum_base + algo.disp_fignum_critshift + 2);
+
+% x-axis: actual x-values in 1D, indices otherwise
+if algo.dim == 1,
+    x = double (x);
+    xlab = 'x';
+else
+    x = (1:(stk_length (x)))';
+    xlab = 'index';
 end
+
+stem (x, p);
+
+stk_labels (xlab, 'probability');
+stk_title ('Distribution of the maximizer');
+
+drawnow;
 
 end % function

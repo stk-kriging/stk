@@ -1,3 +1,22 @@
+Changes in version 2.x.y
+========================
+
+* WORK IN PROGRESS: Sampling criterion objects (EI, EQI...)
+
+* WORK IN PROGRESS: IAGO
+
+* Examples
+
+   o stk_example_doe05.m: Example script that the use of the EQI criterion for
+     noisy optimization.  FIXME: Make it possible to use IAGO as well ?
+
+* Nested design
+
+   o stk_sampling_nesteddesign: new function to create nested designs.
+   
+   o stk_sampling_nestedlhs: new function to create nested LHS (NLHS).
+
+
 Changes in version 2.4.1
 ========================
 
@@ -232,7 +251,7 @@ Changes in version 2.3.3
 * Bug fixes
 
    o stk_dist, stk_filldist, stk_gpquadform, stk_mindist: Fix segmentation
-     faults occuring with very large matrices (related to signed integer-based
+     faults occurring with very large matrices (related to signed integer-based
      index computation in the underlying MEX-files).
 
    o stk_example_doe03.m: Use the appropriate flag for maximization.
@@ -338,7 +357,7 @@ Changes in version 2.3.0
        b) model.lognoisevariance is NaN (new behaviour).
      If param0lnv is not provided, a starting point is obtained using the new
      stk_param_init_lnv function. In all cases (whether lnv is estimated or not)
-     a meaningful value is returned for lnv (equal to model.nognoisevariance
+     a meaningful value is returned for lnv (equal to model.lognoisevariance
      when lnv is not estimated).
 
    o stk_param_estim can provide a value for param0 when it is missing from the
@@ -445,7 +464,7 @@ Changes in version 2.2.0
 
    o stk_model now also accepts function handles for covariance_type.
 
-   o stk_ortho_func is deprecated and will be completeky replaced, in the 3.x
+   o stk_ortho_func is deprecated and will be completely replaced, in the 3.x
      series, by linear model objects. In the meantime, stk_ortho_func has been
      kept as a gateway to stk_lm_* functions and now supports the case of cubic
      polynomial models.
@@ -462,7 +481,7 @@ Changes in version 2.2.0
 
    o Accept invRho = 0 in anisotropic covariance functions.
 
-   o stk_sf_matern: Handle special cases (3/2, 5/2, Inf) explicitely, and handle
+   o stk_sf_matern: Handle special cases (3/2, 5/2, Inf) explicitly, and handle
      large values of the smoothness parameter nu better.
 
    o Handle the case of Gaussian isotropic and anisotropic covariance functions
@@ -508,8 +527,8 @@ Changes in version 2.2.0
         related to bad conditioning, and also improve the performance for
         large n (about 1000, say).
 
-   o New optimization options (can bet set thorugh stk_options_set)
-      - Add global options to control upper/lower bounds for param estim.
+   o New optimization options (can bet set through stk_options_set)
+      - Add global options to control upper/lower bounds for paramestim.
       - (Matlab) Add a 'optim_display_level' option to control the verbosity
         fmincon/fminsearch. Its default value is 'off'.
 
@@ -653,7 +672,7 @@ Changes in version 2.1.0
       Gaussian and Student t distributions
 
 * Matlab/Octave compatibility throughout all supported releases has been
-  strengthened, thanks to the creation of a Matlab/Octave Langage Extension
+  strengthened, thanks to the creation of a Matlab/Octave Language Extension
   (MOLE) module
 
     o octave_quantile removed; instead, a replacement for quantile() is provided
@@ -742,7 +761,7 @@ Changes in version 2.0.0
      to a Gaussian process (kriging) model.
 
    o The old Kx_cache/Px_cache mechanism, for working efficiently on finite
-     spaces, has been replaced by a new covariance fonction: stk_discretecov.
+     spaces, has been replaced by a new covariance function: stk_discretecov.
 
    o A new framework to encapsulate various approaches to parallel
      computations. Currently only supporting 'none' or 'parfor' (Mathworks' PCT

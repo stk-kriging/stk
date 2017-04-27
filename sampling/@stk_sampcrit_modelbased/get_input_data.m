@@ -1,4 +1,7 @@
-% STK_SAMPCRIT_EI_EVAL ...
+% GET_INPUT_DATA ...
+%
+% Note: read-only property
+%
 
 % Copyright Notice
 %
@@ -26,24 +29,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (xt, arg2, varargin)
+function input_data = get_input_data (crit)
 
-if isa (arg2, 'stk_model_gpposterior')
-    
-    % Construct a complete stk_sampcrit object (with an underlying model)
-    crit = stk_sampcrit_ei (arg2, varargin{:});
-    
-    % Evaluate
-    crit_val = feval (crit, xt);
-    
-else  % Assume that arg2 is an stk_dataframe with 'mean' and 'var' columns
-    
-    % Construct an incomplete stk_sampcrit object (without an underlying model)
-    crit = stk_sampcrit_ei ([], varargin{:});
-    
-    % Evaluate
-    crit_val = msfeval (crit, arg2.mean, sqrt (arg2.var));
-    
+if (isempty (crit.model)) || (isstruct (crit.model))
+    % If M is a struct, we assume that it is a prior model
+    input_data = [];
+else
+    input_data = get_input_data (crit.model);
 end
 
 end % function

@@ -1,3 +1,11 @@
+2017-04-27  Remi Stroh  <remi.stroh@lne.fr>
+
+	New functions to create nested designs.
+
+	* sampling/stk_sampling_nesteddesign.m: new function to create nested
+	designs.
+	* sampling/stk_sampling_nestedlhs.m: new function to create nested LHS.
+
 2017-04-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	vertcat.m: Preserve column names when some are missing (ticket #66)
@@ -24,6 +32,41 @@
 
 	* utils/stk_generate_samplepaths.m: No need to set lognoisevariance
 	to -inf in the noiseless case.
+
+	Bring examples up to date with changes in stk_model_gpposterior
+
+	* examples/02_design_of_experiments/stk_example_doe03.m: Do not
+	modify directly the 'lognoisevariance' field of the prior.
+	* examples/02_design_of_experiments/stk_example_doe05.m: Do not
+	modify directly the 'param' field of the prior.
+
+	stk_sampcrit_thresholdbasedoptim.m: Fix input argument processing
+
+	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_sampcrit_thresholdbasedoptim.m:
+	Fix input argument processing.
+
+	Reorganize parameter-related functions
+
+	* param/classes: New directory, that will contain parameter
+	classes in the future.  There are no parameter classes currently,
+	but this is the place where they will be.
+	* paramestim/private/stk_get_optimizable_parameters.m: Moved to param/classes.
+	* paramestim/private/stk_set_optimizable_parameters.m: Idem.
+	* param/classes/stk_get_optimizable_parameters.m: Moved from paramestim/private.
+	* param/classes/stk_set_optimizable_parameters.m: Idem.
+	* paramestim/stk_param_estim.m: Moved to param/estim.
+	* paramestim/stk_param_getdefaultbounds.m: Idem.
+	* paramestim/stk_param_gls.m: Idem.
+	* paramestim/stk_param_init.m: Idem.
+	* paramestim/stk_param_init_lnv.m: Idem.
+	* paramestim/stk_param_relik.m: Idem.
+	* param/estim/stk_param_estim.m: Moved from paramestim/.
+	* param/estim/stk_param_getdefaultbounds.m: Idem.
+	* param/estim/stk_param_gls.m: Idem.
+	* param/estim/stk_param_init.m: Idem.
+	* param/estim/stk_param_init_lnv.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+	* stk_init.m: Update the path
 
 2017-04-18  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -728,9 +771,9 @@
 	New function to get/set optimizable parameters.
 
 	* paramestim/private/stk_get_optimizable_parameters.m: New
-	function get the value of optizable parameters.
+	function get the value of optimizable parameters.
 	* paramestim/private/stk_set_optimizable_parameters.m: New
-	function set the value of optizable parameters.
+	function set the value of optimizable parameters.
 	* paramestim/stk_param_estim.m: Use the new functions wherever it
 	is appropriate.
 	* paramestim/stk_param_relik.m: Idem.
