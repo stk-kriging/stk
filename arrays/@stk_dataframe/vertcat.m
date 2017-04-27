@@ -71,13 +71,17 @@ elseif isempty (y_colnames)
     
 else
     
-    if (~ isequal (size (x_colnames), size (y_colnames))) ...
-            || (any (~ strcmp (x_colnames, y_colnames)))
+    x_empty = cellfun (@isempty, x_colnames);
+    y_empty = cellfun (@isempty, y_colnames);
+    xy_equal = strcmp (x_colnames, y_colnames);
+
+    if all (x_empty | y_empty | xy_equal)
+        colnames = x_colnames;
+        colnames(x_empty) = y_colnames(x_empty);
+    else
         warning ('STK:vertcat:IncompatibleColNames', sprintf ( ...
             ['Incompatible column names !\nThe output of vertcat ' ...
             'will have no column names.']));  colnames = {};
-    else
-        colnames = x_colnames;
     end
     
 end
@@ -116,6 +120,8 @@ if ~ isempty (varargin),
 end
 
 end % function
+
+%#ok<*SPWRN>
 
 
 % IMPORTANT NOTE: [x; y; ...] fails to give the same result as vertcat(x, y,
@@ -183,3 +189,19 @@ end % function
 %! y = stk_dataframe(v);
 %! z = vertcat (x, y, u, v);
 %! assert(isa(z, 'stk_dataframe') && isequal(double(z), [u; v; u; v]));
+
+%%
+% Vertical concatenation with missing column names
+
+%!shared x, y
+%! x = stk_dataframe (rand (2, 3), {'a', 'b', 'c'});
+%! y = stk_dataframe (rand (3, 2), {'a', 'b'});
+%! y = [y rand(3, 1)];
+
+%!test
+%! z = [x; y];
+%! assert (isequal (z.colnames, {'a' 'b' 'c'}))
+
+%!test 
+%! z = [y; x];
+%! assert (isequal (z.colnames, {'a' 'b' 'c'}))

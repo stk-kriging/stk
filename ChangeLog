@@ -1,5 +1,10 @@
 2017-04-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	vertcat.m: Preserve column names when some are missing (ticket #66)
+
+	* arrays/@stk_dataframe/vertcat.m: Preserve column names even if
+	some of them are missing.
+
 	vertcat.m: Do the concatenation earlier
 
 	* arrays/@stk_dataframe/vertcat.m: Do the concatenation earlier to
