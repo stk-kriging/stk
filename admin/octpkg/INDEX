@@ -163,6 +163,8 @@ Design of experiments (non-sequential): sampling
  stk_sampling_halton_rr2
  stk_sampling_sobol
  stk_sampling_maximinlhs
+ stk_sampling_nesteddesign
+ stk_sampling_nestedlhs
  stk_sampling_olhs
  stk_sampling_randomlhs
  stk_sampling_randunif

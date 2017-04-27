@@ -1,3 +1,11 @@
+2017-04-27  Remi Stroh  <remi.stroh@lne.fr>
+
+	New functions to create nested designs.
+
+	* sampling/stk_sampling_nesteddesign.m: new function to create nested
+	designs.
+	* sampling/stk_sampling_nestedlhs.m: new function to create nested LHS.
+
 2017-04-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_generate_samplepaths.m: Do not set lognoisevariance to -inf
@@ -743,9 +751,9 @@
 	New function to get/set optimizable parameters.
 
 	* paramestim/private/stk_get_optimizable_parameters.m: New
-	function get the value of optizable parameters.
+	function get the value of optimizable parameters.
 	* paramestim/private/stk_set_optimizable_parameters.m: New
-	function set the value of optizable parameters.
+	function set the value of optimizable parameters.
 	* paramestim/stk_param_estim.m: Use the new functions wherever it
 	is appropriate.
 	* paramestim/stk_param_relik.m: Idem.
