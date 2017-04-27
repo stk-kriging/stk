@@ -137,3 +137,11 @@ end % function
 %! z_obs = stk_feval (@sin, x_obs);
 %! x_prd = stk_sampling_regulargrid (1e5, 1, [0; pi]);
 %! y_prd = stk_predict (model, x_obs, z_obs, x_prd);
+
+%!xtest  % predict on an observation point
+%! % https://sourceforge.net/p/kriging/tickets/49/
+%! [zp, lambda] = stk_predict (model, x_obs, z_obs, x_obs(4))
+%! assert (isequal (z_obs(4), zp.mean))
+%! assert (isequal (zp.var, 0))
+%! lambda_ref = zeros (n, 1);  lambda_ref(4) = 1;
+%! assert (isequal (lambda, lambda_ref))

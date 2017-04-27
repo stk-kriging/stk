@@ -1,4 +1,4 @@
-% STK_SAMPCRIT_EI_EVAL ...
+% SET_THRESHOLD_MODE ...
 
 % Copyright Notice
 %
@@ -26,24 +26,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (xt, arg2, varargin)
+function crit = set_threshold_mode (crit, threshold_mode)
 
-if isa (arg2, 'stk_model_gpposterior')
+threshold_mode = lower (strtrim (threshold_mode));
+
+switch threshold_mode
     
-    % Construct a complete stk_sampcrit object (with an underlying model)
-    crit = stk_sampcrit_ei (arg2, varargin{:});
-    
-    % Evaluate
-    crit_val = feval (crit, xt);
-    
-else  % Assume that arg2 is an stk_dataframe with 'mean' and 'var' columns
-    
-    % Construct an incomplete stk_sampcrit object (without an underlying model)
-    crit = stk_sampcrit_ei ([], varargin{:});
-    
-    % Evaluate
-    crit_val = msfeval (crit, arg2.mean, sqrt (arg2.var));
-    
-end
+    case 'user-defined'
+        crit.threshold_mode = 'user-defined';
+        
+    case {'best evaluation', 'best quantile'}
+        crit.threshold_mode = threshold_mode;
+        crit = set_threshold_value (crit);
+        
+    otherwise
+        if ischar (threshold_mode)
+            errmsg = sprintf (['Incorrect threshold_mode ' ...
+                'value: %s.'], threshold_mode);
+        else
+            errmsg = sprintf (['Incorrect type for ' ...
+                'threshold_mode: %s.'], class (threshold_mode));
+        end
+        stk_error (errmsg, 'InvalidArgument');
+        
+end % switch
 
 end % function
