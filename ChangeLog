@@ -1,3 +1,10 @@
+2017-04-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	vertcat.m: Do the concatenation earlier
+
+	* arrays/@stk_dataframe/vertcat.m: Do the concatenation earlier to
+	let the base vertcat function generate an error message if needed.
+
 2017-04-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_model_fixlm.m: Better error message (ticket #69)

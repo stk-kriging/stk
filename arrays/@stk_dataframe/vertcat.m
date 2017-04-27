@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -33,10 +33,13 @@ if nargin < 2,
     y = [];
 end
 
-%--- Get raw data ---------------------------------------------------------
+%--- Get raw data and concatenate -----------------------------------------
 
 x_data = double (x);
 y_data = double (y);
+
+% We let the base vertcat function generate an error if needed
+data = [x_data; y_data];
 
 %--- Get column and row names  of inputs ----------------------------------
 
@@ -101,11 +104,11 @@ end
 
 if strcmp (class (x), 'stk_dataframe')  %#ok<STISA>
     % Optimize for speed (no need to call constructor)
-    x.data = [x_data; y_data];
+    x.data = data;
     x.colnames = colnames;
     x.rownames = rownames;
 else
-    x = stk_dataframe ([x_data; y_data], colnames, rownames);
+    x = stk_dataframe (data, colnames, rownames);
 end
 
 if ~ isempty (varargin),
