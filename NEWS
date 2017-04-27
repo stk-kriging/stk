@@ -10,6 +10,12 @@ Changes in version 2.x.y
    o stk_example_doe05.m: Example script that the use of the EQI criterion for
      noisy optimization.  FIXME: Make it possible to use IAGO as well ?
 
+* Nested design
+
+   o stk_sampling_nesteddesign: new function to create nested designs.
+   
+   o stk_sampling_nestedlhs: new function to create nested LHS (NLHS).
+
 
 Changes in version 2.4.1
 ========================
@@ -24,12 +30,6 @@ Changes in version 2.4.1
 * Documentation
 
    o stk_pmisclass.m: Add help text
-   
-* Nested design
-
-   o stk_sampling_nesteddesign: new function to create nested designs.
-   
-   o stk_sampling_nestedlhs: new function to create nested LHS (NLHS).
 
 
 Changes in version 2.4.0
