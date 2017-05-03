@@ -15,6 +15,11 @@ Changes in version 2.x.y
    o stk_sampling_nesteddesign: new function to create nested designs.
    
    o stk_sampling_nestedlhs: new function to create nested LHS (NLHS).
+   
+* Validation of models
+
+   o stk_distrib_normal_crps: new function to compare observations and
+   predictive (Gaussian) density.
 
 
 Changes in version 2.4.1
