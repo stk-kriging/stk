@@ -286,6 +286,9 @@ Miscellaneous: Pareto optimality
  stk_isdominated
  stk_paretofind
 
+Miscellaneous: Validation of models
+ stk_distrib_normal_crps
+
 #stk_commonsize              [internal]
 #stk_sprintf                 [internal]
 #stk_sprintf_colnames        [internal]

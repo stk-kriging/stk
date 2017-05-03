@@ -1,10 +1,18 @@
+2017-05-03  Remi Stroh  <remi.stroh@lne.fr>
+
+	stk_distrib_normal_crps.m: New function to compute the Gaussian CRPS
+
+	* misc/distrib/stk_distrib_normal_crps.m: New function to compute
+	the Continuous Ranked Probability Score in the case of a Gaussian
+	predictive density.
+
 2017-04-27  Remi Stroh  <remi.stroh@lne.fr>
 
 	New functions to create nested designs.
 
-	* sampling/stk_sampling_nesteddesign.m: new function to create nested
+	* sampling/stk_sampling_nesteddesign.m: New function to create nested
 	designs.
-	* sampling/stk_sampling_nestedlhs.m: new function to create nested LHS.
+	* sampling/stk_sampling_nestedlhs.m: New function to create nested LHS.
 
 2017-04-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
