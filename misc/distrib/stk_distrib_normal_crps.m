@@ -1,20 +1,20 @@
-% STK_DISTRIB_NORMAL_CRPS computes the CRPS for Gaussian density prediction.
+% STK_DISTRIB_NORMAL_CRPS computes the CRPS for Gaussian predictive distributions
 %
 % CALL: CRPS = stk_distrib_normal_crps (Z, MU, SIGMA)
 %
-%   computes the Continuous Ranked Probability Score (CRPS) in case of
-%   Gaussian density prediction. It is equal to the integral of Brier Score:
-%       CRPS = int_{-inf}^{+inf} [Phi((y - MU)/SIGMA) - u(y - Z)]^2 dy,
-%   where Phi is the cumulative distribution function (cdf) of the normal
-%   distribution, and u is the Heaviside step function.
-%   Equivalent of Mean Square Error (MSE), but for density prediction.
-%   CRPS equals to 0 means perfect predictive distribution (mu = z and
-%   sigma = 0).
+%    computes the Continuous Ranked Probability Score (CRPS) of Z with respect
+%    to a Gaussian predictive distribution with mean MU and standard deviation
+%    SIGMA.
 %
-% The formula works only on Gaussian posterior assumption.
-%   * z: a set of observations, to compare with predictions;
-%   * mu: a posterior predictions on the same observations points;
-%   * sigma: posterior standard deviations of the predictions.
+%    The CRPS is defined as the integral of the Brier score for the event
+%    {Z <= z}, when z ranges from -inf to +inf:
+%
+%       CRPS = int_{-inf}^{+inf} [Phi((z - MU)/SIGMA) - u(z - Z)]^2 dz,
+%
+%    where Phi is the normal cdf and u the Heaviside step function.  The CRPS
+%    is equal if, and only if, the predictive distribution is a Dirac
+%    distribution (SIGMA = 0) and the observed value is equal to the predicted
+%    value (Z = MU).
 %
 % CALL: CRPS = stk_distrib_normal_crps (Z, MU, SIGMA, NOISTD)
 %
