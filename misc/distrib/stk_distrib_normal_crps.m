@@ -49,7 +49,7 @@
 %
 % REFERENCE
 %
-%   [1] Tilmann Gneiting and Afrian E.Raftery, "Strictly proper scoring
+%   [1] Tilmann Gneiting and Adrian E. Raftery, "Strictly proper scoring
 %       rules, prediction, and estimation", Journal of the American
 %       Statistical Association, 102(477):359-378, 2007.
 %
