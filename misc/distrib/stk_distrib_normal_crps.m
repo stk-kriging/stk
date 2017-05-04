@@ -16,15 +16,6 @@
 %    distribution (SIGMA = 0) and the observed value is equal to the predicted
 %    value (Z = MU).
 %
-% CALL: CRPS = stk_distrib_normal_crps (Z, MU, SIGMA, NOISTD)
-%
-%   computes the CRPS, supposing that the points are observed with a
-%   Gaussian noise with a known standard deviation 'noistd'. It is equal to
-%       CRPS = int_{-inf}^{+inf} [Phi((y - MU)/SIGMA) - Phi((y - Z)/NOISTD)]^2 dy.
-%
-%   CRPS equals to zero if and only if mu == z and sigma == noistd. The
-%   result is always positive or zero.
-%
 % EXAMPLE:
 %
 %   ni = 4; nt = 20; dim = 1;
@@ -55,9 +46,6 @@
 %
 %   % Compare the real function with the prediction of the latent process
 %   crps_func = stk_distrib_normal_crps ([zi; zt], zpn.mean, sqrt(zpn.var));
-%
-%   % Compare (Gaussian) prediction density with real (Gaussian) density
-%   crps_dens = stk_distrib_normal_crps ([zi; zt], zpn.mean, sqrt(zpn_var_obs), noistd);
 %
 % REFERENCE
 %
@@ -96,7 +84,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crps = stk_distrib_normal_crps(z, mu, sigma, noistd)
+function crps = stk_distrib_normal_crps(z, mu, sigma)
 
 if nargin > 4
     stk_error('Too many inputs arguments.', 'TooManyInputArgs');
@@ -117,31 +105,23 @@ else
     sigma = 1;
 end
 
-if nargin > 3 && ~isempty(noistd)
-    noistd(noistd < 0) = nan;
-else
-    % Default: noistd = 0
-    noistd = 0;
-end
-
 % Check size
-[delta, sigma, noistd] = stk_commonsize (delta, sigma, noistd);
+[delta, sigma] = stk_commonsize (delta, sigma);
 
 
 %% Formula for CRPS
 crps = nan (size (delta));
 
-sig_tot = sqrt(sigma.^2 + noistd.^2);
-b0 = ~ (isnan (delta) | isnan (sig_tot));
-b1 = (sig_tot > 0);
+b0 = ~ (isnan (delta) | isnan (sigma));
+b1 = (sigma > 0);
 
-% Compute the CRPS where sig_tot > 0
+% Compute the CRPS where sigma > 0
 b = b0 & b1;
 if any (b)
-    u = delta(b) ./ sig_tot(b);       % (z - m)/sqrt(s^2 + n^2)
-    crps(b) = sig_tot(b).*(2*stk_distrib_normal_pdf (u)...
+    u = delta(b) ./ sigma(b);  % (z - m)/sqrt(s^2 + n^2)
+    crps(b) = sigma(b) .* (2 * stk_distrib_normal_pdf (u)...
         + u.*(2*stk_distrib_normal_cdf (u) - 1) )...
-        - (sigma (b) + noistd (b))/sqrt(pi);
+        - sigma(b) / (sqrt (pi));
 end
 
 % Compute the CRPS where sig_tot == 0: CRPS = abs(z - mu)
@@ -152,34 +132,30 @@ crps(b) =  abs(delta(b));
 crps(crps < 0) = 0;
 end
 
+
 % Check particular values
 
 %!assert (stk_isequal_tolabs (stk_distrib_normal_crps (0.0, 0.0, 0.0), 0.0))
 %!assert (stk_isequal_tolabs (stk_distrib_normal_crps (0.0, 0.0, 1.0), (sqrt(2) - 1)/sqrt(pi)))
-%!assert (stk_isequal_tolabs (stk_distrib_normal_crps (0.0, 0.0, 1.0, 1.0), 0.0))
 
 % Compute CRPS in two cases (noiseless and noised case)
 
-%!shared n, x_obs, mu, sigma, noistd, crps, crps_noise, crps_exp, crps_noise_exp, c
+%!shared n, x_obs, mu, sigma, noistd, crps, crps_exp, crps_noise_exp, c
 %! n = 10;
 %! x_obs = 2*randn(n, 1);       % random observations
 %! mu = 5*(rand(n, 1) - 0.5);	% random values of mean
 %! sigma = 10*rand(n, 1);       % random values of standard deviation
 %! noistd = 1 + 7*rand(n, 1);	% random values of standard deviation of noise
 %! crps = stk_distrib_normal_crps(x_obs, mu, sigma);
-%! crps_noise = stk_distrib_normal_crps(x_obs, mu, sigma, noistd);
 
 % Check that outputs have good properties
 
-%!assert (isequal (size (crps), size(crps_noise), [n, 1]))
-%!assert (all ([crps(:); crps_noise(:)] >= 0))
+%!assert (isequal (size (crps), [n, 1]))
+%!assert (all (crps >= 0))
 %!assert (stk_isequal_tolabs (crps, stk_distrib_normal_crps(mu, x_obs, sigma)))
-%!assert (stk_isequal_tolabs (crps_noise, stk_distrib_normal_crps(x_obs, mu, noistd, sigma)))
-%!assert (stk_isequal_tolabs (stk_distrib_normal_crps(x_obs, x_obs, noistd, noistd), zeros(n, 1)))
 
 %!assert (stk_isequal_tolabs(stk_distrib_normal_crps(x_obs, mu, 0), abs(x_obs - mu)))
 %! c = 2/sqrt(pi)*(sqrt( (sigma.^2 + noistd.^2)/2) - (sigma + noistd)/2);
-%!assert (stk_isequal_tolabs(stk_distrib_normal_crps(0, 0, sigma, noistd), c))
 
 % Compare real values (with integrals) and theoretical values (formulas)
 
@@ -201,4 +177,3 @@ end
 %!  crps_noise_exp(k) = intfun(@(x)((Freal(x) - Fpred(x)).^2), -Inf, +Inf);
 %! end
 %!assert (stk_isequal_tolabs(crps_exp, crps));
-%!assert (stk_isequal_tolabs(crps_noise_exp, crps_noise));
