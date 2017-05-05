@@ -16,37 +16,6 @@
 %    distribution (SIGMA = 0) and the observed value is equal to the predicted
 %    value (Z = MU).
 %
-% EXAMPLE
-%
-%   ni = 4; nt = 20; dim = 1;
-%   f = @(x)( stk_testfun_twobumps (x) );
-%   % Observations
-%   xi = sort (stk_sampling_randomlhs (ni, dim));
-%   zi = f (xi);
-%   % Test points
-%   xt = sort (stk_sampling_randunif (nt, dim));
-%   zt = f (xt);
-%   % Model
-%   model = stk_model (@stk_materncov52_aniso, dim);
-%   model.param = [2*log(1.0); -log(0.6)];
-%   zp = stk_predict (model, xi, zi, [xi; xt]);
-%   % Comparison
-%   crps = stk_distrib_normal_crps ([zi; zt], zp.mean, sqrt(zp.var));
-%
-%   % With noise
-%   noistd = 0.5;
-%   zin = zi + noistd*randn ( size(zi) );	% Noised observations
-%   ztn = zt + noistd*randn ( size(zt) );
-%   model.lognoisevariance = 2*log(0.7);
-%   zpn = stk_predict (model, xi, zin, [xi; xt]);
-%   zpn_var_obs = zpn.var + exp(model.lognoisevariance);
-%
-%   % Compare noised observations with prediction of the model
-%   crps_obs = stk_distrib_normal_crps ([zin; ztn], zpn.mean, sqrt(zpn_var_obs));
-%
-%   % Compare the real function with the prediction of the latent process
-%   crps_func = stk_distrib_normal_crps ([zi; zt], zpn.mean, sqrt(zpn.var));
-%
 % REFERENCE
 %
 %   [1] Tilmann Gneiting and Adrian E. Raftery, "Strictly proper scoring
