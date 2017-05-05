@@ -119,12 +119,12 @@ b1 = (sigma > 0);
 % Compute the CRPS where sigma > 0
 b = b0 & b1;
 if any (b)
-    u = delta(b) ./ sigma(b);  % (z - m)/sqrt(s^2 + n^2)
+    u = delta(b) ./ sigma(b);  % (z - m)/s
     crps(b) = sigma(b) .* (2 * stk_distrib_normal_pdf (u)...
         + u .* (2 * stk_distrib_normal_cdf (u) - 1)) - sigma(b) / (sqrt (pi));
 end
 
-% Compute the CRPS where sig_tot == 0: CRPS = abs(z - mu)
+% Compute the CRPS where sigma == 0: CRPS = abs(z - mu)
 b = b0 & (~ b1);
 crps(b) =  abs (delta(b));
 
@@ -141,12 +141,11 @@ end
 
 % Compute CRPS in two cases (noiseless and noised case)
 
-%!shared n, x_obs, mu, sigma, noistd, crps, crps_exp, crps_noise_exp, c
+%!shared n, x_obs, mu, sigma, crps, crps_exp
 %! n = 10;
 %! x_obs = 2 * randn (n, 1);      % random observations
 %! mu = 5 * (rand(n, 1) - 0.5);   % random values of mean
 %! sigma = 10 * rand (n, 1);      % random values of standard deviation
-%! noistd = 1 + 7 * rand (n, 1);  % random values of standard deviation of noise
 %! crps = stk_distrib_normal_crps (x_obs, mu, sigma);
 
 % Check that outputs have good properties
@@ -156,27 +155,22 @@ end
 %!assert (stk_isequal_tolabs (crps, stk_distrib_normal_crps(mu, x_obs, sigma)))
 
 %!assert (stk_isequal_tolabs (stk_distrib_normal_crps (x_obs, mu, 0), abs (x_obs - mu)))
-%! c = 2 / (sqrt (pi)) * (sqrt ((sigma .^ 2 + noistd .^ 2) / 2) - (sigma + noistd) / 2);
 
 % Compare real values (with integrals) and theoretical values (formulas)
 
 %!test
 %! crps_exp = nan (n, 1);
-%! crps_noise_exp = nan (n, 1);
 %! if isoctave  % Find the integral function
 %!  intfun = @quad;
 %! else
 %!  intfun = @integral;
 %! end
 %! for k = 1:n
-%!  Freal = @(x)(stk_distrib_normal_cdf (x, x_obs(k), noistd(k)));
-%!  Fpred = @(x)(stk_distrib_normal_cdf (x, mu(k), sigma(k)));
+%!  F = @(x)(stk_distrib_normal_cdf (x, mu(k), sigma(k)));
 %
-%!  crps_exp_1 = intfun (@(x)(     Fpred(x) .^2), -Inf, x_obs(k));
-%!  crps_exp_2 = intfun (@(x)((1 - Fpred(x)).^2), x_obs(k), +Inf);
+%!  crps_exp_1 = intfun (@(x)(     F(x) .^2), -Inf, x_obs(k));
+%!  crps_exp_2 = intfun (@(x)((1 - F(x)).^2), x_obs(k), +Inf);
 %!  crps_exp(k) = crps_exp_1 + crps_exp_2;
-%
-%!  crps_noise_exp(k) = intfun (@(x)((Freal(x) - Fpred(x)).^2), -Inf, +Inf);
 %! end
 
 %!assert (stk_isequal_tolabs (crps_exp, crps));
