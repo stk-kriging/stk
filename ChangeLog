@@ -1,3 +1,12 @@
+2017-05-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_distrib_normal_crps.m: Remove example from help text
+
+	* misc/distrib/stk_distrib_normal_crps.m: Remove example from help
+	text. The functions in misc/distrib are meant to be independent of
+	the rest of the toolbox, we should avoid using functions from
+	other parts of STK inside them.
+
 2017-05-03  Remi Stroh  <remi.stroh@lne.fr>
 
 	stk_distrib_normal_crps.m: New function to compute the Gaussian CRPS
