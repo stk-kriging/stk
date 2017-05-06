@@ -8,9 +8,18 @@ Changes in version 2.4.1
    o stk_get_optimizable_parameters.m, stk_get_optimizable_parameters.m: Fix
      syntax errors.
 
+* API change
+
+   o The function stk_sampcrit_ei_eval has a new syntax.  The other
+     syntaxes, introduced (accidentally) in STK 2.4.0, will remain
+     supported in 2.4.x but are deprecated and will be removed in a
+     future release.
+
 * Documentation
 
    o stk_pmisclass.m: Add help text
+
+   o stk_sampcrit_ei_eval.m: MISSING HELP TEXT !!!
 
 
 Changes in version 2.4.0
