@@ -52,7 +52,6 @@ stk_disp_examplewelcome;  stk_figure ('stk_example_doe03');
 f = @(x)(x .* sin (x));            % Define a 1D test function
 DIM = 1;                           % Dimension of the factor space
 BOX = stk_hrect ([0; 12], {'x'});  % Factor space (hyper-rectangle object)
-goal = 'maximize';                 % Direction of optimization
 
 % Space discretization
 NT = 400;  % Number of points in the grid
@@ -141,8 +140,8 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     z_pred = stk_predict (model, data.x, data.z, xg);
     
     % Compute the Expected Improvement (EI) criterion on the grid
-    EI_val = stk_sampcrit_ei_eval ( ...
-        z_pred.mean, sqrt (z_pred.var), data.z, goal);
+    % (note the minus signs to address a *maximization* problem)
+    EI_val = stk_sampcrit_ei_eval (-z_pred.mean, sqrt (z_pred.var), -data.z);
     
     % Pick the point where the EI is maximum as our next evaluation point
     [EI_max, i_max] = max (EI_val);

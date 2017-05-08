@@ -1,3 +1,15 @@
+2017-05-08  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampcrit_ei_eval.m: Remove the 'goal' argument
+
+	* sampling/stk_sampcrit_ei_eval.m: Remove the 'goal' argument and
+	provide an implementation for *minimization* problems, which is
+	the usual convention for optimization problems and which is
+	consistent with the convention chosen for the EMMI and EHVI
+	criteria.
+	* examples/02_design_of_experiments/stk_example_doe03.m: Use the
+	new syntax without the 'goal' argument, using minus signs instead.
+
 2017-05-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_sampcrit_ei_eval.m: New syntax

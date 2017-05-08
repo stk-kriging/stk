@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (arg1, arg2, arg3, arg4)
+function crit_val = stk_sampcrit_ei_eval (arg1, arg2, arg3)
 
 if isa (arg2, 'stk_model_gpposterior')
 
@@ -94,7 +94,7 @@ else
     
     % The syntax
     %
-    %    crit_val = stk_sampcrit_ei_eval (zp_mean, zp_std, zi, goal)
+    %    crit_val = stk_sampcrit_ei_eval (zp_mean, zp_std, zi)
     %
     % is the one that will be kept for future releases.
     
@@ -106,11 +106,7 @@ else
     zp_std = arg2;
     zi = arg3;
     
-    if nargin < 4
-        goal = 'minimize';
-    else
-        goal = arg4;
-    end
+    goal = 'minimize';
     
 end
 
@@ -151,8 +147,6 @@ end % function
 
 %!test % Current syntax (STK 2.4.1 and later)
 %! EI1 = stk_sampcrit_ei_eval (zp.mean, sqrt (zp.var), min (zi));
-%! EI1b = stk_sampcrit_ei_eval (zp.mean, sqrt (zp.var), min (zi), 'minimize');
-%! assert (isequal (EI1, EI1b));  % 'minimize' is the default
 
 %!assert (isequal (EI1, EIref))
 
