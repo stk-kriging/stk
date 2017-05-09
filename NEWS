@@ -19,6 +19,10 @@ Changes in version 2.4.1
      supported in 2.4.x but are deprecated and will be removed in a
      future release.
 
+   o Unlike the older stk_distrib_normal_ei function,
+     stk_sampcrit_ei_eval is written for a *minimization* problem,
+     following the usual convention in optimization software.
+
 * Documentation
 
    o stk_pmisclass.m: Add help text

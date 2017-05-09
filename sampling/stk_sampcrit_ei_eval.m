@@ -1,4 +1,43 @@
-% STK_SAMPCRIT_EI_EVAL ...
+% STK_SAMPCRIT_EI_EVAL computes the Expected Improvement (EI) criterion
+%
+% CALL: EI_VAL = stk_sampcrit_ei_eval (ZP_MEAN, ZP_STD, ZI)
+%
+%    computes the value EI_VAL of the Expected Improvement (EI) criterion for
+%    a minimization problem, with respect to the observed values ZI, assuming
+%    Gaussian predictive distributions with means ZP_MEAN and standard
+%    deviations ZP_STD.  The input argument must have the following sizes:
+%
+%       * ZP_MEAN    M x 1,
+%       * ZP_STD     M x 1,
+%       * ZI         N x 1,
+%
+%    where M is the number of points where the EI must be computed, and N the
+%    number of observations.  The output has size M x 1.
+%
+% REMARK
+%
+%    Since the EI is computed for a minimization problem, the result depends on
+%    the minimum of the obervations.  The above call is thus equivalent to
+%
+%       EI_VAL = stk_sampcrit_ei_eval (ZP_MEAN, ZP_STD, min (ZI))
+%
+% NOTE
+%
+%    This function was added in STK 2.4.1, and will in the future completely
+%    replace stk_distrib_normal_ei.  Note that, unlike the present function,
+%    stk_distrib_normal_ei returns as a default the EI for a *maximization*
+%    problem.
+%
+% REFERENCES
+%
+%   [1] D. R. Jones, M. Schonlau and William J. Welch. Efficient global
+%       optimization of expensive black-box functions.  Journal of Global
+%       Optimization, 13(4):455-492, 1998.
+%
+%   [2] J. Mockus, V. Tiesis and A. Zilinskas. The application of Bayesian
+%       methods for seeking the extremum. In L.C.W. Dixon and G.P. Szego,
+%       editors, Towards Global Optimization, volume 2, pages 117-129, North
+%       Holland, New York, 1978.
 
 % Copyright Notice
 %
@@ -26,10 +65,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit_val = stk_sampcrit_ei_eval (arg1, arg2, arg3)
+function EI_val = stk_sampcrit_ei_eval (arg1, arg2, arg3)
 
 if isa (arg2, 'stk_model_gpposterior')
-
+    
     % The syntax
     %
     %    crit_val = stk_sampcrit_ei_eval (xt, M_post, goal)
@@ -124,7 +163,7 @@ switch goal
 end
 
 % Evaluate the sampling criterion
-crit_val = stk_distrib_normal_ei (threshold, zp_mean, zp_std, minimize);
+EI_val = stk_distrib_normal_ei (threshold, zp_mean, zp_std, minimize);
 
 end % function
 
