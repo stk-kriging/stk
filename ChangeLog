@@ -1,5 +1,9 @@
 2017-05-09  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_sampcrit_ei_eval.m: Add help text
+
+	* sampling/stk_sampcrit_ei_eval.m: Add help text.
+
 	stk_param_estim.m: Improve error message (ticket #72)
 
 	* paramestim/stk_param_estim.m: Issue a better error message when
