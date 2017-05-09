@@ -8,6 +8,10 @@ Changes in version 2.4.1
    o stk_get_optimizable_parameters.m, stk_get_optimizable_parameters.m: Fix
      syntax errors.
 
+   o stk_param_estim.m: Issue a better error message when LNV0 (the starting
+     point for the estimation of the lognoisevariance parameter) is either
+     NaN of infinite (ticket #72).
+
 * API change
 
    o The function stk_sampcrit_ei_eval has a new syntax.  The other
