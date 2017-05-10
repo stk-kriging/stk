@@ -1,3 +1,40 @@
+2017-05-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampcrit_ei_eval.m: Add help text
+
+	* sampling/stk_sampcrit_ei_eval.m: Add help text.
+
+	stk_param_estim.m: Improve error message (ticket #72)
+
+	* paramestim/stk_param_estim.m: Issue a better error message when
+	LNV0 is either NaN of infinite.
+
+2017-05-08  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampcrit_ei_eval.m: Remove the 'goal' argument
+
+	* sampling/stk_sampcrit_ei_eval.m: Remove the 'goal' argument and
+	provide an implementation for *minimization* problems, which is
+	the usual convention for optimization problems and which is
+	consistent with the convention chosen for the EMMI and EHVI
+	criteria.
+	* examples/02_design_of_experiments/stk_example_doe03.m: Use the
+	new syntax without the 'goal' argument, using minus signs instead.
+
+2017-05-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampcrit_ei_eval.m: New syntax
+
+	* sampling/stk_sampcrit_ei_eval.m: Adopt a syntax that is
+	consistent with the syntax of the EHVI and EMMI *_eval functions.
+	This function was accidentally released in STK 2.4.0 with two
+	other syntaxes, now marked as deprecated, that were never publicly
+	documented.
+	* examples/02_design_of_experiments/stk_example_doe03.m: Use the
+	new syntax.  Also, fix the example which was showing a
+	minimization strategy while a comment in the source code indicated
+	maximization.
+
 2017-05-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_distrib_normal_crps.m: Remove example from help text
