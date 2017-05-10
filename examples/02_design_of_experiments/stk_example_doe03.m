@@ -1,6 +1,6 @@
 % STK_EXAMPLE_DOE03  A simple illustration of 1D Bayesian optimization
 %
-% Our goal here is to optimize the one-dimensional function
+% Our goal here is to optimize (maximize) the one-dimensional function
 %
 %    x |--> x * sin (x)
 %
@@ -43,7 +43,7 @@ stk_disp_examplewelcome;  stk_figure ('stk_example_doe03');
 
 %% Problem definition
 %
-% Here we define a one-dimensional optimization problem.
+% Here we define a one-dimensional maximization problem.
 %
 % The goal is to find the maximum of f on the domain BOX.
 %
@@ -116,6 +116,9 @@ model.param = log ([SIGMA2; 1/RHO1]);
 % the maximum of the EI criterion falls below some threshold.
 %
 
+% Start with the initial design defined above
+data = horzcat (x0, z0);
+
 % Number of points to be added adaptively
 NB_ITER = 20;
 
@@ -125,10 +128,6 @@ EI_max = +inf;
 % Value of EI_max for the stopping criterion
 EI_max_stop = (max (zg) - min (zg)) / 1e5;
 
-% Construct sampling criterion object
-EI_crit = stk_sampcrit_ei (model, 'maximize');
-EI_crit = stk_model_update (EI_crit, x0, z0);
-
 % Iteration number
 iter = 0;
 
@@ -136,19 +135,20 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     % Trick: add a small "regularization" noise to our model
     model.lognoisevariance = 2 * log (min (1e-4, EI_max / 1e3));
-    EI_crit.model = stk_model_gpposterior (model, ...
-        EI_crit.model.input_data, EI_crit.model.output_data);
+    
+    % Carry out the kriging prediction
+    z_pred = stk_predict (model, data.x, data.z, xg);
     
     % Compute the Expected Improvement (EI) criterion on the grid
-    [EI_val, z_pred] = EI_crit (xg);
+    % (note the minus signs to address a *maximization* problem)
+    EI_val = stk_sampcrit_ei_eval (-z_pred.mean, sqrt (z_pred.var), -data.z);
     
     % Pick the point where the EI is maximum as our next evaluation point
     [EI_max, i_max] = max (EI_val);
     
     % Figure: upper panel
     stk_subplot (2, 1, 1);  cla;
-    stk_plot1d (EI_crit.model.input_data, EI_crit.model.output_data, ...
-        xg, zg, z_pred);  xlim (BOX);  hold on;
+    stk_plot1d (data.x, data.z, xg, zg, z_pred);  xlim (BOX);  hold on;
     plot (xg(i_max), zg(i_max), 'ro', 'MarkerFaceColor', 'y');
     
     % Figure: lower panel
@@ -159,7 +159,8 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     if EI_max > EI_max_stop,
         % Add the new evaluation to the DoE
-        EI_crit = stk_model_update (EI_crit, xg(i_max, :), zg(i_max, :));
+        new_row = horzcat (xg(i_max, :), zg(i_max, :));
+        data = vertcat (data, new_row);  %#ok<AGROW>
         iter = iter + 1;
     end
     
@@ -168,8 +169,7 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
 end
 
 % Display the final DoE
-data = [EI_crit.model.input_data EI_crit.model.output_data];
-data = stk_dataframe (data, {'x', 'z'});  disp (data);
+disp (data);
 
 % Total number of evaluations ?
 fprintf ('\nNumber of evaluations: %d + %d = %d.\n\n', N0, iter, N0 + iter);

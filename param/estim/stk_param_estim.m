@@ -29,7 +29,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2011-2013 SUPELEC
 %
@@ -92,14 +92,20 @@ end
 if ~ isempty (lnv0)
     % lnv0 present => noise variance *must* be estimated
     do_estim_lnv = true;
+    if isnan (lnv0) || isinf (lnv0)
+        stk_error (['Incorrect value for input argumen lnv0. The starting ' ...
+            'point for the estimation of lnv must be neither infinite nor ' ...
+            'NaN.'], 'IncorrectArgument');
+    end
 else
     % Otherwise, noise variance estimation happens when lnv has NaNs
     lnv0 = model.lognoisevariance;
     do_estim_lnv = any (isnan (lnv0));
-    if do_estim_lnv && (~ isscalar (lnv0))
-        stk_error (['Estimating the variance of the noise is not possible ' ...
-            'in the hetereoscedastic case yet. Sorry.'], 'IncorrectArgument');
-    end
+end
+
+if do_estim_lnv && (~ isscalar (lnv0))
+    stk_error (['Estimating the variance of the noise is not possible ' ...
+        'in the hetereoscedastic case yet. Sorry.'], 'IncorrectArgument');
 end
 
 % Default criterion: restricted likelihood (ReML method)
@@ -248,7 +254,7 @@ end
 end % function
 
 
-%!shared f, xi, zi, NI, param0, model
+%!shared f, xi, zi, NI, param0, param1, model
 %!
 %! f = @(x)(- (0.8 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)) );
 %! DIM = 1;  NI = 20;  box = [-1.0; 1.0];
@@ -260,6 +266,28 @@ end % function
 %! param0 = log ([SIGMA2; NU; 1/RHO1]);
 %!
 %! model = stk_model ('stk_materncov_iso');
+
+%!test  % noiseless
+%! zi = stk_feval (f, xi);
+%! param1 = stk_param_estim (model, xi, zi, param0);
+%! assert (isequal (size (param1), size (param0)))
+
+% We cannot assume a DETERMINISTIC optimization algorithm
+% (for some reason, Octave's sqp is not exactly deterministic)
+
+%!test  % same thing, with empty lnv0 (ok)
+%! param2 = stk_param_estim (model, xi, zi, param0, []);
+%! assert (stk_isequal_tolrel (param2, param1, 1e-2))
+
+%!error  % same thing, with lnv0 == NaN (not ok as a starting point)
+%! param2 = stk_param_estim (model, xi, zi, param0, nan);
+
+%!error  % same thing, with lnv0 == -inf (not ok as a starting point)
+%! param2 = stk_param_estim (model, xi, zi, param0, -inf);
+
+%!test  % same thing, with explicit value for 'criterion'
+%! param2 = stk_param_estim (model, xi, zi, param0, [], @stk_param_relik);
+%! assert (stk_isequal_tolrel (param1, param2, 1e-2))
 
 %!test  % noiseless
 %! zi = stk_feval (f, xi);
