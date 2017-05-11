@@ -68,14 +68,13 @@
 function EI_val = stk_sampcrit_ei_eval (arg1, arg2, arg3)
 
 if isa (arg2, 'stk_model_gpposterior')
-    
-    % The syntax
     %
-    %    crit_val = stk_sampcrit_ei_eval (xt, M_post, goal)
+    % WARNING: DEPRECATED USE !
     %
-    % was introduced by mistake in STK 2.4.0 (without documentation).  It
-    % will be removed from future releases.  We keep it for STK 2.4.x to
-    % avoid breaking things in a minor release.
+    % We keep this syntax in 2.4.x to avoid breaking things in a bugfix release
+    % but it will be removed in future releases
+    %
+    warn_about_deprecated_use ('EI_val = stk_sampcrit_ei_eval (xt, M_post, goal)');
     
     if nargin > 3
         stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -98,14 +97,13 @@ if isa (arg2, 'stk_model_gpposterior')
     
 elseif (isa (arg2, 'stk_dataframe')) ...
         && (isequal (arg2.colnames, {'mean', 'var'}))
-    
-    % The syntax
     %
-    %    crit_val = stk_sampcrit_ei_eval (xt, zp, goal)
+    % WARNING: DEPRECATED USE !
     %
-    % was introduced by mistake in STK 2.4.0 (without documentation).  It
-    % will be removed from future releases.  We keep it for STK 2.4.x to
-    % avoid breaking things in a minor release.
+    % We keep this syntax in 2.4.x to avoid breaking things in a bugfix release
+    % but it will be removed in future releases.
+    %
+    warn_about_deprecated_use ('EI_val = stk_sampcrit_ei_eval (xt, zp, goal)');
     
     if nargin > 3
         stk_error ('Too many input arguments.', 'TooManyInputArgs');
@@ -164,6 +162,33 @@ end
 
 % Evaluate the sampling criterion
 EI_val = stk_distrib_normal_ei (threshold, zp_mean, zp_std, minimize);
+
+end % function
+
+
+function warn_about_deprecated_use (s)
+
+warning ('STK:stk_hrect:stk_sampcrit_ei_eval:DeprecatedUse', sprintf ([ ...
+    'The syntax\n'                                                      ...
+    '\n'                                                                ...
+    '   %s\n'                                                           ...
+    '\n'                                                                ...
+    'was introduced by mistake in STK 2.4.0 (without documentation,\n'  ...
+    'but apparently some people read the source code...).\n'            ...
+    '\n'                                                                ...
+    '*** It will not be supported in future releases. ***\n'            ...
+    '\n'                                                                ...
+    'Please use the syntax\n'                                           ...
+    '\n'                                                                ...
+    '   EI_val = stk_sampcrit_ei_eval (zp_mean, zp_std, zi)\n'          ...
+    '\n'                                                                ...
+    'instead. Sorry for the inconvenience. Use\n'                       ...
+    '\n'                                                                ...
+    '   warning (''off'', '                                             ...
+    '''STK:stk_hrect:stk_sampcrit_ei_eval:DeprecatedUse'')\n'           ...
+    '\n'                                                                ...
+    'if you don''t want to see this warning again. '                    ...
+    'Read the doc for more information.\n'], s));               %#ok<SPWRN>
 
 end % function
 
