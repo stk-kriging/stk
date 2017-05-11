@@ -16,8 +16,9 @@
 %
 % REMARK
 %
-%    Since the EI is computed for a minimization problem, the result depends on
-%    the minimum of the obervations.  The above call is thus equivalent to
+%    Since the EI is computed for a minimization problem, the result depends
+%    on the minimum of the obervations only, not on the entire set of observed
+%    values.  The above call is thus equivalent to
 %
 %       EI_VAL = stk_sampcrit_ei_eval (ZP_MEAN, ZP_STD, min (ZI))
 %
