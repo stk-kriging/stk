@@ -2,28 +2,31 @@
 %
 % CALL: EMMI_VAL = stk_sampcrit_emmi_eval (ZP_MEAN, ZP_STD, ZI)
 %
-%   computes the expected maximin improvement using Monte Carlo simulation.
-%   A normal distribution with mean ZP_MEAN and standard deviation ZP_STD is
-%   assumed. ZI is a matrix of pareto optimal solutions.
-%   The input arguments should have the following sizes
+%    computes the value EMMI_VAL of the Expected MaxiMin Improvement (EMMI)
+%    for a multi-objective minimization problem, with respect to the observed
+%    values ZI, assuming Gaussian predictive distributions with means ZP_MEAN
+%    and standard deviations ZP_STD.  The value of the criterion is computed
+%    approximately, using Monte Carlo simulations.  ZI is a matrix of pareto
+%    optimal solutions. The input arguments must have the following sizes
 %
-%       * ZP_MEAN must have size n x p
-%       * ZP_STD  must have size n x p
-%       * ZI      must have size np x p
+%       * ZP_MEAN    M x P
+%       * ZP_STD     M x P
+%       * ZI         N x P
+%
+%    where M is the number of points where the EMMI must be computed, P the
+%    number of objective functions to be minimized, and N the current number of
+%    Pareto optimal solutions.  The output has size M x 1.
 %
 % CALL: EMMI_VAL = stk_sampcrit_emmi_eval (ZP_MEAN, ZP_STD, ZI, NSIMU)
 %
-%   allows to change the number of simulations NSIMU used in the calculation of
-%   the criterion.
+%    allows to change the number of simulations NSIMU used in the calculation of
+%    the criterion.
 %
-% NOTE:
+% NOTE
 %
-%    minimization wrt to all objectives is assumed (for now)
-%
-% NOTE:
-%
-%    *_eval function should be provided for all pointwise sampling
-%       (makes them easy to use when means and std are already computed)
+%    Multi-objective maximization problems, or mixed minimization/maximization
+%    problems, can be handled by chaning the sign of the corresponding
+%    components of ZP_MEAN and ZI.
 %
 % NOTE:
 %
