@@ -1,20 +1,20 @@
 % STK_SAMPCRIT_EMMI_EVAL computes the expected maximin improvement criterion
 %
-% CALL: EMMI = stk_sampcrit_emmi_eval (zp_mean, zp_std, zi)
+% CALL: EMMI_VAL = stk_sampcrit_emmi_eval (ZP_MEAN, ZP_STD, ZI)
 %
 %   computes the expected maximin improvement using Monte Carlo simulation.
-%   A normal distribution with mean zp_mean and standard deviation zp_std is
-%   assumed. zi is a matrix of pareto optimal solutions.
+%   A normal distribution with mean ZP_MEAN and standard deviation ZP_STD is
+%   assumed. ZI is a matrix of pareto optimal solutions.
 %   The input arguments should have the following sizes
 %
-%       * zp_mean must have size n x p
-%       * zp_std  must have size n x p
-%       * zi      must have size np x p
+%       * ZP_MEAN must have size n x p
+%       * ZP_STD  must have size n x p
+%       * ZI      must have size np x p
 %
-% CALL: EMMI = stk_sampcrit_emmi_eval (zp_mean, zp_std, zi, nsimu)
+% CALL: EMMI_VAL = stk_sampcrit_emmi_eval (ZP_MEAN, ZP_STD, ZI, NSIMU)
 %
-%   allows to change the number of simulations used in the calculation of the
-%   criterion.
+%   allows to change the number of simulations NSIMU used in the calculation of
+%   the criterion.
 %
 % NOTE:
 %
@@ -40,6 +40,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2016 IRT SystemX
 %
 %    Author:  Paul Feliot  <paul.feliot@irt-systemx.fr>

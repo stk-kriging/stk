@@ -1,5 +1,10 @@
 2017-05-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_sampcrit_emmi_eval.m: Use capital variable names in help text
+
+	* sampling/stk_sampcrit_emmi_eval.m: Use capital variable names in
+	help text, as everywhere else in the toolbox.
+
 	stk_sampcrit_ei_eval.m: Warn about deprecated use
 
 	* sampling/stk_sampcrit_ei_eval.m: Add warnings about deprecated
