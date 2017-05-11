@@ -1,3 +1,12 @@
+2017-05-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampcrit_ei_eval.m: Warn about deprecated use
+
+	* sampling/stk_sampcrit_ei_eval.m: Add warnings about deprecated
+	syntaxes, that were introduced inadvertently in STK 2.4.0 and will
+	be removed in future releases.  These warnings should remain as
+	long as we are in the 2.4.x series.
+
 2017-05-09  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_sampcrit_ei_eval.m: Add help text
