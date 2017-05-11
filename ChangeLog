@@ -1,5 +1,12 @@
 2017-05-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Remove dominated solutions in MOO sampling criteria
+
+	* sampling/stk_sampcrit_ehvi_eval.m: Simply add a comment.
+	Dominated solutions were already removed by stk_dominatedhv.
+	* sampling/stk_sampcrit_emmi_eval.m: Remove dominated solutions
+	and duplicates, as in stk_dominatedhv.
+
 	stk_sampcrit_emmi_eval.m: Improve help text
 
 	* sampling/stk_sampcrit_emmi_eval.m: Improve help text.

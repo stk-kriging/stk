@@ -42,6 +42,7 @@ EIr = stk_distrib_normal_ei (zr, zp_mean, zp_std, 1);  % m x p
 EHVI = prod (EIr, 2);                                  % m x 1
 
 % Compute signed decomposition wrt to the reference zr
+% (note: stk_dominatedhv removes non-dominated points and duplicates from zi)
 S = stk_dominatedhv (zi, zr, 1);
 
 if ~ isempty (S.sign)
