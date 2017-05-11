@@ -6,12 +6,12 @@
 %    for a multi-objective minimization problem, with respect to the observed
 %    values ZI, assuming Gaussian predictive distributions with means ZP_MEAN
 %    and standard deviations ZP_STD.  The value of the criterion is computed
-%    approximately, using Monte Carlo simulations.  ZI is a matrix of pareto
-%    optimal solutions. The input arguments must have the following sizes
+%    approximately, using Monte Carlo simulations.  The input arguments must 
+%    have the following sizes:
 %
-%       * ZP_MEAN    M x P
-%       * ZP_STD     M x P
-%       * ZI         N x P
+%       * ZP_MEAN    M x P,
+%       * ZP_STD     M x P,
+%       * ZI         N x P,
 %
 %    where M is the number of points where the EMMI must be computed, P the
 %    number of objective functions to be minimized, and N the current number of
@@ -24,13 +24,13 @@
 %
 % NOTE
 %
-%    Multi-objective maximization problems, or mixed minimization/maximization
-%    problems, can be handled by chaning the sign of the corresponding
+% 1) The result depends only on the non-dominated rows of ZI.
+%
+% 2) Multi-objective maximization problems, or mixed minimization/maximization
+%    problems, can be handled by changing the sign of the corresponding
 %    components of ZP_MEAN and ZI.
 %
-% NOTE:
-%
-%    Objective functions should be normalized for better performances.
+% 3) Objective functions should be normalized for better performances.
 %
 % REFERENCES
 %
@@ -83,6 +83,10 @@ end
 % Handle empty zi
 if isempty (zi)
     stk_error ('Empty zi.', 'EmptyZi')
+else
+    zi = double (zi);
+    % Keep only non-dominated points, and remove duplicates
+    zi = unique (zi(stk_paretofind (zi), :), 'rows');
 end
 
 % Size parameters
