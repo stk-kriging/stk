@@ -1,5 +1,9 @@
 2017-05-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_sampcrit_emmi_eval.m: Improve help text
+
+	* sampling/stk_sampcrit_emmi_eval.m: Improve help text.
+
 	stk_sampcrit_emmi_eval.m: Use capital variable names in help text
 
 	* sampling/stk_sampcrit_emmi_eval.m: Use capital variable names in
