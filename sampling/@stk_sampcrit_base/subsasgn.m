@@ -1,9 +1,8 @@
-% STK_VERSION returns STK's version number
+% SUBSASGN [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +26,23 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function crit = subsasgn (crit, idx, value)
 
-v = '2.4-dev';
+switch idx(1).type
+    
+    case '.'
+        
+        if length (idx) > 1
+            value = subsasgn (get (crit, idx(1).subs), idx(2:end), value);
+        end
+        
+        crit = set (crit, idx(1).subs, value);
+        
+    case {'{}', '()'}
+        
+        errmsg = 'Illegal assignment';
+        stk_error (errmsg, 'IllegalAssignment');
+        
+end
 
 end % function

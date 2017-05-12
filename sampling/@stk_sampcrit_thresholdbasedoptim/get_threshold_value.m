@@ -1,9 +1,8 @@
-% STK_VERSION returns STK's version number
+% STK_GET_THRESHOLD ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function value = get_threshold_value (crit)
 
-v = '2.4-dev';
+value = crit.threshold_value;
 
 end % function

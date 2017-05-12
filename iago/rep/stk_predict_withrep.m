@@ -1,11 +1,10 @@
-% STK_VERSION returns STK's version number
+% STK_PREDICT_WITHREP ...
 
 % Copyright Notice
 %
 %    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,8 +26,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function varargout = stk_predict_withrep (model, xi, zi, xt)
 
-v = '2.4-dev';
+if nargin > 4,
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+end
+
+% NOTE: the fact that we need to write such a function shows that
+%   we should have a dedicated class for these three-columnd dataframes
+%   for which we could implement stk_predict (and probably other things too)
+
+[model, zi] = stk_fakenorep (model, zi);
+
+varargout = cell (1, max (1, nargout));
+
+[varargout{:}] = stk_predict (model, xi, zi, xt);
 
 end % function

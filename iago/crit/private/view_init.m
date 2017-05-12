@@ -1,11 +1,12 @@
-% STK_VERSION returns STK's version number
+% VIEW_INIT view function
 
 % Copyright Notice
 %
 %    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,8 +28,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function view_init (algo, xi, zi, xg)
 
-v = '2.4-dev';
+if algo.dim == 1
+    %view_init_1d (algo, xi, zi); REMOVED
+elseif algo.dim == 2
+    view_init_2d (algo, xi, zi, xg);
+end
 
 end % function

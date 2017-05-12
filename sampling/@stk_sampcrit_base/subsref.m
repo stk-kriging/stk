@@ -1,9 +1,8 @@
-% STK_VERSION returns STK's version number
+% SUBSREF [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +26,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function [value, argout2] = subsref (crit, idx)
 
-v = '2.4-dev';
+switch idx(1).type
+    
+    case '()'
+        [value, argout2] = feval (crit, idx(1).subs{:});
+        
+    case '{}'
+        
+        errmsg = 'Indexing with curly braces is not allowed.';
+        stk_error (errmsg, 'IllegalIndexing');
+        
+    case '.'
+        
+        value = get (crit, idx(1).subs);
+        
+end
+
+if (length (idx)) > 1,
+    value = subsref (value, idx(2:end));
+end
 
 end % function

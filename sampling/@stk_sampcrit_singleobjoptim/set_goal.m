@@ -1,9 +1,8 @@
-% STK_VERSION returns STK's version number
+% SET_GOAL ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +26,30 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function crit = set_goal (crit, goal)
 
-v = '2.4-dev';
+if strcmp (goal, 'minimize')
+    
+    crit.goal = 'minimize';
+    crit.bminimize = true;
+    
+elseif strcmp (goal, 'maximize')
+    
+    crit.goal = 'maximize';
+    crit.bminimize = false;
+    
+elseif ischar (goal)  % Correct type but incorrect value
+    
+    stk_error (sprintf (['Incorrect value for property ''goal'': ' ...
+        '%s.\nThe value should be either ''minimize'' or ' ...
+        '''maximize''.'], goal), 'IncorrectValue');
+    
+else  % Incorrect type
+    
+    stk_error (sprintf (['Incorrect value type for property ''goal'': ' ...
+        '%s.\nThe value should a character string (char).'], ...
+        class (goal)), 'TypeMismatch');
+    
+end % if
 
 end % function

@@ -1,9 +1,8 @@
-% STK_VERSION returns STK's version number
+% DISP [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +26,36 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function disp (crit)
 
-v = '2.4-dev';
+loose_spacing = strcmp (get (0, 'FormatSpacing'), 'loose');
+
+fprintf ('<%s>\n', stk_sprintf_sizetype (crit));
+
+if loose_spacing
+    fprintf ('\n');
+end
+
+if ~ strcmp (class (crit), 'stk_sampcrit_base')
+    
+    fprintf ('*** WARNING: %s has no proper disp () method.\n', class (crit));
+    
+    if loose_spacing
+        fprintf ('***\n');
+    end
+    
+    fprintf ('*** Dumping the raw content of the underlying structure...\n');
+    
+    if loose_spacing
+        fprintf ('***\n\n');
+    end
+    
+    disp (struct(crit));
+    
+    if loose_spacing
+        fprintf ('\n');
+    end
+    
+end % if
 
 end % function

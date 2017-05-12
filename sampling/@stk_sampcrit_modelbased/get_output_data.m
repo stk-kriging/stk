@@ -1,9 +1,11 @@
-% STK_VERSION returns STK's version number
+% GET_OUTPUT_DATA ...
+%
+% Note: read-only property
+%
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +29,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function output_data = get_output_data (crit)
 
-v = '2.4-dev';
+if (isempty (crit.model)) || (isstruct (crit.model))
+    % If M is a struct, we assume that it is a prior model
+    output_data = [];
+else
+    output_data = get_output_data (crit.model);
+end
 
 end % function

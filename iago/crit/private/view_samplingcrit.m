@@ -1,11 +1,12 @@
-% STK_VERSION returns STK's version number
+% VIEW_SAMPLINGCRIT view function
 
 % Copyright Notice
 %
 %    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2011-2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Authors:   Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%               Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,8 +28,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function view_samplingcrit (algo, xg, xi, xinew, samplingcrit, h_fig)
 
-v = '2.4-dev';
+if algo.dim == 1
+    %view_samplingcrit_1d (algo, xg, xi, xinew, samplingcrit, h_fig); REMOVED
+elseif algo.dim == 2
+    view_samplingcrit_2d (algo, xg, xi, xinew, samplingcrit, h_fig);
+end
 
 end % function

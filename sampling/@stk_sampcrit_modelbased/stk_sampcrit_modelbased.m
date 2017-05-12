@@ -1,9 +1,8 @@
-% STK_VERSION returns STK's version number
+% STK_SAMPCRIT_MODELBASED ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +26,27 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function crit = stk_sampcrit_modelbased (model, varargin)
 
-v = '2.4-dev';
+if nargin == 1
+    
+    crit.model = model;
+    
+elseif nargin == 0
+    
+    % No input argument case: construct empty object
+    crit.model = [];
+    
+else
+    
+    % Catch syntax errors (Octave only)
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
+    
+end % if
+
+crit = class (crit, 'stk_sampcrit_modelbased', stk_sampcrit_base ());
 
 end % function
+
+
+%!test crit = stk_sampcrit_modelbased ();

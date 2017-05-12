@@ -1,9 +1,8 @@
-% STK_VERSION returns STK's version number
+% MSFEVAL ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +26,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function crit_val = msfeval (crit, mean, std)
 
-v = '2.4-dev';
+threshold = get_threshold_value (crit);
+bminimize = get_bminimize (crit);
+
+crit_val = stk_distrib_normal_ei (threshold, mean, std, bminimize);
 
 end % function

@@ -1,9 +1,8 @@
-% STK_VERSION returns STK's version number
+% STK_SAMPCRIT_EI ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +26,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function crit = stk_sampcrit_ei (varargin)
 
-v = '2.4-dev';
+crit0 = stk_sampcrit_thresholdbasedoptim (varargin{:});
+
+crit = class (struct (), 'stk_sampcrit_ei', crit0);
 
 end % function
+
+
+%!test crit = stk_sampcrit_ei ();

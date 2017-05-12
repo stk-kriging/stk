@@ -243,3 +243,8 @@ end % function
 %! zsim = stk_generate_samplepaths (model, [xt; xt], nb_paths);
 %! assert (isequal (size (zsim), [2 * n, nb_paths]));
 %! assert (isequal (zsim(1:n, :), zsim((n + 1):end, :)));
+
+%!xtest  % simulation points equal to observation points (noiseless model)
+%! % https://sourceforge.net/p/kriging/tickets/14/
+%! zsim = stk_generate_samplepaths (model, xt, zeros (n, 1), xt);
+%! assert (isequal (zsim, zeros (n, 1)));
