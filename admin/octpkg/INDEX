@@ -58,6 +58,7 @@ Core STK functions
  stk_make_matcov
  stk_predict
  stk_predict_leaveoneout
+ stk_pmisclass 
  stk_conditioning
  stk_generate_samplepaths
  stk_isnoisy
@@ -180,7 +181,6 @@ Design of experiments (non-sequential): criterions
 Design of experiments (sequential): criterions
  stk_distrib_normal_ei
  stk_distrib_student_ei
- stk_pmisclass
  stk_sampcrit_ehvi_eval
  stk_sampcrit_ei_eval
  stk_sampcrit_emmi_eval
