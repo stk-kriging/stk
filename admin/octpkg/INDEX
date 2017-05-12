@@ -179,11 +179,11 @@ Design of experiments (non-sequential): criterions
  stk_phipcrit
 
 Design of experiments (sequential): criterions
+ stk_sampcrit_ei_eval 
+ stk_sampcrit_ehvi_eval
+ stk_sampcrit_emmi_eval
  stk_distrib_normal_ei
  stk_distrib_student_ei
- stk_sampcrit_ehvi_eval
- stk_sampcrit_ei_eval
- stk_sampcrit_emmi_eval
 
 Examples: kriging basics
  stk_example_kb01
