@@ -1,58 +1,58 @@
 % STK_SAMPLING_NESTEDLHS builds a Nested Latin Hypercube Sampling (NLHS)
-% using Qian's algorithm
 %
-% CALL: X_nlhs = stk_sampling_nestedlhs(n, dim)
+% CALL: X = stk_sampling_nestedlhs (N, DIM)
 %
-%   builds a NLHS, with length(n) levels, n(k) points at the k-th level,
-%   and and dimension dim. X_nlhs has sum(n) rows and (dim + 1) columns.
+%   builds a NLHS, with length(N) levels, N(k) points at the k-th level,
+%   and a dimension DIM. X has sum(N) rows and (DIM + 1) columns, the last
+%   column begin the levels.
 %   A design is nested when all points observed at the (k+1)-th level are
 %   also observed at the k-th level.
-%   Remark: n(k) must divide n(k + 1).
+%   A nested design is a Latin Hypercube Sampling (LHS), if every
+%   sub-design corresponding to a specified level is a LHS.
+%   Remark: N(k) must divide N(k + 1).
 %
-% CALL: X_nlhs = stk_sampling_nestedlhs(n, dim, box)
+% CALL: X = stk_sampling_nestedlhs (N, DIM, BOX)
 %
 %   does the same thing in the DIM-dimensional hyperrectangle specified by the
 %   argument BOX, which is a 2 x DIM matrix where BOX(1, j) and BOX(2, j) are
 %   the lower- and upper-bound of the interval on the j^th coordinate.
-%   Default value for box: [0; 1]^dim.
-%   If box is provided, dim = size(box, 2).
-%   Warning: size(X_nlhs, 2) == (dim + 1)
+%   Default value for BOX: [0; 1]^DIM.
+%   If BOX is provided, DIM = size(BOX, 2).
+%   Warning: size(X, 2) == (DIM + 1)
 %
-% CALL: best_nlhs = stk_sampling_nestedlhs(n, dim, box, niter)
+% CALL: X = stk_sampling_nestedlhs (N, DIM, BOX, NITER)
 %
 %   allows to change the number of independent random LHS that are used at
 %   each level to complete the design.
-%   Default value for niter: 1000.
-%   Put niter to 1 to generate a random NLHS.
+%   Default value for NITER: 1000.
+%   Put NITER to 1 to generate a random NLHS.
 %
-% CALL: best_nlhs = stk_sampling_nestedlhs(n, dim, box, niter, levels)
+% CALL: X = stk_sampling_nestedlhs (N, DIM, BOX, NITER, LEVELS)
 %
-%   does the same thing, but the levels are indexed by the 'levels' vector.
-%   The length of levels must be greater or equal than the length of n.
-%   Default value for levels: 1:length(n).
+%   does the same thing, but the levels are indexed by the vector LEVELS.
+%   The length of LEVELS must be greater or equal than the length of N.
+%   Default value for LEVELS: 1:length(N).
 %
 % EXAMPLE
 %
-%   n = [48, 12, 6, 2]; d = 2;
+%   n = [48, 12, 6, 2]; dim = 2;
 %   bnd = stk_hrect([-5, 1; 7, 2]);
 %   levels = [100; 50; 33; 25; 20;];
-%   x = stk_sampling_nestedlhs(n, d, bnd, [], levels);
+%   x = stk_sampling_nestedlhs(n, dim, bnd, [], levels);
 %
 % REFERENCE
 %
-%   Peter Z. G. Qian. Nested latin hypercube designs.
-%   Biometrika, 96 (4):957–970, 2009.
+%   [1] Peter Z. G. Qian, "Nested latin hypercube designs", Biometrika,
+%       96(4):957–970, 2009.
 %
-% See also: stk_sampling_nesteddesign
+% See also: stk_sampling_nesteddesign, stk_sampling_randomlhs
 
 % Copyright Notice
 %
 %    Copyright (C) 2017 LNE
 %    Copyright (C) 2017 CentraleSupelec
 %
-%    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
-%               Remi Stroh         <remi.stroh@lne.fr>
+%    Authors:   Remi Stroh         <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
