@@ -1,45 +1,46 @@
-% STK_SAMPLING_NESTEDDESIGN generates a nested design with Le Gratiet's
-% algorithm.
+% STK_SAMPLING_NESTEDDESIGN generates a nested design
 %
-% CALL: nd = stk_sampling_nesteddesign(n, dim)
+% CALL: X = stk_sampling_nesteddesign (N, DIM)
 %
-%   generates a nested design with length(n) levels, with n(k) points at
-%   the k-th level. nd has sum(n) rows and (dim + 1) columns.
-%   A design is nested when all points observed at the (k+1)-th level are
-%   also observed at the k-th level.
+%   generates a nested design with length(N) levels, with N(k) points at
+%   the k-th level. X has sum(N) rows and (DIM + 1) columns, the last
+%   column begin the levels.
+%   A design is nested when all points at the (k+1)-th level are also at
+%   the k-th level.
 %
-% CALL: nd = stk_sampling_nesteddesign(n, dim, box)
+% CALL: X = stk_sampling_nesteddesign (N, DIM, BOX)
 %
 %   does the same thing in the DIM-dimensional hyperrectangle specified by the
 %   argument BOX, which is a 2 x DIM matrix where BOX(1, j) and BOX(2, j) are
 %   the lower- and upper-bound of the interval on the j^th coordinate.
-%   Default value for box: [0; 1]^dim.
-%   If box is provided, dim = size(box, 2).
-%   Warning: size(nd, 2) == (dim + 1)
+%   Default value for BOX: [0; 1]^DIM.
+%   If BOX is provided, DIM = size(BOX, 2).
+%   Warning: size(X, 2) == (DIM + 1)
 %
-% CALL: best_nd = stk_sampling_nesteddesign(n, dim, box, niter)
+% CALL: X = stk_sampling_nesteddesign (N, DIM, BOX, NITER)
 %
 %   allows to change the number of independent random LHS that are used,
 %   when generating a maximin LHS.
-%   Default value for niter: 1000. 
+%   Default value for NITER: 1000. 
 %
-% CALL: nd = stk_sampling_nesteddesign(n, dim, box, niter, levels)
+% CALL: X = stk_sampling_nesteddesign (N, DIM, BOX, NITER, LEVELS)
 %
-%   does the same thing, but the levels are indexed by the 'levels' vector.
-%   The length of levels must be greater or equal than the length of n.
-%   Default value for levels: 1:length(n).
+%   does the same thing, but the levels are indexed by the vector LEVELS.
+%   The length of LEVELS must be greater or equal than the length of N.
+%   Default value for levels: 1:length(N).
 %
 % EXAMPLE
 %
-%   n = [30, 14, 5, 2]; d = 2;
+%   n = [30, 14, 5, 2]; dim = 2;
 %   bnd = stk_hrect([-5, 1; 7, 2]);
 %   levels = [100; 50; 33; 25; 20;];
-%   x = stk_sampling_nesteddesign(n, d, bnd, [], levels);
+%   x = stk_sampling_nesteddesign(n, dim, bnd, [], levels);
 %
 % REFERENCE
 %
-%   Loic Le Gratiet. Multi-fidelity Gaussian process regression for computer
-%   experiments. PhD thesis, Universite Paris-Diderot - Paris VII, 2013.
+%   [1] Loic Le Gratiet, "Multi-fidelity Gaussian process regression for
+%       computer experiments", PhD thesis, Universite Paris-Diderot -
+%       Paris VII, 2013.
 %
 % See also: stk_sampling_nestedlhs, stk_sampling_maximinlhs
 
@@ -48,9 +49,7 @@
 %    Copyright (C) 2017 LNE
 %    Copyright (C) 2017 CentraleSupelec
 %
-%    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
-%               Remi Stroh         <remi.stroh@lne.fr>
+%    Authors:   Remi Stroh         <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %

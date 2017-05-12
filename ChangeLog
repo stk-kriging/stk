@@ -1,3 +1,11 @@
+2017-05-12  Remi Stroh  <remi.stroh@lne.fr>
+	
+	Format help texts.
+	
+	* sampling/stk_sampling_nesteddesign.m: Formatting help text to
+	follow the STK style.	
+	* sampling/stk_sampling_nestedlhs.m: Idem.
+
 2017-05-09  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_sampcrit_ei_eval.m: Add help text
