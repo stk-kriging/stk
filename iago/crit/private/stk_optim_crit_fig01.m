@@ -1,11 +1,12 @@
-% STK_VERSION returns STK's version number
+% STK_OPTIM_CRIT_FIG01 ...
 
 % Copyright Notice
 %
 %    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
+%              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,8 +28,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function stk_optim_crit_fig01 (algo, xi, zi, x, z_pred, z_sim)
 
-v = '2.4-dev';
+figure (algo.disp_fignum_base + algo.disp_fignum_critshift + 1);
+
+% Do not display all samplepaths
+L = min (size (z_sim, 2), 50);
+
+stk_plot1d (xi, zi, x, [], z_pred, z_sim(:, 1:L));
+
+stk_labels ('x', 'f(x)');
+stk_title ('Conditional samplepaths');
+
+drawnow;
 
 end % function

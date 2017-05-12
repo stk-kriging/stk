@@ -1,9 +1,8 @@
-% STK_VERSION returns STK's version number
+% DISPLAY [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +26,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function display (crit)
 
-v = '2.4-dev';
+loose_spacing = strcmp (get (0, 'FormatSpacing'), 'loose');
+
+name = inputname (1);
+if isempty (name)
+    name = 'ans';
+end
+
+if loose_spacing
+    fprintf ('\n');
+end
+
+fprintf ('%s = ', name);
+
+disp (crit);
 
 end % function

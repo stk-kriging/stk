@@ -1,9 +1,8 @@
-% STK_VERSION returns STK's version number
+% GET [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +26,35 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function value = get (crit, propname)
 
-v = '2.4-dev';
+switch propname
+    
+    case 'model'
+        value = get_model (crit);
+        
+    case 'input_data'
+        value = get_input_data (crit);
+        
+    case 'output_data'
+        value = get_output_data (crit);
+        
+    case 'goal'
+        value = get_goal (crit);
+        
+    case 'threshold_mode'
+        value = crit.threshold_mode;
+        
+    case 'threshold_value'
+        value = crit.threshold_value;
+        
+    case 'threshold_quantile_order'
+        value = crit.threshold_quantile_order;
+        
+    otherwise
+        errmsg = sprintf ('There is no field named %s', propname);
+        stk_error (errmsg, 'InvalidArgument');
+        
+end % switch
 
 end % function

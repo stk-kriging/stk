@@ -1,9 +1,8 @@
-% STK_VERSION returns STK's version number
+% SET [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +26,37 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function crit = set (crit, propname, value)
 
-v = '2.4-dev';
+switch propname
+    
+    case 'model'
+        crit = set_model (crit, value);
+        
+    case 'input_data'
+        stk_error ('Property ''input_data'' is read-only.', ...
+            'ReadOnlyProperty');
+        
+    case 'output_data'
+        stk_error ('Property ''output_data'' is read-only.', ...
+            'ReadOnlyProperty');
+        
+    case 'goal'
+        crit = set_goal (crit, value);
+        
+    case 'threshold_mode'
+        crit = set_threshold_mode (crit, value);
+        
+    case 'threshold_value'
+        crit = set_threshold_value (crit, value);
+
+    case 'threshold_quantile_order'
+        crit = set_threshold_quantile_order (crit, value);
+
+    otherwise
+        errmsg = sprintf ('There is no field named %s', propname);
+        stk_error (errmsg, 'InvalidArgument');
+        
+end
 
 end % function

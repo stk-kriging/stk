@@ -1,9 +1,8 @@
-% STK_VERSION returns STK's version number
+% SET_THRESHOLD_MODE ...
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +26,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function crit = set_threshold_mode (crit, threshold_mode)
 
-v = '2.4-dev';
+threshold_mode = lower (strtrim (threshold_mode));
+
+switch threshold_mode
+    
+    case 'user-defined'
+        crit.threshold_mode = 'user-defined';
+        
+    case {'best evaluation', 'best quantile'}
+        crit.threshold_mode = threshold_mode;
+        crit = set_threshold_value (crit);
+        
+    otherwise
+        if ischar (threshold_mode)
+            errmsg = sprintf (['Incorrect threshold_mode ' ...
+                'value: %s.'], threshold_mode);
+        else
+            errmsg = sprintf (['Incorrect type for ' ...
+                'threshold_mode: %s.'], class (threshold_mode));
+        end
+        stk_error (errmsg, 'InvalidArgument');
+        
+end % switch
 
 end % function

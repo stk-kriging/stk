@@ -1,9 +1,12 @@
-% STK_VERSION returns STK's version number
+% FEVAL ...
+%
+% TODO: Explain: default "pointwise" implementation, override for other types of
+%       criteria (e.g., integral criteria)
+%
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,8 +30,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_version ()
+function [crit_val, zp] = feval (crit, x, varargin)
 
-v = '2.4-dev';
+zp = stk_predict (crit.model, x);
+
+crit_val = msfeval (crit, zp.mean, sqrt (zp.var), varargin{:});
 
 end % function
