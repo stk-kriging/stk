@@ -16,6 +16,23 @@
 %    with mean MU and standard deviation SIGMA, below the threshold Z
 %    if MINIMIZE is true, above the threshold Z otherwise.
 %
+% NOTE
+%
+%    Starting with STK 2.4.1, it is recommended to use stk_sampcrit_ei_eval
+%    instead of this function.  Be careful, however, with the "direction" of
+%    the improvement that you want to compute:
+%
+%       EI = stk_sampcrit_ei_eval (MU, SIGMA, Z)
+%
+%    computes the expected improvement *below* the threshold Z, and is thus
+%    equivalent to
+%
+%       EI = stk_distrib_normal_ei (Z, MU, SIGMA, true)
+%
+%    To compute the expected improvement *above* Z, change signs as follows:
+%
+%       EI = stk_sampcrit_ei_eval (-MU, SIGMA, -Z)
+%
 % REFERENCES
 %
 %   [1] D. R. Jones, M. Schonlau and William J. Welch. Efficient global
@@ -27,11 +44,11 @@
 %       editors, Towards Global Optimization, volume 2, pages 117-129, North
 %       Holland, New York, 1978.
 %
-% See also stk_distrib_student_ei
+% See also stk_sampcrit_ei_eval, stk_distrib_student_ei
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:  Julien Bect     <julien.bect@centralesupelec.fr>

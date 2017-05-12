@@ -1,3 +1,10 @@
+2017-05-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_distrib_normal_ei.m: Recommend to use stk_sampcrit_ei_eval
+
+	* misc/distrib/stk_distrib_normal_ei.m: Recommend to use
+	stk_sampcrit_ei_eval instead.
+
 2017-05-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Remove dominated solutions in MOO sampling criteria

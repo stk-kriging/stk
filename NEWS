@@ -23,6 +23,9 @@ Changes in version 2.4.1
      stk_sampcrit_ei_eval is written for a *minimization* problem,
      following the usual convention in optimization software.
 
+   o From now on, it is recommended to use stk_sampcrit_ei_eval instead of
+     stk_distrib_normal_ei.
+
    o stk_sampcrit_emmi_eval.m: Now accepts for the input argument ZI a set of
      observations that contains dominated solutions (rows).  Dominated rows
      and duplicates are removed automatically, as in stk_sampcrit_ehvi_eval.
