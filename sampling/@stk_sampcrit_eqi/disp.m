@@ -1,8 +1,10 @@
-% STK_SAMPCRIT_SINGLEOBJOPTIM ...
+% @STK_SAMPCRIT_EQI/DISP [overload base function]
+%
+% See also: disp
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,25 +28,31 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = stk_sampcrit_singleobjoptim (goal)
+function disp (crit)
 
-% Default value
-crit.goal = 'minimize';
-crit.bminimize = true;  % read-only property
+loose_spacing = stk_disp_isloose ();
 
-% Create criterion object
-crit = class (crit, 'stk_sampcrit_singleobjoptim', stk_sampcrit_base ());
+fprintf ('<%s>\n', stk_sprintf_sizetype (crit));
 
-switch nargin
-    case 0
-        % Nothing more to do
-    case 1
-        crit = set_goal (crit, goal);
-    otherwise
-        stk_error ('Too many input arguments.', 'TooManyInputArgs');
+if loose_spacing
+    fprintf ('|\n');
+end
+
+if isempty (crit.model)
+    % Uninstantiated sampling criterion
+    model_str = '--  (not instantiated)';
+else
+    % Instantiated sampling criterion
+    model_str = sprintf ('<%s>', stk_sprintf_sizetype (crit.model));
+end
+
+fprintf ('|              model:  %s\n', model_str);
+fprintf ('|     quantile_order:  %s\n', num2str (crit.quantile_order));
+fprintf ('|   point_batch_size:  %s\n', num2str (crit.point_batch_size));
+fprintf ('|    current_minimum:  %s\n', num2str (crit.current_minimum));
+
+if loose_spacing
+    fprintf ('|\n\n');
 end
 
 end % function
-
-
-%!test crit = stk_sampcrit_singleobjoptim ();

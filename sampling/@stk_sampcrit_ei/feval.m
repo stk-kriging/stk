@@ -1,8 +1,10 @@
-% SET_MODEL ...
+% @STK_SAMPCRIT_EI/FEVAL [overload base function]
+%
+% See also: feval
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,10 +28,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = set_model (crit, model)
+function [EI, zp] = feval (crit, x, varargin)
 
-crit.stk_sampcrit_modelbased = set_model (crit.stk_sampcrit_modelbased, model);
+zp = stk_predict (crit.model, x);
 
-crit = set_threshold_value (crit);
+EI = stk_sampcrit_ei_eval (zp.mean, sqrt (zp.var), crit.current_minimum);
 
 end % function

@@ -1,4 +1,6 @@
-% DISP [overload base function]
+% @STK_FUNCTION/DISP [overload base function]
+%
+% See also: disp
 
 % Copyright Notice
 %
@@ -26,19 +28,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function disp (crit)
+function disp (F)
 
 loose_spacing = stk_disp_isloose ();
 
-fprintf ('<%s>\n', stk_sprintf_sizetype (crit));
+fprintf ('<%s>\n', stk_sprintf_sizetype (F));
 
 if loose_spacing
     fprintf ('\n');
 end
 
-if ~ strcmp (class (crit), 'stk_sampcrit_base')
+if ~ strcmp (class (F), 'stk_function')  %#ok<STISA>
     
-    fprintf ('*** WARNING: %s has no proper disp () method.\n', class (crit));
+    fprintf ('*** WARNING: %s has no proper disp () method.\n', class (F));
     
     if loose_spacing
         fprintf ('***\n');
@@ -50,7 +52,7 @@ if ~ strcmp (class (crit), 'stk_sampcrit_base')
         fprintf ('***\n\n');
     end
     
-    disp (struct(crit));
+    disp (struct (F));
     
     if loose_spacing
         fprintf ('\n');

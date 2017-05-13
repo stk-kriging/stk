@@ -1,8 +1,10 @@
-% GET_MODEL ...
+% @STK_SAMPCRIT_EI/DISP [overload base function]
+%
+% See also: disp
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +28,29 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function model = get_model (crit)
+function disp (crit)
 
-model = crit.model;
+loose_spacing = stk_disp_isloose ();
+
+fprintf ('<%s>\n', stk_sprintf_sizetype (crit));
+
+if loose_spacing
+    fprintf ('|\n');
+end
+
+if isempty (crit.model)
+    % Uninstantiated sampling criterion
+    model_str = '--  (not instantiated)';
+else
+    % Instantiated sampling criterion
+    model_str = sprintf ('<%s>', stk_sprintf_sizetype (crit.model));
+end
+
+fprintf ('|             model:  %s\n', model_str);
+fprintf ('|   current_minimum:  %s\n', num2str (crit.current_minimum));
+
+if loose_spacing
+    fprintf ('|\n\n');
+end
 
 end % function

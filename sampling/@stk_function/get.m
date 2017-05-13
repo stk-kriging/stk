@@ -1,8 +1,8 @@
-% DISPLAY [overload base function]
+% @STK_SAMPCRIT_EI/GET [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,21 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function display (crit)
+function value = get (crit, propname)
 
-loose_spacing = stk_disp_isloose ();
-
-name = inputname (1);
-if isempty (name)
-    name = 'ans';
-end
-
-if loose_spacing
-    fprintf ('\n');
-end
-
-fprintf ('%s = ', name);
-
-disp (crit);
+value = crit.(propname);
 
 end % function

@@ -1,4 +1,6 @@
-% STK_SAMPCRIT_MODELBASED ...
+% @STK_FUNCTION/SUBSREF [overload base function]
+%
+% See also: subsref
 
 % Copyright Notice
 %
@@ -26,27 +28,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = stk_sampcrit_modelbased (model, varargin)
+function [value, argout2] = subsref (F, idx)
 
-if nargin == 1
+switch idx(1).type
     
-    crit.model = model;
-    
-elseif nargin == 0
-    
-    % No input argument case: construct empty object
-    crit.model = [];
-    
-else
-    
-    % Catch syntax errors (Octave only)
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-    
-end % if
+    case '()'
+        [value, argout2] = feval (F, idx(1).subs{:});
+        
+    case '{}'
+        
+        errmsg = 'Indexing with curly braces is not allowed.';
+        stk_error (errmsg, 'IllegalIndexing');
+        
+    case '.'
+        
+        value = get (F, idx(1).subs);
+        
+end
 
-crit = class (crit, 'stk_sampcrit_modelbased', stk_sampcrit_base ());
+if (length (idx)) > 1
+    value = subsref (value, idx(2:end));
+end
 
 end % function
-
-
-%!test crit = stk_sampcrit_modelbased ();

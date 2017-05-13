@@ -1,8 +1,8 @@
-% GET_THRESHOLD_QUANTILE_ORDER ...
+% GET_OUTPUT_DATA returns the output data of the model
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +26,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function value = get_threshold_quantile_order (crit)
+function output_data = get_output_data (model)
 
-value = crit.threshold_quantile_order;
+assert_struct_is_model (model);
+
+output_data = zeros (0, 1);
 
 end % function

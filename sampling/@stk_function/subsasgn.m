@@ -1,4 +1,6 @@
-% SET_MODEL ...
+% @STK_FUNCTION/SUBSASGN [overload base function]
+%
+% See also: subsasgn
 
 % Copyright Notice
 %
@@ -26,8 +28,23 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = set_model (crit, model)
+function F = subsasgn (F, idx, value)
 
-crit.model = model;
+switch idx(1).type
+    
+    case '.'
+        
+        if length (idx) > 1
+            value = subsasgn (get (F, idx(1).subs), idx(2:end), value);
+        end
+        
+        F = set (F, idx(1).subs, value);
+        
+    case {'{}', '()'}
+        
+        errmsg = 'Illegal assignment';
+        stk_error (errmsg, 'IllegalAssignment');
+        
+end
 
 end % function

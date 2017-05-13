@@ -1,4 +1,6 @@
-% SET_THRESHOLD_MODE ...
+% @STK_FUNCTION/DISPLAY [overload base function]
+%
+% See also: display
 
 % Copyright Notice
 %
@@ -26,29 +28,21 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = set_threshold_mode (crit, threshold_mode)
+function display (F)  %#ok<*DISPLAY>
 
-threshold_mode = lower (strtrim (threshold_mode));
+loose_spacing = stk_disp_isloose ();
 
-switch threshold_mode
-    
-    case 'user-defined'
-        crit.threshold_mode = 'user-defined';
-        
-    case {'best evaluation', 'best quantile'}
-        crit.threshold_mode = threshold_mode;
-        crit = set_threshold_value (crit);
-        
-    otherwise
-        if ischar (threshold_mode)
-            errmsg = sprintf (['Incorrect threshold_mode ' ...
-                'value: %s.'], threshold_mode);
-        else
-            errmsg = sprintf (['Incorrect type for ' ...
-                'threshold_mode: %s.'], class (threshold_mode));
-        end
-        stk_error (errmsg, 'InvalidArgument');
-        
-end % switch
+name = inputname (1);
+if isempty (name)
+    name = 'ans';
+end
+
+if loose_spacing
+    fprintf ('\n');
+end
+
+fprintf ('%s = ', name);
+
+disp (F);
 
 end % function
