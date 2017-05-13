@@ -1,3 +1,11 @@
+2017-05-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampcrit_ehvi_eval.m: Add help text
+
+	* sampling/stk_sampcrit_ehvi_eval.m: Add help text.
+	* sampling/stk_sampcrit_ei_eval.m: Minor change in help text.
+	* sampling/stk_sampcrit_emmi_eval.m: Minor change in help text.
+
 2017-05-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_distrib_normal_ei.m: Recommend to use stk_sampcrit_ei_eval

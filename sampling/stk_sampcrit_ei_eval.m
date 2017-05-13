@@ -1,4 +1,4 @@
-% STK_SAMPCRIT_EI_EVAL computes the Expected Improvement (EI) criterion
+% STK_SAMPCRIT_EI_EVAL computes the EI criterion
 %
 % CALL: EI = stk_sampcrit_ei_eval (ZP_MEAN, ZP_STD, ZI)
 %
