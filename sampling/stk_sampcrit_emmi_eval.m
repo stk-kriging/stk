@@ -1,4 +1,4 @@
-% STK_SAMPCRIT_EMMI_EVAL computes the expected maximin improvement criterion
+% STK_SAMPCRIT_EMMI_EVAL computes the EMMI criterion
 %
 % CALL: EMMI = stk_sampcrit_emmi_eval (ZP_MEAN, ZP_STD, ZI)
 %
