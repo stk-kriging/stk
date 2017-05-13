@@ -32,9 +32,8 @@ Changes in version 2.4.1
 
 * Documentation
 
-   o stk_pmisclass.m: Add help text
-
-   o stk_sampcrit_ei_eval.m: MISSING HELP TEXT !!!
+   o stk_pmisclass.m, stk_sampcrit_ei_eval.m, stk_sampcrit_ehvi_eval:
+     Help text has been added for all these functions.
 
 
 Changes in version 2.4.0
