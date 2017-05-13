@@ -1,8 +1,8 @@
-% SUBSREF [overload base function]
+% GET_INTPUT_DATA returns the input data of the model
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,26 +26,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [value, argout2] = subsref (crit, idx)
+function input_data = get_input_data (model)
 
-switch idx(1).type
+assert_struct_is_model (model);
+
+if isfield (model, 'dim')
     
-    case '()'
-        [value, argout2] = feval (crit, idx(1).subs{:});
-        
-    case '{}'
-        
-        errmsg = 'Indexing with curly braces is not allowed.';
-        stk_error (errmsg, 'IllegalIndexing');
-        
-    case '.'
-        
-        value = get (crit, idx(1).subs);
-        
-end
+    input_data = zeros (0, model.dim);
+    
+else
+    
+    input_data = [];
 
-if (length (idx)) > 1,
-    value = subsref (value, idx(2:end));
 end
 
 end % function

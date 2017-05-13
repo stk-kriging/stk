@@ -1,8 +1,8 @@
-% SET [overload base function]
+% ASSERT_STRUCT_IS_MODEL [STK internal]
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,37 +26,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = set (crit, propname, value)
+function assert_struct_is_model (model)
 
-switch propname
+% Just a quick check
+if ~ isfield (model, 'param')
     
-    case 'model'
-        crit = set_model (crit, value);
-        
-    case 'input_data'
-        stk_error ('Property ''input_data'' is read-only.', ...
-            'ReadOnlyProperty');
-        
-    case 'output_data'
-        stk_error ('Property ''output_data'' is read-only.', ...
-            'ReadOnlyProperty');
-        
-    case 'goal'
-        crit = set_goal (crit, value);
-        
-    case 'threshold_mode'
-        crit = set_threshold_mode (crit, value);
-        
-    case 'threshold_value'
-        crit = set_threshold_value (crit, value);
-
-    case 'threshold_quantile_order'
-        crit = set_threshold_quantile_order (crit, value);
-
-    otherwise
-        errmsg = sprintf ('There is no field named %s', propname);
-        stk_error (errmsg, 'InvalidArgument');
-        
+    stk_error (['The input argument does not look like a valid STK model' ...
+        'structure.'], 'Invalid Argument');
+    
 end
 
 end % function

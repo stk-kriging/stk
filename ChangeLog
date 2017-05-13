@@ -1,3 +1,73 @@
+2017-05-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Massive overhaul of sampling criterion classes
+
+	* sampling/@stk_sampcrit_modelbased: Class removed
+	* sampling/@stk_sampcrit_modelbased/feval.m: Removed
+	* sampling/@stk_sampcrit_modelbased/get_input_data.m: Removed
+	* sampling/@stk_sampcrit_modelbased/get_model.m: Removed
+	* sampling/@stk_sampcrit_modelbased/get_output_data.m: Removed
+	* sampling/@stk_sampcrit_modelbased/set_model.m: Removed
+	* sampling/@stk_sampcrit_modelbased/stk_model_update.m: Removed
+	* sampling/@stk_sampcrit_modelbased/stk_sampcrit_modelbased.m: Removed
+	* sampling/@stk_sampcrit_singleobjoptim: Class removed
+	* sampling/@stk_sampcrit_singleobjoptim/get_bminimize.m: Removed
+	* sampling/@stk_sampcrit_singleobjoptim/get_goal.m: Removed
+	* sampling/@stk_sampcrit_singleobjoptim/set_goal.m: Removed
+	* sampling/@stk_sampcrit_singleobjoptim/stk_sampcrit_singleobjoptim.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim: Class removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/disp.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get_threshold_mode.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get_threshold_quantile_order.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get_threshold_value.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_goal.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_model.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_threshold_mode.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_threshold_quantile_order.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_threshold_value.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_model_update.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_sampcrit_thresholdbasedoptim.m: Removed
+	* sampling/@stk_sampcrit_base: Class renamed to @stk_function
+	* sampling/@stk_sampcrit_base/stk_sampcrit_base.m: Moved to @stk_function, renamed, modified
+	* sampling/@stk_sampcrit_base/disp.m: : Moved to @stk_function and modified
+	* sampling/@stk_sampcrit_base/display.m: Idem.
+	* sampling/@stk_sampcrit_base/horzcat.m: Idem.
+	* sampling/@stk_sampcrit_base/subsasgn.m: Idem.
+	* sampling/@stk_sampcrit_base/subsref.m: Idem.
+	* sampling/@stk_sampcrit_base/vertcat.m: Idem.
+	* sampling/@stk_function: Replaces @stk_sampcrit_base
+	* sampling/@stk_function/stk_function.m: Moved from @stk_sampcrit_base, renamed, modified
+	* sampling/@stk_function/disp.m: Moved from @stk_sampcrit_base and modified
+	* sampling/@stk_function/display.m: Idem.
+	* sampling/@stk_function/horzcat.m: Idem.
+	* sampling/@stk_function/subsasgn.m: Idem.
+	* sampling/@stk_function/subsref.m: Idem.
+	* sampling/@stk_function/vertcat.m: Idem.
+	* sampling/@stk_function/feval.m: New method (error only)
+	* sampling/@stk_function/get.m: New method (error only)
+	* core/@struct/get_input_data.m: New method to support prior models defined as structures
+	* core/@struct/get_output_data.m: Idem.
+	* core/@struct/get_prior_model.m: Idem.
+	* core/@struct/private/assert_struct_is_model.m: Private function used by the last three
+	* sampling/@stk_sampcrit_ei: Complete class rewrite
+	* sampling/@stk_sampcrit_ei/stk_sampcrit_ei.m: Entirely rewritten
+	* sampling/@stk_sampcrit_ei/msfeval.m: Moved to feval.m
+	* sampling/@stk_sampcrit_ei/feval.m: Moved from msfeval.m and modified
+	* sampling/@stk_sampcrit_ei/disp.m: Moved from thresholdbasedoptim and modified
+	* sampling/@stk_sampcrit_ei/get.m: New method (trivial getter)
+	* sampling/@stk_sampcrit_ei/set.m: New method (non-trivial setter)
+	* sampling/@stk_sampcrit_eqi: Complete class rewrite
+	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: Entirely rewritten
+	* sampling/@stk_sampcrit_eqi/msfeval.m: Moved to feval.m
+	* sampling/@stk_sampcrit_eqi/feval.m: Moved from msfeval.m and modified
+	* sampling/@stk_sampcrit_eqi/disp.m: Moved from thresholdbasedoptim and modified
+	* sampling/@stk_sampcrit_eqi/get.m: New method (trivial getter)
+	* sampling/@stk_sampcrit_eqi/set.m: New method (non-trivial setter)
+	* examples/02_design_of_experiments/stk_example_doe05.m: Rewrite almost entirely
+	* admin/octpkg/INDEX: Update index
+
 2017-05-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Fix object display problem (ticket #73)

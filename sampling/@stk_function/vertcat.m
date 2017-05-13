@@ -1,4 +1,6 @@
-% GET_THRESHOLD_MODE ...
+% @STK_FUNCTION/VERTCAT [overload base function]
+%
+% See also: vertcat
 
 % Copyright Notice
 %
@@ -26,8 +28,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function value = get_threshold_mode (crit)
+function varargout = vertcat (varargin)
 
-value = crit.threshold_mode;
+stk_error (['Arrays of sampling criterion objects are not supported. ', ...
+    'Use cell arrays instead.'], 'IllegalOperation');
 
 end % function

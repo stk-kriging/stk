@@ -1,8 +1,8 @@
-% SET_GOAL ...
+% GET_PRIOR_MODEL returns the prior_model structure
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,11 +26,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = set_goal (crit, goal)
+function prior_model = get_prior_model (model)
 
-crit.stk_sampcrit_singleobjoptim = set_goal ...
-    (crit.stk_sampcrit_singleobjoptim, goal);
+assert_struct_is_model (model);
 
-crit = set_threshold (crit);
+prior_model = model;
 
 end % function

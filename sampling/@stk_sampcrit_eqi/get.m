@@ -1,8 +1,8 @@
-% STK_SET_MODEL updates the underlying model
+% @STK_SAMPCRIT_EI/GET [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function crit = stk_model_update (crit, varargin)
+function value = get (crit, propname)
 
-crit.model = stk_model_update (crit.model, varargin{:});
+value = crit.(propname);
 
 end % function

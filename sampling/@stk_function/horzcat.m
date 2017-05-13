@@ -1,7 +1,6 @@
-% GET_OUTPUT_DATA ...
+% @STK_FUNCTION/HORZCAT [overload base function]
 %
-% Note: read-only property
-%
+% See also: horzcat
 
 % Copyright Notice
 %
@@ -29,13 +28,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function output_data = get_output_data (crit)
+function varargout = horzcat (varargin)
 
-if (isempty (crit.model)) || (isstruct (crit.model))
-    % If M is a struct, we assume that it is a prior model
-    output_data = [];
-else
-    output_data = get_output_data (crit.model);
-end
+stk_error (['Arrays of sampling criterion objects are not supported. ', ...
+    'Use cell arrays instead.'], 'IllegalOperation');
 
 end % function

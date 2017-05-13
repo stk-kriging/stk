@@ -1,11 +1,10 @@
-% GET_INPUT_DATA ...
+% @STK_FUNCTION/FEVAL [overload base function]
 %
-% Note: read-only property
-%
+% See also: feval
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -29,13 +28,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function input_data = get_input_data (crit)
+function F_val = feval (F, x, varargin)  %#ok<INUSD,STOUT>
 
-if (isempty (crit.model)) || (isstruct (crit.model))
-    % If M is a struct, we assume that it is a prior model
-    input_data = [];
-else
-    input_data = get_input_data (crit.model);
-end
+stk_error (sprintf ('Method feval is missing from class %s.', ...
+    class (F)), 'Missing Method');
 
 end % function
