@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -28,7 +28,7 @@
 
 function disp (model)
 
-loose_spacing = strcmp (get (0, 'FormatSpacing'), 'loose');
+loose_spacing = stk_disp_isloose ();
 
 fprintf ('<%s>\n', stk_sprintf_sizetype (model));
 

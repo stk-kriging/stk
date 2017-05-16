@@ -1,10 +1,21 @@
-% DISPLAY [overload base function]
+% STK_DISP_ISLOOSE [STK internal]
+%
+% CALL: ISLOOSE = stk_disp_isloose ()
+%
+%    returns true if a 'loose' display mode is used, and false otherwise.
+%
+% NOTE
+%
+%    This function solves a Matlab/Octave compatibility issue.  See:
+%
+%     * https://savannah.gnu.org/bugs/index.php?51035
+%     * https://sourceforge.net/p/kriging/tickets/73
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,19 +37,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function display (x)
+function b = stk_disp_isloose ()
 
-name = inputname (1);
-if isempty (name)
-    name = 'ans';
+if isoctave
+    
+    % This is the Octave way
+    [ign, fmt] = format ();  %#ok<ASGLU>
+    
+else
+    
+    % This is the Matlab way
+    fmt = get (0, 'FormatSpacing');
+    
 end
 
-if stk_disp_isloose
-    fprintf ('\n');
-end
-
-fprintf ('%s = ', name);
-
-disp (x);
+b = strcmp (fmt, 'loose');
 
 end % function
