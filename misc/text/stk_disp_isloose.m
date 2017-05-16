@@ -39,16 +39,28 @@
 
 function b = stk_disp_isloose ()
 
-if isoctave
+try
     
-    % This is the Octave way
-    [ign, fmt] = format ();  %#ok<ASGLU>
-    
-else
-    
-    % This is the Matlab way
+    % This works in Matlab (even though 'FormatSpacing' as been removed from
+    % the public list of root properties since R2014b) and in Octave <= 4.0.3
     fmt = get (0, 'FormatSpacing');
     
+catch
+    
+    try
+        
+        % In Octave 4.2.0 the 'FormatSpacing' root property has been removed
+        % but a different syntax has been introduced:
+        [ign, fmt] = format ();  %#ok<ASGLU>
+        
+    catch
+        
+        % If nothing works, I really don't know which version of Octave or
+        % Matlab you are using, but defaulting to 'loose' in this case seems
+        % better than a warning or an error.
+        fmt = 'loose';
+        
+    end
 end
 
 b = strcmp (fmt, 'loose');
