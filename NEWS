@@ -1,3 +1,12 @@
+Changes in version 2.4.2
+========================
+
+* Bug fixes
+
+   o Fix display problem of stk_model_gpposterior objects in Octave 4.2
+     (ticket #73).
+
+
 Changes in version 2.4.1
 ========================
 
