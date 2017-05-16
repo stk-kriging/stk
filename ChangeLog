@@ -1,3 +1,13 @@
+2017-05-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix object display problem (ticket #73)
+
+	* misc/text/stk_disp_isloose.m: New function, to query the
+	compact/loose display status in a Matlab/Octave compatible-way.
+	* core/@stk_model_gpposterior/disp.m: Use the new function.
+	* core/@stk_model_gpposterior/display.m: Idem.
+	* admin/octpkg/INDEX: Add the new function to the index.
+
 2017-05-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_sampcrit_ehvi_eval.m: Add help text
