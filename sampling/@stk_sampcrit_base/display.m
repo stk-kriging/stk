@@ -28,7 +28,7 @@
 
 function display (crit)
 
-loose_spacing = strcmp (get (0, 'FormatSpacing'), 'loose');
+loose_spacing = stk_disp_isloose ();
 
 name = inputname (1);
 if isempty (name)

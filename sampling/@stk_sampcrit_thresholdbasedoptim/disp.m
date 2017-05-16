@@ -28,7 +28,7 @@
 
 function disp (crit)
 
-loose_spacing = strcmp (get (0, 'FormatSpacing'), 'loose');
+loose_spacing = stk_disp_isloose ();
 
 fprintf ('<%s>\n', stk_sprintf_sizetype (crit));
 
