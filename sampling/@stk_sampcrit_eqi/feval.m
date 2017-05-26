@@ -43,8 +43,17 @@ if nargin < 3
     % Otherwise, use the value of tau2 provided as an input argument.  Note
     % that the value of crit.point_batch_size is ignored in this second case.
     if stk_isnoisy (crit.model)
+        
+        if isa (crit.point_batch_size, 'function_handle')
+            n = stk_length (get (crit.model, 'input_data'));
+            pbs = feval (crit.point_batch_size, x, n);
+        else
+            pbs = crit.point_batch_size;
+        end
+        
         prior_model = get (crit.model, 'prior_model');
-        tau2 = (exp (prior_model.lognoisevariance)) / crit.point_batch_size;
+        tau2 = (exp (prior_model.lognoisevariance)) / pbs;
+        
     else
         tau2 = 0;
     end

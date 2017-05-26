@@ -9,8 +9,8 @@
 % CALL: CRIT = stk_sampcrit_ei (MODEL)
 %
 %    creates an EI criterion object CRIT associated to MODEL.  The input
-%    argument MODEL can be empty, in which case CRIT is an uninstanciated
-%    criterion object (to be instanciated later by setting the 'model'
+%    argument MODEL can be empty, in which case CRIT is an uninstantiated
+%    criterion object (to be instantiated later by setting the 'model'
 %    property of CRIT).
 %
 % See also: stk_sampcrit_eqi

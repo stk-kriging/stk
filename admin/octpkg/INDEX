@@ -85,6 +85,7 @@ Posterior model objects
  @stk_model_gpposterior/get_output_data
  @stk_model_gpposterior/get_prior_model
 #@stk_model_gpposterior/stk_isnoisy            [overload STK]
+#@stk_model_gpposterior/stk_make_kreq          [internal]
 #@stk_model_gpposterior/disp                   [overload base]
 #@stk_model_gpposterior/display                [overload base]
 #@stk_model_gpposterior/fieldnames             [overload base]
@@ -191,6 +192,7 @@ Design of experiments (sequential): criteria
  stk_sampcrit_ei_eval
  stk_sampcrit_ehvi_eval
  stk_sampcrit_emmi_eval
+ stk_sampcrit_akg_eval 
  stk_distrib_normal_ei
  stk_distrib_student_ei
 
@@ -217,6 +219,12 @@ Design of experiments (sequential): criteria
 #@stk_sampcrit_eqi/feval             [overload base]
 #@stk_sampcrit_eqi/get               [overload base]
 #@stk_sampcrit_eqi/set               [overload base]
+
+#@stk_sampcrit_akg/stk_sampcrit_akg  [experimental]
+#@stk_sampcrit_akg/disp              [overload base]
+#@stk_sampcrit_akg/feval             [overload base]
+#@stk_sampcrit_akg/get               [overload base]
+#@stk_sampcrit_akg/set               [overload base]
 
 Examples: kriging basics
  stk_example_kb01
