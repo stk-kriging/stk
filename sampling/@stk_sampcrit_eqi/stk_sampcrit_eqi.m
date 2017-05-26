@@ -10,8 +10,8 @@
 %
 %    creates an EQI criterion object CRIT associated to MODEL, where the
 %    quantile of interest is the median of the output.  The input argument
-%    MODEL can be empty, in which case CRIT is an uninstanciated criterion
-%    object (which can be instanciated later by setting the 'model' property
+%    MODEL can be empty, in which case CRIT is an uninstantiated criterion
+%    object (which can be instantiated later by setting the 'model' property
 %    of CRIT).
 %
 % CALL: CRIT = stk_sampcrit_eqi (MODEL, P)
@@ -187,3 +187,23 @@ end % function
 
 %!assert (isequal (F.quantile_order, 0.8));
 %!assert (isequal (F.point_batch_size, 5));
+
+%%
+% test various forms for point_batch_size
+
+%!shared F, M, EQI
+%! prior_model = stk_model ();
+%! prior_model.lognoisevariance = 0.678;
+%! M = stk_model_gpposterior (prior_model, [1 2 3]', [1.234 3 2]');
+%! F = stk_sampcrit_eqi (M);
+
+%!test F.point_batch_size = 10;  % numeric
+%!assert (isequal (F.point_batch_size, 10))
+%!test EQI = feval (F, [1.0; 1.1; 1.2]);
+
+%!test F.point_batch_size = @(x, n) 100 - n;  % function handle
+%!assert (isa (F.point_batch_size, 'function_handle'))
+%!test EQI = feval (F, [1.0; 1.1; 1.2]);
+
+%!test F.point_batch_size = 'toto';  % char
+%!assert (isa (F.point_batch_size, 'function_handle'))

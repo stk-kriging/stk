@@ -62,17 +62,25 @@ switch propname
         
     case 'point_batch_size'
         
-        point_batch_size = double (value);
-        
-        if (~ isscalar (point_batch_size)) || (point_batch_size <= 0) ...
-                || (point_batch_size ~= floor (point_batch_size))
+        if ischar (value)
             
-            stk_error (['The value of property ''point_batch_size'' ' ...
-                'must be a positive integer or +inf.'], 'InvalidArgument');
+            crit.point_batch_size = str2func (value);
             
-        else
+        elseif isa (value, 'function_handle')
             
-            crit.point_batch_size = point_batch_size;
+            crit.point_batch_size = value;
+            
+        else  % Last possibility: a fixed numeric value
+            
+            point_batch_size = double (value);
+            
+            if (~ isscalar (point_batch_size)) || (point_batch_size <= 0) ...
+                    || (point_batch_size ~= floor (point_batch_size))                
+                stk_error ('Incorrect ''point_batch_size'' value', ...
+                    'InvalidArgument');                
+            else            
+                crit.point_batch_size = point_batch_size;
+            end
             
         end
         

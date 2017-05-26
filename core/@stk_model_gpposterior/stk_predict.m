@@ -105,8 +105,7 @@ for block_num = 1:nb_blocks
     
     % solve the kriging equation for the current block
     xt_ = xt(idx, :);
-    [Kti, Pt] = stk_make_matcov (M_prior, xt_, M_post.input_data);
-    kreq = stk_set_righthandside (M_post.kreq, Kti, Pt);
+    kreq = stk_make_kreq (M_post, xt_);
     
     % compute the kriging mean
     if compute_prediction,

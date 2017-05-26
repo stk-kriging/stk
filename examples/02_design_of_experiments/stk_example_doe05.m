@@ -4,9 +4,10 @@
 %
 %    x |--> x * sin (x)
 %
-% over the interval [0; 4 * pi], using noisy evaluations. Evaluations points
-% are chosen sequentially using the Expected Quantile Improvement (EQI)
-% criterion.
+% over the interval [0; 4 * pi], using noisy evaluations.
+%
+% Evaluations points are chosen sequentially using either AKG criterion
+% (default) or the EQI criterion (set SAMPCRIT_NAME to 'EQI');
 
 % Copyright Notice
 %
@@ -15,7 +16,7 @@
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
-%              Tom Assouline, Florent Autret & Stefano Duhamel
+%              Tom Assouline, Florent Autret & Stefano Duhamel (for EDF R&D)
 
 % Copying Permission Statement
 %
@@ -51,7 +52,7 @@ DIM = 1;                           % Dimension of the factor space
 BOX = stk_hrect ([0; 12], {'x'});  % Factor space (hyper-rectangle object)
 
 % Variance of the observation noise
-NOISE_VARIANCE = 2^2;
+NOISE_VARIANCE = 2 ^ 2;
 
 % Space discretization
 GRID_SIZE = 200;  % Number of points in the grid
@@ -69,9 +70,21 @@ zg.colnames = {'z'};
 %% Parameters affecting the sequential design algorithm
 
 N0 = 5;                 % Size of the initial (regularly spaced) design
-BUDGET = 100;           % Total evaluatio budget
-QUANTILE_ORDER = 0.9;   % Quantile order for the EQI criterion (default)
+BUDGET = 100;           % Total evaluation budget
 REESTIM_PERIOD = 10;    % How often should we re-estimate the cov parameters ?
+SAMPCRIT_NAME = 'AKG';  % Choose a particular sampling criterion
+
+% Note: the two criteria proposed here compute an "expected improvement" of
+% some kind.  As such, they return positive values, and must be maximized.
+
+switch SAMPCRIT_NAME
+    case 'EQI'
+        QUANTILE_ORDER = 0.5;
+        POINT_BATCH_SIZE = @(x, n) BUDGET - n;
+        sampcrit = stk_sampcrit_eqi ([], QUANTILE_ORDER, POINT_BATCH_SIZE);
+    case 'AKG'
+        sampcrit = stk_sampcrit_akg ();
+end
 
 
 %% Initial design of experiments
@@ -101,9 +114,8 @@ model0.prior.invcov = diag (1 ./ [+inf log(2)^2]);
 
 
 %% Sequential design of experiments
-% Here, evaluations points are chosen sequentially using the Expected
-% Quantile Improvement (EQI) criterion, starting from the initial design
-% defined above.
+% Here, evaluations points are chosen sequentially using the sampling criterion,
+% starting from the initial design defined above.
 
 % Plot only once in a while
 PLOT_PERIOD = 5;
@@ -124,40 +136,41 @@ for iter = 1:(BUDGET - N0)
         model = stk_model_update (model, x_new, z_new);
     end
     
-    % Construct sampling criterion object following the recommendation of
-    % Picheny et al. (2013) concerning the (virtual) batch size
-    remaining_budget = BUDGET - stk_length (x);
-    EQI_crit = stk_sampcrit_eqi (model, QUANTILE_ORDER, remaining_budget);
+    % Instanciate sampling criterion object with model
+    sampcrit.model = model;
     
     % Compute the EQI criterion on the grid
-    [EQI_val, z_pred] = EQI_crit (xg);
+    [crit_val, z_pred] = sampcrit (xg);
+    
+    if mod (iter, PLOT_PERIOD) == 1
+        % Figure: upper panel
+        stk_subplot (2, 1, 1);  cla;
+        stk_plot1d ([],[], xg, zg, z_pred);
+        hold on;  plot (x, z, 'k.');
+        % Figure: lower panel
+        stk_subplot (2, 1, 2);  cla;
+        plot (xg, crit_val);  xlim (BOX);  ylabel (SAMPCRIT_NAME);
+    end
+    
+    if all (crit_val == 0),  break,  end
     
     % Pick the point where the EQI is maximum as our next evaluation point
-    [EQI_max, i_max] = max (EQI_val);
+    [crit_max, i_max] = max (crit_val);
     x_new = xg(i_max, :);
     
     % Simulate a new observation at the selected location
     z_new = zg(i_max, :) + sqrt (NOISE_VARIANCE) * randn;
     
+    % Indicate new point on the lower panel
     if mod (iter, PLOT_PERIOD) == 1
-        
-        % Figure: upper panel
-        stk_subplot (2, 1, 1);  cla;
-        stk_plot1d ([],[], xg, zg, z_pred);
-        hold on;  plot (x, z, 'k.');
-        
-        % Figure: lower panel
-        stk_subplot (2, 1, 2);  cla;
-        plot (xg, EQI_val); xlim (BOX); hold on;
-        plot (x_new, EQI_max, 'ro', 'MarkerFaceColor', 'y');
-        
+        hold on;  plot (x_new, crit_max, 'ro', 'MarkerFaceColor', 'y');
     end
     
     % Add the new evaluation to the DoE
     x = vertcat (x, x_new);
     z = vertcat (z, z_new);
     
-    drawnow;  % pause (0.2);
+    drawnow; % pause
     
 end
 

@@ -1,3 +1,43 @@
+2017-05-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Implement the AKG criterion
+
+	* sampling/stk_sampcrit_akg_eval.m: New function, this is were the
+	actual computation of the AKG criterion happens.
+	* sampling/private/halfpintl.m: New private function that computes
+	the intersection of lower half-planes (equivalently, the lower
+	envelope of a set of lines) needed in the AKG.
+	* sampling/@stk_sampcrit_akg/stk_sampcrit_akg.m: New function.
+	* sampling/@stk_sampcrit_akg/feval.m: New function, does some
+	non-trivial preliminary work before calling stk_sampcrit_akg_eval.
+	* sampling/@stk_sampcrit_akg/disp.m: New function, copied from
+	other sampcrit classes with minor adaptations.
+	* sampling/@stk_sampcrit_akg/get.m: New function, this is the same
+	trivial getter as in other sampcrit classes.
+	* sampling/@stk_sampcrit_akg/set.m: New function, contains some
+	pre-computations that depend on the reference grid only.
+	* examples/02_design_of_experiments/stk_example_doe05.m: Use AKG
+	as a default, a propose EQI as an option.
+	* admin/octpkg/INDEX: Update index with new functions.
+
+	@stk_model_gpposterior/stk_make_kreq: new (internal) method
+
+	* core/@stk_model_gpposterior/stk_make_kreq.m: New method.
+	* core/@stk_model_gpposterior/stk_predict.m: Use the new method.
+	* admin/octpkg/INDEX: Update index with new function.
+
+	@stk_sampcrit_ei: point_batch_size can also be a function
+
+	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: Add unit tests.
+	* sampling/@stk_sampcrit_eqi/set.m: Accept functions and char for
+	the value of point_batch_size.
+	* sampling/@stk_sampcrit_eqi/feval.m: Compute point_batch_size.
+
+	Fix a spelling error (instanciated -> instantiated)
+
+	* sampling/@stk_sampcrit_ei/stk_sampcrit_ei.m: Fix spelling error.
+	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: Idem.
+
 2017-05-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Massive overhaul of sampling criterion classes
