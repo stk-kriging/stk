@@ -17,7 +17,7 @@
 	* sampling/@stk_sampcrit_akg/set.m: New function, contains some
 	pre-computations that depend on the reference grid only.
 	* examples/02_design_of_experiments/stk_example_doe05.m: Use AKG
-	as a default, a propose EQI as an option.
+	as a default, and propose EQI as an option.
 	* admin/octpkg/INDEX: Update index with new functions.
 
 	@stk_model_gpposterior/stk_make_kreq: new (internal) method
@@ -26,7 +26,7 @@
 	* core/@stk_model_gpposterior/stk_predict.m: Use the new method.
 	* admin/octpkg/INDEX: Update index with new function.
 
-	@stk_sampcrit_ei: point_batch_size can also be a function
+	@stk_sampcrit_eqi: point_batch_size can also be a function
 
 	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: Add unit tests.
 	* sampling/@stk_sampcrit_eqi/set.m: Accept functions and char for
