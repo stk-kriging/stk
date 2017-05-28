@@ -27,32 +27,32 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_factorialdesign(levels, varargin)
+function x = stk_factorialdesign (levels, varargin)
 
-if nargin == 0  % default constructor
+if nargin == 0   % default constructor
     levels = {[]};
 end
 
 % number of factors
-d = length(levels);
+d = length (levels);
 
-if ~iscell(levels) || (numel(levels) ~= d)
+if ~ iscell (levels) || (numel (levels) ~= d)
     
     errmsg = 'Expecting a "flat" cell array as first argument.';
-    stk_error(errmsg, 'TypeMismatch');
+    stk_error (errmsg, 'TypeMismatch');
     
 else
     
-    if ~all(cellfun(@isnumeric, levels))
+    if ~ all (cellfun (@isnumeric, levels))
         
         errmsg = 'Only numeric factors are currently supported.';
-        stk_error(errmsg, 'TypeMismatch');
+        stk_error (errmsg, 'TypeMismatch');
         
     else % ok, numeric levels, we know how to handle that
         
-        if (d == 0) || any(cellfun(@isempty, levels))
+        if (d == 0) || any (cellfun (@isempty, levels))
             
-            xdata = zeros(0, d);
+            xdata = zeros (0, d);
             
         elseif d == 1
             
@@ -61,12 +61,12 @@ else
         else
             
             % coordinate arrays
-            coord = cell(1, d);
-            [coord{:}] = ndgrid(levels{:});
+            coord = cell (1, d);
+            [coord{:}] = ndgrid (levels{:});
             
             % design matrix
-            xdata = zeros(numel(coord{1}), d);
-            for j = 1:d,
+            xdata = zeros (numel (coord{1}), d);
+            for j = 1:d
                 xdata(:, j) = coord{j}(:);
             end
             
