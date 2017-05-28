@@ -1,5 +1,15 @@
 2017-05-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_factorialdesign.m: Accept stk_dataframe levels
+
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Accept
+	one-variable stk_dataframe factors and preserve column names in
+	this case.
+	* arrays/@stk_factorialdesign/stk_boundingbox.m: Do not assume
+	that the cell array of levels is row-shaped.
+	* admin/octpkg/patches/matlab-graphics-axis-Axes.patch: Update
+	patch.
+
 	stk_predict: Remove old inaccessible display_waitbar stuff
 
 	* core/@stk_model_gpposterior/stk_predict.m: Remove old and
