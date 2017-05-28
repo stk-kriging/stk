@@ -14,15 +14,17 @@
  
 --- a/arrays/@stk_factorialdesign/stk_factorialdesign.m
 +++ b/arrays/@stk_factorialdesign/stk_factorialdesign.m
-@@ -80,11 +80,6 @@
-         x = struct ('levels', {levels});
-         x = class (x, 'stk_factorialdesign', df);
-         
--        try
--            % Starting with Matlab R2014b, graphics handles are objects
--            superiorto ('matlab.graphics.axis.Axes');
--        end
--        
-     end % if
-     
+@@ -103,12 +103,7 @@
+     % "factorial design" object
+     x = struct ('levels', {levels});
+     x = class (x, 'stk_factorialdesign', df);
+-    
+-    try
+-        % Starting with Matlab R2014b, graphics handles are objects
+-        superiorto ('matlab.graphics.axis.Axes');
+-    end
+-    
++        
  end % if
+ 
+ end % function

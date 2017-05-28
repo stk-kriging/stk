@@ -33,59 +33,81 @@ if nargin == 0   % default constructor
     levels = {[]};
 end
 
-% number of factors
-d = length (levels);
-
-if ~ iscell (levels) || (numel (levels) ~= d)
+if ~ iscell (levels)
     
-    errmsg = 'Expecting a "flat" cell array as first argument.';
-    stk_error (errmsg, 'TypeMismatch');
+    stk_error ('Expecting a cell array as first argument',  'TypeMismatch');
     
 else
     
-    if ~ all (cellfun (@isnumeric, levels))
-        
-        errmsg = 'Only numeric factors are currently supported.';
-        stk_error (errmsg, 'TypeMismatch');
-        
-    else % ok, numeric levels, we know how to handle that
-        
-        if (d == 0) || any (cellfun (@isempty, levels))
-            
-            xdata = zeros (0, d);
-            
-        elseif d == 1
-            
-            xdata = levels{1}(:);
-            
-        else
-            
-            % coordinate arrays
-            coord = cell (1, d);
-            [coord{:}] = ndgrid (levels{:});
-            
-            % design matrix
-            xdata = zeros (numel (coord{1}), d);
-            for j = 1:d
-                xdata(:, j) = coord{j}(:);
-            end
-            
-        end
-        
-        % base dataframe
-        df = stk_dataframe (xdata, varargin{:});
-        df = set (df, 'info', 'Created by stk_factorialdesign');
-        
-        % "factorial design" object
-        x = struct ('levels', {levels});
-        x = class (x, 'stk_factorialdesign', df);
-        
+    % Guess the number of factors from the length of the cell array
+    dim = length (levels);
+    
+    % Extract raw factor data and column names (when they are available)
+    raw_levels = cell (1, dim);
+    colnames = cell (1, dim);
+    for i = 1:dim
+        li = levels{i};
         try
-            % Starting with Matlab R2014b, graphics handles are objects
-            superiorto ('matlab.graphics.axis.Axes');
+            assert (isa (li, 'stk_dataframe'));
+            assert (size (li, 2) == 1);
+            cn = get (li, 'colnames');
+            if isempty (cn)
+                colnames{i} = '';
+            else
+                colnames(i) = cn;
+            end
+            raw_levels{i} = double (li);
+        catch
+            if isnumeric (li)
+                colnames{i} = '';
+                raw_levels{i} = double (li(:));
+                levels{i} = raw_levels{i};
+            else
+                errmsg = 'Only numeric factors are currently supported.';
+                stk_error (errmsg, 'TypeMismatch');
+            end
+        end
+    end
+    
+    if (dim == 0) || any (cellfun (@isempty, raw_levels))
+        
+        xdata = zeros (0, dim);
+        
+    elseif dim == 1
+        
+        xdata = raw_levels{1};
+        
+    else
+        
+        % coordinate arrays
+        coord = cell (1, dim);
+        [coord{:}] = ndgrid (raw_levels{:});
+        
+        % design matrix
+        xdata = zeros (numel (coord{1}), dim);
+        for j = 1:dim
+            xdata(:, j) = coord{j}(:);
         end
         
-    end % if
+    end
+    
+    % base dataframe
+    df = stk_dataframe (xdata, varargin{:});
+    df = set (df, 'info', 'Created by stk_factorialdesign');
+    
+    % column names ?
+    if isempty (df.colnames) && ~ all (cellfun (@isempty, colnames))
+        df = set (df, 'colnames', colnames);
+    end
+    
+    % "factorial design" object
+    x = struct ('levels', {levels});
+    x = class (x, 'stk_factorialdesign', df);
+    
+    try
+        % Starting with Matlab R2014b, graphics handles are objects
+        superiorto ('matlab.graphics.axis.Axes');
+    end
     
 end % if
 
@@ -103,7 +125,6 @@ end % function
 
 % tests some incorrect values for 'levels'
 %!error stk_factorialdesign ('bouh');
-%!error stk_factorialdesign (repmat ({[0 1]}, 2, 2));
 
 % categorical variable not supported yet
 %!error stk_factorialdesign ({{'a' 'b'}});
