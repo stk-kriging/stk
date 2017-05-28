@@ -35,7 +35,6 @@ if nargin > 2,
 end
 
 % TODO: these should become options
-display_waitbar = false;
 block_size = [];
 
 M_prior = M_post.prior_model;
@@ -138,14 +137,6 @@ for block_num = 1:nb_blocks
             '(%d negative variances have been set to zero)'], sum (b)));
     end
     
-    if display_waitbar,
-        waitbar (idx_end/nt, hwb, sprintf ( ...
-            'In stk\\_predict(): %d/%d predictions completed',idx_end,nt));
-    end
-end
-
-if display_waitbar,
-    close (hwb);
 end
 
 %--- Prepare outputs -----------------------------------------------------------

@@ -1,3 +1,10 @@
+2017-05-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_predict: Remove old inaccessible display_waitbar stuff
+
+	* core/@stk_model_gpposterior/stk_predict.m: Remove old and
+	inaccessible display_waitbar stuff.
+
 2017-05-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Implement the AKG criterion
