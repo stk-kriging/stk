@@ -1,6 +1,6 @@
 --- a/stk_init.m
 +++ b/stk_init.m
-@@ -257,27 +257,22 @@
+@@ -265,27 +265,22 @@
  
  regex1 = strcat ('^', escape_regexp (root));
  
@@ -8,13 +8,13 @@
 -
 -if isoctave
 -    try
--      % Use the modern name (__octave_config_info__) if possible
--      % NOTE: feval prevents Matlab from complaining about the underscores
--      apiver = feval ('__octave_config_info__', 'api_version');
--      assert (ischar (apiver));
+-        % Use the modern name (__octave_config_info__) if possible
+-        % NOTE: feval prevents Matlab from complaining about the underscores
+-        apiver = feval ('__octave_config_info__', 'api_version');
+-        assert (ischar (apiver));
 -    catch
--      % Use the old name instead
--      apiver = octave_config_info ('api_version');
+-        % Use the old name instead
+-        apiver = octave_config_info ('api_version');
 -    end
 -    regex2 = strcat (escape_regexp (apiver), '$');
 +try
