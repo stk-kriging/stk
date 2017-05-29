@@ -1,3 +1,10 @@
+2017-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_hrect.m: Preserve colmumns names for stk_dataframe inputs
+
+	* arrays/@stk_hrect/stk_hrect.m: Preserve colmumns names when the
+	input is an stk_dataframe object.
+
 2017-05-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_factorialdesign.m: Accept stk_dataframe levels
