@@ -72,11 +72,21 @@ else  % create a new stk_hrect object
     
     if (prod (size (arg1)) == 1)  % arg1 is the dimension of the input space
         % => create a default hyper-rectangle [0; 1]^d, with d = arg1
+        
         d = arg1;
         box_data = repmat ([0; 1], 1, d);
+        
     else
+        
+        if isa (arg1, 'stk_dataframe')
+            colnames = get (arg1, 'colnames');
+        else
+            colnames = {};
+        end
+        
         box_data = double (arg1);
         d = size (box_data, 2);
+        
         if (~ isequal (size (box_data), [2 d]))
             stk_error ('Invalid size: should be 2 x dim.', 'IncorrectSize');
         end
@@ -86,7 +96,7 @@ else  % create a new stk_hrect object
         stk_error ('Invalid bounds', 'InvalidBounds');
     end
     
-    df = stk_dataframe (box_data, {}, {'lower_bounds', 'upper_bounds'});
+    df = stk_dataframe (box_data, colnames, {'lower_bounds', 'upper_bounds'});
     s = class (struct (), 'stk_hrect', df);
     
 end
