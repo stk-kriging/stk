@@ -335,6 +335,7 @@ Miscellaneous: Validation of models
 #@stk_dataframe/exp                       [overload base]
 #@stk_dataframe/expm1                     [overload base]
 #@stk_dataframe/fieldnames                [overload base]
+#@stk_dataframe/find                      [overload base]
 #@stk_dataframe/ge                        [overload base]
 #@stk_dataframe/get                       [overload base]
 #@stk_dataframe/gt                        [overload base]

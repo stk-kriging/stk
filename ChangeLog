@@ -1,5 +1,11 @@
 2017-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_dataframe/find.m: Overload base function
+
+	* arrays/@stk_dataframe/find.m: Overload base function to support
+	calling find with an stk_dataframe as first input argument.
+	* admin/octpkg/INDEX: Add new function to the index.
+
 	stk_dataframe.m: Improve error messages
 
 	* arrays/@stk_dataframe/stk_dataframe.m: Improve error message
