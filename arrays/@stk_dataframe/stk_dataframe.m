@@ -59,7 +59,7 @@
 
 function x = stk_dataframe (x, colnames, rownames)
 
-if nargin > 3,
+if nargin > 3
     
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
     
@@ -71,7 +71,7 @@ elseif nargin == 0  % Default constructor
     
 elseif strcmp (class (x), 'stk_dataframe')  %#ok<STISA>
     
-    if nargin > 1,
+    if nargin > 1
         
         if iscell (colnames)
             x = set (x, 'colnames', colnames);
@@ -100,7 +100,7 @@ elseif isa (x, 'stk_dataframe')
     
     x_data = x.data;
     
-    if nargin == 1,
+    if nargin == 1
         
         colnames = x.colnames;
         rownames = x.rownames;
@@ -116,7 +116,7 @@ elseif isa (x, 'stk_dataframe')
             %       while {} means "no column names"
         end
         
-        if nargin == 2,
+        if nargin == 2
             
             rownames = x.rownames;
             
@@ -137,10 +137,10 @@ else  % Assume x is (or can be converted to) numeric data
     
     x_data = double (x);
     
-    if nargin < 3,
+    if nargin < 3
         rownames = {};
         
-        if nargin < 2,
+        if nargin < 2
             colnames = {};
         end
     end
@@ -175,7 +175,7 @@ x = struct ('data', x_data, ...
 
 x = class (x, 'stk_dataframe');
 
-try
+try  %#ok<TRYNC>
     % Starting with Matlab R2014b, graphics handles are objects
     superiorto ('matlab.graphics.axis.Axes');
 end
