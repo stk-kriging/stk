@@ -50,7 +50,7 @@
 
 function s = stk_hrect (arg1, colnames)
 
-if nargin > 2,
+if nargin > 2
     
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
     
@@ -97,6 +97,8 @@ if nargin > 1
 end
 
 end % function
+
+%#ok<*PSIZE>
 
 
 %!test stk_test_class ('stk_hrect')
