@@ -1,5 +1,10 @@
 2017-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_sampcrit_akg_eval.m: Set zr_min to +Inf when zr_mean is empty
+
+	* sampling/stk_sampcrit_akg_eval.m: Set zr_min to +Inf when
+	zr_mean is empty.
+
 	stk_hrect.m: Preserve colmumns names for stk_dataframe inputs
 
 	* arrays/@stk_hrect/stk_hrect.m: Preserve colmumns names when the

@@ -163,7 +163,11 @@ end
 AKG = zeros (M, 1);
 
 % Minimum over the reference grid
-zr_min = min (zr_mean);
+if isempty (zr_mean)
+    zr_min = +inf;
+else
+    zr_min = min (zr_mean);
+end
 
 for i = 1:M
     
