@@ -107,29 +107,14 @@ elseif isa (x, 'stk_dataframe')
         
     else % nargin > 1,
         
-        if (isempty (colnames)) && (~ iscell (colnames))
+        % colnames = [] means "keep x.colnames"
+        if isempty (colnames) && ~ iscell (colnames)
             colnames = x.colnames;
-        elseif ~ iscell (colnames)
-            stk_error (['colnames should be either a cell array ' ...
-                'of strings or [].'], 'InvalidArgument');
-            % Note: [] means "keep x.colnames"
-            %       while {} means "no column names"
         end
         
-        if nargin == 2
-            
+        % rownames missing or [] means "keep x.rownames"
+        if (nargin == 2) || (isempty (rownames) && ~ iscell (rownames))            
             rownames = x.rownames;
-            
-        else % nargin > 2,
-            
-            if (isempty (rownames)) && (~ iscell (rownames))
-                rownames = x.rownames;
-            elseif ~ iscell (rownames)
-                stk_error (['rownames should be either a cell array ' ...
-                    'of strings or [].'], 'InvalidArgument');
-                % Note: [] means "keep x.rownames"
-                %       while {} means "no rownames names"
-            end
         end
     end
     
@@ -148,26 +133,24 @@ end
 
 [n, d] = size (x_data);
 
-% Check colnames argument: must be a 1 x d cell array of strings
-if ~ iscell (colnames)
-    if isempty (colnames)
-        colnames = {};
-    else
-        stk_error ('colnames should be a cell array.', 'TypeMismatch');
-    end
-elseif (~ isempty (colnames)) && (~ isequal (size (colnames), [1 d]))
+% Process colnames argument
+if isempty (colnames)
+    colnames = {};
+elseif iscell (colnames) && numel (colnames) == d
     colnames = reshape (colnames, 1, d);
+else
+    stk_error (['colnames should be a cell array with d elmements, ' ...
+        'where d is the number of columns of the dataframe'], 'IncorrectSize');
 end
 
-% Check rownames argument: must be a n x 1 cell array of strings
-if ~ iscell (rownames)
-    if isempty (rownames)
-        rownames = {};
-    else
-        stk_error ('rownames should be a cell array.', 'TypeMismatch');
-    end
-elseif (~ isempty (rownames)) && (~ isequal (size (rownames), [n 1]))
+% Process rownames argument
+if isempty (rownames)
+    rownames = {};
+elseif iscell (rownames) && numel (rownames) == n
     rownames = reshape (rownames, n, 1);
+else
+    stk_error (['rownames should be a cell array with n elmements, ' ...
+        'where n is the number of rows of the dataframe'], 'IncorrectSize');
 end
 
 x = struct ('data', x_data, ...
