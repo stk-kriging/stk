@@ -14,19 +14,22 @@ Changes in version 2.x.y
 
    o stk_factorialdesign.m: Accept one-variable stk_dataframe as
      factors and preserve column names in this case.
-  
+
    o stk_sampling_nesteddesign: New function to create nested designs.
-   
+
    o stk_sampling_nestedlhs: New function to create nested LHS (NLHS).
-   
+
 * Validation of models
 
    o stk_distrib_normal_crps: New function to compare observations and
      predictive (Gaussian) density.
 
-* Bug fixes
+* stk_dataframe and related classes
 
    o stk_hrect.m: Preserve column names for stk_dataframe inputs.
+
+   o @stk_dataframe/find: Overload base function to support calling
+     find with an stk_dataframe as first input argument.
 
 
 Changes in version 2.4.2
