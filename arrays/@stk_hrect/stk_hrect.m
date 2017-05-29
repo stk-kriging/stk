@@ -79,9 +79,9 @@ else  % create a new stk_hrect object
     else
         
         if isa (arg1, 'stk_dataframe')
-            colnames = get (arg1, 'colnames');
+            box_colnames = get (arg1, 'colnames');
         else
-            colnames = {};
+            box_colnames = {};
         end
         
         box_data = double (arg1);
@@ -96,7 +96,8 @@ else  % create a new stk_hrect object
         stk_error ('Invalid bounds', 'InvalidBounds');
     end
     
-    df = stk_dataframe (box_data, colnames, {'lower_bounds', 'upper_bounds'});
+    df = stk_dataframe (box_data, ...
+        box_colnames, {'lower_bounds', 'upper_bounds'});
     s = class (struct (), 'stk_hrect', df);
     
 end
@@ -112,3 +113,9 @@ end % function
 
 
 %!test stk_test_class ('stk_hrect')
+
+%!shared dom
+%!test dom = stk_hrect ([-1; 1], {'x'});
+%!assert (isequal (dom.colnames, {'x'}))
+%!assert (isequal (dom.rownames, {'lower_bounds'; 'upper_bounds'}))
+%!assert (isequal (dom.data, [-1; 1]))
