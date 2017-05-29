@@ -4,7 +4,7 @@
  
  x = class (x, 'stk_dataframe');
  
--try
+-try  %#ok<TRYNC>
 -    % Starting with Matlab R2014b, graphics handles are objects
 -    superiorto ('matlab.graphics.axis.Axes');
 -end
