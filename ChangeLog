@@ -1,5 +1,11 @@
 2017-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_dataframe.m: Improve error messages
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Improve error message
+	when either colnames or rownames has an incorrect number of
+	elements.
+
 	stk_sampcrit_akg_eval.m: Set zr_min to +Inf when zr_mean is empty
 
 	* sampling/stk_sampcrit_akg_eval.m: Set zr_min to +Inf when
