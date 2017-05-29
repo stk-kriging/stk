@@ -75,6 +75,7 @@ else  % create a new stk_hrect object
         
         d = arg1;
         box_data = repmat ([0; 1], 1, d);
+        box_colnames = {};
         
     else
         
