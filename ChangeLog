@@ -1,3 +1,11 @@
+2017-03-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Upcast objects from derived classes to stk_dataframe
+
+	* arrays/@stk_factorialdesign/stk_dataframe.m: New function.
+	* arrays/@stk_hrect/stk_dataframe.m: New function.
+	* admin/octpkg/INDEX: Add new functions to the index.
+
 2017-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/find.m: Overload base function
