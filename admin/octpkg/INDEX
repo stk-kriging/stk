@@ -409,6 +409,7 @@ Miscellaneous: Validation of models
 #@stk_factorialdesign/stk_boundingbox       [overload STK]
 #@stk_factorialdesign/stk_normalize         [overload STK]
 #@stk_factorialdesign/stk_rescale           [overload STK]
+#@stk_factorialdesign/stk_dataframe         [overload STK]
 #@stk_factorialdesign/stk_sprintf           [internal]
 #@stk_factorialdesign/stk_sprintf_levels    [internal]
 
@@ -424,6 +425,7 @@ Miscellaneous: Validation of models
 #@stk_hrect/stk_boundingbox  [overload STK]
 #@stk_hrect/stk_normalize    [overload STK]
 #@stk_hrect/stk_rescale      [overload STK]
+#@stk_hrect/stk_dataframe    [overload STK]
 
 ## Optimizers
  stk_minimize_boxconstrained
