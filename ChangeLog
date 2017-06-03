@@ -1,5 +1,14 @@
 2017-03-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Optimize a few functions for speed
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Optimize
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Optimize
+	* arrays/@stk_hrect/stk_rescale.m: Optimize
+	* sampling/stk_sampling_randunif.m: Optimize
+	* sampling/stk_sampling_regulargrid.m: Optimize
+	* admin/octpkg/patches/matlab-graphics-axis-Axes.patch: Update
+
 	Upcast objects from derived classes to stk_dataframe
 
 	* arrays/@stk_factorialdesign/stk_dataframe.m: New function.

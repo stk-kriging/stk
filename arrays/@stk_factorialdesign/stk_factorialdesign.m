@@ -44,11 +44,13 @@ else
     
     % Extract raw factor data and column names (when they are available)
     raw_levels = cell (1, dim);
+    raw_levels_anyempty = false;
     colnames = cell (1, dim);
+    colnames_allempty = true;
     for i = 1:dim
         li = levels{i};
-        try
-            assert (isa (li, 'stk_dataframe'));
+        
+        if isa (li, 'stk_dataframe')
             assert (size (li, 2) == 1);
             cn = get (li, 'colnames');
             if isempty (cn)
@@ -57,19 +59,25 @@ else
                 colnames(i) = cn;
             end
             raw_levels{i} = double (li);
-        catch
-            if isnumeric (li)
-                colnames{i} = '';
-                raw_levels{i} = double (li(:));
-                levels{i} = raw_levels{i};
-            else
-                errmsg = 'Only numeric factors are currently supported.';
-                stk_error (errmsg, 'TypeMismatch');
-            end
+        elseif isnumeric (li)
+            colnames{i} = '';
+            raw_levels{i} = double (li(:));
+            levels{i} = raw_levels{i};
+        else
+            errmsg = 'Only numeric factors are currently supported.';
+            stk_error (errmsg, 'TypeMismatch');
+        end
+        
+        if isempty (raw_levels{i})
+            raw_levels_anyempty = true;
+        end
+        
+        if ~ isempty (colnames{i})
+            colnames_allempty = false;
         end
     end
     
-    if (dim == 0) || any (cellfun (@isempty, raw_levels))
+    if (dim == 0) || raw_levels_anyempty
         
         xdata = zeros (0, dim);
         
@@ -96,15 +104,15 @@ else
     df = set (df, 'info', 'Created by stk_factorialdesign');
     
     % column names ?
-    if isempty (df.colnames) && ~ all (cellfun (@isempty, colnames))
+    if isempty (get (df, 'colnames')) && ~ colnames_allempty
         df = set (df, 'colnames', colnames);
     end
     
     % "factorial design" object
-    x = struct ('levels', {levels});
+    x = struct ();  x.levels = levels;
     x = class (x, 'stk_factorialdesign', df);
     
-    try
+    try %#ok<TRYNC>
         % Starting with Matlab R2014b, graphics handles are objects
         superiorto ('matlab.graphics.axis.Axes');
     end

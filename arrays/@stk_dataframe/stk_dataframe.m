@@ -69,52 +69,55 @@ elseif nargin == 0  % Default constructor
     colnames = {};
     rownames = {};
     
-elseif strcmp (class (x), 'stk_dataframe')  %#ok<STISA>
-    
-    if nargin > 1
-        
-        if iscell (colnames)
-            x = set (x, 'colnames', colnames);
-        elseif ~ isempty (colnames)
-            stk_error (['colnames should be either a cell array ' ...
-                'of strings or [].'], 'InvalidArgument');
-            % Note: [] means "keep x.colnames"
-            %       while {} means "no column names"
-        end
-        
-        if nargin > 2
-            if iscell (rownames)
-                x = set (x, 'rownames', rownames);
-            elseif ~ isempty (rownames)
-                stk_error (['rownames should be either a cell array ' ...
-                    'of strings or [].'], 'InvalidArgument');
-                % Note: [] means "keep x.rownames"
-                %       while {} means "no rownames names"
-            end
-        end
-    end
-    
-    return  % We already have an stk_dataframe object
-    
 elseif isa (x, 'stk_dataframe')
     
-    x_data = x.data;
-    
-    if nargin == 1
+    if strcmp (class (x), 'stk_dataframe')  %#ok<STISA>
         
-        colnames = x.colnames;
-        rownames = x.rownames;
-        
-    else % nargin > 1,
-        
-        % colnames = [] means "keep x.colnames"
-        if isempty (colnames) && ~ iscell (colnames)
-            colnames = x.colnames;
+        if nargin > 1
+            
+            if iscell (colnames)
+                x = set (x, 'colnames', colnames);
+            elseif ~ isempty (colnames)
+                stk_error (['colnames should be either a cell array ' ...
+                    'of strings or [].'], 'InvalidArgument');
+                % Note: [] means "keep x.colnames"
+                %       while {} means "no column names"
+            end
+            
+            if nargin > 2
+                if iscell (rownames)
+                    x = set (x, 'rownames', rownames);
+                elseif ~ isempty (rownames)
+                    stk_error (['rownames should be either a cell array ' ...
+                        'of strings or [].'], 'InvalidArgument');
+                    % Note: [] means "keep x.rownames"
+                    %       while {} means "no row names"
+                end
+            end
         end
         
-        % rownames missing or [] means "keep x.rownames"
-        if (nargin == 2) || (isempty (rownames) && ~ iscell (rownames))            
+        return  % We already have an stk_dataframe object
+        
+    else  % x belongs to a derived class
+        
+        x_data = x.data;
+        
+        if nargin == 1
+            
+            colnames = x.colnames;
             rownames = x.rownames;
+            
+        else % nargin > 1,
+            
+            % colnames = [] means "keep x.colnames"
+            if isempty (colnames) && ~ iscell (colnames)
+                colnames = x.colnames;
+            end
+            
+            % rownames missing or [] means "keep x.rownames"
+            if (nargin == 2) || (isempty (rownames) && ~ iscell (rownames))
+                rownames = x.rownames;
+            end
         end
     end
     
@@ -153,8 +156,12 @@ else
         'where n is the number of rows of the dataframe'], 'IncorrectSize');
 end
 
-x = struct ('data', x_data, ...
-    'colnames', {colnames}, 'rownames', {rownames}, 'info', '');
+x = struct ();
+
+x.data     = x_data;
+x.colnames = colnames;
+x.rownames = rownames;
+x.info     = '';
 
 x = class (x, 'stk_dataframe');
 

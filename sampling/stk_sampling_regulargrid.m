@@ -58,9 +58,15 @@ end
 
 % Read argument 'box'
 if (nargin < 3) || isempty (box)
-    box = stk_hrect (dim);  % build a default box
+    xmin = zeros (1, dim);
+    xmax = ones (1, dim);
+    box_colnames = {};
 else
     box = stk_hrect (box);  % convert input argument to a proper box
+    box_data = get (box, 'data');
+    box_colnames = get (box, 'colnames');
+    xmin = box_data(1, :);
+    xmax = box_data(2, :);
 end
 
 if length (n) == 1
@@ -78,13 +84,11 @@ end
 
 % levels
 levels = cell (1, dim);
-xmin = box.data(1, :);
-xmax = box.data(2, :);
 for j = 1:dim,
     levels{j} = linspace (xmin(j), xmax(j), n(j));
 end
 
-x = stk_factorialdesign (levels, box.colnames);
+x = stk_factorialdesign (levels, box_colnames);
 
 end % function
 
