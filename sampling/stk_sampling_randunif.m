@@ -64,13 +64,15 @@ else
     box = stk_hrect (box);  % convert input argument to a proper box
 end
 
-if n == 0, % empty sample
+if n == 0  % empty sample
     xdata = zeros (0, dim);
-else % at least one input point
-    xdata = stk_rescale (rand(n, dim), [], box);
+else  % at least one input point
+    xdata = stk_rescale (rand (n, dim), [], box);
 end
 
-x = stk_dataframe (xdata, box.colnames);
+x = stk_dataframe (box);      % Start from box (we want the same column names)
+x = set (x, 'rownames', {});  % FIXME: Overload stk_sampling_randunif for df
+x = set (x, 'data', xdata);   % FIXME: Idem
 
 end % function
 
