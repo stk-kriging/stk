@@ -356,6 +356,7 @@ Miscellaneous: Validation of models
 #@stk_dataframe/ne                        [overload base]
 #@stk_dataframe/or                        [overload base]
 #@stk_dataframe/plot                      [overload base]
+#@stk_dataframe/plotmatrix                [overload base]
 #@stk_dataframe/subsasgn                  [overload base]
 #@stk_dataframe/subsref                   [overload base]
 #@stk_dataframe/max                       [overload base]
