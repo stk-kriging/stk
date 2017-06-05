@@ -59,20 +59,27 @@ end
 
 % Read argument box
 if (nargin < 3) || isempty (box)
-    box = stk_hrect (dim);  % build a default box
+    box = [];  % default box: [0; 1] ^ dim
 else
     box = stk_hrect (box);  % convert input argument to a proper box
 end
 
-if n == 0  % empty sample
-    xdata = zeros (0, dim);
-else  % at least one input point
-    xdata = stk_rescale (rand (n, dim), [], box);
+if isempty (box)
+    if n == 0
+        x = stk_dataframe (zeros (0, dim));  % Empty sample
+    else
+        x = stk_dataframe (rand (n, dim));
+    end
+else
+    if n == 0
+        x = stk_dataframe (box, [], {});   % Keep column names
+        x = set_data (x, zeros (0, dim));  % Empty sample
+    else
+        % FIXME: stk_rescale should return a df when box is a df ?
+        x = stk_dataframe (box, [], {});
+        x = set_data (x, stk_rescale (rand (n, dim), [], box));
+    end
 end
-
-x = stk_dataframe (box);      % Start from box (we want the same column names)
-x = set (x, 'rownames', {});  % FIXME: Overload stk_sampling_randunif for df
-x = set (x, 'data', xdata);   % FIXME: Idem
 
 end % function
 

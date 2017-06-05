@@ -1,9 +1,9 @@
-% SUBSASGN [overload base function]
+% @STK_DATAFRAME/SET_DATA [STK internal]
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
-%    Copyright (C) 2013, 2014 SUPELEC
+%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,22 +27,32 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = subsasgn (x, idx, value)
+function x = set_data (x, data)
 
-if isa (x, 'stk_hrect')
-    
-    x.stk_dataframe = subsasgn (x.stk_dataframe, idx, value);
-    
-    data = double (x);
-    if any (data(1, :) > data(2, :))
-        stk_error ('Lower bounds cannot be larger than upperbounds', ...
-            'IllegalAssigment');
+[n1, d1] = size (x.data);
+[n2, d2] = size (data);
+x.data = data;
+
+if (n1 ~= n2) && ~ isempty (x.rownames)
+    if n2 > n1
+        % silently add rows without a name
+        x.rownames = [x.rownames; repmat({''}, n2 - n1, 1)];
+    else
+        % delete superfluous row names and emit a warning
+        x.rownames = x.rownames(1:n2);
+        warning ('Some row names have been deleted.');
     end
-    
-else % value must be an stk_hrect object
-    
-    x = subsasgn (x, idx, x.stk_dataframe);
-    
+end
+
+if (d1 ~= d2) && ~ isempty (x.colnames)
+    if d2 > d1
+        % silently add columns without a name
+        x.colnames = [x.colnames; repmat({''}, 1, d2 - d1)];
+    else
+        % delete superfluous column names and emit a warning
+        x.colnames = x.colnames(1:d2);
+        warning ('Some column names have been deleted.');
+    end
 end
 
 end % function
