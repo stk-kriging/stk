@@ -1,5 +1,12 @@
 2017-06-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_dataframe/plotmatrix.m: Overload base function
+
+	* arrays/@stk_dataframe/plotmatrix.m: New function, overload base
+	function to enrich plotmatrix graphics with variable names when
+	possible.
+	* admin/octpkg/INDEX: Add the new function to the index.
+
 	Optimize for speed
 
 	* arrays/@stk_dataframe/set_data.m: New function, fast setter.

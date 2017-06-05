@@ -35,6 +35,9 @@ Changes in version 2.x.y
    o @stk_dataframe/find: Overload base function to support calling
      find with an stk_dataframe as first input argument.
 
+   o @stk_dataframe/plotmatrix: Overload base function to enrich
+     plotmatrix graphics with variable names when possible.
+
 
 Changes in version 2.4.2
 ========================
