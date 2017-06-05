@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -96,31 +96,7 @@ switch icol
         
     case - 1 % set entire array
         
-        [n1, d1] = size (x.data);
-        [n2, d2] = size (value);
-        x.data = value;
-        
-        if (n1 ~= n2) && ~ isempty (x.rownames)
-            if n2 > n1,
-                % silently add rows without a name
-                x.rownames = [x.rownames; repmat({''}, n2 - n1, 1)];
-            else
-                % delete superfluous row names and emit a warning
-                x.rownames = x.rownames(1:n2);
-                warning ('Some row names have been deleted.');
-            end
-        end
-        
-        if (d1 ~= d2) && ~ isempty (x.colnames)
-            if d2 > d1,
-                % silently add columns without a name
-                x.colnames = [x.colnames; repmat({''}, 1, d2 - d1)];
-            else
-                % delete superfluous column names and emit a warning
-                x.colnames = x.colnames(1:d2);
-                warning ('Some column names have been deleted.');
-            end
-        end
+        x = set_data (x, value);
         
     otherwise
         if isequal (size(value), [size(x.data, 1) 1])

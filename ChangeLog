@@ -1,4 +1,17 @@
-2017-03-06  Julien Bect  <julien.bect@centralesupelec.fr>
+2017-06-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Optimize for speed
+
+	* arrays/@stk_dataframe/set_data.m: New function, fast setter.
+	* admin/octpkg/INDEX: Add the new function to the index.
+	* arrays/@stk_dataframe/set.m: Use set_data.
+	* arrays/@stk_factorialdesign/set.m: Use set_data.
+	* arrays/@stk_hrect/stk_rescale.m: Optimize for speed.
+	* arrays/@stk_hrect/subsasgn.m: Optimize for speed.
+	* sampling/stk_sampling_randunif.m: Optimize for speed.
+	* sampling/stk_sampling_regulargrid.m: Optimize for speed.
+
+2017-06-03  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Optimize a few functions for speed
 

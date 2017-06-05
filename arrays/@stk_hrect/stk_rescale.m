@@ -37,7 +37,9 @@ end
 x_data = double (x);
 d = size (x_data, 2);
 
-if isempty (box1)
+box1_data = double (box1);
+
+if isempty (box1_data)
     
     % Speed up the case where box1 is empty
     b1 = 1;
@@ -45,14 +47,14 @@ if isempty (box1)
     
 else
     
-    % Ensure that box1 is an stk_hrect object
+    % Ensure that box1 is an stk_hrect object, or can be converted to one
+    % (note: this checks that lower bounds are smaller than upper bounds)
     if ~ isa (box1, 'stk_hrect')
-        box1 = stk_hrect (box1);
+        box1 = stk_hrect (box1); %#ok<NASGU>
     end
     
-    % Extract lower/upper bounds for box1
-    box1_data = double (box1.stk_dataframe);
-    if ~ isequal (size (box1_data), [2 d])
+    % Check the number of columns
+    if size (box1_data, 2) ~= d
         errmsg = sprintf ('box1 should have size [2 d], with d=%d.', d);
         stk_error (errmsg, 'IncorrectSize');
     end
@@ -65,7 +67,9 @@ else
     
 end
 
-if isempty (box2)
+box2_data = double (box2);
+
+if isempty (box2_data)
     
     % Speed up the case where box2 is empty
     b2 = 1;
@@ -73,14 +77,14 @@ if isempty (box2)
     
 else
     
-    % Ensure that box2 is an stk_hrect object
+    % Ensure that box2 is an stk_hrect object, or can be converted to one
+    % (note: this checks that lower bounds are smaller than upper bounds)
     if ~ isa (box2, 'stk_hrect')
-        box2 = stk_hrect (box2);
+        box2 = stk_hrect (box2); %#ok<NASGU>
     end
     
-    % Extract lower/upper bounds for box2
-    box2_data = double (box2.stk_dataframe);
-    if ~ isequal (size (box2_data), [2 d])
+    % Check the number of columns
+    if size (box2_data, 2) ~= d
         errmsg = sprintf ('box2 should have size [2 d], with d=%d.', d);
         stk_error (errmsg, 'IncorrectSize');
     end

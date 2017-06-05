@@ -63,7 +63,7 @@ if (nargin < 3) || isempty (box)
     box_colnames = {};
 else
     box = stk_hrect (box);  % convert input argument to a proper box
-    box_data = get (box, 'data');
+    box_data = double (box);
     box_colnames = get (box, 'colnames');
     xmin = box_data(1, :);
     xmax = box_data(2, :);

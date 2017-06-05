@@ -305,6 +305,7 @@ Miscellaneous: Validation of models
 #@stk_dataframe/stk_normalize             [overload STK]
 #@stk_dataframe/stk_rescale               [overload STK]
 #@stk_dataframe/apply                     [internal]
+#@stk_dataframe/set_data                  [internal]
 #@stk_dataframe/stk_sprintf               [internal]
 #@stk_dataframe/stk_sprintf_colnames      [internal]
 #@stk_dataframe/stk_sprintf_rownames      [internal]
