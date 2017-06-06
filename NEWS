@@ -23,6 +23,8 @@ Changes in version 2.x.y
 
    o stk_sampling_nestedlhs: New function to create nested LHS (NLHS).
 
+   o stk_sampling_sobol.m: Fix help text.
+
 * Validation of models
 
    o stk_distrib_normal_crps: New function to compare observations and
