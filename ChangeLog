@@ -1,5 +1,9 @@
 2017-06-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_sampling_sobol.m: Fix help text
+
+	* sampling/stk_sampling_sobol.m: Fix help text.
+
 	build_octpkg.m: Add 'License:' in DESCRIPTION
 
 	* admin/build_tools/build_octpkg.m: Add 'License:' in DESCRIPTION.
