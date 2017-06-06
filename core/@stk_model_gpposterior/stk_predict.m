@@ -50,8 +50,13 @@ if (strcmp (M_prior.covariance_type, 'stk_discretecov')) && (isempty (xt))
     xt = (1:nt)';
 else
     nt = size (xt, 1);
-    if ~ isequal (size (xt), [nt, M_prior.dim]),
-        stk_error ('The size of xt is incorrect.', 'IncorrectSize');
+    if length (size (xt)) > 2
+        stk_error (['The input argument xt should not have more than two ' ...
+            'dimensions'], 'IncorrectSize');
+    elseif ~ isequal (size (xt), [nt M_prior.dim])
+        stk_error (sprintf (['The number of columns of xt (which is %d) ' ...
+            'does not agree with the dimension of the model (which is ' ...
+            '%d).'], size (xt, 2), M_prior.dim), 'IncorrectSize');
     end
 end
 
