@@ -1,3 +1,10 @@
+2017-06-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_model_gpposterior/stk_predict.m: Improve error messages
+
+	* core/@stk_model_gpposterior/stk_predict.m: Improve the error
+	messages corresponding to the case where xt has an incorrect size.
+
 2017-06-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/plotmatrix.m: Overload base function
