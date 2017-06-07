@@ -38,6 +38,10 @@ Changes in version 2.x.y
    o @stk_dataframe/plotmatrix: Overload base function to enrich
      plotmatrix graphics with variable names when possible.
 
+* Miscellaneous
+
+   o Many functions have been optimized for speed.
+
 
 Changes in version 2.4.2
 ========================
