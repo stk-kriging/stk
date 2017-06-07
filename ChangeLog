@@ -1,3 +1,11 @@
+2017-06-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Optimize for speed
+
+	* core/@stk_kreq_qr/get.m: Use a simple switch.
+	* core/@stk_model_gpposterior/stk_predict.m: Call get directly.
+	* sampling/@stk_sampcrit_akg/feval.m: Call get directly.
+
 2017-06-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_model_gpposterior/stk_predict.m: Improve error messages

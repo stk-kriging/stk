@@ -39,11 +39,11 @@ kreq = stk_make_kreq (crit.model, x);
 
 prior_model = get_prior_model (crit.model);
 
-zc_mean  = kreq.lambda' * (double (get_output_data (crit.model)));
-zc_var   = stk_make_matcov (prior_model, x, x, true) - kreq.delta_var;
+zc_mean  = (get (kreq, 'lambda'))' * (double (get_output_data (crit.model)));
+zc_var   = stk_make_matcov (prior_model, x, x, true) - get (kreq, 'delta_var');
 zc_std   = sqrt (max (0, zc_var));
 zcr_cov0 = stk_make_matcov (prior_model, x, crit.xr);
-zcr_cov  = zcr_cov0 - kreq.RS' * crit.zr_lambdamu;
+zcr_cov  = zcr_cov0 - (get (kreq, 'RS'))' * crit.zr_lambdamu;
 
 AKG = stk_sampcrit_akg_eval ...
     (zc_mean, zc_std, crit.zr_mean, crit.zr_std, zcr_cov);

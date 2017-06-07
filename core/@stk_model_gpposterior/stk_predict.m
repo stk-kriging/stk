@@ -87,8 +87,8 @@ nb_blocks = max (1, ceil (nt / block_size));
 block_size = ceil (nt / nb_blocks);
 
 % The full lambda_mu matrix is only needed when nargout > 1
-if nargout > 1,
-    lambda_mu = zeros (n_obs + M_post.kreq.r, nt);
+if nargout > 1
+    lambda_mu = zeros (n_obs + get (M_post.kreq, 'r'), nt);
 end
 
 % The full RS matrix is only needed when nargout > 3
@@ -112,27 +112,28 @@ for block_num = 1:nb_blocks
     kreq = stk_make_kreq (M_post, xt_);
     
     % compute the kriging mean
-    if compute_prediction,
-        zp_a(idx) = kreq.lambda' * (double (M_post.output_data));
+    if compute_prediction
+        zp_a(idx) = (get (kreq, 'lambda'))' * (double (M_post.output_data));
     end
     
     % The full lambda_mu matrix is only needed when nargout > 1
     if nargout > 1
-        lambda_mu(:, idx) = kreq.lambda_mu;
+        lambda_mu(:, idx) = get (kreq, 'lambda_mu');
     end
     
     % The full RS matrix is only needed when nargout > 3
-    if nargout > 3,
-        RS(:, idx) = kreq.RS;
+    if nargout > 3
+        RS(:, idx) = get (kreq, 'RS');
     end
     
     % compute kriging variances (this does NOT include the noise variance)
-    zp_v(idx) = stk_make_matcov (M_prior, xt_, xt_, true) - kreq.delta_var;
+    zp_v(idx) = stk_make_matcov (M_prior, xt_, xt_, true) ...
+        - get (kreq, 'delta_var');
     
     % note: the following modification computes prediction variances for noisy
     % variance, i.e., including the noise variance also
-    % zp_v(idx) = stk_make_matcov (M_prior, xt_, [], true) ...
-    %     - dot (kreq.lambda_mu, kreq.RS);
+    %    zp_v(idx) = stk_make_matcov (M_prior, xt_, [], true) ...
+    %                 - get (kreq, 'delta_var');
     
     b = (zp_v < 0);
     if any (b),
