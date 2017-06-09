@@ -77,8 +77,12 @@ As a work-around, always use a comma-separated list: C = {@sin, @cos};
 
 --- CG#07: Ignoring output arguments -------------------------------------------
 
-Octave 3.2.x does not support the use of ~ to ignore unwanted output
-arguments.  Don't use this syntax as long as Octave 3.2.x is supported.
+Octave supports the use of ~, to ignore unwanted output arguments, since
+its 3.4.0 release:
+
+https://www.gnu.org/software/octave/NEWS-3.4.html
+
+Don't use this syntax as long as Octave 3.2.x is supported in STK.
 
 
 --- CG#08: Using ismatrix ------------------------------------------------------
