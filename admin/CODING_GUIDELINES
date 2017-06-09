@@ -2,7 +2,7 @@ This document gather various recommendations for writing code to be included in
 the STK.
 
 
---- Checking the value of nargin -----------------------------------------------
+--- CG#01: Checking the value of nargin ----------------------------------------
 
 Older versions of Matlab and Octave (e.g., Matlab R2007a or Octave 3.4.3) have
 nargchk but not narginchk available. But the syntax of nargchk is ugly, and the
@@ -32,19 +32,22 @@ The current recommendation for checking the value of nargin in STK is as follows
    end
 
 
---- Nested functions --------------------------------------------------------
+--- CG#02: Nested functions ----------------------------------------------------
 
-Octave 3.6.4 does not support nested functions. Octave 3.8.x probably won't
-support them either. So don't use them.
+The support for nested function was introduced in Octave 3.8:
+
+https://www.gnu.org/software/octave/NEWS-3.8.html
+
+Until STK's requirement is raised to Octave 3.8, don't use nested functions.
 
 
---- MEX-file in class directories -------------------------------------------
+--- CG#03: MEX-file in class directories ---------------------------------------
 
 Octave 3.6.4 does allow to manipulate instances of user-defined classes
 through MEX-files. Octave 3.8.x probably won't. So don't think of it.
 
 
---- Overloading isequal -----------------------------------------------------
+--- CG#04: Overloading isequal -------------------------------------------------
 
 Overloading the base function 'isequal' is usually not required for user-
 defined classes. Some old releases of Octave (e.g., 3.2.4), however, have a
@@ -53,7 +56,7 @@ they are equal. Therefore, as long as we want to support those releases, we
 have have to overload isequal (see, e.g., @stk_dataframe).
 
 
---- Calling display () on structures ----------------------------------------
+--- CG#05: Calling display () on structures ------------------------------------
 
 Octave fails when display is called on structures that contain strings
 containing '<class ' or objects that don't overload display (and
@@ -65,20 +68,20 @@ As a workaround, we should avoid calling display on such structures
 (espacially, on model structures that contain an stk_lm_* object).
 
 
---- Cell arrays of handles --------------------------------------------------
+--- CG#06: Cell arrays of handles ----------------------------------------------
 
 Octave 3.6.2 fails to parse this: C = {@sin @cos};
 
 As a work-around, always use a comma-separated list: C = {@sin, @cos};
 
 
---- Ignoring output arguments -----------------------------------------------
+--- CG#07: Ignoring output arguments -------------------------------------------
 
 Octave 3.2.x does not support the use of ~ to ignore unwanted output
 arguments.  Don't use this syntax as long as Octave 3.2.x is supported.
 
 
---- Using ismatrix ----------------------------------------------------------
+--- CG#08: Using ismatrix ------------------------------------------------------
 
 The ismatrix function has only been introduced in Matlab R2010b.
 
