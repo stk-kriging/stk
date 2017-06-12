@@ -47,19 +47,18 @@ gray_level = [0.95 0.88 0.80];
 for k = 1:3
     
     delta = delta0(k) * sqrt (abs (z.var));
-    h_plot = area (h_axes, x, [z.mean - delta, 2 * delta]);
     
-    hold on;
+    xx = [x; flipud(x)];
+    zz = [z.mean - delta; flipud(z.mean + delta)];
+    cc = gray_level(k) * [1 1 1];
     
-    % Remove the first area object (between 0 and z.mean - delta)
-    delete (h_plot(1));  h_plot = h_plot(2);
-
-    c = gray_level(k) * [1 1 1];  % Light gray
-    set (h_plot, 'FaceColor', c, 'LineStyle', '-', 'LineWidth', 1, 'EdgeColor', c);
+    h_plot = fill (h_axes, xx, zz, cc, 'EdgeColor', cc);  hold on;
+    
+    % The options in 'opts', if any, are applied to all patch objects
     if ~ isempty (opts)
         set (h_plot, opts{:});
     end
-
+    
 end
 
 hold off;

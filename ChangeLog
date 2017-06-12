@@ -1,5 +1,10 @@
 2017-06-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_plot_shadedci.m: Use fill instead of area
+
+	* misc/plot/stk_plot_shadedci.m: Recent changes in Matlab R2017a
+	have altered the behaviour of area.  Using fill is cleaner.
+
 	stk_plot_shadedci.m: Use three shaded areas
 
 	* misc/plot/stk_plot_shadedci.m: Use three shaded areas to
