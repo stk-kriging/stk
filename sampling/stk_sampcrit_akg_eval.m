@@ -173,8 +173,12 @@ for i = 1:M
     
     if zc_std(i) == 0,  continue;  end
     
-    a = [zcr_cov(i,:)'./zc_std(i); zc_std(i)];  % slopes
-    b = [zr_mean; zc_mean(i)];                  % intercepts
+    % Mitigate the effect of small inaccurate covariance values
+    a0 = zcr_cov(i,:)' / zc_std(i);
+    a0 = max (-zr_std, min (zr_std, a0));
+    
+    a = [a0; zc_std(i)];        % slopes
+    b = [zr_mean; zc_mean(i)];  % intercepts
     
     % Intersection of lower half-planes
     % (algorithm similar to the one in Scott et al, 2011, Table 4.1,
