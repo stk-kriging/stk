@@ -1,5 +1,10 @@
 2017-06-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_sampcrit_akg_eval.m: Improve numerical robustness
+
+	* sampling/stk_sampcrit_akg_eval.m: Mitigate the effect of small
+	inaccurate covariance values on the computation of the slopes.
+
 	halfpintl.m: Fix a bug affecting slope equality cases
 
 	* sampling/private/halfpintl.m: Fix a bug affecting slope equality
