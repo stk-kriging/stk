@@ -37,17 +37,32 @@ function h_plot = stk_plot_shadedci (varargin)
 
 x = double (x);
 
-delta = 1.96 * sqrt (abs (z.var));
-h_plot = area (h_axes, x, [z.mean - delta, 2 * delta]);
+% Avoid a dependency on the stat toolbox in Matlab:
+% norminv (1 - 0.05/2)  = 1.9600
+% norminv (1 - 0.01/2)  = 2.5758
+% norminv (1 - 0.001/2) = 3.2905
+delta0 = [3.2905 2.5758 1.9600];
+gray_level = [0.95 0.88 0.80];
 
-% Remove the first area object (between 0 and z.mean - delta)
-delete (h_plot(1));  h_plot = h_plot(2);
+for k = 1:3
+    
+    delta = delta0(k) * sqrt (abs (z.var));
+    h_plot = area (h_axes, x, [z.mean - delta, 2 * delta]);
+    
+    hold on;
+    
+    % Remove the first area object (between 0 and z.mean - delta)
+    delete (h_plot(1));  h_plot = h_plot(2);
 
-c = [0.8 0.8 0.8];  % Light gray
-set (h_plot, 'FaceColor', c, 'LineStyle', '-', 'LineWidth', 1, 'EdgeColor', c);
-if ~ isempty (opts)
-    set (h_plot, opts{:});
+    c = gray_level(k) * [1 1 1];  % Light gray
+    set (h_plot, 'FaceColor', c, 'LineStyle', '-', 'LineWidth', 1, 'EdgeColor', c);
+    if ~ isempty (opts)
+        set (h_plot, opts{:});
+    end
+
 end
+
+hold off;
 
 % Raise current axis to the top layer, to prevent it
 % from being hidden by the grayed area
