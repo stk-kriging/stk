@@ -1,3 +1,10 @@
+2017-06-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot_shadedci.m: Use three shaded areas
+
+	* misc/plot/stk_plot_shadedci.m: Use three shaded areas to
+	visualize three levels of pointwise confidence intervals at once.
+
 2017-06-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Optimize for speed
