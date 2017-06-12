@@ -11,14 +11,7 @@
 %
 % ALGORITHM
 %
-%    The algorithm implented in this function is very similar to the one
-%    presented in [1, Algorithm 1] or [2, Table 4.1].
-%
-%    The only difference is that the preliminary sorting step is made according
-%    to the slope values only.  Cases of slope equality are dealt with inside
-%    the while loop.  In [1, 2], the preliminary sorting step ensures that in
-%    case of equality of slopes the intercepts are also sorted, in such a way
-%    that only the lowest line is considered in the subsequent loop.
+%    The algorithm implemented in this function is described in [1, 2].
 %
 % REFERENCE
 %
@@ -71,10 +64,12 @@ if m == 1
 end
 
 
-% 1) Sort by decreasing slopes
+% 1) Sort by decreasing slopes (and increasing intercept in case of equality)
 
-[a_in, i_sort] = sort (a(:), 1, 'descend');
-b_in = b(i_sort);
+tmp = [a b];
+tmp = sortrows (tmp, [-1 2]);
+a_in = tmp(:, 1);
+b_in = tmp(:, 2);
 
 
 % 2) Prepare output lists
@@ -96,10 +91,6 @@ while k_in <= m
     
     if a_in(k_in) == a_out(k_out)  % equality of slopes
         
-        if b_in(k_in) < b_out(k_out)
-            b_out(k_out) = b_in(k_in);
-        end
-        
         k_in = k_in + 1;
         
     else % inequality: a_in(k_in) < a_out(k_out)
@@ -110,7 +101,7 @@ while k_in <= m
         if (k_out == 1) || (z > z_out(k_out-1))
             % Insert the new element at the end of the output list
             z_out(k_out) = z;
-            k_out = k_out + 1;            
+            k_out = k_out + 1;
             a_out(k_out) = a_in(k_in);
             b_out(k_out) = b_in(k_in);
             k_in = k_in + 1;

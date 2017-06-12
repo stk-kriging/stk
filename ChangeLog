@@ -1,5 +1,10 @@
 2017-06-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	halfpintl.m: Fix a bug affecting slope equality cases
+
+	* sampling/private/halfpintl.m: Fix a bug affecting slope equality
+	cases.
+
 	stk_plot_shadedci.m: Use area when fill fails (ticket #75)
 
 	* misc/plot/stk_plot_shadedci.m: fill does not accept a axis
