@@ -5,7 +5,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -75,7 +75,7 @@ function [h_axes, x, z, opts] = parse_args_ (varargin)
 % Extract axis handle (if it is present)
 [h_axes, varargin, n_argin] = stk_plot_getaxesarg (varargin{:});
 
-if n_argin < 2,
+if n_argin < 2
     stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
 end
 
