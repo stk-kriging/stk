@@ -1,3 +1,11 @@
+2017-06-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot_shadedci.m: Use area when fill fails (ticket #75)
+
+	* misc/plot/stk_plot_shadedci.m: fill does not accept a axis
+	handle argument in Matlab prior to R2016a.  Use area as we were
+	doing before when fill fails.
+
 2017-06-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_plot_shadedci.m: Use fill instead of area

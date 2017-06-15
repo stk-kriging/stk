@@ -47,12 +47,23 @@ gray_level = [0.95 0.88 0.80];
 for k = 1:3
     
     delta = delta0(k) * sqrt (abs (z.var));
+    patch_color = gray_level(k) * [1 1 1];
     
-    xx = [x; flipud(x)];
-    zz = [z.mean - delta; flipud(z.mean + delta)];
-    cc = gray_level(k) * [1 1 1];
-    
-    h_plot = fill (h_axes, xx, zz, cc, 'EdgeColor', cc);  hold on;
+    try
+        % Try to use fill, which is the most natural way to do this
+        xx = [x; flipud(x)];
+        zz = [z.mean - delta; flipud(z.mean + delta)];
+        h_plot = fill (h_axes, xx, zz, patch_color, 'EdgeColor', patch_color);
+    catch
+        % Problem: fill does not support the h_axes argument in Matlab < R2016a
+        % Use area instead, assuming that this is the reason why we failed
+        h_plot = area (h_axes, x, [z.mean - delta, 2 * delta]);
+        % Remove the first area object (between 0 and z.mean - delta)
+        delete (h_plot(1));  h_plot = h_plot(2);
+        set (h_plot, 'FaceColor', patch_color, 'LineStyle', '-', ...
+            'LineWidth', 1, 'EdgeColor', patch_color);
+    end
+    hold on;
     
     % The options in 'opts', if any, are applied to all patch objects
     if ~ isempty (opts)
