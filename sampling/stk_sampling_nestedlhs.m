@@ -185,7 +185,7 @@ for k_lev = nLev:-1:1; %begin by the end
         
         X_new_kl = NaN(n_new_k, dim);    %the matrix to add
         
-        [~, random_index] = sort(rand(n_new_k, dim), 1);
+        [ignd, random_index] = sort(rand(n_new_k, dim), 1);  % See CG#07
         for i = 1:dim
             X_new_kl(:, i) = list_nb_new_k(random_index(:, i), i);
         end

@@ -1,5 +1,12 @@
 2017-06-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
+    Don't use ~ to ignore output arguments (see CG#07)
+
+	* admin/CODING_GUIDELINES: Improve CG#07
+	* sampling/stk_sampcrit_akg_eval.m: Apply CG#07
+	* sampling/stk_sampling_nesteddesign.m: Apply CG#07
+	* sampling/stk_sampling_nestedlhs.m: Apply CG#07
+
 	@stk_sampcrit_eqi/disp.m: Fix display bug
 
 	* sampling/@stk_sampcrit_eqi/disp.m: Fix display bug for the case
