@@ -129,7 +129,7 @@ end % function
 %!test F = stk_sampcrit_eqi (M)  % ending ";" omitted on purpose, to test disp
 
 %!assert (isequal (F.model, M))
-%!assert (F.current_minimum == 1.234);
+%!assert (stk_isequal_tolrel (F.current_minimum, 1.234, 10 * eps));
 
 %!test EQI = feval (F, [1.0; 1.1; 1.2]);
 %!assert (isequal (size (EQI), [3 1]))
@@ -148,7 +148,7 @@ end % function
 %!test F = stk_sampcrit_eqi (M);
 
 %!assert (isequal (F.model, M))
-%!assert (stk_isequal_tolrel (F.current_minimum, 2.077996, 1e-6));
+%!assert (stk_isequal_tolrel (F.current_minimum, 2.077997, 1e-5));
 
 %!test EQI = feval (F, [1.0; 1.1; 1.2]);
 %!assert (isequal (size (EQI), [3 1]))
