@@ -1,5 +1,10 @@
 2017-06-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_sampcrit_eqi/disp.m: Fix display bug
+
+	* sampling/@stk_sampcrit_eqi/disp.m: Fix display bug for the case
+	where point_batch_size is a function handle.
+
 	stk_sampcrit_eqi.m: Increase unit test tolerance (ticket #76)
 
 	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: Increase the
