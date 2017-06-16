@@ -61,6 +61,6 @@ function df = nabla_f_ (f, u)
 % Note: with this implementation, f_val is computed twice
 %   (once when f is called by sqp, and once again when nabla_f is called)
 
-[f_val, df] = f (u);  %#ok<ASGLU>
+[ignd, df] = f (u);  %#ok<ASGLU> CG#07
 
 end % function

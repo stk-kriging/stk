@@ -296,7 +296,7 @@ for eta = eta_list
         % must be estimated (in the first case, eta = 0 and thus lnv is -inf)
         if (eta == 0) || (homoscedastic && (isnan (lnv)))
             model.lognoisevariance = log (eta);
-            [beta_ignored, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU>
+            [ignd, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU> CG#07
             if ~ (sigma2 > 0), continue; end
             log_sigma2 = log (sigma2);
             model.lognoisevariance = log  (eta * sigma2);

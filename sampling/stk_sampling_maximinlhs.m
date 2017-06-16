@@ -115,7 +115,7 @@ function x = generatedesign_ (n, d)
 x = zeros (n, d);
 
 for i = 1:d % for each dimension, draw a random permutation
-    [sx, x(:,i)] = sort (rand (n,1)); %#ok<ASGLU>
+    [ignd, x(:,i)] = sort (rand (n,1));  %#ok<ASGLU> CG#07
 end
 
 x = (x - rand (size (x))) / n;

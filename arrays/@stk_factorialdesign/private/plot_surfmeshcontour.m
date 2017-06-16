@@ -121,8 +121,8 @@ try
     % in particular when options are provided. Let's try that first.
     
     if strcmp (func2str (plotfun), 'contour')
-        [C_ignored, h_plot] = contour ...
-            (h_axes, x, y, z, varargin{:});  %#ok<ASGLU>
+        [ignd, h_plot] = contour ...
+            (h_axes, x, y, z, varargin{:});  %#ok<ASGLU> CG#07
     else
         h_plot = plotfun (h_axes, x, y, z, varargin{:});
     end
@@ -149,7 +149,7 @@ catch  %#ok<CTCH>
     try
         
         if strcmp (func2str (plotfun), 'contour')
-            [C_ignored, h_plot] = contour (x, y, z, numarg{:});  %#ok<ASGLU>
+            [ignd, h_plot] = contour (x, y, z, numarg{:});  %#ok<ASGLU> CG#07
         else
             h_plot = plotfun (x, y, z, numarg{:});
         end
