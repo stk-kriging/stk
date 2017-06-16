@@ -134,7 +134,7 @@ end
 %--- Generate unconditional sample paths --------------------------------------
 
 % Pick unique simulation points
-[xt_unique, i_ignore, j] = unique (xt, 'rows');  %#ok<ASGLU>
+[xt_unique, ignd, j] = unique (xt, 'rows');  %#ok<ASGLU> CG#07
 
 % Did we actually find duplicates in xt ?
 duplicates_detected = (size (xt_unique, 1) < size (xt, 1));
@@ -163,7 +163,7 @@ if duplicates_detected,  zsim = zsim(j, :);  end
 if conditional
        
     % Carry out the kriging prediction at points xt
-    [zp_ignore, lambda] = stk_predict (model, xi, zi, xt);  %#ok<ASGLU>
+    [ignd, lambda] = stk_predict (model, xi, zi, xt);  %#ok<ASGLU> CG#07
     
     if ~ stk_isnoisy (model)
         

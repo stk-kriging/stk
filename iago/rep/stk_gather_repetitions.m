@@ -28,7 +28,7 @@
 
 function [x, z] = stk_gather_repetitions (x, z, x_new, z_new)
 
-if nargin == 2,
+if nargin == 2
     x_new = x;  x = [];
     z_new = z;  z = [];
 end
@@ -39,7 +39,7 @@ n = stk_length (x);      assert (stk_length (z) == n);
 m = stk_length (x_new);  assert (stk_length (z_new) == m);
 
 % Convert z to the three-column representation (mean, var, nb_obs)
-if size (z, 2) == 1,
+if size (z, 2) == 1
     z = horzcat (z, repmat ([0 1], size (z)));    
 elseif isempty (z)
     z = zeros (0, 3);
@@ -48,7 +48,7 @@ else
 end
 
 % Convert z_new to the three-column representation (mean, var, nb_obs)
-if size (z_new, 2) == 1,
+if size (z_new, 2) == 1
     z_new = horzcat (z_new, repmat ([0 1], size (z_new)));
 else
     assert (size (z_new, 2) == 3);
@@ -97,7 +97,7 @@ end
     
 % Second, deal with those that are not repetitions of any existing evaluation
 % point (but there may still be repetitions *inside* z_new)
-[arg1_ignored, idx, pos] = unique (double (x_new), 'rows', 'first');
+[ignd, idx, pos] = unique (double (x_new), 'rows', 'first');  %#ok<ASGLU> CG#07
 nb_unique = length (idx);
 % Note: Octave doesn't support the 'stable' option, so we just reorder manually
 [idx_stable, k] = sort (idx);
@@ -110,7 +110,7 @@ for r = 1:nb_unique
     b_rep = (pos == k(r)); % indicates which rows are repetitions of x_new(i, :)
     n_rep = sum (b_rep);  assert (n_rep > 0);
 
-    if n_rep == 1,  % Special case: no repetitions
+    if n_rep == 1  % Special case: no repetitions
         
         z_new_(r, :) = z_new(i, :);
         
@@ -145,5 +145,3 @@ x = [x; x_new];
 z = [z; z_new_];
 
 end % function
-
-%#ok<*ASGLU>

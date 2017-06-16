@@ -51,7 +51,7 @@ catch
         
         % In Octave 4.2.0 the 'FormatSpacing' root property has been removed
         % but a different syntax has been introduced:
-        [ign, fmt] = format ();  %#ok<ASGLU>
+        [ignd, fmt] = format ();  %#ok<ASGLU> CG#07
         
     catch
         
