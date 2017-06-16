@@ -77,12 +77,16 @@ As a work-around, always use a comma-separated list: C = {@sin, @cos};
 
 --- CG#07: Ignoring output arguments -------------------------------------------
 
-Octave supports the use of ~, to ignore unwanted output arguments, since
-its 3.4.0 release:
+The ~ syntax to ignore unwanted output arguments has been available in Matlab
+since release R2009b (September 2009) and in Octave since release 3.4.0 (June
+2011).
 
 https://www.gnu.org/software/octave/NEWS-3.4.html
 
-Don't use this syntax as long as Octave 3.2.x is supported in STK.
+https://en.wikipedia.org/wiki/MATLAB#Release_history
+
+Don't use this syntax as long as Octave 3.2.x and Matlab R2007a--R2009a are
+supported in STK.
 
 
 --- CG#08: Using ismatrix ------------------------------------------------------

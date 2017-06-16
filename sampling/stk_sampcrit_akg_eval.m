@@ -211,7 +211,7 @@ end % function
 %!
 %! nc = 20;
 %! xc = stk_sampling_regulargrid (nc, 1, [0; 1]);
-%! [zp, ~, ~, K] = stk_predict (M_prior, xi, zi, [xi; xc]);
+%! [zp, ignd1, ignd2, K] = stk_predict (M_prior, xi, zi, [xi; xc]);  % See CG#07
 %!
 %! ir = 1:ni;  ic = ni + (1:nc);
 %!
