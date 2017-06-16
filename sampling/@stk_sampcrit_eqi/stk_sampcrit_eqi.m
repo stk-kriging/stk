@@ -205,5 +205,5 @@ end % function
 %!assert (isa (F.point_batch_size, 'function_handle'))
 %!test EQI = feval (F, [1.0; 1.1; 1.2]);
 
-%!test F.point_batch_size = 'toto';  % char
+%!test F.point_batch_size = 'sin';  % char
 %!assert (isa (F.point_batch_size, 'function_handle'))
