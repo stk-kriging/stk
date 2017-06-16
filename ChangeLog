@@ -1,5 +1,10 @@
 2017-06-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_sampcrit_eqi.m: Increase unit test tolerance (ticket #76)
+
+	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: Increase the
+	numerical tolerance in two unit tests.
+
 	stk_sampcrit_eqi.m: Fix one unit test (ticket #76)
 
 	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: Fix one unit
