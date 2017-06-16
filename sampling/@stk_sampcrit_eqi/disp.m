@@ -46,9 +46,15 @@ else
     model_str = sprintf ('<%s>', stk_sprintf_sizetype (crit.model));
 end
 
+if isa (crit.point_batch_size, 'function_handle')
+    pbs_str = func2str (crit.point_batch_size);
+else
+    pbs_str = num2str (crit.point_batch_size);
+end
+
 fprintf ('|              model:  %s\n', model_str);
 fprintf ('|     quantile_order:  %s\n', num2str (crit.quantile_order));
-fprintf ('|   point_batch_size:  %s\n', num2str (crit.point_batch_size));
+fprintf ('|   point_batch_size:  %s\n', pbs_str);
 fprintf ('|    current_minimum:  %s\n', num2str (crit.current_minimum));
 
 if loose_spacing
