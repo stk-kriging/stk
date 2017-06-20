@@ -1,3 +1,11 @@
+2017-06-20  Remi Stroh  <remi.stroh@lne.fr>
+
+    stk_distrib_normal_crps.m: Change the final test.
+
+	* misc\distrib\stk_distrib_normal_crps.m: Modify the last test
+	to support compatibility with older versions of Matlab and
+	Octave (ticket #77).
+
 2017-06-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/set.m: Check colnames and rownames values more striclty

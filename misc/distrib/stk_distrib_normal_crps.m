@@ -125,21 +125,21 @@ end
 
 %!assert (stk_isequal_tolabs (stk_distrib_normal_crps (x_obs, mu, 0), abs (x_obs - mu)))
 
-% Compare real values (with integrals) and theoretical values (formulas)
+% Compare experimental values (computed with trapezoidal integration)
+% and theoretical values (formulas)
 
 %!test
 %! crps_exp = nan (n, 1);
-%! if isoctave  % Find the integral function
-%!  intfun = @quad;
-%! else
-%!  intfun = @integral;
-%! end
 %! for k = 1:n
-%!  F = @(x)(stk_distrib_normal_cdf (x, mu(k), sigma(k)));
+%!  x1 = linspace (mu(k) - 6*sigma(k), x_obs(k), 2e5);
+%!  x2 = linspace (x_obs(k), mu(k) + 6*sigma(k), 2e5);
+%!  x = [x1, x2];
 %
-%!  crps_exp_1 = intfun (@(x)(     F(x) .^2), -Inf, x_obs(k));
-%!  crps_exp_2 = intfun (@(x)((1 - F(x)).^2), x_obs(k), +Inf);
-%!  crps_exp(k) = crps_exp_1 + crps_exp_2;
+%!  F1 = stk_distrib_normal_cdf (x1, mu(k), sigma(k)).^2;
+%!  F2 = stk_distrib_normal_cdf (mu(k), x2, sigma(k)).^2;
+%!  F = [F1, F2];
+%
+%!  crps_exp(k) = trapz (x, F);
 %! end
 
 %!assert (stk_isequal_tolabs (crps_exp, crps));
