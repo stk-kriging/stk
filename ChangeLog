@@ -1,6 +1,14 @@
+2017-06-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dominatedhv.m: Accept @stkçdataframe inputs
+
+	* misc/pareto/stk_dominatedhv.m: Tolerate any kind of input
+	argument that can be converted to a double precision matrix, in
+	particular @stk_dataframe objects.
+
 2017-06-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
-    Don't use ~ to ignore output arguments (see CG#07)
+	Don't use ~ to ignore output arguments (see CG#07)
 
 	* admin/CODING_GUIDELINES: Improve CG#07
 	* sampling/stk_sampcrit_akg_eval.m: Apply CG#07
