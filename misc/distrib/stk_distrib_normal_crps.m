@@ -108,13 +108,13 @@ end
 %!assert (stk_isequal_tolabs (stk_distrib_normal_crps (0.0, 0.0, 0.0), 0.0))
 %!assert (stk_isequal_tolabs (stk_distrib_normal_crps (0.0, 0.0, 1.0), (sqrt(2) - 1)/sqrt(pi)))
 
-% Compute CRPS in two cases (noiseless and noised case)
+% Compute Continuous Ranked Probability Score (CRPS)
 
 %!shared n, x_obs, mu, sigma, crps, crps_exp
-%! n = 10;
-%! x_obs = 2 * randn (n, 1);      % random observations
-%! mu = 5 * (rand(n, 1) - 0.5);   % random values of mean
-%! sigma = 10 * rand (n, 1);      % random values of standard deviation
+%! x_obs = [ 1.78; -2.29; -1.62; -5.89;  2.88;  0.65;  2.74; -3.42];	% observations
+%! mu    = [-0.31; -0.59;  1.48; -1.57; -0.05; -0.27;  1.05;  1.27];	% predictions
+%! sigma = [ 2.76;  6.80;  1.63;  1.19;  4.98;  9.60;  5.85;  2.24];	% uncertainty
+%! n = size(x_obs, 1);
 %! crps = stk_distrib_normal_crps (x_obs, mu, sigma);
 
 % Check that outputs have good properties
