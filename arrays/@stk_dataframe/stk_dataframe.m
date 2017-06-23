@@ -134,26 +134,56 @@ else  % Assume x is (or can be converted to) numeric data
     end
 end
 
-[n, d] = size (x_data);
-
-% Process colnames argument
-if isempty (colnames)
-    colnames = {};
-elseif iscell (colnames) && numel (colnames) == d
-    colnames = reshape (colnames, 1, d);
+if isempty (x_data)
+    
+    % Process colnames argument
+    if isempty (colnames)
+        d = 0;
+        colnames = {};
+    elseif iscell (colnames)
+        d = numel (colnames);
+        colnames = reshape (colnames, 1, d);
+    else
+        stk_error ('colnames should be a cell array', 'TypeMismatch');
+    end
+    
+    % Process rownames argument
+    if isempty (rownames)
+        n = 0;
+        rownames = {};
+    elseif iscell (rownames)
+        n = numel (rownames);
+        rownames = reshape (rownames, n, 1);
+    else
+        stk_error ('rownames should be a cell array', 'TypeMismatch');
+    end
+    
+    x_data = zeros (n, d);
+    
 else
-    stk_error (['colnames should be a cell array with d elmements, ' ...
-        'where d is the number of columns of the dataframe'], 'IncorrectSize');
-end
-
-% Process rownames argument
-if isempty (rownames)
-    rownames = {};
-elseif iscell (rownames) && numel (rownames) == n
-    rownames = reshape (rownames, n, 1);
-else
-    stk_error (['rownames should be a cell array with n elmements, ' ...
-        'where n is the number of rows of the dataframe'], 'IncorrectSize');
+    
+    [n, d] = size (x_data);
+    
+    % Process colnames argument
+    if isempty (colnames)
+        colnames = {};
+    elseif iscell (colnames) && numel (colnames) == d
+        colnames = reshape (colnames, 1, d);
+    else
+        stk_error (['colnames should be a cell array with d elmements, ' ...
+            'where d is the number of columns of the dataframe'], 'IncorrectSize');
+    end
+    
+    % Process rownames argument
+    if isempty (rownames)
+        rownames = {};
+    elseif iscell (rownames) && numel (rownames) == n
+        rownames = reshape (rownames, n, 1);
+    else
+        stk_error (['rownames should be a cell array with n elmements, ' ...
+            'where n is the number of rows of the dataframe'], 'IncorrectSize');
+    end
+    
 end
 
 x = struct ();
@@ -179,7 +209,7 @@ end % function
 
 %!test % default constructor
 %! x = stk_dataframe ();
-%! assert (isa (x, 'stk_dataframe') && isequal (size (x), [0 1]))
+%! assert (isa (x, 'stk_dataframe') && isequal (size (x), [0 0]))
 
 %!test
 %! y = stk_dataframe (rand (3, 2));
@@ -271,3 +301,15 @@ end % function
 %!error
 %! x = stk_factorialdesign ({1:3, 1:2});
 %! y = stk_dataframe (x, {}, pi);
+
+%!test
+%! x = stk_dataframe ([], {'a', 'b'});
+%! assert (isequal (size (x), [0 2]))
+%! assert (isequal (x.colnames, {'a' 'b'}));
+%! assert (isequal (x.rownames, {}));
+
+%!test
+%! x = stk_dataframe ([], {'a', 'b'}, {'toto'});
+%! assert (isequal (size (x), [1 2]))
+%! assert (isequal (x.colnames, {'a' 'b'}));
+%! assert (isequal (x.rownames, {'toto'}));
