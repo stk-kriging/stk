@@ -1,5 +1,10 @@
 2017-06-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	build_octpkg.m: Add 'License:' in DESCRIPTION
+
+	* admin/build_tools/build_octpkg.m: Add 'License:' in DESCRIPTION.
+	* admin/build_tools/generate_htmldoc.m: Remove 'Read License" subst.
+
 	@stk_dataframe/stk_sprintf.m: Improve formatting for empty data frames
 
 	* arrays/@stk_dataframe/stk_sprintf.m: Improve formatting for
