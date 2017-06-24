@@ -106,6 +106,8 @@ fprintf (fid, ' and Emmanuel VAZQUEZ <emmanuel.vazquez@centralesupelec.fr>\n');
 fprintf (fid, '#\n');
 fprintf (fid, '%s', parse_description_field (root_dir));
 fprintf (fid, '#\n');
+fprintf (fid, 'License: GPLv3+\n');
+fprintf (fid, '#\n');
 fprintf (fid, 'Url: https://sourceforge.net/projects/kriging/\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Depends: octave (>= 3.2.4)\n');

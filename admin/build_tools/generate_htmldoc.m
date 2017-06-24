@@ -121,9 +121,6 @@ fclose (fid);
 % Remove email addresses
 s = regexprep (s, '&lt;.*?@.*?&gt;', '');
 
-% Explicit license
-s = regexprep (s, 'Read license', 'GNU Public Licence v3');
-
 % Plural for authors and maintainers
 s = regexprep (s, 'Package Author', 'Package Authors');
 s = regexprep (s, 'Package Maintainer', 'Package Maintainers');
