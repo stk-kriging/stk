@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
@@ -30,29 +30,64 @@
 
 function s = stk_sprintf (x, verbosity, data_col_width)
 
-if (nargin < 2) || (isempty (verbosity)),
+if (nargin < 2) || (isempty (verbosity))
     verbosity = stk_options_get ('stk_dataframe', 'disp_format');
 end
+
 if ~ ismember (verbosity, {'basic', 'verbose'})
     errmsg = 'verbosity should be ''basic'' or ''verbose''.';
     stk_error (errmsg, 'InvalidArgument');
 end
 
-if (nargin < 3) || (isempty (data_col_width)),
+if (nargin < 3) || (isempty (data_col_width))
     data_col_width = [];
 end
 
-s = sprintf_table_ (x.data, x.colnames, x.rownames, data_col_width);
-
-if strcmp (verbosity, 'verbose'),
+if isempty (x)
     
     spstr = stk_options_get ('stk_dataframe', 'disp_spstr');
     
-    s = char (...
-        '.colnames =', horzcat (spstr, stk_sprintf_colnames (x)), ...
-        '.rownames =', horzcat (spstr, stk_sprintf_rownames (x)), ...
-        '.data =', horzcat (repmat (spstr, size (s, 1), 1), s));
+    if strcmp (verbosity, 'verbose')                
+        
+        s = char (...
+            '.colnames =', horzcat (spstr, stk_sprintf_colnames (x)), ...
+            '.rownames =', horzcat (spstr, stk_sprintf_rownames (x)), ...
+            '.data =', horzcat (spstr, '<', stk_sprintf_sizetype (x.data), '>'));
+        
+    else
+        
+        [n, d] = size (x);
+        
+        s = sprintf ('Empty data frame with %d rows and %d columns', n, d);
+        
+        if d > 0 && ~ isempty (x.colnames)
+            s = char (s, ...
+                sprintf ('  with .colnames = %s', stk_sprintf_colnames (x)));
+        elseif n > 0 && ~ isempty (x.rownames)
+            s = char (s, ...
+                sprintf ('  with .rownames = %s', stk_sprintf_rownames (x)));
+        end        
+    end
     
+else  % x is not empty
+    
+    s = sprintf_table_ (x.data, x.colnames, x.rownames, data_col_width);
+    
+    if strcmp (verbosity, 'verbose')
+        
+        spstr = stk_options_get ('stk_dataframe', 'disp_spstr');
+        
+        s = char (...
+            '.colnames =', horzcat (spstr, stk_sprintf_colnames (x)), ...
+            '.rownames =', horzcat (spstr, stk_sprintf_rownames (x)), ...
+            '.data =', horzcat (repmat (spstr, size (s, 1), 1), s));
+        
+    elseif isempty (s)
+        
+        disp toto
+        
+    end
+
 end
 
 end % function
@@ -114,13 +149,13 @@ else
     s = [s repmat(' :', nb_rows,  1) ...
         repmat(' ', nb_rows,  nb_spaces_colsep)];
     
-    for j = 1:d,
+    for j = 1:d
         
         xx = stk_sprintf_colvect (x(:, j), data_col_width);
         Lxx = size (xx, 2);
         
         vn = colnames{j};
-        if isempty (vn),
+        if isempty (vn)
             vn = repmat('-', 1, Lxx);
         end
         
@@ -128,7 +163,7 @@ else
         s = [s [sprintf('% *s', L, vn);   % variable name
             repmat(' ', n, L - Lxx) xx]]; % formatted data
         
-        if j < d,
+        if j < d
             % column separator
             s = [s repmat(' ', nb_rows,  nb_spaces_colsep)];
         end

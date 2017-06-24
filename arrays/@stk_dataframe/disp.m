@@ -34,7 +34,7 @@
 
 function disp (x, verbosity, prefix, data_col_width)
 
-if (nargin < 2) || (isempty (verbosity)),
+if (nargin < 2) || (isempty (verbosity))
     verbosity = stk_options_get ('stk_dataframe', 'disp_format');
 end
 
@@ -42,7 +42,7 @@ if (nargin < 3) || (isempty (prefix))
     prefix = ' ';
 end
 
-if (nargin < 4) || (isempty (data_col_width)),
+if (nargin < 4) || (isempty (data_col_width))
     data_col_width = [];
 end
 

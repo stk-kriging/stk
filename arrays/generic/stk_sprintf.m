@@ -1,4 +1,4 @@
-% STK_SPRINTF_DATA prints the content of an array into a string
+% STK_SPRINTF prints the content of an array into a string
 
 % Copyright Notice
 %
@@ -71,10 +71,10 @@ else
     
     s = repmat ('', n, 1); %#ok<*AGROW>
     
-    for j = 1:d,
+    for j = 1:d
         xx = stk_sprintf_colvect (x(:, j), data_col_width);
         s = [s xx]; % formatted data
-        if j < d,
+        if j < d
             % column separator
             s = [s repmat(' ', n,  nb_spaces_colsep)];
         end

@@ -1,3 +1,13 @@
+2017-06-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/stk_sprintf.m: Improve formatting for empty data frames
+
+	* arrays/@stk_dataframe/stk_sprintf.m: Improve formatting for
+	empty data frames.  In particular, display column names or row
+	names if appropriate.
+	* arrays/@stk_dataframe/disp.m: Source formatting.
+	* arrays/generic/stk_sprintf.m: Fix help text.  Source formatting.
+
 2017-06-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_dataframe.m: Guess the size when the first input is empty
