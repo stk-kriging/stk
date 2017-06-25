@@ -1,3 +1,10 @@
+2017-06-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/fieldnames.m: Add row names to the list
+
+	* arrays/@stk_dataframe/fieldnames.m: Add row names.  Also, do not
+	include empty row or column names in the list.
+
 2017-06-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_sampling_sobol.m: Fix help text
