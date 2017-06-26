@@ -73,7 +73,7 @@ switch idx(1).type
             
             val_data = double (val);
             
-            if L == 2,  % matrix-style indexing
+            if L == 2  % matrix-style indexing
                 
                 % Process row indices
                 I = idx(1).subs{1};
@@ -101,7 +101,7 @@ switch idx(1).type
                 
                 x.data = subsasgn (x.data, idx, val_data);
                 
-                if L == 1,  % linear indexing
+                if L == 1  % linear indexing
                     
                     % Linear indexing is not allowed to change the shape of a
                     % dataframe (this happens, with numeric arrays, when
@@ -169,13 +169,13 @@ switch idx(1).type
                 
             else  % Assignment rhs is empty: deletion
                 
-                if L == 1,  % Linear indexing
+                if L == 1  % Linear indexing
                     
-                    if d == 1,  % Column array => remove rows
+                    if d == 1  % Column array => remove rows
                         I = idx(1).subs{1};
                         J = 1;
                         remove_rows = true;
-                    elseif n == 1,  % Row array => remove columns
+                    elseif n == 1  % Row array => remove columns
                         I = 1;
                         J = idx(1).subs{1};
                         remove_rows = false;
@@ -217,7 +217,7 @@ switch idx(1).type
         
     case '.'
         
-        if strcmp (idx(1).subs, 'data') && length (idx) > 1,
+        if strcmp (idx(1).subs, 'data') && length (idx) > 1
             
             if strcmp (idx(2).type, '()')
                 x = subsasgn (x, idx(2:end), val);
@@ -404,7 +404,7 @@ end % function
 %! assert (isequal (z(1, :), x(1, :)));
 %! assert (isequal (z(3, :), y));
 
-%--- change several values at once with linear indxing -------------------------
+%--- change several values at once with linear indexing ------------------------
 
 %!shared x
 %! x = stk_dataframe (zeros (2), {'u' 'v'});
