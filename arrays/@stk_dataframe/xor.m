@@ -2,9 +2,9 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2017 CentraleSupelec
 %
-%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,17 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = xor(x1, x2)
+function y = xor (x1, x2)
 
-y = bsxfun(@xor, x1, x2);
+y = xor (logical (x1), logical (x2));
 
 end % function
-
-%!shared x, y, z
-%! x = floor (3 * rand (7, 2));
-%! y = floor (3 * rand (7, 2));
-%! z = floor (3 * rand (7, 3));
-
-%!test  stk_test_dfbinaryop ('xor', x, y);
-%!test  stk_test_dfbinaryop ('xor', x, 1.0);
-%!error stk_test_dfbinaryop ('xor', x, z);

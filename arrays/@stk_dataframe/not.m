@@ -1,4 +1,4 @@
-% GT [overload base function]
+% NOT [overload base function]
 
 % Copyright Notice
 %
@@ -26,8 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = gt (x1, x2)
+function y = not (x)
 
-y = (double (x1) > double (x2));
+y = ~ logical (x);
 
 end % function
