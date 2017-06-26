@@ -35,11 +35,11 @@ switch idx(1).type
         
         L = length (idx(1).subs);
         
-        if L == 1,  % linear indexing
+        if L == 1  % linear indexing
             
             t = subsref (x.data, idx);
             
-        elseif L == 2,  % matrix-style indexing
+        elseif L == 2  % matrix-style indexing
             
             % Process row indices
             I = idx(1).subs{1};
@@ -82,7 +82,7 @@ switch idx(1).type
         
 end
 
-if (length (idx)) > 1,
+if (length (idx)) > 1
     t = subsref (t, idx(2:end));
 end
 
