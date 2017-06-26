@@ -1,5 +1,9 @@
 2017-06-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_dataframe/subsref.m: Fix empty indexing
+
+	* arrays/@stk_dataframe/subsref.m: Fix empty indexing.
+
 	@stk_dataframe/stk_dataframe.m: Fix typo
 
 	* arrays/@stk_dataframe/stk_dataframe.m: Fix typo.
