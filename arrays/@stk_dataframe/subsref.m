@@ -57,15 +57,35 @@ switch idx(1).type
                 J = process_cell_indices (J, x.colnames, 'Column');
             end
             
-            t = stk_dataframe (x.data(I, J));
-            
-            if ~ isempty (x.colnames)
-                t.colnames = x.colnames(1, J);
+            if isempty (I)
+                if isempty (J)
+                    t_data = [];
+                else
+                    t_data = zeros (0, size (x.data, 2));
+                    t_data = t_data(:, J);
+                end
+            else
+                if isempty (J)
+                    t_data = zeros (size (x.data, 1), 0);
+                    t_data = t_data(I, :);
+                else
+                    t_data = x.data(I, J);
+                end
             end
             
-            if ~ isempty (x.rownames)
-                t.rownames = x.rownames(I, 1);
+            if isempty (x.colnames)
+                cn = {};
+            else
+                cn = x.colnames(1, J);
             end
+            
+            if isempty (x.rownames)
+                rn = {};
+            else
+                rn = x.rownames(I, 1);
+            end
+            
+            t = stk_dataframe (t_data, cn, rn);
             
         else
             stk_error ('Illegal indexing.', 'IllegalIndexing');
