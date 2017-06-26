@@ -1,5 +1,10 @@
 2017-06-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_dataframe/set.m: Check colnames and rownames values more striclty
+
+	* arrays/@stk_dataframe/set.m: Reject colnames and rownames values
+	with an insufficient number of elements.
+
 	@stk_dataframe/subsref.m: Fix empty indexing
 
 	* arrays/@stk_dataframe/subsref.m: Fix empty indexing.
