@@ -421,3 +421,19 @@ end % function
 
 %!error  % too many elements
 %! x(1:5) = 3;
+
+%--- empty indexing ------------------------------------------------------------
+
+%!test
+%! x = stk_dataframe (randn (2, 2), {'u' 'v'});
+%! y = x ([], :);
+%! assert (isa (y, 'stk_dataframe'));
+%! assert (isequal (size (y), [0 2]));
+%! assert (isequal (y.colnames, {'u' 'v'}));
+
+%!test
+%! x = stk_dataframe (randn (2, 2), [], {'a' 'b'});
+%! y = x (:, []);
+%! assert (isa (y, 'stk_dataframe'));
+%! assert (isequal (size (y), [2 0]));
+%! assert (isequal (y.rownames, {'a'; 'b'}));
