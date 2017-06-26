@@ -1,13 +1,27 @@
-2017-06-20  Remi Stroh  <remi.stroh@lne.fr>
+2017-06-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
-    stk_distrib_normal_crps.m: Remove random from test.
+	Logical-valued operators now return logical values on df as well
+
+	* arrays/@stk_dataframe/and.m: Return logical result.
+	* arrays/@stk_dataframe/eq.m: Idem.
+	* arrays/@stk_dataframe/ge.m: Idem.
+	* arrays/@stk_dataframe/gt.m: Idem.
+	* arrays/@stk_dataframe/le.m: Idem.
+	* arrays/@stk_dataframe/lt.m: Idem.
+	* arrays/@stk_dataframe/ne.m: Idem.
+	* arrays/@stk_dataframe/or.m: Idem.
+	* arrays/@stk_dataframe/xor.m: Idem.
+	* arrays/@stk_dataframe/not.m: New function.
+	* admin/octpkg/INDEX: Add new function to the INDEX.
+
+2017-06-26  Remi Stroh  <remi.stroh@lne.fr>
+
+	stk_distrib_normal_crps.m: Remove random from test.
 
 	* misc\distrib\stk_distrib_normal_crps.m: Replace the random
 	selection of data with fixed data (ticket #77).
 
-2017-06-20  Remi Stroh  <remi.stroh@lne.fr>
-
-    stk_distrib_normal_crps.m: Change the final test.
+	stk_distrib_normal_crps.m: Change the final test.
 
 	* misc\distrib\stk_distrib_normal_crps.m: Modify the last test
 	to support compatibility with older versions of Matlab and
