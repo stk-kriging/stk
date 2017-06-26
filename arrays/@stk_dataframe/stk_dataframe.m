@@ -170,7 +170,7 @@ else
     elseif iscell (colnames) && numel (colnames) == d
         colnames = reshape (colnames, 1, d);
     else
-        stk_error (['colnames should be a cell array with d elmements, ' ...
+        stk_error (['colnames should be a cell array with d elements, ' ...
             'where d is the number of columns of the dataframe'], 'IncorrectSize');
     end
     
@@ -180,7 +180,7 @@ else
     elseif iscell (rownames) && numel (rownames) == n
         rownames = reshape (rownames, n, 1);
     else
-        stk_error (['rownames should be a cell array with n elmements, ' ...
+        stk_error (['rownames should be a cell array with n elements, ' ...
             'where n is the number of rows of the dataframe'], 'IncorrectSize');
     end
     
