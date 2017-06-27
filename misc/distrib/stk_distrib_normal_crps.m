@@ -111,13 +111,11 @@ end
 % Compute Continuous Ranked Probability Score (CRPS)
 
 %!shared n, x_obs, mu, sigma, crps, crps_exp
-%! x_obs = [ 1.78; -2.29; -1.62; -5.89;  2.88;  0.65;  2.74; -3.42];	% observations
-%! mu    = [-0.31; -0.59;  1.48; -1.57; -0.05; -0.27;  1.05;  1.27];	% predictions
-%! sigma = [ 2.76;  6.80;  1.63;  1.19;  4.98;  9.60;  5.85;  2.24];	% uncertainty
+%! x_obs = [ 1.78; -2.29; -1.62; -5.89;  2.88;  0.65;  2.74; -3.42];  % observations
+%! mu    = [-0.31; -0.59;  1.48; -1.57; -0.05; -0.27;  1.05;  1.27];  % predictions
+%! sigma = [ 2.76;  6.80;  1.63;  1.19;  4.98;  9.60;  5.85;  2.24];  % uncertainty
 %! n = size(x_obs, 1);
 %! crps = stk_distrib_normal_crps (x_obs, mu, sigma);
-
-% Check that outputs have good properties
 
 %!assert (isequal (size (crps), [n, 1]))
 %!assert (all (crps >= 0))
@@ -125,21 +123,23 @@ end
 
 %!assert (stk_isequal_tolabs (stk_distrib_normal_crps (x_obs, mu, 0), abs (x_obs - mu)))
 
-% Compare experimental values (computed with trapezoidal integration)
-% and theoretical values (formulas)
+% % Numerical integration to get the reference results used below
+% crps_ref = nan (n, 1);
+% for k = 1:n
+%   x1 = linspace (mu(k) - 6*sigma(k), x_obs(k), 2e6);
+%   x2 = linspace (x_obs(k), mu(k) + 6*sigma(k), 2e6);
+%   F1 = stk_distrib_normal_cdf (x1, mu(k), sigma(k)) .^ 2;
+%   F2 = stk_distrib_normal_cdf (mu(k), x2, sigma(k)) .^ 2;
+%   crps_ref(k) = trapz ([x1 x2], [F1 F2]);
+% end
 
-%!test
-%! crps_exp = nan (n, 1);
-%! for k = 1:n
-%!  x1 = linspace (mu(k) - 6*sigma(k), x_obs(k), 2e5);
-%!  x2 = linspace (x_obs(k), mu(k) + 6*sigma(k), 2e5);
-%!  x = [x1, x2];
-%
-%!  F1 = stk_distrib_normal_cdf (x1, mu(k), sigma(k)).^2;
-%!  F2 = stk_distrib_normal_cdf (mu(k), x2, sigma(k)).^2;
-%!  F = [F1, F2];
-%
-%!  crps_exp(k) = trapz (x, F);
-%! end
-
-%!assert (stk_isequal_tolabs (crps_exp, crps));
+%! crps_ref = [        ...
+%!   1.247856605928301 ...
+%!   1.757798727719891 ...
+%!   2.216236225997414 ...
+%!   3.648696666764968 ...
+%!   1.832355265287495 ...
+%!   2.278618297947438 ...
+%!   1.560544734359158 ...
+%!   3.455697443411153 ];
+%! assert (stk_isequal_tolabs (crps, crps_ref, 1e-10));
