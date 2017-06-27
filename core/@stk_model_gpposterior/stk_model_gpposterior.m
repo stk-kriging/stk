@@ -44,6 +44,12 @@ if nargin == 3
             'same number of rows as x_obs.'], 'IncorrectSize');
     end
     
+    % Currently, prior models are represented exclusively as structures
+    if ~ isstruct (prior_model)
+        stk_error (['Input argument ''prior_model'' must be a ' ...
+            'prior model structure.'], 'InvalidArgument');
+    end
+    
     % Make sure that lognoisevariance is -inf for noiseless models
     if ~ stk_isnoisy (prior_model)
         prior_model.lognoisevariance = -inf;
