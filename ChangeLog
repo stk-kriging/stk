@@ -1,5 +1,10 @@
 2017-06-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_model_gpposterior/stk_model_gpposterior.m: Check 'prior_model' arg
+
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Check that
+	input argument 'prior_model' is a structure.
+
 	Logical-valued operators now return logical values on df as well
 
 	* arrays/@stk_dataframe/and.m: Return logical result.
