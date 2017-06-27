@@ -1,5 +1,10 @@
 2017-06-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_dataframe/set.m: Backout revision 29c5b2515988
+
+	* arrays/@stk_dataframe/set.m: *Do not* reject colnames and
+	rownames values with an insufficient number of elements.
+
 	@stk_dataframe/subsasgn.m: Add (currently failing) unit tests
 
 	* arrays/@stk_dataframe/subsasgn.m: Add (currently failing) unit
