@@ -239,47 +239,48 @@ end
 
 end % function
 
+
 %!shared x, s, t, data
-%! x = stk_dataframe(rand(3, 2));
+%! x = stk_dataframe (rand (3, 2));
 %! s = {'a'; 'b'; 'c'};
 %! t = {'xx' 'yy'};
 
 %!test
 %! x.rownames = s;
-%! assert (isequal(get(x, 'rownames'), s))
+%! assert (isequal (get (x, 'rownames'), s))
 
 %!test
 %! x.colnames = t;
-%! assert (isequal(get(x, 'rownames'), s))
-%! assert (isequal(get(x, 'colnames'), t))
+%! assert (isequal (get (x, 'rownames'), s))
+%! assert (isequal (get (x, 'colnames'), t))
 
 %!test
 %! x.rownames{2} = 'dudule';
-%! assert (isequal(get(x, 'rownames'), {'a'; 'dudule'; 'c'}))
-%! assert (isequal(get(x, 'colnames'), t))
+%! assert (isequal (get (x, 'rownames'), {'a'; 'dudule'; 'c'}))
+%! assert (isequal (get (x, 'colnames'), t))
 
 %!test
 %! x.colnames{1} = 'martha';
-%! assert (isequal(get(x, 'rownames'), {'a'; 'dudule'; 'c'}))
-%! assert (isequal(get(x, 'colnames'), {'martha' 'yy'}))
+%! assert (isequal (get (x, 'rownames'), {'a'; 'dudule'; 'c'}))
+%! assert (isequal (get (x, 'colnames'), {'martha' 'yy'}))
 
 % %!error x.colnames{1} = 'yy'
 % %!error x.colnames = {'xx' 'xx'}
 
 %!test
-%! data = stk_dataframe(zeros(3, 2), {'x1' 'x2'});
-%! u = rand(3, 1); data.x2 = u;
-%! assert (isequal(double(data), [zeros(3, 1) u]))
+%! data = stk_dataframe (zeros(3, 2), {'x1' 'x2'});
+%! u = rand(3, 1);  data.x2 = u;
+%! assert (isequal (double (data), [zeros(3, 1) u]))
 
 %!test
-%! data = stk_dataframe(zeros(3, 2), {'x1' 'x2'});
+%! data = stk_dataframe (zeros (3, 2), {'x1' 'x2'});
 %! data.x2(3) = 27;
-%! assert (isequal(double(data), [0 0; 0 0; 0 27]))
+%! assert (isequal (double (data), [0 0; 0 0; 0 27]))
 
-%!error data.toto = rand(3, 1);
+%!error data.toto = rand (3, 1);
 
 %!shared x
-%! x = stk_dataframe(reshape(1:12, 4, 3), {'u' 'v' 'w'});
+%! x = stk_dataframe (reshape (1:12, 4, 3), {'u' 'v' 'w'});
 
 %!test
 %! x(:, 2) = [];
