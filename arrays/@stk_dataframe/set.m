@@ -43,13 +43,14 @@ switch icol
             x.rownames = {};
         else
             n1 = size (x.data, 1);
-            n2 = numel (value);
-            
-            if iscell (value) && n2 >= n1
-                x.rownames = reshape (value, n2, 1);
+            n2 = length (value);
+            if ~ iscell (value)
+                stk_error (['Input argument ''value'' should be a cell' ...
+                    ' array.'], 'InvalidArgument');
+            elseif isequal (size (value), [n2 1])
+                x.rownames = value;
             else
-                stk_error (sprintf (['The value of ''rownames'' should be ' ...
-                    'a cell array with %d elements.'], n1), 'InvalidArgument');
+                x.rownames = reshape (value, n2, 1);
             end
             
             b = cellfun (@isempty, x.rownames);
@@ -57,7 +58,9 @@ switch icol
             if nb > 0
                 x.rownames(b) = repmat ({''}, nb, 1);
             end
-            if n2 > n1
+            if n2 < n1
+                x.rownames = [x.rownames; repmat({''}, n1 - n2, 1)];
+            elseif n2 > n1
                 x.data = [x.data; nan(n2 - n1, size(x.data, 2))];
             end
         end
@@ -68,13 +71,15 @@ switch icol
             x.colnames = {};
         else
             d1 = size (x.data, 2);
-            d2 = numel (value);
+            d2 = length (value);
             
-            if iscell (value) && d2 >= d1
-                x.colnames = reshape (value, 1, d2);
+            if ~ iscell (value)
+                stk_error (['Input argument ''value'' should be a cell' ...
+                    ' array.'], 'InvalidArgument');
+            elseif isequal (size (value), [1 d2])
+                x.colnames = value;
             else
-                stk_error (sprintf (['The value of ''colnames'' should be ' ...
-                    'a cell array with %d elements.'], d1), 'InvalidArgument');
+                x.colnames = reshape (value, 1, d2);
             end
             
             b = cellfun (@isempty, x.colnames);
@@ -82,7 +87,9 @@ switch icol
             if nb > 0
                 x.colnames(b) = repmat ({''}, 1, nb);
             end
-            if d2 > d1
+            if d2 < d1
+                x.colnames = [x.colnames repmat({''}, 1, d1 - d2)];
+            elseif d2 > d1
                 x.data = [x.data nan(size(x.data, 1), d2 - d1)];
             end
         end
