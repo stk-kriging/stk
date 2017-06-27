@@ -1,5 +1,11 @@
 2017-06-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_dataframe/subsasgn.m: Add (currently failing) unit tests
+
+	* arrays/@stk_dataframe/subsasgn.m: Add (currently failing) unit
+	tests for the insertion of row/column names on data frames that
+	have none.
+
 	@stk_model_gpposterior/stk_model_gpposterior.m: Check 'prior_model' arg
 
 	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Check that

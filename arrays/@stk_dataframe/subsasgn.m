@@ -422,3 +422,14 @@ end % function
 
 %!error  % too many elements
 %! x(1:5) = 3;
+
+%--- add just one row/column name ----------------------------------------------
+
+%!shared x
+%! x = stk_dataframe (randn (3, 3));
+
+%!test x.colnames{2} = 'y';
+%!assert (isequal (x.colnames, {'' 'y' ''}));
+
+%!test x.rownames{2} = 'b';
+%!assert (isequal (x.rownames, {''; 'b'; ''}));
