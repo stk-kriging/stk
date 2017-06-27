@@ -21,20 +21,20 @@
 
 2017-06-26  Remi Stroh  <remi.stroh@lne.fr>
 
-	stk_distrib_normal_crps.m: Remove random from test.
+	stk_distrib_normal_crps.m: Make unit test deterministic (ticket #77)
 
 	* misc\distrib\stk_distrib_normal_crps.m: Replace the random
-	selection of data with fixed data (ticket #77).
+	selection of data with fixed data.
 
-	stk_distrib_normal_crps.m: Change the final test.
+	stk_distrib_normal_crps.m: Change the final test (ticket #77)
 
 	* misc\distrib\stk_distrib_normal_crps.m: Modify the last test
 	to support compatibility with older versions of Matlab and
-	Octave (ticket #77).
+	Octave.
 
 2017-06-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
-	@stk_dataframe/set.m: Check colnames and rownames values more striclty
+	@stk_dataframe/set.m: Check colnames and rownames values more strictly
 
 	* arrays/@stk_dataframe/set.m: Reject colnames and rownames values
 	with an insufficient number of elements.
