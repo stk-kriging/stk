@@ -69,7 +69,7 @@ if nargin < 4,
 else
     if (isempty (y)) && (~ isempty (ry)) && (~ isequal (rx, ry))
         errmsg = 'ry should be empty or equal to rx';
-        stk_error (errmsg, 'IncorrectArgument');
+        stk_error (errmsg, 'InvalidArgument');
     end
 end
         

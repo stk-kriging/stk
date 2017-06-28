@@ -234,7 +234,7 @@ switch model.covariance_type
         
     otherwise
         errmsg = 'Unsupported covariance type.';
-        stk_error (errmsg, 'IncorrectArgument');
+        stk_error (errmsg, 'InvalidArgument');
 end
 
 end % function

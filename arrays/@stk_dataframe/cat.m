@@ -37,7 +37,7 @@ else
     
     if dim ~= 2
         errmsg = 'Dataframes can only be concatenated along dimension 1 or 2.';
-        stk_error(errmsg, 'IncorrectArgument');
+        stk_error(errmsg, 'InvalidArgument');
     else
         % concatenate along dimension 2, i.e., horizontally
         z = horzcat(varargin{:});

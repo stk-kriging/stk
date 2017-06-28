@@ -89,7 +89,7 @@ r = floor(log2(n - 1) - 1);
 n_ = 2^(r + 1) + 1;
 if (r <= 0) || (abs(n - n_) > eps),
     errmsg = 'n must be an integer of the form 2^(r+1) + 1 with r > 0';
-    stk_error(errmsg, 'IncorrectArgument');
+    stk_error(errmsg, 'InvalidArgument');
 end
 n = n_;
 
@@ -99,7 +99,7 @@ if ~extended
     if (nargin > 1) && ~isempty(d),
         if d ~= 2 * r,
             errmsg = 'Incorrect value of d, please read the documentation...';
-            stk_error(errmsg, 'IncorrectArgument');
+            stk_error(errmsg, 'InvalidArgument');
         end
     else
         d = 2 * r;
@@ -110,7 +110,7 @@ else
     if (nargin > 1) && ~isempty(d),
         if d ~= r + 1 + nchoosek(r, 2),
             errmsg = 'Incorrect value of d, please read the documentation...';
-            stk_error(errmsg, 'IncorrectArgument');
+            stk_error(errmsg, 'InvalidArgument');
         end
     else
         d = r + 1 + nchoosek(r, 2);
@@ -134,7 +134,7 @@ else
     permut = permut(:);
     if ~isequal(sort(permut), (1:q)'),
         errmsg = sprintf('permut should be a permutation of 1:%d.', q);
-        stk_error(errmsg, 'IncorrectArgument');
+        stk_error(errmsg, 'InvalidArgument');
     end
 end
 

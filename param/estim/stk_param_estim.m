@@ -95,7 +95,7 @@ if ~ isempty (lnv0)
     if isnan (lnv0) || isinf (lnv0)
         stk_error (['Incorrect value for input argumen lnv0. The starting ' ...
             'point for the estimation of lnv must be neither infinite nor ' ...
-            'NaN.'], 'IncorrectArgument');
+            'NaN.'], 'InvalidArgument');
     end
 else
     % Otherwise, noise variance estimation happens when lnv has NaNs
@@ -105,7 +105,7 @@ end
 
 if do_estim_lnv && (~ isscalar (lnv0))
     stk_error (['Estimating the variance of the noise is not possible ' ...
-        'in the hetereoscedastic case yet. Sorry.'], 'IncorrectArgument');
+        'in the hetereoscedastic case yet. Sorry.'], 'InvalidArgument');
 end
 
 % Default criterion: restricted likelihood (ReML method)

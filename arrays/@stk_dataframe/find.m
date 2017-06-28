@@ -38,7 +38,7 @@ if isa (x, 'stk_dataframe')
 else
     
     stk_error (['@stk_dataframe/find only supports stk_dataframe objects ' ...
-        'for the first input argument.'], 'IncorrectArgument');
+        'for the first input argument.'], 'InvalidArgument');
     
 end
 
