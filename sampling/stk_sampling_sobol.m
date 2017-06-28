@@ -91,7 +91,7 @@ end
 % Check that either dim or box is provided
 if (isempty (dim)) && (isempty (box))
     stk_error (['The dimension argument can be omitted if, and only if, a ' ...
-        'valid box argument is provided instead.'], 'IncorrectArgument');
+        'valid box argument is provided instead.'], 'InvalidArgument');
 end
 
 % Process box argument
@@ -104,7 +104,7 @@ else
         dim = size (box, 2);
     elseif dim ~= size (box, 2)
         stk_error (['The dimension argument must be compatible with' ...
-        'the box argument when both are provided.'], 'IncorrectArgument');
+        'the box argument when both are provided.'], 'InvalidArgument');
     end
 end
     

@@ -103,7 +103,7 @@ dim = size (x, 2);
 
 if dim ~= 2,
     errmsg = 'Only works for two-dimensional factor spaces.';
-    stk_error (errmsg, 'IncorrectArgument');
+    stk_error (errmsg, 'InvalidArgument');
 end
 
 end % function

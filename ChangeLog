@@ -1,5 +1,18 @@
 2017-06-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Change mnemonic 'IncorrectArgument' to 'InvalidArgument'
+
+	* arrays/@stk_dataframe/cat.m: Change mnemonic 'IncorrectArgument'
+	to 'InvalidArgument', since both of them were used interchangeably.
+	* arrays/@stk_dataframe/find.m: Idem.
+	* arrays/@stk_factorialdesign/private/plot_surfmeshcontour.m: Idem.
+	* misc/dist/stk_gpquadform.m: Idem.
+	* misc/pareto/stk_dominatedhv.m: Idem.
+	* param/estim/stk_param_estim.m: Idem.
+	* param/estim/stk_param_init.m: Idem.
+	* sampling/stk_sampling_olhs.m: Idem.
+	* sampling/stk_sampling_sobol.m: Idem.
+
 	@stk_dataframe/bsxfun.m: Remove annoying warnings
 
 	* arrays/@stk_dataframe/bsxfun.m: Take the column names (or row

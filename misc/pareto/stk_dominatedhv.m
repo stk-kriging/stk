@@ -100,7 +100,7 @@ else % y is a matrix
         assert (ndims (y) == 2);  %#ok<ISMAT> see CODING_GUDELINES
     catch
         stk_error (['y should either be a cell array or be (convertible ' ...
-            'to) a numeric matrix'], 'IncorrectArgument');
+            'to) a numeric matrix'], 'InvalidArgument');
     end
     y = wfg_preprocessing (y, y_ref);
 end
@@ -148,7 +148,7 @@ else  % Reference point provided
     % Check the size of y
     if (p > p_ref)
         stk_error (['The number of columns the data matrix should not be ' ...
-            'larger than the number of columns of y_ref'], 'IncorrectArgument');
+            'larger than the number of columns of y_ref'], 'InvalidArgument');
     end
     
     % WFG convention: maximization problem
