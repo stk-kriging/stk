@@ -72,12 +72,8 @@ if isempty (c1)
 elseif isempty (c2)
     colnames = c1;
 else
-    if (~ isequal (size (c1), size (c2))) || (any (~ strcmp (c1, c2)))
-        warning ('STK:bsxfun:IncompatibleColumnNames', ...
-            'Incompatible column names.');  colnames = {};
-    else
-        colnames = c1;
-    end
+    % Keep the columns names from the first dataframe (as in R)
+    colnames = c1;
 end
 
 if isempty (r1)
@@ -85,12 +81,8 @@ if isempty (r1)
 elseif isempty (r2)
     rownames = r1;
 else
-    if (~ isequal (size (r1), size (r2))) || (any (~ strcmp (r1, r2)))
-        warning ('STK:bsxfun:IncompatibleRowNames', ...
-            'Incompatible row names.');  rownames = {};
-    else
-        rownames = r1;
-    end
+    % Keep the row names from the first dataframe (as in R)
+    rownames = r1;
 end
 
 %--- Create output ------------------------------------------------------
@@ -98,18 +90,6 @@ end
 y = stk_dataframe (ydata, colnames, rownames);
 
 end % function
-
-
-% DESIGN NOTES
-%
-% Starting from STK 2.2.0, the result of bsxfun is ALWAYS an
-% stk_dataframe object, and has column names iff
-%  * either one of the two arguments doesn't have columns names
-%  * or the columns names of both arguments agree.
-%
-% With this design choice, we ensure that if the underlying operation F
-% is commutative on double-precision arrays, then it stays commutative
-% on stk_dataframe objects.
 
 
 %!shared x1, x2, data1, data2
@@ -127,4 +107,18 @@ end % function
 %!test
 %! z = bsxfun (@plus, data1, data2);
 %! assert (isa (z, 'stk_dataframe') && isequal (double (z), x1 + x2))
+
+%--- check the behaviour wrt column / row names --------------------------------
+
+%!shared x, y
+%! x = stk_dataframe (randn (2), {'x1', 'x2'}, {'a'; 'b'});
+%! y = stk_dataframe (randn (2), {'y1', 'y2'}, {'c'; 'd'});
+
+%!test z = x + y;
+%! assert (isequal (z.colnames, x.colnames));
+%! assert (isequal (z.rownames, x.rownames));
+
+%!test z = y + x;
+%! assert (isequal (z.colnames, y.colnames));
+%! assert (isequal (z.rownames, y.rownames));
 

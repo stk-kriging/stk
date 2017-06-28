@@ -1,3 +1,11 @@
+2017-06-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/bsxfun.m: Remove annoying warnings
+
+	* arrays/@stk_dataframe/bsxfun.m: Take the column names (or row
+	names) from the first argument in case of disagreement, as in R.
+	Remove the annoying warnings.
+
 2017-06-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/set.m: Backout revision 29c5b2515988
