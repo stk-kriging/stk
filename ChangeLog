@@ -1,3 +1,9 @@
+2017-06-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot_predvsobs.m: Lowercase labels
+
+	* misc/plot/stk_plot_predvsobs.m: Lowercase labels.
+
 2017-06-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Change mnemonic 'IncorrectArgument' to 'InvalidArgument'
