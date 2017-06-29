@@ -45,6 +45,8 @@ Changes in version 2.x.y
 
 * Miscellaneous
 
+   o new test case: 'truss3' (Koski, 1985; Das, 1997)
+
    o Many functions have been optimized for speed.
 
 

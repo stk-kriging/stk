@@ -1,5 +1,12 @@
 2017-06-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Add a new test case named 'truss3'
+
+	* examples/test_functions/stk_testcase_truss3.m: New function.
+	* examples/test_functions/stk_testfun_truss3_bb.m: New function.
+	* examples/test_functions/stk_testfun_truss3_vol.m: New function.
+	* admin/octpkg/INDEX: Add new functions to the INDEX.
+
 	stk_plot_predvsobs.m: Lowercase labels
 
 	* misc/plot/stk_plot_predvsobs.m: Lowercase labels.
