@@ -63,7 +63,7 @@ if ~ isempty (opts)
 end
 
 % Create labels
-h_labels = stk_labels (h_axes, 'Observations', 'Predictions');
+h_labels = stk_labels (h_axes, 'observations', 'predictions');
 h.xlabel = h_labels(1);
 h.ylabel = h_labels(2);
 
