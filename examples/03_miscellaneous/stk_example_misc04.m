@@ -54,11 +54,9 @@ BOX = repmat ([0; 1], 1, DIM);
 
 model1 = stk_model ('stk_materncov52_iso', DIM);
 model1.param = log ([1.0 1/0.5]);
-model1.response_name = 'y1';
 
 model2 = stk_model ('stk_materncov52_iso', DIM);
 model2.param = log ([1.0 1/2.0]);
-model2.response_name = 'y2';
 
 NB_SIMULATION_POINTS = 500;
 x_sim = stk_sampling_randunif (NB_SIMULATION_POINTS, DIM, BOX);
@@ -88,14 +86,14 @@ for i = 1:NB_SAMPLEPATHS,
     
     y_sim = [y1_sim(:, i) y2_sim(:, i)];
     y_nd = y_sim(stk_paretofind (y_sim), :);
-
+    
     % Add two extremities to the Pareto front
     y_nd_0 = [y_nd(1, 1) y2_max];
     y_nd_1 = [y1_max y_nd(end, 2)];
     y_nd = [y_nd_0; y_nd; y_nd_1];  %#ok<AGROW>
-        
+    
     stairs (y_nd(:, 1), y_nd(:, 2), 'Color', cm(i, :));
-    stk_labels (model1.response_name, model2.response_name);
+    stk_labels ('y1', 'y2');
     axis ([y1_axis y2_axis]);  hold on;
     
 end
@@ -122,12 +120,11 @@ y2_axis = [y2_min - 0.05 * (y2_max - y2_min), y2_max];
 % Test points
 n_test = 100 ^ 2;
 y_test = stk_sampling_regulargrid (n_test, 2, [y1_axis' y2_axis']);
-y_test.colnames = {model1.response_name, model2.response_name};
 
 isdom = zeros (size (y_test, 1), 1);
-for i = 1:NB_SAMPLEPATHS,    
+for i = 1:NB_SAMPLEPATHS
     y_sim = [y1_sim(:, i) y2_sim(:, i)];
-    isdom = isdom + stk_isdominated (y_test, y_sim);   
+    isdom = isdom + stk_isdominated (y_test, y_sim);
 end
 isdom = isdom / NB_SAMPLEPATHS;
 

@@ -1,5 +1,12 @@
 2017-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Remove all occurences of response_name
+
+	* core/stk_model.m: Do not mention response_name as an optional
+	field, since it isn't used anywhere in STK now.
+	* examples/03_miscellaneous/stk_example_misc04.m: No more
+	response_name.
+
 	Return a plain numerical array from stk_generate_samplepaths
 
 	* utils/stk_generate_samplepaths.m: Return a plain double

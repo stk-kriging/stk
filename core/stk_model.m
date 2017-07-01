@@ -21,7 +21,7 @@
 % which has mandatory fields and optional fields.
 %
 %   MANDATORY FIELDS: covariance_type, param, lm, lognoisevariance
-%   OPTIONAL FIELD: param_prior, noise_prior, response_name
+%   OPTIONAL FIELD: param_prior, noise_prior
 %
 % See also stk_materncov_iso, stk_materncov_aniso, ...
 
