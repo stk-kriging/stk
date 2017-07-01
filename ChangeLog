@@ -1,3 +1,14 @@
+2017-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Move important plotting functions to 'utils' directory
+
+	* misc/plot/stk_plot1d.m: Moved to 'utils' directory.
+	* misc/plot/stk_plot_histnormres.m: Idem.
+	* misc/plot/stk_plot_predvsobs.m: Idem.
+	* utils/stk_plot1d.m: Moved from 'misc/plot' directory.
+	* utils/stk_plot_histnormres.m: Idem.
+	* utils/stk_plot_predvsobs.m: Idem.
+
 2017-06-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Add a new test case named 'truss3'
