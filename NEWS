@@ -48,6 +48,12 @@ Changes in version 2.x.y
 
 * Miscellaneous
 
+   o stk_plot_probdom2d.m: New function to represent the uncertainty
+     about a 2D Pareto front.  This function is currently considered
+     experimental and should not be expected to produce a reliable
+     representation of the uncertainty for difficult or
+     high-dimensional optimization problems.
+   
    o new test case: 'truss3' (Koski, 1985; Das, 1997)
 
    o Many functions have been optimized for speed.
