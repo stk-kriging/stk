@@ -1,5 +1,10 @@
 2017-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_model_gpposterior/stk_model_gpposterior.m: Check xi
+
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Check the
+	number of columns of input argument xi.
+
 	Move important plotting functions to 'utils' directory
 
 	* misc/plot/stk_plot1d.m: Moved to 'utils' directory.
