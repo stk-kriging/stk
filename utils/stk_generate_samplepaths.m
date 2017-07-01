@@ -38,15 +38,11 @@
 %
 % NOTE: Output type
 %
-%    The output argument ZSIM will be an stk_dataframe if at least one of the
-%    following conditions is met:
+%    The output argument ZSIM is a plain (double precision) numerical array,
+%    even if XT is a data frame.  Row names can be added afterwards as follows:
 %
-%      a) the MODEL structure has a non-empty char field named 'response_name';
-%
-%      b) one of the input arguments XT, XI or ZI is an stk_dataframe object.
-%
-%    If both MODEL.response_name and ZI.colnames exist and are non-empty, they
-%    must be equal (if they are not, ZSIM.colnames is empty).
+%       ZSIM = stk_generate_samplepaths (MODEL, XT);
+%       ZSIM = stk_dataframe (ZSIM, {}, XT.rownames);
 %
 % EXAMPLES: see stk_example_kb05, stk_example_kb07
 %
@@ -54,7 +50,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -123,12 +119,34 @@ switch nargin
         
 end
 
-% Prepare extended dataset for conditioning, if required
-% (TODO: avoid duplicating observations points if xi is a subset of xt)
+
+%--- Process input arguments ---------------------------------------------------
+
+% Extract row names from xt
+xt = double (xt);
+
+% Check nb_paths argument
+nb_paths = double (nb_paths);
+if ~ isscalar (nb_paths) || ~ (nb_paths > 0)
+    stk_error ('nb_paths must be a positive scalar', 'Invalid argument');
+end
+
+
+%--- Extend xt with the observation points, if needed --------------------------
+
 if conditional
+    
+    % Keep only numerical data for xi, zi
+    xi = double (xi);
+    zi = double (zi);
+    
+    % Conditioning by kriging => we must simulate on the observation points too
     xt = [xi; xt];
     xi_ind = 1:(size (xi, 1));
+    
 end
+
+% FIXME: Avoid duplicating observations points if xi is a subset of xt
 
 
 %--- Generate unconditional sample paths --------------------------------------
@@ -161,7 +179,7 @@ if duplicates_detected,  zsim = zsim(j, :);  end
 %--- Generate conditional sample paths ----------------------------------------
 
 if conditional
-       
+    
     % Carry out the kriging prediction at points xt
     [ignd, lambda] = stk_predict (model, xi, zi, xt);  %#ok<ASGLU> CG#07
     
@@ -192,25 +210,6 @@ if conditional
     
     zsim(xi_ind, :) = [];
     
-end
-
-
-%--- stk_dataframe output ?  --------------------------------------------------
-
-try %#ok<TRYNC>
-    
-    response_name = model.response_name;
-    assert ((~ isempty (response_name)) && (ischar (response_name)));
-    
-    if nb_paths == 1
-        zsim_colnames = {response_name};
-    else
-        zsim_colnames = arrayfun ( ...
-            @(i)(sprintf ('%s_%d', response_name, i)), ...
-            1:nb_paths, 'UniformOutput', false);
-    end
-    
-    zsim = stk_dataframe (zsim, zsim_colnames);
 end
 
 end % function

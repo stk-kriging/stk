@@ -1,5 +1,13 @@
 2017-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Return a plain numerical array from stk_generate_samplepaths
+
+	* utils/stk_generate_samplepaths.m: Return a plain double
+	precision numerical array; no more data frames here.
+	* arrays/@stk_dataframe/stk_generate_samplepaths.m: Removed.
+	* examples/03_miscellaneous/stk_example_misc04.m: Updated.
+	* admin/octpkg/INDEX: Update the INDEX.
+
 	@stk_model_gpposterior/stk_model_gpposterior.m: Check xi
 
 	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Check the
