@@ -72,8 +72,6 @@ heteroscedastic noise.
 
 @item @code{noise_prior}
 
-@item @code{response_name}
-
 @item @code{lm}
 
 @end itemize
