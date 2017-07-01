@@ -85,24 +85,24 @@ function zsim = stk_generate_samplepaths (model, varargin)
 % Note: we know that none of the input argument is an stk_dataframe object
 %  (otherwise we would have ended up in @stk_dataframe/stk_generate_samplepaths)
 
-switch nargin,
+switch nargin
     
-    case {0, 1},
+    case {0, 1}
         stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
         
-    case 2,
+    case 2
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT)
         xt = varargin{1};
         nb_paths = 1;
         conditional = false;
         
-    case 3,
+    case 3
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT, NB_PATHS)
         xt = varargin{1};
         nb_paths = varargin{2};
         conditional = false;
         
-    case 4,
+    case 4
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT)
         xi = varargin{1};
         zi = varargin{2};
@@ -110,7 +110,7 @@ switch nargin,
         nb_paths = 1;
         conditional = true;
         
-    case 5,
+    case 5
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT, NB_PATHS)
         xi = varargin{1};
         zi = varargin{2};
@@ -125,7 +125,7 @@ end
 
 % Prepare extended dataset for conditioning, if required
 % (TODO: avoid duplicating observations points if xi is a subset of xt)
-if conditional,
+if conditional
     xt = [xi; xt];
     xi_ind = 1:(size (xi, 1));
 end
@@ -142,7 +142,7 @@ duplicates_detected = (size (xt_unique, 1) < size (xt, 1));
 % Compute the covariance matrix
 % (even if there no duplicates, it is not guaranteed
 %  that xt_unique and xt are equal)
-if duplicates_detected,
+if duplicates_detected
     K = stk_make_matcov (model, xt_unique, xt_unique);
 else
     K = stk_make_matcov (model, xt, xt);
@@ -202,7 +202,7 @@ try %#ok<TRYNC>
     response_name = model.response_name;
     assert ((~ isempty (response_name)) && (ischar (response_name)));
     
-    if nb_paths == 1,
+    if nb_paths == 1
         zsim_colnames = {response_name};
     else
         zsim_colnames = arrayfun ( ...
