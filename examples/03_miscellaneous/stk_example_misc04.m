@@ -4,22 +4,32 @@
 %
 %   We consider a bi-objective optimization problem, where the objective
 %   functions are modeled as a pair of independent stationary Gaussian
-%   processes with a Matern 5/2 isotropic covariance function.
+%   processes with a Matern 5/2 anisotropic covariance function.
 %
-%   Figure (a): we draw (unconditional) samplepaths of the Pareto front
-%   using (unconditional) samplepaths of the pair of objective functions.
+%   Figure (a): represent unconditional realizations of the Pareto front and
+%      and estimate of the probability of being non-dominated at each point
+%      of the objective space.
 %
-%   Figure (b): we represent a Monte-Carlo estimate of the probability of
-%   domination, computed on a grid.
+%   Figure (b): represent conditional realizations of the Pareto front and
+%      and estimate of the posteriorior probability of being non-dominated
+%      at each point of the objective space.
+%
+% EXPERIMENTAL FUNCTION WARNING
+%
+%    This script uses the stk_plot_probdom2d function, which is currently
+%    considered an experimental function.  Read the help for more information.
 %
 % REFERENCE
 %
 %  [1] Michael Binois, David Ginsbourger and Olivier Roustant,  Quantifying
 %      uncertainty on Pareto fronts with Gaussian Process conditional simu-
-%      lations,  Preprint hal-00904811,  2013.
+%      lations,  European J. of Operational Research, 2043(2):386-394, 2015.
+%
+% See also: stk_plot_probdom2d
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -47,93 +57,46 @@
 stk_disp_examplewelcome;
 
 
-%% MODEL
+%% Objective functions
 
-DIM = 3;
-BOX = repmat ([0; 1], 1, DIM);
+DIM = 2;
+BOX = [[0; 5] [0; 3]];
 
-model1 = stk_model ('stk_materncov52_iso', DIM);
-model1.param = log ([1.0 1/0.5]);
-
-model2 = stk_model ('stk_materncov52_iso', DIM);
-model2.param = log ([1.0 1/2.0]);
-
-NB_SIMULATION_POINTS = 500;
-x_sim = stk_sampling_randunif (NB_SIMULATION_POINTS, DIM, BOX);
+f1 = @(x) 4 * x(:,1) .^ 2 + 4 * x(:,2) .^ 2;
+f2 = @(x) (x(:,1) - 5) .^ 2 + (x(:,2) - 5) .^ 2;
 
 
-%% SIMULATE AND PLOT REALIZATIONS OF THE PARETO FRONT
+%% Data
 
-NB_SAMPLEPATHS = 20;
+n_obs = 10;
 
-% Simulate samplepaths
-y1_sim = stk_generate_samplepaths (model1, x_sim, NB_SAMPLEPATHS);
-y2_sim = stk_generate_samplepaths (model2, x_sim, NB_SAMPLEPATHS);
+x_obs = stk_sampling_maximinlhs (n_obs, [], BOX);
 
-% Empirical lower/upper bounds for each response
-y1_min = min (y1_sim(:));  y1_max = max (y1_sim(:));
-y2_min = min (y2_sim(:));  y2_max = max (y2_sim(:));
+z_obs = zeros (n_obs, 2);
+z_obs(:, 1) = f1 (x_obs);
+z_obs(:, 2) = f2 (x_obs);
 
-% Axis for a nice plot
-y1_axis = [y1_min - 0.05 * (y1_max - y1_min), y1_max];
-y2_axis = [y2_min - 0.05 * (y2_max - y2_min), y2_max];
 
-% Figure + colormap
+%% Stationary GP models
+
+model1 = stk_model ('stk_materncov52_aniso', DIM);
+model1.param = stk_param_estim (model1, x_obs, z_obs(:, 1));
+
+model2 = stk_model ('stk_materncov52_aniso', DIM);
+model2.param = stk_param_estim (model2, x_obs, z_obs(:, 1));
+
 stk_figure ('stk_example_misc04 (a)');
-cm = jet (NB_SAMPLEPATHS);
 
-for i = 1:NB_SAMPLEPATHS,
-    
-    y_sim = [y1_sim(:, i) y2_sim(:, i)];
-    y_nd = y_sim(stk_paretofind (y_sim), :);
-    
-    % Add two extremities to the Pareto front
-    y_nd_0 = [y_nd(1, 1) y2_max];
-    y_nd_1 = [y1_max y_nd(end, 2)];
-    y_nd = [y_nd_0; y_nd; y_nd_1];  %#ok<AGROW>
-    
-    stairs (y_nd(:, 1), y_nd(:, 2), 'Color', cm(i, :));
-    stk_labels ('y1', 'y2');
-    axis ([y1_axis y2_axis]);  hold on;
-    
-end
-
-stk_title ('Simulated Pareto fronts');
+stk_plot_probdom2d (model1, model2, BOX);
 
 
-%% SIMULATE DOMINATED REGION
+%% Conditionned GP models
 
-NB_SAMPLEPATHS = 100;
-
-% Simulate samplepaths
-y1_sim = stk_generate_samplepaths (model1, x_sim, NB_SAMPLEPATHS);
-y2_sim = stk_generate_samplepaths (model2, x_sim, NB_SAMPLEPATHS);
-
-% Empirical lower/upper bounds for each response
-y1_min = min (y1_sim(:));  y1_max = max (y1_sim(:));
-y2_min = min (y2_sim(:));  y2_max = max (y2_sim(:));
-
-% Axes for a nice plot
-y1_axis = [y1_min - 0.05 * (y1_max - y1_min), y1_max];
-y2_axis = [y2_min - 0.05 * (y2_max - y2_min), y2_max];
-
-% Test points
-n_test = 100 ^ 2;
-y_test = stk_sampling_regulargrid (n_test, 2, [y1_axis' y2_axis']);
-
-isdom = zeros (size (y_test, 1), 1);
-for i = 1:NB_SAMPLEPATHS
-    y_sim = [y1_sim(:, i) y2_sim(:, i)];
-    isdom = isdom + stk_isdominated (y_test, y_sim);
-end
-isdom = isdom / NB_SAMPLEPATHS;
-
-% Figure (b)
 stk_figure ('stk_example_misc04 (b)');
-colormap (hot);  pcolor (y_test, isdom);
-colorbar ('YTick', [0 .25 .5 .75 1], ...
-    'YTickLabel', {'0%', '25%', '50%', '75%', '100%'});
-stk_title ('Probability of domination');
+
+stk_plot_probdom2d ( ...
+    stk_model_gpposterior (model1, x_obs, z_obs(:, 1)), ...
+    stk_model_gpposterior (model2, x_obs, z_obs(:, 2)), BOX);
 
 
 %!test stk_example_misc04;  close all;

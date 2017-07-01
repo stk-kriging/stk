@@ -464,6 +464,7 @@ Miscellaneous: options, plots...
 #stk_plot_shadedci    [internal]
  stk_plot_histnormres
  stk_plot_predvsobs
+ stk_plot_probdom2d
  stk_runtests
  stk_version
 

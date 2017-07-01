@@ -1,5 +1,16 @@
 2017-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_plot_probdom2d.m: New function
+
+	* utils/stk_plot_probdom2d.m: New function to represent the
+	uncertainty about a 2D Pareto front.  This function is currently
+	considered experimental and should not be expected to produce a
+	reliable representation of the uncertainty for difficult or
+	high-dimensional optimization problems.
+	* examples/03_miscellaneous/stk_example_misc04.m: Update the
+	example to use the new function.
+	* admin/octpkg/INDEX: Add the new function to the INDEX.
+
 	@stk_model_gpposterior/stk_generate_samplepaths.m: Overload base
 
 	* core/@stk_model_gpposterior/stk_generate_samplepaths.m: New
