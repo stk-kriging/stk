@@ -35,12 +35,12 @@ if isa (model, 'stk_dataframe')
         'stk_dataframe object'], TypeMismatch');
 end
 
-switch nargin,
+switch nargin
     
-    case {0, 1},
+    case {0, 1}
         stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
         
-    case 2,
+    case 2
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT)
         xt = varargin{1};
         nb_paths = 1;
@@ -48,7 +48,7 @@ switch nargin,
         
         zsim = stk_generate_samplepaths (model, double (xt));
         
-    case 3,
+    case 3
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT, NB_PATHS)
         xt = varargin{1};
         nb_paths = varargin{2};
@@ -61,7 +61,7 @@ switch nargin,
         
         zsim = stk_generate_samplepaths (model, double (xt), nb_paths);
         
-    case 4,
+    case 4
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT)
         xi = varargin{1};
         zi = varargin{2};
@@ -72,7 +72,7 @@ switch nargin,
         zsim = stk_generate_samplepaths (model, double (xi), ...
             double (zi), double (xt));
         
-    case 5,
+    case 5
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT, NB_PATHS)
         xi = varargin{1};
         zi = varargin{2};
@@ -124,7 +124,7 @@ else % model.response name does not exist or is empty
         response_name = zi.colnames{1};
         assert (numel (zi.colnames) == 1);
         assert ((~ isempty (response_name)) && (ischar (response_name)));
-        if nb_paths == 1,
+        if nb_paths == 1
             colnames = {response_name};
         else
             colnames = arrayfun ( ...
