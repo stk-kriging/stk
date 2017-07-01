@@ -1,5 +1,10 @@
 2017-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_model_gpposterior/stk_generate_samplepaths.m: Overload base
+
+	* core/@stk_model_gpposterior/stk_generate_samplepaths.m: New
+	function, overload base STK function.
+
 	Remove all occurences of response_name
 
 	* core/stk_model.m: Do not mention response_name as an optional
