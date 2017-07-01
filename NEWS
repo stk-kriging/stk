@@ -43,6 +43,9 @@ Changes in version 2.x.y
    o Operations that normally return logical (lt, eq, and...) now
      return logical values for @stk_dataframe arguments.
 
+   o stk_generate_samplepaths now returns a plain numerical array
+     instead of a data frame.
+
 * Miscellaneous
 
    o new test case: 'truss3' (Koski, 1985; Das, 1997)

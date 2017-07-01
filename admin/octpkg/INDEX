@@ -303,7 +303,6 @@ Miscellaneous: Validation of models
 
 #@stk_dataframe/stk_boundingbox           [overload STK]
 #@stk_dataframe/stk_conditioning          [overload STK]
-#@stk_dataframe/stk_generate_samplepaths  [overload STK]
 #@stk_dataframe/stk_length                [overload STK]
 #@stk_dataframe/stk_normalize             [overload STK]
 #@stk_dataframe/stk_rescale               [overload STK]
