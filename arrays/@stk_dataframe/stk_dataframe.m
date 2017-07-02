@@ -169,6 +169,8 @@ else
         colnames = {};
     elseif iscell (colnames) && numel (colnames) == d
         colnames = reshape (colnames, 1, d);
+    elseif ischar (colnames) && d == 1
+        colnames = {colnames};
     else
         stk_error (['colnames should be a cell array with d elements, ' ...
             'where d is the number of columns of the dataframe'], 'IncorrectSize');
@@ -179,6 +181,8 @@ else
         rownames = {};
     elseif iscell (rownames) && numel (rownames) == n
         rownames = reshape (rownames, n, 1);
+    elseif ischar (rownames) && n == 1
+        rownames = {rownames};
     else
         stk_error (['rownames should be a cell array with n elements, ' ...
             'where n is the number of rows of the dataframe'], 'IncorrectSize');
@@ -313,3 +317,13 @@ end % function
 %! assert (isequal (size (x), [1 2]))
 %! assert (isequal (x.colnames, {'a' 'b'}));
 %! assert (isequal (x.rownames, {'toto'}));
+
+% Check that we tolerate char arguments for colnames/rownames
+
+%!test
+%! x = stk_dataframe (randn (10, 1), 'NOx');
+%! assert (isequal (x.colnames, {'NOx'}));
+
+%!test
+%! x = stk_dataframe (randn (1, 2), {}, 'aaa');
+%! assert (isequal (x.rownames, {'aaa}));
