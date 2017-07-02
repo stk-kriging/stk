@@ -326,4 +326,4 @@ end % function
 
 %!test
 %! x = stk_dataframe (randn (1, 2), {}, 'aaa');
-%! assert (isequal (x.rownames, {'aaa}));
+%! assert (isequal (x.rownames, {'aaa'}));
