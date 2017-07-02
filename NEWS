@@ -30,6 +30,11 @@ Changes in version 2.x.y
    o stk_distrib_normal_crps: New function to compare observations and
      predictive (Gaussian) density.
 
+   o Calling stk_predict_leaveoneout with no output arguments now
+     automatically create two cross-validation diagnostics in two
+     subplots: prediction VS observations (left panel) and normalized
+     residuals (right panel).
+
 * stk_dataframe and related classes
 
    o stk_hrect.m: Preserve column names for stk_dataframe inputs.

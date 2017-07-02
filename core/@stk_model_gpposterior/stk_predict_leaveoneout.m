@@ -66,7 +66,7 @@ end
 LOO_pred = stk_dataframe ([zp_mean zp_var], {'mean', 'var'});
 
 % Compute residuals ?
-if nargout > 1
+if nargout ~= 1
     
     % Compute "raw" residuals
     raw_res = M_post.output_data - zp_mean;
@@ -78,6 +78,17 @@ if nargout > 1
     % Pack results into a dataframe
     LOO_res = stk_dataframe ([raw_res norm_res], ...
         {'residuals', 'norm_res'});
+end
+
+% Create LOO cross-validation plots?
+if nargout == 0
+
+    % Plot predictions VS observations (left planel)...
+    stk_subplot (1, 2, 1);  stk_plot_predvsobs (M_post.output_data, LOO_pred);
+    
+    % ...and normalized residuals (right panel)
+    stk_subplot (1, 2, 2);   stk_plot_histnormres (LOO_res.norm_res);
+
 end
 
 end % function

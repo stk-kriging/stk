@@ -1,5 +1,17 @@
 2017-07-02  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_predict_leaveoneout.m: nargout == 0 => create plots
+
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Calling
+	stk_predict_leaveoneout with no output arguments now automatically
+	create two cross-validation diagnostics in two subplots:
+	prediction VS observations, left panel, and normalized +
+	residuals, right panel.
+	* core/stk_predict_leaveoneout.m: Do not change nargout when
+	calling overloaded method.
+	* examples/01_kriging_basics/stk_example_kb10.m: Advertise the new
+	syntax at the end of the script.
+
 	@stk_dataframe/stk_dataframe.m: Accept char colnames/rownames
 
 	* arrays/@stk_dataframe/stk_dataframe.m: Tolerate char arguments

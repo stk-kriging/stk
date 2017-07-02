@@ -61,8 +61,17 @@ end
 
 M_post = stk_model_gpposterior (M_prior, xi, zi);
 
-varargout = cell (1, max (1, nargout));
-[varargout{:}] = stk_predict_leaveoneout (M_post);
+if nargout == 0
+    
+    % Call stk_predict_leaveoneout with nargout == 0 to create the plots
+    stk_predict_leaveoneout (M_post);
+    
+else
+    
+    varargout = cell (1, nargout);
+    [varargout{:}] = stk_predict_leaveoneout (M_post);
+    
+end
 
 end % function
 
