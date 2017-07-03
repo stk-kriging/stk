@@ -1,3 +1,11 @@
+2017-07-03  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim.m: Do not use model.param as a starting point
+
+	* param/estim/stk_param_estim.m: Do not use model.param as a
+	starting point; if param0 is not provided, call stk_param_init.
+	Modify documentation accordingly; it wasn't up-to-date anyway.
+
 2017-07-02  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_model_gpposterior/stk_predict.m: Skip main loop when nt == 0
