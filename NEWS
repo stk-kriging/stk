@@ -1,4 +1,4 @@
-Changes in version 2.x.y
+Changes in version 2.5.0
 ========================
 
 * Sequential design of experiments
@@ -8,11 +8,8 @@ Changes in version 2.x.y
 
    o stk_example_doe05.m: Example script that demonstrates the use of
      the AKG and EQI sampling criteria for noisy optimization.
-     FIXME: Make it possible to use IAGO as well ?
 
    o WORK IN PROGRESS: Sampling criterion objects (EI, EQI...)
-
-   o WORK IN PROGRESS: IAGO
 
 * Design of experiments
 

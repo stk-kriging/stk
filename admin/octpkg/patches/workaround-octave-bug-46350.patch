@@ -13,26 +13,3 @@
 +% !test HOMOSCEDASTIC_NOISE = false;  stk_example_kb09;  close all;
 +
 +%!test stk_example_kb09;  close all;
---- a/iago/stk_optimscript.m
-+++ b/iago/stk_optimscript.m
-@@ -143,12 +143,15 @@
- %!test  CRIT = 'IAGO';  stk_optimscript;
- %!error CRIT = 'EI';    stk_optimscript;  % EI cannot be used in the noisy case
- 
--%!shared MAX_ITER, TESTCASE_NUM, CRIT
--%! MAX_ITER = 2;  TESTCASE_NUM = 2;  CRIT = 'IAGO';
-+% These tests are disabled in the Octave package release
-+% (see Octave bug #46350, https://savannah.gnu.org/bugs/?46350)
- 
--%!test  NOISY = false; stk_optimscript;
--%!test  NOISY = true; KNOWN_NOISE_VARIANCE = true;  stk_optimscript;
--%!xtest NOISY = true; KNOWN_NOISE_VARIANCE = false;  stk_optimscript;
-+% !shared MAX_ITER, TESTCASE_NUM, CRIT
-+% ! MAX_ITER = 2;  TESTCASE_NUM = 2;  CRIT = 'IAGO';
-+
-+% !test  NOISY = false; stk_optimscript;
-+% !test  NOISY = true; KNOWN_NOISE_VARIANCE = true;  stk_optimscript;
-+% !xtest NOISY = true; KNOWN_NOISE_VARIANCE = false;  stk_optimscript;
- 
- % The last test (currently) fails because, when repetitions are gathered,
- % we (currently) cannot rely on stk_param_estim to estimate lnv. An easy
