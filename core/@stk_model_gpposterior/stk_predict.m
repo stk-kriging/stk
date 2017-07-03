@@ -81,10 +81,14 @@ if isempty (block_size)
     block_size = ceil (MAX_RS_SIZE / (n_obs * SIZE_OF_DOUBLE));
 end
 
-% blocks of size approx. block_size
-nb_blocks = max (1, ceil (nt / block_size));
-
-block_size = ceil (nt / nb_blocks);
+if nt == 0
+    % skip main loop
+    nb_blocks = 0;
+else
+    % blocks of size approx. block_size
+    nb_blocks = max (1, ceil (nt / block_size));
+    block_size = ceil (nt / nb_blocks);
+end
 
 % The full lambda_mu matrix is only needed when nargout > 1
 if nargout > 1

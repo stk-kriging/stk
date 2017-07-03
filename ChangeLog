@@ -1,5 +1,10 @@
 2017-07-02  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_model_gpposterior/stk_predict.m: Skip main loop when nt == 0
+
+	* core/@stk_model_gpposterior/stk_predict.m: Skip main loop when
+	nt == 0.
+
 	stk_predict_leaveoneout.m: nargout == 0 => create plots
 
 	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Calling
