@@ -30,7 +30,7 @@
 
 function [zp, lambda, mu, K] = stk_predict (M_post, xt)
 
-if nargin > 2,
+if nargin > 2
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
@@ -66,7 +66,7 @@ zp_v = zeros (nt, 1);
 compute_prediction = ~ isempty (M_post.output_data);
 
 % compute the kriging prediction, or just the variances ?
-if compute_prediction,
+if compute_prediction
     zp_a = zeros (nt, 1);
 else
     zp_a = nan (nt, 1);
@@ -92,7 +92,7 @@ if nargout > 1
 end
 
 % The full RS matrix is only needed when nargout > 3
-if nargout > 3,
+if nargout > 3
     RS = zeros (size (lambda_mu));
 end
 
@@ -136,7 +136,7 @@ for block_num = 1:nb_blocks
     %                 - get (kreq, 'delta_var');
     
     b = (zp_v < 0);
-    if any (b),
+    if any (b)
         zp_v(b) = 0.0;
         warning('STK:stk_predict:NegativeVariancesSetToZero', sprintf ( ...
             ['Correcting numerical inaccuracies in kriging variance.\n' ...
@@ -157,7 +157,7 @@ if nargout > 2 % mu requested
     mu = lambda_mu((n_obs+1):end, :);
 end
 
-if nargout > 3,
+if nargout > 3
     K0 = stk_make_matcov (M_prior, xt, xt);
     deltaK = lambda_mu' * RS;
     K = K0 - 0.5 * (deltaK + deltaK');
