@@ -17,6 +17,10 @@
 % CALL: stk_plot1d (H_AXES, ...)
 %
 %    plots into existing axes with axis handle H_AXES.
+%
+% CALL: H_PLOT = stk_plot1d (...)
+%
+%   returns the handles of the drawing in a structure.
 
 % Copyright Notice
 %
@@ -51,7 +55,12 @@ function h_plot = stk_plot1d (varargin)
 % Extract axis handle (if it is present)
 [h_axes, varargin] = stk_plot_getaxesarg (varargin{:});
 
-h_plot = stk_plot1d_ (h_axes, varargin{:});
+if nargout < 1
+    stk_plot1d_ (h_axes, varargin{:});
+    % Do not display the handles if they are not asked (graphical option)
+else
+    h_plot = stk_plot1d_ (h_axes, varargin{:});
+end
 
 end % function
 
@@ -62,8 +71,14 @@ has_zt_arg   = (nargin > 4) && (~ isempty (zt));
 has_zp_arg   = (nargin > 5) && (~ isempty (zp));
 has_zsim_arg = (nargin > 6) && (~ isempty (zsim));
 
+% Sort the input xt
+[xt, idxt_sort] = sort(xt);
+
 % Shaded area representing pointwise confidence intervals
 if has_zp_arg
+    % Sort zp
+    zp = zp(idxt_sort, :);
+    
     h_ci = stk_plot_shadedci (h_axes, xt, zp);
     hold on;
 else
@@ -72,6 +87,9 @@ end
 
 % Plot sample paths
 if has_zsim_arg
+    % Sort zsim
+    zsim = zsim(idxt_sort, :);
+    
     if isa (zsim, 'stk_dataframe')
         % Prevents automatic creation of a legend by @stk_dataframe/plot
         zsim.colnames = {};
@@ -85,6 +103,9 @@ end
 
 % Ground truth
 if has_zt_arg
+    % Sort zt
+    zt = zt(idxt_sort, :);
+    
     h_truth = plot (h_axes, xt, zt, ...
         '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
     hold on;
@@ -94,6 +115,7 @@ end
 
 % Kriging predictor (posterior mean)
 if has_zp_arg
+    % zp has already been sorted
     h_pred = plot (h_axes, xt, zp.mean, ...
         'LineWidth', 3, 'Color', [0.95 0.25 0.3]);
     hold on;
