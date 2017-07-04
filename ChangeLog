@@ -1,3 +1,11 @@
+2017-07-04  Remi Stroh  <remi.Stroh@lne.fr>
+
+	arrays/@stk_dataframe: Overload 3 additional unitary test functions
+
+	* arrays/@stk_dataframe/isnan.m: New overloaded test function
+	* arrays/@stk_dataframe/isinf.m: Idem.
+	* arrays/@stk_dataframe/isfinite.m: Idem.
+
 2017-07-03  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_estim.m: Do not use model.param as a starting point
@@ -1277,7 +1285,7 @@
 
 2016-07-21  Rémi Stroh  <remi.stroh@lne.fr>
 
-	arrays/@stk_dataframe: Overload 25 additional unary base functions (sin, exp...)
+	arrays/@stk_dataframe: Overload 25 additional unitary base functions (sin, exp...)
 
 	* arrays/@stk_dataframe/acos.m: New overloaded base function
 	* arrays/@stk_dataframe/acosd.m: Idem.
