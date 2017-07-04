@@ -53,7 +53,12 @@ switch propname
                 'must be a scalar between 0 and 1.'], 'InvalidArgument');
         else
             crit.quantile_order = order;
-            crit.quantile_value = norminv (order);
+            crit.quantile_value = -sqrt(2) * erfcinv (2*order);
+            % = norminv (order)
+            % The function "norminv" is available only on the statistical
+            % toolbox.
+            % The function "erfcinv" is a special function available on
+            % Matlab by default.
         end
         
         if ~ isempty (crit.model)

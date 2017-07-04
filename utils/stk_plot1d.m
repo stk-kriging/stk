@@ -71,8 +71,10 @@ has_zt_arg   = (nargin > 4) && (~ isempty (zt));
 has_zp_arg   = (nargin > 5) && (~ isempty (zp));
 has_zsim_arg = (nargin > 6) && (~ isempty (zsim));
 
-% Sort the input xt
-[xt, idxt_sort] = sort(xt);
+if (nargin > 3) && (~ isempty (xt))
+    % Sort the input xt
+    [xt, idxt_sort] = sort(xt);
+end
 
 % Shaded area representing pointwise confidence intervals
 if has_zp_arg
