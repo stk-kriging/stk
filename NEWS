@@ -48,6 +48,9 @@ Changes in version 2.5.0
    o stk_generate_samplepaths now returns a plain numerical array
      instead of a data frame.
 
+   o New overloaded functions for stk_dataframe objects: isinf, isnan,
+   isfinite. 
+
 * Miscellaneous
 
    o stk_plot_probdom2d.m: New function to represent the uncertainty
