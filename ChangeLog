@@ -1,5 +1,17 @@
 2017-07-04  Remi Stroh  <remi.stroh@lne.fr>
 
+	@stk_sampcrit_eqi\set.m: Change "norminv" by "erfcinv" (ticket #78)
+
+	* sampling\@stk_sampcrit_eqi\set.m: Replace the use of "norminv"
+	function, available only with the statistical toolbox, by an
+	expression using "erfcinv", a special basis function.
+	
+	utils\stk_plot1d.m: Correct a bug
+
+	* utils\@stk_plot1d.m: Correct a bug, in the case where xt is empty.
+
+2017-07-04  Remi Stroh  <remi.stroh@lne.fr>
+
 	utils/@stk_plot1d: sort data before plotting
 
 	* utils/@stk_plot1d: sort xt as increasing order before plotting.
