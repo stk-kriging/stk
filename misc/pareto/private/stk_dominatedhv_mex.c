@@ -211,6 +211,9 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   else
     {
       mexErrMsgTxt ("Incorrect type for argin #1: cell or double expected.");
+      nb_fronts = 0;             /* avoids unitialized variable warning */
+      fronts = NULL;             /* idem */
+      must_free_fronts = false;  /* idem */
     }
 
   if (mxIsLogicalScalar (DO_DECOMPOSITION))
@@ -220,6 +223,7 @@ void mexFunction (int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[])
   else
     {
       mexErrMsgTxt ("Incorrect type for argin #2: logical scalar expected.");
+      do_decomposition = false;  /* avoids unitialized variable warning */
     }
 
   /*--- Prepare fronts for WFG -----------------------------------------------*/
