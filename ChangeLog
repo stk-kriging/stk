@@ -1,5 +1,9 @@
 2017-07-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_sampcrit_akg_eval.m: Fix unit tests
+
+	* sampling/stk_sampcrit_akg_eval.m: Fix unit tests.
+
 	stk_dominatedhv_mex.c: Avoid "uninitialized variable" warnings
 
 	* misc/pareto/private/stk_dominatedhv_mex.c: Avoid "uninitialized

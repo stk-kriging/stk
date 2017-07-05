@@ -200,7 +200,7 @@ end % for
 end % function
 
 
-%!shared zc_std, zc_std, zr_mean, zr_std, zcr_cov, AKG, nc
+%!shared zc_mean, zc_std, zr_mean, zr_std, zcr_cov, AKG, nc
 %! xi = [0; 0.2; 0.7; 0.9];
 %! zi = [1; 0.9; 0.6; 0.1] - 10;
 %! ni = 4;
@@ -224,10 +224,10 @@ end % function
 %!
 %! zcr_cov = K(ic, ir);
 
-%!test AKG = stk_sampcrit_akg_eval (zc_std, zc_std, zr_mean, zr_std, zcr_cov);
+%!test AKG = stk_sampcrit_akg_eval (zc_mean, zc_std, zr_mean, zr_std, zcr_cov);
 %!assert (isequal (size (AKG), [nc 1]))
 %!assert (all (AKG >= 0))
 
 % not enough or too many input args
-%!error AKG = stk_sampcrit_akg_eval (zc_std, zc_std, zr_mean, zr_std);
-%!error AKG = stk_sampcrit_akg_eval (zc_std, zc_std, zr_mean, zr_std, zcr_cov, 1.234);
+%!error AKG = stk_sampcrit_akg_eval (zc_mean, zc_std, zr_mean, zr_std);
+%!error AKG = stk_sampcrit_akg_eval (zc_mean, zc_std, zr_mean, zr_std, zcr_cov, 1.234);
