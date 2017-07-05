@@ -13,20 +13,16 @@
 	* sampling\@stk_sampcrit_eqi\set.m: Replace the use of "norminv"
 	function, available only with the statistical toolbox, by an
 	expression using "erfcinv", a special basis function.
-	
+
 	utils\stk_plot1d.m: Correct a bug
 
 	* utils\@stk_plot1d.m: Correct a bug, in the case where xt is empty.
-
-2017-07-04  Remi Stroh  <remi.stroh@lne.fr>
 
 	utils/@stk_plot1d: sort data before plotting
 
 	* utils/@stk_plot1d: sort xt as increasing order before plotting.
 	The output vectors zt, zp and zsim are similarly modified before
 	their drawings.
-
-2017-07-04  Remi Stroh  <remi.stroh@lne.fr>
 
 	arrays/@stk_dataframe: Overload 3 additional unitary test functions
 
