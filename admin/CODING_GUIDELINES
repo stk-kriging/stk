@@ -108,9 +108,15 @@ or, to specifically test for a numeric matrix:
 
 --- CG#09: Use erfcinv instead of norminv --------------------------------------
 
-To avoid a dependency on Matlab's stats toolbox, use erfcinv directly instead of
-norminv (according to Matlab's online doc, erfcinv has been introduced prior to
-R2006a):
+To avoid a dependency on Matlab's stats toolbox, try to use erfcinv
+directly when norminv fails.  This should cover all cases:
 
-    y = - sqrt (2) * erfcinv (2 * x);  % nomrinv (x)
+try
+    crit.quantile_value = norminv (order);
+    % works in Octave and in Matlab if the stats toolbox is available
+catch
+    % works in Matlab (introduced prior to 2006a according to the online doc)
+    crit.quantile_value = - sqrt (2) * erfcinv (2 * order);  % CG#09
+end
 
+Note that the second syntax only works in Octave 3.8 and later.

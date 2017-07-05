@@ -53,8 +53,11 @@ switch propname
                 'must be a scalar between 0 and 1.'], 'InvalidArgument');
         else
             crit.quantile_order = order;
-            crit.quantile_value = - sqrt (2) * erfcinv (2 * order);
-            % = norminv (order), see CG#09
+            try
+                crit.quantile_value = norminv (order);
+            catch
+                crit.quantile_value = - sqrt (2) * erfcinv (2 * order);  % CG#09
+            end
         end
         
         if ~ isempty (crit.model)
