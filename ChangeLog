@@ -1,5 +1,10 @@
 2017-07-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_dominatedhv_mex.c: Avoid "uninitialized variable" warnings
+
+	* misc/pareto/private/stk_dominatedhv_mex.c: Avoid "uninitialized
+	variable" compiler warnings.
+
 	CG#09: Use erfcinv when norminv fails (ticket #78)
 
 	* admin/CODING_GUIDELINES: Introduce new coding guideline, CG#09,
