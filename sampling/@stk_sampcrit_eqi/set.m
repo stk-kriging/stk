@@ -53,12 +53,8 @@ switch propname
                 'must be a scalar between 0 and 1.'], 'InvalidArgument');
         else
             crit.quantile_order = order;
-            crit.quantile_value = -sqrt(2) * erfcinv (2*order);
-            % = norminv (order)
-            % The function "norminv" is available only on the statistical
-            % toolbox.
-            % The function "erfcinv" is a special function available on
-            % Matlab by default.
+            crit.quantile_value = - sqrt (2) * erfcinv (2 * order);
+            % = norminv (order), see CG#09
         end
         
         if ~ isempty (crit.model)
@@ -80,10 +76,10 @@ switch propname
             point_batch_size = double (value);
             
             if (~ isscalar (point_batch_size)) || (point_batch_size <= 0) ...
-                    || (point_batch_size ~= floor (point_batch_size))                
+                    || (point_batch_size ~= floor (point_batch_size))
                 stk_error ('Incorrect ''point_batch_size'' value', ...
-                    'InvalidArgument');                
-            else            
+                    'InvalidArgument');
+            else
                 crit.point_batch_size = point_batch_size;
             end
             

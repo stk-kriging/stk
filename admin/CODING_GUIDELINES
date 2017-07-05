@@ -104,3 +104,13 @@ The simplest solution is to completely avoid ismatrix and use instead:
 or, to specifically test for a numeric matrix:
 
     is_matrix = (isnumeric (x)) && (ndims (x) == 2);
+
+
+--- CG#09: Use erfcinv instead of norminv --------------------------------------
+
+To avoid a dependency on Matlab's stats toolbox, use erfcinv directly instead of
+norminv (according to Matlab's online doc, erfcinv has been introduced prior to
+R2006a):
+
+    y = - sqrt (2) * erfcinv (2 * x);  % nomrinv (x)
+
