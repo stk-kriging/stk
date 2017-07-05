@@ -24,11 +24,12 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
 %              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%              Remi Stroh        <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -72,14 +73,13 @@ has_zp_arg   = (nargin > 5) && (~ isempty (zp));
 has_zsim_arg = (nargin > 6) && (~ isempty (zsim));
 
 if (nargin > 3) && (~ isempty (xt))
-    % Sort the input xt
-    [xt, idxt_sort] = sort(xt);
+    [xt, idx_sort] = sort (xt);
 end
 
 % Shaded area representing pointwise confidence intervals
 if has_zp_arg
     % Sort zp
-    zp = zp(idxt_sort, :);
+    zp = zp(idx_sort, :);
     
     h_ci = stk_plot_shadedci (h_axes, xt, zp);
     hold on;
@@ -90,7 +90,7 @@ end
 % Plot sample paths
 if has_zsim_arg
     % Sort zsim
-    zsim = zsim(idxt_sort, :);
+    zsim = zsim(idx_sort, :);
     
     if isa (zsim, 'stk_dataframe')
         % Prevents automatic creation of a legend by @stk_dataframe/plot
@@ -106,7 +106,7 @@ end
 % Ground truth
 if has_zt_arg
     % Sort zt
-    zt = zt(idxt_sort, :);
+    zt = zt(idx_sort, :);
     
     h_truth = plot (h_axes, xt, zt, ...
         '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);

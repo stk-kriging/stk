@@ -2,9 +2,9 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CENTRALESUPELEC
+%    Copyright (C) 2017 CentraleSupelec
 %
-%    Author: Remi Stroh  <remi.stroh@lne.fr>
+%    Author:  Remi Stroh  <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
