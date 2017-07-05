@@ -9,7 +9,8 @@ Changes in version 2.5.0
    o stk_example_doe05.m: Example script that demonstrates the use of
      the AKG and EQI sampling criteria for noisy optimization.
 
-   o WORK IN PROGRESS: Sampling criterion objects (EI, EQI...)
+   o New (experimental) classes to represent sampling criterion
+     objects: stk_sampcrit_ei, stk_sampcrit_akg, stk_sampcrit_eqi.
 
 * Design of experiments
 
@@ -42,14 +43,14 @@ Changes in version 2.5.0
    o @stk_dataframe/plotmatrix: Overload base function to enrich
      plotmatrix graphics with variable names when possible.
 
-   o Operations that normally return logical (lt, eq, and...) now
-     return logical values for @stk_dataframe arguments.
+   o Logical functions
+      o Operations that normally return logical (lt, eq, and...) now
+        return logical values for @stk_dataframe arguments.
+      o New overloaded functions for stk_dataframe objects: isinf,
+        isnan, isfinite.
 
    o stk_generate_samplepaths now returns a plain numerical array
      instead of a data frame.
-
-   o New overloaded functions for stk_dataframe objects: isinf, isnan,
-   isfinite. 
 
 * Miscellaneous
 
@@ -58,10 +59,12 @@ Changes in version 2.5.0
      experimental and should not be expected to produce a reliable
      representation of the uncertainty for difficult or
      high-dimensional optimization problems.
-   
-   o new test case: 'truss3' (Koski, 1985; Das, 1997)
+
+   o New test case: 'truss3' (Koski, 1985; Das, 1997).
 
    o Many functions have been optimized for speed.
+
+   o stk_plot1d.m: Handle the case where xt is not sorted.
 
 
 Changes in version 2.4.2
