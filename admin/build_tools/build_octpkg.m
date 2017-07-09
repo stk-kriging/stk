@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -27,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function build_octpkg (root_dir, release_dir)
+function build_octpkg (root_dir, release_dir, release_date)
 
 disp ('                          ');
 disp ('**************************');
@@ -76,7 +76,7 @@ try
     assert (system ('quilt push -a -q') == 0);
     
     % Process directories recursively
-    process_directory ('', unpacked_dir, ignore_list, sed_program);
+    process_directory ('', unpacked_dir, ignore_list, sed_program, release_date);
     
     % Cleanup: unapply patches
     assert (system ('quilt pop -a -q') == 0);
@@ -95,7 +95,7 @@ fprintf (fid, 'Name: STK\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Version: %s\n', version_number);
 fprintf (fid, '#\n');
-fprintf (fid, 'Date: %s\n', date);
+fprintf (fid, 'Date: %s\n', release_date(1:10));
 fprintf (fid, '#\n');
 fprintf (fid, 'Title: STK: A Small Toolbox for Kriging\n');
 fprintf (fid, '#\n');
@@ -135,7 +135,7 @@ end % function
 %#ok<*NOPRT,*SPWRN,*WNTAG,*SPERR,*AGROW>
 
 
-function process_directory (d, unpacked_dir, ignore_list, sed_program)
+function process_directory (d, unpacked_dir, ignore_list, sed_program, release_date)
 
 if ismember (d, ignore_list)
     return;
@@ -152,9 +152,9 @@ for i = 1:(length (dir_content))
     if ~ (isequal (s, '.') || isequal (s, '..'))
         s = fullfile (d, s);
         if dir_content(i).isdir
-            process_directory (s, unpacked_dir, ignore_list, sed_program);
+            process_directory (s, unpacked_dir, ignore_list, sed_program, release_date);
         else
-            process_file (s, unpacked_dir, sed_program);
+            process_file (s, unpacked_dir, sed_program, release_date);
         end
     end
 end
@@ -163,7 +163,7 @@ end % function
 
 
 
-function process_file (s, unpacked_dir, sed_program)
+function process_file (s, unpacked_dir, sed_program, release_date)
 
 % Regular expressions
 regex_ignore = '(~|\.(hgignore|hgtags|mexglx|mex|mexa64|mexw64|o|tmp|orig|info))$';
@@ -205,11 +205,11 @@ else
     elseif strcmp (s, 'README.md')
         
         % Put README.md in the documentation directory
-        copy_readme (s, fullfile (unpacked_dir, 'doc'));
+        copy_readme (s, fullfile (unpacked_dir, 'doc'), release_date);
         
     elseif strcmp (s, 'CITATION')
         
-        copy_citation (s, unpacked_dir);
+        copy_citation (s, unpacked_dir, release_date);
         
     else
         

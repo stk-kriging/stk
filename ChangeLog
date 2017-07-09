@@ -1,5 +1,13 @@
 2017-07-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Set release date based on hg date in the build process
+
+	* Makefile: Pass hg date to build_* functions.
+	* admin/build_tools/build_allpurpose.m: Use hg date.
+	* admin/build_tools/build_octpkg.m: Use hg date.
+	* admin/build_tools/copy_citation.m: Use hg date.
+	* admin/build_tools/copy_readme.m: Use hg date.
+
 	stk_sampcrit_akg_eval.m: Fix unit tests
 
 	* sampling/stk_sampcrit_akg_eval.m: Fix unit tests.
