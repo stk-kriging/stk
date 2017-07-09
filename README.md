@@ -164,7 +164,6 @@ probability of failure*.  Statistics and Computing, pages 1-21, 2011.
 DOI: 10.1007/s11222-011-9241-4.
 
 
-
 ## Ways to get help, report bugs, ask for new features...
 
    Use the "help" mailing-list:
