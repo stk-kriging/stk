@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -26,13 +27,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function copy_citation (src_filename, unpacked_dir)
+function copy_citation (src_filename, unpacked_dir, release_date)
 
 fid = fopen_ (src_filename, 'rt');
 s = char (fread (fid));
 fclose (fid);
 
-s = strrep (s, '$YEAR', datestr (now, 'yyyy'));
+s = strrep (s, '$YEAR', release_date(1:4));
 s = strrep (s, '$VERNUM', get_version_number_ ());
 
 fid = fopen_ (fullfile (unpacked_dir, 'CITATION'), 'wt');

@@ -84,7 +84,10 @@ HG_ID     := $(shell hg parent --template '{node}')
 HG_DATE   := $(shell hg log --rev $(HG_ID) --template {date\|isodate})
 
 # Update hg stamp file if the id has changed
-DUMMY := $(shell test "$(HG_OLD_ID)" != "$(HG_ID)" && mkdir -p $(BUILD_DIR) && echo "$(HG_ID)" > "$(HG_STAMP)")
+DUMMY := $(shell                        \
+  test "$(HG_OLD_ID)" != "$(HG_ID)"     \
+  && mkdir -p $(BUILD_DIR)              \
+  && echo "$(HG_ID)" > "$(HG_STAMP)")
 
 # Follows the recommendations of https://reproducible-builds.org/docs/archives
 define create_tarball
@@ -125,7 +128,7 @@ ${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_TIMESTAMP} | ${OF_DIR}
 	@echo
 
 ${OF_OCTPKG_TIMESTAMP}: ${HG_STAMP} | check_hg_clean ${OF_DIR}
-	@${OCT_EVAL} "cd admin; build octpkg ${OF_DIR}"
+	@${OCT_EVAL} "cd admin; build octpkg ${OF_DIR} ${HG_DATE}"
 	@touch ${OF_OCTPKG_TIMESTAMP}
 
 # Create tar.gz archive (this should create a tarball
@@ -163,7 +166,7 @@ ${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_TIMESTAMP} | ${SF_DIR}
 	$(call create_tarball,$(SF_ALLPURP_UNPACKED),$@)
 
 ${SF_ALLPURP_TIMESTAMP}: ${SF_OCTPKG_TARBALL} ${HG_STAMP} | check_hg_clean ${SF_DIR}
-	@${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL}"
+	@${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL} ${HG_DATE}"
 	@touch ${SF_ALLPURP_TIMESTAMP}
 
 ${SF_OCTPKG_TARBALL}: ${OF_OCTPKG_TARBALL} | ${SF_DIR}
