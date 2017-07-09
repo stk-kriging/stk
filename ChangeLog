@@ -1,4 +1,8 @@
-2017-07-05  Julien Bect  <julien.bect@centralesupelec.fr>
+2017-07-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_predict_leaveoneout.m: Update help text
+
+	* core/stk_predict_leaveoneout.m: Update help text.
 
 	Set release date based on hg date in the build process
 
@@ -7,6 +11,8 @@
 	* admin/build_tools/build_octpkg.m: Use hg date.
 	* admin/build_tools/copy_citation.m: Use hg date.
 	* admin/build_tools/copy_readme.m: Use hg date.
+
+2017-07-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_sampcrit_akg_eval.m: Fix unit tests
 
