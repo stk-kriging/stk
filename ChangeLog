@@ -1,5 +1,10 @@
 2017-07-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_example_misc04.m: Work-around for Octave bug #49267.
+
+	* examples/03_miscellaneous/stk_example_misc04.m: Work-around for
+	Octave bug #49267.
+
 	New octpkg patch to comment out unit tests in private functions
 
 	* admin/octpkg/patches/comment-out-unit-tests-in-private-functions.patch:
