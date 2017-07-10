@@ -73,8 +73,8 @@ n_obs = 10;
 x_obs = stk_sampling_maximinlhs (n_obs, [], BOX);
 
 z_obs = zeros (n_obs, 2);
-z_obs(:, 1) = f1 (x_obs);
-z_obs(:, 2) = f2 (x_obs);
+z_obs(:, 1) = f1 (x_obs.data);  % Remark: f1 (x_obs) should be OK...
+z_obs(:, 2) = f2 (x_obs.data);  %         ... but see Octave bug #49267 
 
 
 %% Stationary GP models
