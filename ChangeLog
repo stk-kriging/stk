@@ -1,3 +1,10 @@
+2017-07-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_benchmark_.m: New function to help benchmark computation times
+
+	* misc/benchmarks/stk_benchmark_.m: New function to help benchmark
+	computation times.
+
 2017-07-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_example_misc04.m: Work-around for Octave bug #49267.
