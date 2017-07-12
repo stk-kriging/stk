@@ -1,5 +1,10 @@
 2017-07-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_benchmark_predict.m: New function to benchmark stk_predict
+
+	* misc/benchmarks/stk_benchmark_predict.m: New function to
+	benchmark stk_predict.
+
 	stk_benchmark_.m: New function to help benchmark computation times
 
 	* misc/benchmarks/stk_benchmark_.m: New function to help benchmark
