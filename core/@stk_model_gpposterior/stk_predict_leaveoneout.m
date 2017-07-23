@@ -2,10 +2,12 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017 LNE
 %
 %    Author:  Julien Bect      <julien.bect@centralesupelec.fr>
 %             Stefano Duhamel  <stefano.duhamel@supelec.fr>
+%             Remi Stroh       <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -33,50 +35,46 @@ if nargin > 1,
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% Heteroscedatic noise ?
-heteroscedastic = ~ isscalar (M_post.prior_model.lognoisevariance);
-
-n = size (M_post.input_data, 1);
-zp_mean = zeros (n, 1);
-zp_var = zeros (n, 1);
-
 prior_model = M_post.prior_model;
 
-for i = 1:n  % FIXME: use "virtual cross-validation" formulae
-    
-    xx = M_post.input_data;   xx(i, :) = [];  xt = M_post.input_data(i, :);
-    zz = M_post.output_data;  zz(i, :) = [];
-    
-    % In the heteroscedastic case, the vector of log-variances for the
-    % noise is stored in prior_model.lognoisevariance.  This vector must be
-    % modified too, when performing cross-validation.
-    if heteroscedastic
-        prior_model = M_post.prior_model;
-        prior_model.lognoisevariance(i) = [];
-    end
-    
-    zp = stk_predict (prior_model, xx, zz, xt);
-    
-    zp_mean(i) = zp.mean;
-    zp_var(i) = zp.var;
-    
-end
+% Compute the covariance matrix, and the trend matrix
+[K, P] = stk_make_matcov(prior_model, M_post.input_data);
+% Remark: the covariance K takes into account of the noise
+% (covmat_response)
+simple_kriging = (size (P, 2) == 0);
 
-% Prepare outputs
-LOO_pred = stk_dataframe ([zp_mean zp_var], {'mean', 'var'});
+% If simple kriging, just compute the inverse covariance matrix
+if simple_kriging
+    R = inv(K);
+else
+    % Use a more complex formula ("virtual cross-validation")
+    P_K = P'/K;
+    R = K\(eye(size(K)) - P*((P_K*P)\P_K));
+    % I = inv(K);
+    % R = I - I*P*inv(P'*I*P)*P'*I;
+end
+dR = diag(R);   % The diagonal of the LOO matrix
+
+% Mean
+zi = M_post.output_data;
+raw_res = R*zi./dR;     % Compute "raw" residuals
+zp_mean = zi - raw_res; % LOO-prediction
+
+% Error
+noisevariance = exp (M_post.prior_model.lognoisevariance);
+zp_var = 1./dR - noisevariance; % Do not forget the noise!
+
+LOO_pred = stk_dataframe([zp_mean, zp_var], {'mean', 'var'});
 
 % Compute residuals ?
 if nargout ~= 1
     
-    % Compute "raw" residuals
-    raw_res = M_post.output_data - zp_mean;
-    
     % Compute normalized residual
-    noisevariance = exp (M_post.prior_model.lognoisevariance);
-    norm_res = raw_res ./ (sqrt (noisevariance + zp_var));
+    % norm_res = (zi - zp_mean) ./ (sqrt (noisevariance + zp_var));
+    norm_res = sqrt(dR).*raw_res;
     
     % Pack results into a dataframe
-    LOO_res = stk_dataframe ([raw_res norm_res], ...
+    LOO_res = stk_dataframe ([raw_res, norm_res], ...
         {'residuals', 'norm_res'});
 end
 
