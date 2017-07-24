@@ -1,5 +1,11 @@
 2017-07-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Benchmark virtual LOO-CV speedup
+
+	* misc/benchmarks/stk_benchmark_loocv.m: New benchmark script to
+	evaluate to speedup brought by the implementation of virtual LOO
+	cross validation.
+
 	Move some LOO-CV unit tests
 
 	* core/stk_predict_leaveoneout.m: Move unit tests for correctness
