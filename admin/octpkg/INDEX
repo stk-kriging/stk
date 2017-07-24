@@ -1,5 +1,5 @@
 stk >> STK, a Small Toolbox for Kriging
- 
+
 ## Copyright Notice
 ##
 ##    Copyright (C) 2015-2017 CentraleSupelec
@@ -58,7 +58,7 @@ Core STK functions
  stk_make_matcov
  stk_predict
  stk_predict_leaveoneout
- stk_pmisclass 
+ stk_pmisclass
  stk_conditioning
  stk_generate_samplepaths
  stk_isnoisy
@@ -84,19 +84,20 @@ Posterior model objects
  @stk_model_gpposterior/get_input_data
  @stk_model_gpposterior/get_output_data
  @stk_model_gpposterior/get_prior_model
-#@stk_model_gpposterior/stk_isnoisy               [overload STK]
-#@stk_model_gpposterior/stk_generate_samplepaths  [overload STK]
-#@stk_model_gpposterior/stk_make_kreq             [internal]
-#@stk_model_gpposterior/disp                      [overload base]
-#@stk_model_gpposterior/display                   [overload base]
-#@stk_model_gpposterior/fieldnames                [overload base]
-#@stk_model_gpposterior/get                       [overload base]
-#@stk_model_gpposterior/isequal                   [overload base]
-#@stk_model_gpposterior/set                       [overload base]
-#@stk_model_gpposterior/subsasgn                  [overload base]
-#@stk_model_gpposterior/subsref                   [overload base]
-#@stk_model_gpposterior/horzcat                   [overload base]
-#@stk_model_gpposterior/vertcat                   [overload base]
+#@stk_model_gpposterior/stk_isnoisy                     [overload STK]
+#@stk_model_gpposterior/stk_generate_samplepaths        [overload STK]
+#@stk_model_gpposterior/stk_make_kreq                   [internal]
+#@stk_model_gpposterior/stk_predict_leaveoneout_direct  [internal]
+#@stk_model_gpposterior/disp                            [overload base]
+#@stk_model_gpposterior/display                         [overload base]
+#@stk_model_gpposterior/fieldnames                      [overload base]
+#@stk_model_gpposterior/get                             [overload base]
+#@stk_model_gpposterior/isequal                         [overload base]
+#@stk_model_gpposterior/set                             [overload base]
+#@stk_model_gpposterior/subsasgn                        [overload base]
+#@stk_model_gpposterior/subsref                         [overload base]
+#@stk_model_gpposterior/horzcat                         [overload base]
+#@stk_model_gpposterior/vertcat                         [overload base]
 
 ## Prior models are currently represented by structures
 #@struct/get_input_data                        [internal]
@@ -127,7 +128,7 @@ Model components: Covariance functions
  stk_materncov_aniso
  stk_materncov_iso
  stk_sphcov_aniso
- stk_sphcov_iso 
+ stk_sphcov_iso
  stk_noisecov
  stk_discretecov
 
@@ -193,7 +194,7 @@ Design of experiments (sequential): criteria
  stk_sampcrit_ei_eval
  stk_sampcrit_ehvi_eval
  stk_sampcrit_emmi_eval
- stk_sampcrit_akg_eval 
+ stk_sampcrit_akg_eval
  stk_distrib_normal_ei
  stk_distrib_student_ei
 
