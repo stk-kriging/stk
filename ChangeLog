@@ -1,5 +1,12 @@
 2017-07-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Move some LOO-CV unit tests
+
+	* core/stk_predict_leaveoneout.m: Move unit tests for correctness
+	of virtual LOO-CV formulas to
+	@stk_model_gpposterior/stk_predict_leaveoneout.m.
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Here.
+
 	Keep a copy of the original "direct" implementation of LOO-CV.
 
 	* core/@stk_model_gpposterior/stk_predict_leaveoneout_direct.m:
