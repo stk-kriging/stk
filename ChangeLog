@@ -3,9 +3,9 @@
 	stk_predict_leaveoneout.m: Use virtual Leave-One-Out formula (ticket #35)
 
 	* core\@stk_model_gpposterior\stk_predict_leaveoneout.m: Replace
-	the naive expression of the cross-validation, by the virtual 
+	the naive expression of the cross-validation, by the virtual
 	leave-one-out formula.
-	* core\stk_predict_leaveoneout.m: add a test to check virtual
+	* core\stk_predict_leaveoneout.m: Add a test to check virtual
 	LOO formula.
 
 2017-07-12  Julien Bect  <julien.bect@centralesupelec.fr>
