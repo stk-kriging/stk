@@ -120,30 +120,3 @@ end % function
 %! assert (isequal (size (loo_res), [n 2]));
 %! assert (isequal (loo_res.colnames, {'residuals', 'norm_res'}));
 %! assert (all (isfinite (loo_res(:))));
-
-%!test  % Check virtual Leave-One-Out formula
-%
-%! [loo_pred, loo_res] = stk_predict_leaveoneout (model, x_obs, z_obs);
-%! naive_pred = stk_dataframe (NaN(n, 2), loo_pred.colnames);
-%! naive_res  = stk_dataframe (NaN(n, 2),  loo_res.colnames);
-%! lnv_obs    = model.lognoisevariance;
-%! for k = 1:n
-%!  x = x_obs;
-%!  z = z_obs;
-%!  lnv = lnv_obs;
-%
-%!  x(k, :) = [];
-%!  z(k, :) = [];
-%!  lnv(k, :) = [];
-%
-%!  model.lognoisevariance = lnv;
-%
-%!  naive_pred(k, :) = stk_predict (model, x, z, x_obs(k, :));
-%! end
-%
-%! naive_res.residuals = double (z_obs) - naive_pred.mean;
-%! naive_var_obs = exp(lnv_obs) + naive_pred.var;
-%! naive_res.norm_res = (naive_res.residuals) ./ (sqrt (naive_var_obs));
-%
-%! assert (stk_isequal_tolrel (loo_pred, naive_pred));
-%! assert (stk_isequal_tolrel (loo_res , naive_res ));

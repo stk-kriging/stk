@@ -88,3 +88,39 @@ if nargout == 0
 end
 
 end % function
+
+
+%!test  % Check virtual Leave-One-Out formula
+%!
+%! n = 20;  d = 1;
+%! x_obs = stk_sampling_regulargrid (n, d, [0; 2*pi]);
+%! z_obs = stk_feval (@sin, x_obs);
+%! 
+%! lm_list = {stk_lm_null, stk_lm_constant, stk_lm_affine};
+%! 
+%! for j = 0:2
+%!     for k = 1:(length (lm_list))
+%!         
+%!         model = stk_model ('stk_materncov32_iso', d);
+%!         model.lm = lm_list{k};
+%!         model.param = log ([1; 5]);
+%!         
+%!         switch j  % test various scenarios for lognoisevariance
+%!             case 0
+%!                 model.lognoisevariance = -inf;
+%!             case 1
+%!                 model.lognoisevariance = 0;
+%!             case 2
+%!                 model.lognoisevariance = (1 + rand (n, 1)) * 1e-3;
+%!         end
+%!         
+%!         M_post = stk_model_gpposterior (model, x_obs, z_obs);
+%!         
+%!         [loo_pred, loo_res] = stk_predict_leaveoneout (M_post);
+%!         [direct_pred, direct_res] = stk_predict_leaveoneout_direct (M_post);
+%!         
+%!         assert (stk_isequal_tolrel (loo_pred, direct_pred));
+%!         assert (stk_isequal_tolrel (loo_res, direct_res));
+%!         
+%!     end
+%! end
