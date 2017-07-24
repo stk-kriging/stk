@@ -33,6 +33,8 @@ Changes in version 2.5.0
      subplots: prediction VS observations (left panel) and normalized
      residuals (right panel).
 
+   o stk_predict_leaveoneout uses now the virtual LOO formula.
+
 * stk_dataframe and related classes
 
    o stk_hrect.m: Preserve column names for stk_dataframe inputs.
