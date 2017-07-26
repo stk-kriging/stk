@@ -51,7 +51,7 @@ end
 
 %---- Choose column and row names ---------------------------------------
 
-if isa (x1, 'stk_dataframe'),
+if isa (x1, 'stk_dataframe')
     c1 = x1.colnames;
     r1 = x1.rownames;
 else
@@ -59,7 +59,7 @@ else
     r1 = {};
 end
 
-if isa (x2, 'stk_dataframe'),
+if isa (x2, 'stk_dataframe')
     c2 = x2.colnames;
     r2 = x2.rownames;
 else
