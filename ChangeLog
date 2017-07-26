@@ -1,3 +1,9 @@
+2017-07-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/bsxfun.m: Fix colnames/rownames selection
+
+	* arrays/@stk_dataframe/bsxfun.m: Fix colnames/rownames selection.
+
 2017-07-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_model_gpposterior/stk_predict_leaveoneout.m: Ensure var >= 0
