@@ -67,22 +67,24 @@ else
     r2 = {};
 end
 
-if isempty (c1)
-    colnames = c2;
-elseif isempty (c2)
-    colnames = c1;
-else
+[nr, nc] = size (ydata);
+
+if length (c1) == nc
     % Keep the columns names from the first dataframe (as in R)
     colnames = c1;
+elseif length (c2) == nc
+    colnames = c2;
+else
+    colnames = {};
 end
 
-if isempty (r1)
+if length (r1) == nr
+    % Keep the columns names from the first dataframe (as in R)
+    rownames = r1;
+elseif length (r2) == nr
     rownames = r2;
-elseif isempty (r2)
-    rownames = r1;
 else
-    % Keep the row names from the first dataframe (as in R)
-    rownames = r1;
+    rownames = {};
 end
 
 %--- Create output ------------------------------------------------------
