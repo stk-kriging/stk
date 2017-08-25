@@ -1,3 +1,10 @@
+2017-08-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Adapt html doc generation to changes in generate_html
+
+	* admin/build_tools/get_allpurpose_html_options.m: Adapt html doc
+	generation to changes in generate_html.
+
 2017-07-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/bsxfun.m: Fix colnames/rownames selection

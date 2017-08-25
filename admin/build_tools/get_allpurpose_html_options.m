@@ -46,7 +46,7 @@ options.include_demos = true;
 
 %--- Header --------------------------------------------------------------------
 
-options.header = "\
+options.header = @ (opts, pars, vpars) sprintf ("\
 <!DOCTYPE\
  html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n\
  \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\n\
@@ -61,7 +61,7 @@ options.header = "\
  content=\"text/html; charset=utf-8\" />\n\
 \n\
 <meta name=\"date\"\n\
- content=\"%date\"/>\n\
+ content=\"%s\"/>\n\
 \n\
 <meta name=\"author\"\n\
  content=\"Julien Bect and Emmanuel Vazquez\" />\n\
@@ -71,13 +71,12 @@ options.header = "\
  a Small (Matlab/Octave) Toolbox for Kriging.\" />\n\
 \n\
 <meta name=\"keywords\" lang=\"en\"\n\
- content=\"kriging, Gaussian processes, Matérn covariance, \
+ content=\"kriging, Gaussian processes, Matérn covariance,\
  design and analysis of computer experiments\" />\n\
 \n\
 <title>STK: a Small (Matlab/Octave) Toolbox for Kriging</title>\n\
 \n\
-<link rel=\"stylesheet\" type=\"text/css\" href=\"%pkgrootcss/%css\" />\n\
-<link rel=\"shortcut icon\" href=\"%rootfavicon.ico\" />\n\
+<link rel=\"stylesheet\" type=\"text/css\" href=\"%scss/%s\" />\n\
 \n\
 </head>\n\
 \n\
@@ -86,12 +85,12 @@ options.header = "\
 <div class=\"header\">\n\
   <table><tr>\n\
     <td id=\"logo\">\n\
-      <a class=\"linkToIndex\" href =\"%pkgrootindex.html\">\n\
-        <img src=\"%pkgrootimages/stk_logo.png\" alt=\"Octave logo\" />\n\
+      <a class=\"linkToIndex\" href =\"%sindex.html\">\n\
+        <img src=\"%simages/stk_logo.png\" alt=\"Octave logo\" />\n\
       </a>\n\
     </td>\n\
     <td id=\"title\">\n\
-      <a class=\"linkToIndex\" href =\"%pkgrootindex.html\">\n\
+      <a class=\"linkToIndex\" href =\"%sindex.html\">\n\
         <b>STK</b>: a <b>S</b>mall (Matlab/Octave)\n\
         <b>T</b>oolbox for <b>K</b>riging\n\
       </a>\n\
@@ -99,9 +98,8 @@ options.header = "\
   </tr></table>\n\
 </div>\n\
 \n\
-<div id=\"doccontent\">\n";
-
-options.header = strrep (options.header, "%date", date ());
+<div id=\"doccontent\">\n", date (), vpars.pkgroot, opts.css, ...
+vpars.root, vpars.pkgroot, vpars.pkgroot, vpars.pkgroot);
 
 %%--- Footer -------------------------------------------------------------------
 
