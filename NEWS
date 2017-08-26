@@ -51,6 +51,9 @@ Changes in version 2.5.0
       o New overloaded functions for stk_dataframe objects: isinf,
         isnan, isfinite.
 
+   o @stk_dataframe/ismember: No longer assumes 'rows' for consistency
+     with the base ismember function.
+
    o stk_generate_samplepaths now returns a plain numerical array
      instead of a data frame.
 
