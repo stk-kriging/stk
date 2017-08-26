@@ -31,21 +31,17 @@ function varargout = ismember (A, B, varargin)
 
 if ~ all (cellfun (@ischar, varargin))
     stk_error ('Invalid flag (should be a string).', 'InvalidArgument');
-else
-    % At least of of the arguments (A or B) is an stk_dataframe,
-    % therefore ismember should work on rows
-    flags = unique ([{'rows'} varargin{:}]);
 end
 
 varargout = cell (1, max (nargout, 1));
 
 if isa (A, 'stk_dataframe')
     
-    [varargout{:}] = ismember (A.data, B, flags{:});
+    [varargout{:}] = ismember (A.data, B, varargin{:});
     
-else % isa (B, 'stk_dataframe')
+else  % B is an stk_dataframe object
     
-    [varargout{:}] = ismember (A, B.data, flags{:});
+    [varargout{:}] = ismember (A, B.data, varargin{:});
     
 end
 
@@ -60,15 +56,15 @@ end % function
 %! u2 = - ones (1, 4);
 %! x2 = stk_dataframe (u2);
 
-%!assert (ismember (u1, x))
-%!assert (ismember (x1, u))
-%!assert (ismember (x1, x))
+%!assert (ismember (u1, x, 'rows'))
+%!assert (ismember (x1, u, 'rows'))
+%!assert (ismember (x1, x, 'rows'))
 
-%!assert (~ ismember (u2, x))
-%!assert (~ ismember (x2, u))
-%!assert (~ ismember (x2, x))
+%!assert (~ ismember (u2, x, 'rows'))
+%!assert (~ ismember (x2, u, 'rows'))
+%!assert (~ ismember (x2, x, 'rows'))
 
 %!test
-%! [b, idx] = ismember ([x2; x1; x1], x);
+%! [b, idx] = ismember ([x2; x1; x1], x, 'rows');
 %! assert (isequal (b, [false; true; true]));
 %! assert (isequal (idx, [0; 1; 1]))

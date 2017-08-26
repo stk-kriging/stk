@@ -1,5 +1,11 @@
 2017-08-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_dataframe/ismember.m: Do not assume 'rows' (ticket #50)
+
+	* arrays/@stk_dataframe/ismember.m: Do not assume 'rows', in order
+	to have a behaviour that is consistent with that of the base
+	function on numerical matrices.
+
 	Remove isoctave function
 
 	* misc/mole/isoctave/isoctave.m: Deleted.
