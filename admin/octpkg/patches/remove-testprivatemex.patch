@@ -21,14 +21,14 @@
  
 -% Check that MEX-files located in private folders are properly detected (note:
 -% there are no MEX-files in private folders if STK is used as an Octave package)
--if isoctave
+-if exist ('OCTAVE_VERSION', 'builtin') == 5  % Octave
 -    stk_init__test_private_mex ();
 -end
 -
  % Set default options
  stk_options_set ();
  
-@@ -556,40 +544,6 @@
+@@ -554,40 +542,6 @@
  
  end % function
  

@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -33,7 +34,8 @@ eng = stk_parallel_engine_get ();
 if strcmp (class (eng), 'stk_parallel_engine_none')  %#ok<STISA>
     
     % use Mathworks' PCT if available
-    if (~ isoctave) && (exist ('matlabpool','file'))
+    if (exist ('OCTAVE_VERSION', 'builtin') ~= 5) ...  % no Octave
+            && (exist ('matlabpool', 'file'))
         eng = stk_parallel_engine_parfor ();
         stk_parallel_engine_set (eng);
     end

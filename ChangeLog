@@ -1,5 +1,22 @@
 2017-08-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Remove isoctave function
+
+	* misc/mole/isoctave/isoctave.m: Deleted.
+	* stk_init.m: Use exist directly. Remove a few lines related to
+	the isoctave function.
+	* misc/mole/graphics_toolkit/graphics_toolkit.m: Use exist
+	directly.
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Use exist
+	directly.
+	* misc/options/stk_options_set.m: Use exist directly.
+	* misc/parallel/stk_parallel_start.m: Use exist directly.
+	* misc/test/stk_test.m: Use exist directly.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+	* admin/octpkg/patches/stk-init-rmpath-cleanup.patch: Refresh patch.
+	* admin/octpkg/patches/use-native-test-function.patch: Refresh patch.
+
 	CG#10: Disable TeX interpreter for variable names
 
 	* admin/CODING_GUIDELINES: Introduce new coding guideline, CG#10,
