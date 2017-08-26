@@ -120,3 +120,13 @@ catch
 end
 
 Note that the second syntax only works in Octave 3.8 and later.
+
+
+--- CG#10: Disable TeX interpreter for variables names -------------------------
+
+Variables names (typically, column names in @stk_dataframe objects) often
+contain underscores.  It is thus preferable to disable the TeX interpreter
+when calling stk_xlabel / stk_ylabel / stk_zlabel to display such variable
+names, as follows:
+
+stk_xlabel (h_axis, xlab, 'interpreter', 'none');

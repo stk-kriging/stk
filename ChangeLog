@@ -1,3 +1,14 @@
+2017-08-26  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	CG#10: Disable TeX interpreter for variable names
+
+	* admin/CODING_GUIDELINES: Introduce new coding guideline, CG#10,
+	recommending to disable the TeX interpreter for variable names.
+	* arrays/@stk_dataframe/plot.m: Follow CG#10.
+	* arrays/@stk_dataframe/plotmatrix.m: Follow CG#10.
+	* arrays/@stk_factorialdesign/private/plot_surfmeshcontour.m: Follow CG#10.
+	* arrays/@stk_hrect/axis.m: Follow CG#10.
+
 2017-08-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Adapt html doc generation to changes in generate_html
