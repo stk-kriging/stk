@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -34,7 +34,7 @@ function varargout = axis (varargin)
 varargout = cell (1, nargout);
 labels = {};
 
-for i = 1:nargin,
+for i = 1:nargin
     a = varargin{i};
     if isa (a, 'stk_hrect')
         df = a.stk_dataframe;
@@ -60,10 +60,10 @@ end
 
 % Add labels if available
 if (~ isempty (labels))
-    stk_xlabel (h_axes, labels{1});
-    stk_ylabel (h_axes, labels{2});
+    stk_xlabel (h_axes, labels{1}, 'interpreter', 'none');  % CG#10
+    stk_ylabel (h_axes, labels{2}, 'interpreter', 'none');  % CG#10
     if (length (labels) > 2)
-        stk_zlabel (h_axes, labels{3});
+        stk_zlabel (h_axes, labels{3}, 'interpreter', 'none');  % CG#10
     end
 end
 

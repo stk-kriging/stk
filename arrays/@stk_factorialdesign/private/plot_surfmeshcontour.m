@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %    Copyright (C) 2013 Valentin Resseguier
 %    Copyright (C) 2012-2014 SUPELEC
 %
@@ -50,15 +50,15 @@ h_plot = call_plotfun (plotfun, h_axes, ...
 
 % Create labels if x provides column names
 c = get (x.stk_dataframe, 'colnames');
-if ~ isempty (c),
-    stk_xlabel (h_axes, c{1});
+if ~ isempty (c)
+    stk_xlabel (h_axes, c{1}, 'interpreter', 'none');  % CG#10
 end
-if length (c) > 1,
-    stk_ylabel (h_axes, c{2});
+if length (c) > 1
+    stk_ylabel (h_axes, c{2}, 'interpreter', 'none');  % CG#10
 end
 
 % Use interpolated shading for surf and pcolor plots
-if ismember (func2str (plotfun), {'surf', 'pcolor'}),
+if ismember (func2str (plotfun), {'surf', 'pcolor'})
     shading (h_axes, 'interp');
 end
 
@@ -85,7 +85,7 @@ function [h_axes, x, z, opts] = parse_args_ (varargin)
 % Extract axis handle (if it is present)
 [h_axes, varargin, n_argin] = stk_plot_getaxesarg (varargin{:});
 
-if n_argin < 2,
+if n_argin < 2
     stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
 end
 
@@ -94,14 +94,14 @@ z = varargin{2};
 opts = varargin(3:end);
 
 % Then, x must be an stk_factorialdesign object
-if ~ isa (x, 'stk_factorialdesign'),
+if ~ isa (x, 'stk_factorialdesign')
     stk_error (['The first input argument should be a handle to existing' ...
         'axes or and stk_factorialdesign object.'], 'TypeMismatch');
 end
 
 dim = size (x, 2);
 
-if dim ~= 2,
+if dim ~= 2
     errmsg = 'Only works for two-dimensional factor spaces.';
     stk_error (errmsg, 'InvalidArgument');
 end

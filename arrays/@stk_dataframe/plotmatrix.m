@@ -72,13 +72,13 @@ varargout = varargout(1:nargout);
 
 if ~ isempty (x_colnames)
     for i = 1:nx
-        stk_xlabel (hh(ny, i), x_colnames{i});
+        stk_xlabel (hh(ny, i), x_colnames{i}, 'interpreter', 'none');  % CG#10
     end
 end
 
 if ~ isempty (y_colnames)
     for j = 1:ny
-        stk_ylabel (hh(j, 1), y_colnames{j});
+        stk_ylabel (hh(j, 1), y_colnames{j}, 'interpreter', 'none');  % CG#10
     end
 end
 
