@@ -69,7 +69,7 @@ end
 
 % Provide default QP solver if needed
 if isempty (options.qp_solver)
-    if isoctave
+    if exist ('OCTAVE_VERSION', 'builtin') == 5  % Octave
         % Octave's core qp function
         options.qp_solver = 'qp';
     else

@@ -120,7 +120,7 @@ stk_init__addpath (root);
 
 % Check that MEX-files located in private folders are properly detected (note:
 % there are no MEX-files in private folders if STK is used as an Octave package)
-if isoctave
+if exist ('OCTAVE_VERSION', 'builtin') == 5  % Octave
     stk_init__test_private_mex ();
 end
 
@@ -160,7 +160,6 @@ end % function
 function stk_init__munlock ()
 
 filenames = {                 ...
-    'isoctave',               ...
     'stk_optim_fmincon',      ...
     'stk_options_set',        ...
     'stk_parallel_engine_set' };
@@ -180,7 +179,6 @@ function stk_init__clear_persistents ()
 stk_init__munlock ();
 
 filenames = {                 ...
-    'isoctave',               ...
     'stk_disp_progress',      ...
     'stk_gausscov_iso',       ...
     'stk_gausscov_aniso',     ...
@@ -275,7 +273,7 @@ if (exist ('OCTAVE_VERSION', 'builtin') == 5)
         for i = 1:(length (test_path))
             p = fullfile (test_path{i}, 'private');
             if exist (p, 'dir')
-                private_path = [private_path {p}];
+                private_path = [private_path {p}];  %#ok<AGROW>
             end
         end
         path = [path private_path];
@@ -601,9 +599,6 @@ if isoctave
 end
 
 opts = {root, mole_dir, do_addpath, prune_unused};
-
-% isoctave
-install_mole_function ('isoctave', opts{:});
 
 % Provide missing octave functions for Matlab users
 % TODO: extract functions that are REALLY needed in separate directories

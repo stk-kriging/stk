@@ -4,10 +4,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2012, 2013 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 %
 %    This file has been adapted from test.m in Octave 3.6.2,  distributed
 %    under the GNU General Public Licence version 3 (GPLv3). The original
@@ -491,18 +492,22 @@ for i = 1:length(x__list_shared),
 end
 
 % Prepare shared variables
-for x__i = 1:length(x__list_shared),
+for x__i = 1:length(x__list_shared)
     eval(sprintf('%s = varargin{%d};', x__list_shared{x__i}, x__i));
 end
 
 % Run the code
-if isoctave,
+if exist ('OCTAVE_VERSION', 'builtin') == 5  % Octave
+
     % Run without output capture (evalc is not implemented yet in Octave)
     eval (x__code);
-else
+
+else  % Matlab
+
     % Run with output capture
     % (TODO: compare the output with a reference, if provided)
-    gobble_output = evalc (x__code); %#ok<NASGU>
+    gobble_output = evalc (x__code);  %#ok<NASGU>
+
 end
 
 % Save shared variables
