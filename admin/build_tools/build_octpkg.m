@@ -190,13 +190,20 @@ else
         
         copyfile (s, fullfile (unpacked_dir, 'src'));
         
-    elseif any (strcmp (s, {'ChangeLog' 'NEWS' 'COPYING'}))
+    elseif any (strcmp (s, {'ChangeLog' 'COPYING'}))
         
-        % DESCRIPTION, COPYING, ChangeLog & NEWS will be available
-        % in "packinfo" after installation
+        % ChangeLog and COPYING are copied at the root of the package tarball
+        % but will be available in "packinfo" after installation
         
         copyfile (s, unpacked_dir);
         
+    elseif strcmp (s, 'NEWS.md')
+        
+        % NEWS will also be available in "packinfo" after installation
+        
+        % Remove the .md extension, which is not expected by Octave
+        copyfile (s, fullfile (unpacked_dir, 'NEWS'));
+
     elseif strcmp (s, 'AUTHORS')
         
         % Put AUTHORS in the documentation directory

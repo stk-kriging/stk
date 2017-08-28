@@ -1,3 +1,11 @@
+2017-08-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Convert NEWS to markdown formatting
+
+	* NEWS.md: Convert NEWS to markdown formatting and rename to NEWS.md.
+	* NEWS: Removed.
+	* admin/build_tools/build_octpkg.m: Rename NEWS to NEWS.md.
+
 2017-08-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/ismember.m: Do not assume 'rows' (ticket #50)
