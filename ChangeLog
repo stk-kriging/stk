@@ -1,5 +1,10 @@
 2017-08-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	generate_htmldoc.m: Use HTML version of NEWS.md (ticket #61)
+
+	* admin/build_tools/generate_htmldoc.m: Insert HTML version of
+	NEWS.md, produced by markdown, inside NEWS.html.
+
 	NEWS.md: Fix markdown formatting
 
 	* NEWS.md: Fix markdown formatting
