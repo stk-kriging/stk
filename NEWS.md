@@ -2,49 +2,49 @@
 
 ## Sequential design of experiments
 
-o `stk_sampcrit_akg_eval`: New function.  Computes the Approximate
+* `stk_sampcrit_akg_eval`: New function.  Computes the Approximate
   Knowledge Gradient (AKG) sampling criterion.
 
-o `stk_example_doe05`: Example script that demonstrates the use of the AKG
+* `stk_example_doe05`: Example script that demonstrates the use of the AKG
   and EQI sampling criteria for noisy optimization.
 
-o New (experimental) classes to represent sampling criterion objects:
+* New (experimental) classes to represent sampling criterion objects:
   `stk_sampcrit_ei`, `stk_sampcrit_akg`, `stk_sampcrit_eqi`.
 
 ## Design of experiments
 
-o `stk_factorialdesign`: Accept one-variable `stk_dataframe` objects as
+* `stk_factorialdesign`: Accept one-variable `stk_dataframe` objects as
   factors and preserve column names in this case.
 
-o `stk_sampling_nesteddesign`: New function to create nested designs.
+* `stk_sampling_nesteddesign`: New function to create nested designs.
 
-o `stk_sampling_nestedlhs`: New function to create nested LHS (NLHS).
+* `stk_sampling_nestedlhs`: New function to create nested LHS (NLHS).
 
-o `stk_sampling_sobol`: Fix help text.
+* `stk_sampling_sobol`: Fix help text.
 
 ## Validation of models
 
-o `stk_distrib_normal_crps`: New function to compare observations and
+* `stk_distrib_normal_crps`: New function to compare observations and
   predictive (Gaussian) density.
 
-o Calling `stk_predict_leaveoneout` with no output arguments now
+* Calling `stk_predict_leaveoneout` with no output arguments now
   automatically creates two cross-validation diagnostics in two subplots:
   prediction VS observations (left panel) and normalized residuals (right
   panel).
 
-o `stk_predict_leaveoneout` uses now the virtual LOO formula.
+* `stk_predict_leaveoneout` uses now the virtual LOO formula.
 
 ## `stk_dataframe` and related classes
 
-o `stk_hrect`: Preserve column names for `stk_dataframe` inputs.
+* `stk_hrect`: Preserve column names for `stk_dataframe` inputs.
 
-o `@stk_dataframe/find`: Overload base function to support calling find
+* `@stk_dataframe/find`: Overload base function to support calling find
   with an stk_dataframe as first input argument.
 
-o `@stk_dataframe/plotmatrix`: Overload base function to enrich
+* `@stk_dataframe/plotmatrix`: Overload base function to enrich
   `plotmatrix` graphics with variable names when possible.
 
-o Logical functions
+* Logical functions
 
    + Operations that normally return logical (`lt`, `eq`, `and`...) now
      return logical values for `stk_dataframe` arguments.
@@ -52,24 +52,24 @@ o Logical functions
    + New overloaded functions for `stk_dataframe` objects: `isinf`,
      `isnan`, `isfinite`.
 
-o `@stk_dataframe/ismember`: No longer assumes `rows` flag for consistency
+* `@stk_dataframe/ismember`: No longer assumes `rows` flag for consistency
   with the base `ismember` function.
 
-o `stk_generate_samplepaths` now returns a plain numerical array instead of
+* `stk_generate_samplepaths` now returns a plain numerical array instead of
   a data frame.
 
 ## Miscellaneous
 
-o `stk_plot_probdom2d`: New function to represent the uncertainty about a
+* `stk_plot_probdom2d`: New function to represent the uncertainty about a
   2D Pareto front.  This function is currently considered experimental and
   should not be expected to produce a reliable representation of the
   uncertainty for difficult or high-dimensional optimization problems.
 
-o New test case: "truss3" (Koski, 1985; Das, 1997).
+* New test case: "truss3" (Koski, 1985; Das, 1997).
 
-o Many functions have been optimized for speed.
+* Many functions have been optimized for speed.
 
-o `stk_plot1d`: Handle the case where `xt` is not sorted.
+* `stk_plot1d`: Handle the case where `xt` is not sorted.
 
 -----
 
@@ -78,44 +78,44 @@ o `stk_plot1d`: Handle the case where `xt` is not sorted.
 
 ## Bug fixes
 
- o Fix display problem of `stk_model_gpposterior` objects in Octave 4.2
-   (ticket #73).
+* Fix display problem of `stk_model_gpposterior` objects in Octave 4.2
+  (ticket #73).
 
 
 # Changes in version 2.4.1
 
 ## Bug fixes
 
-o `stk_pmisclass`: Handle properly the case where `K22` is negative or
+* `stk_pmisclass`: Handle properly the case where `K22` is negative or
   null.
 
-o `stk_get_optimizable_parameters`, `stk_get_optimizable_parameters`: Fix
+* `stk_get_optimizable_parameters`, `stk_get_optimizable_parameters`: Fix
   syntax errors.
 
-o `stk_param_estim`: Issue a better error message when `LNV0` (the starting
+* `stk_param_estim`: Issue a better error message when `LNV0` (the starting
   point for the estimation of the lognoisevariance parameter) is either
   `NaN` of infinite (ticket #72).
 
 ## Sampling criteria
 
-o `stk_sampcrit_ei_eval`: The function now has a new syntax. The other
+* `stk_sampcrit_ei_eval`: The function now has a new syntax. The other
   syntaxes, introduced (accidentally) in STK 2.4.0, will remain supported
   in 2.4.x, but are deprecated and will be removed in a future release.
 
-o Unlike the older `stk_distrib_normal_ei` function, `stk_sampcrit_ei_eval`
+* Unlike the older `stk_distrib_normal_ei` function, `stk_sampcrit_ei_eval`
   is written for a *minimization* problem, following the usual convention
   in optimization software.
 
-o From now on, it is recommended to use `stk_sampcrit_ei_eval` instead of
+* From now on, it is recommended to use `stk_sampcrit_ei_eval` instead of
   `stk_distrib_normal_ei`.
 
-o `stk_sampcrit_emmi_eval`: Now accepts for the input argument `ZI` a set
+* `stk_sampcrit_emmi_eval`: Now accepts for the input argument `ZI` a set
   of observations that contains dominated solutions (rows).  Dominated rows
   and duplicates are removed automatically, as in `stk_sampcrit_ehvi_eval`.
 
 ## Documentation
 
-o `stk_pmisclass`, `stk_sampcrit_ei_eval`, `stk_sampcrit_ehvi_eval`: Help
+* `stk_pmisclass`, `stk_sampcrit_ei_eval`, `stk_sampcrit_ehvi_eval`: Help
   text has been added for all these functions.
 
 
@@ -123,41 +123,41 @@ o `stk_pmisclass`, `stk_sampcrit_ei_eval`, `stk_sampcrit_ehvi_eval`: Help
 
 ## Choosing the optimizer used in `stk_param_estim`
 
-o The choice of the optimization algorithm used in `stk_param_estim` is now
+* The choice of the optimization algorithm used in `stk_param_estim` is now
   much more flexible, thanks to a new interface based on "optimizer object"
   classes.
 
-o The following classes are currently available: `@stk_optim_octavesqp`,
+* The following classes are currently available: `@stk_optim_octavesqp`,
   `@stk_optim_fmincon`, `@stk_optim_fminsearch`.
 
-o `stk_optim_octavesqp` works both in Octave and in Matlab, with two
+* `stk_optim_octavesqp` works both in Octave and in Matlab, with two
   possible choices for the QP solver: `qp` (available in Octave only, this
   is Octave's core `qp` function) and `quadprog` (available in Matlab from
   the Optimization toolbox or from MOSEK; should be available in Octave's
   optim package soon).
 
-o Automatic detection of available optimizers.
+* Automatic detection of available optimizers.
 
-o `stk_minimize_boxconstrained` (new function): Perform box-constrained
+* `stk_minimize_boxconstrained` (new function): Perform box-constrained
   minimization of a function.  This function is overloaded for each
   optimizer object class that supports box-constrained optimization.
 
-o `stk_minimize_unconstrained` (new function): Perform unconstrained
+* `stk_minimize_unconstrained` (new function): Perform unconstrained
   minimization of a function.  This function is overloaded for each
   optimizer object class that supports unconstrained optimization.
 
 ## Covariance functions
 
-o It is now possible to specify default bounds for the estimation of the
+* It is now possible to specify default bounds for the estimation of the
   parameters in a user-defined covariance function. See the documentation
   of `stk_param_getdefaultbounds` for more information.
 
-o Experimental/undocumented feature: it is possible to provide a
+* Experimental/undocumented feature: it is possible to provide a
   specialized `stk_param_init` function for user-defined covariance
   functions.  Read `stk_param_init` if you need to do this.  (This feature
   might be removed or modified in future releases.)
 
-o Radial basis functions (old and new):
+* Radial basis functions (old and new):
 
    + `stk_rbf_matern`, `stk_rbf_matern32`, `stk_rbf_matern52` and
      `stk_rbf_gauss` (previously available internally as `stk_sf_*`
@@ -166,152 +166,152 @@ o Radial basis functions (old and new):
    + Bugfix: `stk_rbf_matern32`, `stk_rbf_matern52` return 0 for very large
      `h`, where `stk_sf_matern32` and `stk_sf_matern52` returned NaN.
 
-o New covariance functions
+* New covariance functions
 
    + Exponential (aka Matern 1/2): `stk_expcov_iso`, `stk_expcov_aniso`
    + Spherical: `stk_sphcov_iso`, `stk_sphcov_aniso`
 
 ## Linear models
 
-o `model.lm` and linear model objects (`stk_lm_*` classes), introduced as
+* `model.lm` and linear model objects (`stk_lm_*` classes), introduced as
   an experimental feature in STK 2.2.0, are now the recommended way of
   setting the linear part of Gaussian process models.
 
-o `model.order` is deprecated (but still supported).
+* `model.order` is deprecated (but still supported).
 
-o As an example, the following define a Gaussian process with a Matern 5/2
+* As an example, the following define a Gaussian process with a Matern 5/2
   covariance function and a quadratic trend:
 
-       model = stk_model ('stk_materncov52_aniso');
-       model.lm = stk_lm_quadratic;
+        model = stk_model ('stk_materncov52_aniso');
+        model.lm = stk_lm_quadratic;
 
-o `stk_lm_polynomial` (new function): Create a polynomial model of given
+* `stk_lm_polynomial` (new function): Create a polynomial model of given
   degree, up to cubic models.
 
 ## `stk_model_gpposterior` objects
 
-o A new `stk_model_gpposterior` class is introduced to represent a Gaussian
+* A new `stk_model_gpposterior` class is introduced to represent a Gaussian
   process conditioned by observations (which is again Gaussian process).
 
-o Internally, an `stk_model_gpposterior` object currently stores the QR
+* Internally, an `stk_model_gpposterior` object currently stores the QR
   factorization of the associated kriging matrix (other representations
   will be implemented in the future).
 
-o `stk_predict` is overloaded for `stk_model_gpposterior` objects.
+* `stk_predict` is overloaded for `stk_model_gpposterior` objects.
 
-o `stk_model_update` (new function): Update a model with new observations.
+* `stk_model_update` (new function): Update a model with new observations.
 
 ## Space-filling designs
 
-o `stk_sampling_sobol`: New function to generate points from a Sobol
+* `stk_sampling_sobol`: New function to generate points from a Sobol
   sequence using the algorithm of Bratley and Fox (1988), as modified by
   Joe and Kuo (2003).  The C implementation under the hood is due to Steven
   G. Johnson, and was borrowed from the NLopt toolbox (version 2.4.2).
 
 ## Sampling criterions for sequential designs
 
-o `stk_sampcrit_ei_eval` (new function): Compute the expected improvement
+* `stk_sampcrit_ei_eval` (new function): Compute the expected improvement
   (EI) criterion for single-objective noiseless optimization.
 
-o `stk_sampcrit_ehvi_eval` (new function): Compute the expect hyper-volume
+* `stk_sampcrit_ehvi_eval` (new function): Compute the expect hyper-volume
   improvement (EHVI) criterion (Emmerich, Giannakoglou & Naujoks, 2006) for
   multi-objective noiseless optimization.  This function implements an
   exact computation of the EHVI criterion, using a decomposition of the
   dominated region into hyper-rectangles.
 
-o `stk_sampcrit_emmi_eval` (new function): Compute the expected maximin
+* `stk_sampcrit_emmi_eval` (new function): Compute the expected maximin
   improvement (EMMI) criterion for multi-objective noiseless optimization
   (Svenson & Santner, 2010).
 
 ## Miscellaneous
 
-o `stk_pmisclass` (new function): Compute either the current probability of
+* `stk_pmisclass` (new function): Compute either the current probability of
   misclassification or the expectation of the future probability of
   misclassification, with respect to a given threshold.
 
-o `stk_dominatedhv` (new function): Compute Pareto-dominated hypervolumes,
+* `stk_dominatedhv` (new function): Compute Pareto-dominated hypervolumes,
   which relies internally on the "Walking Fish Group" (WFG 1.10)
   algorithm. The function can also return the underlying
   inclusion-exclusion representation of the dominated region, i.e., its
   representation as a collection of signed overlapping hyper-rectangles.
 
-o `stk_predict_leaveoneout`: New function that computes leave-one-out
+* `stk_predict_leaveoneout`: New function that computes leave-one-out
   predictions and residuals.
 
-o `stk_isnoisy` (new function): Returns false for a noiseless model and
+* `stk_isnoisy` (new function): Returns false for a noiseless model and
   true otherwise.
 
 ## Graphics
 
-o All STK functions related to graphics now accept a handle to existing
+* All STK functions related to graphics now accept a handle to existing
   axes as optional first input argument, and return a handle (or a vector
   of handles when appropriate) to the graphical object created by the
   function.
 
-o STK is now compatible with Matlab >= R2014b, where handles to graphical
+* STK is now compatible with Matlab >= R2014b, where handles to graphical
   objects are not numbers any more.
 
-o `stk_plot1d`: A nice default legend can now be created painlessly using
+* `stk_plot1d`: A nice default legend can now be created painlessly using
   legend ('show'), and a struct of handles to the graphical objects
   composing the plot is returned to facilitate further customization. See,
   e.g., examples 1 and 2 in the "kriging basics" series.
 
-o `stk_plot2d`: Removed (had been deprecated for a while).
+* `stk_plot2d`: Removed (had been deprecated for a while).
 
-o `stk_plot_predvsobs` (new function): Plot predictions against observations.
+* `stk_plot_predvsobs` (new function): Plot predictions against observations.
 
-o `stk_plot_histnormres` (new function): Plot histogram of normalized
+* `stk_plot_histnormres` (new function): Plot histogram of normalized
   residuals, together with the N(0, 1) pdf as a reference.
 
 ## Examples
 
-o `stk_example_doe04`: Example script that demonstrates the use of
+* `stk_example_doe04`: Example script that demonstrates the use of
   `stk_pmisclass`.
 
-o `stk_example_kb10`: Example script that demonstrates the use of
+* `stk_example_kb10`: Example script that demonstrates the use of
   leave-one-out cross-validation to produce goodness-of-fit graphical
   diagnostics.
 
-o `stk_testfun_borehole` (new function): New test function (the "borehole
+* `stk_testfun_borehole` (new function): New test function (the "borehole
   model" response function, from Harper & Gupta 1983).
 
-o `stk_testfun_twobumps` (new function): A simple 1D test function.
+* `stk_testfun_twobumps` (new function): A simple 1D test function.
 
-o `stk_dataset_twobumps` (new function): Define three datasets based on the
+* `stk_dataset_twobumps` (new function): Define three datasets based on the
   TwoBumps test function.
 
 ## stk_dataframe class
 
-o New overloaded functions for stk_dataframe objects: `acos`, `acosd`,
+* New overloaded functions for stk_dataframe objects: `acos`, `acosd`,
   `acosh`, `asin`, `asind`, `asinh`, `atan`, `atand`, `atanh`, `cos`,
   `cosd`, `cosh`, `exp`, `expm1`, `log`, `log10`, `log1p`, `log2`,
   `logical`, `sin`, `sind`, `sinh`, `sqrt`, `tan`, `tand`, `tanh`.
 
-o `@stk_dataframe/bsxfun`: Now preserve row names if possible.
+* `@stk_dataframe/bsxfun`: Now preserve row names if possible.
 
-o `@stk_dataframe/openvar` (new function): Convert `stk_dataframe` object
+* `@stk_dataframe/openvar` (new function): Convert `stk_dataframe` object
   to table or double array before opening it the variable editor.
 
-o `stk_dataframe` arrays now accept characters indices (row/column names)
+* `stk_dataframe` arrays now accept characters indices (row/column names)
   and cell array indices (list of row/column names).
 
-o The `info` field is deprecated.
+* The `info` field is deprecated.
 
 ## Other minor changes
 
-o `stk_plot_shadedci`: Delete invisible area object.
+* `stk_plot_shadedci`: Delete invisible area object.
 
-o `@stk_hrect/ismember`: Optimize for speed.
+* `@stk_hrect/ismember`: Optimize for speed.
 
-o `stk_predict`: In the case of discrete models, row input vectors are no
+* `stk_predict`: In the case of discrete models, row input vectors are no
   longer accepted.
 
-o `stk_runtests`: Now also available in the Octave package release, to
+* `stk_runtests`: Now also available in the Octave package release, to
   provide a convenient wrapper around __run_test_suite__ ().
 
-o `stk_maxabscorr`: No longer relies on corr ().
+* `stk_maxabscorr`: No longer relies on corr ().
 
-o `stk_kreq_qr`: Now has a default constructor, which allows to load saved
+* `stk_kreq_qr`: Now has a default constructor, which allows to load saved
   `stk_kreq_qr` objects properly.
 
 -----
@@ -321,38 +321,38 @@ o `stk_kreq_qr`: Now has a default constructor, which allows to load saved
 
 ## Bug fixes
 
-o `@stk_hrect/ismember`: Fix
+* `@stk_hrect/ismember`: Fix
 
    + a bug that prevented `ismember` from working on more than one point at
      a time, and
    + another bug in the case where `B` is not an `stk_hrect` object (it was
      incorrectly assumed to be an `stk_dataframe` in this case).
 
-o `@stk_hrect/subsref`: Make sure that the returned value is still an
+* `@stk_hrect/subsref`: Make sure that the returned value is still an
   `stk_hrect` object when the number of rows (which is two) is unchanged.
 
 ## Minor changes
 
-o Add a `clean` target to the Octave package Makefile.
+* Add a `clean` target to the Octave package Makefile.
 
-o Decrease unit test verbosity.
+* Decrease unit test verbosity.
 
 
 # Changes in version 2.3.3
 
 ## Bug fixes
 
-o `stk_dist`, `stk_filldist`, `stk_gpquadform`, `stk_mindist`: Fix segmentation
+* `stk_dist`, `stk_filldist`, `stk_gpquadform`, `stk_mindist`: Fix segmentation
   faults occurring with very large matrices (related to signed
   integer-based index computation in the underlying MEX-files).
 
-o `stk_example_doe03`: Use the appropriate flag for maximization.
+* `stk_example_doe03`: Use the appropriate flag for maximization.
 
-o `mole/matlab/file_in_path.m`: Fix two bugs (Matlab only)
+* `mole/matlab/file_in_path.m`: Fix two bugs (Matlab only)
 
 ## Minor changes
 
-o `stk_example_doe03`: Display pointwise credible intervals in the upper
+* `stk_example_doe03`: Display pointwise credible intervals in the upper
   panel.
 
 
@@ -360,23 +360,23 @@ o `stk_example_doe03`: Display pointwise credible intervals in the upper
 
 ## Bug fixes
 
-o `stk_param_estim`: Fix a bug related to parameter objects. More
+* `stk_param_estim`: Fix a bug related to parameter objects. More
   precisely, use `(:)` indexing systematically to access the vector of
   numerical parameters corresponding to a given parameter object.
 
-o `@stk_kreq_qr/get`: Fix a call to `dot` to make it work when there is
+* `@stk_kreq_qr/get`: Fix a call to `dot` to make it work when there is
   only one observation.
 
-o Add missing field "Depends" to the `DESCRIPTION` file in the Octave
+* Add missing field "Depends" to the `DESCRIPTION` file in the Octave
   package.
 
 ## Minor changes
 
-o `stk_param_getdefaultbounds`: Return empty lower and upper bounds for
+* `stk_param_getdefaultbounds`: Return empty lower and upper bounds for
   parameter classes that do not implement the `stk_param_getdefaultbounds`
   (instead of calling `error`).
 
-o Add optional field "Autoload" to the `DESCRIPTION` file in the Octave
+* Add optional field "Autoload" to the `DESCRIPTION` file in the Octave
   package.
 
 
@@ -384,33 +384,33 @@ o Add optional field "Autoload" to the `DESCRIPTION` file in the Octave
 
 ## Bug fixes
 
-o `stk_optim_hasfmincon`: Detect `fmincon` by trying to use it, instead of
+* `stk_optim_hasfmincon`: Detect `fmincon` by trying to use it, instead of
   relying on the result of the `exist` function (ticket #30 closed).
 
-o `stk_param_estim`: Make sure that the bounds that we use for the `lnv`
+* `stk_param_estim`: Make sure that the bounds that we use for the `lnv`
   parameter contain the starting point `lnv0` when it is provided.
 
-o `@stk_dataframe/set`: Fix `stk_error` calls (missing mnemonic).
+* `@stk_dataframe/set`: Fix `stk_error` calls (missing mnemonic).
 
-o `stk_distrib_bivnorm_cdf`: Fix a bug in the case of mixtures of singular
+* `stk_distrib_bivnorm_cdf`: Fix a bug in the case of mixtures of singular
   and non-singular cases.
 
-o `@stk_dataframe/subsasgn`: Preserve column names when deleting rows, even
+* `@stk_dataframe/subsasgn`: Preserve column names when deleting rows, even
   if the resulting array is empty.
 
 ## Minor changes
 
-o `stk_init`: Clear persistent variables. As a consequence, `stk_init` can
+* `stk_init`: Clear persistent variables. As a consequence, `stk_init` can
   now be used to restart STK completely.
 
-o `stk_commonsize`: Accept empty dimensions, under the condition that all
+* `stk_commonsize`: Accept empty dimensions, under the condition that all
   input arguments have the same empty dimensions (in which case the result
   is empty).
 
-o `stk_commonsize`: is now faster when some arguments already have the
+* `stk_commonsize`: is now faster when some arguments already have the
   proper size (unnecessary calls to `repmat` are avoided).
 
-o `stk_distrib_normal_cdf`, `stk_distrib_bivnorm_cdf`: are now slightly
+* `stk_distrib_normal_cdf`, `stk_distrib_bivnorm_cdf`: are now slightly
   faster (unnecessary calls to `stk_commonsize` are avoided).
 
 
@@ -418,121 +418,121 @@ o `stk_distrib_normal_cdf`, `stk_distrib_bivnorm_cdf`: are now slightly
 
 ## Model structures
 
-o `lognoisevariance` is now considered a mandatory field. For backward
+* `lognoisevariance` is now considered a mandatory field. For backward
   compatibility, a missing or empty lognoisevariance field is interpreted
   as `-inf`. A NaN value in the lognoisevariance field is now interpreted
   as meaning that the variance of the noise must be estimated.
 
-o `model.param` is set to NaN by `stk_model`. This special value indicates
+* `model.param` is set to NaN by `stk_model`. This special value indicates
   that the parameters must be estimated from the data before any prediction
   can be done.
 
-o Improved documentation for `stk_model`.
+* Improved documentation for `stk_model`.
 
 ## Parameter estimation
 
-o `stk_param_init` defaults to using the input value of
+* `stk_param_init` defaults to using the input value of
   `model.lognoisevariance` if it is not NaN, and estimating the variance if
   it is NaN. The meaning of the fifth argument, now called `DO_ESTIM_LNV`,
   has thus slightly changed: it is used to force or prevent the estimation
   of the variance of the noise, regardless of the value of
   `model.lognoisevariance`.
 
-o `stk_param_init` also supports the heteroscedastic noisy case, but only
+* `stk_param_init` also supports the heteroscedastic noisy case, but only
   when the variance of the noise is assumed to be known.
 
-o `stk_param_init_lnv` is a new function that provides a rough estimate of
+* `stk_param_init_lnv` is a new function that provides a rough estimate of
   the variance of the noise (in the spirit of `stk_param_init`).
 
-o `stk_param_estim` estimates the variance of the noise if either
+* `stk_param_estim` estimates the variance of the noise if either
 
-   a) `param0lnv` is provided and is not empty (as in STK <= 2.2.0), or
-   b) `model.lognoisevariance` is NaN (new behaviour).
+   + `param0lnv` is provided and is not empty (as in STK <= 2.2.0), or
+   + `model.lognoisevariance` is NaN (new behaviour).
 
   If `param0lnv` is not provided, a starting point is obtained using the
   new `stk_param_init_lnv` function. In all cases (whether `lnv` is
   estimated or not) a meaningful value is returned for `lnv` (equal to
   `model.lognoisevariance` when `lnv` is not estimated).
 
-o `stk_param_estim` can provide a value for `param0` when it is missing
+* `stk_param_estim` can provide a value for `param0` when it is missing
   from the list of input arguments.
 
-o `stk_param_relik`: Compute `G = W' * K * W` in such a way that the result
+* `stk_param_relik`: Compute `G = W' * K * W` in such a way that the result
   is always (?) symmetric.
 
 ## Prediction
 
-o `stk_predict` computes `lambda_mu` and `RS` only when necessary, depending on
+* `stk_predict` computes `lambda_mu` and `RS` only when necessary, depending on
   the number of output arguments.
 
 ## Covariance functions
 
-o `stk_noisecov` now has a `pairwise` argument, like the others.
+* `stk_noisecov` now has a `pairwise` argument, like the others.
 
 ## Sampling
 
-o `stk_sampling_randunif` accepts empty dim argument when `box` is provided
+* `stk_sampling_randunif` accepts empty dim argument when `box` is provided
 
 ## Simulation of Gaussian process sample paths
 
-o `stk_generate_samplepaths`: Do not add observation noise to the generated
+* `stk_generate_samplepaths`: Do not add observation noise to the generated
   sample paths. This is consistent with `stk_predict`, which returns
   posterior variances for the unknown function, not for future noisy
   observations.
 
-o `stk_conditioning`: Simulate sample paths conditioned on noisy
+* `stk_conditioning`: Simulate sample paths conditioned on noisy
   observations when the additional `NOISE_SIM` argument is provided.
 
-o `stk_generate_samplepaths`: Fix conditioning on noisy observations, which
+* `stk_generate_samplepaths`: Fix conditioning on noisy observations, which
   was not implemented properly until now.
 
-o `stk_generate_samplepaths`: The output is an `stk_dataframe` object if
+* `stk_generate_samplepaths`: The output is an `stk_dataframe` object if
   either `MODEL.response_name` exists and is a non-empty string, or one of
   the input arguments (`XI`, `ZI`, `XT`) is an `stk_dataframe` object.
 
-o `stk_conditioning`: The output is an `stk_dataframe` object if either
+* `stk_conditioning`: The output is an `stk_dataframe` object if either
   `LAMBDA` or `ZSIM` is an `stk_dataframe` object.
 
 ## Objects representing sets
 
-o `stk_hrect`: new class to describe hyper-rectangle objects.
+* `stk_hrect`: new class to describe hyper-rectangle objects.
 
-o `stk_boundingbox`: constructs the bounding box for a set of points.
+* `stk_boundingbox`: constructs the bounding box for a set of points.
 
 ## Examples
 
-o `stk_example_kb04` demonstrates how it is possible to estimate the
+* `stk_example_kb04` demonstrates how it is possible to estimate the
   variance of the noise without providing a initial guess for it.
 
-o `stk_example_kb09` demonstrates how to simulate conditional sample paths
+* `stk_example_kb09` demonstrates how to simulate conditional sample paths
   in the case of noisy observations, both in the homoscedastic and in the
   heteroscedastic cases.
 
 ## Miscellaneous
 
-o `stk_distrib_bivnorm_cdf` computes bivariate normal probabilities.
+* `stk_distrib_bivnorm_cdf` computes bivariate normal probabilities.
 
-o `stk_disp_progress`: New function that displays a textual progress
+* `stk_disp_progress`: New function that displays a textual progress
   indicator.
 
-o `stk_feval` handles cell-arrays of functions (ticket #19 closed),
+* `stk_feval` handles cell-arrays of functions (ticket #19 closed),
   multivariate outputs (ticket #20 closed), and uses vectorized calls by
   default (unless a progress indicator is displayed).
 
-o `sort`, `mtimes`, `uplus` and `uminus` are now overloaded for
+* `sort`, `mtimes`, `uplus` and `uminus` are now overloaded for
   `stk_dataframe` objects
 
-o `min`, `max` are now able to return a second output argument (index of
+* `min`, `max` are now able to return a second output argument (index of
   mininizer or maximizer) for `stk_dataframe` arguments.
 
-o Now the output of `stk_dataframe` is always an `stk_dataframe` object.
+* Now the output of `stk_dataframe` is always an `stk_dataframe` object.
   Previously, this wasn't true if the first input argument was, e.g., an
   `stk_factorialdesign` object.
 
-o `stk_distrib_normal_ei`, `stk_distrib_student_ei`: bugfix (the optional
+* `stk_distrib_normal_ei`, `stk_distrib_student_ei`: bugfix (the optional
   input argument "minimize" was not taken into account).
 
-o `stk_distrib_normal_cdf`: Fix the zero-variance case.
+* `stk_distrib_normal_cdf`: Fix the zero-variance case.
 
 -----
 
@@ -541,75 +541,75 @@ o `stk_distrib_normal_cdf`: Fix the zero-variance case.
 
 ## Octave 4.0 compliance
 
-o Fix unit tests
+* Fix unit tests
 
 ## Octave package
 
-o Do not ship `stk_test` and `stk_runtests` with the Octave package
+* Do not ship `stk_test` and `stk_runtests` with the Octave package
 
 
 # Changes in version 2.2.0
 
 ## Octave package
 
-o The STK is now available both as an "all-purpose" Matlab/Octave toolbox
+* The STK is now available both as an "all-purpose" Matlab/Octave toolbox
   (as usual) and as a full-fledged Octave package that can be installed
   using `pkg install`.
 
 ## Core
 
-o `stk_model` now also accepts function handles for `covariance_type`.
+* `stk_model` now also accepts function handles for `covariance_type`.
 
-o `stk_ortho_func` is deprecated and will be completely replaced, in the
+* `stk_ortho_func` is deprecated and will be completely replaced, in the
   3.x series, by linear model objects. In the meantime, `stk_ortho_func`
   has been kept as a gateway to `stk_lm_*` functions and now supports the
   case of cubic polynomial models.
 
-o `stk_cholcov`: new function that adaptively adds a little bit of noise on
+* `stk_cholcov`: new function that adaptively adds a little bit of noise on
   the diagonal of a covariance matrix to help `chol` succeed, when the
   first factorization returned by `chol` is not complete (a warning is
   emitted when doing so). Used in `stk_param_init`, `@stk_kreq_qr/get`,
   `stk_param_relik`...
 
-o `@stk_kreq_qr`: heuristic improvement of numerical conditioning
+* `@stk_kreq_qr`: heuristic improvement of numerical conditioning
   (implemented in the new private function `compute_P_scaling`).
 
 ## Covariance functions
 
-o Accept `invRho = 0` in anisotropic covariance functions.
+* Accept `invRho = 0` in anisotropic covariance functions.
 
-o `stk_sf_matern`: Handle special cases (3/2, 5/2, infinity) explicitly,
+* `stk_sf_matern`: Handle special cases (3/2, 5/2, infinity) explicitly,
   and handle large values of the smoothness parameter `nu` better.
 
-o Handle the case of Gaussian isotropic and anisotropic covariance
+* Handle the case of Gaussian isotropic and anisotropic covariance
   functions in `stk_param_init` and `stk_param_getdefaultbounds`.
 
 ## Linear models
 
-o Introduce linear models objects. Currently, the following linear model
+* Introduce linear models objects. Currently, the following linear model
   object classes are available: `stk_lm_null`, `stk_lm_constant`,
   `stk_lm_affine`, `stk_lm_quadratic`, `stk_lm_cubic` and `stk_lm_matrix`.
 
-o Linear model objects are still considered an experimental feature. They
+* Linear model objects are still considered an experimental feature. They
   can be accessed by setting `model.order` to NaN, in which case `model.lm`
   is expected to contain a linear model object.
 
-o `stk_example_misc03`: New example script that demonstrates the use of
+* `stk_example_misc03`: New example script that demonstrates the use of
   linear model objects.
 
 ## Sample path simulation (`stk_generate_samplepaths`)
 
-o The simulation of conditioned sample paths has been made easier (see
+* The simulation of conditioned sample paths has been made easier (see
   ticket #3 on SF). This is demonstrated by `stk_example_kb08`.
 
-o Now uses `model.response_name` (if available) to create column names for
+* Now uses `model.response_name` (if available) to create column names for
   the output array, and `xt.rownames` (if available) to create row names.
 
-o `stk_generate_samplepaths` can deal with replicated rows in `xt`.
+* `stk_generate_samplepaths` can deal with replicated rows in `xt`.
 
 ## Parameter estimation
 
-o `stk_param_estim`
+* `stk_param_estim`
 
    * Warn about constant-response data.
    * Return an additional `info` structure, which currently contains the
@@ -618,7 +618,7 @@ o `stk_param_estim`
    * Add a new (optional) input argument that will make it possible,
      in the future, to select which estimation criterion to use.
 
-o `stk_param_relik`
+* `stk_param_relik`
 
    * Check symmetry of `G = W' * K * W` and apply a naive fix if it is not
      (emit a warning when doing so).
@@ -626,98 +626,98 @@ o `stk_param_relik`
      related to bad conditioning, and also improve the performance for
      large `n` (about 1000, say).
 
-o New optimization options (can bet set through `stk_options_set`)
+* New optimization options (can bet set through `stk_options_set`)
 
    * Add global options to control upper/lower bounds for `stk_param_estim`.
    * (Matlab) Add a `optim_display_level` option to control the verbosity
      `fmincon`/`fminsearch`. Its default value is `'off'`.
 
-o `stk_param_gls`: new function that computes the GLS estimator.
+* `stk_param_gls`: new function that computes the GLS estimator.
 
 ## Array objects (`stk_dataframe`, `stk_factorialdesign`)
 
-o `stk_length`: New function that returns the "length" of an array,
+* `stk_length`: New function that returns the "length" of an array,
   currently defined as its number of rows.
 
-o Improved display for both `stk_dataframe` and `stk_factorial` objects
+* Improved display for both `stk_dataframe` and `stk_factorial` objects
 
-o Fix and improve accessors (`subsasgn`, `subsref`, `set`, `get`,
+* Fix and improve accessors (`subsasgn`, `subsref`, `set`, `get`,
   `fieldnames`)
 
-o Minimalist support for linear indexing on `stk_dataframe` objects
+* Minimalist support for linear indexing on `stk_dataframe` objects
 
-o New overloaded methods: `@stk_dataframe/abs`, `@stk_dataframe/reshape`
+* New overloaded methods: `@stk_dataframe/abs`, `@stk_dataframe/reshape`
 
-o `@stk_dataframe/plot`: Full rewrite to improve compatibility with the
+* `@stk_dataframe/plot`: Full rewrite to improve compatibility with the
   base plot function. The case where `x` is an `stk_dataframe` objects with
   two or more columns is now handled in a way that is consistent with the
   base plot function (i.e., if `x` has two columns, then we get two 1D
   plots).
 
-o `@stk_dataframe/horzcat`, `@stk_dataframe/vertcat`: Now the result is
+* `@stk_dataframe/horzcat`, `@stk_dataframe/vertcat`: Now the result is
   always an `stk_dataframe` object, and has row names iff either one of the
   two arguments doesn't have row names, or the row names of both arguments
   agree.
 
-o `@stk_dataframe/bsxfun`: Modify the behaviour of `bsxfun` for
+* `@stk_dataframe/bsxfun`: Modify the behaviour of `bsxfun` for
   `stk_dataframe` objects. The result is always an `stk_dataframe` object,
   and has column names iff either one of the two arguments doesn't have
   columns names or the columns names of both arguments agree.
 
 ## Graphics
 
-o `stk_plot2d` is deprecated and will be removed in the 3.x series. Use
+* `stk_plot2d` is deprecated and will be removed in the 3.x series. Use
   `contour`, `mesh`, `surf`... directly instead (they are now overloaded
   for `stk_factorialdesign` objects).
 
-o `stk_plot1d`: Improved flexibility in the way input arguments are
+* `stk_plot1d`: Improved flexibility in the way input arguments are
   handled.
 
-o `stk_figure` does not set the axis title any more.
+* `stk_figure` does not set the axis title any more.
 
 ## Pareto domination
 
-o `stk_isdominated`: New function that returns true for dominated rows.
+* `stk_isdominated`: New function that returns true for dominated rows.
 
-o `stk_paretofind`: New function that finds non-dominated points.
+* `stk_paretofind`: New function that finds non-dominated points.
 
-o `stk_example_misc04`: New example script illustrating random Pareto fronts.
+* `stk_example_misc04`: New example script illustrating random Pareto fronts.
 
 ## Faster and less verbose startup
 
-o Stop bothering users at startup with information that they can find in
+* Stop bothering users at startup with information that they can find in
   the `README` file anyway.
 
-o Don't display selected optimizers at startup.
+* Don't display selected optimizers at startup.
 
-o In Matlab, don't bother checking if the PCT is installed.
+* In Matlab, don't bother checking if the PCT is installed.
 
 ## Documentation
 
-o New HTML documentation, available in the "all-purpose" Matlab/Octave
+* New HTML documentation, available in the "all-purpose" Matlab/Octave
   release (doc/html directory) and online on Source-Forge at
   <http://kriging.sourceforge.net/htmldoc>.
 
-o Lots of fixes and improvements in help texts.
+* Lots of fixes and improvements in help texts.
 
-o Add a `CITATION` file, which explains how to cite STK in publications.
+* Add a `CITATION` file, which explains how to cite STK in publications.
 
-o `stk_testfun_braninhoo`: Fix domain bounds in the documentation.
+* `stk_testfun_braninhoo`: Fix domain bounds in the documentation.
 
 ## Miscellaneous
 
-o Options set/get
+* Options set/get
 
    * `stk_options_set`: Add a reset feature.
    * `stk_options_set`: Prevent persistent from being cleared (bugfix)
 
-o Remove `page_screen_output` (not needed anymore).
+* Remove `page_screen_output` (not needed anymore).
 
-o Restore the `stk_` prefix for `distrib_*` functions (`distrib_normal_cdf`
+* Restore the `stk_` prefix for `distrib_*` functions (`distrib_normal_cdf`
   is renamed to `stk_distrib_normal_cdf`, `distrib_student_ei` to
   `stk_distrib_student_ei`, etc.)
 
-o Lots of internal changes, minor changes, etc. not worth mentioning here.
+* Lots of internal changes, minor changes, etc. not worth mentioning here.
 
 -----
 
@@ -726,13 +726,13 @@ o Lots of internal changes, minor changes, etc. not worth mentioning here.
 
 ## Bug fix
 
-o Fix a bug in `stk_param_init`.
+* Fix a bug in `stk_param_init`.
 
 ## Minor changes
 
-o Add size checks to several functions.
+* Add size checks to several functions.
 
-o Warn Octave users about the problem with MEX-files in privates folders:
+* Warn Octave users about the problem with MEX-files in privates folders:
   Octave must be restarted when `stk_init` is run for the first time.
 
 
@@ -740,18 +740,18 @@ o Warn Octave users about the problem with MEX-files in privates folders:
 
 ## How to get help
 
-o Several ways to get help, report bugs or ask for new features on
+* Several ways to get help, report bugs or ask for new features on
   Sourceforge are now proposed to the user (both in `README` or
   `stk_init.m`)
 
 ## Examples
 
-o Existing examples have been improved: descriptions rewritten; graphical
+* Existing examples have been improved: descriptions rewritten; graphical
   options controlled globally thanks to dedicated plotting functions
   (`stk_figure`; `stk_subplot`, `stk_axes`, `stk_title`...); + lots of
   minor changes
 
-o New examples
+* New examples
 
    * kb06: ordinary kriging VS linear trend
    * kb07: simulations of Matern sample paths with different various `nu`
@@ -759,62 +759,62 @@ o New examples
 
 ## Covariance functions
 
-o New function: `stk_gausscov_iso` (isotropic Gaussian covariance model)
+* New function: `stk_gausscov_iso` (isotropic Gaussian covariance model)
 
-o New function: `stk_gausscov_aniso` (anisotropic Gaussian covariance model)
+* New function: `stk_gausscov_aniso` (anisotropic Gaussian covariance model)
 
 ## Special functions
 
-o The precision of `stk_sf_matern` has been improved around 0 for high `nu`
+* The precision of `stk_sf_matern` has been improved around 0 for high `nu`
 
-o New function: `stk_sf_gausscorr` (Gaussian correlation function in 1D)
+* New function: `stk_sf_gausscorr` (Gaussian correlation function in 1D)
 
 ## Design of experiments
 
-o New function: `stk_phipcrit` (phi_p criterion for space-filling designs)
+* New function: `stk_phipcrit` (phi_p criterion for space-filling designs)
 
-o New function: `stk_maxabscorr` (maximal pairwise absolute correlation)
+* New function: `stk_maxabscorr` (maximal pairwise absolute correlation)
 
 ## Probability distributions
 
-o A new 'probability distributions' module has been initiated (read
+* A new 'probability distributions' module has been initiated (read
   `misc/distrib/README` to understand the reasons why)
 
-o Currently provides: pdf, cdf and expected improvement (EI) for the
+* Currently provides: pdf, cdf and expected improvement (EI) for the
   Gaussian and Student t distributions
 
 ## Matlab/Octave compatibility
 
-o Matlab/Octave compatibility throughout all supported releases has been
+* Matlab/Octave compatibility throughout all supported releases has been
   strengthened, thanks to the creation of a Matlab/Octave Language
   Extension (MOLE) module
 
-o octave_quantile removed; instead, a replacement for `quantile` is
+* octave_quantile removed; instead, a replacement for `quantile` is
   provided by the MOLE when needed.
 
-o new function `graphicstoolkit`, providing a kind of replacement for
+* new function `graphicstoolkit`, providing a kind of replacement for
   `graphics_toolkit`, that also work in Matlab and old Octave releases
 
-o ...
+* ...
 
 ## Miscellaneous
 
-o `stk_plot1dsim` has been removed (use `stk_plot1d` instead)
+* `stk_plot1dsim` has been removed (use `stk_plot1d` instead)
 
-o plotting functions now work directly on the current axes
+* plotting functions now work directly on the current axes
 
-o An optional `box` argument has been added to `stk_sampling_halton_rr2`
+* An optional `box` argument has been added to `stk_sampling_halton_rr2`
 
-o `stk_feval` now uses input row names for its output
+* `stk_feval` now uses input row names for its output
 
 ## Bugfixes
 
-o `@stk_kreq_qr/stk_update` is now (inefficient but) working
+* `@stk_kreq_qr/stk_update` is now (inefficient but) working
 
-o `isequal` is now working for `stk_dataframe` and `stk_kreq_qr` objects in
+* `isequal` is now working for `stk_dataframe` and `stk_kreq_qr` objects in
   Octave 3.2.x (explicit overloading was required for these old releases)
 
-o and many other tiny little things
+* and many other tiny little things
 
 -----
 
@@ -823,17 +823,17 @@ o and many other tiny little things
 
 ## Bug fix
 
-o Fix a bug `core/stk_predict.m` (related to blockwise computations)
+* Fix a bug `core/stk_predict.m` (related to blockwise computations)
 
 
 # Changes in version 2.0.2
 
 ## Bug fixes
 
-o Fix a bug in `@stk_dataframe/subsref` (handle colnames properly when
+* Fix a bug in `@stk_dataframe/subsref` (handle colnames properly when
   ()-indexing is used to extract a subset of rows).
 
-o Fix a bug in `@stk_dataframe/stk_dataframe` (make sure that `.data`
+* Fix a bug in `@stk_dataframe/stk_dataframe` (make sure that `.data`
   contains numerical data) and add a copy constructor.
 
 
@@ -841,85 +841,85 @@ o Fix a bug in `@stk_dataframe/stk_dataframe` (make sure that `.data`
 
 ## Bug fixes
 
-o Fix a bug in `stk_predict` (don't compute the optional outputs `lambda`
+* Fix a bug in `stk_predict` (don't compute the optional outputs `lambda`
   and `mu` when they are not requested by the caller).
 
-o Fix a bug in `stk_sampling_olhs` (fail neatly when called with n = 2).
+* Fix a bug in `stk_sampling_olhs` (fail neatly when called with n = 2).
 
 
 # Changes in version 2.0.0
 
 ## Required Octave version number
 
-o Required Octave version number has been raised to 3.2.2.
+* Required Octave version number has been raised to 3.2.2.
 
 ## Important changes to the public API
 
-o New R-like data structures: `@stk_dataframe`, `@stk_factorial_design`.
+* New R-like data structures: `@stk_dataframe`, `@stk_factorial_design`.
 
-o The structures previously used everywhere in STK (with a `.a` field) are
+* The structures previously used everywhere in STK (with a `.a` field) are
   still supported but should be considered as deprecated (and will probably
   be completely removed in the next major release).
 
-o As a result, `stk_predict` does not return a `.a`/`.v` structure any
+* As a result, `stk_predict` does not return a `.a`/`.v` structure any
   more. Instead, it returns an stk_dataframe object with two variables
   called `mean` and `var`.
 
-o The function that computes (the opposite of the log of) the restricted
+* The function that computes (the opposite of the log of) the restricted
   likelihood is now called `stk_param_relik` instead of `stk_remlqrg`.
 
 ## Internal structure
 
-o Many improvements in the internal structure of STK, for the sake of
+* Many improvements in the internal structure of STK, for the sake of
   clarity (for those who happen to read the code) and efficiency:
 
-o `@stk_kreq_qr`: new class for encapsulating basic computations related to
+* `@stk_kreq_qr`: new class for encapsulating basic computations related to
   a Gaussian process (kriging) model.
 
-o The old `Kx_cache`/`Px_cache` mechanism, for working efficiently on
+* The old `Kx_cache`/`Px_cache` mechanism, for working efficiently on
   finite spaces, has been replaced by a new covariance function:
   `stk_discretecov`.
 
-o A new framework to encapsulate various approaches to parallel
+* A new framework to encapsulate various approaches to parallel
   computations. Currently only supporting `'none'` or `'parfor'`
   (Mathworks' PCT toolbox parfor loops) engines, more to come later.
 
 ## Experimental support for parameter objects.
 
-o `model.param` is now allowed to be an object from a user-defined
+* `model.param` is now allowed to be an object from a user-defined
   class. This feature is experimental, and not really used currently in the
   toolbox.
 
-o A new function `stk_param_getdefaultbounds` has appeared in `./param`,
+* A new function `stk_param_getdefaultbounds` has appeared in `./param`,
   that was previously hidden in `stk_predict`. It can be overridden in the
   case where `model.param` is an object from a user-defined class.
 
 ## New sampling algorithms and related functions
 
-o Fill-distance computation: exact (using Pronzato & Müller, Statistics &
+* Fill-distance computation: exact (using Pronzato & Müller, Statistics &
   Computing, 2011) or approximate (using a space-filling reference set).
 
-o Van Der Corput and Halton RR2-scrambled sequences (quasi-MC)
+* Van Der Corput and Halton RR2-scrambled sequences (quasi-MC)
 
-o NOLHS designs (Cioppa & Lucs, Technometrics, 2007)
+* NOLHS designs (Cioppa & Lucs, Technometrics, 2007)
 
 ## Miscellaneous
 
-o `misc/options`: a new system for managing options
+* `misc/options`: a new system for managing options
 
-o `octave_quantile`: replacement for the missing `quantile` function in
+* `octave_quantile`: replacement for the missing `quantile` function in
   base Matlab (Mathworks' Statistics toolbox is not a requirement of STK).
 
-o Add MEX-files for computing "Gibbs-Paciorek quadratic forms" to support
+* Add MEX-files for computing "Gibbs-Paciorek quadratic forms" to support
   future work on non-stationary covariance functions.
 
-o `AUTHORS`: a list of maintainers and contributors can now be found at the
+* `AUTHORS`: a list of maintainers and contributors can now be found at the
   root of the source tree.
 
-o `stk_compile_all`: now recompiles MEX-files automatically if the source code
+* `stk_compile_all`: now recompiles MEX-files automatically if the source code
   has changed.
 
-o Various new utility functions, tiny or not-so-tiny improvements,
+* Various new utility functions, tiny or not-so-tiny improvements,
   bugfixes here and there...
 
 -----
@@ -929,120 +929,120 @@ o Various new utility functions, tiny or not-so-tiny improvements,
 
 ## `stk_predict`
 
-o Now offers the possibility to compute the posterior covariance matrix (it
+* Now offers the possibility to compute the posterior covariance matrix (it
   is returned as a fourth optional argument).
 
-o Has been modified to work with non-stationary covariance functions.
+* Has been modified to work with non-stationary covariance functions.
 
 ## Covariance functions
 
-o Added a new `"pairwise"` option to all covariance functions and also to
+* Added a new `"pairwise"` option to all covariance functions and also to
   `stk_dist` (formerly `stk_distance_matrix`). This options allows to
   compute only the diagonal of the full distance/covariance matrix).
 
 ## Space-filling designs
 
-o New function (`stk_filldist`) to compute the (discretized) fill distance.
+* New function (`stk_filldist`) to compute the (discretized) fill distance.
 
-o New function (`stk_sampling_olhs`) to generate Orthogonal Latin Hypercube
+* New function (`stk_sampling_olhs`) to generate Orthogonal Latin Hypercube
   (OLH) samples using the algorithm of Ye (1998).
 
 ## Parameter estimation
 
-o New (experimental) function to choose automatically the starting point
+* New (experimental) function to choose automatically the starting point
   for a parameter estimation optimization procedure (`stk_param_init`).
 
 ## New functions to work with boxes
 
-o `stk_rescale`,
+* `stk_rescale`,
 
-o `stk_normalize`.
+* `stk_normalize`.
 
 ## More flexible representation of data
 
-o Improved the flexibility most functions (`stk_predict`,
+* Improved the flexibility most functions (`stk_predict`,
   `stk_param_estim`, ...), which are now accepting both matrices and "data
   structures" (with an `.a` field) as input arguments.
 
-o New function: `stk_datastruct`
+* New function: `stk_datastruct`
 
 ## Regular grids
 
-o New function `stk_plot2d` that serves has a wrapper around
+* New function `stk_plot2d` that serves has a wrapper around
   {`surf`|`contour`|`mesh`|`pcolor`}-type functions, to plot data defined
   over a two-dimensional regular grid.
 
-o `stk_sampling_regulargrid` now also returns 'ndgrid-style' coordinate
+* `stk_sampling_regulargrid` now also returns 'ndgrid-style' coordinate
   matrices stored in new `.coord` field.
 
 ## Examples
 
-o Reorganized the example folder and renamed all example scripts.
+* Reorganized the example folder and renamed all example scripts.
 
-o New example (`stk_example_misc03`) to demonstrate the effect of adding a
+* New example (`stk_example_misc03`) to demonstrate the effect of adding a
   prior on the covariance parameters.
 
-o Improved graphical outputs in `stk_example_kb03`.
+* Improved graphical outputs in `stk_example_kb03`.
 
-o New test function: `stk_testfun_braninhoo` (Branin-Hoo).
+* New test function: `stk_testfun_braninhoo` (Branin-Hoo).
 
 ## Miscellaneous
 
-o Renamed `stk_distancematrix` to `stk_dist`.
+* Renamed `stk_distancematrix` to `stk_dist`.
 
-o Various new utility functions: `stk_runexamples`, `stk_disp_framedtext`,
+* Various new utility functions: `stk_runexamples`, `stk_disp_framedtext`,
   `stk_disp_examplewelcome`, `stk_plot_shadedci`, `stk_octave_config`.
 
-o Improved Octave-specific configuration.
+* Improved Octave-specific configuration.
 
-o Lots of bugfixes and improvements.
+* Lots of bugfixes and improvements.
 
 -----
 
 
 # Changes in version 1.1
 
-o New special functions for the Matern 3/2 and 5/2 correlation functions
+* New special functions for the Matern 3/2 and 5/2 correlation functions
   (`stk_sf_matern32`, `stk_sf_matern52`). New covariance functions
   (`stk_materncov32_iso`, `stk_materncov32_aniso`, ...).
 
-o New MEX-file to compute the separation distance (`stk_mindist`).
+* New MEX-file to compute the separation distance (`stk_mindist`).
 
-o New function to generate random Latin Hypercube Samples
+* New function to generate random Latin Hypercube Samples
   (`stk_sampling_randomlhs`).  Renamed `stk_sampling_cartesiangrid` to
   `stk_sampling_regulargrid`, and changed the meaning of the first argument
   for consistency with other `stk_sampling_*` functions.
 
-o Improved `stk_model` function. Now provides default parameters for several
+* Improved `stk_model` function. Now provides default parameters for several
   families of covariance functions.
 
-o Renamed fields in model structures (`covariance_cache` to `Kx_cache` and `P0`
+* Renamed fields in model structures (`covariance_cache` to `Kx_cache` and `P0`
   to `Px_cache`). A new field `dim` has been added to the model structure.
 
-o Changed the order of the arguments of the functions that use the
+* Changed the order of the arguments of the functions that use the
   structure `model`. Now, `model` is always the first argument.
 
-o Changed `stk_param_estim` to make it possible to estimate noise variance.
+* Changed `stk_param_estim` to make it possible to estimate noise variance.
 
-o Fixed issues in `stk_param_estim` related to the definition of the search
+* Fixed issues in `stk_param_estim` related to the definition of the search
   domain and the selection of (constrained/unconstrained) optimizer.
 
-o Renamed `stk_conditionning` to `stk_conditioning`.
+* Renamed `stk_conditionning` to `stk_conditioning`.
 
-o New functions for a more flexible and efficient management of STK's
+* New functions for a more flexible and efficient management of STK's
   configuration in `stk_init` (path, compilation of MEX-file, checking for
   optional packages, selection of the default optimizer, ...).
 
-o New functions for unit testing, based on Octave's testing system
+* New functions for unit testing, based on Octave's testing system
   (`stk_test`, `stk_runtests`). Tests have been added to most functions in
   the toolbox.
 
-o Improved documentation & new examples.
+* Improved documentation & new examples.
 
-o Improved argument checking and error messages.
+* Improved argument checking and error messages.
 
-o Improved compatibility with older versions of Octave and Matlab.
+* Improved compatibility with older versions of Octave and Matlab.
 
-o Lots of minor changes and bug fixes.
+* Lots of minor changes and bug fixes.
 
-o Complete reorganization of the code (better directory structure).
+* Complete reorganization of the code (better directory structure).
