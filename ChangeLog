@@ -1,3 +1,9 @@
+2017-08-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	NEWS.md: Fix markdown formatting
+
+	* NEWS.md: Fix markdown formatting
+
 2017-08-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Convert NEWS to markdown formatting
