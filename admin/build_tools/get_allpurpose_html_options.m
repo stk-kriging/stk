@@ -76,7 +76,7 @@ options.header = @ (opts, pars, vpars) sprintf ("\
 \n\
 <title>STK: a Small (Matlab/Octave) Toolbox for Kriging</title>\n\
 \n\
-<link rel=\"stylesheet\" type=\"text/css\" href=\"%scss/%s\" />\n\
+<link rel=\"stylesheet\" type=\"text/css\" href=\"%s\" />\n\
 \n\
 </head>\n\
 \n\
@@ -85,12 +85,12 @@ options.header = @ (opts, pars, vpars) sprintf ("\
 <div class=\"header\">\n\
   <table><tr>\n\
     <td id=\"logo\">\n\
-      <a class=\"linkToIndex\" href =\"%sindex.html\">\n\
-        <img src=\"%simages/stk_logo.png\" alt=\"Octave logo\" />\n\
+      <a class=\"linkToIndex\" href =\"%s\">\n\
+        <img src=\"%s\" alt=\"Octave logo\" />\n\
       </a>\n\
     </td>\n\
     <td id=\"title\">\n\
-      <a class=\"linkToIndex\" href =\"%sindex.html\">\n\
+      <a class=\"linkToIndex\" href =\"%s\">\n\
         <b>STK</b>: a <b>S</b>mall (Matlab/Octave)\n\
         <b>T</b>oolbox for <b>K</b>riging\n\
       </a>\n\
@@ -98,8 +98,11 @@ options.header = @ (opts, pars, vpars) sprintf ("\
   </tr></table>\n\
 </div>\n\
 \n\
-<div id=\"doccontent\">\n", date (), vpars.pkgroot, opts.css, ...
-vpars.root, vpars.pkgroot, vpars.pkgroot, vpars.pkgroot);
+<div id=\"doccontent\">\n", date (), ...
+fullfile (vpars.pkgroot, "css", opts.css), ...
+fullfile (vpars.pkgroot, "index.html"), ...
+fullfile (vpars.pkgroot, "images", "stk_logo.png"), ...
+fullfile (vpars.pkgroot, "index.html"));
 
 %%--- Footer -------------------------------------------------------------------
 

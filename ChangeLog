@@ -1,5 +1,10 @@
 2017-08-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Adapt html doc generation to changes in generate_html (fix)
+
+	* admin/build_tools/get_allpurpose_html_options.m: Fix earlier
+	commit (a12753859a6a) with the same name.
+
 	generate_htmldoc.m: Use HTML version of NEWS.md (ticket #61)
 
 	* admin/build_tools/generate_htmldoc.m: Insert HTML version of
@@ -11,7 +16,7 @@
 
 2017-08-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
-	Convert NEWS to markdown formatting
+	Convert NEWS to markdown formatting (ticket #60)
 
 	* NEWS.md: Convert NEWS to markdown formatting and rename to NEWS.md.
 	* NEWS: Removed.
