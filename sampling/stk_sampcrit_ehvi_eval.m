@@ -62,7 +62,7 @@
 
 function EHVI = stk_sampcrit_ehvi_eval (zp_mean, zp_std, zi, zr)
 
-if nargin > 4,
+if nargin > 4
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
@@ -79,12 +79,28 @@ if ~ isempty (S.sign)
     % Shift rectangle number to third dimension
     Rs = shiftdim (S.sign,  -2);
     Ra = shiftdim (S.xmin', -1);
-    Rb = shiftdim (S.xmax', -1);    
+    Rb = shiftdim (S.xmax', -1);
     
-    EIa = stk_distrib_normal_ei (Ra, zp_mean, zp_std, 1);  % m x p x R
-    EIb = stk_distrib_normal_ei (Rb, zp_mean, zp_std, 1);  % m x p x R
+    % Number of rectangles
+    R = size (Ra, 3);
     
-    EHVI = EHVI - sum (bsxfun (@times, Rs, prod (EIb - EIa, 2)), 3);
+    % Deal with BLOCK_SIZE rectangles at a time to avoid OOM
+    BLOCK_SIZE = ceil (1e7 / (numel (EIr)));
+    nb_blocks = ceil (R / BLOCK_SIZE);
+    r2 = 0;
+    for b = 1:nb_blocks
+        
+        r1 = r2 + 1;
+        r2 = min (r1 + BLOCK_SIZE - 1, R);
+        
+        % Both EIa and EIb will have size m x p x BLOCK_SIZE
+        EIa = stk_distrib_normal_ei (Ra(:, :, r1:r2), zp_mean, zp_std, 1);
+        EIb = stk_distrib_normal_ei (Rb(:, :, r1:r2), zp_mean, zp_std, 1);
+        
+        EHVI = EHVI - sum (bsxfun (@times, ...
+            Rs(:, :, r1:r2), prod (EIb - EIa, 2)), 3);
+        
+    end % if
     
 end % if
 

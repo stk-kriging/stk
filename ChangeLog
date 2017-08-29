@@ -1,5 +1,10 @@
 2017-08-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_sampcrit_ehvi_eval.m: Avoid OOM errors (ticket #48)
+
+	* sampling/stk_sampcrit_ehvi_eval.m: Process batches of rectangles
+	to avoid OOM errors.
+
 	Adapt html doc generation to changes in generate_html (fix)
 
 	* admin/build_tools/get_allpurpose_html_options.m: Fix earlier
