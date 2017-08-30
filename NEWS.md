@@ -52,8 +52,14 @@
    + New overloaded functions for `stk_dataframe` objects: `isinf`,
      `isnan`, `isfinite`.
 
-* `@stk_dataframe/ismember`: No longer assumes `rows` flag for consistency
-  with the base `ismember` function.
+* Testing array membership
+
+   + `@stk_dataframe/ismember`: No longer assumes `rows` flag for
+     consistency with the base `ismember` function.
+
+   + `stk_factorialdesign/ismember`: New function.  Tests membership
+     for factorial designs much more efficiently than for plain arrays
+     or data frames.
 
 * `stk_generate_samplepaths` now returns a plain numerical array instead of
   a data frame.

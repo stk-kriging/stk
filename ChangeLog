@@ -1,3 +1,9 @@
+2017-08-30  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Overload ismember for stk_factorialdesign objects (ticket #29)
+
+	* arrays/@stk_factorialdesign/ismember.m: New function
+
 2017-08-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_sampcrit_ehvi_eval.m: Avoid OOM errors (ticket #48)
