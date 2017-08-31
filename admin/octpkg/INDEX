@@ -408,6 +408,7 @@ Miscellaneous: Validation of models
 #@stk_factorialdesign/fieldnames            [overload base]
 #@stk_factorialdesign/get                   [overload base]
 #@stk_factorialdesign/isequal               [overload base]
+#@stk_factorialdesign/ismember              [overload base]
 #@stk_factorialdesign/mesh                  [overload base]
 #@stk_factorialdesign/meshc                 [overload base]
 #@stk_factorialdesign/meshz                 [overload base]
