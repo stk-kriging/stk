@@ -1,5 +1,11 @@
 2017-08-31  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_generate_samplepaths.m: Remove xtest for ticket #14
+
+	* utils/stk_generate_samplepaths.m: Remove xtest for ticket #14
+	since the problem as been solved, as expected, by the previous
+	commit.
+
 	Exact predictions at obs points for noiseless models (ticket #49)
 
 	* core/@stk_model_gpposterior/stk_predict.m: Ensure exact
