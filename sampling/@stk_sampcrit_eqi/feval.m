@@ -60,6 +60,7 @@ if nargin < 3
 end
 
 tmp = (zp_std .^ 2) ./ (tau2 + zp_std .^ 2);
+tmp(zp_std == 0) = 0.0;
 quantile_moy = zp_mean + crit.quantile_value * (sqrt (tau2 .* tmp));
 quantile_var = (zp_std .^ 2) .* tmp;
 
