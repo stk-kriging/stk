@@ -99,7 +99,7 @@ fprintf (fid, 'Date: %s\n', release_date(1:10));
 fprintf (fid, '#\n');
 fprintf (fid, 'Title: STK: A Small Toolbox for Kriging\n');
 fprintf (fid, '#\n');
-fprintf (fid, 'Author: See AUTHORS file\n');
+fprintf (fid, 'Author: See AUTHORS.md file\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Maintainer: Julien BECT <julien.bect@centralesupelec.fr>\n');
 fprintf (fid, ' and Emmanuel VAZQUEZ <emmanuel.vazquez@centralesupelec.fr>\n');
@@ -204,14 +204,16 @@ else
         % Remove the .md extension, which is not expected by Octave
         copyfile (s, fullfile (unpacked_dir, 'NEWS'));
 
-    elseif strcmp (s, 'AUTHORS')
+    elseif strcmp (s, 'AUTHORS.md')
         
-        % Put AUTHORS in the documentation directory
+        % Put AUTHORS.md in the documentation directory
+        % (not a standard Octave package file, .md is fine)
         copyfile (s, fullfile (unpacked_dir, 'doc'));
         
     elseif strcmp (s, 'README.md')
         
         % Put README.md in the documentation directory
+        % (not a standard Octave package file, .md is fine)
         copy_readme (s, fullfile (unpacked_dir, 'doc'), release_date);
         
     elseif strcmp (s, 'CITATION')
