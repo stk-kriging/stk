@@ -409,7 +409,7 @@
 
 2017-06-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
-	stk_dominatedhv.m: Accept @stkçdataframe inputs
+	stk_dominatedhv.m: Accept @stk_dataframe inputs
 
 	* misc/pareto/stk_dominatedhv.m: Tolerate any kind of input
 	argument that can be converted to a double precision matrix, in
