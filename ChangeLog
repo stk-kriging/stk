@@ -1,3 +1,11 @@
+2017-08-31  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	NEWS.md: Write Matérn with an accent on the "e"
+
+	* NEWS.md: Write Matérn with an accent on the "e", since we are
+	already using UTF-8 in this file anyway (for the umlaut on the "u"
+	of Müller).
+
 2017-08-30  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Overload ismember for stk_factorialdesign objects (ticket #29)

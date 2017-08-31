@@ -174,7 +174,7 @@
 
 * New covariance functions
 
-   + Exponential (aka Matern 1/2): `stk_expcov_iso`, `stk_expcov_aniso`
+   + Exponential (aka Matérn 1/2): `stk_expcov_iso`, `stk_expcov_aniso`
    + Spherical: `stk_sphcov_iso`, `stk_sphcov_aniso`
 
 ## Linear models
@@ -185,7 +185,7 @@
 
 * `model.order` is deprecated (but still supported).
 
-* As an example, the following define a Gaussian process with a Matern 5/2
+* As an example, the following define a Gaussian process with a Matérn 5/2
   covariance function and a quadratic trend:
 
         model = stk_model ('stk_materncov52_aniso');
@@ -760,7 +760,7 @@
 * New examples
 
    * kb06: ordinary kriging VS linear trend
-   * kb07: simulations of Matern sample paths with different various `nu`
+   * kb07: simulations of Matérn sample paths with different various `nu`
    * doe03: one-dimensional Bayesian optimization (expected improvement)
 
 ## Covariance functions
@@ -1008,7 +1008,7 @@
 
 # Changes in version 1.1
 
-* New special functions for the Matern 3/2 and 5/2 correlation functions
+* New special functions for the Matérn 3/2 and 5/2 correlation functions
   (`stk_sf_matern32`, `stk_sf_matern52`). New covariance functions
   (`stk_materncov32_iso`, `stk_materncov32_aniso`, ...).
 
