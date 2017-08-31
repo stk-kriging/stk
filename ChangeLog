@@ -1,5 +1,14 @@
 2017-08-31  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Convert AUTHORS to markdown.
+
+	* AUTHORS: Renamed to AUTHORS.md
+	* AUTHORS.md: Renamed from AUTHORS, and converted to md syntax.
+	* admin/find_nonstandard_characters.sh: Scan AUTHORS.md as well.
+	* admin/build_tools/build_octpkg.m: Update.
+	* README.md: Update.
+	* admin/RELEASE.md: Update.
+
 	NEWS.md: Write Matérn with an accent on the "e"
 
 	* NEWS.md: Write Matérn with an accent on the "e", since we are

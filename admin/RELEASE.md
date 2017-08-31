@@ -12,8 +12,8 @@ Assume, say, that we want to release STK version 4.5 (hum... not yet...).
  * Check that all mlock-ed files and all files containing persistent variables
    are listed in `stk_init__clear_persistents` (inside `stk_init.m`).
 
- * Check that AUTHORS is up-to-date. Check copyright years on all files modified
-   since the previous release.
+ * Check that AUTHORS.md is up-to-date. Check copyright years on all files
+   modified since the previous release.
  
  * Check that the NEWS file has been updated, and contains a clean description 
    of all changes since the previous release.
