@@ -149,6 +149,33 @@ for block_num = 1:nb_blocks
     
 end
 
+%--- Ensure exact prediction at observation points for noiseless models --------
+
+if ~ stk_isnoisy (M_prior)
+    
+    % FIXME: Fix the kreq object instead ?
+    
+    % Some precautions for backward compat with .a structures:
+    xi = double (M_post.input_data);
+    zi = double (M_post.output_data);
+    
+    [b, loc] = ismember (xt, xi, 'rows');
+    if sum (b) > 0
+        
+        if compute_prediction
+            zp_a(b) = zi(loc(b));
+        end
+        
+        zp_v(b) = 0.0;
+        
+        if nargout > 1
+            lambda_mu(:, b) = 0.0;
+            lambda_mu(sub2ind (size (lambda_mu), loc(b), find (b))) = 1.0;
+        end
+    end
+end
+
+
 %--- Prepare outputs -----------------------------------------------------------
 
 zp = stk_dataframe ([zp_a zp_v], {'mean' 'var'});

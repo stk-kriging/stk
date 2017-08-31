@@ -1,5 +1,13 @@
 2017-08-31  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Exact predictions at obs points for noiseless models (ticket #49)
+
+	* core/@stk_model_gpposterior/stk_predict.m: Ensure exact
+	prediction at observation points for noiseless models.
+	* core/stk_predict.m: Change xtest to test.
+	* sampling/@stk_sampcrit_eqi/feval.m: Fix EQI computation at the
+	points where the variance is zero.
+
 	Insert HTML version of AUTHORS.md in the documentation
 
 	* admin/build_tools/generate_htmldoc.m: Insert HTML version of
