@@ -116,7 +116,7 @@
 	correctness of virtual LOO formulas, and for benchmarking.
 	* admin/octpkg/INDEX: Hide internal function from the index.
 
-2017-07-23  Remi Stroh  <remi.stroh@lne.fr>
+2017-07-23  Rémi Stroh  <remi.stroh@lne.fr>
 
 	stk_predict_leaveoneout.m: Use virtual Leave-One-Out formula (ticket #35)
 
@@ -182,7 +182,7 @@
 	recommending to use erfcinv directly when norminv fails.
 	* sampling/@stk_sampcrit_eqi/set.m: Implement CG#09.
 
-2017-07-04  Remi Stroh  <remi.stroh@lne.fr>
+2017-07-04  Rémi Stroh  <remi.stroh@lne.fr>
 
 	@stk_sampcrit_eqi\set.m: Change "norminv" by "erfcinv" (ticket #78)
 
@@ -352,7 +352,7 @@
 	* arrays/@stk_dataframe/not.m: New function.
 	* admin/octpkg/INDEX: Add new function to the INDEX.
 
-2017-06-26  Remi Stroh  <remi.stroh@lne.fr>
+2017-06-26  Rémi Stroh  <remi.stroh@lne.fr>
 
 	stk_distrib_normal_crps.m: Make unit test deterministic (ticket #77)
 
@@ -708,7 +708,7 @@
 	* misc/distrib/stk_distrib_normal_ei.m: Recommend to use
 	stk_sampcrit_ei_eval instead.
 
-2017-05-12  Remi Stroh  <remi.stroh@lne.fr>
+2017-05-12  Rémi Stroh  <remi.stroh@lne.fr>
 
 	Format help texts.
 
@@ -787,7 +787,7 @@
 	the rest of the toolbox, we should avoid using functions from
 	other parts of STK inside them.
 
-2017-05-03  Remi Stroh  <remi.stroh@lne.fr>
+2017-05-03  Rémi Stroh  <remi.stroh@lne.fr>
 
 	stk_distrib_normal_crps.m: New function to compute the Gaussian CRPS
 
@@ -795,7 +795,7 @@
 	the Continuous Ranked Probability Score in the case of a Gaussian
 	predictive density.
 
-2017-04-27  Remi Stroh  <remi.stroh@lne.fr>
+2017-04-27  Rémi Stroh  <remi.stroh@lne.fr>
 
 	New functions to create nested designs.
 
@@ -6102,7 +6102,7 @@
 
 2012-09-08  Julien Bect  <julien.bect@supelec.fr>
 
-	Adding default bounds for Matern 3/2 covariances.
+	Adding default bounds for Matérn 3/2 covariances.
 
 	* paramestim/stk_param_estim.m: modified
 
@@ -6543,7 +6543,7 @@
 	* stk_init.m: Turned output pagination off and disabled verbose
 	help messages in Octave.
 
-	New covariance function (Matern 3/2).
+	New covariance function (Matérn 3/2).
 
 	* utils/specfun/stk_sf_matern32.m: New function.
 	* covfcs/stk_materncov32_aniso.m: New function.
@@ -6565,12 +6565,12 @@
 
 2012-02-05  Julien Bect  <julien.bect@supelec.fr>
 
-	New covariance function (Matern 5/2).
+	New covariance function (Matérn 5/2).
 
 	* utils/specfun/stk_sf_matern52.m: New function.
 	* covfcs/stk_materncov52_aniso.m: New function.
 	* covfcs/stk_materncov52_iso.m: New function.
-	* core/stk_param_estim.m: Added Matern 5/2 to get_default_bounds().
+	* core/stk_param_estim.m: Added Matérn 5/2 to get_default_bounds().
 	* examples/example06.m: New script.
 	* examples/run_all_examples.m: Increased NB_EXAMPLES.
 
