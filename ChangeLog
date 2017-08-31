@@ -1,5 +1,9 @@
 2017-08-31  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	INDEX: Add @stk_factorialdesign/ismember
+
+	* admin/octpkg/INDEX: INDEX: Add @stk_factorialdesign/ismember.
+
 	Convert AUTHORS to markdown.
 
 	* AUTHORS: Renamed to AUTHORS.md
