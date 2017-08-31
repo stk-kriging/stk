@@ -1,5 +1,10 @@
 2017-08-31  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Insert HTML version of AUTHORS.md in the documentation
+
+	* admin/build_tools/generate_htmldoc.m: Insert HTML version of
+	AUTHORS.md in the documentation.
+
 	INDEX: Add @stk_factorialdesign/ismember
 
 	* admin/octpkg/INDEX: INDEX: Add @stk_factorialdesign/ismember.
