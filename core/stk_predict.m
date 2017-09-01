@@ -127,11 +127,6 @@ end % function
 %! assert (isequal (size (mu), [1 m]));  % ordinary kriging
 %! assert (isequal (size (K), [m m]));
 
-%!test % use old-style .a structures (legacy)
-%! y_prd2 = stk_predict(model, struct('a', double(x_obs)), ...
-%!                      struct('a', double(z_obs)), struct('a', double(x_prd)));
-%! assert(stk_isequal_tolrel(double(y_prd1), double(y_prd2)));
-
 %!test  % predict on large set of locations
 %! x_prd = stk_sampling_regulargrid (1e5, 1, [0; pi]);
 %! y_prd = stk_predict (model, x_obs, z_obs, x_prd);

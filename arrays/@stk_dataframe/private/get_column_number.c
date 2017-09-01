@@ -54,11 +54,11 @@ int get_column_number(const mxArray* mxColNames, char* s)
     if (strcmp (s, "colnames") == 0)
         return ICOL_COLNAMES;
     
-    ncol = mxGetNumberOfElements(mxColNames);
+    ncol = mxGetNumberOfElements (mxColNames);
     if (ncol == 0) {
-        if (strcmp(s, "a") == 0 || strcmp(s, "data") == 0) /* LEGACY: .a */
+        if (strcmp(s, "data") == 0)
             return ICOL_ENTIRE_DATAFRAME;
-        mexErrMsgTxt("The dataframe has no column names.");
+        mexErrMsgTxt ("The dataframe has no column names.");
     }
     
     icol = -1;

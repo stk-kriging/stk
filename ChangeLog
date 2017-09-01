@@ -1,3 +1,24 @@
+2017-09-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Remove support for old-style .a structures
+
+	* arrays/@stk_dataframe/private/get_column_number.c: Remove
+	support for old-style .a structures.
+	* misc/dist/stk_gpquadform.m: Idem.
+	* arrays/@struct/double.m: Removed.
+	* arrays/@struct/stk_boundingbox.m: Removed.
+	* arrays/@struct/stk_length.m: Removed.
+	* admin/octpkg/INDEX: Update.
+	* arrays/@stk_dataframe/subsref.m: Remove unit tests.
+	* core/@stk_model_gpposterior/stk_predict.m: Idem.
+	* core/stk_predict.m: Idem.
+	* arrays/generic/stk_feval.m: Idem.
+	* covfcs/stk_expcov_aniso.m: Idem.
+	* covfcs/stk_gausscov_aniso.m: Idem.
+	* covfcs/stk_materncov32_aniso.m: Idem.
+	* covfcs/stk_sphcov_aniso.m: Idem.
+	* NEWS.md: Advertise.
+
 2017-08-31  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_generate_samplepaths.m: Remove xtest for ticket #14
