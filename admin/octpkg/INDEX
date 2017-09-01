@@ -297,12 +297,6 @@ Miscellaneous: Validation of models
 #stk_sprintf_rownames        [internal]
 #stk_sprintf_sizetype        [internal]
 
-## Those are for legacy support of .a data structures
-## (will be completely removed in the 3.x series)
-#@struct/double              [overload base + deprecated]
-#@struct/stk_boundingbox     [overload STK + deprecated]
-#@struct/stk_length          [overload STK + deprecated]
-
 #@stk_dataframe/stk_boundingbox           [overload STK]
 #@stk_dataframe/stk_conditioning          [overload STK]
 #@stk_dataframe/stk_length                [overload STK]

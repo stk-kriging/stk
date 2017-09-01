@@ -155,7 +155,6 @@ if ~ stk_isnoisy (M_prior)
     
     % FIXME: Fix the kreq object instead ?
     
-    % Some precautions for backward compat with .a structures:
     xi = double (M_post.input_data);
     zi = double (M_post.output_data);
     
@@ -247,14 +246,6 @@ end % function
 %! [y_prd_nan, lambda] = stk_predict (M_post1, x_prd);
 %! assert (isequal (size (lambda), [n m]));
 %! assert (all (isnan (y_prd_nan.mean)));
-
-%!test % use old-style .a structures (legacy)
-%! x_obs_a = struct ('a', double (x_obs));
-%! z_obs_a = struct ('a', double (z_obs));
-%! x_prd_a = struct ('a', double (x_prd));
-%! M_post1 = stk_model_gpposterior (M_prior, x_obs_a, z_obs_a);
-%! y_prd1 = stk_predict (M_post, x_prd_a);
-%! assert (stk_isequal_tolrel (y_prd, y_prd1));
 
 %!test % discrete model (prediction indices provided)
 %! M_prior1 = stk_model ('stk_discretecov', M_prior, x0);

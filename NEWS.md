@@ -77,6 +77,8 @@
 
 * `stk_plot1d`: Handle the case where `xt` is not sorted.
 
+* Support old-style STK structures (with a `.a` field) has been removed.
+
 -----
 
 

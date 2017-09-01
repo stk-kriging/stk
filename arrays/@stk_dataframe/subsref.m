@@ -138,14 +138,6 @@ end % function
 %!error t = data(1, 1, 1);    % too many indices
 %!error t = data{1};          % curly braces not allowed
 
-%!test % legacy feature: data.a returns the 'mean' column if it exists
-%! data = set(data, 'colnames', {'mean', 'x2'});
-%! assert(isequal(data.a, u(:, 1)));
-
-%!test % legacy feature: data.a returns the whole dataframe otherwise
-%! data = set(data, 'colnames', {'x1', 'x2'});
-%! assert(isequal(data.a, u));
-
 %!test % select rows and columns
 %! x = stk_dataframe (reshape (1:15, 5, 3), {'u' 'v' 'w'});
 %! assert (isequal (x([3 5], 2), stk_dataframe ([8; 10], {'v'})));
