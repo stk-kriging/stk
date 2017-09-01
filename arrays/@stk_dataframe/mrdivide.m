@@ -29,22 +29,38 @@
 function y = mrdivide (x1, x2)
 
 if isa (x1, 'stk_dataframe')
+    
     x1_data = x1.data;
-    x1_rownames = x1.rownames;
-else
+    rownames = x1.rownames;
+    
+    if isa (x2, 'stk_dataframe')  % both are stk_dataframe objects
+        
+        x2_data = x2.data;
+        colnames = x2.rownames;
+        
+    else
+        
+        x2_data = x2;
+        
+        if isscalar (x2)  % special case
+            colnames = x1.colnames;
+        else
+            colnames = {};
+        end
+        
+    end
+    
+else  % x2 is an stk_dataframe object, but x1 is not
+    
     x1_data = x1;
-    x1_rownames = {};
-end
-
-if isa (x2, 'stk_dataframe')
+    rownames = {};
+    
     x2_data = x2.data;
-    x2_rownames = x2.rownames;
-else
-    x2_data = x2;
-    x2_rownames = {};
+    colnames = x2.rownames;
+    
 end
 
-y = stk_dataframe (x1_data / x2_data, x2_rownames, x1_rownames);
+y = stk_dataframe (x1_data / x2_data, colnames, rownames);
 
 end % function
 
@@ -55,3 +71,14 @@ end % function
 %! y = x1 / x2;
 %! assert (isequal (y, ...
 %!     stk_dataframe (x1.data / x2.data, {'u'; 'v'; 'w'; 'z'}, {'a'; 'b'})));
+
+
+% Special case: division by a scalar
+
+%!shared x, y
+%! x = stk_dataframe (rand (3, 2), {'x' 'y'}, {'a'; 'b'; 'c'});
+
+%!test y = x / 3;
+%!assert (isequal (y, stk_dataframe (x.data / 3, {'x' 'y'}, {'a'; 'b'; 'c'})));
+
+%!error y = 3 / x;
