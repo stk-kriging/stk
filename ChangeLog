@@ -1,5 +1,12 @@
 2017-09-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Multiply/divide an stk_dataframe object by a scalar
+
+	* arrays/@stk_dataframe/mtimes.m: Implement a special case for the
+	multiplication of an stk_dataframe object by a numerical scalar.
+	* arrays/@stk_dataframe/mldivide.m: Idem for left division.
+	* arrays/@stk_dataframe/mrdivide.m: Idem for right division.
+
 	Overload left/right matrix division for stk_dataframe objects
 
 	* arrays/@stk_dataframe/mldivide.m: New function.
