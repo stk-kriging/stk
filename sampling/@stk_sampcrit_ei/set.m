@@ -48,7 +48,6 @@ switch propname
                 crit.current_minimum = +inf;
             else
                 n = size (zi, 1);
-                assert (isequal (size (zi), [n, 1]));  % FIXME
                 crit.current_minimum = min (zi);
             end
             

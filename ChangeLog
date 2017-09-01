@@ -1,5 +1,10 @@
 2017-09-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_sampcrit_ei/set.m: Remove unnecessary assert
+
+	* sampling/@stk_sampcrit_ei/set.m: Remove unnecessary assert,
+	since only scalar output models are supported in STK at this time.
+
 	Remove support for old-style .a structures
 
 	* arrays/@stk_dataframe/private/get_column_number.c: Remove
