@@ -89,8 +89,6 @@ lia = all (b, 2);
 end % function
 
 
-%%% FIXME: update unit tests !!!
-
 %!shared A, B, BB, b
 %!
 %! i_max = 10;  n = 100;  d = 5;
