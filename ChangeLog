@@ -1,5 +1,11 @@
 2017-09-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Overload left/right matrix division for stk_dataframe objects
+
+	* arrays/@stk_dataframe/mldivide.m: New function.
+	* arrays/@stk_dataframe/mrdivide.m: New function.
+	* admin/octpkg/INDEX: Add new functions to the INDEX.
+
 	stk_benchmark_predict.m: The boxplot function might be unavailable
 
 	* misc/benchmarks/stk_benchmark_predict.m: Wrap call to boxplot in

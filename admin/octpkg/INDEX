@@ -360,6 +360,8 @@ Miscellaneous: Validation of models
 #@stk_dataframe/min                       [overload base]
 #@stk_dataframe/minus                     [overload base]
 #@stk_dataframe/mode                      [overload base]
+#@stk_dataframe/mrdivide                  [overload base]
+#@stk_dataframe/mldivide                  [overload base]
 #@stk_dataframe/mtimes                    [overload base]
 #@stk_dataframe/ne                        [overload base]
 #@stk_dataframe/not                       [overload base]
