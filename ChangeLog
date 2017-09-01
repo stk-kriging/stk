@@ -1,5 +1,10 @@
 2017-09-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_benchmark_predict.m: The boxplot function might be unavailable
+
+	* misc/benchmarks/stk_benchmark_predict.m: Wrap call to boxplot in
+	try-catch block, since the boxplot function might be unavailable.
+
 	@stk_sampcrit_ei/set.m: Remove unnecessary assert
 
 	* sampling/@stk_sampcrit_ei/set.m: Remove unnecessary assert,

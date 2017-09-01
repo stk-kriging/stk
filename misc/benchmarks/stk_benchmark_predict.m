@@ -56,11 +56,15 @@ for i = 1:m
     t_out.mad(i) = median (abs (t(:, i) - t_out.median(i)));
 end
 
-% Boxplots
-stk_figure ('stk_benchmark_predict');
-boxplot (log10 (t * 1000));
-set(gca (), 'xticklabel', t_out.rownames);
-stk_labels ('n_{obs} / n_{pred}', 'log10 (t) [ms]'); 
+% Boxplots (if available)
+h_fig = stk_figure ('stk_benchmark_predict');
+try
+    boxplot (log10 (t * 1000));
+    set(gca (), 'xticklabel', t_out.rownames);
+    stk_labels ('n_{obs} / n_{pred}', 'log10 (t) [ms]'); 
+catch
+    close (h_fig);
+end
 
 end % function
 
