@@ -1,5 +1,9 @@
 2017-09-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_sampcrit_ei_eval.m: Remove deprecated calling forms
+
+	* sampling/stk_sampcrit_ei_eval.m: Remove deprecated calling forms.
+
 	Make halfpintl public, with an stk_ prefix
 
 	* sampling/private/halfpintl.m: Remove from private directory.
