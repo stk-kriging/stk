@@ -183,7 +183,7 @@ for i = 1:M
     % Intersection of lower half-planes
     % (algorithm similar to the one in Scott et al, 2011, Table 4.1,
     %  except that cases of equal slopes are dealt with inside the loop)
-    [a, b, z] = halfpintl (a, b);
+    [a, b, z] = stk_halfpintl (a, b);
     
     % Compute normal cdfs and pdfs
     F = [0; stk_distrib_normal_cdf(z); 1];
