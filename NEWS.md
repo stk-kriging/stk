@@ -11,6 +11,8 @@
 * New (experimental) classes to represent sampling criterion objects:
   `stk_sampcrit_ei`, `stk_sampcrit_akg`, `stk_sampcrit_eqi`.
 
+* `stk_sampcrit_ei_eval`: Remove deprecated calling forms.
+
 ## Design of experiments
 
 * `stk_factorialdesign`: Accept one-variable `stk_dataframe` objects as
