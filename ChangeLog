@@ -1,3 +1,14 @@
+2017-09-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Use Octave's native test function on Octave
+
+	* misc/test/stk_test.m: Use Octave's native test function on Octave.
+	* misc/test/stk_runtests.m: Similarly, use Octave's native
+	__run_test_suite__ function when running on Octave.
+	* admin/octpkg/patches/use-native-test-function.patch: Remove patch.
+	* admin/octpkg/patches/series: Remove patch.
+	* admin/octpkg/INDEX: Add stk_test to the INDEX.
+
 2017-09-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Multiply/divide an stk_dataframe object by a scalar

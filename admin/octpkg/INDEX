@@ -466,6 +466,7 @@ Miscellaneous: options, plots...
  stk_plot_histnormres
  stk_plot_predvsobs
  stk_plot_probdom2d
+ stk_test
  stk_runtests
  stk_version
 
