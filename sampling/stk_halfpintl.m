@@ -1,13 +1,13 @@
-% HALFPINTL [STK internal]
+% STK_HALFPINTL computes an intersection of lower half-planes
 %
-% CALL: [A, B, Z] = halfpintl (A, B)
+% CALL: [A, B, Z] = stk_halfpintl (A, B)
 %
 %    computes the intersection of the lower half-planes defined by the vector
 %    of slopes A and the vector of intercepts B.  The output vectors A and B
 %    contain the slopes and intercept of the lines that actually contribute to
 %    the boundary of the intersection, sorted in such a way that the k^th
 %    element corresponds to the k^th piece of the piecewise affine boundary.
-%    The output Z contains the intertesection points (shorter by one element).
+%    The output Z contains the intersection points (shorter by one element).
 %
 % ALGORITHM
 %
@@ -49,7 +49,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [a, b, z] = halfpintl (a, b)
+function [a, b, z] = stk_halfpintl (a, b)
 
 % a: slopes
 % b: intercepts
@@ -124,7 +124,7 @@ end % function
 %!test  % case #1
 %! a = 1;
 %! b = 1;
-%! [a_out, b_out, z_out] = halfpintl (a, b);
+%! [a_out, b_out, z_out] = stk_halfpintl (a, b);
 %! assert (a_out == 1)
 %! assert (b_out == 1)
 %! assert (isempty (z_out))
@@ -132,7 +132,7 @@ end % function
 %!test  % case #2: two lines, slopes not equal, already sorted
 %! a = [1; -1];
 %! b = [0; 2];
-%! [a_out, b_out, z_out] = halfpintl (a, b);
+%! [a_out, b_out, z_out] = stk_halfpintl (a, b);
 %! assert (isequal (a_out, [1; -1]))
 %! assert (isequal (b_out, [0; 2]))
 %! assert (z_out == 1)
@@ -140,7 +140,7 @@ end % function
 %!test  % case #3: same as #2, but not sorted
 %! a = [-1; 1];
 %! b = [ 2; 0];
-%! [a_out, b_out, z_out] = halfpintl (a, b);
+%! [a_out, b_out, z_out] = stk_halfpintl (a, b);
 %! assert (isequal (a_out, [1; -1]))
 %! assert (isequal (b_out, [0; 2]))
 %! assert (z_out == 1)
@@ -148,7 +148,7 @@ end % function
 %!test  % case #4: two lines, equal slopes, already sorted
 %! a = [0; 0];
 %! b = [1; 2];
-%! [a_out, b_out, z_out] = halfpintl (a, b);
+%! [a_out, b_out, z_out] = stk_halfpintl (a, b);
 %! assert (a_out == 0)
 %! assert (b_out == 1)
 %! assert (isempty (z_out))
@@ -156,7 +156,7 @@ end % function
 %!test  % case #5: same as #4, but not sorted
 %! a = [0; 0];
 %! b = [2; 1];
-%! [a_out, b_out, z_out] = halfpintl (a, b);
+%! [a_out, b_out, z_out] = stk_halfpintl (a, b);
 %! assert (a_out == 0)
 %! assert (b_out == 1)
 %! assert (isempty (z_out))
@@ -164,7 +164,7 @@ end % function
 %!test  % case #6: add a dominated line to #2 (the result does not change)
 %! a = [1; -1; 0];
 %! b = [0;  2; 1];
-%! [a_out, b_out, z_out] = halfpintl (a, b);
+%! [a_out, b_out, z_out] = stk_halfpintl (a, b);
 %! assert (isequal (a_out, [1; -1]))
 %! assert (isequal (b_out, [0; 2]))
 %! assert (z_out == 1)
@@ -172,7 +172,7 @@ end % function
 %!test  % case #7: permutation of #6
 %! a = [1; 0; -1];
 %! b = [0; 1;  2];
-%! [a_out, b_out, z_out] = halfpintl (a, b);
+%! [a_out, b_out, z_out] = stk_halfpintl (a, b);
 %! assert (isequal (a_out, [1; -1]))
 %! assert (isequal (b_out, [0; 2]))
 %! assert (z_out == 1)
@@ -180,7 +180,7 @@ end % function
 %!test  % case #8: another permutation of #6
 %! a = [0; 1; -1];
 %! b = [1; 0;  2];
-%! [a_out, b_out, z_out] = halfpintl (a, b);
+%! [a_out, b_out, z_out] = stk_halfpintl (a, b);
 %! assert (isequal (a_out, [1; -1]))
 %! assert (isequal (b_out, [0; 2]))
 %! assert (z_out == 1)
@@ -188,7 +188,7 @@ end % function
 %!test  % case #9: same as #8, with some duplicated lines added
 %! a = [0; 1; 0; -1; 0; -1; 1];
 %! b = [1; 0; 1;  2; 1;  2; 0];
-%! [a_out, b_out, z_out] = halfpintl (a, b);
+%! [a_out, b_out, z_out] = stk_halfpintl (a, b);
 %! assert (isequal (a_out, [1; -1]))
 %! assert (isequal (b_out, [0; 2]))
 %! assert (z_out == 1)

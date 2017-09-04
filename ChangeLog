@@ -1,5 +1,14 @@
 2017-09-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Make halfpintl public, with an stk_ prefix
+
+	* sampling/private/halfpintl.m: Remove from private directory.
+	* sampling/stk_halfpintl.m: Renamed from halfpintl.m.
+	* admin/octpkg/INDEX: Expose stk_halfpintl in the INDEX.
+	* sampling/stk_sampcrit_akg_eval.m: Update.
+	* admin/octpkg/patches/comment-out-unit-tests-in-private-functions.patch: Remove.
+	* admin/octpkg/patches/series: Update.
+
 	Use Octave's native test function on Octave
 
 	* misc/test/stk_test.m: Use Octave's native test function on Octave.

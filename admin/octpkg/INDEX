@@ -458,6 +458,7 @@ Miscellaneous: Validation of models
 
 Miscellaneous: options, plots...
  stk_dist
+ stk_halfpintl
  stk_init
  stk_options_get
  stk_options_set
