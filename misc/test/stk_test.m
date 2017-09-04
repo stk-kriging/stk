@@ -86,7 +86,26 @@
 % @seealso{assert, error, example}
 % @end deftypefn
 
-function [x__ret1, x__ret2, x__ret3] = stk_test (x__name, x__flag, x__fid)
+function varargout = stk_test (varargin)
+
+varargout = cell (1, nargout);
+
+if exist ('OCTAVE_VERSION', 'builtin') == 5
+    
+    % Use the original test function shipped with Octave
+    [varargout{:}] = test (varargin{:});
+    
+else  % Matlab
+    
+    % Use the one that is provided with STK
+    [varargout{:}] = stk_test_ (varargin{:});
+    
+end % if
+
+end % function
+
+
+function [x__ret1, x__ret2, x__ret3] = stk_test_ (x__name, x__flag, x__fid)
 
 SIGNAL_FAIL  = '!!!!! ';  % prefix: test had an unexpected result
 SIGNAL_EMPTY = '????? ';  % prefix: no tests in file
@@ -658,10 +677,6 @@ end % function
 % !warning <worry about>   % we expect a warning msg including "worry about"
 % ! warning('Don''t worry about this warning');
 
-% 'error' tests succeed on syntax errors if no pattern is provided
-% (this is not the behaviour of Octave's test() function)
-%!error }{
-
 %% Tests the behaviour of stk_test() itself
 
 % The number of input arguments should be between one and three
@@ -669,12 +684,12 @@ end % function
 %!error stk_test('disp', 'verbose', [], 'extra arg !!!');
 
 % The first argument of stk_test() must be a non-empty string
-%!error <non-empty string> stk_test([])
-%!error <non-empty string> stk_test(0.0)
+%!error stk_test([])
+%!error stk_test(0.0)
 
 % The second argument of stk_test() must be a either empty, or one of the
 %%! following strings: normal, quiet, verbose
-%!error <empty or a string> stk_test('stk_mindist', 0.0)
+%!error stk_test('stk_mindist', 0.0)
 %!error <unknown flag> stk_test('stk_mindist', 'dudule')
 
 %% Failure tests
