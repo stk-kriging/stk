@@ -1,3 +1,10 @@
+2017-09-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_runtests.m: In Octave, check that __run_test_suite__ exists
+
+	* misc/test/stk_runtests.m: In Octave, check that
+	__run_test_suite__ exists before actually trying to call it.
+
 2017-09-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_sampcrit_ei_eval.m: Remove deprecated calling forms

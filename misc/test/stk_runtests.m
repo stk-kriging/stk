@@ -47,7 +47,8 @@
 
 function stk_runtests (varargin)
 
-if exist ('OCTAVE_VERSION', 'builtin') == 5
+if (exist ('OCTAVE_VERSION', 'builtin') == 5) ...
+        && (exist ('__run_test_suite__', 'file') == 2)
     
     % Use the original __run_test_suite__ function, shipped with Octave
     if nargin == 0
