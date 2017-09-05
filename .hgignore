@@ -3,6 +3,7 @@ build
 *.mex
 *.mexa64
 *.mexglx
+*.mexw32
 *.mexw64
 *.o
 *~
