@@ -1,3 +1,10 @@
+2017-09-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot_shadedci.m: Use area instead of fill for old Octave/Matlab
+
+	* misc/plot/stk_plot_shadedci.m: Use area instead of fill for old
+	versions of Octave and Matlab.
+
 2017-09-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_runtests.m: In Octave, check that __run_test_suite__ exists

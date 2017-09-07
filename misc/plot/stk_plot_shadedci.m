@@ -44,19 +44,30 @@ x = double (x);
 delta0 = [3.2905 2.5758 1.9600];
 gray_level = [0.95 0.88 0.80];
 
+% Use fill or area ?
+persistent use_fill
+if isempty (use_fill)
+    v = regexp (version (), '^[0-9]*\.', 'match');
+    
+    if exist ('OCTAVE_VERSION', 'builtin')
+        % In Octave 3.x, prefer area.  There are several problems with fill
+        use_fill = (str2double (v{1}) >= 4);
+    else
+        % Problem: fill does not support the h_axes argument in Matlab < R2016a
+        use_fill = (str2double (v{1}) >= 9);  % 9.0 is R2016a
+    end
+end
+
 for k = 1:3
     
     delta = delta0(k) * sqrt (abs (z.var));
     patch_color = gray_level(k) * [1 1 1];
     
-    try
-        % Try to use fill, which is the most natural way to do this
+    if use_fill
         xx = [x; flipud(x)];
         zz = [z.mean - delta; flipud(z.mean + delta)];
         h_plot = fill (h_axes, xx, zz, patch_color, 'EdgeColor', patch_color);
-    catch
-        % Problem: fill does not support the h_axes argument in Matlab < R2016a
-        % Use area instead, assuming that this is the reason why we failed
+    else
         h_plot = area (h_axes, x, [z.mean - delta, 2 * delta]);
         % Remove the first area object (between 0 and z.mean - delta)
         delete (h_plot(1));  h_plot = h_plot(2);
