@@ -62,7 +62,7 @@ zp_mean = zi - raw_res;  % LOO prediction
 noisevariance = exp (M_post.prior_model.lognoisevariance);
 zp_var = max (0, 1 ./ dR - noisevariance);
 
-LOO_pred = stk_dataframe ([zp_mean, zp_var], {'mean', 'var'});
+LOO_pred = stk_dataframe (horzcat (zp_mean, zp_var), {'mean', 'var'});
 
 % Compute residuals ?
 if nargout ~= 1
@@ -72,7 +72,7 @@ if nargout ~= 1
     norm_res = (sqrt (dR)) .* raw_res;
     
     % Pack results into a dataframe
-    LOO_res = stk_dataframe ([raw_res, norm_res], ...
+    LOO_res = stk_dataframe (horzcat (raw_res, norm_res), ...
         {'residuals', 'norm_res'});
 end
 
