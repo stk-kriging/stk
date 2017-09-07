@@ -196,12 +196,12 @@ end % function
 %!shared x, y
 %! x = stk_dataframe (rand (2, 3), {'a', 'b', 'c'});
 %! y = stk_dataframe (rand (3, 2), {'a', 'b'});
-%! y = [y rand(3, 1)];
+%! y = horzcat (y, rand(3, 1));  % last column name is missing
 
 %!test
-%! z = [x; y];
+%! z = vertcat (x, y);
 %! assert (isequal (z.colnames, {'a' 'b' 'c'}))
 
 %!test
-%! z = [y; x];
+%! z = vertcat (y, x);
 %! assert (isequal (z.colnames, {'a' 'b' 'c'}))
