@@ -42,17 +42,6 @@ if ~ isa (x, 'stk_dataframe')
     return
 end
 
-if all (builtin ('size', x) == 0)
-    % This happens in Octave 3.2.x when doing B(idx) = D if B does not exist and
-    % D is an stk_dataframe. In this case, x is a corrupted stk_dataframe object
-    % with underlying structure of size 0x0...
-    % The following hack should be sufficient to let repmat (x, ...) work
-    % when x is a scalar stk_dataframe (but row and column names will be lost):
-    x_data = subsasgn ([], idx, val.data);
-    x = stk_dataframe (x_data);
-    return
-end
-
 switch idx(1).type
     
     case '()'

@@ -1,3 +1,43 @@
+2017-09-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Raise Octave version requirement to 3.6
+
+	* README.md: Indicate that STK is tested to work on "GNU Octave
+	3.6.2 or newer", which corresponds to the version currently
+	available in Debian old-old-stable, a.k.a. Wheezy.
+	* admin/CODING_GUIDELINES: Update coding guidelines.
+	* admin/build_tools/build_octpkg.m: Set octave depencency version
+	to 3.6.0 in the DESCRIPTION file.
+	* arrays/@stk_dataframe/stk_sprintf.m: Remove hacks.
+	* arrays/@stk_dataframe/subsasgn.m: Remove hacks.
+	* arrays/@stk_factorialdesign/subsasgn.m: Remove hacks.
+	* arrays/generic/stk_sprintf.m: Remove hacks.
+	* misc/error/stk_error.m: Remove hacks.
+	* misc/mole/quantile/quantile.m: Remove hacks.
+	* stk_init.m: Remove hacks.
+	* utils/stk_plot1d.m: Remove hacks.
+	* arrays/@stk_dataframe/isequal.m: Remove overloaded isequal
+	function, no longer needed.
+	* arrays/@stk_factorialdesign/isequal.m: Idem.
+	* core/@stk_kreq_qr/isequal.m: Idem.
+	* core/@stk_model_gpposterior/isequal.m: Idem.
+	* lm/@stk_lm_affine/isequal.m: Idem.
+	* lm/@stk_lm_constant/isequal.m: Idem.
+	* lm/@stk_lm_cubic/isequal.m: Idem.
+	* lm/@stk_lm_matrix/isequal.m: Idem.
+	* lm/@stk_lm_null/isequal.m: Idem.
+	* lm/@stk_lm_quadratic/isequal.m: Idem.
+	* misc/optim/@stk_optim_baseclass/isequal.m: Idem.
+	* misc/optim/@stk_optim_fmincon/isequal.m: Idem.
+	* misc/optim/@stk_optim_fminsearch/isequal.m: Idem.
+	* misc/optim/@stk_optim_octavesqp/isequal.m: Idem.
+	* misc/parallel/@stk_parallel_engine_none/isequal.m: Idem.
+	* misc/parallel/@stk_parallel_engine_parfor/isequal.m: Idem.
+	* admin/octpkg/INDEX: Update INDEX.
+	* admin/octpkg/patches/remove-buildmex.patch: Update patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Update patch.
+	* admin/octpkg/patches/stk-init-rmpath-cleanup.patch: Update patch.
+
 2017-09-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_plot_shadedci.m: Use area instead of fill for old Octave/Matlab

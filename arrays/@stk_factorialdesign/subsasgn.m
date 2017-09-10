@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -33,13 +34,6 @@ if ~ isa (x, 'stk_dataframe')
     %  (see @stk_dataframe/subsasgn.m)
     x = subsasgn (x, idx, val.stk_dataframe);
     return
-end
-
-if all (builtin ('size', x) == 0)
-    % This happens in Octave 3.2.x when doing B(idx) = D if B does not
-    % exist and D is an stk_factorialdesign object. In this case, x is an
-    % UNITIALIZED 0x0 stk_factorialdesign object. We have to initialize it.
-    x = stk_factorialdesign ();
 end
 
 switch idx(1).type

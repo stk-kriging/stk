@@ -1,5 +1,9 @@
 # Changes in version 2.5.0
 
+## Required Octave version
+
+* Required Octave version number has been raised to 3.6.0.
+
 ## Sequential design of experiments
 
 * `stk_sampcrit_akg_eval`: New function.  Computes the Approximate
