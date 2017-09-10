@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
@@ -51,19 +52,14 @@ if (n == 0) || (d == 0)
 else
     
     if (nargin < 2) || isempty (data_col_width)
-        try
-            switch get (0, 'Format')
-                case 'short'
-                    data_col_width = 6;
-                case 'long'
-                    data_col_width = 16;
-                otherwise
-                    % FIXME: handle other formatting modes...
-                    data_col_width = 10;
-            end
-        catch
-            % Property 'Format' doesn't exist in Octave 3.2.x
-            data_col_width = 6;
+        switch get (0, 'Format')
+            case 'short'
+                data_col_width = 6;
+            case 'long'
+                data_col_width = 16;
+            otherwise
+                % FIXME: handle other formatting modes...
+                data_col_width = 10;
         end
     end
     

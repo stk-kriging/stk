@@ -260,26 +260,6 @@ path = [path {                                             ...
     fullfile(root, 'examples', 'datasets'                ) ...
     fullfile(root, 'examples', 'test_functions'          ) }];
 
-% Fix a problem with private folders in Octave 3.2.x
-%   (add private folders to the path to make STK work...)
-if (exist ('OCTAVE_VERSION', 'builtin') == 5)
-    v = version;
-    if strcmp (v(1:4), '3.2.')
-        test_path = [path {...
-            fullfile(root, 'arrays', '@stk_dataframe') ...
-            fullfile(root, 'arrays', '@stk_factorialdesign') ...
-            fullfile(root, 'core', '@stk_kreq_qr')}];
-        private_path = {};
-        for i = 1:(length (test_path))
-            p = fullfile (test_path{i}, 'private');
-            if exist (p, 'dir')
-                private_path = [private_path {p}];  %#ok<AGROW>
-            end
-        end
-        path = [path private_path];
-    end
-end
-
 end % function
 
 
@@ -321,27 +301,6 @@ end % function
 
 
 function s = escape_regexp (s)
-
-% For backward compatibility with Octave 3.2.x, we cannot use regexprep here:
-%
-%    s = regexprep (s, '([\+\.\\])', '\\$1');
-%
-% Indeed, compare the results with Octave 3.8.x
-%
-%    >> regexprep ('2.2.0', '(\.)', '\$1')
-%    ans = 2$12$10
-%
-%    >> regexprep ('2.2.0', '(\.)', '\\$1')
-%    ans = 2\.2\.0
-%
-% and those with Octave 3.2.4
-%
-%    >> regexprep ('2.2.0', '(\.)', '\$1')
-%    ans = 2\.2\.0
-%
-%    >> regexprep ('2.2.0', '(\.)', '\\$1')
-%    ans = 2\\.2\\.0
-%
 
 s = strrep (s, '\', '\\');
 s = strrep (s, '+', '\+');

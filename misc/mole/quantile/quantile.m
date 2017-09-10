@@ -346,8 +346,7 @@ end % function
 %!error quantile ()
 %!error quantile (1, 2, 3, 4, 5)
 %!error quantile (['A'; 'B'], 10)
-% %!error quantile (1:10, [true, false])
-% % this test fails in Octave 3.2.x
+%!error quantile (1:10, [true, false])
 %!error quantile (1:10, ones (2,2))
 %!error quantile (1, 1, 1.5)
 %!error quantile (1, 1, 0)
