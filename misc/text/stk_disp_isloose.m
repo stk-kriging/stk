@@ -8,7 +8,9 @@
 %
 %    This function solves a Matlab/Octave compatibility issue.  See:
 %
-%     * https://savannah.gnu.org/bugs/index.php?51035
+%     * https://savannah.gnu.org/bugs/?51035
+%     * https://savannah.gnu.org/bugs/?49951
+%     * https://savannah.gnu.org/bugs/?46034
 %     * https://sourceforge.net/p/kriging/tickets/73
 
 % Copyright Notice
@@ -39,30 +41,8 @@
 
 function b = stk_disp_isloose ()
 
-try
-    
-    % This works in Matlab (even though 'FormatSpacing' as been removed from
-    % the public list of root properties since R2014b) and in Octave <= 4.0.3
-    fmt = get (0, 'FormatSpacing');
-    
-catch
-    
-    try
-        
-        % In Octave 4.2.0 the 'FormatSpacing' root property has been removed
-        % but a different syntax has been introduced:
-        [ignd, fmt] = format ();  %#ok<ASGLU> CG#07
-        
-    catch
-        
-        % If nothing works, I really don't know which version of Octave or
-        % Matlab you are using, but defaulting to 'loose' in this case seems
-        % better than a warning or an error.
-        fmt = 'loose';
-        
-    end
-end
+[fmt, spc] = stk_disp_getformat (); %#ok<ASGLU> CG#07
 
-b = strcmp (fmt, 'loose');
+b = strcmp (spc, 'loose');
 
 end % function

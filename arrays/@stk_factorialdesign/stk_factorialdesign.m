@@ -140,17 +140,12 @@ end % function
 %--- disp & display -----------------------------------------------------------
 
 %!shared x, fmt
-%! try % doesn't work on old Octave versions, nevermind
-%!   fmt = get (0, 'Format');
-%! catch
-%!   fmt = nan;
-%! end
+%! fmt = stk_disp_getformat ();
 %! x = stk_sampling_regulargrid (3^2, 2);
 
 %!test format rat;    disp (x);
 %!test format long;   disp (x);
-%!test format short;  disp (x);
-%! if ~ isnan (fmt), set (0, 'Format', fmt); end
+%!test format short;  disp (x);  format (fmt);
 
 %!test disp (stk_sampling_regulargrid (0^1, 1));
 %!test disp (stk_sampling_regulargrid (0^2, 2));

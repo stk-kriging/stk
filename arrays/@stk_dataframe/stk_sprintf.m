@@ -47,7 +47,7 @@ if isempty (x)
     
     spstr = stk_options_get ('stk_dataframe', 'disp_spstr');
     
-    if strcmp (verbosity, 'verbose')                
+    if strcmp (verbosity, 'verbose')
         
         s = char (...
             '.colnames =', horzcat (spstr, stk_sprintf_colnames (x)), ...
@@ -66,7 +66,7 @@ if isempty (x)
         elseif n > 0 && ~ isempty (x.rownames)
             s = char (s, ...
                 sprintf ('  with .rownames = %s', stk_sprintf_rownames (x)));
-        end        
+        end
     end
     
 else  % x is not empty
@@ -87,7 +87,7 @@ else  % x is not empty
         disp toto
         
     end
-
+    
 end
 
 end % function
@@ -107,7 +107,7 @@ if (n == 0) || (d == 0)
 else
     
     if (nargin < 2) || isempty (data_col_width)
-        switch get (0, 'Format')
+        switch stk_disp_getformat ()
             case 'short'
                 data_col_width = 8;
             case 'long'
@@ -171,17 +171,12 @@ end % function
 
 
 %!shared x, fmt
-%! try % doesn't work on old Octave versions, nevermind
-%!   fmt = get (0, 'Format');
-%! catch
-%!   fmt = nan;
-%! end
+%! fmt = stk_disp_getformat ();
 %! x = stk_dataframe (rand (3, 2));
 
-%!test format rat;      disp (x);
-%!test format long;     disp (x);
-%!test format short;    disp (x);
-%! if ~isnan (fmt), set (0, 'Format', fmt); end
+%!test format rat;    disp (x);
+%!test format long;   disp (x);
+%!test format short;  disp (x);  format (fmt);
 
 %!test disp (stk_dataframe (zeros (0, 1)))
 %!test disp (stk_dataframe (zeros (0, 2)))
