@@ -1,3 +1,15 @@
+2017-09-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Workaround for get (0, 'Format') compatibility issue
+
+	* misc/text/stk_disp_getformat.m: New function to get 'Format' and
+	'FormatSpacing' properties in a Matlab/Octave comaptible way.
+	* misc/text/stk_disp_isloose.m: Rewrite using the new function.
+	* admin/octpkg/INDEX: Add new function to the INDEX.
+	* arrays/@stk_dataframe/disp.m: Use the new function.
+	* arrays/@stk_dataframe/stk_sprintf.m: Idem.
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Itou.
+
 2017-09-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Raise Octave version requirement to 3.6

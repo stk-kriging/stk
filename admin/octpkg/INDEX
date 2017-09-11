@@ -480,6 +480,7 @@ Miscellaneous: options, plots...
 #stk_disp_examplewelcome         [internal]
 #stk_disp_progress               [internal]
 #stk_disp_isloose                [internal]
+#stk_disp_getformat              [internal]
 #stk_sprintf_colvect             [internal]
 #stk_sprintf_colvect_fixedpoint  [internal]
 #stk_sprintf_colvect_scientific  [internal]
