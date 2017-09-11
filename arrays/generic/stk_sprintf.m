@@ -52,7 +52,7 @@ if (n == 0) || (d == 0)
 else
     
     if (nargin < 2) || isempty (data_col_width)
-        switch get (0, 'Format')
+        switch stk_disp_getformat ()
             case 'short'
                 data_col_width = 6;
             case 'long'
