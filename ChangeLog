@@ -1,5 +1,12 @@
 2017-09-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	CODING_GUIDELINES: Add (and apply) CG#12 guideline
+
+	* admin/CODING_GUIDELINES: Document in CG#12 why it is better to
+	use "hold off" instead of "cla" when calling stk_plot1d in a loop.
+	* examples/02_design_of_experiments/stk_example_doe03.m: Apply CG#12.
+	* examples/02_design_of_experiments/stk_example_doe05.m: Apply CG#12.
+
 	CODING_GUIDELINES: Add CG#11 guideline
 
 	* admin/CODING_GUIDELINES: Document in CG#11 why horzcat and
