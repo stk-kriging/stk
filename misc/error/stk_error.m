@@ -34,8 +34,13 @@ function stk_error (errmsg, mnemonic, stack)
 % (unless stk_error has been called directly from the base workspace)
 if nargin < 3,
     
-    stack = dbstack ('-completenames');
-    % Rem: in Octave, -completenames is currently  ignored
+    try
+        stack = dbstack ('-completenames');
+        % In Octave, -completenames is at best ignored (in recent versions)
+        % or generates an error (in, e.g., Octave 3.6.2).
+    catch
+        stack = dbstack ();
+    end
     
     if length (stack) == 1,
         caller = 'BaseWorkspace';
