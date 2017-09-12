@@ -133,3 +133,21 @@ when calling stk_xlabel / stk_ylabel / stk_zlabel to display such variable
 names, as follows:
 
 stk_xlabel (h_axis, xlab, 'interpreter', 'none');
+
+
+--- CG#11: Call horzcat/vertcat explicitely ------------------------------------
+
+Horizontal and vertical concatenation of stk_dataframe objects with non-scalar
+numerical arrays fails in Octave 3.6.2 if brackets are used:
+
+   z = [x, y];
+
+or
+
+   z = [x; y];
+
+The reason is that x is considered by Octave to have size 1x1 (the overloaded
+size operator is ignored).
+
+As long as Octave 3.6.x is supported, explicit calls to horzcat and vertcat must
+thus be preferred.

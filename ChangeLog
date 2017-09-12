@@ -1,3 +1,10 @@
+2017-09-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	CODING_GUIDELINES: Add CG#11 guideline
+
+	* admin/CODING_GUIDELINES: Document in CG#11 why horzcat and
+	vertcat must be called explicitely.
+
 2017-09-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Workaround for get (0, 'Format') compatibility issue
