@@ -151,3 +151,22 @@ size operator is ignored).
 
 As long as Octave 3.6.x is supported, explicit calls to horzcat and vertcat must
 thus be preferred.
+
+
+--- CG#12: Prefer "hold off" to "cla" ------------------------------------------
+
+For some mysterious reason, in Octave 3.6.2, stk_plot1d fails to
+create the legend when used in a loop like this:
+
+while iter < NB_ITER
+
+    % ...
+
+    stk_subplot (2, 1, 1);  cla;
+    stk_plot1d (...);
+
+    % ...
+    
+end
+
+Replacing "cla" with "hold off" fixes the issue.

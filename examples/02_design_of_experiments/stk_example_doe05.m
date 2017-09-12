@@ -144,7 +144,7 @@ for iter = 1:(BUDGET - N0)
     
     if mod (iter, PLOT_PERIOD) == 1
         % Figure: upper panel
-        stk_subplot (2, 1, 1);  cla;
+        stk_subplot (2, 1, 1);  hold off;  % CG#12
         stk_plot1d ([],[], xg, zg, z_pred);
         hold on;  plot (x, z, 'k.');
         % Figure: lower panel

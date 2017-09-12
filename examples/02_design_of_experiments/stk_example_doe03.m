@@ -147,7 +147,7 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     [EI_max, i_max] = max (EI_val);
     
     % Figure: upper panel
-    stk_subplot (2, 1, 1);  cla;
+    stk_subplot (2, 1, 1);  hold off;  % CG#12
     stk_plot1d (data.x, data.z, xg, zg, z_pred);  xlim (BOX);  hold on;
     plot (xg(i_max), zg(i_max), 'ro', 'MarkerFaceColor', 'y');
     
