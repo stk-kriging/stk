@@ -66,19 +66,23 @@ end % function
 
 
 %!test
-%! x1 = stk_dataframe (rand (3, 2), {'a'; 'b'}, {'x' 'y' 'z'});
-%! x2 = stk_dataframe (rand (3, 4), {'u'; 'v'; 'w'; 'z'}, {'x' 'y' 'z'});
-%! y = x1 \ x2;
-%! assert (isequal (y, ...
-%!     stk_dataframe (x1.data \ x2.data, {'u'; 'v'; 'w'; 'z'}, {'a'; 'b'})));
+%! x1_data = [57 7; 2 0];
+%! x1 = stk_dataframe (x1_data, {'x' 'y'}, {'a'; 'b'});
+%! x2_data = [8 7; 2 0];
+%! x2 = stk_dataframe (x2_data, {'w' 'z'}, {'a'; 'b'});
+%! y = x2 \ x1;
+%! assert (stk_isequal_tolabs (y, ...
+%!     stk_dataframe ([1 0; 7 1], {'x'; 'y'}, {'w'; 'z'})));
 
 
 % Special case: division by a scalar
 
-%!shared x, y
-%! x = stk_dataframe (rand (3, 2), {'x' 'y'}, {'a'; 'b'; 'c'});
+%!shared x_data, x, y_data, y
+%! x_data = [3 3; 6 3; 9 12];
+%! y_data = [1 1; 2 1; 3 4];
+%! x = stk_dataframe (x_data, {'x' 'y'}, {'a'; 'b'; 'c'});
 
 %!test y = 3 \ x;
-%!assert (isequal (y, stk_dataframe (3 \ x.data, {'x' 'y'}, {'a'; 'b'; 'c'})));
+%!assert (isequal (y, stk_dataframe (y_data, {'x' 'y'}, {'a'; 'b'; 'c'})));
 
 %!error y = x \ 3;
