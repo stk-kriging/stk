@@ -9,7 +9,7 @@
 %
 %   where
 %
-%      TOLABS = max(max(A(:)), max(B(:))) * TOLREL.
+%      TOLABS = max(abs(A(:)), abs(B(:))) * TOLREL.
 %
 %   For numeric array, the function returns false is either
 %
