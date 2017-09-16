@@ -1,10 +1,10 @@
 --- a/arrays/@stk_dataframe/stk_dataframe.m
 +++ b/arrays/@stk_dataframe/stk_dataframe.m
-@@ -175,11 +175,6 @@
+@@ -199,11 +199,6 @@
  
  x = class (x, 'stk_dataframe');
  
--try
+-try  %#ok<TRYNC>
 -    % Starting with Matlab R2014b, graphics handles are objects
 -    superiorto ('matlab.graphics.axis.Axes');
 -end
@@ -14,15 +14,15 @@
  
 --- a/arrays/@stk_factorialdesign/stk_factorialdesign.m
 +++ b/arrays/@stk_factorialdesign/stk_factorialdesign.m
-@@ -80,11 +80,6 @@
-         x = struct ('levels', {levels});
-         x = class (x, 'stk_factorialdesign', df);
-         
--        try
--            % Starting with Matlab R2014b, graphics handles are objects
--            superiorto ('matlab.graphics.axis.Axes');
--        end
--        
-     end % if
+@@ -112,11 +112,6 @@
+     x = struct ();  x.levels = levels;
+     x = class (x, 'stk_factorialdesign', df);
      
+-    try %#ok<TRYNC>
+-        % Starting with Matlab R2014b, graphics handles are objects
+-        superiorto ('matlab.graphics.axis.Axes');
+-    end
+-    
  end % if
+ 
+ end % function

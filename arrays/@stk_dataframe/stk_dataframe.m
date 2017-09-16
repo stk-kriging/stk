@@ -59,7 +59,7 @@
 
 function x = stk_dataframe (x, colnames, rownames)
 
-if nargin > 3,
+if nargin > 3
     
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
     
@@ -69,66 +69,54 @@ elseif nargin == 0  % Default constructor
     colnames = {};
     rownames = {};
     
-elseif strcmp (class (x), 'stk_dataframe')  %#ok<STISA>
-    
-    if nargin > 1,
-        
-        if iscell (colnames)
-            x = set (x, 'colnames', colnames);
-        elseif ~ isempty (colnames)
-            stk_error (['colnames should be either a cell array ' ...
-                'of strings or [].'], 'InvalidArgument');
-            % Note: [] means "keep x.colnames"
-            %       while {} means "no column names"
-        end
-        
-        if nargin > 2
-            if iscell (rownames)
-                x = set (x, 'rownames', rownames);
-            elseif ~ isempty (rownames)
-                stk_error (['rownames should be either a cell array ' ...
-                    'of strings or [].'], 'InvalidArgument');
-                % Note: [] means "keep x.rownames"
-                %       while {} means "no rownames names"
-            end
-        end
-    end
-    
-    return  % We already have an stk_dataframe object
-    
 elseif isa (x, 'stk_dataframe')
     
-    x_data = x.data;
-    
-    if nargin == 1,
+    if strcmp (class (x), 'stk_dataframe')  %#ok<STISA>
         
-        colnames = x.colnames;
-        rownames = x.rownames;
-        
-    else % nargin > 1,
-        
-        if (isempty (colnames)) && (~ iscell (colnames))
-            colnames = x.colnames;
-        elseif ~ iscell (colnames)
-            stk_error (['colnames should be either a cell array ' ...
-                'of strings or [].'], 'InvalidArgument');
-            % Note: [] means "keep x.colnames"
-            %       while {} means "no column names"
+        if nargin > 1
+            
+            if iscell (colnames)
+                x = set (x, 'colnames', colnames);
+            elseif ~ isempty (colnames)
+                stk_error (['colnames should be either a cell array ' ...
+                    'of strings or [].'], 'InvalidArgument');
+                % Note: [] means "keep x.colnames"
+                %       while {} means "no column names"
+            end
+            
+            if nargin > 2
+                if iscell (rownames)
+                    x = set (x, 'rownames', rownames);
+                elseif ~ isempty (rownames)
+                    stk_error (['rownames should be either a cell array ' ...
+                        'of strings or [].'], 'InvalidArgument');
+                    % Note: [] means "keep x.rownames"
+                    %       while {} means "no row names"
+                end
+            end
         end
         
-        if nargin == 2,
+        return  % We already have an stk_dataframe object
+        
+    else  % x belongs to a derived class
+        
+        x_data = x.data;
+        
+        if nargin == 1
             
+            colnames = x.colnames;
             rownames = x.rownames;
             
-        else % nargin > 2,
+        else % nargin > 1,
             
-            if (isempty (rownames)) && (~ iscell (rownames))
+            % colnames = [] means "keep x.colnames"
+            if isempty (colnames) && ~ iscell (colnames)
+                colnames = x.colnames;
+            end
+            
+            % rownames missing or [] means "keep x.rownames"
+            if (nargin == 2) || (isempty (rownames) && ~ iscell (rownames))
                 rownames = x.rownames;
-            elseif ~ iscell (rownames)
-                stk_error (['rownames should be either a cell array ' ...
-                    'of strings or [].'], 'InvalidArgument');
-                % Note: [] means "keep x.rownames"
-                %       while {} means "no rownames names"
             end
         end
     end
@@ -137,45 +125,81 @@ else  % Assume x is (or can be converted to) numeric data
     
     x_data = double (x);
     
-    if nargin < 3,
+    if nargin < 3
         rownames = {};
         
-        if nargin < 2,
+        if nargin < 2
             colnames = {};
         end
     end
 end
 
-[n, d] = size (x_data);
-
-% Check colnames argument: must be a 1 x d cell array of strings
-if ~ iscell (colnames)
+if isempty (x_data)
+    
+    % Process colnames argument
+    if isempty (colnames)
+        d = 0;
+        colnames = {};
+    elseif iscell (colnames)
+        d = numel (colnames);
+        colnames = reshape (colnames, 1, d);
+    else
+        stk_error ('colnames should be a cell array', 'TypeMismatch');
+    end
+    
+    % Process rownames argument
+    if isempty (rownames)
+        n = 0;
+        rownames = {};
+    elseif iscell (rownames)
+        n = numel (rownames);
+        rownames = reshape (rownames, n, 1);
+    else
+        stk_error ('rownames should be a cell array', 'TypeMismatch');
+    end
+    
+    x_data = zeros (n, d);
+    
+else
+    
+    [n, d] = size (x_data);
+    
+    % Process colnames argument
     if isempty (colnames)
         colnames = {};
+    elseif iscell (colnames) && numel (colnames) == d
+        colnames = reshape (colnames, 1, d);
+    elseif ischar (colnames) && d == 1
+        colnames = {colnames};
     else
-        stk_error ('colnames should be a cell array.', 'TypeMismatch');
+        stk_error (['colnames should be a cell array with d elements, ' ...
+            'where d is the number of columns of the dataframe'], 'IncorrectSize');
     end
-elseif (~ isempty (colnames)) && (~ isequal (size (colnames), [1 d]))
-    colnames = reshape (colnames, 1, d);
-end
-
-% Check rownames argument: must be a n x 1 cell array of strings
-if ~ iscell (rownames)
+    
+    % Process rownames argument
     if isempty (rownames)
         rownames = {};
+    elseif iscell (rownames) && numel (rownames) == n
+        rownames = reshape (rownames, n, 1);
+    elseif ischar (rownames) && n == 1
+        rownames = {rownames};
     else
-        stk_error ('rownames should be a cell array.', 'TypeMismatch');
+        stk_error (['rownames should be a cell array with n elements, ' ...
+            'where n is the number of rows of the dataframe'], 'IncorrectSize');
     end
-elseif (~ isempty (rownames)) && (~ isequal (size (rownames), [n 1]))
-    rownames = reshape (rownames, n, 1);
+    
 end
 
-x = struct ('data', x_data, ...
-    'colnames', {colnames}, 'rownames', {rownames}, 'info', '');
+x = struct ();
+
+x.data     = x_data;
+x.colnames = colnames;
+x.rownames = rownames;
+x.info     = '';
 
 x = class (x, 'stk_dataframe');
 
-try
+try  %#ok<TRYNC>
     % Starting with Matlab R2014b, graphics handles are objects
     superiorto ('matlab.graphics.axis.Axes');
 end
@@ -189,7 +213,7 @@ end % function
 
 %!test % default constructor
 %! x = stk_dataframe ();
-%! assert (isa (x, 'stk_dataframe') && isequal (size (x), [0 1]))
+%! assert (isa (x, 'stk_dataframe') && isequal (size (x), [0 0]))
 
 %!test
 %! y = stk_dataframe (rand (3, 2));
@@ -281,3 +305,25 @@ end % function
 %!error
 %! x = stk_factorialdesign ({1:3, 1:2});
 %! y = stk_dataframe (x, {}, pi);
+
+%!test
+%! x = stk_dataframe ([], {'a', 'b'});
+%! assert (isequal (size (x), [0 2]))
+%! assert (isequal (x.colnames, {'a' 'b'}));
+%! assert (isequal (x.rownames, {}));
+
+%!test
+%! x = stk_dataframe ([], {'a', 'b'}, {'toto'});
+%! assert (isequal (size (x), [1 2]))
+%! assert (isequal (x.colnames, {'a' 'b'}));
+%! assert (isequal (x.rownames, {'toto'}));
+
+% Check that we tolerate char arguments for colnames/rownames
+
+%!test
+%! x = stk_dataframe (randn (10, 1), 'NOx');
+%! assert (isequal (x.colnames, {'NOx'}));
+
+%!test
+%! x = stk_dataframe (randn (1, 2), {}, 'aaa');
+%! assert (isequal (x.rownames, {'aaa'}));

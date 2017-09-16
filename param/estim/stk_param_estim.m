@@ -5,13 +5,20 @@
 %
 %   estimates the parameters PARAM of the covariance function in MODEL
 %   from the data (XI, YI) using the restricted maximum likelihood (ReML)
-%   method. A starting point PARAM0 must be provided.
+%   method.  The value PARAM0 is used as a starting point for local
+%   optimization.
 %
 %   The observations are assumed to be noisy if MODEL.lognoisevariance is
 %   not -inf. In this case, the variance of the noise is estimated if
 %   MODEL.lognoisevariance is nan, and assumed known otherwise. The
 %   estimated log-variance is returned as the second output argument LNV
 %   (equal to MODEL.lognoisevariance when it is assumed to be known).
+%
+% CALL: PARAM = stk_param_estim (MODEL, XI, YI)
+% CALL: [PARAM, LNV] = stk_param_estim (MODEL, XI, YI)
+%
+%   does the same thing but uses stk_param_init to provide a starting value
+%   automatically.
 %
 % CALL: [PARAM, LNV] = stk_param_estim (MODEL, XI, YI, PARAM0, LNV0)
 %
@@ -95,7 +102,7 @@ if ~ isempty (lnv0)
     if isnan (lnv0) || isinf (lnv0)
         stk_error (['Incorrect value for input argumen lnv0. The starting ' ...
             'point for the estimation of lnv must be neither infinite nor ' ...
-            'NaN.'], 'IncorrectArgument');
+            'NaN.'], 'InvalidArgument');
     end
 else
     % Otherwise, noise variance estimation happens when lnv has NaNs
@@ -105,7 +112,7 @@ end
 
 if do_estim_lnv && (~ isscalar (lnv0))
     stk_error (['Estimating the variance of the noise is not possible ' ...
-        'in the hetereoscedastic case yet. Sorry.'], 'IncorrectArgument');
+        'in the hetereoscedastic case yet. Sorry.'], 'InvalidArgument');
 end
 
 % Default criterion: restricted likelihood (ReML method)
@@ -235,14 +242,9 @@ if ~ isempty (param0)
     
     % Test if param0 contains nans
     if any (isnan (stk_get_optimizable_parameters (param0)))
-        warning ('param0 has nans, using model.param instead');
+        warning ('param0 has nans, calling stk_param_init instead');
         param0 = [];
     end
-end
-
-% param0: try to use model.param if we still have no acceptable value
-if isempty (param0) && ~ any (isnan (stk_get_optimizable_parameters (model.param)))
-    param0 = model.param;
 end
 
 % param0: try stk_param_init if we still have no acceptable value

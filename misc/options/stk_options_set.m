@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2013 SUPELEC
 %
@@ -40,16 +40,16 @@ end
 
 switch nargin
     
-    case 0, % nothing to do, just return the output
+    case 0  % nothing to do, just return the output
         
-    case 1, % reset
+    case 1  % reset
         if (ischar (varargin{1})) && strcmp (varargin{1}, 'default')
             options = init_options ();
         else
             stk_error ('Syntax error', 'SyntaxError');
         end
         
-    case 2,
+    case 2
         switch varargin{1}
             
             case 'stk_sf_matern'
@@ -63,7 +63,7 @@ switch nargin
                 options.(varargin{1}) = varargin{2};
         end
         
-    case 3,
+    case 3
         switch varargin{1}
             
             case 'stk_param_estim'
@@ -123,7 +123,7 @@ opts.stk_title.properties = {'FontSize', 10, 'FontWeight', 'bold'};
 opts.stk_axes.properties = {'FontSize', 8};
 
 % Select optimizer for stk_param_estim
-if isoctave
+if exist ('OCTAVE_VERSION', 'builtin') == 5
     % In Octave we use sqp (which is always available) in both cases
     opts.stk_param_estim.minimize_box = stk_optim_octavesqp ();
     opts.stk_param_estim.minimize_unc = stk_optim_octavesqp ();

@@ -21,14 +21,14 @@
  
 -% Check that MEX-files located in private folders are properly detected (note:
 -% there are no MEX-files in private folders if STK is used as an Octave package)
--if isoctave
+-if exist ('OCTAVE_VERSION', 'builtin') == 5  % Octave
 -    stk_init__test_private_mex ();
 -end
 -
  % Set default options
  stk_options_set ();
  
-@@ -555,40 +543,6 @@
+@@ -513,40 +501,6 @@
  
  end % function
  
@@ -42,10 +42,10 @@
 -    assert (isequal (size (D), [n n]));
 -catch
 -    err = lasterror ();
--    if (~ isempty (regexp (err.message, 'stk_dist_matrixx', 'once'))) ...
+-    if (~ isempty (regexp (err.message, 'stk_dist_matrixx', 'once')))  ...
 -            && (~ isempty (regexp (err.message, 'undefined', 'once')))
 -        fprintf ('\n\n');
--        warning (sprintf (['\n\n' ...
+-        warning (sprintf (['\n\n'                                      ...
 -            '!>>>>>> PLEASE RESTART OCTAVE BEFORE USING STK <<<<<<!\n' ...
 -            '!                                                    !\n' ...
 -            '! Some STK functions implemented as MEX-files have   !\n' ...

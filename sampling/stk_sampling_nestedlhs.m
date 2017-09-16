@@ -43,7 +43,7 @@
 % REFERENCE
 %
 %   [1] Peter Z. G. Qian, "Nested latin hypercube designs", Biometrika,
-%       96(4):957–970, 2009.
+%       96(4):957-970, 2009.
 %
 % See also: stk_sampling_nesteddesign, stk_sampling_randomlhs
 
@@ -52,7 +52,7 @@
 %    Copyright (C) 2017 LNE
 %    Copyright (C) 2017 CentraleSupelec
 %
-%    Authors:   Remi Stroh         <remi.stroh@lne.fr>
+%    Authors:  Remi Stroh  <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -185,7 +185,7 @@ for k_lev = nLev:-1:1; %begin by the end
         
         X_new_kl = NaN(n_new_k, dim);    %the matrix to add
         
-        [~, random_index] = sort(rand(n_new_k, dim), 1);
+        [ignd, random_index] = sort(rand(n_new_k, dim), 1);  %#ok<ASGLU> CG#07
         for i = 1:dim
             X_new_kl(:, i) = list_nb_new_k(random_index(:, i), i);
         end

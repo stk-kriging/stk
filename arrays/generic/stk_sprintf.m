@@ -1,7 +1,8 @@
-% STK_SPRINTF_DATA prints the content of an array into a string
+% STK_SPRINTF prints the content of an array into a string
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
@@ -51,19 +52,14 @@ if (n == 0) || (d == 0)
 else
     
     if (nargin < 2) || isempty (data_col_width)
-        try
-            switch get (0, 'Format')
-                case 'short'
-                    data_col_width = 6;
-                case 'long'
-                    data_col_width = 16;
-                otherwise
-                    % FIXME: handle other formatting modes...
-                    data_col_width = 10;
-            end
-        catch
-            % Property 'Format' doesn't exist in Octave 3.2.x
-            data_col_width = 6;
+        switch stk_disp_getformat ()
+            case 'short'
+                data_col_width = 6;
+            case 'long'
+                data_col_width = 16;
+            otherwise
+                % FIXME: handle other formatting modes...
+                data_col_width = 10;
         end
     end
     
@@ -71,10 +67,10 @@ else
     
     s = repmat ('', n, 1); %#ok<*AGROW>
     
-    for j = 1:d,
+    for j = 1:d
         xx = stk_sprintf_colvect (x(:, j), data_col_width);
         s = [s xx]; % formatted data
-        if j < d,
+        if j < d
             % column separator
             s = [s repmat(' ', n,  nb_spaces_colsep)];
         end

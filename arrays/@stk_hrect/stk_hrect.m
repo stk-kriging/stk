@@ -50,7 +50,7 @@
 
 function s = stk_hrect (arg1, colnames)
 
-if nargin > 2,
+if nargin > 2
     
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
     
@@ -72,11 +72,22 @@ else  % create a new stk_hrect object
     
     if (prod (size (arg1)) == 1)  % arg1 is the dimension of the input space
         % => create a default hyper-rectangle [0; 1]^d, with d = arg1
+        
         d = arg1;
         box_data = repmat ([0; 1], 1, d);
+        box_colnames = {};
+        
     else
+        
+        if isa (arg1, 'stk_dataframe')
+            box_colnames = get (arg1, 'colnames');
+        else
+            box_colnames = {};
+        end
+        
         box_data = double (arg1);
         d = size (box_data, 2);
+        
         if (~ isequal (size (box_data), [2 d]))
             stk_error ('Invalid size: should be 2 x dim.', 'IncorrectSize');
         end
@@ -86,7 +97,8 @@ else  % create a new stk_hrect object
         stk_error ('Invalid bounds', 'InvalidBounds');
     end
     
-    df = stk_dataframe (box_data, {}, {'lower_bounds', 'upper_bounds'});
+    df = stk_dataframe (box_data, ...
+        box_colnames, {'lower_bounds', 'upper_bounds'});
     s = class (struct (), 'stk_hrect', df);
     
 end
@@ -98,5 +110,13 @@ end
 
 end % function
 
+%#ok<*PSIZE>
+
 
 %!test stk_test_class ('stk_hrect')
+
+%!shared dom
+%!test dom = stk_hrect ([-1; 1], {'x'});
+%!assert (isequal (dom.colnames, {'x'}))
+%!assert (isequal (dom.rownames, {'lower_bounds'; 'upper_bounds'}))
+%!assert (isequal (dom.data, [-1; 1]))

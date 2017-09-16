@@ -33,7 +33,7 @@ if isa (x, 'stk_hrect')
     
     x.stk_dataframe = subsasgn (x.stk_dataframe, idx, value);
     
-    data = get (x.stk_dataframe, 'data');
+    data = double (x);
     if any (data(1, :) > data(2, :))
         stk_error ('Lower bounds cannot be larger than upperbounds', ...
             'IllegalAssigment');

@@ -153,13 +153,11 @@ end % function
 %!assert (isequal (K1, K2));
 %!assert (isequal (K1, K3));
 
-%!test % various types of input arguments
+%!test  % df versus ordinary array
 %! u = double (x);  v = double (y);
 %! K1 = stk_materncov32_aniso (param, u, v, -1);
-%! K2 = stk_materncov32_aniso (param, struct ('a', u), struct ('a', v), -1);
-%! K3 = stk_materncov32_aniso (param, stk_dataframe (u), stk_dataframe (v), -1);
+%! K2 = stk_materncov32_aniso (param, stk_dataframe (u), stk_dataframe (v), -1);
 %! assert (isequal (K1, K2));
-%! assert (isequal (K1, K3));
 
 %!error stk_materncov32_aniso (param, x, y, -2);
 %!test  stk_materncov32_aniso (param, x, y, -1);

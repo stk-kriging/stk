@@ -37,7 +37,7 @@ switch propname,
         %    x = stk_factorialdesign (value);
         % to preserve the value of the other fields (info, colnames, ...).
         tmp = stk_factorialdesign (value);
-        x = set (df, 'data', tmp.data);
+        x = set_data (df, tmp.data);
         
     case 'stk_dataframe',
         errmsg = 'Field .stk_dataframe is read-only.';

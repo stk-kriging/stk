@@ -3,7 +3,7 @@
 % CALL: Q = stk_gpquadform (X, Y, RX, RY)
 %
 %    computes a matrix Q, whose entries Q(i,j) are given by a Gibbs-
-%    Paciorek quadratic form 
+%    Paciorek quadratic form
 %
 %       Q(i,j) = \sum_{k = 1}^d (X(i,k) - Y(j,k))^2 / R(i,j,k)^2,
 %
@@ -18,6 +18,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -44,22 +45,12 @@
 
 function Q = stk_gpquadform (x, y, rx, ry, pairwise)
 
-if nargin > 5,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
-% read argument #1
-if isstruct (x),
-    x = x.a;
-end
-
-% read argument #2
-if isstruct (y),
-    y = y.a;
+if nargin > 5
+    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % read argument #4
-if nargin < 4,
+if nargin < 4
     if isempty (y)
         ry = rx;
     else
@@ -69,13 +60,13 @@ if nargin < 4,
 else
     if (isempty (y)) && (~ isempty (ry)) && (~ isequal (rx, ry))
         errmsg = 'ry should be empty or equal to rx';
-        stk_error (errmsg, 'IncorrectArgument');
+        stk_error (errmsg, 'InvalidArgument');
     end
 end
-        
+
 
 % read argument #5
-if nargin < 5,
+if nargin < 5
     pairwise = false;
 else
     if ~ islogical (pairwise)
@@ -118,14 +109,6 @@ end % function
 %!error Q = stk_gpquadform(x, rx, y, rx)
 %!error Q = stk_gpquadform(x, rx, y, rz)
 %!error Q = stk_gpquadform(x, rx, z, ry)
-
-%%
-% Check that ".a" structures are accepted
-
-%!test
-%! Dxy1 = stk_gpquadform(x, y, rx, ry);
-%! Dxy2 = stk_gpquadform(struct('a', x), struct('a', y), rx, ry);
-%! assert(stk_isequal_tolabs(Dxy1, Dxy2));
 
 %%
 % Tests with r = 1/sqrt(2)

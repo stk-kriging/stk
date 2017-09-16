@@ -1,8 +1,10 @@
 % STK_RUNTESTS runs all tests in a given directory (or in STK's searchpath).
+%
+% FIXME: missing doc
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -43,7 +45,33 @@
 % @seealso{rundemos, path}
 % @end deftypefn
 
-function stk_runtests (directory)
+function stk_runtests (varargin)
+
+if (exist ('OCTAVE_VERSION', 'builtin') == 5) ...
+        && (exist ('__run_test_suite__', 'file') == 2)
+    
+    % Use the original __run_test_suite__ function, shipped with Octave
+    if nargin == 0
+        % Scan all STK directories if no input argument is provided
+        directory = fileparts (fileparts (fileparts (mfilename ('fullpath'))));
+    else
+        directory = varargin{1};
+    end
+    
+    % NOTE: feval prevents Matlab from complaining about the underscores
+    feval ('__run_test_suite__', {directory}, {});
+    
+else % Matlab
+    
+    % Use the replacement that is provided with STK
+    stk_runtests_ (varargin{:});
+    
+end % if
+
+end % function
+
+
+function stk_runtests_ (directory)
 
 if nargin == 0
     % scan all STK directories if no input argument is provided

@@ -6,7 +6,7 @@
 % CALL: NAME = graphics_toolkit ()
 %
 %   returns:
-%    
+%
 %    * the result of get (0, 'defaultfigure__backend__') if you're running an old version
 %      of Octave that does not have graphics_toolkit,
 %
@@ -42,8 +42,8 @@
 
 function name = graphics_toolkit ()
 
-if isoctave,
-
+if exist ('OCTAVE_VERSION', 'builtin') == 5  % Octave
+    
     try
         % This should work on older versions of Octave, e.g., 3.2.4
         % (there was no notion of a 'toolkit' at the time, but if gnuplot
@@ -52,16 +52,16 @@ if isoctave,
     catch
         error ('Unable to determine which toolkit is being used.');
     end
-
-else % Matlab
-
+    
+else  % Matlab
+    
     try
         assert (usejava ('jvm'));
         name = 'matlab-jvm';
     catch
         name = 'matlab-nojvm';
     end
-
+    
 end
 
 end % function

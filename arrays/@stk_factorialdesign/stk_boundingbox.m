@@ -28,12 +28,16 @@
 
 function box = stk_boundingbox (x)
 
-if nargin > 1,
+if nargin > 1
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 xmin = cellfun (@min, x.levels);
 xmax = cellfun (@max, x.levels);
+
+dim = numel (xmin);
+xmin = reshape (xmin, 1, dim);
+xmax = reshape (xmax, 1, dim);
 
 box = stk_hrect ([xmin; xmax]);
 

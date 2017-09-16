@@ -42,17 +42,6 @@ if ~ isa (x, 'stk_dataframe')
     return
 end
 
-if all (builtin ('size', x) == 0)
-    % This happens in Octave 3.2.x when doing B(idx) = D if B does not exist and
-    % D is an stk_dataframe. In this case, x is a corrupted stk_dataframe object
-    % with underlying structure of size 0x0...
-    % The following hack should be sufficient to let repmat (x, ...) work
-    % when x is a scalar stk_dataframe (but row and column names will be lost):
-    x_data = subsasgn ([], idx, val.data);
-    x = stk_dataframe (x_data);
-    return
-end
-
 switch idx(1).type
     
     case '()'
@@ -73,7 +62,7 @@ switch idx(1).type
             
             val_data = double (val);
             
-            if L == 2,  % matrix-style indexing
+            if L == 2  % matrix-style indexing
                 
                 % Process row indices
                 I = idx(1).subs{1};
@@ -101,7 +90,7 @@ switch idx(1).type
                 
                 x.data = subsasgn (x.data, idx, val_data);
                 
-                if L == 1,  % linear indexing
+                if L == 1  % linear indexing
                     
                     % Linear indexing is not allowed to change the shape of a
                     % dataframe (this happens, with numeric arrays, when
@@ -169,13 +158,13 @@ switch idx(1).type
                 
             else  % Assignment rhs is empty: deletion
                 
-                if L == 1,  % Linear indexing
+                if L == 1  % Linear indexing
                     
-                    if d == 1,  % Column array => remove rows
+                    if d == 1  % Column array => remove rows
                         I = idx(1).subs{1};
                         J = 1;
                         remove_rows = true;
-                    elseif n == 1,  % Row array => remove columns
+                    elseif n == 1  % Row array => remove columns
                         I = 1;
                         J = idx(1).subs{1};
                         remove_rows = false;
@@ -217,7 +206,7 @@ switch idx(1).type
         
     case '.'
         
-        if strcmp (idx(1).subs, 'data') && length (idx) > 1,
+        if strcmp (idx(1).subs, 'data') && length (idx) > 1
             
             if strcmp (idx(2).type, '()')
                 x = subsasgn (x, idx(2:end), val);
@@ -239,47 +228,48 @@ end
 
 end % function
 
+
 %!shared x, s, t, data
-%! x = stk_dataframe(rand(3, 2));
+%! x = stk_dataframe (rand (3, 2));
 %! s = {'a'; 'b'; 'c'};
 %! t = {'xx' 'yy'};
 
 %!test
 %! x.rownames = s;
-%! assert (isequal(get(x, 'rownames'), s))
+%! assert (isequal (get (x, 'rownames'), s))
 
 %!test
 %! x.colnames = t;
-%! assert (isequal(get(x, 'rownames'), s))
-%! assert (isequal(get(x, 'colnames'), t))
+%! assert (isequal (get (x, 'rownames'), s))
+%! assert (isequal (get (x, 'colnames'), t))
 
 %!test
 %! x.rownames{2} = 'dudule';
-%! assert (isequal(get(x, 'rownames'), {'a'; 'dudule'; 'c'}))
-%! assert (isequal(get(x, 'colnames'), t))
+%! assert (isequal (get (x, 'rownames'), {'a'; 'dudule'; 'c'}))
+%! assert (isequal (get (x, 'colnames'), t))
 
 %!test
 %! x.colnames{1} = 'martha';
-%! assert (isequal(get(x, 'rownames'), {'a'; 'dudule'; 'c'}))
-%! assert (isequal(get(x, 'colnames'), {'martha' 'yy'}))
+%! assert (isequal (get (x, 'rownames'), {'a'; 'dudule'; 'c'}))
+%! assert (isequal (get (x, 'colnames'), {'martha' 'yy'}))
 
 % %!error x.colnames{1} = 'yy'
 % %!error x.colnames = {'xx' 'xx'}
 
 %!test
-%! data = stk_dataframe(zeros(3, 2), {'x1' 'x2'});
-%! u = rand(3, 1); data.x2 = u;
-%! assert (isequal(double(data), [zeros(3, 1) u]))
+%! data = stk_dataframe (zeros(3, 2), {'x1' 'x2'});
+%! u = rand(3, 1);  data.x2 = u;
+%! assert (isequal (double (data), [zeros(3, 1) u]))
 
 %!test
-%! data = stk_dataframe(zeros(3, 2), {'x1' 'x2'});
+%! data = stk_dataframe (zeros (3, 2), {'x1' 'x2'});
 %! data.x2(3) = 27;
-%! assert (isequal(double(data), [0 0; 0 0; 0 27]))
+%! assert (isequal (double (data), [0 0; 0 0; 0 27]))
 
-%!error data.toto = rand(3, 1);
+%!error data.toto = rand (3, 1);
 
 %!shared x
-%! x = stk_dataframe(reshape(1:12, 4, 3), {'u' 'v' 'w'});
+%! x = stk_dataframe (reshape (1:12, 4, 3), {'u' 'v' 'w'});
 
 %!test
 %! x(:, 2) = [];
@@ -404,7 +394,7 @@ end % function
 %! assert (isequal (z(1, :), x(1, :)));
 %! assert (isequal (z(3, :), y));
 
-%--- change several values at once with linear indxing -------------------------
+%--- change several values at once with linear indexing ------------------------
 
 %!shared x
 %! x = stk_dataframe (zeros (2), {'u' 'v'});
@@ -421,3 +411,14 @@ end % function
 
 %!error  % too many elements
 %! x(1:5) = 3;
+
+%--- add just one row/column name ----------------------------------------------
+
+%!shared x
+%! x = stk_dataframe (randn (3, 3));
+
+%!test x.colnames{2} = 'y';
+%!assert (isequal (x.colnames, {'' 'y' ''}));
+
+%!test x.rownames{2} = 'b';
+%!assert (isequal (x.rownames, {''; 'b'; ''}));

@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -27,7 +27,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function build_allpurpose (root_dir, release_dir, octpkg_tarball)
+function build_allpurpose (root_dir, ...
+    release_dir, octpkg_tarball, release_date)
 
 disp ('                              ');
 disp ('******************************');
@@ -54,14 +55,14 @@ fprintf ('Exporting with "hg archive" ... ');
 cd (root_dir);
 system (sprintf (['hg archive --exclude admin --exclude .pc ' ...
  '--exclude ''.hg*'' --exclude Makefile %s'], unpacked_dir));
-fprintf ('done.\n');
+fprintf ('done.\n\n');
 
 % Instantiate CITATION template
 cd (release_dir);
-copy_citation ('stk/CITATION', 'stk');
+copy_citation ('stk/CITATION', 'stk', release_date);
 
 % Write explicit version number in README.md
-copy_readme ('stk/README.md', 'stk');
+copy_readme ('stk/README.md', 'stk', release_date);
 
 % Build HTML doc
 htmldoc_dir = fullfile (unpacked_dir, 'doc', 'html');

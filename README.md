@@ -24,7 +24,7 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
    Version:      See stk_version.m
 
-   Authors:      See AUTHORS file
+   Authors:      See AUTHORS.md file
 
    Maintainers:  Julien Bect <julien.bect@centralesupelec.fr>
                  and Emmanuel Vazquez <emmanuel.vazquez@centralesupelec.fr>
@@ -113,7 +113,7 @@ the third example in the "Kriging basics" series.
 
 ### Requirements and recommendations for use with GNU Octave
 
-   The STK is tested to work with GNU Octave 3.2.4 or newer.
+   The STK is tested to work with GNU Octave 3.6.2 or newer.
 
 ### Requirements and recommendations for use with Matlab
 
@@ -162,7 +162,6 @@ Optimization, 13(4):455-492, 1998.
 *Sequential design of computer experiments for the estimation of a
 probability of failure*.  Statistics and Computing, pages 1-21, 2011.
 DOI: 10.1007/s11222-011-9241-4.
-
 
 
 ## Ways to get help, report bugs, ask for new features...

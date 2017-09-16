@@ -29,7 +29,7 @@
  % Add STK subdirectories to the path
  stk_init__addpath (root);
  
-@@ -332,211 +317,6 @@
+@@ -290,211 +275,6 @@
  
  end % function
  
@@ -221,11 +221,11 @@
 -
 -function info = register_mex (info, relpath, mexname, other_src, includes)
 -
--if nargin < 4,
+-if nargin < 4
 -    other_src = {};
 -end
 -
--if nargin < 5,
+-if nargin < 5
 -    includes = {};
 -end
 -

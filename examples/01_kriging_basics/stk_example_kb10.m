@@ -54,7 +54,17 @@ y = stk_testfun_borehole (x);                % Obtain the responses on the DoE x
 M_prior = stk_model (@stk_materncov52_aniso, d);  % prior
 M_prior.param = stk_param_estim (M_prior, x, y);  % ReML parameter estimation
 
+% Compye LOO predictions and residuals
 [y_LOO, res_LOO] = stk_predict_leaveoneout (M_prior, x, y);
 
+% Plot predictions VS observations (left planel)
+%  and normalized residuals (right panel)
 stk_figure ('stk_example_kb10 (a)');  stk_plot_predvsobs (y, y_LOO);
 stk_figure ('stk_example_kb10 (b)');  stk_plot_histnormres (res_LOO.norm_res);
+
+% Note that the three previous lines can be summarized,
+% if you only need the two diagnostic plots, as:
+%
+%    stk_predict_leaveoneout (M_prior, x, y);
+%
+% (calling stk_predict_leaveoneout with no output arguments creates the plots).

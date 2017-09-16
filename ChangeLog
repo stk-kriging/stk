@@ -1,3 +1,893 @@
+2017-09-14  Rémi Stroh  <remi.stroh@lne.fr>
+
+	Correct an error in the documentation
+
+	* misc/test/stk_isequal_tolrel.m: replace "max" by "abs"
+	in the help message
+
+2017-09-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	CODING_GUIDELINES: Add (and apply) CG#12 guideline
+
+	* admin/CODING_GUIDELINES: Document in CG#12 why it is better to
+	use "hold off" instead of "cla" when calling stk_plot1d in a loop.
+	* examples/02_design_of_experiments/stk_example_doe03.m: Apply CG#12.
+	* examples/02_design_of_experiments/stk_example_doe05.m: Apply CG#12.
+
+	CODING_GUIDELINES: Add CG#11 guideline
+
+	* admin/CODING_GUIDELINES: Document in CG#11 why horzcat and
+	vertcat must be called explicitely.
+
+2017-09-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Workaround for get (0, 'Format') compatibility issue
+
+	* misc/text/stk_disp_getformat.m: New function to get 'Format' and
+	'FormatSpacing' properties in a Matlab/Octave comaptible way.
+	* misc/text/stk_disp_isloose.m: Rewrite using the new function.
+	* admin/octpkg/INDEX: Add new function to the INDEX.
+	* arrays/@stk_dataframe/disp.m: Use the new function.
+	* arrays/@stk_dataframe/stk_sprintf.m: Idem.
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Itou.
+
+2017-09-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Raise Octave version requirement to 3.6
+
+	* README.md: Indicate that STK is tested to work on "GNU Octave
+	3.6.2 or newer", which corresponds to the version currently
+	available in Debian old-old-stable, a.k.a. Wheezy.
+	* admin/CODING_GUIDELINES: Update coding guidelines.
+	* admin/build_tools/build_octpkg.m: Set octave depencency version
+	to 3.6.0 in the DESCRIPTION file.
+	* arrays/@stk_dataframe/stk_sprintf.m: Remove hacks.
+	* arrays/@stk_dataframe/subsasgn.m: Remove hacks.
+	* arrays/@stk_factorialdesign/subsasgn.m: Remove hacks.
+	* arrays/generic/stk_sprintf.m: Remove hacks.
+	* misc/error/stk_error.m: Remove hacks.
+	* misc/mole/quantile/quantile.m: Remove hacks.
+	* stk_init.m: Remove hacks.
+	* utils/stk_plot1d.m: Remove hacks.
+	* arrays/@stk_dataframe/isequal.m: Remove overloaded isequal
+	function, no longer needed.
+	* arrays/@stk_factorialdesign/isequal.m: Idem.
+	* core/@stk_kreq_qr/isequal.m: Idem.
+	* core/@stk_model_gpposterior/isequal.m: Idem.
+	* lm/@stk_lm_affine/isequal.m: Idem.
+	* lm/@stk_lm_constant/isequal.m: Idem.
+	* lm/@stk_lm_cubic/isequal.m: Idem.
+	* lm/@stk_lm_matrix/isequal.m: Idem.
+	* lm/@stk_lm_null/isequal.m: Idem.
+	* lm/@stk_lm_quadratic/isequal.m: Idem.
+	* misc/optim/@stk_optim_baseclass/isequal.m: Idem.
+	* misc/optim/@stk_optim_fmincon/isequal.m: Idem.
+	* misc/optim/@stk_optim_fminsearch/isequal.m: Idem.
+	* misc/optim/@stk_optim_octavesqp/isequal.m: Idem.
+	* misc/parallel/@stk_parallel_engine_none/isequal.m: Idem.
+	* misc/parallel/@stk_parallel_engine_parfor/isequal.m: Idem.
+	* admin/octpkg/INDEX: Update INDEX.
+	* admin/octpkg/patches/remove-buildmex.patch: Update patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Update patch.
+	* admin/octpkg/patches/stk-init-rmpath-cleanup.patch: Update patch.
+
+2017-09-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot_shadedci.m: Use area instead of fill for old Octave/Matlab
+
+	* misc/plot/stk_plot_shadedci.m: Use area instead of fill for old
+	versions of Octave and Matlab.
+
+2017-09-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_runtests.m: In Octave, check that __run_test_suite__ exists
+
+	* misc/test/stk_runtests.m: In Octave, check that
+	__run_test_suite__ exists before actually trying to call it.
+
+2017-09-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampcrit_ei_eval.m: Remove deprecated calling forms
+
+	* sampling/stk_sampcrit_ei_eval.m: Remove deprecated calling forms.
+
+	Make halfpintl public, with an stk_ prefix
+
+	* sampling/private/halfpintl.m: Remove from private directory.
+	* sampling/stk_halfpintl.m: Renamed from halfpintl.m.
+	* admin/octpkg/INDEX: Expose stk_halfpintl in the INDEX.
+	* sampling/stk_sampcrit_akg_eval.m: Update.
+	* admin/octpkg/patches/comment-out-unit-tests-in-private-functions.patch: Remove.
+	* admin/octpkg/patches/series: Update.
+
+	Use Octave's native test function on Octave
+
+	* misc/test/stk_test.m: Use Octave's native test function on Octave.
+	* misc/test/stk_runtests.m: Similarly, use Octave's native
+	__run_test_suite__ function when running on Octave.
+	* admin/octpkg/patches/use-native-test-function.patch: Remove patch.
+	* admin/octpkg/patches/series: Remove patch.
+	* admin/octpkg/INDEX: Add stk_test to the INDEX.
+
+2017-09-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Multiply/divide an stk_dataframe object by a scalar
+
+	* arrays/@stk_dataframe/mtimes.m: Implement a special case for the
+	multiplication of an stk_dataframe object by a numerical scalar.
+	* arrays/@stk_dataframe/mldivide.m: Idem for left division.
+	* arrays/@stk_dataframe/mrdivide.m: Idem for right division.
+
+	Overload left/right matrix division for stk_dataframe objects
+
+	* arrays/@stk_dataframe/mldivide.m: New function.
+	* arrays/@stk_dataframe/mrdivide.m: New function.
+	* admin/octpkg/INDEX: Add new functions to the INDEX.
+
+	stk_benchmark_predict.m: The boxplot function might be unavailable
+
+	* misc/benchmarks/stk_benchmark_predict.m: Wrap call to boxplot in
+	try-catch block, since the boxplot function might be unavailable.
+
+	@stk_sampcrit_ei/set.m: Remove unnecessary assert
+
+	* sampling/@stk_sampcrit_ei/set.m: Remove unnecessary assert,
+	since only scalar output models are supported in STK at this time.
+
+	Remove support for old-style .a structures
+
+	* arrays/@stk_dataframe/private/get_column_number.c: Remove
+	support for old-style .a structures.
+	* misc/dist/stk_gpquadform.m: Idem.
+	* arrays/@struct/double.m: Removed.
+	* arrays/@struct/stk_boundingbox.m: Removed.
+	* arrays/@struct/stk_length.m: Removed.
+	* admin/octpkg/INDEX: Update.
+	* arrays/@stk_dataframe/subsref.m: Remove unit tests.
+	* core/@stk_model_gpposterior/stk_predict.m: Idem.
+	* core/stk_predict.m: Idem.
+	* arrays/generic/stk_feval.m: Idem.
+	* covfcs/stk_expcov_aniso.m: Idem.
+	* covfcs/stk_gausscov_aniso.m: Idem.
+	* covfcs/stk_materncov32_aniso.m: Idem.
+	* covfcs/stk_sphcov_aniso.m: Idem.
+	* NEWS.md: Advertise.
+
+2017-08-31  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_generate_samplepaths.m: Remove xtest for ticket #14
+
+	* utils/stk_generate_samplepaths.m: Remove xtest for ticket #14
+	since the problem as been solved, as expected, by the previous
+	commit.
+
+	Exact predictions at obs points for noiseless models (ticket #49)
+
+	* core/@stk_model_gpposterior/stk_predict.m: Ensure exact
+	prediction at observation points for noiseless models.
+	* core/stk_predict.m: Change xtest to test.
+	* sampling/@stk_sampcrit_eqi/feval.m: Fix EQI computation at the
+	points where the variance is zero.
+
+	Insert HTML version of AUTHORS.md in the documentation
+
+	* admin/build_tools/generate_htmldoc.m: Insert HTML version of
+	AUTHORS.md in the documentation.
+
+	INDEX: Add @stk_factorialdesign/ismember
+
+	* admin/octpkg/INDEX: INDEX: Add @stk_factorialdesign/ismember.
+
+	Convert AUTHORS to markdown.
+
+	* AUTHORS: Renamed to AUTHORS.md
+	* AUTHORS.md: Renamed from AUTHORS, and converted to md syntax.
+	* admin/find_nonstandard_characters.sh: Scan AUTHORS.md as well.
+	* admin/build_tools/build_octpkg.m: Update.
+	* README.md: Update.
+	* admin/RELEASE.md: Update.
+
+	NEWS.md: Write Matérn with an accent on the "e"
+
+	* NEWS.md: Write Matérn with an accent on the "e", since we are
+	already using UTF-8 in this file anyway (for the umlaut on the "u"
+	of Müller).
+
+2017-08-30  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Overload ismember for stk_factorialdesign objects (ticket #29)
+
+	* arrays/@stk_factorialdesign/ismember.m: New function
+
+2017-08-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampcrit_ehvi_eval.m: Avoid OOM errors (ticket #48)
+
+	* sampling/stk_sampcrit_ehvi_eval.m: Process batches of rectangles
+	to avoid OOM errors.
+
+	Adapt html doc generation to changes in generate_html (fix)
+
+	* admin/build_tools/get_allpurpose_html_options.m: Fix earlier
+	commit (a12753859a6a) with the same name.
+
+	generate_htmldoc.m: Use HTML version of NEWS.md (ticket #61)
+
+	* admin/build_tools/generate_htmldoc.m: Insert HTML version of
+	NEWS.md, produced by markdown, inside NEWS.html.
+
+	NEWS.md: Fix markdown formatting
+
+	* NEWS.md: Fix markdown formatting
+
+2017-08-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Convert NEWS to markdown formatting (ticket #60)
+
+	* NEWS.md: Convert NEWS to markdown formatting and rename to NEWS.md.
+	* NEWS: Removed.
+	* admin/build_tools/build_octpkg.m: Rename NEWS to NEWS.md.
+
+2017-08-26  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/ismember.m: Do not assume 'rows' (ticket #50)
+
+	* arrays/@stk_dataframe/ismember.m: Do not assume 'rows', in order
+	to have a behaviour that is consistent with that of the base
+	function on numerical matrices.
+
+	Remove isoctave function
+
+	* misc/mole/isoctave/isoctave.m: Deleted.
+	* stk_init.m: Use exist directly. Remove a few lines related to
+	the isoctave function.
+	* misc/mole/graphics_toolkit/graphics_toolkit.m: Use exist
+	directly.
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Use exist
+	directly.
+	* misc/options/stk_options_set.m: Use exist directly.
+	* misc/parallel/stk_parallel_start.m: Use exist directly.
+	* misc/test/stk_test.m: Use exist directly.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+	* admin/octpkg/patches/stk-init-rmpath-cleanup.patch: Refresh patch.
+	* admin/octpkg/patches/use-native-test-function.patch: Refresh patch.
+
+	CG#10: Disable TeX interpreter for variable names
+
+	* admin/CODING_GUIDELINES: Introduce new coding guideline, CG#10,
+	recommending to disable the TeX interpreter for variable names.
+	* arrays/@stk_dataframe/plot.m: Follow CG#10.
+	* arrays/@stk_dataframe/plotmatrix.m: Follow CG#10.
+	* arrays/@stk_factorialdesign/private/plot_surfmeshcontour.m: Follow CG#10.
+	* arrays/@stk_hrect/axis.m: Follow CG#10.
+
+2017-08-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Adapt html doc generation to changes in generate_html
+
+	* admin/build_tools/get_allpurpose_html_options.m: Adapt html doc
+	generation to changes in generate_html.
+
+2017-07-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/bsxfun.m: Fix colnames/rownames selection
+
+	* arrays/@stk_dataframe/bsxfun.m: Fix colnames/rownames selection.
+
+2017-07-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_model_gpposterior/stk_predict_leaveoneout.m: Ensure var >= 0
+
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Make sure
+	that variances will always be non-negative.
+
+	Benchmark virtual LOO-CV speedup
+
+	* misc/benchmarks/stk_benchmark_loocv.m: New benchmark script to
+	evaluate to speedup brought by the implementation of virtual LOO
+	cross validation.
+
+	Move some LOO-CV unit tests
+
+	* core/stk_predict_leaveoneout.m: Move unit tests for correctness
+	of virtual LOO-CV formulas to
+	@stk_model_gpposterior/stk_predict_leaveoneout.m.
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Here.
+
+	Keep a copy of the original "direct" implementation of LOO-CV.
+
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout_direct.m:
+	Internal function, which is simply a copy of our original,
+	"direct" implementation of LOO-CV.  Can be used to check
+	correctness of virtual LOO formulas, and for benchmarking.
+	* admin/octpkg/INDEX: Hide internal function from the index.
+
+2017-07-23  Rémi Stroh  <remi.stroh@lne.fr>
+
+	stk_predict_leaveoneout.m: Use virtual Leave-One-Out formula (ticket #35)
+
+	* core\@stk_model_gpposterior\stk_predict_leaveoneout.m: Replace
+	the naive expression of the cross-validation, by the virtual
+	leave-one-out formula.
+	* core\stk_predict_leaveoneout.m: Add a test to check virtual
+	LOO formula.
+
+2017-07-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_benchmark_predict.m: New function to benchmark stk_predict
+
+	* misc/benchmarks/stk_benchmark_predict.m: New function to
+	benchmark stk_predict.
+
+	stk_benchmark_.m: New function to help benchmark computation times
+
+	* misc/benchmarks/stk_benchmark_.m: New function to help benchmark
+	computation times.
+
+2017-07-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_example_misc04.m: Work-around for Octave bug #49267.
+
+	* examples/03_miscellaneous/stk_example_misc04.m: Work-around for
+	Octave bug #49267.
+
+	New octpkg patch to comment out unit tests in private functions
+
+	* admin/octpkg/patches/comment-out-unit-tests-in-private-functions.patch:
+	New octpkg patch to comment out unit tests in private functions.
+	* admin/octpkg/patches/series: Add new test to the series.
+
+2017-07-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_predict_leaveoneout.m: Update help text
+
+	* core/stk_predict_leaveoneout.m: Update help text.
+
+	Set release date based on hg date in the build process
+
+	* Makefile: Pass hg date to build_* functions.
+	* admin/build_tools/build_allpurpose.m: Use hg date.
+	* admin/build_tools/build_octpkg.m: Use hg date.
+	* admin/build_tools/copy_citation.m: Use hg date.
+	* admin/build_tools/copy_readme.m: Use hg date.
+
+2017-07-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampcrit_akg_eval.m: Fix unit tests
+
+	* sampling/stk_sampcrit_akg_eval.m: Fix unit tests.
+
+	stk_dominatedhv_mex.c: Avoid "uninitialized variable" warnings
+
+	* misc/pareto/private/stk_dominatedhv_mex.c: Avoid "uninitialized
+	variable" compiler warnings.
+
+	CG#09: Use erfcinv when norminv fails (ticket #78)
+
+	* admin/CODING_GUIDELINES: Introduce new coding guideline, CG#09,
+	recommending to use erfcinv directly when norminv fails.
+	* sampling/@stk_sampcrit_eqi/set.m: Implement CG#09.
+
+2017-07-04  Rémi Stroh  <remi.stroh@lne.fr>
+
+	@stk_sampcrit_eqi\set.m: Change "norminv" by "erfcinv" (ticket #78)
+
+	* sampling\@stk_sampcrit_eqi\set.m: Replace the use of "norminv"
+	function, available only with the statistical toolbox, by an
+	expression using "erfcinv", a special basis function.
+
+	utils\stk_plot1d.m: Correct a bug
+
+	* utils\@stk_plot1d.m: Correct a bug, in the case where xt is empty.
+
+	utils/@stk_plot1d: sort data before plotting
+
+	* utils/@stk_plot1d: sort xt as increasing order before plotting.
+	The output vectors zt, zp and zsim are similarly modified before
+	their drawings.
+
+	arrays/@stk_dataframe: Overload 3 additional unitary test functions
+
+	* arrays/@stk_dataframe/isnan.m: New overloaded test function
+	* arrays/@stk_dataframe/isinf.m: Idem.
+	* arrays/@stk_dataframe/isfinite.m: Idem.
+
+2017-07-03  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim.m: Do not use model.param as a starting point
+
+	* param/estim/stk_param_estim.m: Do not use model.param as a
+	starting point; if param0 is not provided, call stk_param_init.
+	Modify documentation accordingly; it wasn't up-to-date anyway.
+
+2017-07-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_model_gpposterior/stk_predict.m: Skip main loop when nt == 0
+
+	* core/@stk_model_gpposterior/stk_predict.m: Skip main loop when
+	nt == 0.
+
+	stk_predict_leaveoneout.m: nargout == 0 => create plots
+
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Calling
+	stk_predict_leaveoneout with no output arguments now automatically
+	create two cross-validation diagnostics in two subplots:
+	prediction VS observations, left panel, and normalized +
+	residuals, right panel.
+	* core/stk_predict_leaveoneout.m: Do not change nargout when
+	calling overloaded method.
+	* examples/01_kriging_basics/stk_example_kb10.m: Advertise the new
+	syntax at the end of the script.
+
+	@stk_dataframe/stk_dataframe.m: Accept char colnames/rownames
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Tolerate char arguments
+	instead of cells for column and row names in the special case
+	where the expected number of elements is one.
+
+2017-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot_probdom2d.m: New function
+
+	* utils/stk_plot_probdom2d.m: New function to represent the
+	uncertainty about a 2D Pareto front.  This function is currently
+	considered experimental and should not be expected to produce a
+	reliable representation of the uncertainty for difficult or
+	high-dimensional optimization problems.
+	* examples/03_miscellaneous/stk_example_misc04.m: Update the
+	example to use the new function.
+	* admin/octpkg/INDEX: Add the new function to the INDEX.
+
+	@stk_model_gpposterior/stk_generate_samplepaths.m: Overload base
+
+	* core/@stk_model_gpposterior/stk_generate_samplepaths.m: New
+	function, overload base STK function.
+
+	Remove all occurences of response_name
+
+	* core/stk_model.m: Do not mention response_name as an optional
+	field, since it isn't used anywhere in STK now.
+	* examples/03_miscellaneous/stk_example_misc04.m: No more
+	response_name.
+
+	Return a plain numerical array from stk_generate_samplepaths
+
+	* utils/stk_generate_samplepaths.m: Return a plain double
+	precision numerical array; no more data frames here.
+	* arrays/@stk_dataframe/stk_generate_samplepaths.m: Removed.
+	* examples/03_miscellaneous/stk_example_misc04.m: Updated.
+	* admin/octpkg/INDEX: Update the INDEX.
+
+	@stk_model_gpposterior/stk_model_gpposterior.m: Check xi
+
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Check the
+	number of columns of input argument xi.
+
+	Move important plotting functions to 'utils' directory
+
+	* misc/plot/stk_plot1d.m: Moved to 'utils' directory.
+	* misc/plot/stk_plot_histnormres.m: Idem.
+	* misc/plot/stk_plot_predvsobs.m: Idem.
+	* utils/stk_plot1d.m: Moved from 'misc/plot' directory.
+	* utils/stk_plot_histnormres.m: Idem.
+	* utils/stk_plot_predvsobs.m: Idem.
+
+2017-06-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Add a new test case named 'truss3'
+
+	* examples/test_functions/stk_testcase_truss3.m: New function.
+	* examples/test_functions/stk_testfun_truss3_bb.m: New function.
+	* examples/test_functions/stk_testfun_truss3_vol.m: New function.
+	* admin/octpkg/INDEX: Add new functions to the INDEX.
+
+	stk_plot_predvsobs.m: Lowercase labels
+
+	* misc/plot/stk_plot_predvsobs.m: Lowercase labels.
+
+2017-06-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Change mnemonic 'IncorrectArgument' to 'InvalidArgument'
+
+	* arrays/@stk_dataframe/cat.m: Change mnemonic 'IncorrectArgument'
+	to 'InvalidArgument', since both of them were used interchangeably.
+	* arrays/@stk_dataframe/find.m: Idem.
+	* arrays/@stk_factorialdesign/private/plot_surfmeshcontour.m: Idem.
+	* misc/dist/stk_gpquadform.m: Idem.
+	* misc/pareto/stk_dominatedhv.m: Idem.
+	* param/estim/stk_param_estim.m: Idem.
+	* param/estim/stk_param_init.m: Idem.
+	* sampling/stk_sampling_olhs.m: Idem.
+	* sampling/stk_sampling_sobol.m: Idem.
+
+	@stk_dataframe/bsxfun.m: Remove annoying warnings
+
+	* arrays/@stk_dataframe/bsxfun.m: Take the column names (or row
+	names) from the first argument in case of disagreement, as in R.
+	Remove the annoying warnings.
+
+2017-06-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/set.m: Backout revision 29c5b2515988
+
+	* arrays/@stk_dataframe/set.m: *Do not* reject colnames and
+	rownames values with an insufficient number of elements.
+
+	@stk_dataframe/subsasgn.m: Add (currently failing) unit tests
+
+	* arrays/@stk_dataframe/subsasgn.m: Add (currently failing) unit
+	tests for the insertion of row/column names on data frames that
+	have none.
+
+	@stk_model_gpposterior/stk_model_gpposterior.m: Check 'prior_model' arg
+
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Check that
+	input argument 'prior_model' is a structure.
+
+	Logical-valued operators now return logical values on df as well
+
+	* arrays/@stk_dataframe/and.m: Return logical result.
+	* arrays/@stk_dataframe/eq.m: Idem.
+	* arrays/@stk_dataframe/ge.m: Idem.
+	* arrays/@stk_dataframe/gt.m: Idem.
+	* arrays/@stk_dataframe/le.m: Idem.
+	* arrays/@stk_dataframe/lt.m: Idem.
+	* arrays/@stk_dataframe/ne.m: Idem.
+	* arrays/@stk_dataframe/or.m: Idem.
+	* arrays/@stk_dataframe/xor.m: Idem.
+	* arrays/@stk_dataframe/not.m: New function.
+	* admin/octpkg/INDEX: Add new function to the INDEX.
+
+2017-06-26  Rémi Stroh  <remi.stroh@lne.fr>
+
+	stk_distrib_normal_crps.m: Make unit test deterministic (ticket #77)
+
+	* misc\distrib\stk_distrib_normal_crps.m: Replace the random
+	selection of data with fixed data.
+
+	stk_distrib_normal_crps.m: Change the final test (ticket #77)
+
+	* misc\distrib\stk_distrib_normal_crps.m: Modify the last test
+	to support compatibility with older versions of Matlab and
+	Octave.
+
+2017-06-26  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/set.m: Check colnames and rownames values more strictly
+
+	* arrays/@stk_dataframe/set.m: Reject colnames and rownames values
+	with an insufficient number of elements.
+
+	@stk_dataframe/subsref.m: Fix empty indexing
+
+	* arrays/@stk_dataframe/subsref.m: Fix empty indexing.
+
+	@stk_dataframe/stk_dataframe.m: Fix typo
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Fix typo.
+
+2017-06-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/fieldnames.m: Add row names to the list
+
+	* arrays/@stk_dataframe/fieldnames.m: Add row names.  Also, do not
+	include empty row or column names in the list.
+
+2017-06-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampling_sobol.m: Fix help text
+
+	* sampling/stk_sampling_sobol.m: Fix help text.
+
+	build_octpkg.m: Add 'License:' in DESCRIPTION
+
+	* admin/build_tools/build_octpkg.m: Add 'License:' in DESCRIPTION.
+	* admin/build_tools/generate_htmldoc.m: Remove 'Read License" subst.
+
+	@stk_dataframe/stk_sprintf.m: Improve formatting for empty data frames
+
+	* arrays/@stk_dataframe/stk_sprintf.m: Improve formatting for
+	empty data frames.  In particular, display column names or row
+	names if appropriate.
+	* arrays/@stk_dataframe/disp.m: Source formatting.
+	* arrays/generic/stk_sprintf.m: Fix help text.  Source formatting.
+
+2017-06-23  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dataframe.m: Guess the size when the first input is empty
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Deduce the number of
+	columns and rows from the length of colnames and rownames,
+	respectively, when the first input argument is empty.  Note that
+	this patch changes the object generated by the default constructor.
+
+2017-06-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dominatedhv.m: Accept @stk_dataframe inputs
+
+	* misc/pareto/stk_dominatedhv.m: Tolerate any kind of input
+	argument that can be converted to a double precision matrix, in
+	particular @stk_dataframe objects.
+
+2017-06-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Don't use ~ to ignore output arguments (see CG#07)
+
+	* admin/CODING_GUIDELINES: Improve CG#07
+	* sampling/stk_sampcrit_akg_eval.m: Apply CG#07
+	* sampling/stk_sampling_nesteddesign.m: Apply CG#07
+	* sampling/stk_sampling_nestedlhs.m: Apply CG#07
+
+	@stk_sampcrit_eqi/disp.m: Fix display bug
+
+	* sampling/@stk_sampcrit_eqi/disp.m: Fix display bug for the case
+	where point_batch_size is a function handle.
+
+	stk_sampcrit_eqi.m: Increase unit test tolerance (ticket #76)
+
+	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: Increase the
+	numerical tolerance in two unit tests.
+
+	stk_sampcrit_eqi.m: Fix one unit test (ticket #76)
+
+	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: Fix one unit
+	test; in Octave, str2func fails on phony function names.
+
+2017-06-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampcrit_akg_eval.m: Improve numerical robustness
+
+	* sampling/stk_sampcrit_akg_eval.m: Mitigate the effect of small
+	inaccurate covariance values on the computation of the slopes.
+
+	halfpintl.m: Fix a bug affecting slope equality cases
+
+	* sampling/private/halfpintl.m: Fix a bug affecting slope equality
+	cases.
+
+	stk_plot_shadedci.m: Use area when fill fails (ticket #75)
+
+	* misc/plot/stk_plot_shadedci.m: fill does not accept a axis
+	handle argument in Matlab prior to R2016a.  Use area as we were
+	doing before when fill fails.
+
+2017-06-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot_shadedci.m: Use fill instead of area
+
+	* misc/plot/stk_plot_shadedci.m: Recent changes in Matlab R2017a
+	have altered the behaviour of area.  Using fill is cleaner.
+
+	stk_plot_shadedci.m: Use three shaded areas
+
+	* misc/plot/stk_plot_shadedci.m: Use three shaded areas to
+	visualize three levels of pointwise confidence intervals at once.
+
+2017-06-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Optimize for speed
+
+	* core/@stk_kreq_qr/get.m: Use a simple switch.
+	* core/@stk_model_gpposterior/stk_predict.m: Call get directly.
+	* sampling/@stk_sampcrit_akg/feval.m: Call get directly.
+
+2017-06-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_model_gpposterior/stk_predict.m: Improve error messages
+
+	* core/@stk_model_gpposterior/stk_predict.m: Improve the error
+	messages corresponding to the case where xt has an incorrect size.
+
+2017-06-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/plotmatrix.m: Overload base function
+
+	* arrays/@stk_dataframe/plotmatrix.m: New function, overload base
+	function to enrich plotmatrix graphics with variable names when
+	possible.
+	* admin/octpkg/INDEX: Add the new function to the index.
+
+	Optimize for speed
+
+	* arrays/@stk_dataframe/set_data.m: New function, fast setter.
+	* admin/octpkg/INDEX: Add the new function to the index.
+	* arrays/@stk_dataframe/set.m: Use set_data.
+	* arrays/@stk_factorialdesign/set.m: Use set_data.
+	* arrays/@stk_hrect/stk_rescale.m: Optimize for speed.
+	* arrays/@stk_hrect/subsasgn.m: Optimize for speed.
+	* sampling/stk_sampling_randunif.m: Optimize for speed.
+	* sampling/stk_sampling_regulargrid.m: Optimize for speed.
+
+2017-06-03  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Optimize a few functions for speed
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Optimize
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Optimize
+	* arrays/@stk_hrect/stk_rescale.m: Optimize
+	* sampling/stk_sampling_randunif.m: Optimize
+	* sampling/stk_sampling_regulargrid.m: Optimize
+	* admin/octpkg/patches/matlab-graphics-axis-Axes.patch: Update
+
+	Upcast objects from derived classes to stk_dataframe
+
+	* arrays/@stk_factorialdesign/stk_dataframe.m: New function.
+	* arrays/@stk_hrect/stk_dataframe.m: New function.
+	* admin/octpkg/INDEX: Add new functions to the index.
+
+2017-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/find.m: Overload base function
+
+	* arrays/@stk_dataframe/find.m: Overload base function to support
+	calling find with an stk_dataframe as first input argument.
+	* admin/octpkg/INDEX: Add new function to the index.
+
+	stk_dataframe.m: Improve error messages
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Improve error message
+	when either colnames or rownames has an incorrect number of
+	elements.
+
+	stk_sampcrit_akg_eval.m: Set zr_min to +Inf when zr_mean is empty
+
+	* sampling/stk_sampcrit_akg_eval.m: Set zr_min to +Inf when
+	zr_mean is empty.
+
+	stk_hrect.m: Preserve colmumns names for stk_dataframe inputs
+
+	* arrays/@stk_hrect/stk_hrect.m: Preserve colmumns names when the
+	input is an stk_dataframe object.
+
+2017-05-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_factorialdesign.m: Accept stk_dataframe levels
+
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Accept
+	one-variable stk_dataframe factors and preserve column names in
+	this case.
+	* arrays/@stk_factorialdesign/stk_boundingbox.m: Do not assume
+	that the cell array of levels is row-shaped.
+	* admin/octpkg/patches/matlab-graphics-axis-Axes.patch: Update
+	patch.
+
+	stk_predict: Remove old inaccessible display_waitbar stuff
+
+	* core/@stk_model_gpposterior/stk_predict.m: Remove old and
+	inaccessible display_waitbar stuff.
+
+2017-05-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Implement the AKG criterion
+
+	* sampling/stk_sampcrit_akg_eval.m: New function, this is were the
+	actual computation of the AKG criterion happens.
+	* sampling/private/halfpintl.m: New private function that computes
+	the intersection of lower half-planes (equivalently, the lower
+	envelope of a set of lines) needed in the AKG.
+	* sampling/@stk_sampcrit_akg/stk_sampcrit_akg.m: New function.
+	* sampling/@stk_sampcrit_akg/feval.m: New function, does some
+	non-trivial preliminary work before calling stk_sampcrit_akg_eval.
+	* sampling/@stk_sampcrit_akg/disp.m: New function, copied from
+	other sampcrit classes with minor adaptations.
+	* sampling/@stk_sampcrit_akg/get.m: New function, this is the same
+	trivial getter as in other sampcrit classes.
+	* sampling/@stk_sampcrit_akg/set.m: New function, contains some
+	pre-computations that depend on the reference grid only.
+	* examples/02_design_of_experiments/stk_example_doe05.m: Use AKG
+	as a default, and propose EQI as an option.
+	* admin/octpkg/INDEX: Update index with new functions.
+
+	@stk_model_gpposterior/stk_make_kreq: new (internal) method
+
+	* core/@stk_model_gpposterior/stk_make_kreq.m: New method.
+	* core/@stk_model_gpposterior/stk_predict.m: Use the new method.
+	* admin/octpkg/INDEX: Update index with new function.
+
+	@stk_sampcrit_eqi: point_batch_size can also be a function
+
+	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: Add unit tests.
+	* sampling/@stk_sampcrit_eqi/set.m: Accept functions and char for
+	the value of point_batch_size.
+	* sampling/@stk_sampcrit_eqi/feval.m: Compute point_batch_size.
+
+	Fix a spelling error (instanciated -> instantiated)
+
+	* sampling/@stk_sampcrit_ei/stk_sampcrit_ei.m: Fix spelling error.
+	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: Idem.
+
+2017-05-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Massive overhaul of sampling criterion classes
+
+	* sampling/@stk_sampcrit_modelbased: Class removed
+	* sampling/@stk_sampcrit_modelbased/feval.m: Removed
+	* sampling/@stk_sampcrit_modelbased/get_input_data.m: Removed
+	* sampling/@stk_sampcrit_modelbased/get_model.m: Removed
+	* sampling/@stk_sampcrit_modelbased/get_output_data.m: Removed
+	* sampling/@stk_sampcrit_modelbased/set_model.m: Removed
+	* sampling/@stk_sampcrit_modelbased/stk_model_update.m: Removed
+	* sampling/@stk_sampcrit_modelbased/stk_sampcrit_modelbased.m: Removed
+	* sampling/@stk_sampcrit_singleobjoptim: Class removed
+	* sampling/@stk_sampcrit_singleobjoptim/get_bminimize.m: Removed
+	* sampling/@stk_sampcrit_singleobjoptim/get_goal.m: Removed
+	* sampling/@stk_sampcrit_singleobjoptim/set_goal.m: Removed
+	* sampling/@stk_sampcrit_singleobjoptim/stk_sampcrit_singleobjoptim.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim: Class removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/disp.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get_threshold_mode.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get_threshold_quantile_order.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/get_threshold_value.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_goal.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_model.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_threshold_mode.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_threshold_quantile_order.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/set_threshold_value.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_model_update.m: Removed
+	* sampling/@stk_sampcrit_thresholdbasedoptim/stk_sampcrit_thresholdbasedoptim.m: Removed
+	* sampling/@stk_sampcrit_base: Class renamed to @stk_function
+	* sampling/@stk_sampcrit_base/stk_sampcrit_base.m: Moved to @stk_function, renamed, modified
+	* sampling/@stk_sampcrit_base/disp.m: : Moved to @stk_function and modified
+	* sampling/@stk_sampcrit_base/display.m: Idem.
+	* sampling/@stk_sampcrit_base/horzcat.m: Idem.
+	* sampling/@stk_sampcrit_base/subsasgn.m: Idem.
+	* sampling/@stk_sampcrit_base/subsref.m: Idem.
+	* sampling/@stk_sampcrit_base/vertcat.m: Idem.
+	* sampling/@stk_function: Replaces @stk_sampcrit_base
+	* sampling/@stk_function/stk_function.m: Moved from @stk_sampcrit_base, renamed, modified
+	* sampling/@stk_function/disp.m: Moved from @stk_sampcrit_base and modified
+	* sampling/@stk_function/display.m: Idem.
+	* sampling/@stk_function/horzcat.m: Idem.
+	* sampling/@stk_function/subsasgn.m: Idem.
+	* sampling/@stk_function/subsref.m: Idem.
+	* sampling/@stk_function/vertcat.m: Idem.
+	* sampling/@stk_function/feval.m: New method (error only)
+	* sampling/@stk_function/get.m: New method (error only)
+	* core/@struct/get_input_data.m: New method to support prior models defined as structures
+	* core/@struct/get_output_data.m: Idem.
+	* core/@struct/get_prior_model.m: Idem.
+	* core/@struct/private/assert_struct_is_model.m: Private function used by the last three
+	* sampling/@stk_sampcrit_ei: Complete class rewrite
+	* sampling/@stk_sampcrit_ei/stk_sampcrit_ei.m: Entirely rewritten
+	* sampling/@stk_sampcrit_ei/msfeval.m: Moved to feval.m
+	* sampling/@stk_sampcrit_ei/feval.m: Moved from msfeval.m and modified
+	* sampling/@stk_sampcrit_ei/disp.m: Moved from thresholdbasedoptim and modified
+	* sampling/@stk_sampcrit_ei/get.m: New method (trivial getter)
+	* sampling/@stk_sampcrit_ei/set.m: New method (non-trivial setter)
+	* sampling/@stk_sampcrit_eqi: Complete class rewrite
+	* sampling/@stk_sampcrit_eqi/stk_sampcrit_eqi.m: Entirely rewritten
+	* sampling/@stk_sampcrit_eqi/msfeval.m: Moved to feval.m
+	* sampling/@stk_sampcrit_eqi/feval.m: Moved from msfeval.m and modified
+	* sampling/@stk_sampcrit_eqi/disp.m: Moved from thresholdbasedoptim and modified
+	* sampling/@stk_sampcrit_eqi/get.m: New method (trivial getter)
+	* sampling/@stk_sampcrit_eqi/set.m: New method (non-trivial setter)
+	* examples/02_design_of_experiments/stk_example_doe05.m: Rewrite almost entirely
+	* admin/octpkg/INDEX: Update index
+
+2017-05-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix object display problem (ticket #73)
+
+	* misc/text/stk_disp_isloose.m: New function, to query the
+	compact/loose display status in a Matlab/Octave compatible-way.
+	* core/@stk_model_gpposterior/disp.m: Use the new function.
+	* core/@stk_model_gpposterior/display.m: Idem.
+	* sampling/@stk_sampcrit_base/disp.m: Idem.
+	* sampling/@stk_sampcrit_base/display.m: Idem.
+	* sampling/@stk_sampcrit_thresholdbasedoptim/disp.m: Idem.
+	* admin/octpkg/INDEX: Add the new function to the index.
+
+2017-05-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampcrit_ehvi_eval.m: Add help text
+
+	* sampling/stk_sampcrit_ehvi_eval.m: Add help text.
+	* sampling/stk_sampcrit_ei_eval.m: Minor change in help text.
+	* sampling/stk_sampcrit_emmi_eval.m: Minor change in help text.
+
 2017-05-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_distrib_normal_ei.m: Recommend to use stk_sampcrit_ei_eval
@@ -5,7 +895,7 @@
 	* misc/distrib/stk_distrib_normal_ei.m: Recommend to use
 	stk_sampcrit_ei_eval instead.
 
-2017-05-12  Remi Stroh  <remi.stroh@lne.fr>
+2017-05-12  Rémi Stroh  <remi.stroh@lne.fr>
 
 	Format help texts.
 
@@ -84,7 +974,7 @@
 	the rest of the toolbox, we should avoid using functions from
 	other parts of STK inside them.
 
-2017-05-03  Remi Stroh  <remi.stroh@lne.fr>
+2017-05-03  Rémi Stroh  <remi.stroh@lne.fr>
 
 	stk_distrib_normal_crps.m: New function to compute the Gaussian CRPS
 
@@ -92,7 +982,7 @@
 	the Continuous Ranked Probability Score in the case of a Gaussian
 	predictive density.
 
-2017-04-27  Remi Stroh  <remi.stroh@lne.fr>
+2017-04-27  Rémi Stroh  <remi.stroh@lne.fr>
 
 	New functions to create nested designs.
 
@@ -782,7 +1672,7 @@
 
 2016-07-21  Rémi Stroh  <remi.stroh@lne.fr>
 
-	arrays/@stk_dataframe: Overload 25 additional unary base functions (sin, exp...)
+	arrays/@stk_dataframe: Overload 25 additional unitary base functions (sin, exp...)
 
 	* arrays/@stk_dataframe/acos.m: New overloaded base function
 	* arrays/@stk_dataframe/acosd.m: Idem.
@@ -5399,7 +6289,7 @@
 
 2012-09-08  Julien Bect  <julien.bect@supelec.fr>
 
-	Adding default bounds for Matern 3/2 covariances.
+	Adding default bounds for Matérn 3/2 covariances.
 
 	* paramestim/stk_param_estim.m: modified
 
@@ -5840,7 +6730,7 @@
 	* stk_init.m: Turned output pagination off and disabled verbose
 	help messages in Octave.
 
-	New covariance function (Matern 3/2).
+	New covariance function (Matérn 3/2).
 
 	* utils/specfun/stk_sf_matern32.m: New function.
 	* covfcs/stk_materncov32_aniso.m: New function.
@@ -5862,12 +6752,12 @@
 
 2012-02-05  Julien Bect  <julien.bect@supelec.fr>
 
-	New covariance function (Matern 5/2).
+	New covariance function (Matérn 5/2).
 
 	* utils/specfun/stk_sf_matern52.m: New function.
 	* covfcs/stk_materncov52_aniso.m: New function.
 	* covfcs/stk_materncov52_iso.m: New function.
-	* core/stk_param_estim.m: Added Matern 5/2 to get_default_bounds().
+	* core/stk_param_estim.m: Added Matérn 5/2 to get_default_bounds().
 	* examples/example06.m: New script.
 	* examples/run_all_examples.m: Increased NB_EXAMPLES.
 

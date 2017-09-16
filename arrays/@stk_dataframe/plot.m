@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -55,14 +55,14 @@ function h = plot_ (h_axes, x, z, S, varargin)
 
 %--- Handle stk_dataframe inputs ------------------------------------------
 
-if isa (x, 'stk_dataframe'),
+if isa (x, 'stk_dataframe')
     xlab = x.colnames;
     x = double (x);
 else
     xlab = {};
 end
 
-if isa (z, 'stk_dataframe'),
+if isa (z, 'stk_dataframe')
     zlab = z.colnames;
     z = double (z);
 else
@@ -100,17 +100,17 @@ else
     h = plot (h_axes, x, z, S, varargin{:});
 end
 
-if ~ isempty (xlab),
+if ~ isempty (xlab)
     if size (x, 2) == 1
-        stk_xlabel (xlab{1});
+        stk_xlabel (xlab{1}, 'interpreter', 'none');  % CG#10
     end
     % Note: in the case where x has several columns (and z also) we could
     % create more elaborate legends, e.g., "Zj versus Xj". Another time.
 end
 
 if ~ isempty (zlab)
-    if size (z, 2) == 1,
-        stk_ylabel (zlab{1});
+    if size (z, 2) == 1
+        stk_ylabel (zlab{1}, 'interpreter', 'none');  % CG#10
     else
         legend (zlab{:});
     end
@@ -151,7 +151,7 @@ function [h_axes, plot_elem, keyval_pairs] = parse_args_ (varargin)
 % Extract axis handle (if it is present)
 [h_axes, varargin, n_argin] = stk_plot_getaxesarg (varargin{:});
 
-if n_argin == 0,
+if n_argin == 0
     stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
 end
 
@@ -244,11 +244,11 @@ end % function
 
 function keyval_pairs = parse_keyval_ (key, val, varargin)
 
-if nargin == 0,
+if nargin == 0
     
     keyval_pairs = {};
     
-elseif nargin == 1,
+elseif nargin == 1
     
     errmsg = 'Syntax error. Incomplete key-value pair';
     stk_error (errmsg, 'NotEnoughInputArgs');

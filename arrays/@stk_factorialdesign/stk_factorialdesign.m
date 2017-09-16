@@ -27,65 +27,95 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function x = stk_factorialdesign(levels, varargin)
+function x = stk_factorialdesign (levels, varargin)
 
-if nargin == 0  % default constructor
+if nargin == 0   % default constructor
     levels = {[]};
 end
 
-% number of factors
-d = length(levels);
-
-if ~iscell(levels) || (numel(levels) ~= d)
+if ~ iscell (levels)
     
-    errmsg = 'Expecting a "flat" cell array as first argument.';
-    stk_error(errmsg, 'TypeMismatch');
+    stk_error ('Expecting a cell array as first argument',  'TypeMismatch');
     
 else
     
-    if ~all(cellfun(@isnumeric, levels))
+    % Guess the number of factors from the length of the cell array
+    dim = length (levels);
+    
+    % Extract raw factor data and column names (when they are available)
+    raw_levels = cell (1, dim);
+    raw_levels_anyempty = false;
+    colnames = cell (1, dim);
+    colnames_allempty = true;
+    for i = 1:dim
+        li = levels{i};
         
-        errmsg = 'Only numeric factors are currently supported.';
-        stk_error(errmsg, 'TypeMismatch');
-        
-    else % ok, numeric levels, we know how to handle that
-        
-        if (d == 0) || any(cellfun(@isempty, levels))
-            
-            xdata = zeros(0, d);
-            
-        elseif d == 1
-            
-            xdata = levels{1}(:);
-            
-        else
-            
-            % coordinate arrays
-            coord = cell(1, d);
-            [coord{:}] = ndgrid(levels{:});
-            
-            % design matrix
-            xdata = zeros(numel(coord{1}), d);
-            for j = 1:d,
-                xdata(:, j) = coord{j}(:);
+        if isa (li, 'stk_dataframe')
+            assert (size (li, 2) == 1);
+            cn = get (li, 'colnames');
+            if isempty (cn)
+                colnames{i} = '';
+            else
+                colnames(i) = cn;
             end
-            
+            raw_levels{i} = double (li);
+        elseif isnumeric (li)
+            colnames{i} = '';
+            raw_levels{i} = double (li(:));
+            levels{i} = raw_levels{i};
+        else
+            errmsg = 'Only numeric factors are currently supported.';
+            stk_error (errmsg, 'TypeMismatch');
         end
         
-        % base dataframe
-        df = stk_dataframe (xdata, varargin{:});
-        df = set (df, 'info', 'Created by stk_factorialdesign');
-        
-        % "factorial design" object
-        x = struct ('levels', {levels});
-        x = class (x, 'stk_factorialdesign', df);
-        
-        try
-            % Starting with Matlab R2014b, graphics handles are objects
-            superiorto ('matlab.graphics.axis.Axes');
+        if isempty (raw_levels{i})
+            raw_levels_anyempty = true;
         end
         
-    end % if
+        if ~ isempty (colnames{i})
+            colnames_allempty = false;
+        end
+    end
+    
+    if (dim == 0) || raw_levels_anyempty
+        
+        xdata = zeros (0, dim);
+        
+    elseif dim == 1
+        
+        xdata = raw_levels{1};
+        
+    else
+        
+        % coordinate arrays
+        coord = cell (1, dim);
+        [coord{:}] = ndgrid (raw_levels{:});
+        
+        % design matrix
+        xdata = zeros (numel (coord{1}), dim);
+        for j = 1:dim
+            xdata(:, j) = coord{j}(:);
+        end
+        
+    end
+    
+    % base dataframe
+    df = stk_dataframe (xdata, varargin{:});
+    df = set (df, 'info', 'Created by stk_factorialdesign');
+    
+    % column names ?
+    if isempty (get (df, 'colnames')) && ~ colnames_allempty
+        df = set (df, 'colnames', colnames);
+    end
+    
+    % "factorial design" object
+    x = struct ();  x.levels = levels;
+    x = class (x, 'stk_factorialdesign', df);
+    
+    try %#ok<TRYNC>
+        % Starting with Matlab R2014b, graphics handles are objects
+        superiorto ('matlab.graphics.axis.Axes');
+    end
     
 end % if
 
@@ -103,7 +133,6 @@ end % function
 
 % tests some incorrect values for 'levels'
 %!error stk_factorialdesign ('bouh');
-%!error stk_factorialdesign (repmat ({[0 1]}, 2, 2));
 
 % categorical variable not supported yet
 %!error stk_factorialdesign ({{'a' 'b'}});
@@ -111,17 +140,12 @@ end % function
 %--- disp & display -----------------------------------------------------------
 
 %!shared x, fmt
-%! try % doesn't work on old Octave versions, nevermind
-%!   fmt = get (0, 'Format');
-%! catch
-%!   fmt = nan;
-%! end
+%! fmt = stk_disp_getformat ();
 %! x = stk_sampling_regulargrid (3^2, 2);
 
 %!test format rat;    disp (x);
 %!test format long;   disp (x);
-%!test format short;  disp (x);
-%! if ~ isnan (fmt), set (0, 'Format', fmt); end
+%!test format short;  disp (x);  format (fmt);
 
 %!test disp (stk_sampling_regulargrid (0^1, 1));
 %!test disp (stk_sampling_regulargrid (0^2, 2));

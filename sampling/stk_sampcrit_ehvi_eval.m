@@ -1,13 +1,42 @@
-% STK_SMPCRIT_EHVI_MSFEVAL ... [FIXME: missing documentation]
+% STK_SAMPCRIT_EHVI_EVAL computes the EHVI criterion
 %
-% Note: minimization wrt to all objectives is assumed (for now)
+% CALL: EHVI = stk_sampcrit_ehvi_eval (ZP_MEAN, ZP_STD, ZI, ZR)
 %
-% Note: *_eval function should be provided for all pointwise sampling
-%       (makes them easy to use when means and std are already computed)
+%    computes the value EHVI of the Expected HyperVolume Improvement (EHVI) for
+%    a multi-objective minimization problem, with respect to the observed values
+%    ZI and the reference point ZR, assuming Gaussian predictive distributions
+%    with means ZP_MEAN and standard deviations ZP_STD.  The input arguments
+%    must have the following sizes:
+%
+%       * ZP_MEAN    M x P,
+%       * ZP_STD     M x P,
+%       * ZI         N x P,
+%       * ZR         1 x P,
+%
+%    where M is the number of points where the EHVI must be computed, P the
+%    number of objective functions to be minimized, and N the current number of
+%    Pareto optimal solutions.  The output has size M x 1.
+%
+% NOTE
+%
+% 1) The result depends only on the non-dominated rows of ZI.
+%
+% 2) Multi-objective maximization problems, or mixed minimization/maximization
+%    problems, can be handled by changing the sign of the corresponding
+%    components of ZP_MEAN and ZI.
+%
+% REFERENCES
+%
+%  [1] Emmerich, M. T., Giannakoglou, K. C., & Naujoks, B.  Single- and
+%      multiobjective evolutionary optimization assisted by gaussian random
+%      field metamodels. IEEE Transactions on Evolutionary Computation,
+%      10(4), 421-439, 2006.
+%
+% See also: stk_sampcrit_emmi_eval, stk_sampcrit_ei_eval
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -33,7 +62,7 @@
 
 function EHVI = stk_sampcrit_ehvi_eval (zp_mean, zp_std, zi, zr)
 
-if nargin > 4,
+if nargin > 4
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
@@ -50,12 +79,28 @@ if ~ isempty (S.sign)
     % Shift rectangle number to third dimension
     Rs = shiftdim (S.sign,  -2);
     Ra = shiftdim (S.xmin', -1);
-    Rb = shiftdim (S.xmax', -1);    
+    Rb = shiftdim (S.xmax', -1);
     
-    EIa = stk_distrib_normal_ei (Ra, zp_mean, zp_std, 1);  % m x p x R
-    EIb = stk_distrib_normal_ei (Rb, zp_mean, zp_std, 1);  % m x p x R
+    % Number of rectangles
+    R = size (Ra, 3);
     
-    EHVI = EHVI - sum (bsxfun (@times, Rs, prod (EIb - EIa, 2)), 3);
+    % Deal with BLOCK_SIZE rectangles at a time to avoid OOM
+    BLOCK_SIZE = ceil (1e7 / (numel (EIr)));
+    nb_blocks = ceil (R / BLOCK_SIZE);
+    r2 = 0;
+    for b = 1:nb_blocks
+        
+        r1 = r2 + 1;
+        r2 = min (r1 + BLOCK_SIZE - 1, R);
+        
+        % Both EIa and EIb will have size m x p x BLOCK_SIZE
+        EIa = stk_distrib_normal_ei (Ra(:, :, r1:r2), zp_mean, zp_std, 1);
+        EIb = stk_distrib_normal_ei (Rb(:, :, r1:r2), zp_mean, zp_std, 1);
+        
+        EHVI = EHVI - sum (bsxfun (@times, ...
+            Rs(:, :, r1:r2), prod (EIb - EIa, 2)), 3);
+        
+    end % if
     
 end % if
 

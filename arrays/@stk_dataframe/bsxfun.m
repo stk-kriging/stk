@@ -51,7 +51,7 @@ end
 
 %---- Choose column and row names ---------------------------------------
 
-if isa (x1, 'stk_dataframe'),
+if isa (x1, 'stk_dataframe')
     c1 = x1.colnames;
     r1 = x1.rownames;
 else
@@ -59,7 +59,7 @@ else
     r1 = {};
 end
 
-if isa (x2, 'stk_dataframe'),
+if isa (x2, 'stk_dataframe')
     c2 = x2.colnames;
     r2 = x2.rownames;
 else
@@ -67,30 +67,24 @@ else
     r2 = {};
 end
 
-if isempty (c1)
-    colnames = c2;
-elseif isempty (c2)
+[nr, nc] = size (ydata);
+
+if length (c1) == nc
+    % Keep the columns names from the first dataframe (as in R)
     colnames = c1;
+elseif length (c2) == nc
+    colnames = c2;
 else
-    if (~ isequal (size (c1), size (c2))) || (any (~ strcmp (c1, c2)))
-        warning ('STK:bsxfun:IncompatibleColumnNames', ...
-            'Incompatible column names.');  colnames = {};
-    else
-        colnames = c1;
-    end
+    colnames = {};
 end
 
-if isempty (r1)
-    rownames = r2;
-elseif isempty (r2)
+if length (r1) == nr
+    % Keep the columns names from the first dataframe (as in R)
     rownames = r1;
+elseif length (r2) == nr
+    rownames = r2;
 else
-    if (~ isequal (size (r1), size (r2))) || (any (~ strcmp (r1, r2)))
-        warning ('STK:bsxfun:IncompatibleRowNames', ...
-            'Incompatible row names.');  rownames = {};
-    else
-        rownames = r1;
-    end
+    rownames = {};
 end
 
 %--- Create output ------------------------------------------------------
@@ -98,18 +92,6 @@ end
 y = stk_dataframe (ydata, colnames, rownames);
 
 end % function
-
-
-% DESIGN NOTES
-%
-% Starting from STK 2.2.0, the result of bsxfun is ALWAYS an
-% stk_dataframe object, and has column names iff
-%  * either one of the two arguments doesn't have columns names
-%  * or the columns names of both arguments agree.
-%
-% With this design choice, we ensure that if the underlying operation F
-% is commutative on double-precision arrays, then it stays commutative
-% on stk_dataframe objects.
 
 
 %!shared x1, x2, data1, data2
@@ -127,4 +109,18 @@ end % function
 %!test
 %! z = bsxfun (@plus, data1, data2);
 %! assert (isa (z, 'stk_dataframe') && isequal (double (z), x1 + x2))
+
+%--- check the behaviour wrt column / row names --------------------------------
+
+%!shared x, y
+%! x = stk_dataframe (randn (2), {'x1', 'x2'}, {'a'; 'b'});
+%! y = stk_dataframe (randn (2), {'y1', 'y2'}, {'c'; 'd'});
+
+%!test z = x + y;
+%! assert (isequal (z.colnames, x.colnames));
+%! assert (isequal (z.rownames, x.rownames));
+
+%!test z = y + x;
+%! assert (isequal (z.colnames, y.colnames));
+%! assert (isequal (z.rownames, y.rownames));
 

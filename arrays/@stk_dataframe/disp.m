@@ -7,10 +7,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -34,7 +35,7 @@
 
 function disp (x, verbosity, prefix, data_col_width)
 
-if (nargin < 2) || (isempty (verbosity)),
+if (nargin < 2) || (isempty (verbosity))
     verbosity = stk_options_get ('stk_dataframe', 'disp_format');
 end
 
@@ -42,7 +43,7 @@ if (nargin < 3) || (isempty (prefix))
     prefix = ' ';
 end
 
-if (nargin < 4) || (isempty (data_col_width)),
+if (nargin < 4) || (isempty (data_col_width))
     data_col_width = [];
 end
 
@@ -53,17 +54,12 @@ end % function
 
 
 %!shared x, fmt
-%! try % doesn't work on old Octave versions, nevermind
-%!   fmt = get (0, 'Format');
-%! catch
-%!   fmt = nan;
-%! end
+%! fmt = stk_disp_getformat ();
 %! x = stk_dataframe (rand (3, 2));
 
-%!test format rat;      disp (x);
-%!test format long;     disp (x);
-%!test format short;    disp (x);
-%! if ~isnan (fmt), set (0, 'Format', fmt); end
+%!test format rat;    disp (x);
+%!test format long;   disp (x);
+%!test format short;  disp (x);  format (fmt);
 
 %!test disp (stk_dataframe (zeros (0, 1)))
 %!test disp (stk_dataframe (zeros (0, 2)))

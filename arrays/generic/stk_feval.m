@@ -373,9 +373,3 @@ end % function
 %! G = @(t)(0.365 * t^2 + (cos ((t - 1)*(t - 2) + 0.579033)));
 %! z = stk_feval ({@sin, @cos, G, F, 'tan'}, t, [], [], false);
 %! assert (isequal (z.colnames, {'sin' 'cos' 'F3' 'F4_1' 'F4_2' 'tan'}));
-
-%!test  % backward compatibility with old-style STK structures
-%! n = 15;
-%! x = struct ('a', (linspace (0, pi, n))');
-%! y = stk_feval (@sin, x);
-%! assert (isequal (size (y), [n 1]));

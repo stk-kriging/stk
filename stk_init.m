@@ -1,6 +1,6 @@
 % STK_INIT initializes the STK
 %
-% CALL: stk_init()
+% CALL: stk_init ()
 %
 % STK_INIT sets paths and environment variables
 
@@ -120,7 +120,7 @@ stk_init__addpath (root);
 
 % Check that MEX-files located in private folders are properly detected (note:
 % there are no MEX-files in private folders if STK is used as an Octave package)
-if isoctave
+if exist ('OCTAVE_VERSION', 'builtin') == 5  % Octave
     stk_init__test_private_mex ();
 end
 
@@ -159,15 +159,14 @@ end % function
 
 function stk_init__munlock ()
 
-filenames = { ...
-    'isoctave', ...
-    'stk_optim_fmincon', ...
-    'stk_options_set', ...
-    'stk_parallel_engine_set'};
+filenames = {                 ...
+    'stk_optim_fmincon',      ...
+    'stk_options_set',        ...
+    'stk_parallel_engine_set' };
 
 for i = 1:(length (filenames))
     name = filenames{i};
-    if mislocked (name),
+    if mislocked (name)
         munlock (name);
     end
 end
@@ -179,20 +178,19 @@ function stk_init__clear_persistents ()
 
 stk_init__munlock ();
 
-filenames = { ...
-    'isoctave', ...
-    'stk_disp_progress', ...
-    'stk_gausscov_iso', ...
-    'stk_gausscov_aniso', ...
-    'stk_materncov_aniso', ...
-    'stk_materncov_iso', ...
-    'stk_materncov32_aniso', ...
-    'stk_materncov32_iso', ...
-    'stk_materncov52_aniso', ...
-    'stk_materncov52_iso', ...
-    'stk_optim_fmincon', ...
-    'stk_options_set', ...
-    'stk_parallel_engine_set'};
+filenames = {                 ...
+    'stk_disp_progress',      ...
+    'stk_gausscov_iso',       ...
+    'stk_gausscov_aniso',     ...
+    'stk_materncov_aniso',    ...
+    'stk_materncov_iso',      ...
+    'stk_materncov32_aniso',  ...
+    'stk_materncov32_iso',    ...
+    'stk_materncov52_aniso',  ...
+    'stk_materncov52_iso',    ...
+    'stk_optim_fmincon',      ...
+    'stk_options_set',        ...
+    'stk_parallel_engine_set' };
 
 for i = 1:(length (filenames))
     clear (filenames{i});
@@ -206,7 +204,7 @@ function stk_init__addpath (root)
 path = stk_init__genpath (root);
 
 % Check for missing directories
-for i = 1:length (path),
+for i = 1:length (path)
     if ~ exist (path{i}, 'dir')
         error (sprintf (['Directory %s does not exist.\n' ...
             'Is there a problem in stk_init__genpath ?'], path{i}));
@@ -227,7 +225,7 @@ function path = stk_init__genpath (root)
 path = {};
 
 % main function folders
-path = [path {...
+path = [path {                           ...
     fullfile(root, 'arrays'            ) ...
     fullfile(root, 'arrays', 'generic' ) ...
     fullfile(root, 'core'              ) ...
@@ -235,13 +233,13 @@ path = [path {...
     fullfile(root, 'covfcs', 'rbf'     ) ...
     fullfile(root, 'lm'                ) ...
     fullfile(root, 'param', 'classes'  ) ...
-    fullfile(root, 'param', 'estim'    ) ...    
+    fullfile(root, 'param', 'estim'    ) ...
     fullfile(root, 'sampling'          ) ...
     fullfile(root, 'utils'             ) }];
 
 % 'misc' folder and its subfolders
 misc = fullfile (root, 'misc');
-path = [path {...
+path = [path {                 ...
     fullfile(misc, 'design'  ) ...
     fullfile(misc, 'dist'    ) ...
     fullfile(misc, 'distrib' ) ...
@@ -256,38 +254,18 @@ path = [path {...
 
 % IAGO
 iago = fullfile (root, 'iago');
-path = [path {iago ...
+path = [path {iago            ...
     fullfile(iago, 'crit'   ) ...
     fullfile(iago, 'rep'    ) ...
-    fullfile(iago, 'utils'  )}];
+    fullfile(iago, 'utils'  ) }];
 
 % folders that contain examples
-path = [path {...
+path = [path {                                             ...
     fullfile(root, 'examples', '01_kriging_basics'       ) ...
     fullfile(root, 'examples', '02_design_of_experiments') ...
     fullfile(root, 'examples', '03_miscellaneous'        ) ...
     fullfile(root, 'examples', 'datasets'                ) ...
     fullfile(root, 'examples', 'test_functions'          ) }];
-
-% Fix a problem with private folders in Octave 3.2.x
-%   (add private folders to the path to make STK work...)
-if (exist ('OCTAVE_VERSION', 'builtin') == 5)
-    v = version;
-    if strcmp (v(1:4), '3.2.')
-        test_path = [path {...
-            fullfile(root, 'arrays', '@stk_dataframe') ...
-            fullfile(root, 'arrays', '@stk_factorialdesign') ...
-            fullfile(root, 'core', '@stk_kreq_qr')}];
-        private_path = {};
-        for i = 1:(length (test_path))
-            p = fullfile (test_path{i}, 'private');
-            if exist (p, 'dir')
-                private_path = [private_path {p}];
-            end
-        end
-        path = [path private_path];
-    end
-end
 
 end % function
 
@@ -302,13 +280,13 @@ isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
 
 if isoctave
     try
-      % Use the modern name (__octave_config_info__) if possible
-      % NOTE: feval prevents Matlab from complaining about the underscores
-      apiver = feval ('__octave_config_info__', 'api_version');
-      assert (ischar (apiver));
+        % Use the modern name (__octave_config_info__) if possible
+        % NOTE: feval prevents Matlab from complaining about the underscores
+        apiver = feval ('__octave_config_info__', 'api_version');
+        assert (ischar (apiver));
     catch
-      % Use the old name instead
-      apiver = octave_config_info ('api_version');
+        % Use the old name instead
+        apiver = octave_config_info ('api_version');
     end
     regex2 = strcat (escape_regexp (apiver), '$');
 end
@@ -330,27 +308,6 @@ end % function
 
 
 function s = escape_regexp (s)
-
-% For backward compatibility with Octave 3.2.x, we cannot use regexprep here:
-%
-%    s = regexprep (s, '([\+\.\\])', '\\$1');
-%
-% Indeed, compare the results with Octave 3.8.x
-%
-%    >> regexprep ('2.2.0', '(\.)', '\$1')
-%    ans = 2$12$10
-%
-%    >> regexprep ('2.2.0', '(\.)', '\\$1')
-%    ans = 2\.2\.0
-%
-% and those with Octave 3.2.4
-%
-%    >> regexprep ('2.2.0', '(\.)', '\$1')
-%    ans = 2\.2\.0
-%
-%    >> regexprep ('2.2.0', '(\.)', '\\$1')
-%    ans = 2\\.2\\.0
-%
 
 s = strrep (s, '\', '\\');
 s = strrep (s, '+', '\+');
@@ -546,11 +503,11 @@ end % function
 
 function info = register_mex (info, relpath, mexname, other_src, includes)
 
-if nargin < 4,
+if nargin < 4
     other_src = {};
 end
 
-if nargin < 5,
+if nargin < 5
     includes = {};
 end
 
@@ -573,10 +530,10 @@ try
     assert (isequal (size (D), [n n]));
 catch
     err = lasterror ();
-    if (~ isempty (regexp (err.message, 'stk_dist_matrixx', 'once'))) ...
+    if (~ isempty (regexp (err.message, 'stk_dist_matrixx', 'once')))  ...
             && (~ isempty (regexp (err.message, 'undefined', 'once')))
         fprintf ('\n\n');
-        warning (sprintf (['\n\n' ...
+        warning (sprintf (['\n\n'                                      ...
             '!>>>>>> PLEASE RESTART OCTAVE BEFORE USING STK <<<<<<!\n' ...
             '!                                                    !\n' ...
             '! Some STK functions implemented as MEX-files have   !\n' ...
@@ -608,9 +565,6 @@ if isoctave
 end
 
 opts = {root, mole_dir, do_addpath, prune_unused};
-
-% isoctave
-install_mole_function ('isoctave', opts{:});
 
 % Provide missing octave functions for Matlab users
 % TODO: extract functions that are REALLY needed in separate directories
@@ -668,7 +622,7 @@ if (isempty (w)) || (~ isempty (strfind (w, root)))  % if the function is absent
     if exist (function_dir, 'dir') && exist (function_mfile, 'file')
         
         % fprintf ('[MOLE]  Providing function %s\n', function_name);
-        if do_addpath,
+        if do_addpath
             addpath (function_dir);
         end
         

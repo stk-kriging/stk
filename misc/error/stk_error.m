@@ -37,7 +37,7 @@ if nargin < 3,
     try
         stack = dbstack ('-completenames');
         % In Octave, -completenames is at best ignored (in recent versions)
-        % or generates an error (in, e.g., Octave 3.2.4).
+        % or generates an error (in, e.g., Octave 3.6.2).
     catch
         stack = dbstack ();
     end

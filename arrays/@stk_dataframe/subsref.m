@@ -35,11 +35,11 @@ switch idx(1).type
         
         L = length (idx(1).subs);
         
-        if L == 1,  % linear indexing
+        if L == 1  % linear indexing
             
             t = subsref (x.data, idx);
             
-        elseif L == 2,  % matrix-style indexing
+        elseif L == 2  % matrix-style indexing
             
             % Process row indices
             I = idx(1).subs{1};
@@ -57,15 +57,35 @@ switch idx(1).type
                 J = process_cell_indices (J, x.colnames, 'Column');
             end
             
-            t = stk_dataframe (x.data(I, J));
-            
-            if ~ isempty (x.colnames)
-                t.colnames = x.colnames(1, J);
+            if isempty (I)
+                if isempty (J)
+                    t_data = [];
+                else
+                    t_data = zeros (0, size (x.data, 2));
+                    t_data = t_data(:, J);
+                end
+            else
+                if isempty (J)
+                    t_data = zeros (size (x.data, 1), 0);
+                    t_data = t_data(I, :);
+                else
+                    t_data = x.data(I, J);
+                end
             end
             
-            if ~ isempty (x.rownames)
-                t.rownames = x.rownames(I, 1);
+            if isempty (x.colnames)
+                cn = {};
+            else
+                cn = x.colnames(1, J);
             end
+            
+            if isempty (x.rownames)
+                rn = {};
+            else
+                rn = x.rownames(I, 1);
+            end
+            
+            t = stk_dataframe (t_data, cn, rn);
             
         else
             stk_error ('Illegal indexing.', 'IllegalIndexing');
@@ -82,7 +102,7 @@ switch idx(1).type
         
 end
 
-if (length (idx)) > 1,
+if (length (idx)) > 1
     t = subsref (t, idx(2:end));
 end
 
@@ -118,14 +138,6 @@ end % function
 %!error t = data(1, 1, 1);    % too many indices
 %!error t = data{1};          % curly braces not allowed
 
-%!test % legacy feature: data.a returns the 'mean' column if it exists
-%! data = set(data, 'colnames', {'mean', 'x2'});
-%! assert(isequal(data.a, u(:, 1)));
-
-%!test % legacy feature: data.a returns the whole dataframe otherwise
-%! data = set(data, 'colnames', {'x1', 'x2'});
-%! assert(isequal(data.a, u));
-
 %!test % select rows and columns
 %! x = stk_dataframe (reshape (1:15, 5, 3), {'u' 'v' 'w'});
 %! assert (isequal (x([3 5], 2), stk_dataframe ([8; 10], {'v'})));
@@ -140,3 +152,19 @@ end % function
 %!assert (isequal (double (data(2)),    u(2)))
 %!assert (isequal (double (data(3, 1)), u(3)))
 %!error t = data(1, 1, 1);    % too many indices
+
+%--- empty indexing ------------------------------------------------------------
+
+%!test
+%! x = stk_dataframe (randn (2, 2), {'u' 'v'});
+%! y = x ([], :);
+%! assert (isa (y, 'stk_dataframe'));
+%! assert (isequal (size (y), [0 2]));
+%! assert (isequal (y.colnames, {'u' 'v'}));
+
+%!test
+%! x = stk_dataframe (randn (2, 2), [], {'a' 'b'});
+%! y = x (:, []);
+%! assert (isa (y, 'stk_dataframe'));
+%! assert (isequal (size (y), [2 0]));
+%! assert (isequal (y.rownames, {'a'; 'b'}));

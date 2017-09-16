@@ -1,17 +1,24 @@
 % STK_SAMPLING_SOBOL generates points from a Sobol sequence
 %
 % CALL: X = stk_sampling_sobol (N, D)
-% CALL: X = stk_sampling_sobol (N, D, FALSE)
 %
 %    computes the first N terms of a D-dimensional Sobol sequence (with
 %    N < 2^32 and D <= 1111).  The sequence is generated using the algorithm
 %    of Bratley and Fox [1], as modified by Joe and Kuo [3].
 %
-% CALL: X = stk_sampling_sobol (N, D, TRUE)
+% CALL: X = stk_sampling_sobol (N, DIM, BOX)
+%  
+%    does the same thing in the DIM-dimensional hyperrectangle specified by the
+%    argument BOX, which is a 2 x DIM matrix where BOX(1, j) and BOX(2, j) are
+%    the lower- and upper-bound of the interval on the j^th coordinate.
+%     
+% CALL: X = stk_sampling_sobol (N, D, BOX, DO_SKIP)
 %
-%    skips an initial segment of the sequence.  More precisely, according to
-%    the recommendation of [2] and [3], a number of points equal to the largest
-%    power of 2 smaller than n is skipped.
+%    skips an initial segment of the Sobol sequence  if DO_SKIP is true.  More
+%    precisely, according to the recommendation of [2] and [3], a number of
+%    points equal to the largest power of 2 smaller than n is skipped.  If
+%    DO_SKIP is false, the beginning of the sequence is returns, as in the
+%    previous cases (in other words, DO_SKIP = false is the default).
 %
 % NOTE: Implementation
 %
@@ -84,7 +91,7 @@ end
 % Check that either dim or box is provided
 if (isempty (dim)) && (isempty (box))
     stk_error (['The dimension argument can be omitted if, and only if, a ' ...
-        'valid box argument is provided instead.'], 'IncorrectArgument');
+        'valid box argument is provided instead.'], 'InvalidArgument');
 end
 
 % Process box argument
@@ -97,7 +104,7 @@ else
         dim = size (box, 2);
     elseif dim ~= size (box, 2)
         stk_error (['The dimension argument must be compatible with' ...
-        'the box argument when both are provided.'], 'IncorrectArgument');
+        'the box argument when both are provided.'], 'InvalidArgument');
     end
 end
     

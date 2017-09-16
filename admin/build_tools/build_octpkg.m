@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -27,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function build_octpkg (root_dir, release_dir)
+function build_octpkg (root_dir, release_dir, release_date)
 
 disp ('                          ');
 disp ('**************************');
@@ -76,7 +76,7 @@ try
     assert (system ('quilt push -a -q') == 0);
     
     % Process directories recursively
-    process_directory ('', unpacked_dir, ignore_list, sed_program);
+    process_directory ('', unpacked_dir, ignore_list, sed_program, release_date);
     
     % Cleanup: unapply patches
     assert (system ('quilt pop -a -q') == 0);
@@ -95,20 +95,22 @@ fprintf (fid, 'Name: STK\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Version: %s\n', version_number);
 fprintf (fid, '#\n');
-fprintf (fid, 'Date: %s\n', date);
+fprintf (fid, 'Date: %s\n', release_date(1:10));
 fprintf (fid, '#\n');
 fprintf (fid, 'Title: STK: A Small Toolbox for Kriging\n');
 fprintf (fid, '#\n');
-fprintf (fid, 'Author: See AUTHORS file\n');
+fprintf (fid, 'Author: See AUTHORS.md file\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Maintainer: Julien BECT <julien.bect@centralesupelec.fr>\n');
 fprintf (fid, ' and Emmanuel VAZQUEZ <emmanuel.vazquez@centralesupelec.fr>\n');
 fprintf (fid, '#\n');
 fprintf (fid, '%s', parse_description_field (root_dir));
 fprintf (fid, '#\n');
+fprintf (fid, 'License: GPLv3+\n');
+fprintf (fid, '#\n');
 fprintf (fid, 'Url: https://sourceforge.net/projects/kriging/\n');
 fprintf (fid, '#\n');
-fprintf (fid, 'Depends: octave (>= 3.2.4)\n');
+fprintf (fid, 'Depends: octave (>= 3.6.0)\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Autoload: no\n');
 fclose (fid);
@@ -133,7 +135,7 @@ end % function
 %#ok<*NOPRT,*SPWRN,*WNTAG,*SPERR,*AGROW>
 
 
-function process_directory (d, unpacked_dir, ignore_list, sed_program)
+function process_directory (d, unpacked_dir, ignore_list, sed_program, release_date)
 
 if ismember (d, ignore_list)
     return;
@@ -150,9 +152,9 @@ for i = 1:(length (dir_content))
     if ~ (isequal (s, '.') || isequal (s, '..'))
         s = fullfile (d, s);
         if dir_content(i).isdir
-            process_directory (s, unpacked_dir, ignore_list, sed_program);
+            process_directory (s, unpacked_dir, ignore_list, sed_program, release_date);
         else
-            process_file (s, unpacked_dir, sed_program);
+            process_file (s, unpacked_dir, sed_program, release_date);
         end
     end
 end
@@ -161,7 +163,7 @@ end % function
 
 
 
-function process_file (s, unpacked_dir, sed_program)
+function process_file (s, unpacked_dir, sed_program, release_date)
 
 % Regular expressions
 regex_ignore = '(~|\.(hgignore|hgtags|mexglx|mex|mexa64|mexw64|o|tmp|orig|info))$';
@@ -189,26 +191,35 @@ else
         
         copyfile (s, fullfile (unpacked_dir, 'src'));
         
-    elseif any (strcmp (s, {'ChangeLog' 'NEWS' 'COPYING'}))
+    elseif any (strcmp (s, {'ChangeLog' 'COPYING'}))
         
-        % DESCRIPTION, COPYING, ChangeLog & NEWS will be available
-        % in "packinfo" after installation
+        % ChangeLog and COPYING are copied at the root of the package tarball
+        % but will be available in "packinfo" after installation
         
         copyfile (s, unpacked_dir);
         
-    elseif strcmp (s, 'AUTHORS')
+    elseif strcmp (s, 'NEWS.md')
         
-        % Put AUTHORS in the documentation directory
+        % NEWS will also be available in "packinfo" after installation
+        
+        % Remove the .md extension, which is not expected by Octave
+        copyfile (s, fullfile (unpacked_dir, 'NEWS'));
+
+    elseif strcmp (s, 'AUTHORS.md')
+        
+        % Put AUTHORS.md in the documentation directory
+        % (not a standard Octave package file, .md is fine)
         copyfile (s, fullfile (unpacked_dir, 'doc'));
         
     elseif strcmp (s, 'README.md')
         
         % Put README.md in the documentation directory
-        copy_readme (s, fullfile (unpacked_dir, 'doc'));
+        % (not a standard Octave package file, .md is fine)
+        copy_readme (s, fullfile (unpacked_dir, 'doc'), release_date);
         
     elseif strcmp (s, 'CITATION')
         
-        copy_citation (s, unpacked_dir);
+        copy_citation (s, unpacked_dir, release_date);
         
     else
         

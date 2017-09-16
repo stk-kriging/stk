@@ -44,6 +44,12 @@ if nargin == 3
             'same number of rows as x_obs.'], 'IncorrectSize');
     end
     
+    % Currently, prior models are represented exclusively as structures
+    if ~ isstruct (prior_model)
+        stk_error (['Input argument ''prior_model'' must be a ' ...
+            'prior model structure.'], 'InvalidArgument');
+    end
+    
     % Make sure that lognoisevariance is -inf for noiseless models
     if ~ stk_isnoisy (prior_model)
         prior_model.lognoisevariance = -inf;
@@ -53,6 +59,10 @@ if nargin == 3
     %   accept model structures with missing 'dim' field
     if (~ isfield (prior_model, 'dim')) || (isempty (prior_model.dim))
         prior_model.dim = size (xi, 2);
+    elseif ~ isempty (xi) && (prior_model.dim ~= size (xi, 2))
+        stk_error (sprintf (['The number of columns of xi (which is %d) ' ...
+            'is different from the value of prior_model.dim (which is '   ...
+            '%d).'], size (xi, 2), prior_model.dim), 'InvalidArgument');
     end
     
     % Check prior_model.lognoisevariance

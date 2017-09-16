@@ -38,15 +38,11 @@
 %
 % NOTE: Output type
 %
-%    The output argument ZSIM will be an stk_dataframe if at least one of the
-%    following conditions is met:
+%    The output argument ZSIM is a plain (double precision) numerical array,
+%    even if XT is a data frame.  Row names can be added afterwards as follows:
 %
-%      a) the MODEL structure has a non-empty char field named 'response_name';
-%
-%      b) one of the input arguments XT, XI or ZI is an stk_dataframe object.
-%
-%    If both MODEL.response_name and ZI.colnames exist and are non-empty, they
-%    must be equal (if they are not, ZSIM.colnames is empty).
+%       ZSIM = stk_generate_samplepaths (MODEL, XT);
+%       ZSIM = stk_dataframe (ZSIM, {}, XT.rownames);
 %
 % EXAMPLES: see stk_example_kb05, stk_example_kb07
 %
@@ -54,7 +50,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -85,24 +81,24 @@ function zsim = stk_generate_samplepaths (model, varargin)
 % Note: we know that none of the input argument is an stk_dataframe object
 %  (otherwise we would have ended up in @stk_dataframe/stk_generate_samplepaths)
 
-switch nargin,
+switch nargin
     
-    case {0, 1},
+    case {0, 1}
         stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
         
-    case 2,
+    case 2
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT)
         xt = varargin{1};
         nb_paths = 1;
         conditional = false;
         
-    case 3,
+    case 3
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT, NB_PATHS)
         xt = varargin{1};
         nb_paths = varargin{2};
         conditional = false;
         
-    case 4,
+    case 4
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT)
         xi = varargin{1};
         zi = varargin{2};
@@ -110,7 +106,7 @@ switch nargin,
         nb_paths = 1;
         conditional = true;
         
-    case 5,
+    case 5
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT, NB_PATHS)
         xi = varargin{1};
         zi = varargin{2};
@@ -123,18 +119,40 @@ switch nargin,
         
 end
 
-% Prepare extended dataset for conditioning, if required
-% (TODO: avoid duplicating observations points if xi is a subset of xt)
-if conditional,
+
+%--- Process input arguments ---------------------------------------------------
+
+% Extract row names from xt
+xt = double (xt);
+
+% Check nb_paths argument
+nb_paths = double (nb_paths);
+if ~ isscalar (nb_paths) || ~ (nb_paths > 0)
+    stk_error ('nb_paths must be a positive scalar', 'Invalid argument');
+end
+
+
+%--- Extend xt with the observation points, if needed --------------------------
+
+if conditional
+    
+    % Keep only numerical data for xi, zi
+    xi = double (xi);
+    zi = double (zi);
+    
+    % Conditioning by kriging => we must simulate on the observation points too
     xt = [xi; xt];
     xi_ind = 1:(size (xi, 1));
+    
 end
+
+% FIXME: Avoid duplicating observations points if xi is a subset of xt
 
 
 %--- Generate unconditional sample paths --------------------------------------
 
 % Pick unique simulation points
-[xt_unique, i_ignore, j] = unique (xt, 'rows');  %#ok<ASGLU>
+[xt_unique, ignd, j] = unique (xt, 'rows');  %#ok<ASGLU> CG#07
 
 % Did we actually find duplicates in xt ?
 duplicates_detected = (size (xt_unique, 1) < size (xt, 1));
@@ -142,7 +160,7 @@ duplicates_detected = (size (xt_unique, 1) < size (xt, 1));
 % Compute the covariance matrix
 % (even if there no duplicates, it is not guaranteed
 %  that xt_unique and xt are equal)
-if duplicates_detected,
+if duplicates_detected
     K = stk_covmat_latent (model, xt_unique, xt_unique);
 else
     K = stk_covmat_latent (model, xt, xt);
@@ -161,9 +179,9 @@ if duplicates_detected,  zsim = zsim(j, :);  end
 %--- Generate conditional sample paths ----------------------------------------
 
 if conditional
-       
+    
     % Carry out the kriging prediction at points xt
-    [zp_ignore, lambda] = stk_predict (model, xi, zi, xt);  %#ok<ASGLU>
+    [ignd, lambda] = stk_predict (model, xi, zi, xt);  %#ok<ASGLU> CG#07
     
     if ~ stk_isnoisy (model)
         
@@ -192,25 +210,6 @@ if conditional
     
     zsim(xi_ind, :) = [];
     
-end
-
-
-%--- stk_dataframe output ?  --------------------------------------------------
-
-try %#ok<TRYNC>
-    
-    response_name = model.response_name;
-    assert ((~ isempty (response_name)) && (ischar (response_name)));
-    
-    if nb_paths == 1,
-        zsim_colnames = {response_name};
-    else
-        zsim_colnames = arrayfun ( ...
-            @(i)(sprintf ('%s_%d', response_name, i)), ...
-            1:nb_paths, 'UniformOutput', false);
-    end
-    
-    zsim = stk_dataframe (zsim, zsim_colnames);
 end
 
 end % function
@@ -244,7 +243,7 @@ end % function
 %! assert (isequal (size (zsim), [2 * n, nb_paths]));
 %! assert (isequal (zsim(1:n, :), zsim((n + 1):end, :)));
 
-%!xtest  % simulation points equal to observation points (noiseless model)
+%!test  % simulation points equal to observation points (noiseless model)
 %! % https://sourceforge.net/p/kriging/tickets/14/
 %! zsim = stk_generate_samplepaths (model, xt, zeros (n, 1), xt);
 %! assert (isequal (zsim, zeros (n, 1)));

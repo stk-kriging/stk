@@ -95,9 +95,12 @@ end
 if iscell (y),
     y = cellfun (@(z) wfg_preprocessing (z, y_ref), y, 'UniformOutput', false);
 else % y is a matrix
-    if (~ isnumeric (y)) || (ndims (y) ~= 2) %#ok<ISMAT> see CODING_GUDELINES
-        stk_error (['y should be a numeric matrix or ' ...
-            'a cell array'], 'IncorrectArgument');
+    try
+        y = double (y);
+        assert (ndims (y) == 2);  %#ok<ISMAT> see CODING_GUDELINES
+    catch
+        stk_error (['y should either be a cell array or be (convertible ' ...
+            'to) a numeric matrix'], 'InvalidArgument');
     end
     y = wfg_preprocessing (y, y_ref);
 end
@@ -145,7 +148,7 @@ else  % Reference point provided
     % Check the size of y
     if (p > p_ref)
         stk_error (['The number of columns the data matrix should not be ' ...
-            'larger than the number of columns of y_ref'], 'IncorrectArgument');
+            'larger than the number of columns of y_ref'], 'InvalidArgument');
     end
     
     % WFG convention: maximization problem
@@ -194,6 +197,11 @@ end % function
 
 %!test
 %! hv = stk_dominatedhv (-y);
+%! assert (stk_isequal_tolrel (hv, hv0, 1e-10));
+
+%!test
+%! yy = stk_dataframe (- y);  % Check that @stk_dataframe inputs are accepted
+%! hv = stk_dominatedhv (yy);
 %! assert (stk_isequal_tolrel (hv, hv0, 1e-10));
 
 %!test

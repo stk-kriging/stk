@@ -2,9 +2,9 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2017 CentraleSupelec
 %
-%    Author: Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,12 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = ne(x1, x2)
+function y = ne (x1, x2)
 
-y = bsxfun(@ne, x1, x2);
+y = (double (x1) ~= double (x2));
 
 end % function
-
-%!test  stk_test_dfbinaryop(@ne, floor(3*rand(7, 2)), floor(3*rand(7, 2)));
-%!test  stk_test_dfbinaryop(@ne, floor(3*rand(7, 2)), 1.0);
-%!error stk_test_dfbinaryop(@ne, floor(3*rand(7, 2)), floor(3*rand(7, 3)));

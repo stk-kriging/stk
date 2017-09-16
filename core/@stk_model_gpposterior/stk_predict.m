@@ -30,12 +30,11 @@
 
 function [zp, lambda, mu, K] = stk_predict (M_post, xt)
 
-if nargin > 2,
+if nargin > 2
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 % TODO: these should become options
-display_waitbar = false;
 block_size = [];
 
 M_prior = M_post.prior_model;
@@ -51,8 +50,13 @@ if (strcmp (M_prior.covariance_type, 'stk_discretecov')) && (isempty (xt))
     xt = (1:nt)';
 else
     nt = size (xt, 1);
-    if ~ isequal (size (xt), [nt, M_prior.dim]),
-        stk_error ('The size of xt is incorrect.', 'IncorrectSize');
+    if length (size (xt)) > 2
+        stk_error (['The input argument xt should not have more than two ' ...
+            'dimensions'], 'IncorrectSize');
+    elseif ~ isequal (size (xt), [nt M_prior.dim])
+        stk_error (sprintf (['The number of columns of xt (which is %d) ' ...
+            'does not agree with the dimension of the model (which is ' ...
+            '%d).'], size (xt, 2), M_prior.dim), 'IncorrectSize');
     end
 end
 
@@ -62,7 +66,7 @@ zp_v = zeros (nt, 1);
 compute_prediction = ~ isempty (M_post.output_data);
 
 % compute the kriging prediction, or just the variances ?
-if compute_prediction,
+if compute_prediction
     zp_a = zeros (nt, 1);
 else
     zp_a = nan (nt, 1);
@@ -77,18 +81,22 @@ if isempty (block_size)
     block_size = ceil (MAX_RS_SIZE / (n_obs * SIZE_OF_DOUBLE));
 end
 
-% blocks of size approx. block_size
-nb_blocks = max (1, ceil (nt / block_size));
-
-block_size = ceil (nt / nb_blocks);
+if nt == 0
+    % skip main loop
+    nb_blocks = 0;
+else
+    % blocks of size approx. block_size
+    nb_blocks = max (1, ceil (nt / block_size));
+    block_size = ceil (nt / nb_blocks);
+end
 
 % The full lambda_mu matrix is only needed when nargout > 1
-if nargout > 1,
-    lambda_mu = zeros (n_obs + M_post.kreq.r, nt);
+if nargout > 1
+    lambda_mu = zeros (n_obs + get (M_post.kreq, 'r'), nt);
 end
 
 % The full RS matrix is only needed when nargout > 3
-if nargout > 3,
+if nargout > 3
     RS = zeros (size (lambda_mu));
 end
 
@@ -105,52 +113,67 @@ for block_num = 1:nb_blocks
     
     % solve the kriging equation for the current block
     xt_ = xt(idx, :);
-    [Kti, Pt] = stk_make_matcov (M_prior, xt_, M_post.input_data);
-    kreq = stk_set_righthandside (M_post.kreq, Kti, Pt);
+    kreq = stk_make_kreq (M_post, xt_);
     
     % compute the kriging mean
-    if compute_prediction,
-        zp_a(idx) = kreq.lambda' * (double (M_post.output_data));
+    if compute_prediction
+        zp_a(idx) = (get (kreq, 'lambda'))' * (double (M_post.output_data));
     end
     
     % The full lambda_mu matrix is only needed when nargout > 1
     if nargout > 1
-        lambda_mu(:, idx) = kreq.lambda_mu;
+        lambda_mu(:, idx) = get (kreq, 'lambda_mu');
     end
     
     % The full RS matrix is only needed when nargout > 3
-    if nargout > 3,
-        RS(:, idx) = kreq.RS;
+    if nargout > 3
+        RS(:, idx) = get (kreq, 'RS');
     end
     
     % Compute posterior variances for the latent process
-    %   (note that this does NOT include the noise variance that will affect
-    %    future noisy evaluations)
-    zp_v(idx) = ...
-        stk_covmat_gp0 (M_prior, xt_, [], -1, true) - kreq.delta_var;
+    zp_v(idx) = stk_covmat_gp0 (M_prior, xt_, [], -1, true) ...
+        - get (kreq, 'delta_var');
     
     % Note: the following modification would compute prediction variances for
     % future noisy evaluations, i.e., including the noise variance also:
-    %   zp_v(idx) = ...
-    %      stk_covmat_response (M_prior, xt_, [], true)  - kreq.delta_var;
+    %    zp_v(idx) = stk_covmat_response (M_prior, xt_, [], true) ...
+    %                 - get (kreq, 'delta_var');
     
     b = (zp_v < 0);
-    if any (b),
+    if any (b)
         zp_v(b) = 0.0;
         warning('STK:stk_predict:NegativeVariancesSetToZero', sprintf ( ...
             ['Correcting numerical inaccuracies in kriging variance.\n' ...
             '(%d negative variances have been set to zero)'], sum (b)));
     end
     
-    if display_waitbar,
-        waitbar (idx_end/nt, hwb, sprintf ( ...
-            'In stk\\_predict(): %d/%d predictions completed',idx_end,nt));
+end
+
+%--- Ensure exact prediction at observation points for noiseless models --------
+
+if ~ stk_isnoisy (M_prior)
+    
+    % FIXME: Fix the kreq object instead ?
+    
+    xi = double (M_post.input_data);
+    zi = double (M_post.output_data);
+    
+    [b, loc] = ismember (xt, xi, 'rows');
+    if sum (b) > 0
+        
+        if compute_prediction
+            zp_a(b) = zi(loc(b));
+        end
+        
+        zp_v(b) = 0.0;
+        
+        if nargout > 1
+            lambda_mu(:, b) = 0.0;
+            lambda_mu(sub2ind (size (lambda_mu), loc(b), find (b))) = 1.0;
+        end
     end
 end
 
-if display_waitbar,
-    close (hwb);
-end
 
 %--- Prepare outputs -----------------------------------------------------------
 
@@ -164,7 +187,7 @@ if nargout > 2 % mu requested
     mu = lambda_mu((n_obs+1):end, :);
 end
 
-if nargout > 3,
+if nargout > 3
     K0 = stk_make_matcov (M_prior, xt, xt);
     deltaK = lambda_mu' * RS;
     K = K0 - 0.5 * (deltaK + deltaK');
@@ -223,14 +246,6 @@ end % function
 %! [y_prd_nan, lambda] = stk_predict (M_post1, x_prd);
 %! assert (isequal (size (lambda), [n m]));
 %! assert (all (isnan (y_prd_nan.mean)));
-
-%!test % use old-style .a structures (legacy)
-%! x_obs_a = struct ('a', double (x_obs));
-%! z_obs_a = struct ('a', double (z_obs));
-%! x_prd_a = struct ('a', double (x_prd));
-%! M_post1 = stk_model_gpposterior (M_prior, x_obs_a, z_obs_a);
-%! y_prd1 = stk_predict (M_post, x_prd_a);
-%! assert (stk_isequal_tolrel (y_prd, y_prd1));
 
 %!test % discrete model (prediction indices provided)
 %! M_prior1 = stk_model ('stk_discretecov', M_prior, x0);

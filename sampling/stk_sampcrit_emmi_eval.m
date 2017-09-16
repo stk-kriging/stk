@@ -1,12 +1,12 @@
-% STK_SAMPCRIT_EMMI_EVAL computes the expected maximin improvement criterion
+% STK_SAMPCRIT_EMMI_EVAL computes the EMMI criterion
 %
-% CALL: EMMI_VAL = stk_sampcrit_emmi_eval (ZP_MEAN, ZP_STD, ZI)
+% CALL: EMMI = stk_sampcrit_emmi_eval (ZP_MEAN, ZP_STD, ZI)
 %
-%    computes the value EMMI_VAL of the Expected MaxiMin Improvement (EMMI)
-%    for a multi-objective minimization problem, with respect to the observed
-%    values ZI, assuming Gaussian predictive distributions with means ZP_MEAN
-%    and standard deviations ZP_STD.  The value of the criterion is computed
-%    approximately, using Monte Carlo simulations.  The input arguments must 
+%    computes the value EMMI of the Expected MaxiMin Improvement (EMMI) for a
+%    multi-objective minimization problem, with respect to the observed values
+%    ZI, assuming Gaussian predictive distributions with means ZP_MEAN and
+%    standard deviations ZP_STD.  The value of the criterion is computed
+%    approximately, using Monte Carlo simulations.  The input arguments must
 %    have the following sizes:
 %
 %       * ZP_MEAN    M x P,
@@ -17,7 +17,7 @@
 %    number of objective functions to be minimized, and N the current number of
 %    Pareto optimal solutions.  The output has size M x 1.
 %
-% CALL: EMMI_VAL = stk_sampcrit_emmi_eval (ZP_MEAN, ZP_STD, ZI, NSIMU)
+% CALL: EMMI = stk_sampcrit_emmi_eval (ZP_MEAN, ZP_STD, ZI, NSIMU)
 %
 %    allows to change the number of simulations NSIMU used in the calculation of
 %    the criterion.

@@ -2,10 +2,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017 LNE
 %
-%    Author:  Julien Bect      <julien.bect@centralesupelec.fr>
-%             Stefano Duhamel  <stefano.duhamel@supelec.fr>
+%    Authors:  Remi Stroh   <remi.stroh@lne.fr>
+%              Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -29,55 +30,97 @@
 
 function [LOO_pred, LOO_res] = stk_predict_leaveoneout (M_post)
 
-if nargin > 1,
+if nargin > 1
     stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
-% Heteroscedatic noise ?
-heteroscedastic = ~ isscalar (M_post.prior_model.lognoisevariance);
-
-n = size (M_post.input_data, 1);
-zp_mean = zeros (n, 1);
-zp_var = zeros (n, 1);
-
 prior_model = M_post.prior_model;
 
-for i = 1:n  % FIXME: use "virtual cross-validation" formulae
-    
-    xx = M_post.input_data;   xx(i, :) = [];  xt = M_post.input_data(i, :);
-    zz = M_post.output_data;  zz(i, :) = [];
-    
-    % In the heteroscedastic case, the vector of log-variances for the
-    % noise is stored in prior_model.lognoisevariance.  This vector must be
-    % modified too, when performing cross-validation.
-    if heteroscedastic
-        prior_model = M_post.prior_model;
-        prior_model.lognoisevariance(i) = [];
-    end
-    
-    zp = stk_predict (prior_model, xx, zz, xt);
-    
-    zp_mean(i) = zp.mean;
-    zp_var(i) = zp.var;
-    
-end
+% Compute the covariance matrix, and the trend matrix
+% (this covariance matrix K takes the noise into account)
+[K, P] = stk_make_matcov (prior_model, M_post.input_data);
+simple_kriging = (size (P, 2) == 0);
 
-% Prepare outputs
-LOO_pred = stk_dataframe ([zp_mean zp_var], {'mean', 'var'});
+% If simple kriging, just compute the inverse covariance matrix
+if simple_kriging
+    R = inv (K);
+else
+    % Use a more complex formula ("virtual cross-validation")
+    P_K = P' / K;
+    R = K \ (eye (size (K)) - P * ((P_K * P) \ P_K));
+    % I = inv (K);
+    % R = I - I * P * (inv (P' * I * P)) * P' * I;
+end
+dR = diag (R);  % The diagonal of the LOO matrix
+
+% Mean
+zi = M_post.output_data;
+raw_res = R * zi ./ dR;  % Compute "raw" residuals
+zp_mean = zi - raw_res;  % LOO prediction
+
+% Variance
+noisevariance = exp (M_post.prior_model.lognoisevariance);
+zp_var = max (0, 1 ./ dR - noisevariance);
+
+LOO_pred = stk_dataframe (horzcat (zp_mean, zp_var), {'mean', 'var'});
 
 % Compute residuals ?
-if nargout > 1
-    
-    % Compute "raw" residuals
-    raw_res = M_post.output_data - zp_mean;
+if nargout ~= 1
     
     % Compute normalized residual
-    noisevariance = exp (M_post.prior_model.lognoisevariance);
-    norm_res = raw_res ./ (sqrt (noisevariance + zp_var));
+    % norm_res = (zi - zp_mean) ./ (sqrt (noisevariance + zp_var));
+    norm_res = (sqrt (dR)) .* raw_res;
     
     % Pack results into a dataframe
-    LOO_res = stk_dataframe ([raw_res norm_res], ...
+    LOO_res = stk_dataframe (horzcat (raw_res, norm_res), ...
         {'residuals', 'norm_res'});
 end
 
+% Create LOO cross-validation plots?
+if nargout == 0
+    
+    % Plot predictions VS observations (left planel)...
+    stk_subplot (1, 2, 1);  stk_plot_predvsobs (M_post.output_data, LOO_pred);
+    
+    % ...and normalized residuals (right panel)
+    stk_subplot (1, 2, 2);   stk_plot_histnormres (LOO_res.norm_res);
+    
+end
+
 end % function
+
+
+%!test  % Check virtual Leave-One-Out formula
+%!
+%! n = 20;  d = 1;
+%! x_obs = stk_sampling_regulargrid (n, d, [0; 2*pi]);
+%! z_obs = stk_feval (@sin, x_obs);
+%! 
+%! lm_list = {stk_lm_null, stk_lm_constant, stk_lm_affine};
+%! 
+%! for j = 0:2
+%!     for k = 1:(length (lm_list))
+%!         
+%!         model = stk_model ('stk_materncov32_iso', d);
+%!         model.lm = lm_list{k};
+%!         model.param = log ([1; 5]);
+%!         
+%!         switch j  % test various scenarios for lognoisevariance
+%!             case 0
+%!                 model.lognoisevariance = -inf;
+%!             case 1
+%!                 model.lognoisevariance = 0;
+%!             case 2
+%!                 model.lognoisevariance = (1 + rand (n, 1)) * 1e-3;
+%!         end
+%!         
+%!         M_post = stk_model_gpposterior (model, x_obs, z_obs);
+%!         
+%!         [loo_pred, loo_res] = stk_predict_leaveoneout (M_post);
+%!         [direct_pred, direct_res] = stk_predict_leaveoneout_direct (M_post);
+%!         
+%!         assert (stk_isequal_tolrel (loo_pred, direct_pred));
+%!         assert (stk_isequal_tolrel (loo_res, direct_res));
+%!         
+%!     end
+%! end
