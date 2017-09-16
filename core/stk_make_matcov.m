@@ -2,17 +2,13 @@
 %
 % This function is deprecated and will be removed in future versions of STK.
 %
-% Please use
-%
-%    stk_covmat (model, 'response', ...)
-%
-% instead.
+% Please use stk_covmat instead.
 %
 % See also: stk_covmat
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -38,15 +34,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [K, P] = stk_make_matcov (model, x1, x2, varargin)
+function [K, P] = stk_make_matcov (model, x1, x2, pairwise)
 
-if nargin < 3
-    [K, P] = stk_covmat (model, 'response', x1);
-else
-    [K, P] = stk_covmat (model, 'response', x1, x2, -1, varargin{:});
+switch nargin
     
-    
-end
+    case {0, 1}
+        stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+        
+    case 2
+        [K, P] = stk_covmat (model, 'response', x1);
+        
+    case 3
+        [K, P] = stk_covmat (model, 'latent', x1, x2);
+        
+    case 4
+        [K, P] = stk_covmat (model, 'latent', x1, x2, -1, pairwise);
+        
+    otherwise
+        stk_error ('Too many input arguments.', 'TooManyInputArgs');
+        
+end % switch
 
 end % function
 
