@@ -59,7 +59,12 @@ raw_res = R * zi ./ dR;  % Compute "raw" residuals
 zp_mean = zi - raw_res;  % LOO prediction
 
 % Variance
-noisevariance = exp (M_post.prior_model.lognoisevariance);
+lnv = M_post.prior_model.lognoisevariance;
+if isa (lnv, 'stk_noisemodel')
+    noisevariance = stk_noisevar_matrix (lnv, xt, -1, true);
+else
+    noisevariance = exp (lnv);
+end
 zp_var = max (0, 1 ./ dR - noisevariance);
 
 LOO_pred = stk_dataframe (horzcat (zp_mean, zp_var), {'mean', 'var'});
