@@ -27,7 +27,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -101,7 +101,7 @@ if ~ stk_isnoisy (model_base)
     model_base.lognoisevariance = -inf;
 end
 
-[K, P] = stk_make_matcov (model_base, x, x);
+[K, P] = stk_covmat (model_base, 'latent', x);
 
 model_out = struct ( ...
     'covariance_type', 'stk_discretecov', ...

@@ -188,7 +188,7 @@ if nargout > 2 % mu requested
 end
 
 if nargout > 3
-    K0 = stk_make_matcov (M_prior, xt, xt);
+    K0 = stk_covmat_latent (M_prior, xt);
     deltaK = lambda_mu' * RS;
     K = K0 - 0.5 * (deltaK + deltaK');
 end

@@ -38,7 +38,7 @@ prior_model = M_post.prior_model;
 
 % Compute the covariance matrix, and the trend matrix
 % (this covariance matrix K takes the noise into account)
-[K, P] = stk_make_matcov (prior_model, M_post.input_data);
+[K, P] = stk_covmat (prior_model, 'response', M_post.input_data);
 simple_kriging = (size (P, 2) == 0);
 
 % If simple kriging, just compute the inverse covariance matrix
