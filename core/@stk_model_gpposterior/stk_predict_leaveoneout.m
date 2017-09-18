@@ -61,7 +61,7 @@ zp_mean = zi - raw_res;  % LOO prediction
 % Variance
 lnv = M_post.prior_model.lognoisevariance;
 if isa (lnv, 'stk_noisemodel')
-    noisevariance = stk_noisevar_matrix (lnv, xt, -1, true);
+    noisevariance = stk_noisevar_matrix (lnv, M_post.input_data, -1, true);
 else
     noisevariance = exp (lnv);
 end
