@@ -34,10 +34,10 @@
 
 function display (x, varargin)
 
-fprintf ('\n%s = <%s>', inputname (1), stk_sprintf_sizetype (x));
+fprintf ('\n%s = <%s>\n', inputname (1), stk_sprintf_sizetype (x));
 
 if strcmp ('basic', stk_options_get ('stk_dataframe', 'disp_format'))
-    fprintf ('\n\n');
+    fprintf ('\n');
 end
 
 disp (x, varargin{:});

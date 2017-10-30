@@ -1,5 +1,9 @@
 2017-10-30  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	display.m: Fix EOL problem when display in verbose mode.
+
+	* arrays/@stk_dataframe/display.m: Fix EOL problem in verbose mode.
+
 	stk_options_set.m: Return option struct only if nargout > 0
 
 	* misc/options/stk_options_set.m: stk_options_set.m: Return option
