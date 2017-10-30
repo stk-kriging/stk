@@ -27,6 +27,21 @@
 %
 %    If ROWNAMES is an empty cell({}), the resulting dataframe has no row names.
 %
+% NOTE: How to extract the underlying array
+%
+%    It is sometimes useful to extract from an stk_dataframe object the
+%    underlying numerical (double precision) array.  This can be achieved either
+%    using the 'data' field of the object:
+%
+%       x1 = x.data;        % x1 is a numerical array
+%
+%    or using a cast to double:
+%
+%       x2 = double (x);    % x2 is a numerical array too, identical to x1
+%
+%    Note that the second syntax remains valid even if x is a numerical array
+%    (single, double, uint8...) instead of an stk_dataframe object.
+%
 % See also: stk_factorialdesign, stk_hrect
 
 % Copyright Notice
