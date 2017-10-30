@@ -1,5 +1,10 @@
 2017-10-30  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_dataframe.m: Improve help text
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Explain how to extract
+	the underlying numerical array.
+
 	display.m: Fix EOL problem when display in verbose mode.
 
 	* arrays/@stk_dataframe/display.m: Fix EOL problem in verbose mode.
