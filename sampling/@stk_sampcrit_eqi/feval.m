@@ -5,7 +5,7 @@
 % Copyright Notice
 %
 %    Copyright (C) 2016, 2017 CentraleSupelec
-%    Copyright (C) EDF R&D
+%    Copyright (C) 2016 EDF R&D
 %
 %    Authors:  Tom Assouline, Florent Autret & Stefano Duhamel (for EDF R&D)
 %              Julien Bect  <julien.bect@centralesupelec.fr>
