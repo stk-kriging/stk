@@ -3,7 +3,7 @@
 % CALL: K = stk_materncov32_iso (PARAM, X, Y)
 %
 %   computes the covariance matrix K between the sets of locations X and
-%   Y, using the isotropic Matern covariance kernel with nu=3/2 and
+%   Y, using the isotropic Matern covariance function with nu=3/2 and
 %   parameters PARAM. The output matrix K has size NX x NY, where NX is
 %   the number of rows in X and NY the number of rows in Y. The vector of
 %   parameters must have two elements:

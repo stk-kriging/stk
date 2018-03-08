@@ -3,7 +3,7 @@
 % CALL: K = stk_materncov32_aniso (PARAM, X, Y)
 %
 %   computes the covariance matrix K between the sets of locations X and Y,
-%   using the anisotropic Matern covariance kernel with nu=3/2 and
+%   using the anisotropic Matern covariance function with nu=3/2 and
 %   parameters PARAM. The output matrix K has size NX x NY, where NX is the
 %   number of rows in X and NY the number of rows in Y. The vector of
 %   parameters must have DIM + 1 elements, where DIM is the common number
