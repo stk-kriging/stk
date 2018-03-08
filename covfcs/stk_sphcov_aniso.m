@@ -3,7 +3,7 @@
 % CALL: K = stk_sphcov_aniso (PARAM, X, Y)
 %
 %   computes the covariance matrix K between the sets of locations X and Y,
-%   using the anisotropic spherical covariance kernel with parameters PARAM.
+%   using the anisotropic spherical covariance function with parameters PARAM.
 %   The output matrix K has size NX x NY, where NX is the number of rows in X
 %   and NY the number of rows in Y. The vector of parameters must have DIM + 1
 %   elements, where DIM is the common number of columns of X and Y:

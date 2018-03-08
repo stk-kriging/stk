@@ -1,3 +1,17 @@
+2018-03-08  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Write "covariance function" instead of "covariance kernel" in docs.
+
+	* covfcs/stk_expcov_aniso.m: Write "covariance function" instead
+	of "covariance kernel" in the help text.
+	* covfcs/stk_materncov32_aniso.m: Idem.
+	* covfcs/stk_materncov32_iso.m: Idem.
+	* covfcs/stk_materncov52_aniso.m: Idem.
+	* covfcs/stk_materncov52_iso.m: Idem.
+	* covfcs/stk_materncov_aniso.m: Idem.
+	* covfcs/stk_materncov_iso.m: Idem.
+	* covfcs/stk_sphcov_aniso.m: Idem.
+
 2017-10-30  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_dataframe.m: Improve help text
