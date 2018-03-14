@@ -72,6 +72,8 @@ Parameter estimation
  stk_param_gls
  stk_param_init
  stk_param_init_lnv
+ stk_param_loomse
+ stk_param_loopvc
  stk_param_relik
 #stk_get_optimizable_parameters
 #stk_set_optimizable_parameters
@@ -254,6 +256,7 @@ Examples: miscellaneous
  stk_example_misc02
  stk_example_misc03
  stk_example_misc04
+ stk_example_misc05
 
 Examples: test functions, datasets, etc.
  stk_dataset_twobumps

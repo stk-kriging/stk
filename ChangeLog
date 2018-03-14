@@ -1,3 +1,14 @@
+2018-03-14  Remi Stroh  <remi.stroh@lne.fr>
+
+	New functions to estimate the parameters based on leave-one-out (loo)
+
+	* param/estim/stk_param_loomse.m: loo mean square error
+	* param/estim/stk_param_loopvc.m: loo predictive variance criterion
+
+	Add an example to compare the criteria
+
+	* examples/03_miscellaneous/stk_example_misc05.m
+
 2017-10-30  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_dataframe.m: Improve help text
