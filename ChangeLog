@@ -1,3 +1,23 @@
+2018-05-17  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot1d.m: Fix legend slowness problem (ticket #82)
+
+	* utils/stk_plot1d.m: Do not create a legend systematically.
+	* misc/plot/stk_legend.m: New function to create a legend, using
+	the graphical objects for which a non-empty DisplayName has been
+	provided.
+	* misc/plot/stk_plot_shadedci.m: Provide a DisplayName for one of
+	the gray patches (the darker one).
+	* examples/01_kriging_basics/stk_example_kb01.m: Update.
+	* examples/01_kriging_basics/stk_example_kb01n.m: Update.
+	* examples/01_kriging_basics/stk_example_kb02.m: Update.
+	* examples/01_kriging_basics/stk_example_kb02n.m: Update.
+	* examples/01_kriging_basics/stk_example_kb05.m: Update.
+	* examples/01_kriging_basics/stk_example_kb07.m: Update.
+	* examples/01_kriging_basics/stk_example_kb08.m: Update.
+	* examples/01_kriging_basics/stk_example_kb09.m: Update.
+	* admin/octpkg/INDEX: Add stk_legend to the index.
+
 2018-03-14  Remi Stroh  <remi.stroh@lne.fr>
 
 	New functions to estimate the parameters based on leave-one-out (loo)

@@ -8,7 +8,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2018 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -83,12 +83,12 @@ zsimc2 = stk_generate_samplepaths (model, xi, zi, xt, NB_PATHS);
 
 %% Figure
 
-stk_subplot (1, 2, 1); plot (xt, zsimc1, 'LineWidth', 2);  legend off;  hold on;
+stk_subplot (1, 2, 1); plot (xt, zsimc1, 'LineWidth', 2);  hold on;
 plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
 stk_title (sprintf ('%d conditional sample paths', NB_PATHS));
 stk_labels ('input variable x', 'response z');
 
-stk_subplot (1, 2, 2); plot (xt, zsimc2, 'LineWidth', 2);  legend off;  hold on;
+stk_subplot (1, 2, 2); plot (xt, zsimc2, 'LineWidth', 2);  hold on;
 plot (xi, zi, 'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
 stk_title (sprintf ('another set of %d sample paths', NB_PATHS));
 stk_labels ('input variable x', 'response z');
