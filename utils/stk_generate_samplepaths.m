@@ -191,12 +191,16 @@ if conditional
     else % Noisy case
         
         % Simulate noise values
-        s = sqrt (exp (model.lognoisevariance));
+        if isnumeric(model.lognoisevariance)    % Backward compatibility
+            s = sqrt (exp (model.lognoisevariance));
+        else % if isa(model.lognoisevariance, 'stk_noisemodel')
+            s = sqrt( stk_noisevar_matrix(model.lognoisevariance, xi, -1, true) );
+        end
         ni = length (xi_ind);
         if isscalar (s)
             noise_sim = s * randn (ni, nb_paths);
         else
-            s = reshape (s, ni, 1);
+            s = reshape (s, ni, 1);     % assert column vector
             noise_sim = bsxfun (@times, s, randn (ni, nb_paths));
         end
         
