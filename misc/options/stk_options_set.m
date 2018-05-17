@@ -94,7 +94,9 @@ switch nargin
         
 end
 
-opts = options;
+if nargout > 0
+    opts = options;
+end
 
 end % function
 

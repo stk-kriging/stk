@@ -1,3 +1,64 @@
+2018-05-17  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot1d.m: Fix legend slowness problem (ticket #82)
+
+	* utils/stk_plot1d.m: Do not create a legend systematically.
+	* misc/plot/stk_legend.m: New function to create a legend, using
+	the graphical objects for which a non-empty DisplayName has been
+	provided.
+	* misc/plot/stk_plot_shadedci.m: Provide a DisplayName for one of
+	the gray patches (the darker one).
+	* examples/01_kriging_basics/stk_example_kb01.m: Update.
+	* examples/01_kriging_basics/stk_example_kb01n.m: Update.
+	* examples/01_kriging_basics/stk_example_kb02.m: Update.
+	* examples/01_kriging_basics/stk_example_kb02n.m: Update.
+	* examples/01_kriging_basics/stk_example_kb05.m: Update.
+	* examples/01_kriging_basics/stk_example_kb07.m: Update.
+	* examples/01_kriging_basics/stk_example_kb08.m: Update.
+	* examples/01_kriging_basics/stk_example_kb09.m: Update.
+	* admin/octpkg/INDEX: Add stk_legend to the index.
+
+2018-03-14  Remi Stroh  <remi.stroh@lne.fr>
+
+	New functions to estimate the parameters based on leave-one-out (loo)
+
+	* param/estim/stk_param_loomse.m: loo mean square error
+	* param/estim/stk_param_loopvc.m: loo predictive variance criterion
+
+	Add an example to compare the criteria
+
+	* examples/03_miscellaneous/stk_example_misc05.m
+
+2018-03-08  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Write "covariance function" instead of "covariance kernel" in docs.
+
+	* covfcs/stk_expcov_aniso.m: Write "covariance function" instead
+	of "covariance kernel" in the help text.
+	* covfcs/stk_materncov32_aniso.m: Idem.
+	* covfcs/stk_materncov32_iso.m: Idem.
+	* covfcs/stk_materncov52_aniso.m: Idem.
+	* covfcs/stk_materncov52_iso.m: Idem.
+	* covfcs/stk_materncov_aniso.m: Idem.
+	* covfcs/stk_materncov_iso.m: Idem.
+	* covfcs/stk_sphcov_aniso.m: Idem.
+
+2017-10-30  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dataframe.m: Improve help text
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Explain how to extract
+	the underlying numerical array.
+
+	display.m: Fix EOL problem when display in verbose mode.
+
+	* arrays/@stk_dataframe/display.m: Fix EOL problem in verbose mode.
+
+	stk_options_set.m: Return option struct only if nargout > 0
+
+	* misc/options/stk_options_set.m: stk_options_set.m: Return option
+	struct only if nargout > 0.
+
 2017-09-14  Rémi Stroh  <remi.stroh@lne.fr>
 
 	Correct an error in the documentation
