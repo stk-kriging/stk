@@ -2,7 +2,7 @@ stk >> STK, a Small Toolbox for Kriging
 
 ## Copyright Notice
 ##
-##    Copyright (C) 2015-2017 CentraleSupelec
+##    Copyright (C) 2015-2018 CentraleSupelec
 ##    Copyright (C) 2014 SUPELEC
 ##
 ##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -463,6 +463,7 @@ Miscellaneous: options, plots...
  stk_dist
  stk_halfpintl
  stk_init
+ stk_legend
  stk_options_get
  stk_options_set
  stk_plot1d

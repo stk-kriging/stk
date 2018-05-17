@@ -24,7 +24,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017 CentraleSupelec
+%    Copyright (C) 2015-2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -76,99 +76,47 @@ if (nargin > 3) && (~ isempty (xt))
     [xt, idx_sort] = sort (xt);
 end
 
+h = struct ('truth', [], 'obs', [], 'pred', [], 'ci', [], 'sim', []);
+
 % Shaded area representing pointwise confidence intervals
 if has_zp_arg
-    % Sort zp
     zp = zp(idx_sort, :);
-    
-    h_ci = stk_plot_shadedci (h_axes, xt, zp);
+    h.ci = stk_plot_shadedci (h_axes, xt, zp);
     hold on;
-else
-    h_ci = [];
 end
 
 % Plot sample paths
 if has_zsim_arg
-    % Sort zsim
-    zsim = zsim(idx_sort, :);
-    
     if isa (zsim, 'stk_dataframe')
         % Prevents automatic creation of a legend by @stk_dataframe/plot
         zsim.colnames = {};
     end
-    h_sim = plot (h_axes, xt, zsim, ...
+    h.sim = plot (h_axes, xt, zsim(idx_sort, :), ...
         '-',  'LineWidth', 1, 'Color', [0.39, 0.47, 0.64]);
+    set (h.sim(1), 'DisplayName', 'Samplepaths');
     hold on;
-else
-    h_sim = [];
 end
 
 % Ground truth
 if has_zt_arg
-    % Sort zt
-    zt = zt(idx_sort, :);
-    
-    h_truth = plot (h_axes, xt, zt, ...
-        '--', 'LineWidth', 3, 'Color', [0.39, 0.47, 0.64]);
+    h.truth = plot (h_axes, xt, zt(idx_sort, :), '--', 'LineWidth', 3, ...
+        'Color', [0.39, 0.47, 0.64], 'DisplayName', 'True function');
     hold on;
-else
-    h_truth = [];
 end
 
 % Kriging predictor (posterior mean)
 if has_zp_arg
-    % zp has already been sorted
-    h_pred = plot (h_axes, xt, zp.mean, ...
-        'LineWidth', 3, 'Color', [0.95 0.25 0.3]);
+    h.pred = plot (h_axes, xt, zp.mean, 'LineWidth', 3, ...
+        'Color', [0.95 0.25 0.3], 'DisplayName', 'Posterior mean');
     hold on;
-else
-    h_pred = [];
 end
 
 % Evaluations
 if ~ isempty (zi)
-    h_obs = plot (h_axes, xi, zi, ...
-        'ko', 'MarkerSize', 6, 'MarkerFaceColor', 'k');
-else
-    h_obs = [];
+    h.obs = plot (h_axes, xi, zi, 'ko', 'MarkerSize', 6, ...
+        'MarkerFaceColor', 'k', 'DisplayName', 'Observations');
 end
 
 hold off;  set (gca, 'box', 'off');
-
-% Prepare for the legend
-h_list = [];
-s_list = {};
-if ~ isempty (h_truth)
-    h_list = [h_list; h_truth];
-    s_list = [s_list; {'True function'}];
-end
-if ~ isempty (h_obs)
-    h_list = [h_list; h_obs];
-    s_list = [s_list; {'Observations'}];
-end
-if ~ isempty (h_pred)
-    h_list = [h_list; h_pred];
-    s_list = [s_list; {'Posterior mean'}];
-end
-if ~ isempty (h_ci)
-    h_list = [h_list; h_ci];
-    s_list = [s_list; {'95% credible interval'}];
-end
-if ~ isempty (h_sim)
-    h_list = [h_list; h_sim(1)];
-    s_list = [s_list; {'Samplepaths'}];
-end
-
-% Create the legend
-h_legend = legend (h_list, s_list{:});
-set (h_legend, 'Color', 0.98 * [1 1 1]);
-legend (h_axes, 'hide');
-
-% Make it possible to recover all the handles easily, if needed
-h.truth = h_truth;
-h.obs   = h_obs;
-h.pred  = h_pred;
-h.ci    = h_ci;
-h.sim   = h_sim;
 
 end % function

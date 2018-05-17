@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -54,14 +55,14 @@ nu_list = [0.5 1.5 2.5 10.0];
 
 NB_PATHS = 10;
 
-for k = 1:4,
+for k = 1:4
     
     model.param(2) = log (nu_list(k));
     
     zsim = stk_generate_samplepaths (model, x, NB_PATHS);
     
     % Display the result
-    stk_subplot (2, 2, k);  plot (x, zsim, 'LineWidth', 2);  legend off;
+    stk_subplot (2, 2, k);  plot (x, zsim, 'LineWidth', 2);
     stk_title (sprintf ('Matern, nu = %.1f', nu_list(k)));
     stk_labels ('input variable x', 'response z', 'FontWeight', 'bold');
     
