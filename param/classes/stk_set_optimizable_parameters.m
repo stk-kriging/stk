@@ -1,4 +1,10 @@
-% STK_SET_OPTIMIZABLE_PARAMETERS [STK internal]
+% STK_SET_OPTIMIZABLE_PARAMETERS changes the parameters of an object.
+%
+% CALL: MODEL = stk_set_optimizable_parameters (MODEL, VALUE)
+%
+%   sets to VALUE the 'optimizable_parameters' of the model, i.d., the
+%   optimizable parameters of the covariance, the noise-variance (if there
+%   are some) and the mean trend (future release).
 %
 % CALL: PARAM = stk_set_optimizable_parameters (PARAM, VALUE)
 %
@@ -44,27 +50,71 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function param = stk_set_optimizable_parameters (param, value)
+function arg_out = stk_set_optimizable_parameters (arg1, value)
 
 % This function will catch all calls to stk_set_optimizable_parameters for which
 % neither param nor value is an object of a "parameter class" (more precisely,
 % a class that implements stk_set_optimizable_parameters)
 
-try
+if isstruct(arg1) % is a model
     
-    % If param is numeric, the following syntax preserves its size and type
-    param(:) = value;
+    model = arg1;
     
-    % Note: if param is an object, the previous line is actually a call to
-    % subsasgn in disguise. This way of supporting parameter objects has been
-    % introduced in STK 2.0.0 as an "experimental" feature. It is now
-    % deprecated.
-    
-catch
+    % Number of covariance parameters (assume there is always optimizable
+    % covariance parameters)
+    nb_param_cov = length(stk_get_optimizable_parameters(model.param));
+    if stk_isnoisy(model)
+        nb_param_lnv = length(stk_get_optimizable_parameters(model.lognoisevariance));
         
-    stk_error (['stk_set_optimizable_parameters is not implemented for ' ...
-        'objects of class ', class(param), '.'], 'TypeMismatch');
+        % Check length of value
+        if numel(value) ~= (nb_param_cov + nb_param_lnv)
+            stk_error(['The length of the value must fit the number of',...
+                ' parameters.'], 'IncorrectSize');
+        end
+        
+        % Change covariance parameter
+        model.param = stk_set_optimizable_parameters(...
+            model.param, value(1:nb_param_cov));
+        % Change noise variance parameter
+        model.lognoisevariance = stk_set_optimizable_parameters(...
+            model.lognoisevariance, value(nb_param_cov + (1:nb_param_lnv)));
+    else
+        % nb_param_lnv = 0
+        % Check length of value
+        if numel(value) ~= nb_param_cov
+            stk_error(['The length of the value must fit the number of',...
+                ' parameters.'], 'IncorrectSize');
+        end
+        
+        % Change covariance parameter value
+        model.param = stk_set_optimizable_parameters(model.param, value(:));
+    end
     
-end % if
+    % The output is a model
+    arg_out = model;
+    
+else % is something else (parameters ?)
+    
+    param = arg1;
+    try
+        
+        % If param is numeric, the following syntax preserves its size and type
+        param(:) = value;
+        
+        % Note: if param is an object, the previous line is actually a call to
+        % subsasgn in disguise. This way of supporting parameter objects has been
+        % introduced in STK 2.0.0 as an "experimental" feature. It is now
+        % deprecated.
+        
+    catch
+        
+        stk_error (['stk_set_optimizable_parameters is not implemented for ' ...
+            'objects of class ', class(param), '.'], 'TypeMismatch');
+        
+    end % if
+    
+    % The output is a parameter
+    arg_out = param;
+end
 
 end % function
