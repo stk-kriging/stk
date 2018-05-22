@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -28,10 +28,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [x, a, b] = stk_rescale (x, box1, box2)
-
-if nargin > 3
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Read argument x
 x_data = double (x);

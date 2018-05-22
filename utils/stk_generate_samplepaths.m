@@ -50,7 +50,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017 CentraleSupelec
+%    Copyright (C) 2015-2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -106,16 +106,13 @@ switch nargin
         nb_paths = 1;
         conditional = true;
         
-    case 5
+    otherwise
         % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT, NB_PATHS)
         xi = varargin{1};
         zi = varargin{2};
         xt = varargin{3};
         nb_paths = varargin{4};
         conditional = true;
-        
-    otherwise
-        stk_error ('Too many input arguments.', 'TooManyInputArgs');
         
 end
 
@@ -228,7 +225,6 @@ end % function
 %!test  zsim = stk_generate_samplepaths (model, xt, nb_paths);
 %!test  zsim = stk_generate_samplepaths (model, xi, zi, xt);
 %!test  zsim = stk_generate_samplepaths (model, xi, zi, xt, nb_paths);
-%!error zsim = stk_generate_samplepaths (model, xi, zi, xt, nb_paths, log (2));
 
 %!test
 %! zsim = stk_generate_samplepaths (model, xt);

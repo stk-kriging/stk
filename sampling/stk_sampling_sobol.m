@@ -47,7 +47,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2017 CentraleSupelec
+%    Copyright (C) 2016-2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -72,10 +72,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_sobol (n, dim, box, do_skip)
-
-if nargin > 4
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Default values
 if nargin < 4

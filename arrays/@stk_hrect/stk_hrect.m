@@ -23,7 +23,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2018 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -50,11 +50,7 @@
 
 function s = stk_hrect (arg1, colnames)
 
-if nargin > 2
-    
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-    
-elseif nargin == 0  % Default constructor
+if nargin == 0  % Default constructor
     
     df = stk_dataframe ();
     s = class (struct (), 'stk_hrect', df);

@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017 CentraleSupelec
+%    Copyright (C) 2015-2018 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
 %    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
@@ -39,10 +39,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function algo = stk_optim_octavesqp (user_options)
-
-if nargin > 1
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Default options
 options.maxiter = 500;     % Octave's default is 100

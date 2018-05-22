@@ -50,7 +50,7 @@
 % Copyright Notice
 %
 %    Copyright (C) 2017 LNE
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Authors:  Remi Stroh  <remi.stroh@lne.fr>
 
@@ -75,10 +75,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function nested_LHS = stk_sampling_nestedlhs(n, dim, box, niter, levels)
-
-if nargin > 5,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 if nargin < 1,
     stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
@@ -258,7 +254,6 @@ end
 %!test  x = stk_sampling_nestedlhs (n, dim, box);
 %!test  x = stk_sampling_nestedlhs (n, dim, box, niter);
 %!test  x = stk_sampling_nestedlhs (n, dim, box, niter, levels);
-%!error x = stk_sampling_nestedlhs (n, dim, box, niter, levels, pi);
 
 % Check type of ouputs => assert is Nested LHS
 %!assert ( isequal(size(x), [sum(n), dim + 1]) );

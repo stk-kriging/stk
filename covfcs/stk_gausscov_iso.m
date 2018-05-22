@@ -27,7 +27,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -54,10 +54,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function k = stk_gausscov_iso (param, x, y, diff, pairwise)
-
-if nargin > 5,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 persistent x0 y0 param0 pairwise0 D
 
@@ -118,7 +114,6 @@ end % function
 %!test  stk_gausscov_iso (param, x, y);
 %!test  stk_gausscov_iso (param, x, y, -1);
 %!test  stk_gausscov_iso (param, x, y, -1, false);
-%!error stk_gausscov_iso (param, x, y, -1, false, pi^2);
 
 %!error stk_gausscov_iso (param, x, y, -2);
 %!test  stk_gausscov_iso (param, x, y, -1);

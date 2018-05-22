@@ -17,7 +17,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -43,10 +43,6 @@
 
 function crit = stk_sampcrit_ei (model)
 
-if nargin > 1
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
 % Public properties
 crit.model           = [];   % read/write
 crit.current_minimum = inf;  % read only
@@ -61,8 +57,6 @@ end
 
 end % function
 
-
-%!error F = stk_sampcrit_ei ([], 1.234);  % too many input arguments
 
 %%
 % construct with nargin == 0

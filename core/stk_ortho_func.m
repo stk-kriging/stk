@@ -24,7 +24,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -51,10 +51,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function P = stk_ortho_func (model, x)
-
-if nargin > 2,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 x = double (x);
 
@@ -83,7 +79,6 @@ end % function
 %!error P = stk_ortho_func ();
 %!error P = stk_ortho_func (model);
 %!test  P = stk_ortho_func (model, x);
-%!error P = stk_ortho_func (model, x, pi);
 
 %!test
 %! model.order = -1;  P = stk_ortho_func (model, x);

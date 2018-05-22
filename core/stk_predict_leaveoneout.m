@@ -34,7 +34,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2017 CentraleSupelec
+%    Copyright (C) 2016-2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -59,10 +59,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function varargout = stk_predict_leaveoneout (M_prior, xi, zi)
-
-if nargin > 3
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 M_post = stk_model_gpposterior (M_prior, xi, zi);
 

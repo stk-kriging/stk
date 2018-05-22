@@ -43,7 +43,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2016 IRT SystemX
 %
 %    Author:  Paul Feliot  <paul.feliot@irt-systemx.fr>
@@ -69,10 +69,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function EMMI = stk_sampcrit_emmi_eval (zp_mean, zp_std, zi, nsimu)
-
-if nargin > 4,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Handle empty zp
 if isempty (zp_mean) || isempty (zp_std)

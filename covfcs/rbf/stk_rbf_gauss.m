@@ -25,7 +25,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2018 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -51,10 +51,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function k = stk_rbf_gauss (h, diff)
-
-if nargin > 2,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % default: compute the value (not a derivative)
 if nargin < 2,
@@ -84,7 +80,6 @@ end % function
 %!error stk_rbf_gauss ();
 %!test  stk_rbf_gauss (h);
 %!test  stk_rbf_gauss (h, diff);
-%!error stk_rbf_gauss (h, diff, pi);
 
 %!test  % h = 0.0 => correlation = 1.0
 %! x = stk_rbf_gauss (0.0);

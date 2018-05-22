@@ -5,7 +5,7 @@
 %    Copyright (C) 2016 CentraleSupelec & LNE
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
-%              Rémi Stroh   <remi.stroh@lne.fr>
+%              Remi Stroh   <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %

@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -27,10 +28,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [p, q] = stk_distrib_bivnorm_cdf (z, mu1, mu2, sigma1, sigma2, rho)
-
-if nargin > 6,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 %--- Split z into [z1, z2] -----------------------------------------------------
 

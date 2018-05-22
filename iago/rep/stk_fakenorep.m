@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -27,10 +27,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [model, zi] = stk_fakenorep (model, zi)
-
-if nargin > 2,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 [n d] = size (zi);
 

@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -39,10 +39,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [rl, drl_cov_param, drl_noise_param] = stk_param_relik (model, xi, yi)
-
-if nargin > 3,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Get numerical parameter vector from parameter object
 paramvec = stk_get_optimizable_parameters (model.param);
@@ -189,7 +185,6 @@ end % function
 %!error [J, dJ1, dJ2] = stk_param_relik (model);
 %!error [J, dJ1, dJ2] = stk_param_relik (model, xi);
 %!test  [J, dJ1, dJ2] = stk_param_relik (model, xi, zi);
-%!error [J, dJ1, dJ2] = stk_param_relik (model, xi, zi, pi);
 
 %!test
 %! TOL_REL = 0.01;

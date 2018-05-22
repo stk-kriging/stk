@@ -61,7 +61,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -88,10 +88,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function z = stk_feval (f, x, progress_msg, df_out, vectorized)
-
-if nargin > 5,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Check 'progress_msg' argument
 if (nargin < 3) || (isempty (progress_msg)),
@@ -325,7 +321,6 @@ end % function
 %!test   yt = stk_feval (f, xt, false);
 %!test   yt = stk_feval (f, xt, false, false);
 %!test   yt = stk_feval (f, xt, false, false, false);
-%!error  yt = stk_feval (f, xt, false, false, false, pi^2);
 
 %!test
 %! N = 15;

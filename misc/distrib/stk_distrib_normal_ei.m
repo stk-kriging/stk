@@ -48,7 +48,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2018 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Authors:  Julien Bect     <julien.bect@centralesupelec.fr>
@@ -75,10 +75,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function ei = stk_distrib_normal_ei (z, mu, sigma, minimize)
-
-if nargin > 4,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 if nargin > 1,
     delta = bsxfun (@minus, mu, z);

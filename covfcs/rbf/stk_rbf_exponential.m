@@ -30,7 +30,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect   <julien.bect@centralesupelec.fr>
 
@@ -55,10 +55,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function k = stk_rbf_exponential (h, diff)
-
-if nargin > 2,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 C = 1.4142135623730951;  % 2 * sqrt (Nu) with Nu = 1/2
 
@@ -91,7 +87,6 @@ end % function
 %!error stk_rbf_exponential ();
 %!test  stk_rbf_exponential (h);
 %!test  stk_rbf_exponential (h, diff);
-%!error stk_rbf_exponential (h, diff, pi);
 
 %!test %% h = 0.0 => correlation = 1.0
 %! x = stk_rbf_exponential (0.0);

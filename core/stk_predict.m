@@ -42,7 +42,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -69,10 +69,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function varargout = stk_predict (M_prior, x_obs, z_obs, x_prd)
-
-if nargin > 4,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 M_post = stk_model_gpposterior (M_prior, x_obs, z_obs);
 
@@ -105,7 +101,6 @@ end % function
 %!error y_prd1 = stk_predict(model, x_obs);
 %!error y_prd1 = stk_predict(model, x_obs, z_obs);
 %!test  y_prd1 = stk_predict(model, x_obs, z_obs, x_prd);
-%!error y_prd1 = stk_predict(model, x_obs, z_obs, x_prd, 0);
 
 %!test  % nargout = 2
 %! [y_prd1, lambda] = stk_predict (model, x_obs, z_obs, x_prd);

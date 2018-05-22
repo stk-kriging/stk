@@ -10,7 +10,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -37,10 +37,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function K = stk_noisecov (ni, lognoisevariance, diff, pairwise)
-
-if nargin > 4,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 if (nargin < 3) || (isempty (diff)),
     diff = -1; % default: compute the value (not a derivative)
@@ -100,4 +96,3 @@ end % function
 %!test  K = stk_noisecov(ni, lognoisevariance);
 %!test  K = stk_noisecov(ni, lognoisevariance, diff);
 %!test  K = stk_noisecov(ni, lognoisevariance, diff, true);
-%!error K = stk_noisecov(ni, lognoisevariance, diff, true, pi^2);
