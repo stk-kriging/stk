@@ -1,5 +1,15 @@
 2018-05-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Don't use UTF-8 in m-files
+
+	* core/@stk_model_gpposterior/stk_isnoisy.m: Remove UTF-8 character.
+	* core/stk_isnoisy.m: Idem.
+	* misc/benchmarks/stk_benchmark_bivnorm.m: Idem.
+	* param/estim/stk_param_loomse.m: Idem.
+	* param/estim/stk_param_loopvc.m: Idem.
+
+2018-05-22  Julien Bect  <julien.bect@centralesupelec.fr>
+
 	Remove nargin checks and update CG#01
 
 	* admin/CODING_GUIDELINES: Update CG#01.

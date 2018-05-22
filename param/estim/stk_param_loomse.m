@@ -10,7 +10,7 @@
 %
 % REFERENCE
 %
-%   [1] Fran�ois Bachoc. Estimation parametrique de la fonction de covariance
+%   [1] Francois Bachoc. Estimation parametrique de la fonction de covariance
 %       dans le modele de krigeage par processus gaussiens: application a la
 %       quantification des incertitudes en simulation numerique.
 %       PhD thesis, Paris 7, 2013. http://www.theses.fr/2013PA077111
