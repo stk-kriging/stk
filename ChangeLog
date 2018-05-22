@@ -1,5 +1,13 @@
 2018-05-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Use UNIX-type EOL
+
+	* examples/03_miscellaneous/stk_example_misc05.m: Use UNIX-type EOL.
+	* param/estim/stk_param_loomse.m: Idem.
+	* param/estim/stk_param_loopvc.m: Idem.
+
+2018-05-22  Julien Bect  <julien.bect@centralesupelec.fr>
+
 	Don't use UTF-8 in m-files
 
 	* core/@stk_model_gpposterior/stk_isnoisy.m: Remove UTF-8 character.
