@@ -71,7 +71,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -98,10 +98,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function varargout = stk_covmat (prior_model, output, x1, x2, diff, pairwise)
-
-if nargin > 6
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Note: stk_covmat is overloaded for posterior model objects (i.e., objects of
 % class stk_model_gpposterior).  There, we can assume here that the first
@@ -237,7 +233,6 @@ end % function
 %!test  [K1, P1] = stk_covmat (model, [], x1, []);
 %!test  [K2, P2] = stk_covmat (model, [], x1, [], -1);
 %!test  [K3, P3] = stk_covmat (model, [], x1, [], -1, false);
-%!error [KK, PP] = stk_covmat (model, [], x1, [], -1, false, pi);
 %!assert (isequal (size (Ka), [n1 n1]));
 %!assert (isequal (size (Pa), [n1 d+1]));
 %!assert (isequal (P1, Pa) && (isequal (K1, Ka)))
@@ -255,7 +250,6 @@ end % function
 %!test  [Kc, Pc] = stk_covmat (model, [], x1, x2);                         % (3)
 %!test  [K1, P1] = stk_covmat (model, [], x1, x2, -1);
 %!test  [K2, P2] = stk_covmat (model, [], x1, x2, -1, false);
-%!error [KK, PP] = stk_covmat (model, [], x1, x2, -1, false, pi);
 %!assert (isequal (size (Kc), [n1 n2]));
 %!assert (isequal (size (Pc), [n1 d+1]));
 %!assert (isequal (P1, Pc) && (isequal (K1, Kc)))

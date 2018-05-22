@@ -47,11 +47,8 @@ switch nargin
     case 3
         [K, P] = stk_covmat (model, 'latent', x1, x2);
         
-    case 4
-        [K, P] = stk_covmat (model, 'latent', x1, x2, -1, pairwise);
-        
     otherwise
-        stk_error ('Too many input arguments.', 'TooManyInputArgs');
+        [K, P] = stk_covmat (model, 'latent', x1, x2, -1, pairwise);
         
 end % switch
 
@@ -72,7 +69,6 @@ end % function
 %!test  [Ka, Pa] = stk_make_matcov (model, x1);           % (1)
 %!test  [Kb, Pb] = stk_make_matcov (model, x1, x1);       % (2)
 %!test  [Kc, Pc] = stk_make_matcov (model, x1, x2);       % (3)
-%!error [KK, PP] = stk_make_matcov (model, x1, x2, pi);
 
 %!assert (isequal (size (Ka), [n0 n0]));
 %!assert (isequal (size (Kb), [n0 n0]));
