@@ -47,10 +47,6 @@
 
 function h_legend = stk_legend ()
 
-if nargin > 0
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
 h_list = get (gca (), 'Children');
 s_list = cell (size (h_list));
 

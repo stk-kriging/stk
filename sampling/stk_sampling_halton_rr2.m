@@ -15,13 +15,13 @@
 
 % Copyright Notice
 %
-%    Copyright  (C) 2017 CentraleSupelec
+%    Copyright  (C) 2017, 2018 CentraleSupelec
 %    Copyright  (C) 2014 SUPELEC
 %    Copyright  (C) 2013 Alexandra Krauth, Elham Rahali & SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
-%               Alexandra Krauth  <alexandrakrauth@gmail.com>
-%               Elham Rahali      <elham.rahali@gmail.com>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Alexandra Krauth  <alexandrakrauth@gmail.com>
+%              Elham Rahali      <elham.rahali@gmail.com>
 
 % Copying Permission Statement
 %
@@ -44,10 +44,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_halton_rr2 (n, d, box)
-
-if nargin > 3,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Read argument dim
 if (nargin < 2) || ((nargin < 3) && (isempty (d)))
@@ -79,7 +75,6 @@ end % function
 
 
 %!error stk_sampling_halton_rr2 ()               % nargin < 1
-%!error stk_sampling_halton_rr2 (10, 3, [], -1)  % nargin > 3
 
 %!test
 %! n = 300; d = 25;

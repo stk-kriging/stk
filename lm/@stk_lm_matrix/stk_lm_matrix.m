@@ -8,7 +8,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -35,10 +35,6 @@
 
 function lm = stk_lm_matrix (data)
 
-if nargin > 1
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
 if nargin == 0
     lm = struct ('data', []);
 else
@@ -51,8 +47,6 @@ end % function
 
 
 %!test stk_test_class ('stk_lm_matrix')
-
-%!error lm = stk_lm_matrix ([], 3.33);
 
 %!test %%% dim 1
 %! data = rand (10, 1);  idx = 3:7;

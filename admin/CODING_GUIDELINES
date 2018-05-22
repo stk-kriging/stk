@@ -22,14 +22,13 @@ http://octave.1599824.n4.nabble.com/Why-does-Octave-ignore-additional-input-argu
 
 The current recommendation for checking the value of nargin in STK is as follows:
 
- * don't check for nargin being too small, unless there is a specific reason to
+ * don't check for nargin being too small, unless there is a particular reason to
    do so (typically, to provide a more readable error message),
 
- * check for nargin being too large this way:
-
-   if nargin > 2,
-     stk_error ('Too many input arguments.', 'TooManyInputArgs');
-   end
+ * don't check for nargin being too large in situations where Matlab would normally
+   raise an error automatically (i.e., when a function that accepts at most k input
+   arguments is called with nargin > k)... again, unless there is a particular
+   reason to do so.
 
 
 --- CG#02: Nested functions ----------------------------------------------------

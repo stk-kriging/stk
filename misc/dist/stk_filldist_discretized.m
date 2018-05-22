@@ -27,6 +27,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Author: Julien Bect <julien.bect@centralesupelec.fr>
@@ -53,10 +54,6 @@
 
 function [fd, ymax] = stk_filldist_discretized(x, y)
 
-if nargin > 2,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
 x = double(x);
 y = double(y);
 
@@ -71,7 +68,6 @@ end % function
 % Two non-empty matrices are expected as input arguments
 
 %!error stk_filldist_discretized(0.0)            % incorrect nb of arguments
-%!error stk_filldist_discretized(0.0, 0.0, pi)   % incorrect nb of arguments
 %!error stk_filldist_discretized(0.0, [])        % second arg is empty
 %!error stk_filldist_discretized([], 0.0)        % first arg is empty
 

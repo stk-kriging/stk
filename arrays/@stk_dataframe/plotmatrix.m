@@ -4,7 +4,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -112,13 +112,10 @@ switch n_argin
             linespec = {};
         end
         
-    case 3
+    otherwise
         x = varargin{1};
         y = varargin{2};
         linespec = varargin(3);
-        
-    otherwise
-        stk_error ('Too many input arguments.', 'TooManyInputArgs');
         
 end % switch
 

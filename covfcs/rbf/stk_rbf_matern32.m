@@ -16,11 +16,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011, 2012 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -43,10 +43,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function k = stk_rbf_matern32 (h, diff)
-
-if nargin > 2,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % default: compute the value (not a derivative)
 if nargin < 2,
@@ -83,7 +79,6 @@ end % function
 %!error stk_rbf_matern32 ();
 %!test  stk_rbf_matern32 (h);
 %!test  stk_rbf_matern32 (h, diff);
-%!error stk_rbf_matern32 (h, diff, pi);
 
 %!test %% h = 0.0 => correlation = 1.0
 %! x = stk_rbf_matern32 (0.0);

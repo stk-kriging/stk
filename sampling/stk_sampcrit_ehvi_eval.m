@@ -36,7 +36,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -61,10 +61,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function EHVI = stk_sampcrit_ehvi_eval (zp_mean, zp_std, zi, zr)
-
-if nargin > 4
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % EHVI with respect to the reference
 EIr = stk_distrib_normal_ei (zr, zp_mean, zp_std, 1);  % m x p

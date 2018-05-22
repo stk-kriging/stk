@@ -32,7 +32,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -57,10 +57,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function crit = stk_sampcrit_akg (model, xr)
-
-if nargin > 2
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Public properties
 crit.model          = [];  % read/write
@@ -188,5 +184,3 @@ end % function
 %!assert (isequal (size (F.zr_mean), [5 1]))       % nr x 1
 %!assert (isequal (size (F.zr_std), [5 1]))        % nr x 1
 %!assert (isequal (size (F.zr_lambdamu), [4 5]))   % (n+1) x nr (constant mean)
-
-%!error F = stk_sampcrit_akg (M, xr, 1.234);       % too many input arguments

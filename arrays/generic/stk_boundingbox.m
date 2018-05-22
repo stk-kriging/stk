@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -38,10 +38,6 @@
 
 function box = stk_boundingbox (x)
 
-if nargin > 1,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
 if ~ isnumeric (x)
     stk_error (['The input argument should be a ' ...
         'numeric array.'], 'TypeMismatch');
@@ -64,6 +60,5 @@ end % function
 
 %!error  y = stk_boundingbox ();
 %!test   y = stk_boundingbox (x);
-%!error  y = stk_boundingbox (x, 1);
 
 %!assert (isequal (y.data, [0 0 1; 7 4 2]));

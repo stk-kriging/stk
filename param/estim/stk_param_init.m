@@ -39,7 +39,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -114,10 +114,6 @@ end % function
 
 
 function [param, lnv] = stk_param_init_ (model, xi, zi, box, do_estim_lnv)
-
-if nargin > 5,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 if ~ isequal (size (zi), [size(xi, 1) 1]),
     errmsg = 'zi should be a column, with the same number of rows as xi.';
