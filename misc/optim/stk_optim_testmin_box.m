@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -55,9 +55,6 @@ if nargin == 1
 elseif nargin == 0
     stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
     
-elseif nargin > 1
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-    
 end % if
 
 end % function
@@ -75,7 +72,6 @@ end % function
 %! algo = stk_options_get ('stk_param_estim', 'minimize_box');
 
 %!error b = stk_optim_testmin_box ();
-%!error b = stk_optim_testmin_box (algo, 33.51);
 
 %!assert (stk_optim_testmin_box (algo));
 %!assert (~ stk_optim_testmin_box ('dudule'));

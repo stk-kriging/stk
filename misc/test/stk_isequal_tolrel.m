@@ -28,6 +28,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
@@ -56,10 +57,6 @@
 function res = stk_isequal_tolrel(a, b, tolrel)
 
 DEFAULT_TOLREL = 1e-8;
-
-if nargin > 3,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 if nargin == 2,
     tolrel = DEFAULT_TOLREL;
@@ -129,7 +126,6 @@ end % function
 %!test  r1 = stk_isequal_tolrel(a, b);
 %!test  r2 = stk_isequal_tolrel(a, b, tolrel);
 %!test  r3 = stk_isequal_tolrel(a, [b b]);
-%!error rr = stk_isequal_tolrel(a, b, tolrel, pi);
 
 %!test assert (isequal (r1, false));
 %!test assert (isequal (r2, true));

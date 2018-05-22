@@ -36,7 +36,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017 CentraleSupelec
+%    Copyright (C) 2015-2018 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2011-2013 SUPELEC
 %
@@ -67,10 +67,6 @@
 
 function [param_opt, lnv_opt, info] = stk_param_estim ...
     (model, xi, zi, param0, lnv0, criterion)
-
-if nargin > 6,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Empty is the same as not provided
 if nargin < 6,  criterion = [];  end
@@ -311,7 +307,6 @@ end % function
 %!error param = stk_param_estim ()
 %!error param = stk_param_estim (model);
 %!error param = stk_param_estim (model, xi);
-%!error param = stk_param_estim (model, xi, zi, param0, log(eps), @stk_param_relik, pi);
 
 %!test % Constant response
 %! model = stk_model ('stk_materncov52_iso');

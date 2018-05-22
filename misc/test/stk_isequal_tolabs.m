@@ -24,6 +24,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
@@ -52,10 +53,6 @@
 function res = stk_isequal_tolabs(a, b, tolabs)
 
 DEFAULT_TOLABS = 1e-8;
-
-if nargin > 3,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 if nargin == 2,
     tolabs = DEFAULT_TOLABS;
@@ -120,7 +117,6 @@ end % function
 %!error rr = stk_isequal_tolabs(a);
 %!test  r1 = stk_isequal_tolabs(a, b);
 %!test  r2 = stk_isequal_tolabs(a, b, tolabs);
-%!error rr = stk_isequal_tolabs(a, b, tolabs, pi);
 
 %!test assert(~r1);
 %!test assert(r2);

@@ -17,7 +17,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
@@ -44,10 +44,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_regulargrid (n, dim, box)
-
-if nargin > 3,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Read argument dim
 if (nargin < 2) || ((nargin < 3) && (isempty (dim)))
@@ -105,7 +101,6 @@ end % function
 %!test  x = stk_sampling_regulargrid (n);
 %!test  x = stk_sampling_regulargrid (n, dim);
 %!test  x = stk_sampling_regulargrid (n, dim, box);
-%!error x = stk_sampling_regulargrid (n, dim, box, pi);
 
 %%
 % Check that the output is an stk_dataframe

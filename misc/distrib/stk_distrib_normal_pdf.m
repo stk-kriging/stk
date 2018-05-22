@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -27,10 +28,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function density = stk_distrib_normal_pdf (z, mu, sigma)
-
-if nargin > 3,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 if nargin > 1,
     z = bsxfun (@minus, z, mu);

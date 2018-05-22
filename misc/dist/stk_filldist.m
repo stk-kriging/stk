@@ -52,6 +52,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author: Julien Bect <julien.bect@centralesupelec.fr>
@@ -77,10 +78,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [fd, ymax] = stk_filldist(x, arg2)
-
-if nargin > 2,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 x = double(x);
 

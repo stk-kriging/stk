@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 Centrale
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -41,8 +41,6 @@ function algo = stk_optim_baseclass (does_boxconstrained, does_unconstrained)
 if nargin == 0
     does_boxconstrained = false;
     does_unconstrained = false;
-elseif nargin > 2
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 algo = struct (                                 ...

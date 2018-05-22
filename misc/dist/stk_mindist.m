@@ -13,10 +13,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2012, 2013 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -39,10 +40,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function md = stk_mindist(x)
-
-if nargin > 1,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % call MEX-file
 md = stk_mindist_mex(double(x));

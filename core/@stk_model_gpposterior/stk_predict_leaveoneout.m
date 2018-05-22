@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2017 LNE
 %
 %    Authors:  Remi Stroh   <remi.stroh@lne.fr>
@@ -29,10 +29,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [LOO_pred, LOO_res] = stk_predict_leaveoneout (M_post)
-
-if nargin > 1
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 prior_model = M_post.prior_model;
 

@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017 CentraleSupelec
+%    Copyright (C) 2015-2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -29,10 +29,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [zp, lambda, mu, K] = stk_predict (M_post, xt)
-
-if nargin > 2
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % TODO: these should become options
 block_size = [];
@@ -221,7 +217,6 @@ end % function
 %!error y_prd = stk_predict (M_post);
 %!test  y_prd = stk_predict (M_post, x_prd);
 %!error y_prd = stk_predict (M_post, [x_prd x_prd]);
-%!error y_prd = stk_predict (M_post, x_prd, 0);
 
 %!test  % nargout = 2
 %! [y_prd1, lambda] = stk_predict (M_post, x_prd);

@@ -10,7 +10,7 @@
 %
 % REFERENCE
 %
-%   [1] François Bachoc. Estimation parametrique de la fonction de covariance
+%   [1] Franï¿½ois Bachoc. Estimation parametrique de la fonction de covariance
 %       dans le modele de krigeage par processus gaussiens: application a la
 %       quantification des incertitudes en simulation numerique.
 %       PhD thesis, Paris 7, 2013. http://www.theses.fr/2013PA077111
@@ -22,7 +22,7 @@
 %    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2018 LNE
 %
-%    Authors:  Remi Stroh        <remi.stroh@lne.fr>
+%    Authors:  Remi Stroh  <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -45,10 +45,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [lm, dlm_cov_param, dlm_noise_param] = stk_param_loomse (model, xi, yi)
-
-if nargin > 3,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 yi = double(yi);
 n = size (xi, 1);
@@ -149,7 +145,6 @@ end % function
 %!error [J, dJ1, dJ2] = stk_param_loomse (model);
 %!error [J, dJ1, dJ2] = stk_param_loomse (model, xi);
 %!test  [J, dJ1, dJ2] = stk_param_loomse (model, xi, zi);
-%!error [J, dJ1, dJ2] = stk_param_loomse (model, xi, zi, pi);
 
 %!test
 %! loo_pred = stk_predict_leaveoneout(model, xi, zi);

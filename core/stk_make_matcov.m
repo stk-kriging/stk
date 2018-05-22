@@ -22,7 +22,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -58,10 +58,6 @@ if (isnumeric (model.param)) && (any (isnan (model.param)))
 end
 
 %=== process input arguments
-
-if nargin > 4,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 x0 = double (x0);
 

@@ -16,6 +16,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
 %    Authors:  Julien Bect        <julien.bect@supelec.fr>
@@ -42,10 +43,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [u_opt,lik] = stk_minimize_boxconstrained (algo, f, u_init, lb, ub)
-
-if nargin > 5
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 [u_opt,lik] = fmincon (f, u_init, [], [], [], [], lb, ub, [], algo.options);
 

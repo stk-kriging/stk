@@ -36,6 +36,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC, Guillaume Carlier & Florian Pasanisi
 %
 %    Authors:  Julien Bect             <julien.bect@centralesupelec.fr>
@@ -71,9 +72,6 @@
 
 function [fd, ymax] = stk_filldist_exact(x, box) %---------------------------------------
 
-if nargin > 2,
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 x = double(x);
 [n, d] = size(x);
 
