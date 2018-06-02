@@ -1,3 +1,11 @@
+2018-06-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/sort.m: Behave more like the base sort() function
+
+	* arrays/@stk_dataframe/sort.m: Behave more like the base sort()
+	function.  In particular, accept optional arguments, and deal with
+	that fact that the dimension argument is allowed to be skipped.
+
 2018-05-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Use UNIX-type EOL
