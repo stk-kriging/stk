@@ -26,31 +26,33 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [x, i] = sort (x, dim, mode)
+function [x, i] = sort (x, varargin)
 
 if ~ isa (x, 'stk_dataframe'),
     % Not what we expect: dim or mode is an stk_dataframe...
     stk_error ('x should be an stk_dataframe object here.', 'TypeMismatch');
 end
 
-if (nargin < 2) || (isempty (dim)),
+% The dimension argument is optional, we have to check if it has been given
+if (nargin > 1) && (~ ischar (varargin{1}))
+    dim = varargin{1};
+    if ~ (isequal (dim, 1) || isequal (dim, 2))
+        stk_error ('dim sould be 1 or 2.', 'InvalidArgument');
+    end
+    opts = varargin(2:end);
+else
     % Sort along the first non-singleton dimension
     if (size (x.data, 1) > 1)
         dim = 1;
     else
         dim = 2;
     end
-elseif ~ ((dim == 1) || (dim == 2))
-    stk_error ('dim sould be 1 or 2.', 'InvalidArgument');
+    opts = varargin;
 end
 
-if nargin < 3,
-    mode = 'ascend';
-end
-
-if dim == 1,  % Sort columns
+if dim == 1  % Sort columns
     
-    [x.data, i] = sort (x.data, 1, mode);
+    [x.data, i] = sort (x.data, 1, opts{:});
     
     if (size (x.data, 2) > 1)
         % Row names are lost when sorting a dataframe with more than one column
@@ -61,7 +63,7 @@ if dim == 1,  % Sort columns
     
 else  % Sort rows
     
-    [x.data, i] = sort (x.data, 2, mode);
+    [x.data, i] = sort (x.data, 2, opts{:});
     
     if (size (x.data, 1) > 1)
         % Column names are lost when sorting a dataframe with more than one row
@@ -82,15 +84,23 @@ end % function
 %!assert (strcmp (class (y), 'stk_dataframe'))
 %!assert (isequal (y.data, [1; 2; 3]))
 %!assert (isequal (y.rownames, {'c'; 'b'; 'a'}))
-%!assert (isequal (sort (x, []), y))
+%!error y = sort (x, []);
 %!assert (isequal (sort (x,  1), y))
 %!assert (isequal (sort (x,  2), x))
 %!error sort (x, 3)
-%!assert (isequal (sort (x, [], 'ascend'), y))
+%!error y = sort (x, [], 'ascend');
 %!assert (isequal (sort (x,  1, 'ascend'), y))
 %!assert (isequal (sort (x,  2, 'ascend'),  x))
-%!error sort (x,  3, 'ascend')
-%!assert (isequal (sort (x, [], 'descend'), x))
+%!error y = sort (x,  3, 'ascend');
+%!error y = sort (x, [], 'descend');
 %!assert (isequal (sort (x,  1, 'descend'), x))
 %!assert (isequal (sort (x,  2, 'descend'), x))
 %!error sort (x,  3, 'descend')
+
+% unique() typically relies on sort() to get the job done (at least in does in
+% some versions of Matlab), so it makes sense to put this test here
+%!test  
+%! cn = {'u' 'v' 'w'};  x = stk_dataframe (rand (4, 3), cn);
+%! y = [x; x];  z = unique (y, 'rows');
+%! assert (isequal (z.colnames, cn));
+%! assert (isequal (z.data, unique (x.data, 'rows')));
