@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -96,11 +96,3 @@ end % function
 %!assert (isequal (sort (x,  1, 'descend'), x))
 %!assert (isequal (sort (x,  2, 'descend'), x))
 %!error sort (x,  3, 'descend')
-
-% unique() typically relies on sort() to get the job done (at least in does in
-% some versions of Matlab), so it makes sense to put this test here
-%!test  
-%! cn = {'u' 'v' 'w'};  x = stk_dataframe (rand (4, 3), cn);
-%! y = [x; x];  z = unique (y, 'rows');
-%! assert (isequal (z.colnames, cn));
-%! assert (isequal (z.data, unique (x.data, 'rows')));

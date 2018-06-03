@@ -1,3 +1,12 @@
+2018-06-03  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/unique.m: Overload base function
+
+	* arrays/@stk_dataframe/unique.m: Overload base function.
+	Yesterday's commit was intended to avoid this overload.  It work
+	in matlab, but not in Octave, so here it is...
+	* arrays/@stk_dataframe/sort.m: Remove unit test.
+
 2018-06-02  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/sort.m: Behave more like the base sort() function
