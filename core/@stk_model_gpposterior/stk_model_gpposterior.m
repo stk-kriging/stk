@@ -44,47 +44,49 @@ if nargin == 3
             'same number of rows as x_obs.'], 'IncorrectSize');
     end
     
-    % Currently, prior models are represented exclusively as structures
-    if ~ isstruct (prior_model)
-        stk_error (['Input argument ''prior_model'' must be a ' ...
-            'prior model structure.'], 'InvalidArgument');
-    end
-    
-    % Make sure that lognoisevariance is -inf for noiseless models
-    if ~ stk_isnoisy (prior_model)
-        prior_model.lognoisevariance = -inf;
-    end
-    
-    % Backward compatibility:
-    %   accept model structures with missing 'dim' field
-    if (~ isfield (prior_model, 'dim')) || (isempty (prior_model.dim))
-        prior_model.dim = size (xi, 2);
-    elseif ~ isempty (xi) && (prior_model.dim ~= size (xi, 2))
-        stk_error (sprintf (['The number of columns of xi (which is %d) ' ...
-            'is different from the value of prior_model.dim (which is '   ...
-            '%d).'], size (xi, 2), prior_model.dim), 'InvalidArgument');
-    end
-    
-    % Check prior_model.lognoisevariance
-    if ~ isscalar (prior_model.lognoisevariance)
-        if (~ isvector (prior_model.lognoisevariance)) && (length ...
-                (prior_model.lognoisevariance) == n)
-            stk_error (['M_prior.lognoisevariance must be either ' ...
-                'a scalar or a vector of length size (xi, 1).'], ...
-                'InvalidArgument');
-        end
-        % Make sure that lnv is a column vector
-        prior_model.lognoisevariance = prior_model.lognoisevariance(:);
-    end
-    
-    % Check if the covariance model contains parameters
-    % that must be estimated first
-    if (isnumeric (prior_model.param)) && (any (isnan (prior_model.param)))
-        prior_model.param = stk_param_estim (prior_model, xi, zi);
-    end
-    
-    % Compute QR factorization
     if isempty (kreq)
+        
+        % Currently, prior models are represented exclusively as structures
+        if ~ isstruct (prior_model)
+            stk_error (['Input argument ''prior_model'' must be a ' ...
+                'prior model structure.'], 'InvalidArgument');
+        end
+        
+        % Make sure that lognoisevariance is -inf for noiseless models
+        if ~ stk_isnoisy (prior_model)
+            prior_model.lognoisevariance = -inf;
+        end
+        
+        % Backward compatibility:
+        %   accept model structures with missing 'dim' field
+        if (~ isfield (prior_model, 'dim')) || (isempty (prior_model.dim))
+            prior_model.dim = size (xi, 2);
+        elseif ~ isempty (xi) && (prior_model.dim ~= size (xi, 2))
+            stk_error (sprintf (['The number of columns of xi (which is %d) ' ...
+                'is different from the value of prior_model.dim (which is '   ...
+                '%d).'], size (xi, 2), prior_model.dim), 'InvalidArgument');
+        end
+        
+        % Check prior_model.lognoisevariance
+        if ~ isscalar (prior_model.lognoisevariance)
+            if (~ isvector (prior_model.lognoisevariance)) && (length ...
+                    (prior_model.lognoisevariance) == n)
+                stk_error (['M_prior.lognoisevariance must be either ' ...
+                    'a scalar or a vector of length size (xi, 1).'], ...
+                    'InvalidArgument');
+            end
+            % Make sure that lnv is a column vector
+            prior_model.lognoisevariance = prior_model.lognoisevariance(:);
+        end
+        
+        % Check if the covariance model contains parameters
+        % that must be estimated first
+        if (isnumeric (prior_model.param)) && (any (isnan (prior_model.param)))
+            prior_model.param = stk_param_estim (prior_model, xi, zi);
+        end
+        
+        % Compute QR factorization
+        
         kreq = stk_kreq_qr (prior_model, xi);
     end
     

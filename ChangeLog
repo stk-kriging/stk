@@ -1,3 +1,9 @@
+2018-06-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_model_gpposterior/stk_model_gpposterior.m: Minor change
+
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Minor change.
+
 2018-06-03  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/unique.m: Overload base function
