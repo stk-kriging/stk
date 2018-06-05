@@ -1,3 +1,12 @@
+2018-06-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_relik.m: Just a little bit of optimization
+
+	* param/estim/stk_param_relik.m: Just a little bit of optimization.
+	* misc/benchmarks/stk_benchmark_uppertriangular.m: A simple test
+	script to show that the best way to handle upper-triangular
+	matrices is not the same in Octave and in Matlab.
+
 2018-06-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_model_gpposterior/stk_model_gpposterior.m: Minor change

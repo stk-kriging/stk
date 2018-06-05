@@ -60,17 +60,18 @@ n = size (xi, 1);
 q = size (P, 2);
 simple_kriging = (q == 0);
 
-if simple_kriging
+if simple_kriging  % No need to filter anything out
     
-    G = K;  % No need to filter anything out
-    
+    % Cholesky factorization: G = K = C' * C, with upper-triangular C
+    C = stk_cholcov (K);
+
 else
     
     % Construct a "filtering matrix" A = W'
     [Q, R_ignored] = qr (P);  %#ok<NASGU> %the second argument *must* be here
     W = Q(:, (q+1):n);
     
-    % Compute G = W' * K * W  (covariance matrix of filtered observations)
+    % Compute G = W' * K * W, the covariance matrix of filtered observations
     M = (stk_cholcov (K)) * W;
     G = (M') * M;
     
@@ -81,20 +82,21 @@ else
             'The computation of G = W'' * K * W is inaccurate.');
         G = 0.5 * (G + G');  % Make it at least symmetric
     end
-end
 
-% Cholesky factorization: G = C' * C, with upper-triangular C
-C = stk_cholcov (G);
+    % Cholesky factorization: G = C' * C
+    C = stk_cholcov (G);
+end
 
 % Compute log (det (G)) using the Cholesky factor
 ldetWKW = 2 * sum (log (diag (C)));
 
 % Compute (W' yi)' * G^(-1) * (W' yi) as u' * u, with u = C' \ (W' * yi)
 if simple_kriging
-    u = linsolve (C, double (yi), struct ('UT', true, 'TRANSA', true));
+    yyi = double (yi);
 else
-    u = linsolve (C, W' * double (yi), struct ('UT', true, 'TRANSA', true));
+    yyi = W' * double (yi);
 end
+u = linsolve (C, yyi, struct ('UT', true, 'TRANSA', true));
 attache = sum (u .^ 2);
 
 rl = 0.5 * ((n - q) * log(2 * pi) + ldetWKW + attache);
@@ -120,12 +122,24 @@ if nargout >= 2
     nbparam = length (paramvec);
     drl_param = zeros (nbparam, 1);
     
-    if simple_kriging
-        H = inv (G);
+    if exist ('OCTAVE_VERSION', 'builtin') == 5
+        % Octave remembers that C is upper-triangular and automatically picks
+        % the appropriate algorithm.  Cool.
+        if simple_kriging
+            F = inv (C');
+        else
+            F = (C') \ (W');
+        end
     else
-        F = linsolve (C, W', struct ('UT', true, 'TRANSA', true));
-        H = F' * F;  % = W * G^(-1) * W'
+        % Apparently Matlab does not automatically leverage the fact that C is
+        % upper-triangular.  Pity.  We have to call linsolve explicitely, then.
+        if simple_kriging
+            F = linsolve (C, eye (n), struct ('UT', true, 'TRANSA', true));
+        else
+            F = linsolve (C, W', struct ('UT', true, 'TRANSA', true));
+        end
     end
+    H = F' * F;  % = W * G^(-1) * W'
     
     z = H * double (yi);
     
