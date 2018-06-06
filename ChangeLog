@@ -1,3 +1,11 @@
+2018-06-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_cholcov.m: Return the value of epsi
+
+	* core/stk_cholcov.m: Return the value of epsi, to make it
+	possible to detect that the original matrix A was not
+	numerically positive definite.
+
 2018-06-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_relik.m: Just a little bit of optimization

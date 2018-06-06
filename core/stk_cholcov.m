@@ -21,7 +21,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2014 SUPELEC
+%    Copyright (C) 2014, 2018 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -45,19 +45,23 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function C = stk_cholcov (A, varargin)
+function [C, epsi] = stk_cholcov (A, varargin)
 
 % try to use a plain "chol"
 [C, p] = chol (A, varargin{:});
 
-if p > 0,
+if p == 0  % OK, A is (numerically) positive definite
+    
+    epsi = 0;
+    
+else
     
     epsi = eps;
     u = diag (diag (A));
     
-    while p > 0,
+    while p > 0
         
-        if epsi > 1,  % avoids infinite while loops
+        if epsi > 1  % avoids infinite while loops
             if ~ all (isfinite (A(:)))
                 errmsg = 'A contains NaNs or Infs.';
             else
