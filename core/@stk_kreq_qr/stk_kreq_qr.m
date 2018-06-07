@@ -52,6 +52,13 @@ else
     
     % orthogonal-triangular decomposition
     [Q, R] = qr (LS);
+    
+    % Check for duplicated rows if R is close to singular
+    u = abs (diag (R));
+    if (~ stk_isnoisy (model)) && (min (u) < eps * max (u))
+        stk_assert_no_duplicates (xi);
+    end
+    
     kreq = struct ('n', n, 'r', r, 'P_scaling', P_scaling, ...
         'LS_Q', Q, 'LS_R', R, 'RS', [], 'lambda_mu', []);
     

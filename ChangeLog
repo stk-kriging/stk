@@ -1,3 +1,56 @@
+2018-06-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Check for duplicated rows when ill-conditioning is detected (ticket #74)
+
+	* misc/error/stk_assert_no_duplicates.m: New function.
+	* admin/octpkg/INDEX: Add new function to the index.
+	* core/@stk_kreq_qr/stk_kreq_qr.m: Check for duplicated rows when
+	ill-conditioning is detected.
+	* param/estim/stk_param_relik.m: Idem.
+	* core/stk_predict.m: Add unit test.
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Source
+	formatting.
+
+2018-06-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_cholcov.m: Return the value of epsi
+
+	* core/stk_cholcov.m: Return the value of epsi, to make it
+	possible to detect that the original matrix A was not
+	numerically positive definite.
+
+2018-06-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_relik.m: Just a little bit of optimization
+
+	* param/estim/stk_param_relik.m: Just a little bit of optimization.
+	* misc/benchmarks/stk_benchmark_uppertriangular.m: A simple test
+	script to show that the best way to handle upper-triangular
+	matrices is not the same in Octave and in Matlab.
+
+2018-06-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_model_gpposterior/stk_model_gpposterior.m: Minor change
+
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Minor change.
+
+2018-06-03  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/unique.m: Overload base function
+
+	* arrays/@stk_dataframe/unique.m: Overload base function.
+	Yesterday's commit was intended to avoid this overload.  It work
+	in matlab, but not in Octave, so here it is...
+	* arrays/@stk_dataframe/sort.m: Remove unit test.
+
+2018-06-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/sort.m: Behave more like the base sort() function
+
+	* arrays/@stk_dataframe/sort.m: Behave more like the base sort()
+	function.  In particular, accept optional arguments, and deal with
+	that fact that the dimension argument is allowed to be skipped.
+
 2018-05-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Use UNIX-type EOL
