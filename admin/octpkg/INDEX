@@ -491,7 +491,8 @@ Miscellaneous: options, plots...
 #stk_zlabel           [internal]
 
 ## error/warning
-#stk_error [internal, not for public use]
+#stk_error                 [internal]
+#stk_assert_no_duplicates  [internal]
 ##stk_warning does not exist yet, but it should (?)
 
 ## misc/text

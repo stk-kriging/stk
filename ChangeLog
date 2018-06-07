@@ -1,3 +1,16 @@
+2018-06-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Check for duplicated rows when ill-conditioning is detected (ticket #74)
+
+	* misc/error/stk_assert_no_duplicates.m: New function.
+	* admin/octpkg/INDEX: Add new function to the index.
+	* core/@stk_kreq_qr/stk_kreq_qr.m: Check for duplicated rows when
+	ill-conditioning is detected.
+	* param/estim/stk_param_relik.m: Idem.
+	* core/stk_predict.m: Add unit test.
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Source
+	formatting.
+
 2018-06-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_cholcov.m: Return the value of epsi
