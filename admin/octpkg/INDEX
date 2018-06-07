@@ -396,6 +396,7 @@ Miscellaneous: Validation of models
 #@stk_dataframe/times                     [overload base]
 #@stk_dataframe/transpose                 [overload base]
 #@stk_dataframe/uminus                    [overload base]
+#@stk_dataframe/unique                    [overload base]
 #@stk_dataframe/uplus                     [overload base]
 #@stk_dataframe/var                       [overload base]
 #@stk_dataframe/vertcat                   [overload base]
