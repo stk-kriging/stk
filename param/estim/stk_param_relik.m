@@ -47,7 +47,8 @@ PARAMPRIOR = isfield (model, 'prior');
 NOISEPRIOR = isfield (model, 'noiseprior');
 
 % Make sure that lognoisevariance is -inf for noiseless models
-if ~ stk_isnoisy (model)
+noiseless = ~ stk_isnoisy (model);
+if noiseless
     model.lognoisevariance = -inf;
 end
 
@@ -60,12 +61,13 @@ n = size (xi, 1);
 q = size (P, 2);
 simple_kriging = (q == 0);
 
-if simple_kriging  % No need to filter anything out
-    
-    % Cholesky factorization: G = K = C' * C, with upper-triangular C
-    C = stk_cholcov (K);
+% Choleski factorization: K = C' * C, with upper-triangular C
+[C, epsi] = stk_cholcov (K);
+if noiseless && (epsi > 0)
+    stk_assert_no_duplicates (xi);
+end
 
-else
+if ~ simple_kriging
     
     % Construct a "filtering matrix" A = W'
     [Q, R_ignored] = qr (P);  %#ok<NASGU> %the second argument *must* be here
@@ -82,8 +84,8 @@ else
             'The computation of G = W'' * K * W is inaccurate.');
         G = 0.5 * (G + G');  % Make it at least symmetric
     end
-
-    % Cholesky factorization: G = C' * C
+    
+    % Cholesky factorization: G = C' * C, with upper-triangular C
     C = stk_cholcov (G);
 end
 

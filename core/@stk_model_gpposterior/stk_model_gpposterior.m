@@ -85,8 +85,7 @@ if nargin == 3
             prior_model.param = stk_param_estim (prior_model, xi, zi);
         end
         
-        % Compute QR factorization
-        
+        % Compute QR factorization        
         kreq = stk_kreq_qr (prior_model, xi);
     end
     
