@@ -2,16 +2,13 @@
 %
 % This functions is provided as a replacement for Octave's file_in_path()
 % function when using STK with Matlab.
-%
-% FIXME: missing doc
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2018 CentraleSupelec
 %    Copyright (C) 2012 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 %
 %    This file is based on the Oct2mat package, version 1.0.7. The
 %    following information was provided in the DESCRIPTION of the

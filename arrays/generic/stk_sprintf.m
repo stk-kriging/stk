@@ -2,11 +2,10 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -58,7 +57,7 @@ else
             case 'long'
                 data_col_width = 16;
             otherwise
-                % FIXME: handle other formatting modes...
+                % FIXME (ticket #87): handle other formatting modes...
                 data_col_width = 10;
         end
     end

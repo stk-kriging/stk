@@ -1,43 +1,6 @@
 % STK_TEST performs tests for a given M-file.
 %
-% FIXME: missing doc
-
-% Copyright Notice
-%
-%    Copyright (C) 2017 CentraleSupelec
-%    Copyright (C) 2012, 2013 SUPELEC
-%
-%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
-%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
-%
-%    This file has been adapted from test.m in Octave 3.6.2,  distributed
-%    under the GNU General Public Licence version 3 (GPLv3). The original
-%    copyright notice was as follows:
-%
-%        Copyright (C) 2005-2012 Paul Kienzle
-
-% Copying Permission Statement
-%
-%    This file is part of
-%
-%            STK: a Small (Matlab/Octave) Toolbox for Kriging
-%               (http://sourceforge.net/projects/kriging)
-%
-%    STK is free software: you can redistribute it and/or modify it under
-%    the terms of the GNU General Public License as published by the Free
-%    Software Foundation,  either version 3  of the License, or  (at your
-%    option) any later version.
-%
-%    STK is distributed  in the hope that it will  be useful, but WITHOUT
-%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY
-%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public
-%    License for more details.
-%
-%    You should  have received a copy  of the GNU  General Public License
-%    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-
-%%
-% Octave doc, to be adapted...
+% FIXME (ticket #86): Convert help text below to plain text
 %
 % -*- texinfo -*-
 % @deftypefn  {Command} {} test @var{name}
@@ -85,6 +48,39 @@
 % explanation of the line markers used is written to the file @var{fid}.
 % @seealso{assert, error, example}
 % @end deftypefn
+
+% Copyright Notice
+%
+%    Copyright (C) 2017, 2018 CentraleSupelec
+%    Copyright (C) 2012, 2013 SUPELEC
+%
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%
+%    This file has been adapted from test.m in Octave 3.6.2,  distributed
+%    under the GNU General Public Licence version 3 (GPLv3). The original
+%    copyright notice was as follows:
+%
+%        Copyright (C) 2005-2012 Paul Kienzle
+
+% Copying Permission Statement
+%
+%    This file is part of
+%
+%            STK: a Small (Matlab/Octave) Toolbox for Kriging
+%               (http://sourceforge.net/projects/kriging)
+%
+%    STK is free software: you can redistribute it and/or modify it under
+%    the terms of the GNU General Public License as published by the Free
+%    Software Foundation,  either version 3  of the License, or  (at your
+%    option) any later version.
+%
+%    STK is distributed  in the hope that it will  be useful, but WITHOUT
+%    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY
+%    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public
+%    License for more details.
+%
+%    You should  have received a copy  of the GNU  General Public License
+%    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function varargout = stk_test (varargin)
 
