@@ -1,3 +1,10 @@
+2018-06-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dominatedhv_mex.c: Workaround for Octave 4.4 issue (ticket #89)
+
+	* misc/pareto/private/stk_dominatedhv_mex.c: Workaround for Octave
+	4.4 issue (see ticket #54096 on Octave's bug tracker  for details).
+
 2018-03-08  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Write "covariance function" instead of "covariance kernel" in docs.

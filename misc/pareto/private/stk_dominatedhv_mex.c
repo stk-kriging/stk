@@ -97,9 +97,12 @@ void compute_decomposition (mxArray* f, FRONT *buffer,
 
   if (nb_objectives == 0)
     {
-      *sign = NULL;
-      *xmin = NULL;
-      *xmax = NULL;
+      if (nb_points > 0)
+        mexErrMsgTxt ("nb_objectives == 0 and nb_points > 0: Undefined behaviour.");
+      
+      *sign = mxCreateDoubleMatrix (0, 0, mxREAL);
+      *xmin = mxCreateDoubleMatrix (0, 0, mxREAL);
+      *xmax = mxCreateDoubleMatrix (0, 0, mxREAL);
     }
   else if (nb_points == 0)
     {
