@@ -1,3 +1,17 @@
+# Changes in version 2.5.1
+
+## Bug fixes
+
+* `stk_dominatedhv`: Workaround for Octave 4.4 issue
+  ([ticket #89](https://sourceforge.net/p/kriging/tickets/89/))
+
+## Miscellaneous
+
+* Documentation fixes.
+
+* `stk_option_set`: Return option struct only if `nargout > 0`.
+
+
 # Changes in version 2.5.0
 
 ## Required Octave version
