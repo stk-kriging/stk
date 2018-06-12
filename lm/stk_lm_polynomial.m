@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2017 CentraleSupelec
+%    Copyright (C) 2016-2018 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -36,8 +36,6 @@ function lm = stk_lm_polynomial (order)
 % nargin check neded here.  See https://sourceforge.net/p/kriging/tickets/52.
 if nargin < 1
     stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
-elseif nargin > 1
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
 end
 
 switch order
@@ -65,7 +63,6 @@ end % function
 
 
 %!error lm = stk_lm_polynomial ();
-%!error lm = stk_lm_polynomial (0, 3.33);
 
 %!test
 %! lm = stk_lm_polynomial (-1);

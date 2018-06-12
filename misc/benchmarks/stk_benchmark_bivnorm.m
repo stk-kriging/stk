@@ -49,8 +49,8 @@ p_stk = stk_distrib_bivnorm_cdf (z, mu(1), mu(2), sigma(1), sigma(2), rho);
 t_stk = toc;
 
 err = abs (p_stk - p_mvncdf);
-fprintf ('t_stk = %.1f µs/eval\n', t_stk / n * 1e6);
-fprintf ('t_mvncdf = %.1f µs/eval\n', t_mvncdf / n * 1e6);
+fprintf ('t_stk = %.1f microseconds/eval\n', t_stk / n * 1e6);
+fprintf ('t_mvncdf = %.1f microseconds/eval\n', t_mvncdf / n * 1e6);
 fprintf ('t_mvncdf / t_stk = %.1f\n', t_mvncdf / t_stk);
 fprintf ('maximal absolute difference: %.2g\n', max (err))
 fprintf ('maximal relative difference: %.2g\n', max (err  ./ p_stk))

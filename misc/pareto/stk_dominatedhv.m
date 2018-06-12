@@ -47,7 +47,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -72,10 +72,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function result = stk_dominatedhv (y, y_ref, do_decomposition)
-
-if nargin > 3,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Missing or empty y_ref: will use [0 0 ... 0] as a reference point
 if nargin < 2,

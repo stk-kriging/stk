@@ -10,6 +10,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Authors:  Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
@@ -36,10 +37,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function stk_disp_progress (msg, n, N)
-
-if nargin > 3,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 if ~ ((n > 0) && (n <= N))
     stk_error ('n should be between 1 and N', 'InvalidArgument');

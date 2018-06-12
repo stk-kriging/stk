@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -28,10 +28,6 @@
 
 function box = stk_boundingbox (x)
 
-if nargin > 1
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
 xmin = cellfun (@min, x.levels);
 xmax = cellfun (@max, x.levels);
 
@@ -52,6 +48,5 @@ end % function
 
 %!error y = stk_boundingbox ();
 %!test  y = stk_boundingbox (x);
-%!error y = stk_boundingbox (x, 1);
 
 %!assert (isequal (y, stk_hrect ([1 3 0; 2 5 8], cn)));

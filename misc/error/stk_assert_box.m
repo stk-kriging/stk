@@ -1,8 +1,8 @@
-% STK_ASSERT_BOX ... [FIXME: missing documentation]
+% STK_ASSERT_BOX  [STK internal]
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2012 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>

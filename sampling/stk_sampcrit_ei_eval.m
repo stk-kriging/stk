@@ -42,7 +42,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2017 CentraleSupelec
+%    Copyright (C) 2016-2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -68,10 +68,6 @@
 
 function EI = stk_sampcrit_ei_eval (zp_mean, zp_std, zi)
 
-if nargin > 4
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
 % Evaluate the sampling criterion
 EI = stk_distrib_normal_ei (min (zi), zp_mean, zp_std, true);
 
@@ -80,7 +76,6 @@ end % function
 
 %!error EI = stk_sampcrit_ei_eval ()                % not enough args
 %!error EI = stk_sampcrit_ei_eval (0)               % not enough args
-%!error EI = stk_sampcrit_ei_eval (0, 0, 0, 0, 0)   % too many args
 
 %%
 % Compare various ways to compute the EI

@@ -24,7 +24,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect   <julien.bect@centralesupelec.fr>
 
@@ -49,10 +49,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function k = stk_rbf_spherical (h, diff)
-
-if nargin > 2,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 t = abs (h);
 b = (t < 1);
@@ -82,7 +78,6 @@ end % function
 %!error stk_rbf_spherical ();
 %!test  stk_rbf_spherical (h);
 %!test  stk_rbf_spherical (h, diff);
-%!error stk_rbf_spherical (h, diff, pi);
 
 %!test %% h = 0.0 => correlation = 1.0
 %! x = stk_rbf_spherical (0.0);

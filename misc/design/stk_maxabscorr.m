@@ -28,7 +28,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2018 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -54,10 +54,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function mac = stk_maxabscorr (x)
-
-if nargin > 1
-   stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 x = double (x);
 x = bsxfun (@minus, x, mean (x));

@@ -5,7 +5,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017 CentraleSupelec
+%    Copyright (C) 2015-2018 CentraleSupelec
 %    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -42,7 +42,7 @@ x = double (x);
 % norminv (1 - 0.01/2)  = 2.5758
 % norminv (1 - 0.001/2) = 3.2905
 delta0 = [3.2905 2.5758 1.9600];
-gray_level = [0.95 0.88 0.80];
+gray_level = [0.95 0.85 0.75];
 
 % Use fill or area ?
 persistent use_fill
@@ -81,6 +81,9 @@ for k = 1:3
         set (h_plot, opts{:});
     end
     
+    if k == 3
+        set (h_plot, 'DisplayName', sprintf ('75%%/85%%/95%% CIs'));
+    end
 end
 
 hold off;

@@ -27,7 +27,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -92,10 +92,6 @@ end % function
 
 function model_out = stk_model_discretecov (model_base, x)
 
-if nargin > 2,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
 % Make sure that lognoisevariance is -inf for noiseless models
 if ~ stk_isnoisy (model_base)
     model_base.lognoisevariance = -inf;
@@ -121,10 +117,6 @@ end % function
 %%%%%%%%%%%%%%%%%%
 
 function model = stk_model_ (covariance_type, covariance_name, dim)
-
-if nargin > 3,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 model = struct();
 

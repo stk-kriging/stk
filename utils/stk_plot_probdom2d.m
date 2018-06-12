@@ -31,7 +31,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -57,10 +57,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function stk_plot_probdom2d (model1, model2, box)
-
-if nargin > 3
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % FIXME: Provide a convenient way of changing these parameters
 

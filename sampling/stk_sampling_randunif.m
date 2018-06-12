@@ -13,11 +13,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -40,10 +40,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_randunif (n, dim, box)
-
-if nargin > 3,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Read argument n
 if ~ ((isscalar (n)) && (isnumeric (n)))
@@ -94,7 +90,6 @@ end % function
 %!test  x = stk_sampling_randunif (n);
 %!test  x = stk_sampling_randunif (n, dim);
 %!test  x = stk_sampling_randunif (n, dim, box);
-%!error x = stk_sampling_randunif (n, dim, box, pi);
 
 %%
 % Check that the output is a dataframe

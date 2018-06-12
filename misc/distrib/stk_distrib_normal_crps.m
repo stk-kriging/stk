@@ -26,6 +26,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2017 CentraleSupelec & LNE
 %
 %    Authors:  Remi Stroh   <remi.stroh@lne.fr>
@@ -52,10 +53,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function crps = stk_distrib_normal_crps(z, mu, sigma)
-
-if nargin > 4
-    stk_error('Too many inputs arguments.', 'TooManyInputArgs');
-end
 
 
 %% Center and reduce the data

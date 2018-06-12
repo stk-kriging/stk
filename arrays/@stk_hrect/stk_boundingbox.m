@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -28,10 +28,6 @@
 
 function box = stk_boundingbox (x)
 
-if nargin > 1,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
 % An stk_hrect object is its own bounding box
 box = x;
 
@@ -46,6 +42,5 @@ end % function
 
 %!error  y = stk_boundingbox ();
 %!test   y = stk_boundingbox (x);
-%!error  y = stk_boundingbox (x, 1);
 
 %!assert (isequal (y, x));

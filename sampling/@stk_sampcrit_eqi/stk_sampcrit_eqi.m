@@ -22,7 +22,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -47,10 +47,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function crit = stk_sampcrit_eqi (model, quantile_order, point_batch_size)
-
-if nargin > 3
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Public properties
 crit.model            = [];
@@ -81,8 +77,6 @@ end
 
 end % function
 
-
-%!error F = stk_sampcrit_eqi ([], 0.5, 10, 1.234);  % too many input arguments
 
 %%
 % construct with nargin == 0
