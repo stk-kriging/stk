@@ -47,7 +47,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -74,10 +74,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function zsimc = stk_conditioning (lambda, zi, z_sim, xi_ind, noise_sim)
-
-if nargin > 5,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Are we dealing with noisy observations ?
 noisy = (nargin > 4) && (~ isempty (noise_sim));
@@ -138,7 +134,6 @@ end % function
 %!error  zsimc = stk_conditioning (lambda, zi);
 %!test   zsimc = stk_conditioning (lambda, zi, zsim);
 %!test   zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);
-%!error  zsimc = stk_conditioning (lambda, zi, zsim, xi_ind, pi^2);
 
 %!test
 %! zsimc = stk_conditioning (lambda, zi, zsim, xi_ind);

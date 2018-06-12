@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2018 CentraleSupelec
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,10 +27,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function zsimc = stk_conditioning (lambda, zi, zsim, xi_ind, noise_sim)
-
-if nargin > 5,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 df_out = false;  % stk_dataframe output ?
 

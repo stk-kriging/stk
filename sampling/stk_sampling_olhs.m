@@ -42,7 +42,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -68,10 +68,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [x, aux] = stk_sampling_olhs (n, d, box, permut, extended)
-
-if nargin > 5,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Read argument dim
 if (nargin < 2) || ((nargin < 3) && (isempty (d)))

@@ -21,11 +21,11 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -48,10 +48,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function x = stk_sampling_maximinlhs (n, d, box, niter)
-
-if nargin > 4,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % Read argument dim
 if (nargin < 2) || ((nargin < 3) && (isempty (d)))
@@ -134,7 +130,6 @@ end % function
 %!test  x = stk_sampling_maximinlhs (n, dim);
 %!test  x = stk_sampling_maximinlhs (n, dim, box);
 %!test  x = stk_sampling_maximinlhs (n, dim, box, niter);
-%!error x = stk_sampling_maximinlhs (n, dim, box, niter, pi);
 
 %%
 % Check that the output is a dataframe

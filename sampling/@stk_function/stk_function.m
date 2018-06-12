@@ -16,7 +16,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -42,13 +42,6 @@
 
 function F = stk_function ()
 
-if nargin > 0
-    
-    % Catch syntax errors (Octave only)
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-    
-end % if
-
 F = class (struct (), 'stk_function');
 
 end % function
@@ -57,8 +50,6 @@ end % function
 %!shared F
 
 %!test F = stk_function ()  % ending ";" omitted on purpose, to test disp
-
-%!error F = stk_function (1.234)  %  too many input arguments
 
 %!error [F F];   % arrays of sampling criterion objects are not supported
 %!error [F; F];  % idem

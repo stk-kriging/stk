@@ -1,3 +1,16 @@
+# Changes in version 2.6.0
+
+## Estimation of the parameters
+
+* 'stk_param_loomse': new function to estimate parameters, based
+  on the leave-one-out mean square error
+
+ * 'stk_param_loopvc': new function, which computes the leave-one_out
+  predictive variance
+
+-----
+
+
 # Changes in version 2.5.1
 
 ## Bug fixes

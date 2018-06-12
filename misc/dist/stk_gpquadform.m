@@ -18,7 +18,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -44,10 +44,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function Q = stk_gpquadform (x, y, rx, ry, pairwise)
-
-if nargin > 5
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 % read argument #4
 if nargin < 4

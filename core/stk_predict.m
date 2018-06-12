@@ -42,7 +42,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -70,10 +70,6 @@
 
 function varargout = stk_predict (M_prior, x_obs, z_obs, x_prd)
 
-if nargin > 4,
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
 M_post = stk_model_gpposterior (M_prior, x_obs, z_obs);
 
 varargout = cell (1, max (1, nargout));
@@ -97,15 +93,15 @@ end % function
 %! z_obs = sin (double (x_obs));
 %! x_prd = x0(idx_prd);
 %!
-%! model = stk_model('stk_materncov32_iso');
+%! model = stk_model ('stk_materncov32_iso');
 %! model.param = log ([1.0; 2.1]);
 
-%!error y_prd1 = stk_predict();
-%!error y_prd1 = stk_predict(model);
-%!error y_prd1 = stk_predict(model, x_obs);
-%!error y_prd1 = stk_predict(model, x_obs, z_obs);
-%!test  y_prd1 = stk_predict(model, x_obs, z_obs, x_prd);
-%!error y_prd1 = stk_predict(model, x_obs, z_obs, x_prd, 0);
+%!error y_prd1 = stk_predict ();
+%!error y_prd1 = stk_predict (model);
+%!error y_prd1 = stk_predict (model, x_obs);
+%!error y_prd1 = stk_predict (model, x_obs, z_obs);
+%!test  y_prd1 = stk_predict (model, x_obs, z_obs, x_prd);
+%!error y_prd1 = stk_predict (model, [x_obs; x_obs], [z_obs; z_obs], x_prd);
 
 %!test  % nargout = 2
 %! [y_prd1, lambda] = stk_predict (model, x_obs, z_obs, x_prd);

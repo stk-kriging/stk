@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -33,15 +33,9 @@
 
 function lm = stk_lm_constant ()
 
-if nargin > 0
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
-
 lm = class (struct (), 'stk_lm_constant');
 
 end % function
 
 
 %!test stk_test_class ('stk_lm_constant')
-
-%!error lm = stk_lm_constant (3.33);

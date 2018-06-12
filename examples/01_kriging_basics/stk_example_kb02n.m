@@ -11,7 +11,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -52,7 +52,7 @@ xt = ref.xt;
 zt = ref.zt;
 
 stk_figure ('stk_example_kb02n (a)');
-stk_plot1d (xi, zi, xt, zt);  legend show;
+stk_plot1d (xi, zi, xt, zt);  stk_legend;
 stk_title  ('True function and noisy observed data');
 
 
@@ -85,7 +85,7 @@ fprintf ('Estimated noise variance = %.4f\n\n', exp (model.lognoisevariance));
 zp = stk_predict (model, xi, zi, xt);
 
 stk_figure ('stk_example_kb02n (b)');
-stk_plot1d (xi, zi, xt, zt, zp);  legend show;
+stk_plot1d (xi, zi, xt, zt, zp);  stk_legend;
 stk_title  ('Kriging prediction with estimated parameters');
 stk_labels ('input variable x', 'response z');
 

@@ -96,7 +96,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -129,10 +129,6 @@ function AKG = stk_sampcrit_akg_eval (zc_mean, zc_std, zr_mean, zr_std, zcr_cov)
 % zcr_cov    M x L  covariance between (C)andidate points and (R)eference points
 
 % note: Scott et al.'s "KGCP" corresponds to refs points X_1, ..., X_n
-
-if nargin > 5
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-end
 
 M = size (zc_mean, 1);
 if ~ isequal (size (zc_mean), [M 1])
@@ -230,4 +226,3 @@ end % function
 
 % not enough or too many input args
 %!error AKG = stk_sampcrit_akg_eval (zc_mean, zc_std, zr_mean, zr_std);
-%!error AKG = stk_sampcrit_akg_eval (zc_mean, zc_std, zr_mean, zr_std, zcr_cov, 1.234);

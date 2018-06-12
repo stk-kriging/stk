@@ -46,7 +46,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2018 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -74,11 +74,7 @@
 
 function x = stk_dataframe (x, colnames, rownames)
 
-if nargin > 3
-    
-    stk_error ('Too many input arguments.', 'TooManyInputArgs');
-    
-elseif nargin == 0  % Default constructor
+if nargin == 0  % Default constructor
     
     x_data = zeros (0, 1);
     colnames = {};
@@ -223,8 +219,6 @@ end % function
 
 
 %!test stk_test_class ('stk_dataframe')
-
-%!error x = stk_dataframe (1, {}, {}, pi);
 
 %!test % default constructor
 %! x = stk_dataframe ();

@@ -2,7 +2,7 @@ stk >> STK, a Small Toolbox for Kriging
 
 ## Copyright Notice
 ##
-##    Copyright (C) 2015-2017 CentraleSupelec
+##    Copyright (C) 2015-2018 CentraleSupelec
 ##    Copyright (C) 2014 SUPELEC
 ##
 ##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -72,6 +72,8 @@ Parameter estimation
  stk_param_gls
  stk_param_init
  stk_param_init_lnv
+ stk_param_loomse
+ stk_param_loopvc
  stk_param_relik
 #stk_get_optimizable_parameters
 #stk_set_optimizable_parameters
@@ -254,6 +256,7 @@ Examples: miscellaneous
  stk_example_misc02
  stk_example_misc03
  stk_example_misc04
+ stk_example_misc05
 
 Examples: test functions, datasets, etc.
  stk_dataset_twobumps
@@ -393,6 +396,7 @@ Miscellaneous: Validation of models
 #@stk_dataframe/times                     [overload base]
 #@stk_dataframe/transpose                 [overload base]
 #@stk_dataframe/uminus                    [overload base]
+#@stk_dataframe/unique                    [overload base]
 #@stk_dataframe/uplus                     [overload base]
 #@stk_dataframe/var                       [overload base]
 #@stk_dataframe/vertcat                   [overload base]
@@ -460,6 +464,7 @@ Miscellaneous: options, plots...
  stk_dist
  stk_halfpintl
  stk_init
+ stk_legend
  stk_options_get
  stk_options_set
  stk_plot1d
@@ -487,7 +492,8 @@ Miscellaneous: options, plots...
 #stk_zlabel           [internal]
 
 ## error/warning
-#stk_error [internal, not for public use]
+#stk_error                 [internal]
+#stk_assert_no_duplicates  [internal]
 ##stk_warning does not exist yet, but it should (?)
 
 ## misc/text
@@ -523,3 +529,19 @@ Miscellaneous: options, plots...
 #stk_parallel_feval                                      [experimental]
 #stk_parallel_start                                      [experimental]
 #stk_parallel_stop                                       [experimental]
+
+## IAGO (preliminary form)
+#stk_fakenorep                   [experimental]
+#stk_gather_repetitions          [experimental]
+#stk_losscrit                    [experimental]
+#stk_optim                       [experimental]
+#stk_optim_addevals              [experimental]
+#stk_optim_crit_EI               [experimental]
+#stk_optim_crit_SUR              [experimental]
+#stk_optim_crit_iago             [experimental]
+#stk_optim_init                  [experimental]
+#stk_optimscript                 [experimental]
+#stk_optimscript2                [experimental]
+#stk_param_estim_withrep         [experimental]
+#stk_predict_withrep             [experimental]
+#stk_quadrature                  [experimental]

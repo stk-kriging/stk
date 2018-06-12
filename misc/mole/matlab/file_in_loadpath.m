@@ -2,15 +2,13 @@
 %
 % This functions is provided as a replacement for Octave's file_in_loadpath()
 % function when using STK with Matlab.
-%
-% FIXME: missing doc
 
 % Copyright Notice
 %
+%    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2012 SUPELEC
 %
-%    Authors:   Julien Bect        <julien.bect@centralesupelec.fr>
-%               Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
