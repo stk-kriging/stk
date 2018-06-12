@@ -331,6 +331,10 @@ for eta = eta_list
             sigma2 = exp (log_sigma2);
         end
         
+        % FIXME (ticket #88): The heteroscedatic case is broken, the first
+        % branch of the if/then/else block is used (since eta==0) instead of the
+        % second one as claimed in the comment.
+        
         % Now, compute the antilog-likelihood
         model.param(1) = log_sigma2;
         aLL = stk_param_relik (model, xi, zi);
