@@ -93,13 +93,17 @@ Assume, say, that we want to release STK version 4.5 (hum... not yet...).
         # and modify copyright years if appropriate.
         hg commit -m "Update version number to 4.6-dev"
 
- * Release tarballs
+ * Release (STK project)
    * Upload "allpurpose" and "octpkg" tarballs to Sourceforge's FRS.
        <http://sourceforge.net/projects/kriging/files/>
    * Upload a copy of the "allpurpose" HTML doc to 
        <http://kriging.sourceforge.net/htmldoc/>
-   * Upload the Octave package, the HTML documentation and the MD5 sums to the OF
-     package release tracker.
+
+* Release (Octave Forge)
+   * Update the OF clone of STK.
+   * Upload the Octave package, the HTML documentation and the MD5 sums
+     to the OF package release tracker.
+
 
 ## Spread the news
 
