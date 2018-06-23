@@ -1,3 +1,12 @@
+2018-06-23  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init.m: Fix the broken heteroscedastic case (ticket #88)
+
+	* param/estim/stk_param_init.m (stk_param_init_): Clarify, at
+	least a little bit, what the subfunction does in the three cases,
+	and fix the broken behaviour in the heteroscedatic / known
+	variance case.
+
 2018-06-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_dominatedhv_mex.c: Workaround for Octave 4.4 issue (ticket #89)
