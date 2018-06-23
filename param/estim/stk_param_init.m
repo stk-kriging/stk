@@ -252,12 +252,14 @@ model = stk_model (covname_iso);
 model.lm = lm;
 model.lognoisevariance = lnv;
 
+% Homoscedastic case ?
+homoscedastic = (isscalar (lnv));
+noiseless = homoscedastic && (lnv == -inf);
+
 % list of possible values for the ratio eta = sigma2_noise / sigma2
-if (isscalar (lnv) && (lnv ~= -inf))
-    % Homoscedastic noisy case, with known or unknown noise variance
+if ~ noiseless
     eta_list = 10 .^ (-6:3:0);
 else
-    % Noiseless case or heteroscedastic noisy case (known noise variance)
     eta_list = 0;
 end
 
@@ -278,9 +280,6 @@ rho_best    = NaN;
 sigma2_best = NaN;
 aLL_best    = +Inf;
 
-% Homoscedastic case ?
-homoscedastic = (isscalar (lnv));
-
 % Try all possible combinations of rho and eta from the lists
 for eta = eta_list
     for rho = rho_list
@@ -288,23 +287,26 @@ for eta = eta_list
         % First use sigma2 = 1.0
         model.param = [0.0, -log(rho)];
         
-        % The same code works for the noiseless case and for the case where lnv
-        % must be estimated (in the first case, eta = 0 and thus lnv is -inf)
-        if (eta == 0) || (homoscedastic && (isnan (lnv)))
+        if noiseless
+            
+            [ignd, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU> CG#07
+            if ~ (sigma2 > 0), continue; end
+            log_sigma2 = log (sigma2);
+            
+        elseif homoscedastic && (isnan (lnv))  % Unknown noise variance
+            
             model.lognoisevariance = log (eta);
             [ignd, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU> CG#07
             if ~ (sigma2 > 0), continue; end
             log_sigma2 = log (sigma2);
             model.lognoisevariance = log  (eta * sigma2);
-        else % Known variances (homo- and hetero-scedastic cases)
-            model.param = [0.0, -log(rho)];
+            
+        else % Known variance(s)
+            
             log_sigma2 = (mean (lnv)) - (log (eta));
             sigma2 = exp (log_sigma2);
+            
         end
-        
-        % FIXME (ticket #88): The heteroscedatic case is broken, the first
-        % branch of the if/then/else block is used (since eta==0) instead of the
-        % second one as claimed in the comment.
         
         % Now, compute the antilog-likelihood
         model.param(1) = log_sigma2;
