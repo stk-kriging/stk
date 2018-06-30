@@ -145,7 +145,7 @@ if nargout >= 2
     
     z = H * double (yi);
     
-    for diff = 1:nbparam,
+    for diff = 1:nbparam
         V = feval (model.covariance_type, model.param, xi, xi, diff);
         drl_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
     end
@@ -154,7 +154,7 @@ if nargout >= 2
         drl_param = drl_param + model.prior.invcov * delta_p;
     end
     
-    if nargout >= 3,
+    if nargout >= 3
         if model.lognoisevariance == -inf
             drl_lnv = nan;
         else

@@ -70,7 +70,7 @@ W = L \ P;
 u = L \ zi;
 beta = (W' * W) \ (W' * u);
 
-if nargin > 1,
+if nargin > 1
     % Assuming that the actual covariance matrice is sigma^2 K, compute the
     % "best" unbiased estimate of sigma2 (best wrt the quadratic risk, among
     % all unbiased estimates which are quadratic in the residuals)

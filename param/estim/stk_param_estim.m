@@ -75,7 +75,7 @@ if nargin < 4,  param0    = [];  end
 
 % size checking: xi, zi
 zi_data = double (zi);
-if ~ isequal (size (zi_data), [stk_length(xi) 1]),
+if ~ isequal (size (zi_data), [stk_length(xi) 1])
     errmsg = 'zi should be a column, with the same number of rows as xi.';
     stk_error (errmsg, 'IncorrectSize');
 end
@@ -139,9 +139,9 @@ if do_estim_lnv
 end
 
 switch do_estim_lnv
-    case false,
+    case false
         f = @(u)(f_ (model, u, xi, zi, criterion));
-    case true,
+    case true
         f = @(u)(f_with_noise_ (model, u, xi, zi, criterion));
 end
 
@@ -166,7 +166,7 @@ end
 param_opt = stk_set_optimizable_parameters (model.param, u_opt);
 
 % Create 'info' structure, if requested
-if nargout > 2,
+if nargout > 2
     info.criterion = criterion;
     info.crit_opt = crit_opt;
     info.lower_bounds = lb;
@@ -184,7 +184,7 @@ function [l, dl] = f_ (model, u, xi, zi, criterion)
 
 model.param = stk_set_optimizable_parameters (model.param, u);
 
-if nargout == 1,
+if nargout == 1
     l = criterion (model, xi, zi);
 else
     [l, dl] = criterion (model, xi, zi);
@@ -198,7 +198,7 @@ function [l, dl] = f_with_noise_ (model, u, xi, zi, criterion)
 model.param = stk_set_optimizable_parameters (model.param, u(1:end-1));
 model.lognoisevariance = u(end);
 
-if nargout == 1,
+if nargout == 1
     l = criterion (model, xi, zi);
 else
     [l, dl, dln] = criterion (model, xi, zi);

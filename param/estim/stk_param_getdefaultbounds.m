@@ -88,7 +88,7 @@ else
         covariance_type = func2str (covariance_type);
     end
     
-    switch covariance_type,
+    switch covariance_type
         
         case {'stk_materncov_aniso', 'stk_materncov_iso'}
             
