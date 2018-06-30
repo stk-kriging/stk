@@ -258,11 +258,11 @@ model.lognoisevariance = lnv;
 % Noiseless case?
 noiseless = isequal (lnv, -inf);
 
+
 % list of possible values for the ratio eta = sigma2_noise / sigma2
-if do_estim_lnv || (~ noiseless)
+if ~ noiseless
     eta_list = 10 .^ (-6:3:0);
 else
-    % Noiseless case
     eta_list = 0;
 end
 
@@ -290,50 +290,49 @@ for eta = eta_list
         % First use sigma2 = 1.0
         model.param = [0.0, -log(rho)];
         
-        if do_estim_lnv
+        if noiseless
+            
+            [ignd, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU> CG#07
+            if ~ (sigma2 > 0), continue; end
+            log_sigma2 = log (sigma2);
+            
+        elseif do_estim_lnv
             
             if isa (lnv, 'stk_noisemodel')
+                
                 % NOTE/JB: why -log(eta) ???
                 model.param = [-log(eta) -log(rho)];
                 model.lognoisevariance = stk_param_init (lnv, model, xi, zi);
                 nv = stk_noisecov (model.lognoisevariance, xi, -1, true, []);
                 log_sigma2 = log (mean (nv)) - log (eta);
                 sigma2 = exp(log_sigma2);
+                
             else  % Old-style STK: constant noise variance
+                
                 % Call stk_param_gls with sigma2=1 and lnv=log(eta)
                 model.lognoisevariance = log (eta);
                 [ignd, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU> CG#07
                 if ~ (sigma2 > 0), continue; end
+                
                 % Scale both variances using the GLS estimate
                 log_sigma2 = log (sigma2);
                 model.lognoisevariance = log (eta * sigma2);
+                
             end
-            
-        else  % Noiseless case, or noisy case with known noise variances
-            
-            % Noiseless ?
-            
-            if noiseless
-                model.lognoisevariance = -inf;
-                [beta_ignored, sigma2] = stk_param_gls (model, xi, zi); %#ok<ASGLU>
-                if ~ (sigma2 > 0), continue; end
-                log_sigma2 = log (sigma2);
-            else
-                % Compute the noise variance at all observed locations
-                if isnumeric (lnv)
-                    nv = exp (lnv);
-                else
-                    nv = stk_noisecov (model.lognoisevariance, xi, -1, true, []);
-                end
-                log_sigma2 = log (mean (nv)) - log (eta);
-            end
-            
-            sigma2 = exp (log_sigma2);
-        end
         
-        % FIXME (ticket #88): The heteroscedatic case is broken, the first
-        % branch of the if/then/else block is used (since eta==0) instead of the
-        % second one as claimed in the comment.
+        else % Known variance(s)
+        
+            % Compute the noise variance at all observed locations
+            if isnumeric (lnv)
+                nv = exp (lnv);
+            else
+                nv = stk_noisecov (model.lognoisevariance, xi, -1, true, []);
+            end
+            
+            log_sigma2 = log (mean (nv)) - log (eta);
+            sigma2 = exp (log_sigma2);
+            
+        end
         
         % Now, compute the antilog-likelihood
         model.param(1) = log_sigma2;
