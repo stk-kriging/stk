@@ -29,7 +29,7 @@
 function kreq = stk_make_kreq (M_post, x)
 
 % Create prior cross-covariance matrix (and design matrix at x)
-[Kti, Pt] = stk_make_matcov (M_post.prior_model, x, M_post.input_data);
+[Kti, Pt] = stk_covmat (M_post.prior_model, 'latent', x, M_post.input_data);
 
 % Create full kriging equation object
 kreq = stk_set_righthandside (M_post.kreq, Kti, Pt);
