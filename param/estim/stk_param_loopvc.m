@@ -22,7 +22,7 @@
 %    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2018 LNE
 %
-%    Authors:  Remi Stroh  <remi.stroh@lne.fr>
+%    Author:  Remi Stroh  <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -46,8 +46,9 @@
 
 function [lp, dlp_cov_param, dlp_noise_param] = stk_param_loopvc (model, xi, yi)
 
-yi = double(yi);
+yi = double (yi);
 n = size (xi, 1);
+
 
 %% Compute the mean square error of the leave-one-out prediction
 
@@ -72,6 +73,7 @@ delta_res = R * yi;
 raw_res   = delta_res ./ dR;
 lp = delta_res' * raw_res / n;
 
+
 %% Compute gradient
 
 if nargout >= 2
@@ -81,7 +83,7 @@ if nargout >= 2
     nb_cov_param = length (cov_param);
     dlp_cov_param = zeros (nb_cov_param, 1);
     
-    for diff = 1:nb_cov_param,
+    for diff = 1:nb_cov_param
         V = feval (model.covariance_type, model.param, xi, xi, diff);
         W = R * V * R;
         dlp_cov_param(diff) = (delta_res'./(n * dR')) * (diag(W) .* raw_res - 2 * W * yi);
@@ -113,7 +115,7 @@ if nargout >= 2
         
         dlp_noise_param = zeros (noisevar_nbparam, 1);
         
-        for diff = 1:noisevar_nbparam,
+        for diff = 1:noisevar_nbparam
             V = stk_noisecov (n, model.lognoisevariance, diff);
             W = R * V * R;
             dlp_noise_param(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
@@ -139,8 +141,8 @@ end % function
 %! NU     = 4.0;  % regularity parameter
 %! RHO1   = 0.4;  % scale (range) parameter
 %!
-%! model = stk_model('stk_materncov_aniso', DIM);
-%! model.param = log([SIGMA2; NU; 1/RHO1 * ones(DIM, 1)]);
+%! model = stk_model ('stk_materncov_aniso', DIM);
+%! model.param = log ([SIGMA2; NU; 1/RHO1 * ones(DIM, 1)]);
 
 %!error [J, dJ1, dJ2] = stk_param_loopvc ();
 %!error [J, dJ1, dJ2] = stk_param_loopvc (model);
@@ -148,8 +150,8 @@ end % function
 %!test  [J, dJ1, dJ2] = stk_param_loopvc (model, xi, zi);
 
 %!test
-%! loo_pred = stk_predict_leaveoneout(model, xi, zi);
-%! J_ref = mean( (loo_pred.mean - zi).^2./(loo_pred.var + exp(model.lognoisevariance)) );
+%! loo_pred = stk_predict_leaveoneout (model, xi, zi);
+%! J_ref = mean ((loo_pred.mean - zi) .^ 2 ./ (loo_pred.var + exp (model.lognoisevariance)));
 %!
 %! TOL_REL = 0.01;
 %! assert (stk_isequal_tolrel (J, J_ref));
@@ -160,8 +162,8 @@ end % function
 %! model.lognoisevariance = 2*log(0.1);
 %!
 %! [J, dJ1, dJ2] = stk_param_loopvc (model, xi, zi);
-%! loo_pred = stk_predict_leaveoneout(model, xi, zi);
-%! J_ref = mean( (loo_pred.mean - zi).^2./(loo_pred.var + exp(model.lognoisevariance)) );
+%! loo_pred = stk_predict_leaveoneout (model, xi, zi);
+%! J_ref = mean ((loo_pred.mean - zi) .^ 2 ./ (loo_pred.var + exp(model.lognoisevariance)));
 %!
 %! TOL_REL = 0.01;
 %! assert (stk_isequal_tolrel (J, J_ref));

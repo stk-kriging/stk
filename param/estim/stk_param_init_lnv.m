@@ -45,7 +45,7 @@
 function lnv = stk_param_init_lnv (model, xi, zi)
 
 % size checking: xi, zi
-if ~ isequal (size (zi), [size(xi, 1) 1]),
+if ~ isequal (size (zi), [size(xi, 1) 1])
     errmsg = 'zi should be a column, with the same number of rows as xi.';
     stk_error (errmsg, 'IncorrectSize');
 end

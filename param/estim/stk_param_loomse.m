@@ -22,7 +22,7 @@
 %    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2018 LNE
 %
-%    Authors:  Remi Stroh  <remi.stroh@lne.fr>
+%    Author:  Remi Stroh  <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -46,7 +46,7 @@
 
 function [lm, dlm_cov_param, dlm_noise_param] = stk_param_loomse (model, xi, yi)
 
-yi = double(yi);
+yi = double (yi);
 n = size (xi, 1);
 
 %% Compute the mean square error of the leave-one-out prediction
@@ -80,7 +80,7 @@ if nargout >= 2
     nb_cov_param = length (cov_param);
     dlm_cov_param = zeros (nb_cov_param, 1);
     
-    for diff = 1:nb_cov_param,
+    for diff = 1:nb_cov_param
         V = feval (model.covariance_type, model.param, xi, xi, diff);
         W = R * V * R;
         dlm_cov_param(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
@@ -112,7 +112,7 @@ if nargout >= 2
         
         dlm_noise_param = zeros (noisevar_nbparam, 1);
         
-        for diff = 1:noisevar_nbparam,
+        for diff = 1:noisevar_nbparam
             V = stk_noisecov (n, model.lognoisevariance, diff);
             W = R * V * R;
             dlm_noise_param(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
@@ -147,12 +147,12 @@ end % function
 %!test  [J, dJ1, dJ2] = stk_param_loomse (model, xi, zi);
 
 %!test
-%! loo_pred = stk_predict_leaveoneout(model, xi, zi);
-%! J_ref = mean( (loo_pred.mean - zi).^2 );
+%! loo_pred = stk_predict_leaveoneout (model, xi, zi);
+%! J_ref = mean ((loo_pred.mean - zi) .^ 2);
 %!
 %! TOL_REL = 0.01;
 %! assert (stk_isequal_tolrel (J, J_ref));
-%! assert ( abs( dJ1(1) ) < sqrt(eps) )
+%! assert (abs(dJ1(1)) < sqrt(eps))
 %! assert (stk_isequal_tolrel (dJ1(2:end), [-0.0091 0.0167 -0.0277 0.3326]', TOL_REL));
 %! assert (isempty (dJ2));
 
@@ -160,8 +160,8 @@ end % function
 %! model.lognoisevariance = 2*log(0.1);
 %!
 %! [J, dJ1, dJ2] = stk_param_loomse (model, xi, zi);
-%! loo_pred = stk_predict_leaveoneout(model, xi, zi);
-%! J_ref = mean( (loo_pred.mean - zi).^2 );
+%! loo_pred = stk_predict_leaveoneout (model, xi, zi);
+%! J_ref = mean ((loo_pred.mean - zi) .^ 2);
 %!
 %! TOL_REL = 0.01;
 %! assert (stk_isequal_tolrel (J, J_ref));
