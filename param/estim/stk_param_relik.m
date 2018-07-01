@@ -61,8 +61,8 @@ n = size (xi, 1);
 q = size (P, 2);
 simple_kriging = (q == 0);
 
-% Choleski factorization: K = C' * C, with upper-triangular C
-[C, epsi] = stk_cholcov (K);
+% Choleski factorization: K = U' * U, with upper-triangular U
+[U, epsi] = stk_cholcov (K);
 if noiseless && (epsi > 0)
     stk_assert_no_duplicates (xi);
 end
@@ -74,7 +74,7 @@ if ~ simple_kriging
     W = Q(:, (q+1):n);
     
     % Compute G = W' * K * W, the covariance matrix of filtered observations
-    M = (stk_cholcov (K)) * W;
+    M = U * W;
     G = (M') * M;
     
     % Check if G is (at least close to) symmetric
@@ -85,21 +85,21 @@ if ~ simple_kriging
         G = 0.5 * (G + G');  % Make it at least symmetric
     end
     
-    % Cholesky factorization: G = C' * C, with upper-triangular C
-    C = stk_cholcov (G);
+    % Cholesky factorization: G = U' * U, with upper-triangular U
+    U = stk_cholcov (G);
 end
 
 % Compute log (det (G)) using the Cholesky factor
-ldetWKW = 2 * sum (log (diag (C)));
+ldetWKW = 2 * sum (log (diag (U)));
 
-% Compute (W' yi)' * G^(-1) * (W' yi) as u' * u, with u = C' \ (W' * yi)
+% Compute (W' yi)' * G^(-1) * (W' yi) as v' * v, with v = U' \ (W' * yi)
 if simple_kriging
     yyi = double (yi);
 else
     yyi = W' * double (yi);
 end
-u = linsolve (C, yyi, struct ('UT', true, 'TRANSA', true));
-attache = sum (u .^ 2);
+v = linsolve (U, yyi, struct ('UT', true, 'TRANSA', true));
+attache = sum (v .^ 2);
 
 rl = 0.5 * ((n - q) * log(2 * pi) + ldetWKW + attache);
 
@@ -125,20 +125,20 @@ if nargout >= 2
     drl_param = zeros (nbparam, 1);
     
     if exist ('OCTAVE_VERSION', 'builtin') == 5
-        % Octave remembers that C is upper-triangular and automatically picks
+        % Octave remembers that U is upper-triangular and automatically picks
         % the appropriate algorithm.  Cool.
         if simple_kriging
-            F = inv (C');
+            F = inv (U');
         else
-            F = (C') \ (W');
+            F = (U') \ (W');
         end
     else
-        % Apparently Matlab does not automatically leverage the fact that C is
+        % Apparently Matlab does not automatically leverage the fact that U is
         % upper-triangular.  Pity.  We have to call linsolve explicitely, then.
         if simple_kriging
-            F = linsolve (C, eye (n), struct ('UT', true, 'TRANSA', true));
+            F = linsolve (U, eye (n), struct ('UT', true, 'TRANSA', true));
         else
-            F = linsolve (C, W', struct ('UT', true, 'TRANSA', true));
+            F = linsolve (U, W', struct ('UT', true, 'TRANSA', true));
         end
     end
     H = F' * F;  % = W * G^(-1) * W'
