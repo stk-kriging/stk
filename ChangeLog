@@ -1,3 +1,11 @@
+2018-07-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	param/estim: Use consistent output names
+
+	* param/estim/stk_param_loomse.m: Rename outputs.
+	* param/estim/stk_param_loopvc.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+
 2018-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_relik.m: Re-use the Cholesky factorization of K
