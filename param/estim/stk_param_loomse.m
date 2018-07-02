@@ -1,12 +1,15 @@
 % STK_PARAM_LOOMSE computes the Leave-One-Out criterion of a model given data
 %
-% CALL: [LOOMSE, dLOOMSE_dtheta, dLOOMSE_dLNV] = stk_param_loomse (MODEL, XI, YI)
+% CALL: [C, COVPARAM_DIFF, LNV_DIFF] = stk_param_loomse (MODEL, XI, YI)
 %
-%   computes the Leave-One-Out mean square error (denoted by LOOMSE) of
-%   MODEL given the data (XI, YI). The function also returns the gradient
-%   dLOOMSE_dtheta of LOOMSE with respect to the parameters of the
-%   covariance function and the derivative dLOOMSE_dLNV of LOOMSE with
-%   respect to the logarithm of the noise variance.
+%   computes the value C of the leave-one-out mean square error criterion for
+%   the MODEL given the data (XI, YI).
+%
+% CALL: [C, COVPARAM_DIFF, LNV_DIFF] = stk_param_loomse (MODEL, XI, YI)
+%
+%   also returns the gradient COVPARAM_DIFF of C with respect to the parameters
+%   of the covariance function, and its derivative LNV_DIFF with respect to the
+%   logarithm of the noise variance.
 %
 % REFERENCE
 %
@@ -44,10 +47,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [lm, dlm_cov_param, dlm_noise_param] = stk_param_loomse (model, xi, yi)
+function [C, covparam_diff, lnv_diff] = stk_param_loomse (model, xi, yi)
 
 yi = double (yi);
 n = size (xi, 1);
+
 
 %% Compute the mean square error of the leave-one-out prediction
 
@@ -69,7 +73,8 @@ dR = diag (R);  % The diagonal of the LOO matrix
 
 % Mean
 raw_res = (R * yi) ./ dR;  % Compute "raw" residuals
-lm = raw_res' * raw_res / n;
+C = raw_res' * raw_res / n;
+
 
 %% Compute gradient
 
@@ -78,12 +83,12 @@ if nargout >= 2
     % Get numerical parameter vector from parameter object
     cov_param = stk_get_optimizable_parameters (model.param);
     nb_cov_param = length (cov_param);
-    dlm_cov_param = zeros (nb_cov_param, 1);
+    covparam_diff = zeros (nb_cov_param, 1);
     
     for diff = 1:nb_cov_param
         V = feval (model.covariance_type, model.param, xi, xi, diff);
         W = R * V * R;
-        dlm_cov_param(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
+        covparam_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
     end
     
     if nargout >= 3
@@ -110,12 +115,12 @@ if nargout >= 2
         % instead of NaN is drl_noise_param is requested for a noiseless model
         % FIXME: If we keep this, advertise in the NEWS file when we merge
         
-        dlm_noise_param = zeros (noisevar_nbparam, 1);
+        lnv_diff = zeros (noisevar_nbparam, 1);
         
         for diff = 1:noisevar_nbparam
             V = stk_noisecov (n, model.lognoisevariance, diff);
             W = R * V * R;
-            dlm_noise_param(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
+            lnv_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
         end
         
     end
@@ -125,8 +130,7 @@ end
 end % function
 
 
-
-%!shared f, xi, zi, NI, model, J, dJ1, dJ2
+%!shared f, xi, zi, NI, model, C, dC1, dC2
 %!
 %! f = @(x)(- (0.8 * x(:, 1) + sin (5 * x(:, 2) + 1) ...
 %!          + 0.1 * sin (10 * x(:, 3))));
@@ -141,32 +145,32 @@ end % function
 %! model = stk_model('stk_materncov_aniso', DIM);
 %! model.param = log([SIGMA2; NU; 1/RHO1 * ones(DIM, 1)]);
 
-%!error [J, dJ1, dJ2] = stk_param_loomse ();
-%!error [J, dJ1, dJ2] = stk_param_loomse (model);
-%!error [J, dJ1, dJ2] = stk_param_loomse (model, xi);
-%!test  [J, dJ1, dJ2] = stk_param_loomse (model, xi, zi);
+%!error [C, dC1, dC2] = stk_param_loomse ();
+%!error [C, dC1, dC2] = stk_param_loomse (model);
+%!error [C, dC1, dC2] = stk_param_loomse (model, xi);
+%!test  [C, dC1, dC2] = stk_param_loomse (model, xi, zi);
 
 %!test
 %! loo_pred = stk_predict_leaveoneout (model, xi, zi);
-%! J_ref = mean ((loo_pred.mean - zi) .^ 2);
+%! C_ref = mean ((loo_pred.mean - zi) .^ 2);
 %!
 %! TOL_REL = 0.01;
-%! assert (stk_isequal_tolrel (J, J_ref));
-%! assert (abs(dJ1(1)) < sqrt(eps))
-%! assert (stk_isequal_tolrel (dJ1(2:end), [-0.0091 0.0167 -0.0277 0.3326]', TOL_REL));
-%! assert (isempty (dJ2));
+%! assert (stk_isequal_tolrel (C, C_ref));
+%! assert (abs (dC1(1)) < sqrt (eps))
+%! assert (stk_isequal_tolrel (dC1(2:end), [-0.0091 0.0167 -0.0277 0.3326]', TOL_REL));
+%! assert (isempty (dC2));
 
 %!test  % with noise variance
 %! model.lognoisevariance = 2*log(0.1);
 %!
-%! [J, dJ1, dJ2] = stk_param_loomse (model, xi, zi);
+%! [C, dC1, dC2] = stk_param_loomse (model, xi, zi);
 %! loo_pred = stk_predict_leaveoneout (model, xi, zi);
-%! J_ref = mean ((loo_pred.mean - zi) .^ 2);
+%! C_ref = mean ((loo_pred.mean - zi) .^ 2);
 %!
 %! TOL_REL = 0.01;
-%! assert (stk_isequal_tolrel (J, J_ref));
-%! assert (stk_isequal_tolrel (dJ1, [-1.7417e-03  -9.1600e-03 0.0166 -0.0275 0.3309]', TOL_REL));
-%! assert (stk_isequal_tolrel (dJ2,  1.7417e-03, TOL_REL));
+%! assert (stk_isequal_tolrel (C, C_ref));
+%! assert (stk_isequal_tolrel (dC1, [-1.7417e-03  -9.1600e-03 0.0166 -0.0275 0.3309]', TOL_REL));
+%! assert (stk_isequal_tolrel (dC2,  1.7417e-03, TOL_REL));
 
 %!shared xi, zi, model, TOL_REL
 %! xi = [-1 -.6 -.2 .2 .6 1]';
@@ -177,17 +181,17 @@ end % function
 %! TOL_REL = 0.01;
 
 %!test  % Another simple 1D check
-%! [LOOMSE, dLOOMSE_dtheta, dLOOMSE_dLNV] = stk_param_loomse (model, xi, zi);
-%! assert (stk_isequal_tolrel (LOOMSE, 0.84, TOL_REL));
-%! assert (stk_isequal_tolrel (dLOOMSE_dtheta, [3.4661e-04 -9.2237e-03 -0.1838]', TOL_REL));
-%! assert (stk_isequal_tolrel (dLOOMSE_dLNV, -3.4661e-04, TOL_REL));
+%! [C, dC1, dC2] = stk_param_loomse (model, xi, zi);
+%! assert (stk_isequal_tolrel (C, 0.84, TOL_REL));
+%! assert (stk_isequal_tolrel (dC1, [3.4661e-04 -9.2237e-03 -0.1838]', TOL_REL));
+%! assert (stk_isequal_tolrel (dC2, -3.4661e-04, TOL_REL));
 
 %!test  % Same 1D test with simple kriging
 %! model.lm = stk_lm_null;
-%! [LOOMSE, dLOOMSE_dtheta, dLOOMSE_dLNV] = stk_param_loomse (model, xi, zi);
-%! assert (stk_isequal_tolrel (LOOMSE, 0.7189, TOL_REL));
-%! assert (stk_isequal_tolrel (dLOOMSE_dtheta, [1.3801e-03 5.1088e-04 -0.3730]', TOL_REL));
-%! assert (stk_isequal_tolrel (dLOOMSE_dLNV, -1.3801e-03, TOL_REL));
+%! [C, dC1, dC2] = stk_param_loomse (model, xi, zi);
+%! assert (stk_isequal_tolrel (C, 0.7189, TOL_REL));
+%! assert (stk_isequal_tolrel (dC1, [1.3801e-03 5.1088e-04 -0.3730]', TOL_REL));
+%! assert (stk_isequal_tolrel (dC2, -1.3801e-03, TOL_REL));
 
 %!test  % Check the gradient on a 2D test case
 %!
@@ -203,18 +207,18 @@ end % function
 %! zi = stk_feval (f, xi);
 %!
 %! model.param = [1 1];
-%! [r1, dr] = stk_param_loomse (model, xi, zi);
+%! [C1, dC] = stk_param_loomse (model, xi, zi);
 %!
 %! model.param = model.param + DELTA * [0 1];
-%! r2 = stk_param_loomse (model, xi, zi);
+%! C2 = stk_param_loomse (model, xi, zi);
 %!
-%! assert (stk_isequal_tolrel (dr(2), (r2 - r1) / DELTA, TOL_REL));
+%! assert (stk_isequal_tolrel (dC(2), (C2 - C1) / DELTA, TOL_REL));
 
 %!test  % Check invariance by sigma
 %!
-%! r1 = stk_param_loomse (model, xi, zi);
+%! C1 = stk_param_loomse (model, xi, zi);
 %!
 %! model.param(1) = model.param(1) + 5;
 %!
-%! r2 = stk_param_loomse (model, xi, zi);
-%! assert( stk_isequal_tolrel(r1, r2) )
+%! C2 = stk_param_loomse (model, xi, zi);
+%! assert (stk_isequal_tolrel (C1, C2))
