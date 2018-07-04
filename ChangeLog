@@ -1,3 +1,13 @@
+2018-09-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Reorganize parameter estimation (optimization) code
+
+	* param/estim/stk_param_estim_optim.m: New internal function, to
+	optimize a given estimation criterion over a given subset of the
+	parameters (both covariance parameters and lnv parameters).
+	* core/@struct/stk_param_getblockselectors.m: New internal funct.
+	* param/estim/stk_param_estim.m: Use the new internal functions.
+
 2018-09-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_init.m: Noise parameter objects are not allowed
@@ -263,7 +273,7 @@
 
 2018-07-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
-	Parameter estimation criteria: get noiseparam at the beginning, only if neededed
+	Parameter estimation criteria: get noiseparam at the beginning
 
 	* param/estim/stk_param_loomse.m: Get noiseparam at the beginning,
 	but only if it is really neededed.

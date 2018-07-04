@@ -106,88 +106,43 @@ end
 % Make sure that we have a starting point in (param0, lnv0)
 [param0, lnv0, do_estim_lnv] = provide_starting_point (model, xi, zi, param0, lnv0);
 
-% TODO: allow user-defined bounds
-[lb, ub] = stk_param_getdefaultbounds (model.covariance_type, param0, xi, zi);
+% Set the starting point
+model.param = param0;
+model.lognoisevariance = lnv0;
 
-% Get vector of numerical parameters
-u0 = stk_get_optimizable_parameters (param0);
+% Get selectors
+select = stk_param_getblockselectors (model);
+covparam_select = select{1};
+noiseparam_select = select{2} & do_estim_lnv;
 
-if do_estim_lnv
-    [lb_lnv, ub_lnv] = stk_param_getdefaultbounds_lnv (model, lnv0, xi, zi);
-    u0_lnv = stk_get_optimizable_parameters (lnv0);
-    lb = [lb; lb_lnv];
-    ub = [ub; ub_lnv];
-    u0 = [u0; u0_lnv];
-end
+% NOTE ABOUT SELECTOrS / NaNs
+% The situation is currently a little odd, with a focus on estimating
+% covariance hyperparameters inherited from STK's history.  More precisely:
+%  * the 'linear model' part is not allowed to have (nonlinear) hyperparameters;
+%  * the hyperparameters of the covariance function are automatically estimated
+%    (all of them), regardless of whether there are NaNs or not in model.param;
+%  * the hyperparameters of the noise variance function are estimated (all of
+%    them) if there are NaNs in the vector OR if lnv0 is provided.  Note that
+%    only the case where lnv is a numerical scalar is currently documented.
+%    Also, note that all hyperparameters are estimated, even if only some of
+%    them are NaNs.
+% FIXME: Clarify this confusing situation...
 
-switch do_estim_lnv
-    case false
-        f = @(u)(f_ (model, u, xi, zi, criterion));
-    case true
-        f = @(u)(f_with_noise_ (model, u, xi, zi, criterion));
-end
-
-bounds_available = (~ isempty (lb)) && (~ isempty (ub));
-
-if bounds_available
-    A = stk_options_get ('stk_param_estim', 'minimize_box');
-    [u_opt, crit_opt] = stk_minimize_boxconstrained (A, f, u0, lb, ub);
+% Call optimization routine
+if nargout > 3
+    [model_opt, info] = stk_param_estim_optim ...
+        (model, xi, zi, criterion, covparam_select, noiseparam_select);
 else
-    A = stk_options_get ('stk_param_estim', 'minimize_unc');
-    [u_opt, crit_opt] = stk_minimize_unconstrained (A, f, u0);
+    model_opt = stk_param_estim_optim ...
+        (model, xi, zi, criterion, covparam_select, noiseparam_select);
 end
 
-if do_estim_lnv
-    lnv_opt = u_opt(end);
-    u_opt(end) = [];
-else
-    lnv_opt = model.lognoisevariance;
-end
-
-% Create parameter object
-param_opt = stk_set_optimizable_parameters (model.param, u_opt);
-
-% Create 'info' structure, if requested
-if nargout > 2
-    info.criterion = criterion;
-    info.crit_opt = crit_opt;
-    info.lower_bounds = lb;
-    info.upper_bounds = ub;
-end
+param_opt = model_opt.param;
+lnv_opt = model_opt.lognoisevariance;
 
 end % function
 
 %#ok<*CTCH,*LERR,*SPWRN,*WNTAG>
-
-
-%--- The objective function ---------------------------------------------------
-
-function [l, dl] = f_ (model, u, xi, zi, criterion)
-
-model.param = stk_set_optimizable_parameters (model.param, u);
-
-if nargout == 1
-    l = criterion (model, xi, zi);
-else
-    [l, dl] = criterion (model, xi, zi);
-end
-
-end % function
-
-
-function [l, dl] = f_with_noise_ (model, u, xi, zi, criterion)
-
-model.param = stk_set_optimizable_parameters (model.param, u(1:end-1));
-model.lognoisevariance = u(end);
-
-if nargout == 1
-    l = criterion (model, xi, zi);
-else
-    [l, dl, dln] = criterion (model, xi, zi);
-    dl = [dl; dln];
-end
-
-end % function
 
 
 function [param0, lnv0, do_estim_lnv] = provide_starting_point ...
