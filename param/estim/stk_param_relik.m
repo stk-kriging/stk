@@ -41,10 +41,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [C, covparam_diff, lnv_diff] = stk_param_relik (model, xi, yi)
+function [C, covparam_diff, noiseparam_diff] = stk_param_relik (model, xi, yi)
 
 % Get numerical parameter vector from parameter object
-paramvec = stk_get_optimizable_parameters (model.param);
+covparam = stk_get_optimizable_parameters (model.param);
 
 PARAMPRIOR = isfield (model, 'prior');
 NOISEPRIOR = isfield (model, 'noiseprior');
@@ -110,7 +110,7 @@ C = 0.5 * ((n - q) * log(2 * pi) + ldetWKW + attache);
 %% Add priors
 
 if PARAMPRIOR
-    delta_p = paramvec - model.prior.mean;
+    delta_p = covparam - model.prior.mean;
     C = C + 0.5 * delta_p' * model.prior.invcov * delta_p;
 end
 
@@ -124,8 +124,8 @@ end
 
 if nargout >= 2
     
-    nbparam = length (paramvec);
-    covparam_diff = zeros (nbparam, 1);
+    covparam_size = length (covparam);
+    covparam_diff = zeros (covparam_size, 1);
     
     if exist ('OCTAVE_VERSION', 'builtin') == 5
         % Octave remembers that U is upper-triangular and automatically picks
@@ -148,7 +148,7 @@ if nargout >= 2
     
     z = H * double (yi);
     
-    for diff = 1:nbparam
+    for diff = 1:covparam_size
         V = feval (model.covariance_type, model.param, xi, xi, diff);
         covparam_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
     end
@@ -159,13 +159,13 @@ if nargout >= 2
     
     if nargout >= 3
         if noiseless
-            lnv_diff = [];
+            noiseparam_diff = [];
         else
             diff = 1;
             V = stk_noisecov (n, model.lognoisevariance, diff);
-            lnv_diff = 1/2 * (sum (sum (H .* V)) - z' * V * z);
+            noiseparam_diff = 1/2 * (sum (sum (H .* V)) - z' * V * z);
             if NOISEPRIOR
-                lnv_diff = lnv_diff + delta_lnv / model.noiseprior.var;
+                noiseparam_diff = noiseparam_diff + delta_lnv / model.noiseprior.var;
             end
         end
     end
