@@ -1,12 +1,15 @@
 % STK_PARAM_RELIK computes the restricted likelihood of a model given data
 %
-% CALL: [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (MODEL, XI, YI)
+% CALL: C = stk_param_relik (MODEL, XI, YI)
 %
-%   computes the opposite of the restricted likelihood (denoted by ARL for
-%   Anti-Restricted Likelihood) of MODEL given the data (XI, YI). The function
-%   also returns the gradient dARL_dtheta of ARL with respect to the parameters
-%   of the covariance function and the derivative dARL_dLNV of ARL with respect
-%   to the logarithm of the noise variance.
+%   computes the value C of the opposite of the restricted likelihood criterion
+%   for the MODEL given the data (XI, YI).
+%
+% CALL: [C, COVPARAM_DIFF, LNV_DIFF] = stk_param_relik (MODEL, XI, YI)
+%
+%   also returns the gradient COVPARAM_DIFF of C with respect to the parameters
+%   of the covariance function, and its derivative LNV_DIFF of C with respect to
+%   the logarithm of the noise variance.
 %
 % EXAMPLE: see paramestim/stk_param_estim.m
 
@@ -38,7 +41,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [rl, drl_cov_param, drl_noise_param] = stk_param_relik (model, xi, yi)
+function [C, covparam_diff, lnv_diff] = stk_param_relik (model, xi, yi)
 
 % Get numerical parameter vector from parameter object
 paramvec = stk_get_optimizable_parameters (model.param);
@@ -61,8 +64,8 @@ n = size (xi, 1);
 q = size (P, 2);
 simple_kriging = (q == 0);
 
-% Choleski factorization: K = C' * C, with upper-triangular C
-[C, epsi] = stk_cholcov (K);
+% Choleski factorization: K = U' * U, with upper-triangular U
+[U, epsi] = stk_cholcov (K);
 if noiseless && (epsi > 0)
     stk_assert_no_duplicates (xi);
 end
@@ -74,7 +77,7 @@ if ~ simple_kriging
     W = Q(:, (q+1):n);
     
     % Compute G = W' * K * W, the covariance matrix of filtered observations
-    M = (stk_cholcov (K)) * W;
+    M = U * W;
     G = (M') * M;
     
     % Check if G is (at least close to) symmetric
@@ -85,35 +88,35 @@ if ~ simple_kriging
         G = 0.5 * (G + G');  % Make it at least symmetric
     end
     
-    % Cholesky factorization: G = C' * C, with upper-triangular C
-    C = stk_cholcov (G);
+    % Cholesky factorization: G = U' * U, with upper-triangular U
+    U = stk_cholcov (G);
 end
 
 % Compute log (det (G)) using the Cholesky factor
-ldetWKW = 2 * sum (log (diag (C)));
+ldetWKW = 2 * sum (log (diag (U)));
 
-% Compute (W' yi)' * G^(-1) * (W' yi) as u' * u, with u = C' \ (W' * yi)
+% Compute (W' yi)' * G^(-1) * (W' yi) as v' * v, with v = U' \ (W' * yi)
 if simple_kriging
     yyi = double (yi);
 else
     yyi = W' * double (yi);
 end
-u = linsolve (C, yyi, struct ('UT', true, 'TRANSA', true));
-attache = sum (u .^ 2);
+v = linsolve (U, yyi, struct ('UT', true, 'TRANSA', true));
+attache = sum (v .^ 2);
 
-rl = 0.5 * ((n - q) * log(2 * pi) + ldetWKW + attache);
+C = 0.5 * ((n - q) * log(2 * pi) + ldetWKW + attache);
 
 
 %% Add priors
 
 if PARAMPRIOR
     delta_p = paramvec - model.prior.mean;
-    rl = rl + 0.5 * delta_p' * model.prior.invcov * delta_p;
+    C = C + 0.5 * delta_p' * model.prior.invcov * delta_p;
 end
 
 if NOISEPRIOR
     delta_lnv = model.lognoisevariance - model.noiseprior.mean;
-    rl = rl + 0.5 * (delta_lnv ^ 2) / model.noiseprior.var;
+    C = C + 0.5 * (delta_lnv ^ 2) / model.noiseprior.var;
 end
 
 
@@ -122,23 +125,23 @@ end
 if nargout >= 2
     
     nb_cov_param = length (paramvec);
-    drl_cov_param = zeros (nb_cov_param, 1);
+    covparam_diff = zeros (nb_cov_param, 1);
     
     if exist ('OCTAVE_VERSION', 'builtin') == 5
-        % Octave remembers that C is upper-triangular and automatically picks
+        % Octave remembers that U is upper-triangular and automatically picks
         % the appropriate algorithm.  Cool.
         if simple_kriging
-            F = inv (C');
+            F = inv (U');
         else
-            F = (C') \ (W');
+            F = (U') \ (W');
         end
     else
-        % Apparently Matlab does not automatically leverage the fact that C is
+        % Apparently Matlab does not automatically leverage the fact that U is
         % upper-triangular.  Pity.  We have to call linsolve explicitely, then.
         if simple_kriging
-            F = linsolve (C, eye (n), struct ('UT', true, 'TRANSA', true));
+            F = linsolve (U, eye (n), struct ('UT', true, 'TRANSA', true));
         else
-            F = linsolve (C, W', struct ('UT', true, 'TRANSA', true));
+            F = linsolve (U, W', struct ('UT', true, 'TRANSA', true));
         end
     end
     H = F' * F;  % = W * G^(-1) * W'
@@ -147,25 +150,25 @@ if nargout >= 2
     
     for diff = 1:nb_cov_param,
         V = stk_covmat_gp0 (model, xi, [], diff);
-        drl_cov_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
+        covparam_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
     end
     
     if PARAMPRIOR
-        drl_cov_param = drl_cov_param + model.prior.invcov * delta_p;
+        covparam_diff = covparam_diff + model.prior.invcov * delta_p;
     end
     
-    if nargout >= 3,
+    if nargout >= 3
         
         nb_noise_param = 1;  % For now
                 
         if model.lognoisevariance == -inf
-            drl_noise_param = nan (nb_noise_param, 1);
+            lnv_diff = nan (nb_noise_param, 1);
         else
-            drl_noise_param = zeros (nb_noise_param, 1);
+            lnv_diff = zeros (nb_noise_param, 1);
             
             for diff = 1:nb_noise_param,
                 V = stk_covmat_noise (model, xi, [], diff);
-                drl_noise_param(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
+                lnv_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
             end            
         end
         
@@ -181,8 +184,7 @@ end
 end % function
 
 
-
-%!shared f, xi, zi, NI, model, J, dJ1, dJ2
+%!shared f, xi, zi, NI, model, C, dC1, dC2
 %!
 %! f = @(x)(- (0.8 * x(:, 1) + sin (5 * x(:, 2) + 1) ...
 %!          + 0.1 * sin (10 * x(:, 3))));
@@ -197,16 +199,16 @@ end % function
 %! model = stk_model('stk_materncov_aniso');
 %! model.param = log([SIGMA2; NU; 1/RHO1 * ones(DIM, 1)]);
 
-%!error [J, dJ1, dJ2] = stk_param_relik ();
-%!error [J, dJ1, dJ2] = stk_param_relik (model);
-%!error [J, dJ1, dJ2] = stk_param_relik (model, xi);
-%!test  [J, dJ1, dJ2] = stk_param_relik (model, xi, zi);
+%!error [C, dC1, dC2] = stk_param_relik ();
+%!error [C, dC1, dC2] = stk_param_relik (model);
+%!error [C, dC1, dC2] = stk_param_relik (model, xi);
+%!test  [C, dC1, dC2] = stk_param_relik (model, xi, zi);
 
 %!test
 %! TOL_REL = 0.01;
-%! assert (stk_isequal_tolrel (J, 21.6, TOL_REL));
-%! assert (stk_isequal_tolrel (dJ1, [4.387 -0.1803 0.7917 0.1392 2.580]', TOL_REL));
-%! assert (isnan (dJ2));
+%! assert (stk_isequal_tolrel (C, 21.6, TOL_REL));
+%! assert (stk_isequal_tolrel (dC1, [4.387 -0.1803 0.7917 0.1392 2.580]', TOL_REL));
+%! assert (isnan (dC2));
 
 %!shared xi, zi, model, TOL_REL
 %! xi = [-1 -.6 -.2 .2 .6 1]';
@@ -217,17 +219,17 @@ end % function
 %! TOL_REL = 0.01;
 
 %!test  % Another simple 1D check
-%! [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (model, xi, zi);
-%! assert (stk_isequal_tolrel (ARL, 6.327, TOL_REL));
-%! assert (stk_isequal_tolrel (dARL_dtheta, [0.268 0.0149 -0.636]', TOL_REL));
-%! assert (stk_isequal_tolrel (dARL_dLNV, -1.581e-04, TOL_REL));
+%! [C, dC1, dC2] = stk_param_relik (model, xi, zi);
+%! assert (stk_isequal_tolrel (C, 6.327, TOL_REL));
+%! assert (stk_isequal_tolrel (dC1, [0.268 0.0149 -0.636]', TOL_REL));
+%! assert (stk_isequal_tolrel (dC2, -1.581e-04, TOL_REL));
 
 %!test  % Same 1D test with simple kriging
 %! model.lm = stk_lm_null;
-%! [ARL, dARL_dtheta, dARL_dLNV] = stk_param_relik (model, xi, zi);
-%! assert (stk_isequal_tolrel (ARL, 7.475, TOL_REL));
-%! assert (stk_isequal_tolrel (dARL_dtheta, [0.765 0.0238 -1.019]', TOL_REL));
-%! assert (stk_isequal_tolrel (dARL_dLNV, 3.0517e-03, TOL_REL));
+%! [C, dC1, dC2] = stk_param_relik (model, xi, zi);
+%! assert (stk_isequal_tolrel (C, 7.475, TOL_REL));
+%! assert (stk_isequal_tolrel (dC1, [0.765 0.0238 -1.019]', TOL_REL));
+%! assert (stk_isequal_tolrel (dC2, 3.0517e-03, TOL_REL));
 
 %!test  % Check the gradient on a 2D test case
 %!
@@ -243,9 +245,9 @@ end % function
 %! zi = stk_feval (f, xi);
 %!
 %! model.param = [1 1];
-%! [r1 dr] = stk_param_relik (model, xi, zi);
+%! [C1 dC] = stk_param_relik (model, xi, zi);
 %!
 %! model.param = model.param + DELTA * [0 1];
-%! r2 = stk_param_relik (model, xi, zi);
+%! C2 = stk_param_relik (model, xi, zi);
 %!
-%! assert (stk_isequal_tolrel (dr(2), (r2 - r1) / DELTA, TOL_REL));
+%! assert (stk_isequal_tolrel (dC(2), (C2 - C1) / DELTA, TOL_REL));

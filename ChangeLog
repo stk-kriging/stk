@@ -1,3 +1,21 @@
+2018-07-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	param/estim: Use consistent output names
+
+	* param/estim/stk_param_loomse.m: Rename outputs.
+	* param/estim/stk_param_loopvc.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+
+2018-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_relik.m: Re-use the Cholesky factorization of K
+
+	* param/estim/stk_param_relik.m: Re-use the Cholesky factorization
+	of K instead of doing it twice (this was inadvertently introduced
+	recently).  Also, rename the Cholesky factor from C to U, which
+	stands for "Upper-triangular", thus freeing the letter C which
+	might be a good generic notation for "Criterion"...
+
 2018-06-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_init.m: Fix the broken heteroscedastic case (ticket #88)

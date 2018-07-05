@@ -1,12 +1,15 @@
 % STK_PARAM_LOOPVC computes a Leave-One-Out criterion of a model given data
 %
-% CALL: [LOOPVC, dLOOPVC_dtheta, dLOOPVC_dLNV] = stk_param_loopvc (MODEL, XI, YI)
+% CALL: C = stk_param_loopvc (MODEL, XI, YI)
 %
-%   computes the Leave-One-Out predictive variance criterion (denoted by
-%   LOOPVC) of MODEL given the data (XI, YI). The function also returns
-%   the gradient dLOOPVC_dtheta of LOOPVC with respect to the parameters
-%   of the covariance function and the derivative dLOOPVC_dLNV of LOOPVC
-%   with respect to the logarithm of the noise variance.
+%   computes the value C of the Leave-One-Out predictive variance criterion of
+%   MODEL given the data (XI, YI).
+%
+% CALL: [C, COVPARAM_DIFF, LNV_DIFF] = stk_param_loopvc (MODEL, XI, YI)
+%
+%   also returnsthe gradient COVPARAM_DIFF of C with respect to the parameters
+%   of the covariance function, its the derivative LNV_DIFF with respect to the
+%   logarithm of the noise variance.
 %
 % REFERENCE
 %
@@ -22,7 +25,7 @@
 %    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2018 LNE
 %
-%    Authors:  Remi Stroh  <remi.stroh@lne.fr>
+%    Author:  Remi Stroh  <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -44,10 +47,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [lp, dlp_cov_param, dlp_noise_param] = stk_param_loopvc (model, xi, yi)
+function [C, covparam_diff, lnv_diff] = stk_param_loopvc (model, xi, yi)
 
-yi = double(yi);
+yi = double (yi);
 n = size (xi, 1);
+
 
 %% Compute the mean square error of the leave-one-out prediction
 
@@ -70,7 +74,8 @@ dR = diag (R);  % The diagonal of the LOO matrix
 % Mean
 delta_res = R * yi;
 raw_res   = delta_res ./ dR;
-lp = delta_res' * raw_res / n;
+C = delta_res' * raw_res / n;
+
 
 %% Compute gradient
 
@@ -79,12 +84,12 @@ if nargout >= 2
     % Get numerical parameter vector from parameter object
     cov_param = stk_get_optimizable_parameters (model.param);
     nb_cov_param = length (cov_param);
-    dlp_cov_param = zeros (nb_cov_param, 1);
+    covparam_diff = zeros (nb_cov_param, 1);
     
-    for diff = 1:nb_cov_param,
+    for diff = 1:nb_cov_param
         V = feval (model.covariance_type, model.param, xi, xi, diff);
         W = R * V * R;
-        dlp_cov_param(diff) = (delta_res'./(n * dR')) * (diag(W) .* raw_res - 2 * W * yi);
+        covparam_diff(diff) = (delta_res'./(n * dR')) * (diag(W) .* raw_res - 2 * W * yi);
     end
     
     if nargout >= 3
@@ -111,12 +116,12 @@ if nargout >= 2
         % instead of NaN is drl_noise_param is requested for a noiseless model
         % FIXME: If we keep this, advertise in the NEWS file when we merge
         
-        dlp_noise_param = zeros (noisevar_nbparam, 1);
+        lnv_diff = zeros (noisevar_nbparam, 1);
         
-        for diff = 1:noisevar_nbparam,
+        for diff = 1:noisevar_nbparam
             V = stk_noisecov (n, model.lognoisevariance, diff);
             W = R * V * R;
-            dlp_noise_param(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
+            lnv_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
         end
         
     end
@@ -126,8 +131,7 @@ end
 end % function
 
 
-
-%!shared f, xi, zi, NI, model, J, dJ1, dJ2
+%!shared f, xi, zi, NI, model, C, dC1, dC2
 %!
 %! f = @(x)(- (0.8 * x(:, 1) + sin (5 * x(:, 2) + 1) ...
 %!          + 0.1 * sin (10 * x(:, 3))));
@@ -139,34 +143,34 @@ end % function
 %! NU     = 4.0;  % regularity parameter
 %! RHO1   = 0.4;  % scale (range) parameter
 %!
-%! model = stk_model('stk_materncov_aniso', DIM);
-%! model.param = log([SIGMA2; NU; 1/RHO1 * ones(DIM, 1)]);
+%! model = stk_model ('stk_materncov_aniso', DIM);
+%! model.param = log ([SIGMA2; NU; 1/RHO1 * ones(DIM, 1)]);
 
-%!error [J, dJ1, dJ2] = stk_param_loopvc ();
-%!error [J, dJ1, dJ2] = stk_param_loopvc (model);
-%!error [J, dJ1, dJ2] = stk_param_loopvc (model, xi);
-%!test  [J, dJ1, dJ2] = stk_param_loopvc (model, xi, zi);
+%!error [C, dC1, dC2] = stk_param_loopvc ();
+%!error [C, dC1, dC2] = stk_param_loopvc (model);
+%!error [C, dC1, dC2] = stk_param_loopvc (model, xi);
+%!test  [C, dC1, dC2] = stk_param_loopvc (model, xi, zi);
 
 %!test
-%! loo_pred = stk_predict_leaveoneout(model, xi, zi);
-%! J_ref = mean( (loo_pred.mean - zi).^2./(loo_pred.var + exp(model.lognoisevariance)) );
+%! loo_pred = stk_predict_leaveoneout (model, xi, zi);
+%! C_ref = mean ((loo_pred.mean - zi) .^ 2 ./ (loo_pred.var + exp (model.lognoisevariance)));
 %!
 %! TOL_REL = 0.01;
-%! assert (stk_isequal_tolrel (J, J_ref));
-%! assert (stk_isequal_tolrel (dJ1, [-0.4205 -0.0077 -0.0046 -0.0459 0.2695]', TOL_REL));
-%! assert (isempty (dJ2));
+%! assert (stk_isequal_tolrel (C, C_ref));
+%! assert (stk_isequal_tolrel (dC1, [-0.4205 -0.0077 -0.0046 -0.0459 0.2695]', TOL_REL));
+%! assert (isempty (dC2));
 
 %!test  % with noise variance
 %! model.lognoisevariance = 2*log(0.1);
 %!
-%! [J, dJ1, dJ2] = stk_param_loopvc (model, xi, zi);
-%! loo_pred = stk_predict_leaveoneout(model, xi, zi);
-%! J_ref = mean( (loo_pred.mean - zi).^2./(loo_pred.var + exp(model.lognoisevariance)) );
+%! [C, dC1, dC2] = stk_param_loopvc (model, xi, zi);
+%! loo_pred = stk_predict_leaveoneout (model, xi, zi);
+%! C_ref = mean ((loo_pred.mean - zi) .^ 2 ./ (loo_pred.var + exp(model.lognoisevariance)));
 %!
 %! TOL_REL = 0.01;
-%! assert (stk_isequal_tolrel (J, J_ref));
-%! assert (stk_isequal_tolrel (dJ1, [-0.4147 -0.0077 -0.0045 -0.0450 0.2659]', TOL_REL));
-%! assert (stk_isequal_tolrel (dJ2, 1.7417e-03, TOL_REL));
+%! assert (stk_isequal_tolrel (C, C_ref));
+%! assert (stk_isequal_tolrel (dC1, [-0.4147 -0.0077 -0.0045 -0.0450 0.2659]', TOL_REL));
+%! assert (stk_isequal_tolrel (dC2, 1.7417e-03, TOL_REL));
 
 %!shared xi, zi, model, TOL_REL
 %! xi = [-1 -.6 -.2 .2 .6 1]';
@@ -177,17 +181,17 @@ end % function
 %! TOL_REL = 0.01;
 
 %!test  % Another simple 1D check
-%! [LOOPVC, dLOOPVC_dtheta, dLOOPVC_dLNV] = stk_param_loopvc (model, xi, zi);
-%! assert (stk_isequal_tolrel (LOOPVC, 0.9643, TOL_REL));
-%! assert (stk_isequal_tolrel (dLOOPVC_dtheta, [-0.9488 0.0416 -1.2490]', TOL_REL));
-%! assert (stk_isequal_tolrel (dLOOPVC_dLNV, -3.4661e-04, TOL_REL));
+%! [C, dC1, dC2] = stk_param_loopvc (model, xi, zi);
+%! assert (stk_isequal_tolrel (C, 0.9643, TOL_REL));
+%! assert (stk_isequal_tolrel (dC1, [-0.9488 0.0416 -1.2490]', TOL_REL));
+%! assert (stk_isequal_tolrel (dC2, -3.4661e-04, TOL_REL));
 
 %!test  % Same 1D test with simple kriging
 %! model.lm = stk_lm_null;
-%! [LOOPVC, dLOOPVC_dtheta, dLOOPVC_dLNV] = stk_param_loopvc (model, xi, zi);
-%! assert (stk_isequal_tolrel (LOOPVC, 0.8950, TOL_REL));
-%! assert (stk_isequal_tolrel (dLOOPVC_dtheta, [-0.8798 0.0455 -1.3190]', TOL_REL));
-%! assert (stk_isequal_tolrel (dLOOPVC_dLNV, -1.3801e-03, TOL_REL));
+%! [C, dC1, dC2] = stk_param_loopvc (model, xi, zi);
+%! assert (stk_isequal_tolrel (C, 0.8950, TOL_REL));
+%! assert (stk_isequal_tolrel (dC1, [-0.8798 0.0455 -1.3190]', TOL_REL));
+%! assert (stk_isequal_tolrel (dC2, -1.3801e-03, TOL_REL));
 
 %!test  % Check the gradient on a 2D test case
 %!
@@ -203,9 +207,9 @@ end % function
 %! zi = stk_feval (f, xi);
 %!
 %! model.param = [1 1];
-%! [r1, dr] = stk_param_loopvc (model, xi, zi);
+%! [C1, dC] = stk_param_loopvc (model, xi, zi);
 %!
 %! model.param = model.param + DELTA * [0 1];
-%! r2 = stk_param_loopvc (model, xi, zi);
+%! C2 = stk_param_loopvc (model, xi, zi);
 %!
-%! assert (stk_isequal_tolrel (dr(2), (r2 - r1) / DELTA, TOL_REL));
+%! assert (stk_isequal_tolrel (dC(2), (C2 - C1) / DELTA, TOL_REL));
