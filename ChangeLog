@@ -1,5 +1,13 @@
 2018-07-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Parameter estimation criteria: use consistent variable names
+
+	* param/estim/stk_param_loomse.m: Rename some variables.
+	* param/estim/stk_param_loopvc.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+
+2018-07-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
 	Parameter estimation criteria: return [] instead of NaN when...
 
 	* param/estim/stk_param_loomse.m: Remove FIXME comment.
