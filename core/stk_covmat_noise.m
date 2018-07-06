@@ -55,58 +55,62 @@ pairwise = (nargin > 4) && pairwise;
 
 if autocov && (diff ~= 0) && (stk_isnoisy (model))
     
-    if isscalar (model.lognoisevariance) % Homoscedastic case
-        
-        % Note: the value of x1 is ignored in this case, which is normal.
-        %       Only the size of x1 actually matters.
-        
-        % Currently there is only one parameter (lognoisevariance).
-        % This will change when we implement parameterized variance models...
-        if (diff ~= -1) && (diff ~= 1)
-            stk_error (['diff should be either -1 or +1 in the ' ...
-                'homoscedastic case'], 'IncorrectArgument');
-        end
-        
-        if pairwise
-            if model.lognoisevariance == -inf
-                K = zeros (n1, 1);
-            else
-                K = (exp (model.lognoisevariance)) * (ones (n1, 1));
+    if isa(model.lognoisevariance, 'stk_noisemodel')
+        K = stk_noisevar_matrix(model.lognoisevariance, x1, diff, pairwise);
+    else % if isnumeric(model.lognoisevariance) % old compatibility
+        if isscalar (model.lognoisevariance) % Homoscedastic case
+            
+            % Note: the value of x1 is ignored in this case, which is normal.
+            %       Only the size of x1 actually matters.
+            
+            % Currently there is only one parameter (lognoisevariance).
+            % This will change when we implement parameterized variance models...
+            if (diff ~= -1) && (diff ~= 1)
+                stk_error (['diff should be either -1 or +1 in the ' ...
+                    'homoscedastic case'], 'IncorrectArgument');
             end
-        else
-            if model.lognoisevariance == -inf
-                K = zeros (n1);
+            
+            if pairwise
+                if model.lognoisevariance == -inf
+                    K = zeros (n1, 1);
+                else
+                    K = (exp (model.lognoisevariance)) * (ones (n1, 1));
+                end
             else
-                K = (exp (model.lognoisevariance)) * (eye (n1));
+                if model.lognoisevariance == -inf
+                    K = zeros (n1);
+                else
+                    K = (exp (model.lognoisevariance)) * (eye (n1));
+                end
             end
-        end
-        
-    else % Heteroscedastic
-        
-        % Note: the value of x1 is *also* ignored in this case, which is
-        %       much less normal...  This will change soon.
-        
-        % Old-style STK support for heteroscedasticity: the noise variances
-        % corresponding to the locations x1(1,:) to x1(end,:) are assumed to
-        % be stored in model.lognoisevariance (ugly).
-        
-        s = size (model.lognoisevariance);
-        if ~ ((isequal (s, [1, n1])) || (isequal (s, [n1, 1])))
-            fprintf ('lognoisevariance has size:\n');  display (s);
-            stk_error (sprintf (['lognoisevariance was expected to be either a ' ...
-                'scalar or a vector of length %d\n'], n1), 'IncorrectSize');
-        end
-        
-        % Currently there are no parameters in this case.
-        % This will change when we implement parameterized variance models...
-        if diff ~= -1,
-            error ('diff ~= -1 is not allowed in the heteroscedastic case');
-        end
-        
-        if pairwise
-            K = exp (model.lognoisevariance(:));
-        else
-            K = diag (exp (model.lognoisevariance));
+            
+        else % Heteroscedastic
+            
+            % Note: the value of x1 is *also* ignored in this case, which is
+            %       much less normal...  This will change soon.
+            
+            % Old-style STK support for heteroscedasticity: the noise variances
+            % corresponding to the locations x1(1,:) to x1(end,:) are assumed to
+            % be stored in model.lognoisevariance (ugly).
+            
+            s = size (model.lognoisevariance);
+            if ~ ((isequal (s, [1, n1])) || (isequal (s, [n1, 1])))
+                fprintf ('lognoisevariance has size:\n');  display (s);
+                stk_error (sprintf (['lognoisevariance was expected to be either a ' ...
+                    'scalar or a vector of length %d\n'], n1), 'IncorrectSize');
+            end
+            
+            % Currently there are no parameters in this case.
+            % This will change when we implement parameterized variance models...
+            if diff ~= -1,
+                error ('diff ~= -1 is not allowed in the heteroscedastic case');
+            end
+            
+            if pairwise
+                K = exp (model.lognoisevariance(:));
+            else
+                K = diag (exp (model.lognoisevariance));
+            end
         end
     end
     
