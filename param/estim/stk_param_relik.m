@@ -139,7 +139,7 @@ C = 0.5 * ((n - q) * log(2 * pi) + ldetWKW + attache);
 
 if PARAMPRIOR
     delta_p = cov_param - model.prior.mean;
-s    C = C + 0.5 * delta_p' * model.prior.invcov * delta_p;
+    C = C + 0.5 * delta_p' * model.prior.invcov * delta_p;
 end
 
 if NOISEPRIOR
