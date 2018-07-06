@@ -204,9 +204,9 @@ if nargout >= 2
         
         if NOISEPRIOR
             if isfield (model.noiseprior, 'invcov')
-                drl_noise_param = drl_noise_param + model.noiseprior.invcov * delta_lnv;
+                lnv_diff = lnv_diff + model.noiseprior.invcov * delta_lnv;
             else % assume isfield (model.noiseprior, 'var')
-                drl_noise_param = drl_noise_param + (model.noiseprior.var\delta_lnv);
+                lnv_diff = lnv_diff + (model.noiseprior.var\delta_lnv);
             end
         end
         
