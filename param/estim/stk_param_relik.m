@@ -43,6 +43,15 @@
 
 function [C, covparam_diff, noiseparam_diff] = stk_param_relik (model, xi, zi)
 
+zi = double (zi);
+
+% Check the size of zi
+n = size (xi, 1);
+if ~ isequal (size (zi), [n 1])
+    stk_error (['zi must be a column vector, with the same' ...
+        'same number of rows as x_obs.'], 'IncorrectSize');
+end
+
 % Get numerical parameter vector from parameter object
 covparam = stk_get_optimizable_parameters (model.param);
 
@@ -54,8 +63,6 @@ noiseless = ~ stk_isnoisy (model);
 if noiseless
     model.lognoisevariance = -inf;
 end
-
-n = size (xi, 1);
 
 
 %% Compute the (opposite of) the restricted log-likelihood
@@ -97,9 +104,9 @@ ldetWKW = 2 * sum (log (diag (U)));
 
 % Compute (W' yi)' * G^(-1) * (W' yi) as v' * v, with v = U' \ (W' * yi)
 if simple_kriging
-    yyi = double (zi);
+    yyi = zi;
 else
-    yyi = W' * double (zi);
+    yyi = W' * zi;
 end
 v = linsolve (U, yyi, struct ('UT', true, 'TRANSA', true));
 attache = sum (v .^ 2);
@@ -146,7 +153,7 @@ if nargout >= 2
     end
     H = F' * F;  % = W * G^(-1) * W'
     
-    z = H * double (zi);
+    z = H * zi;
     
     for diff = 1:covparam_size
         V = feval (model.covariance_type, model.param, xi, xi, diff);
@@ -242,4 +249,3 @@ end % function
 %! C2 = stk_param_relik (model, xi, zi);
 %!
 %! assert (stk_isequal_tolrel (dC(2), (C2 - C1) / DELTA, TOL_REL));
-    
