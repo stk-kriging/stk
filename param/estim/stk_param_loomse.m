@@ -47,7 +47,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [C, covparam_diff, lnv_diff] = stk_param_loomse (model, xi, yi)
+function [C, covparam_diff, noiseparam_diff] = stk_param_loomse (model, xi, yi)
 
 yi = double (yi);
 n = size (xi, 1);
@@ -81,11 +81,11 @@ C = raw_res' * raw_res / n;
 if nargout >= 2
     
     % Get numerical parameter vector from parameter object
-    cov_param = stk_get_optimizable_parameters (model.param);
-    nb_cov_param = length (cov_param);
-    covparam_diff = zeros (nb_cov_param, 1);
+    covparam = stk_get_optimizable_parameters (model.param);
+    covparam_size = length (covparam);
+    covparam_diff = zeros (covparam_size, 1);
     
-    for diff = 1:nb_cov_param
+    for diff = 1:covparam_size
         V = feval (model.covariance_type, model.param, xi, xi, diff);
         W = R * V * R;
         covparam_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
@@ -97,32 +97,32 @@ if nargout >= 2
             if isnumeric (model.lognoisevariance)
                 if isscalar (model.lognoisevariance)
                     % Homoscedastic case
-                    noisevar_nbparam = 1;
+                    noiseparam_size = 1;
                 else
                     % Old-style heteroscedastic case: don't optimize
-                    noisevar_nbparam = 0;
+                    noiseparam_size = 0;
                 end
             else
                 % model.lognoisevariance is a parameter object
-                noisevar_param = stk_get_optimizable_parameters (model.lognoisevariance);
-                noisevar_nbparam = length (noisevar_param);
+                noiseparam = stk_get_optimizable_parameters (model.lognoisevariance);
+                noiseparam_size = length (noiseparam);
             end
         else
-            noisevar_nbparam = 0;
+            noiseparam_size = 0;
         end
         
-        if noisevar_nbparam == 0
+        if noiseparam_size == 0
             
-            lnv_diff = [];
+            noiseparam_diff = [];
             
         else
             
-            lnv_diff = zeros (noisevar_nbparam, 1);
+            noiseparam_diff = zeros (noiseparam_size, 1);
             
-            for diff = 1:noisevar_nbparam
+            for diff = 1:noiseparam_size
                 V = stk_noisecov (n, model.lognoisevariance, diff);
                 W = R * V * R;
-                lnv_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
+                noiseparam_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
             end
             
         end
