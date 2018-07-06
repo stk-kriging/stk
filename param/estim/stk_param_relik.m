@@ -64,6 +64,34 @@ if noiseless
     model.lognoisevariance = -inf;
 end
 
+% Extract lnv parameters, if we need them
+if (nargout >= 3) || NOISEPRIOR
+    if noiseless
+        % If NOISEPRIOR is true, this is very likely going to cause an error
+        % below, unless the prior is zero-dimensional...  Wait and see...
+        noiseparam = [];
+        noiseparam_size = 0;
+    else
+        if isnumeric (model.lognoisevariance)
+            if isscalar (model.lognoisevariance)
+                % Homoscedastic case
+                noiseparam = model.lognoisevariance;
+                noiseparam_size = 1;
+            else
+                % Old-style heteroscedastic case: don't optimize
+                noiseparam = [];
+                noiseparam_size = 0;
+            end
+        else
+            % model.lognoisevariance is a parameter object
+            noiseparam = stk_get_optimizable_parameters (model.lognoisevariance);
+            noiseparam_size = length (noiseparam);
+            % Make sure we have a column vector
+            noiseparam = reshape (noiseparam, noiseparam_size, 1);
+        end
+    end
+end
+
 
 %% Compute the (opposite of) the restricted log-likelihood
 
@@ -122,8 +150,12 @@ if PARAMPRIOR
 end
 
 if NOISEPRIOR
-    delta_lnv = model.lognoisevariance - model.noiseprior.mean;
-    C = C + 0.5 * (delta_lnv ^ 2) / model.noiseprior.var;
+    delta_lnv = noiseparam - model.noiseprior.mean;
+    if isfield (model.noiseprior, 'invcov')
+        C = C + 0.5 * (delta_lnv' * model.noiseprior.invcov * delta_lnv);
+    else % assume isfield (model.noiseprior, 'var')
+        C = C + 0.5 * (delta_lnv' * (model.noiseprior.var \ delta_lnv));
+    end
 end
 
 
@@ -166,8 +198,6 @@ if nargout >= 2
     
     if nargout >= 3
         
-        noiseparam_size = 1;  % For now
-        
         if noiseless
             noiseparam_diff = [];
         else
@@ -176,12 +206,15 @@ if nargout >= 2
             for diff = 1:noiseparam_size
                 V = stk_covmat_noise (model, xi, [], diff);
                 noiseparam_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
-            end            
+            end
         end
         
-        % WARNING: this still assumes nb_noise_param == 1
         if NOISEPRIOR
-            noiseparam_diff = noiseparam_diff + delta_lnv / model.noiseprior.var;
+            if isfield (model.noiseprior, 'invcov')
+                noiseparam_diff = noiseparam_diff + model.noiseprior.invcov * delta_lnv;
+            else % assume isfield (model.noiseprior, 'var')
+                noiseparam_diff = noiseparam_diff + (model.noiseprior.var\delta_lnv);
+            end
         end
         
     end
