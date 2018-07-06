@@ -1,11 +1,11 @@
 % STK_PARAM_RELIK computes the restricted likelihood of a model given data
 %
-% CALL: C = stk_param_relik (MODEL, XI, YI)
+% CALL: C = stk_param_relik (MODEL, XI, ZI)
 %
 %   computes the value C of the opposite of the restricted likelihood criterion
-%   for the MODEL given the data (XI, YI).
+%   for the MODEL given the data (XI, ZI).
 %
-% CALL: [C, COVPARAM_DIFF, LNV_DIFF] = stk_param_relik (MODEL, XI, YI)
+% CALL: [C, COVPARAM_DIFF, LNV_DIFF] = stk_param_relik (MODEL, XI, ZI)
 %
 %   also returns the gradient COVPARAM_DIFF of C with respect to the parameters
 %   of the covariance function, and its derivative LNV_DIFF of C with respect to
@@ -41,7 +41,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [C, covparam_diff, noiseparam_diff] = stk_param_relik (model, xi, yi)
+function [C, covparam_diff, noiseparam_diff] = stk_param_relik (model, xi, zi)
 
 % Get numerical parameter vector from parameter object
 covparam = stk_get_optimizable_parameters (model.param);
@@ -97,9 +97,9 @@ ldetWKW = 2 * sum (log (diag (U)));
 
 % Compute (W' yi)' * G^(-1) * (W' yi) as v' * v, with v = U' \ (W' * yi)
 if simple_kriging
-    yyi = double (yi);
+    yyi = double (zi);
 else
-    yyi = W' * double (yi);
+    yyi = W' * double (zi);
 end
 v = linsolve (U, yyi, struct ('UT', true, 'TRANSA', true));
 attache = sum (v .^ 2);
@@ -146,7 +146,7 @@ if nargout >= 2
     end
     H = F' * F;  % = W * G^(-1) * W'
     
-    z = H * double (yi);
+    z = H * double (zi);
     
     for diff = 1:covparam_size
         V = feval (model.covariance_type, model.param, xi, xi, diff);
