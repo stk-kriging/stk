@@ -1,11 +1,11 @@
 % STK_PARAM_LOOPVC computes a Leave-One-Out criterion of a model given data
 %
-% CALL: C = stk_param_loopvc (MODEL, XI, YI)
+% CALL: C = stk_param_loopvc (MODEL, XI, ZI)
 %
 %   computes the value C of the Leave-One-Out predictive variance criterion of
-%   MODEL given the data (XI, YI).
+%   MODEL given the data (XI, ZI).
 %
-% CALL: [C, COVPARAM_DIFF, LNV_DIFF] = stk_param_loopvc (MODEL, XI, YI)
+% CALL: [C, COVPARAM_DIFF, LNV_DIFF] = stk_param_loopvc (MODEL, XI, ZI)
 %
 %   also returns the gradient COVPARAM_DIFF of C with respect to the parameters
 %   of the covariance function, its the derivative LNV_DIFF with respect to the
@@ -47,10 +47,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [C, covparam_diff, noiseparam_diff] = stk_param_loopvc (model, xi, yi)
+function [C, covparam_diff, noiseparam_diff] = stk_param_loopvc (model, xi, zi)
 
-yi = double (yi);
+zi = double (zi);
+
+% Check the size of zi
 n = size (xi, 1);
+if ~ isequal (size (zi), [n 1])
+    stk_error (['zi must be a column vector, with the same' ...
+        'same number of rows as x_obs.'], 'IncorrectSize');
+end
+
 
 
 %% Compute the mean square error of the leave-one-out prediction
@@ -72,7 +79,7 @@ end
 dR = diag (R);  % The diagonal of the LOO matrix
 
 % Mean
-delta_res = R * yi;
+delta_res = R * zi;
 raw_res   = delta_res ./ dR;
 C = delta_res' * raw_res / n;
 
@@ -89,7 +96,7 @@ if nargout >= 2
     for diff = 1:covparam_size
         V = feval (model.covariance_type, model.param, xi, xi, diff);
         W = R * V * R;
-        covparam_diff(diff) = (delta_res'./(n * dR')) * (diag(W) .* raw_res - 2 * W * yi);
+        covparam_diff(diff) = (delta_res'./(n * dR')) * (diag(W) .* raw_res - 2 * W * zi);
     end
     
     if nargout >= 3
@@ -123,7 +130,7 @@ if nargout >= 2
             for diff = 1:noiseparam_size
                 V = stk_noisecov (n, model.lognoisevariance, diff);
                 W = R * V * R;
-                noiseparam_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
+                noiseparam_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * zi);
             end
             
         end
