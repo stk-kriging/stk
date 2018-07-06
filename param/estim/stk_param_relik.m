@@ -164,7 +164,7 @@ if nargout >= 2
         if noiseless
             noiseparam_diff = [];
         else
-            lnv_diff = zeros (noiseparam_size, 1);
+            noiseparam_diff = zeros (noiseparam_size, 1);
             
             for diff = 1:noiseparam_size
                 V = stk_covmat_noise (model, xi, [], diff);
