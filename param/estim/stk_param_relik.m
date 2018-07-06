@@ -174,7 +174,7 @@ if nargout >= 2
         
         % WARNING: this still assumes nb_noise_param == 1
         if NOISEPRIOR
-            drl_noise_param = drl_noise_param + delta_lnv / model.noiseprior.var;
+            lnv_diff = lnv_diff + delta_lnv / model.noiseprior.var;
         end
         
     end
