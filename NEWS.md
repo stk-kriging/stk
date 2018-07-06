@@ -8,6 +8,11 @@
 * `stk_param_loopvc`: New function, which computes the leave-one-out
   predictive variance.
 
+* Minor compatibility-breaking change: Parameter estimation criteria
+  (such as `stk_param_relik`, `stk_param_loomse`...) now return []
+  instead of NaN when the derivative with respect to lnv is requested
+  for a noiseless model.
+
 -----
 
 

@@ -158,8 +158,8 @@ if nargout >= 2
     end
     
     if nargout >= 3
-        if model.lognoisevariance == -inf
-            lnv_diff = nan;
+        if noiseless
+            lnv_diff = [];
         else
             diff = 1;
             V = stk_noisecov (n, model.lognoisevariance, diff);
@@ -199,7 +199,7 @@ end % function
 %! TOL_REL = 0.01;
 %! assert (stk_isequal_tolrel (C, 21.6, TOL_REL));
 %! assert (stk_isequal_tolrel (dC1, [4.387 -0.1803 0.7917 0.1392 2.580]', TOL_REL));
-%! assert (isnan (dC2));
+%! assert (isequal (dC2, []));
 
 %!shared xi, zi, model, TOL_REL
 %! xi = [-1 -.6 -.2 .2 .6 1]';

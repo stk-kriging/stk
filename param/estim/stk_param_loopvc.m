@@ -7,7 +7,7 @@
 %
 % CALL: [C, COVPARAM_DIFF, LNV_DIFF] = stk_param_loopvc (MODEL, XI, YI)
 %
-%   also returnsthe gradient COVPARAM_DIFF of C with respect to the parameters
+%   also returns the gradient COVPARAM_DIFF of C with respect to the parameters
 %   of the covariance function, its the derivative LNV_DIFF with respect to the
 %   logarithm of the noise variance.
 %
@@ -112,18 +112,21 @@ if nargout >= 2
             noisevar_nbparam = 0;
         end
         
-        % NOTE/JB: Minor compatibility-breaking change here, we're returning |]
-        % instead of NaN is drl_noise_param is requested for a noiseless model
-        % FIXME: If we keep this, advertise in the NEWS file when we merge
-        
-        lnv_diff = zeros (noisevar_nbparam, 1);
-        
-        for diff = 1:noisevar_nbparam
-            V = stk_noisecov (n, model.lognoisevariance, diff);
-            W = R * V * R;
-            lnv_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
+        if noisevar_nbparam == 0
+            
+            lnv_diff = [];
+            
+        else
+            
+            lnv_diff = zeros (noisevar_nbparam, 1);
+            
+            for diff = 1:noisevar_nbparam
+                V = stk_noisecov (n, model.lognoisevariance, diff);
+                W = R * V * R;
+                lnv_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
+            end
+            
         end
-        
     end
     
 end
@@ -158,7 +161,7 @@ end % function
 %! TOL_REL = 0.01;
 %! assert (stk_isequal_tolrel (C, C_ref));
 %! assert (stk_isequal_tolrel (dC1, [-0.4205 -0.0077 -0.0046 -0.0459 0.2695]', TOL_REL));
-%! assert (isempty (dC2));
+%! assert (isequal (dC2, []));
 
 %!test  % with noise variance
 %! model.lognoisevariance = 2*log(0.1);
