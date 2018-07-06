@@ -50,14 +50,19 @@ PARAMPRIOR = isfield (model, 'prior');
 NOISEPRIOR = isfield (model, 'noiseprior');
 
 % Make sure that lognoisevariance is -inf for noiseless models
-isnoisy = stk_isnoisy (model);
-if ~ isnoisy
+noiseless = ~ stk_isnoisy (model);
+if noiseless
     model.lognoisevariance = -inf;
 end
 
 % Extract lnv parameters, if we need them
 if (nargout >= 3) || NOISEPRIOR
-    if isnoisy
+    if noiseless
+        % If NOISEPRIOR is true, this is very likely going to cause an error
+        % below, unless the prior is zero-dimensional...  Wait and see...
+        noisevar_param = [];
+        noisevar_nbparam = 0;
+    else
         if isnumeric (model.lognoisevariance)
             if isscalar (model.lognoisevariance)
                 % Homoscedastic case
@@ -75,11 +80,6 @@ if (nargout >= 3) || NOISEPRIOR
             % Make sure we have a column vector
             noisevar_param = reshape (noisevar_param, noisevar_nbparam, 1);
         end
-    else
-        % If NOISEPRIOR is true, this is very likely going to cause an error
-        % below, unless the prior is zero-dimensional...  Wait and see...
-        noisevar_param = [];
-        noisevar_nbparam = 0;
     end
 end
 
@@ -94,7 +94,7 @@ simple_kriging = (q == 0);
 
 % Choleski factorization: K = U' * U, with upper-triangular U
 [U, epsi] = stk_cholcov (K);
-if (~ isnoisy) && (epsi > 0)
+if noiseless && (epsi > 0)
     stk_assert_no_duplicates (xi);
 end
 
@@ -196,10 +196,10 @@ if nargout >= 2
         else
             lnv_diff = zeros (noisevar_nbparam, 1);
             
-            for diff = 1:noisevar_nbparam,
+            for diff = 1:noisevar_nbparam
                 V = stk_covmat_noise (model, xi, [], diff);
                 lnv_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
-            end            
+            end
         end
         
         if NOISEPRIOR
@@ -284,4 +284,3 @@ end % function
 %! C2 = stk_param_relik (model, xi, zi);
 %!
 %! assert (stk_isequal_tolrel (dC(2), (C2 - C1) / DELTA, TOL_REL));
-    
