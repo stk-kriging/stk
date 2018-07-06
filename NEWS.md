@@ -1,12 +1,17 @@
 # Changes in version 2.6.0
 
-## Estimation of the parameters
+## Parameter estimation
 
-* 'stk_param_loomse': new function to estimate parameters, based
-  on the leave-one-out mean square error
+* `stk_param_loomse`: New function to estimate parameters, based on
+  the leave-one-out mean square error.
 
- * 'stk_param_loopvc': new function, which computes the leave-one_out
-  predictive variance
+* `stk_param_loopvc`: New function, which computes the leave-one-out
+  predictive variance.
+
+* Minor compatibility-breaking change: Parameter estimation criteria
+  (such as `stk_param_relik`, `stk_param_loomse`...) now return []
+  instead of NaN when the derivative with respect to lnv is requested
+  for a noiseless model.
 
 -----
 

@@ -161,8 +161,8 @@ if nargout >= 2
         
         nb_noise_param = 1;  % For now
                 
-        if model.lognoisevariance == -inf
-            lnv_diff = nan (nb_noise_param, 1);
+        if noiseless
+            lnv_diff = [];
         else
             lnv_diff = zeros (nb_noise_param, 1);
             
@@ -208,7 +208,7 @@ end % function
 %! TOL_REL = 0.01;
 %! assert (stk_isequal_tolrel (C, 21.6, TOL_REL));
 %! assert (stk_isequal_tolrel (dC1, [4.387 -0.1803 0.7917 0.1392 2.580]', TOL_REL));
-%! assert (isnan (dC2));
+%! assert (isequal (dC2, []));
 
 %!shared xi, zi, model, TOL_REL
 %! xi = [-1 -.6 -.2 .2 .6 1]';
@@ -251,3 +251,4 @@ end % function
 %! C2 = stk_param_relik (model, xi, zi);
 %!
 %! assert (stk_isequal_tolrel (dC(2), (C2 - C1) / DELTA, TOL_REL));
+    
