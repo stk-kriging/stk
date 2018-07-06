@@ -242,3 +242,4 @@ end % function
 %! C2 = stk_param_relik (model, xi, zi);
 %!
 %! assert (stk_isequal_tolrel (dC(2), (C2 - C1) / DELTA, TOL_REL));
+    
