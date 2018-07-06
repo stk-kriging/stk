@@ -1,3 +1,13 @@
+2018-07-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Parameter estimation criteria: return [] instead of NaN when...
+
+	* param/estim/stk_param_loomse.m: Remove FIXME comment.
+	* param/estim/stk_param_loopvc.m: Idem.
+	* param/estim/stk_param_relik.m: Return [] instead of NaN for when
+	the derivative with respect to lnv is requested for a noiseless
+	model.
+
 2018-07-02  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	param/estim: Use consistent output names

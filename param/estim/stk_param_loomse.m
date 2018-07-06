@@ -111,18 +111,21 @@ if nargout >= 2
             noisevar_nbparam = 0;
         end
         
-        % NOTE/JB: Minor compatibility-breaking change here, we're returning |]
-        % instead of NaN is drl_noise_param is requested for a noiseless model
-        % FIXME: If we keep this, advertise in the NEWS file when we merge
-        
-        lnv_diff = zeros (noisevar_nbparam, 1);
-        
-        for diff = 1:noisevar_nbparam
-            V = stk_noisecov (n, model.lognoisevariance, diff);
-            W = R * V * R;
-            lnv_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
+        if noisevar_nbparam == 0
+            
+            lnv_diff = [];
+            
+        else
+            
+            lnv_diff = zeros (noisevar_nbparam, 1);
+            
+            for diff = 1:noisevar_nbparam
+                V = stk_noisecov (n, model.lognoisevariance, diff);
+                W = R * V * R;
+                lnv_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * yi);
+            end
+            
         end
-        
     end
     
 end
@@ -158,7 +161,7 @@ end % function
 %! assert (stk_isequal_tolrel (C, C_ref));
 %! assert (abs (dC1(1)) < sqrt (eps))
 %! assert (stk_isequal_tolrel (dC1(2:end), [-0.0091 0.0167 -0.0277 0.3326]', TOL_REL));
-%! assert (isempty (dC2));
+%! assert (isequal (dC2, []));
 
 %!test  % with noise variance
 %! model.lognoisevariance = 2*log(0.1);
