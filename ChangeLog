@@ -1,5 +1,11 @@
 2018-07-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Parameter estimation criteria: check the size of XI and ZI
+
+	* param/estim/stk_param_loomse.m: Check the size of XI and ZI.
+	* param/estim/stk_param_loopvc.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+
 	Parameter estimation criteria: call the observations ZI
 
 	* param/estim/stk_param_loomse.m: Call the observations ZI, as
@@ -7,15 +13,11 @@
 	* param/estim/stk_param_loopvc.m: Idem.
 	* param/estim/stk_param_relik.m: Idem.
 
-2018-07-06  Julien Bect  <julien.bect@centralesupelec.fr>
-
 	Parameter estimation criteria: use consistent variable names
 
 	* param/estim/stk_param_loomse.m: Rename some variables.
 	* param/estim/stk_param_loopvc.m: Idem.
 	* param/estim/stk_param_relik.m: Idem.
-
-2018-07-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Parameter estimation criteria: return [] instead of NaN when...
 

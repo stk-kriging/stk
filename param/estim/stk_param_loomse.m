@@ -50,7 +50,13 @@
 function [C, covparam_diff, noiseparam_diff] = stk_param_loomse (model, xi, zi)
 
 zi = double (zi);
+
+% Check the size of zi
 n = size (xi, 1);
+if ~ isequal (size (zi), [n 1])
+    stk_error (['zi must be a column vector, with the same' ...
+        'same number of rows as x_obs.'], 'IncorrectSize');
+end
 
 
 %% Compute the mean square error of the leave-one-out prediction
