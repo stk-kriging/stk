@@ -148,7 +148,7 @@ if nargout >= 2
     
     z = H * double (yi);
     
-    for diff = 1:nb_cov_param,
+    for diff = 1:nb_cov_param
         V = stk_covmat_gp0 (model, xi, [], diff);
         covparam_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
     end
@@ -166,7 +166,7 @@ if nargout >= 2
         else
             lnv_diff = zeros (nb_noise_param, 1);
             
-            for diff = 1:nb_noise_param,
+            for diff = 1:nb_noise_param
                 V = stk_covmat_noise (model, xi, [], diff);
                 lnv_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
             end            
