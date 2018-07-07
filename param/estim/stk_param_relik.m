@@ -52,45 +52,15 @@ if ~ isequal (size (zi), [n 1])
         'same number of rows as x_obs.'], 'IncorrectSize');
 end
 
-% Get numerical parameter vector from parameter object
+% Parameters of the covariance function
 covparam = stk_get_optimizable_parameters (model.param);
+
+% Parameters of the noise variance function
+[noiseparam, isnoisy] = stk_get_optimizable_noise_parameters (model);
+noiseparam_size = length (noiseparam);
 
 PARAMPRIOR = isfield (model, 'prior');
 NOISEPRIOR = isfield (model, 'noiseprior');
-
-% Make sure that lognoisevariance is -inf for noiseless models
-noiseless = ~ stk_isnoisy (model);
-if noiseless
-    model.lognoisevariance = -inf;
-end
-
-% Extract lnv parameters, if we need them
-if (nargout >= 3) || NOISEPRIOR
-    if noiseless
-        % If NOISEPRIOR is true, this is very likely going to cause an error
-        % below, unless the prior is zero-dimensional...  Wait and see...
-        noiseparam = [];
-        noiseparam_size = 0;
-    else
-        if isnumeric (model.lognoisevariance)
-            if isscalar (model.lognoisevariance)
-                % Homoscedastic case
-                noiseparam = model.lognoisevariance;
-                noiseparam_size = 1;
-            else
-                % Old-style heteroscedastic case: don't optimize
-                noiseparam = [];
-                noiseparam_size = 0;
-            end
-        else
-            % model.lognoisevariance is a parameter object
-            noiseparam = stk_get_optimizable_parameters (model.lognoisevariance);
-            noiseparam_size = length (noiseparam);
-            % Make sure we have a column vector
-            noiseparam = reshape (noiseparam, noiseparam_size, 1);
-        end
-    end
-end
 
 
 %% Compute the (opposite of) the restricted log-likelihood
@@ -101,7 +71,7 @@ simple_kriging = (q == 0);
 
 % Choleski factorization: K = U' * U, with upper-triangular U
 [U, epsi] = stk_cholcov (K);
-if noiseless && (epsi > 0)
+if (~ isnoisy) && (epsi > 0)
     stk_assert_no_duplicates (xi);
 end
 
@@ -150,11 +120,11 @@ if PARAMPRIOR
 end
 
 if NOISEPRIOR
-    delta_lnv = noiseparam - model.noiseprior.mean;
+    delta_noiseparam = noiseparam - model.noiseprior.mean;
     if isfield (model.noiseprior, 'invcov')
-        C = C + 0.5 * (delta_lnv' * model.noiseprior.invcov * delta_lnv);
+        C = C + 0.5 * (delta_noiseparam' * model.noiseprior.invcov * delta_noiseparam);
     else % assume isfield (model.noiseprior, 'var')
-        C = C + 0.5 * (delta_lnv' * (model.noiseprior.var \ delta_lnv));
+        C = C + 0.5 * (delta_noiseparam' * (model.noiseprior.var \ delta_noiseparam));
     end
 end
 
@@ -197,26 +167,21 @@ if nargout >= 2
     end
     
     if nargout >= 3
-        
-        if noiseless
+        if noiseparam_size == 0
             noiseparam_diff = [];
         else
             noiseparam_diff = zeros (noiseparam_size, 1);
-            
             for diff = 1:noiseparam_size
                 V = stk_covmat_noise (model, xi, [], diff);
                 noiseparam_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
             end
+            if NOISEPRIOR
+                if isfield (model.noiseprior, 'invcov')
+                    noiseparam_diff = noiseparam_diff + model.noiseprior.invcov * delta_noiseparam;
+                else % assume isfield (model.noiseprior, 'var')
+                    noiseparam_diff = noiseparam_diff + (model.noiseprior.var \ delta_noiseparam);
+                end
         end
-        
-        if NOISEPRIOR
-            if isfield (model.noiseprior, 'invcov')
-                noiseparam_diff = noiseparam_diff + model.noiseprior.invcov * delta_lnv;
-            else % assume isfield (model.noiseprior, 'var')
-                noiseparam_diff = noiseparam_diff + (model.noiseprior.var\delta_lnv);
-            end
-        end
-        
     end
     
 end
