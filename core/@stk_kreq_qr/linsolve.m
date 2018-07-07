@@ -33,7 +33,7 @@
 
 function w = linsolve (kreq, rs)
 
-if nargin < 2,
+if nargin < 2
     rs = kreq.RS;
 end
 

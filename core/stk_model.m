@@ -126,7 +126,7 @@ model.covariance_type = covariance_type;
 model.lm = stk_lm_constant ();
 
 % default dimension is d = 1
-if nargin < 3,
+if nargin < 3
     model.dim = 1;
 else
     model.dim = dim;
