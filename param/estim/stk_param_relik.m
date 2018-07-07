@@ -55,12 +55,16 @@ end
 % Parameters of the covariance function
 covparam = stk_get_optimizable_parameters (model.param);
 
-% Parameters of the noise variance function
-[noiseparam, isnoisy] = stk_get_optimizable_noise_parameters (model);
-noiseparam_size = length (noiseparam);
-
 PARAMPRIOR = isfield (model, 'prior');
 NOISEPRIOR = isfield (model, 'noiseprior');
+
+if (nargout >= 3) || NOISEPRIOR
+    % Parameters of the noise variance function
+    [noiseparam, isnoisy] = stk_get_optimizable_noise_parameters (model);
+    noiseparam_size = length (noiseparam);
+else
+    isnoisy = stk_isnoisy (model);
+end
 
 
 %% Compute the (opposite of) the restricted log-likelihood

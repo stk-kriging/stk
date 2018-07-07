@@ -1,5 +1,12 @@
 2018-07-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Parameter estimation criteria: get noiseparam at the beginning, only if neededed
+
+	* param/estim/stk_param_loomse.m: Get noiseparam at the beginning,
+	but only if it is really neededed.
+	* param/estim/stk_param_loopvc.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+
 	Parameter estimation: improve the way we deal with noise parameters
 
 	* core/@struct/stk_get_optimizable_noise_parameters.m: New

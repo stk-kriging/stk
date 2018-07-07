@@ -59,6 +59,12 @@ if ~ isequal (size (zi), [n 1])
         'same number of rows as x_obs.'], 'IncorrectSize');
 end
 
+if nargout >= 3
+    % Parameters of the noise variance function
+    noiseparam = stk_get_optimizable_noise_parameters (model);
+    noiseparam_size = length (noiseparam);
+end
+
 
 %% Compute the mean square error of the leave-one-out prediction
 
@@ -100,10 +106,6 @@ if nargout >= 2
     end
     
     if nargout >= 3
-        
-        % Parameters of the noise variance function
-        noiseparam = stk_get_optimizable_noise_parameters (model);
-        noiseparam_size = length (noiseparam);
         
         if noiseparam_size == 0
             noiseparam_diff = [];
