@@ -67,7 +67,7 @@ end
 kreq = class (kreq, 'stk_kreq_qr');
 
 % Prepare the right-hand side of the kriging equation
-if nargin > 2,
+if nargin > 2
     [Kti, Pt] = stk_covmat_latent (model, xt, xi);
     kreq = stk_set_righthandside (kreq, Kti, Pt);
 end
