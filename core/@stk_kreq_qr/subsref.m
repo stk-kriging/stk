@@ -38,7 +38,7 @@ if strcmp (idx(1).type, '.')
     
     value = get (kreq, idx(1).subs);
     
-    if length(idx) > 1,
+    if length(idx) > 1
         value = subsref(value, idx(2:end));
     end
     

@@ -61,7 +61,7 @@ end
 
 x0 = double (x0);
 
-if (nargin > 2) && (~ isempty (x1)),
+if (nargin > 2) && (~ isempty (x1))
     x1 = double (x1);
     make_matcov_auto = false;
 else
@@ -81,7 +81,7 @@ end
 
 %=== compute the regression functions
 
-if nargout > 1,
+if nargout > 1
     
     P = stk_ortho_func (model, x0);
     
