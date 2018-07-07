@@ -59,7 +59,6 @@ if ~ isequal (size (zi), [n 1])
 end
 
 
-
 %% Compute the mean square error of the leave-one-out prediction
 
 [K, P] = stk_make_matcov (model, xi);
