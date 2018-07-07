@@ -1,3 +1,16 @@
+2018-07-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Parameter estimation: improve the way we deal with noise parameters
+
+	* core/@struct/stk_get_optimizable_noise_parameters.m: New
+	internal function to get the vector of optimizable parameters of
+	the noise model.
+	* core/@stk_model_gpposterior/stk_get_optimizable_noise_parameters.m:
+	Idem for posterior models.
+	* param/estim/stk_param_loomse.m: Use the new function.
+	* param/estim/stk_param_loopvc.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+
 2018-07-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Parameter estimation criteria: check the size of XI and ZI

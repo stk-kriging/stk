@@ -52,17 +52,15 @@ if ~ isequal (size (zi), [n 1])
         'same number of rows as x_obs.'], 'IncorrectSize');
 end
 
-% Get numerical parameter vector from parameter object
+% Parameters of the covariance function
 covparam = stk_get_optimizable_parameters (model.param);
+
+% Parameters of the noise variance function
+[noiseparam, isnoisy] = stk_get_optimizable_noise_parameters (model);
+noiseparam_size = length (noiseparam);
 
 PARAMPRIOR = isfield (model, 'prior');
 NOISEPRIOR = isfield (model, 'noiseprior');
-
-% Make sure that lognoisevariance is -inf for noiseless models
-noiseless = ~ stk_isnoisy (model);
-if noiseless
-    model.lognoisevariance = -inf;
-end
 
 
 %% Compute the (opposite of) the restricted log-likelihood
@@ -73,7 +71,7 @@ simple_kriging = (q == 0);
 
 % Choleski factorization: K = U' * U, with upper-triangular U
 [U, epsi] = stk_cholcov (K);
-if noiseless && (epsi > 0)
+if (~ isnoisy) && (epsi > 0)
     stk_assert_no_duplicates (xi);
 end
 
@@ -122,8 +120,9 @@ if PARAMPRIOR
 end
 
 if NOISEPRIOR
-    delta_lnv = model.lognoisevariance - model.noiseprior.mean;
-    C = C + 0.5 * (delta_lnv ^ 2) / model.noiseprior.var;
+    assert (noiseparam_size == 1);  % FIXME: Support the multi-parameter case
+    delta_noiseparam = noiseparam - model.noiseprior.mean;
+    C = C + 0.5 * (delta_noiseparam ^ 2) / model.noiseprior.var;
 end
 
 
@@ -165,14 +164,17 @@ if nargout >= 2
     end
     
     if nargout >= 3
-        if noiseless
+        if noiseparam_size == 0
             noiseparam_diff = [];
         else
-            diff = 1;
-            V = stk_noisecov (n, model.lognoisevariance, diff);
-            noiseparam_diff = 1/2 * (sum (sum (H .* V)) - z' * V * z);
+            noiseparam_diff = zeros (noiseparam_size, 1);
+            for diff = 1:noiseparam_size
+                V = stk_noisecov (n, model.lognoisevariance, diff);
+                noiseparam_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
+            end
             if NOISEPRIOR
-                noiseparam_diff = noiseparam_diff + delta_lnv / model.noiseprior.var;
+                assert (noiseparam_size == 1);  % FIXME: Support the multi-parameter case
+                noiseparam_diff = noiseparam_diff + delta_noiseparam / model.noiseprior.var;
             end
         end
     end

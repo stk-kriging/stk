@@ -25,7 +25,8 @@
 %    Copyright (C) 2018 CentraleSupelec
 %    Copyright (C) 2018 LNE
 %
-%    Author:  Remi Stroh  <remi.stroh@lne.fr>
+%    Authors:  Remi Stroh   <remi.stroh@lne.fr>
+%              Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -98,39 +99,20 @@ if nargout >= 2
     end
     
     if nargout >= 3
-        % Extract lnv parameters, if we need them
-        if stk_isnoisy (model)
-            if isnumeric (model.lognoisevariance)
-                if isscalar (model.lognoisevariance)
-                    % Homoscedastic case
-                    noiseparam_size = 1;
-                else
-                    % Old-style heteroscedastic case: don't optimize
-                    noiseparam_size = 0;
-                end
-            else
-                % model.lognoisevariance is a parameter object
-                noiseparam = stk_get_optimizable_parameters (model.lognoisevariance);
-                noiseparam_size = length (noiseparam);
-            end
-        else
-            noiseparam_size = 0;
-        end
+        
+        % Parameters of the noise variance function
+        noiseparam = stk_get_optimizable_noise_parameters (model);
+        noiseparam_size = length (noiseparam);
         
         if noiseparam_size == 0
-            
-            noiseparam_diff = [];
-            
-        else
-            
+            noiseparam_diff = [];           
+        else           
             noiseparam_diff = zeros (noiseparam_size, 1);
-            
             for diff = 1:noiseparam_size
                 V = stk_noisecov (n, model.lognoisevariance, diff);
                 W = R * V * R;
                 noiseparam_diff(diff) = (2 * raw_res'./(n * dR')) * (diag(W) .* raw_res - W * zi);
             end
-            
         end
     end
     
