@@ -1,3 +1,12 @@
+2018-07-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Make get_defaultbounds_lnv a (renamed) standalone function for clarity.
+
+	* param/estim/stk_param_getdefaultbounds_lnv.m: Replacement
+	function for subfunction get_defaultbounds_lnv in stk_param_estim.
+	Take this opportunity to support the case of parameter objects.
+	* param/estim/stk_param_estim.m: Use the new function.
+
 2018-07-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Parameter estimation criteria: get noiseparam at the beginning, only if neededed
