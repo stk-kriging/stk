@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2017 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -42,7 +42,7 @@ model.param = [0 0 0];
 tic;
 for i = 1:REP,
     x = stk_sampling_regulargrid (N, DIM);
-    K = stk_make_matcov (model, x, x);
+    K = stk_covmat (model, 'latent', x);
 end
 t = toc / REP;
 
