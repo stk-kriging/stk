@@ -132,10 +132,11 @@ end
 u0 = stk_get_optimizable_parameters (param0);
 
 if do_estim_lnv
-    [lblnv, ublnv] = get_default_bounds_lnv (model, lnv0, xi, zi);
-    lb = [lb ; lblnv];
-    ub = [ub ; ublnv];
-    u0 = [u0; lnv0];
+    [lb_lnv, ub_lnv] = stk_param_getdefaultbounds_lnv (model, lnv0, xi, zi);
+    u0_lnv = stk_get_optimizable_parameters (lnv0);
+    lb = [lb; lb_lnv];
+    ub = [ub; ub_lnv];
+    u0 = [u0; u0_lnv];
 end
 
 switch do_estim_lnv
