@@ -458,7 +458,23 @@ function [x, obj, info, iter, nf, lambda] = sqp_quadprog ...
         warning (ws);
         rethrow (lasterror ());
     end
-    
+
+    if quadprog_exitflag < 0 % if quadprog failed
+        e_B = eig(B);                       % eigenvector of B (the Hessian)
+        c_B = max(abs(e_B))/min(abs(e_B));  % condition number of B
+        E_mateps = 1/eps;                   % machine epsilon
+        if c_B > E_mateps
+            % if the Hessian matrix is bad-conditionned,
+            % then, solve the problem with a regularized Hessian
+            display('Bad-conditionned Hessian matrix. Trying to regularize.');
+            % Warning : e_B(1) ~= arg min( abs(e_B) ), because of
+            % bad-conditionning
+            l_regu = (e_B(end) - E_mateps*e_B(1))/(E_mateps - 1);
+            % Assert : cond(B + l_regu*eye(size(B))) == E_mateps
+            [p, obj_qp, quadprog_exitflag, quadprog_output, lambda] = quadprog ...
+                (B + l_regu*eye(size(B)), c, -C, -d, F, g, [], [], x, quadprog_options);
+        end
+    end
     warning (ws);
 
     % Recreate a vector of Lagrange multipliers similar to qp's one

@@ -40,7 +40,7 @@ function [K, P1, P2] = stk_covmat_gp0 (model, x1, x2, diff, pairwise)
 % Check if the covariance model contains parameters
 % that should have been estimated first
 if ~ isstruct (model.param)
-    param = model.param(:);
+    param = stk_get_optimizable_parameters(model.param);
     if any (isnan (param))
         stk_error (['The covariance model contains undefined parameters, ' ...
             'which must be estimated first.'], 'ParametersMustBeEstimated');
@@ -48,8 +48,11 @@ if ~ isstruct (model.param)
 else
     % Note: there is currently one case where model.param is a struct: the case
     % of a discrete covariance (struct with fields .K and .P).  In this case the
-    % syntax model.param(:), which is used everywhere to allow the use of
-    % parameter objects, does not work. Ugly...
+    % syntax stk_get_optimizable_parameters(model.param), which is used
+    % everywhere to allow the use of parameter objects, does not work. Ugly...
+    
+    % TO DO : define stk_get_optimizable_parameters(model.param) = [], if
+    % param is a struct for discrete covariance.
     
     % Until we find a more elegant solution:
     assert (isfield (model.param, 'K') && isfield (model.param, 'P'));
@@ -71,7 +74,10 @@ if nargin < 4,  diff = -1;  end
 % Default value for 'pairwise' (arg #5): false
 pairwise = (nargin > 4) && pairwise;
 
-if (diff == -1) || (diff <= length (param))
+if isa(model.param, 'stk_covmodel') && diff ~= 0
+    % Support new implementation (STROH Remi 23 august 2016)
+    K = stk_covmatrix(model.param, x1, x2, diff, pairwise);
+elseif (diff == -1) || (diff <= length (param))
     
     % Compute the covariance matrix
     K = feval (model.covariance_type, model.param, x1, x2, diff, pairwise);
