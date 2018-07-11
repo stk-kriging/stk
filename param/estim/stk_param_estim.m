@@ -233,7 +233,7 @@ function [l, dl] = f_ (model, u, xi, zi, criterion)
 
 if stk_isnoisy(model)
     model = stk_set_optimizable_parameters(model,...
-        [u; stk_get_optimizable_parameters(model.lognoisevariance)]);
+        [u; stk_get_optimizable_noise_parameters(model)]);
 else
     model = stk_set_optimizable_parameters(model, u);
 end
