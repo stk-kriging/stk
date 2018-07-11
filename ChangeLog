@@ -1,3 +1,25 @@
+2018-07-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Add an optional select argument to stk_set_optimizable_parameters
+
+	* core/@stk_model_gpposterior/stk_set_optimizable_parameters.m:
+	Add an optional select argument to stk_set_optimizable_parameters.
+	* core/@struct/stk_set_optimizable_parameters.m: Idem.
+	* param/classes/stk_set_optimizable_parameters.m: Idem.
+
+	Implement stk_set/get_optimizable_parameters for models
+
+	* core/@stk_model_gpposterior/stk_set_optimizable_parameters.m:
+	Implement stk_set_optimizable_parameters for posterior models.
+	* core/@struct/stk_set_optimizable_parameters.m: Implement
+	stk_set_optimizable_parameters for prior models, currently
+	described by a structure.
+	* core/@stk_model_gpposterior/stk_get_optimizable_parameters.m:
+	Implement stk_get_optimizable_parameters for posterior models.
+	* core/@struct/stk_get_optimizable_parameters.m: Implement
+	stk_get_optimizable_parameters for prior models, currently
+	described by a structure.
+
 2018-07-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Make get_defaultbounds_lnv a (renamed) standalone function for clarity.
