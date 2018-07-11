@@ -20,7 +20,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2017 CentraleSupelec
+%    Copyright (C) 2016-2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -44,7 +44,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function param = stk_set_optimizable_parameters (param, value)
+function param = stk_set_optimizable_parameters (param, value, select)
 
 % This function will catch all calls to stk_set_optimizable_parameters for which
 % neither param nor value is an object of a "parameter class" (more precisely,
@@ -52,16 +52,33 @@ function param = stk_set_optimizable_parameters (param, value)
 
 try
     
-    % If param is numeric, the following syntax preserves its size and type
-    param(:) = value;
+    if nargin < 3
+        
+        % If param is numeric, the following syntax preserves its size and type
+        param(:) = value;
+        
+    else
+        
+        % Save initial size
+        s = size (param);
+        
+        % If param is numeric, the following syntax preserves its type
+        % but might change its size, depending on what select actually is
+        param(select) = value;
+        
+        if ~ isequal (size (param), s)
+            stk_error ('Invalid select argument.', 'InvalidArgument');
+        end
+        
+    end
     
-    % Note: if param is an object, the previous line is actually a call to
-    % subsasgn in disguise. This way of supporting parameter objects has been
-    % introduced in STK 2.0.0 as an "experimental" feature. It is now
-    % deprecated.
+    % Note: if param is an object, what we just did is actually a call to
+    % subsasgn in disguise.  This way of supporting parameter objects has been
+    % introduced in STK 2.0.0 as an "experimental" feature.  It is now
+    % deprecated; overload stk_set_optimizable_parameters () instead.
     
 catch
-        
+    
     stk_error (['stk_set_optimizable_parameters is not implemented for ' ...
         'objects of class ', class(param), '.'], 'TypeMismatch');
     
