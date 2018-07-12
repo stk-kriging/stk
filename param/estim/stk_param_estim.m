@@ -68,12 +68,18 @@
 function [param_opt, lnv_opt, info] = stk_param_estim ...
     (model, xi, zi, param0, lnv0, criterion)
 
-% Empty is the same as not provided
-if nargin < 6,  criterion = [];  end
-if nargin < 5,  lnv0      = [];  end
-if nargin < 4,  param0    = [];  end
+% Empty is the same as 'not provided'
+if nargin < 6
+    criterion = [];
+    if nargin < 5
+        lnv0 = [];
+        if nargin < 4
+            param0 = [];
+        end
+    end
+end
 
-% size checking: xi, zi
+% Size checking: xi, zi
 zi_data = double (zi);
 if ~ isequal (size (zi_data), [stk_length(xi) 1])
     errmsg = 'zi should be a column, with the same number of rows as xi.';
