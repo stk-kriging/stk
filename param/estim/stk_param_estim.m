@@ -68,12 +68,18 @@
 function [param_opt, lnv_opt, info] = stk_param_estim ...
     (model, xi, zi, param0, lnv0, criterion)
 
-% Empty is the same as not provided
-if nargin < 6,  criterion = [];  end
-if nargin < 5,  lnv0      = [];  end
-if nargin < 4,  param0    = [];  end
+% Empty is the same as 'not provided'
+if nargin < 6
+    criterion = [];
+    if nargin < 5
+        lnv0 = [];
+        if nargin < 4
+            param0 = [];
+        end
+    end
+end
 
-% size checking: xi, zi
+% Size checking: xi, zi
 zi_data = double (zi);
 if ~ isequal (size (zi_data), [stk_length(xi) 1])
     errmsg = 'zi should be a column, with the same number of rows as xi.';
@@ -209,45 +215,36 @@ end
 end % function
 
 
-function [lblnv,ublnv] = get_default_bounds_lnv ... % --------------------------
-    (model, lnv0, xi, zi) %#ok<INUSL>
-
-TOLVAR = 0.5;
-
-% Bounds for the variance parameter
-empirical_variance = var(zi);
-lblnv = log (eps);
-ublnv = log (empirical_variance) + TOLVAR;
-
-% Make sure that lnv0 falls within the bounds
-if ~ isempty (lnv0)
-    lblnv = min (lblnv, lnv0 - TOLVAR);
-    ublnv = max (ublnv, lnv0 + TOLVAR);
-end
-
-end % function
-
-
 function [param0, lnv0] = provide_param0_value ... % ---------------------------
     (model, xi, zi, param0, lnv0)
 
-% param0: try to use input argument first
+% The starting points param0 and lnv0 can be provided either directly under the
+% form of a vector of a numeric parameters, or as parameter objects.  Both cases
+% are covered thanks to the use of stk_get_optimizable_parameters.
+
+% If param0 is not empty, it means that the user has provided
+% a starting point, in which case we must use it.
 if ~ isempty (param0)
     
-    % Cast param0 into an object of the appropriate type
+    param0 = stk_get_optimizable_parameters (param0);
+
+    % Test if param0 contains nans
+    if any (isnan (param0))
+        stk_error ('param0 has NaNs', 'InvalidArgument');
+    end
+    
+    % Cast param0 into a variable of the appropriate type (numeric or object)
     param0 = stk_set_optimizable_parameters (model.param, param0);
     
-    % Test if param0 contains nans
-    if any (isnan (stk_get_optimizable_parameters (param0)))
-        warning ('param0 has nans, calling stk_param_init instead');
-        param0 = [];
-    end
-end
-
-% param0: try stk_param_init if we still have no acceptable value
-if isempty (param0)
-    model.lognoisevariance = lnv0;
+else  % Otherwise, try stk_param_init to get a starting point
+    
+    lnv0 = stk_get_optimizable_parameters (lnv0);
+    
+    model.lognoisevariance = stk_set_optimizable_parameters ...
+        (model.lognoisevariance, lnv0);
+    
     [param0, lnv0] = stk_param_init (model, xi, zi);
+
 end
 
 end % function
@@ -312,5 +309,5 @@ end % function
 %!test % Constant response
 %! model = stk_model ('stk_materncov52_iso');
 %! n = 10;  x = stk_sampling_regulargrid (n, 1, [0; 1]);  z = ones (size (x));
-%! param = stk_param_estim (model, x, z, model.param);
+%! param = stk_param_estim (model, x, z);
 %! assert ((all (isfinite (param))) && (length (param) == 2));

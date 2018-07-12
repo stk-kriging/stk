@@ -1,3 +1,15 @@
+2018-07-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim.m (provide_param0_value): Fix the case of parameter objects
+
+	* param/estim/stk_param_estim.m: Fix the case where param0 is a
+	parameter object instead of a vector of numeric parameter values.
+
+	stk_param_estim.m: Rewrite nargin checks in a more efficient way
+
+	* param/estim/stk_param_estim.m: Rewrite nargin checks in a more
+	efficient way.
+
 2018-07-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Add an optional select argument to stk_set_optimizable_parameters
