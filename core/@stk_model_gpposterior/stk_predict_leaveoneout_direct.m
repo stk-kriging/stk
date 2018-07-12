@@ -68,7 +68,13 @@ if nargout ~= 1
     raw_res = M_post.output_data - zp_mean;
     
     % Compute normalized residual
-    noisevariance = exp (M_post.prior_model.lognoisevariance);
+    lnv = M_post.prior_model.lognoisevariance;
+    if isa(lnv, 'stk_noisemodel')
+        noisevariance = stk_noisevar_matrix(lnv, xt, -1, true);
+        % size(var_noise) = [size(x, 1), 1]
+    else %if isnumeric(lnv)
+        noisevariance = exp (lnv);
+    end
     norm_res = raw_res ./ (sqrt (noisevariance + zp_var));
     
     % Pack results into a dataframe

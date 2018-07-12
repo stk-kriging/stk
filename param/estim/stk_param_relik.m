@@ -124,9 +124,12 @@ if PARAMPRIOR
 end
 
 if NOISEPRIOR
-    assert (noiseparam_size == 1);  % FIXME: Support the multi-parameter case
     delta_noiseparam = noiseparam - model.noiseprior.mean;
-    C = C + 0.5 * (delta_noiseparam ^ 2) / model.noiseprior.var;
+    if isfield (model.noiseprior, 'invcov')
+        C = C + 0.5 * (delta_noiseparam' * model.noiseprior.invcov * delta_noiseparam);
+    else % assume isfield (model.noiseprior, 'var')
+        C = C + 0.5 * (delta_noiseparam' * (model.noiseprior.var \ delta_noiseparam));
+    end
 end
 
 
@@ -177,9 +180,11 @@ if nargout >= 2
                 noiseparam_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
             end
             if NOISEPRIOR
-                assert (noiseparam_size == 1);  % FIXME: Support the multi-parameter case
-                noiseparam_diff = noiseparam_diff + delta_noiseparam / model.noiseprior.var;
-            end
+                if isfield (model.noiseprior, 'invcov')
+                    noiseparam_diff = noiseparam_diff + model.noiseprior.invcov * delta_noiseparam;
+                else % assume isfield (model.noiseprior, 'var')
+                    noiseparam_diff = noiseparam_diff + (model.noiseprior.var \ delta_noiseparam);
+                end
         end
     end
     
