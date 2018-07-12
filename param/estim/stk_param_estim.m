@@ -116,7 +116,7 @@ if isempty (criterion)
     criterion = @stk_param_relik;
 end
 
-%% Default value for param0 and lnv0
+% Default value for param0 and lnv0
 % param0: provide a value (if not provided as input argument)
 [param0, lnv0] = provide_param0_value (model, xi, zi, param0, lnv0);
 
@@ -130,7 +130,7 @@ if do_estim_lnv && (any(isnan (stk_get_optimizable_parameters(lnv0))))
     end
 end
 
-%% Define bounds for optimization
+% Define bounds for optimization
 % TODO: allow user-defined bounds
 if isa(param0, 'stk_covmodel')
     % if param0 is a stk_covmodel, call directly the good
@@ -153,7 +153,7 @@ if do_estim_lnv
 end
 nbParam_lnv = length(u0) - nbParam_cov;
 
-%% If necessary, define equality constraint with matrix
+% If necessary, define equality constraint with matrix
 % Constraint such as A*u0 = b
 Aconst_eq = [];
 bconst_eq = [];
@@ -179,7 +179,7 @@ if (do_estim_lnv && isa(lnv0, 'stk_noisemodel')...
     bconst_eq = [bconst_eq; mea_trans(ind_eq, 1)];
 end
 
-%% Define the function to optimize
+% Define the function to optimize
 model.param = param0;
 switch do_estim_lnv
     case false
@@ -189,8 +189,7 @@ switch do_estim_lnv
         f = @(u)(f_with_noise_ (model, u, xi, zi, criterion));
 end
 
-
-%% Optimize
+% Optimize
 bounds_available = (~ isempty (lb)) && (~ isempty (ub));
 
 if bounds_available
@@ -201,7 +200,7 @@ else
     [u_opt, crit_opt] = stk_minimize_unconstrained (A, f, u0);
 end
 
-%% Return result
+% Return result
 if do_estim_lnv
     index_lnv = (nbParam_cov + 1):length(u_opt);
     lnv_opt = lnv0;          % Return an object with the same class as lnv0
