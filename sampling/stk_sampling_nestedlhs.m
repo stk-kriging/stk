@@ -9,7 +9,7 @@
 %   also observed at the k-th level.
 %   A nested design is a Latin Hypercube Sampling (LHS), if every
 %   sub-design corresponding to a specified level is a LHS.
-%   Remark: N(k) must divide N(k + 1).
+%   Remark: N(k+1) must divide N(k).
 %
 % CALL: X = stk_sampling_nestedlhs (N, DIM, BOX)
 %

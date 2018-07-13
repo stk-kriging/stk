@@ -17,16 +17,19 @@
 %     * MODEL.lognoisevariance is a vector of -inf  (heteroscedastic case with
 %       all variances set to zero).
 %
-%    Note that in the case of a parameterized noise variance model (i.e., when
-%    MODEL.lognoisevariance is an object), the MODEL is automatically considered
-%    noisy, even when the parameters of the variance model are set to values
-%    such that the noise variance function vanishes.
+% REMARK: Variance model objects
+%
+%    Note that in the case where MODEL.lognoisevariance is an object, the MODEL
+%    is automatically considered noisy, even when the parameters of the variance
+%    model are set (or can be set) to values such that the noise variance
+%    function vanishes.
 %
 % See also: stk_model
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec & LNE
+%    Copyright (C) 2016-2018 CentraleSupelec
+%    Copyright (C) 2017-2018 LNE
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
 %              Remi Stroh   <remi.stroh@lne.fr>
@@ -53,21 +56,17 @@
 
 function b = stk_isnoisy (model)
 
-if ~ isfield (model, 'lognoisevariance')
+if (~ isfield (model, 'lognoisevariance')) || (isempty (model.lognoisevariance))
     
     % Backward compatiblity: accept model structures with missing
-    % lognoisevariance (and consider them as noiseless models)
+    % lognoisevariance, and consider them as noiseless models
     
     b = false;
     
-elseif isobject(model.lognoisevariance)
-    
-    b = true;
-    
 else
     
-    b = ~ ((isempty (model.lognoisevariance)) ...
-        || (all (model.lognoisevariance == - inf)));
+    b = ~ (isnumeric (model.lognoisevariance) ...
+        && (all (model.lognoisevariance == - inf)));
     
 end
 
