@@ -119,14 +119,11 @@ C = 0.5 * ((n - q) * log(2 * pi) + ldetWKW + attache);
 %% Add priors
 
 if PARAMPRIOR
-    delta_p = covparam - model.prior.mean;
-    C = C + 0.5 * delta_p' * model.prior.invcov * delta_p;
+    C = C - stk_distrib_logpdf (model.prior, covparam);
 end
 
 if NOISEPRIOR
-    assert (noiseparam_size == 1);  % FIXME: Support the multi-parameter case
-    delta_noiseparam = noiseparam - model.noiseprior.mean;
-    C = C + 0.5 * (delta_noiseparam ^ 2) / model.noiseprior.var;
+    C = C - stk_distrib_logpdf (model.noiseprior, noiseparam);
 end
 
 
@@ -164,7 +161,8 @@ if nargout >= 2
     end
     
     if PARAMPRIOR
-        covparam_diff = covparam_diff + model.prior.invcov * delta_p;
+        covparam_diff = covparam_diff ...
+            - stk_distrib_logpdf_grad (model.prior, covparam);
     end
     
     if nargout >= 3
@@ -177,8 +175,8 @@ if nargout >= 2
                 noiseparam_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
             end
             if NOISEPRIOR
-                assert (noiseparam_size == 1);  % FIXME: Support the multi-parameter case
-                noiseparam_diff = noiseparam_diff + delta_noiseparam / model.noiseprior.var;
+                noiseparam_diff = noiseparam_diff ...
+                    - stk_distrib_logpdf_grad (model.noiseprior, noiseparam);
             end
         end
     end
