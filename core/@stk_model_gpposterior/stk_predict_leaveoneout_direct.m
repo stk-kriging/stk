@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2017 CentraleSupelec
+%    Copyright (C) 2016-2018 CentraleSupelec
 %
 %    Author:  Julien Bect      <julien.bect@centralesupelec.fr>
 %             Stefano Duhamel  <stefano.duhamel@supelec.fr>
@@ -68,13 +68,7 @@ if nargout ~= 1
     raw_res = M_post.output_data - zp_mean;
     
     % Compute normalized residual
-    lnv = M_post.prior_model.lognoisevariance;
-    if isa(lnv, 'stk_noisemodel')
-        noisevariance = stk_noisevar_matrix(lnv, xt, -1, true);
-        % size(var_noise) = [size(x, 1), 1]
-    else %if isnumeric(lnv)
-        noisevariance = exp (lnv);
-    end
+    noisevariance = stk_get_observation_variances (M_post);
     norm_res = raw_res ./ (sqrt (noisevariance + zp_var));
     
     % Pack results into a dataframe
