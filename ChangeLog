@@ -1,5 +1,16 @@
 2018-07-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	New function(s) to get the variance of the observations
+
+	* core/@stk_model_gpposterior/stk_get_observation_variances.m:
+	Return the variance of the observation for a posterior model.
+	* core/stk_get_observation_variances.m: Same thing for a prior
+	model, at a given set of locations.
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Use the
+	new function.
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout_direct.m: Idem.
+	* core/@struct/stk_replicate_obs_noise.m: Idem.
+
 	assert_struct_is_model.m: Fix error identifier
 
 	* core/@struct/private/assert_struct_is_model.m: Fix error
