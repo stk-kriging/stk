@@ -1,5 +1,11 @@
 2018-07-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	New (internal) function to simulate noise sample replicates
+
+	* core/@struct/stk_replicate_obs_noise.m: simulate noise sample
+	replicates.
+	* utils/stk_generate_samplepaths.m: Use the new function.
+
 	Encapsulate Gaussian logpdf / logpdf_grad computations
 
 	* misc/distrib/stk_distrib_logpdf.m: Compute the Gaussian logpdf,

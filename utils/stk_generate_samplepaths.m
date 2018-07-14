@@ -186,16 +186,9 @@ if conditional
         zsim = stk_conditioning (lambda, zi, zsim, xi_ind);
         
     else % Noisy case
-        
+                
         % Simulate noise values
-        s = sqrt (exp (model.lognoisevariance));
-        ni = length (xi_ind);
-        if isscalar (s)
-            noise_sim = s * randn (ni, nb_paths);
-        else
-            s = reshape (s, ni, 1);
-            noise_sim = bsxfun (@times, s, randn (ni, nb_paths));
-        end
+        noise_sim = stk_replicate_obs_noise (model, xi, nb_paths);
         
         % Simulate sample paths conditioned on noisy observations
         zsim = stk_conditioning (lambda, zi, zsim, xi_ind, noise_sim);
