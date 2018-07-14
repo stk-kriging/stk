@@ -1,5 +1,10 @@
 2018-07-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_get_optimizable_parameters.m: Return [] for discrete cov structures
+
+	* param/classes/stk_get_optimizable_parameters.m: Return [] if
+	param describes a discrete covariance structure.
+
 	New function(s) to get the variance of the observations
 
 	* core/@stk_model_gpposterior/stk_get_observation_variances.m:

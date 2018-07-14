@@ -19,7 +19,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2017 CentraleSupelec
+%    Copyright (C) 2016-2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -49,7 +49,12 @@ function value = stk_get_optimizable_parameters (param)
 % param is not an object of a "parameter class" (more precisely, a class that
 % implements stk_get_optimizable_parameters)
 
-if ~ isnumeric (param)
+if isstruct (param) && isfield (param, 'K') && isfield (param, 'P')
+    
+    % A very special case...
+    param = [];
+    
+elseif ~ isnumeric (param)
     
     try
         
