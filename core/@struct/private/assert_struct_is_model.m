@@ -32,7 +32,7 @@ function assert_struct_is_model (model)
 if ~ isfield (model, 'param')
     
     stk_error (['The input argument does not look like a valid STK model' ...
-        'structure.'], 'Invalid Argument');
+        'structure.'], 'InvalidArgument');
     
 end
 

@@ -1,4 +1,9 @@
-2018-07-13  Julien Bect  <julien.bect@centralesupelec.fr>
+2018-07-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	assert_struct_is_model.m: Fix error identifier
+
+	* core/@struct/private/assert_struct_is_model.m: Fix error
+	identifier.
 
 	New (internal) function to simulate noise sample replicates
 
