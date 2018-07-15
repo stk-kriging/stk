@@ -1,4 +1,20 @@
+2018-07-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Deal with structs in base set/get optimizable parameters
+
+	* core/@struct/stk_get_optimizable_parameters.m: Renamed from.
+	* core/stk_get_optimizable_model_parameters.m: Renamed to.
+	* core/@struct/stk_set_optimizable_parameters.m: Renamed from.
+	* core/stk_set_optimizable_model_parameters.m: Renamed to.
+	* param/classes/stk_get_optimizable_parameters.m: Deal with structs.
+	* param/classes/stk_set_optimizable_parameters.m: Idem.
+
 2018-07-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_get_optimizable_parameters.m: Return [] for discrete cov structures
+
+	* param/classes/stk_get_optimizable_parameters.m: Return [] if
+	param describes a discrete covariance structure.
 
 	New function(s) to get the variance of the observations
 

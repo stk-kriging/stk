@@ -1,4 +1,4 @@
-% STK_SET_OPTIMIZABLE_PARAMETERS [overload STK function, internal]
+% STK_SET_OPTIMIZABLE_PARAMETERS [STK internal]
 %
 % INTERNAL FUNCTION WARNING:
 %
@@ -36,9 +36,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function model = stk_set_optimizable_parameters (model, value, select)
+function model = stk_set_optimizable_model_parameters (model, value, select)
 
-assert_struct_is_model (model);
+% Just a quick check
+if ~ (isstruct (model) && isfield (model, 'param'))
+    stk_error (['The first input argument does not look like a ' ...
+        'valid STK model structure.'], 'InvalidArgument');
+end
 
 % Covariance parameters
 covparam = stk_get_optimizable_parameters (model.param);
