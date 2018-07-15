@@ -43,39 +43,55 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function value = stk_get_optimizable_parameters (param)
+function value = stk_get_optimizable_parameters (arg1)
 
 % This function will catch all calls to stk_get_optimizable_parameters for which
-% param is not an object of a "parameter class" (more precisely, a class that
-% implements stk_get_optimizable_parameters)
+% arg1 is not an object of a class that implements stk_get_optimizable_parameters.
 
-if isstruct (param) && isfield (param, 'K') && isfield (param, 'P')
+if isstruct (arg1)
     
-    % A very special case...
-    param = [];
-    
-elseif ~ isnumeric (param)
-    
-    try
+    if isfield (arg1, 'K') && isfield (arg1, 'P')
         
-        % Extract parameter values
-        param = param(:);
+        % A very special case: parameter structure of a discrete covariance model
+        value = [];
         
-        % Note: if param is an object, the previous line is actually a call to
-        % subsref in disguise.  This way of supporting parameter objects has
-        % been introduced in STK 2.0.0 as an "experimental" feature. It is now
-        % deprecated.
+    else
         
-    catch
-        
-        stk_error (['stk_get_optimizable_parameters is not implemented for ' ...
-            'objects of class ', class(param), '.'], 'TypeMismatch');
-        
+        % Assuming that arg1 is a model structure:
+        value = stk_get_optimizable_model_parameters (arg1);
+                
     end
     
-end % if
-
-% Make sure that the result is a column vector
-value = param(:);
+else
+   
+    if isnumeric (arg1)
+        
+        param = arg1;
+    
+    else
+        
+        try
+            
+            % Extract parameter values
+            param = arg1(:);
+            
+            % Note: if param is an object, the previous line is actually a call to
+            % subsref in disguise.  This way of supporting parameter objects has
+            % been introduced in STK 2.0.0 as an "experimental" feature.  It is now
+            % deprecated.
+            
+        catch
+            
+            stk_error (['stk_get_optimizable_parameters is not implemented for ' ...
+                'objects of class ', class(arg1), '.'], 'TypeMismatch');
+            
+        end
+        
+    end % if
+    
+    % Make sure that the result is a column vector
+    value = param(:);
+    
+end
 
 end % function
