@@ -49,32 +49,6 @@ if ~ (isstruct (model) && isfield (model, 'param'))
         'valid STK model structure.'], 'InvalidArgument');
 end
 
-ni = size (xi, 1);
-
-if ~ stk_isnoisy (model)  % Noiseless case
-    
-    v = zeros (ni, 1);
-    
-else  % Noisy case
-    
-    if isnumeric (model.lognoisevariance)
-        
-        % Classical STK: model.lognoisevariance is numeric
-        v = exp (model.lognoisevariance);
-        
-        if isscalar (v)
-            v = repmat (v, ni, 1);
-        end
-        
-    else  % Object-oriented approach
-        
-        % FIXME: Think harder about function names... are we really going to
-        % have a function named stk_noisevar_matrix ?
-        
-        v = stk_noisevar_matrix (model.lognoisevariance, xi, -1, true);
-        
-    end
-    
-end
+v = stk_covmat_noise (model, xi, [], -1, true);
 
 end % function

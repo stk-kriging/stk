@@ -76,7 +76,7 @@ pairwise = (nargin > 3) && pairwise;
 K = feval (model.covariance_type, model.param, x0, x1, -1, pairwise);
 
 if make_matcov_auto && stk_isnoisy (model)
-    K = K + stk_noisecov (size (K,1), model.lognoisevariance, -1, pairwise);
+    K = K + stk_covmat_noise (model, x0, [], -1, pairwise);
 end
 
 %=== compute the regression functions

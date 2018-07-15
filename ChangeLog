@@ -1,5 +1,23 @@
 2018-07-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Deprecate stk_noisecov
+
+	* covfcs/stk_noisecov.m: Mark as deprecated.
+	* core/stk_covmat_noise.m: New function, cherry-picked from branch
+	covmat and then modified, to serve as a replacment for
+	stk_noisecov.  Considered as internal for the time being.
+	* core/stk_get_observation_variances.m: Remove redundant code and
+	call stk_covmat_noise instead.
+	* core/@stk_model_gpposterior/stk_get_observation_variances.m:
+	Call stk_covmat_noise directly.
+	* core/stk_make_matcov.m: Use stk_covmat_noise instead of
+	stk_noisecov.
+	* param/estim/stk_param_loomse.m: Idem.
+	* param/estim/stk_param_loopvc.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+	* admin/octpkg/INDEX: Add the new function, mark the old one as
+	deprecated.
+
 	Deal with structs in base set/get optimizable parameters
 
 	* core/@struct/stk_get_optimizable_parameters.m: Renamed from.

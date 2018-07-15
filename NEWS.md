@@ -13,6 +13,8 @@
   instead of NaN when the derivative with respect to lnv is requested
   for a noiseless model.
 
+* Deprecated: `stk_noisecov`.
+
 -----
 
 
