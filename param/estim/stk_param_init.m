@@ -163,8 +163,7 @@ if (isnumeric (lnv)) && (~ isscalar (lnv))  % Backward compatibility
     
     % Old-style support for the heteroscedastic case: a numeric vector of
     % log-noise variances was stored in model.lognoisevariance (implicitely
-    % associated with the locations xi that would be passed later to
-    % stk_noisecov...).
+    % associated with the locations xi.
     
     % Noise variance estimation not supported in this case
     if ((nargin >= 5) && do_estim_lnv) || (any (isnan (lnv)))
@@ -303,7 +302,7 @@ for eta = eta_list
                 % NOTE/JB: why -log(eta) ???
                 model.param = [-log(eta) -log(rho)];
                 model.lognoisevariance = stk_param_init (lnv, model, xi, zi);
-                nv = stk_noisecov (model.lognoisevariance, xi, -1, true, []);
+                nv = stk_covmat_noise (model, xi, [], -1, true);
                 log_sigma2 = log (mean (nv)) - log (eta);
                 sigma2 = exp(log_sigma2);
                 
@@ -323,11 +322,7 @@ for eta = eta_list
         else % Known variance(s)
         
             % Compute the noise variance at all observed locations
-            if isnumeric (lnv)
-                nv = exp (lnv);
-            else
-                nv = stk_noisecov (model.lognoisevariance, xi, -1, true, []);
-            end
+            nv = stk_covmat_noise (model, xi, [], -1, true);
             
             log_sigma2 = log (mean (nv)) - log (eta);
             sigma2 = exp (log_sigma2);
