@@ -60,7 +60,10 @@ if nargin < 4,  diff = -1;  end
 % Default value for 'pairwise' (arg #5): false
 pairwise = (nargin > 4) && pairwise;
 
-if (diff == -1) || (diff <= length (param))
+if isa(model.param, 'stk_covmodel') && diff ~= 0
+    % Support new implementation (STROH Remi 23 august 2016)
+    K = stk_covmatrix(model.param, x1, x2, diff, pairwise);
+elseif (diff == -1) || (diff <= length (param))
     
     % Compute the covariance matrix
     K = feval (model.covariance_type, model.param, x1, x2, diff, pairwise);
