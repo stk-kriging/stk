@@ -171,7 +171,7 @@ if nargout >= 2
         else
             noiseparam_diff = zeros (noiseparam_size, 1);
             for diff = 1:noiseparam_size
-                V = stk_noisecov (n, model.lognoisevariance, diff);
+                V = stk_covmat_noise (model, xi, [], diff);
                 noiseparam_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
             end
             if NOISEPRIOR

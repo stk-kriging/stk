@@ -65,6 +65,7 @@ Core STK functions
 #stk_ortho_func              [deprecated]
 #stk_cholcov                 [internal]
 #stk_model_fixlm             [internal]
+#stk_covmat_noise            [internal]
 
 Parameter estimation
  stk_param_estim
@@ -131,8 +132,8 @@ Model components: Covariance functions
  stk_materncov_iso
  stk_sphcov_aniso
  stk_sphcov_iso
- stk_noisecov
  stk_discretecov
+#stk_noisecov        [deprecated]
 
 Model components: Radial basis functions
  stk_rbf_exponential

@@ -28,6 +28,6 @@
 
 function v = stk_get_observation_variances (model)
 
-v = stk_get_observation_variances (model.prior_model, model.input_data);
+v = stk_covmat_noise (model.prior_model, model.input_data, [], -1, true);
 
 end % function

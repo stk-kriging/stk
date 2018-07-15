@@ -1,4 +1,4 @@
-% STK_NOISECOV computes a noise covariance
+% STK_NOISECOV [deprecated]
 
 % Copyright Notice
 %
@@ -30,15 +30,15 @@
 
 function K = stk_noisecov (ni, lognoisevariance, diff, pairwise)
 
-if (nargin < 3) || (isempty (diff)),
-    diff = -1; % default: compute the value (not a derivative)
+if (nargin < 3) || (isempty (diff))
+    diff = -1;  % Default: compute the value (not a derivative)
 end
 
 if nargin < 4
-    pairwise = false; % default: matrix
+    pairwise = false;  % Default: matrix
 end
 
-if isscalar (lognoisevariance), % homoscedastic
+if isscalar (lognoisevariance)  % Homoscedastic
     % Remark: the result does not depend on diff
     
     if pairwise
@@ -55,8 +55,8 @@ if isscalar (lognoisevariance), % homoscedastic
         end
     end
     
-else % heteroscedastic
-
+else  % Heteroscedastic
+    
     s = size (lognoisevariance);
     if ~ ((isequal (s, [1, ni])) || (isequal (s, [ni, 1])))
         fprintf ('lognoisevariance has size:\n');  display (s);
@@ -64,7 +64,7 @@ else % heteroscedastic
             'scalar or a vector of length %d\n'], ni), 'IncorrectSize');
     end
     
-    if diff ~= -1,
+    if diff ~= -1
         error ('diff ~= -1 is not allowed in the heteroscedastic case');
     end
     
@@ -73,6 +73,7 @@ else % heteroscedastic
     else
         K = diag (exp (lognoisevariance));
     end
+    
 end
 
 end % function
@@ -83,8 +84,8 @@ end % function
 %!  lognoisevariance = 0.0;
 %!  diff = -1;
 
-%!error K = stk_noisecov();
-%!error K = stk_noisecov(ni);
-%!test  K = stk_noisecov(ni, lognoisevariance);
-%!test  K = stk_noisecov(ni, lognoisevariance, diff);
-%!test  K = stk_noisecov(ni, lognoisevariance, diff, true);
+%!error K = stk_noisecov ();
+%!error K = stk_noisecov (ni);
+%!test  K = stk_noisecov (ni, lognoisevariance);
+%!test  K = stk_noisecov (ni, lognoisevariance, diff);
+%!test  K = stk_noisecov (ni, lognoisevariance, diff, true);
