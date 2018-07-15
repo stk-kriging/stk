@@ -8,7 +8,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -39,21 +39,10 @@ function [K, P1, P2] = stk_covmat_gp0 (model, x1, x2, diff, pairwise)
 
 % Check if the covariance model contains parameters
 % that should have been estimated first
-if ~ isstruct (model.param)
-    param = model.param(:);
-    if any (isnan (param))
-        stk_error (['The covariance model contains undefined parameters, ' ...
-            'which must be estimated first.'], 'ParametersMustBeEstimated');
-    end
-else
-    % Note: there is currently one case where model.param is a struct: the case
-    % of a discrete covariance (struct with fields .K and .P).  In this case the
-    % syntax model.param(:), which is used everywhere to allow the use of
-    % parameter objects, does not work. Ugly...
-    
-    % Until we find a more elegant solution:
-    assert (isfield (model.param, 'K') && isfield (model.param, 'P'));
-    param = [];
+param = stk_get_optimizable_parameters (model.param);
+if any (isnan (param))
+    stk_error (['The covariance model contains undefined parameters, ' ...
+        'which must be estimated first.'], 'ParametersMustBeEstimated');
 end
 
 % Evaluation points
