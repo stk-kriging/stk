@@ -1,3 +1,12 @@
+2018-07-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_make_matcov.m: Direct evaluation of covariance parameter objects
+
+	* core/stk_make_matcov.m: Unofficial support for direct evaluation
+	of covariance parameter objects, ignoring
+	model.covariance_type. This is introduced temporarily to support
+	some code by R. Stroh but should not be advertised as it is...
+
 2018-07-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Deprecate stk_noisecov
