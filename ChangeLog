@@ -1,3 +1,11 @@
+2018-07-17  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim.m: One more tiny step toward lnv objects
+
+	* param/estim/stk_param_estim.m: Do not check directly if lnv0 is
+	OK, since lnv0 might be a parameter object.  Instead, extract the
+	vector of optimizable parameters, and do the checking on it.
+
 2018-07-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_make_matcov.m: Direct evaluation of covariance parameter objects

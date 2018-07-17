@@ -101,8 +101,9 @@ end
 if ~ isempty (lnv0)
     % lnv0 present => noise variance *must* be estimated
     do_estim_lnv = true;
-    if isnan (lnv0) || isinf (lnv0)
-        stk_error (['Incorrect value for input argumen lnv0. The starting ' ...
+    lnv0_ = stk_get_optimizable_parameters (lnv0);
+    if any (isnan (lnv0_) || isinf (lnv0_))
+        stk_error (['Incorrect value for input argument lnv0. The starting ' ...
             'point for the estimation of lnv must be neither infinite nor ' ...
             'NaN.'], 'InvalidArgument');
     end
