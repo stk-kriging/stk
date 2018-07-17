@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -71,7 +71,7 @@ end % function
 
 %!test
 %! kreqA = stk_kreq_qr (model, x);
-%! [Kii, Pi] = stk_make_matcov (model, x);
+%! [Kii, Pi] = stk_covmat (model, 'response', x);
 %! kreqB = stk_kreq_qr (model, x(1));
 %! kreqB = stk_update (kreqB, Kii(2, 2), Kii(2, 1), Pi(2));
 %! kreqB = stk_update (kreqB, Kii(3, 3), Kii(3, [1 2]), Pi(3));
@@ -79,8 +79,8 @@ end % function
 
 %!test
 %! kreqA = stk_kreq_qr (model, x, y);
-%! [Kii, Pi] = stk_make_matcov (model, x);
-%! [Kti, Pt] = stk_make_matcov (model, y, x);
+%! [Kii, Pi] = stk_covmat (model, 'response', x);
+%! [Kti, Pt] = stk_covmat (model, 'latent', y, x);
 %! kreqB = stk_kreq_qr (model, x(1), y);
 %! kreqB = stk_update (kreqB, Kii(2, 2), Kii(2, 1), Pi(2), Kti(2));
 %! kreqB = stk_update (kreqB, Kii(3, 3), Kii(3, [1 2]), Pi(3), Kti(3));
