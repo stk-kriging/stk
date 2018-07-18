@@ -1,3 +1,18 @@
+2018-07-18  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim.m: One more tiny step toward lnv objects (bis)
+
+	* param/estim/private/stk_param_check_lnv0.m: Gather all lnv0
+	checks in this subfunction to reduce clutter in stk_param_estim.
+	At the same time, rewrite some of the checks in order to accept
+	objects as well.
+	* param/estim/stk_param_estim.m: Use the new private function.
+	Also, in the case where lnv0 is not provided, adapt to deal with
+	object case as well.
+	* examples/03_miscellaneous/stk_example_misc03.m: Declare noisy
+	models properly (estimating the variance of the noise for a
+	noiseless model is no longer accepted).
+
 2018-07-17  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_estim.m: One more tiny step toward lnv objects
