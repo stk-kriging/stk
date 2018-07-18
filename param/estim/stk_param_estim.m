@@ -101,21 +101,11 @@ end
 if ~ isempty (lnv0)
     % lnv0 present => noise variance *must* be estimated
     do_estim_lnv = true;
-    lnv0_ = stk_get_optimizable_parameters (lnv0);
-    if any (isnan (lnv0_) || isinf (lnv0_))
-        stk_error (['Incorrect value for input argument lnv0. The starting ' ...
-            'point for the estimation of lnv must be neither infinite nor ' ...
-            'NaN.'], 'InvalidArgument');
-    end
+    stk_param_check_lnv0 (model, lnv0);
 else
     % Otherwise, noise variance estimation happens when lnv has NaNs
     lnv0 = model.lognoisevariance;
-    do_estim_lnv = any (isnan (lnv0));
-end
-
-if do_estim_lnv && (~ isscalar (lnv0))
-    stk_error (['Estimating the variance of the noise is not possible ' ...
-        'in the hetereoscedastic case yet. Sorry.'], 'InvalidArgument');
+    do_estim_lnv = any (isnan (stk_get_optimizable_parameters (lnv0)));
 end
 
 % Default criterion: restricted likelihood (ReML method)
@@ -228,7 +218,7 @@ function [param0, lnv0] = provide_param0_value ... % ---------------------------
 if ~ isempty (param0)
     
     param0 = stk_get_optimizable_parameters (param0);
-
+    
     % Test if param0 contains nans
     if any (isnan (param0))
         stk_error ('param0 has NaNs', 'InvalidArgument');
@@ -245,7 +235,7 @@ else  % Otherwise, try stk_param_init to get a starting point
         (model.lognoisevariance, lnv0);
     
     [param0, lnv0] = stk_param_init (model, xi, zi);
-
+    
 end
 
 end % function
