@@ -69,7 +69,7 @@ end
 
 %% Compute the (opposite of) the restricted log-likelihood
 
-[K, P] = stk_make_matcov (model, xi);
+[K, P] = stk_covmat_response (model, xi);
 q = size (P, 2);
 simple_kriging = (q == 0);
 
@@ -156,7 +156,7 @@ if nargout >= 2
     z = H * zi;
     
     for diff = 1:covparam_size
-        V = feval (model.covariance_type, model.param, xi, xi, diff);
+        V = stk_covmat_gp0 (model, xi, [], diff);
         covparam_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
     end
     
