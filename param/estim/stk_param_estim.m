@@ -37,8 +37,9 @@
 % Copyright Notice
 %
 %    Copyright (C) 2015-2018 CentraleSupelec
-%    Copyright (C) 2014 SUPELEC & A. Ravisankar
-%    Copyright (C) 2011-2013 SUPELEC
+%    Copyright (C) 2017 LNE
+%    Copyright (C) 2014 A. Ravisankar
+%    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
 %              Emmanuel Vazquez   <emmanuel.vazquez@centralesupelec.fr>
