@@ -1,3 +1,9 @@
+2018-07-19  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_make_matcov.m: Remove some recent experimental code
+
+	* core/stk_make_matcov.m: Remove some recent experimental code.
+
 2018-07-18  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_estim.m: One more tiny step toward lnv objects (bis)

@@ -73,21 +73,7 @@ pairwise = (nargin > 3) && pairwise;
 
 %=== compute the covariance matrix
 
-if ismethod (model.param, 'stk_covmat')
-    
-    % UNOFFICIAL support for some code by R. Stroh...
-    K = stk_covmat (model.param, x0, x1, -1, pairwise);
-    
-    % FIXME: Flawed design, model.covariance_type is ignored in this case.  When
-    % we finally decide to transition to this way of evaluating covariance
-    % functions, we need to get rid of model.covariance_type.  Never advertise
-    % this as it is, it would only introduce more confusion...
-    
-else  % This is how you're currently supposed to do
-    
-    K = feval (model.covariance_type, model.param, x0, x1, -1, pairwise);
-    
-end
+K = feval (model.covariance_type, model.param, x0, x1, -1, pairwise);
 
 if make_matcov_auto && stk_isnoisy (model)
     K = K + stk_covmat_noise (model, x0, [], -1, pairwise);
