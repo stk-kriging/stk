@@ -106,11 +106,19 @@ end
 % Make sure that we have a starting point in (param0, lnv0)
 [param0, lnv0, do_estim_lnv] = provide_starting_point (model, xi, zi, param0, lnv0);
 
+% Define bounds for optimization
 % TODO: allow user-defined bounds
-[lb, ub] = stk_param_getdefaultbounds (model.covariance_type, param0, xi, zi);
+if isa(param0, 'stk_covmodel')
+    % if param0 is a stk_covmodel, call directly the good
+    % stk_param_getdefaultbounds function
+    [lb, ub] = stk_param_getdefaultbounds(param0, xi, zi);
+else
+    [lb, ub] = stk_param_getdefaultbounds(model.covariance_type, param0, xi, zi);
+end
 
 % Get vector of numerical parameters
-u0 = stk_get_optimizable_parameters (param0);
+u0 = stk_get_optimizable_parameters(param0);
+nbParam_cov = length(u0);
 
 if do_estim_lnv
     [lb_lnv, ub_lnv] = stk_param_getdefaultbounds_lnv (model, lnv0, xi, zi);
@@ -119,27 +127,61 @@ if do_estim_lnv
     ub = [ub; ub_lnv];
     u0 = [u0; u0_lnv];
 end
+nbParam_lnv = length(u0) - nbParam_cov;
 
+% If necessary, define equality constraint with matrix
+% Constraint such as A*u0 = b
+Aconst_eq = [];
+bconst_eq = [];
+
+if (isa(param0, 'stk_covmodel') && isa(param0.prior, 'stk_prior_gauss')...
+        && any(param0.prior.eigenvals == 0))
+    trans = param0.prior.eigenvect;
+    mea_trans = trans'*param0.prior.mean;
+    
+    ind_eq = (param0.prior.eigenvals == 0);	% index of parameters
+    %(or linear combination of parameters) which must not move.
+    Aconst_eq = [Aconst_eq; [trans(:, ind_eq)', zeros(sum(ind_eq), nbParam_lnv)]];
+    bconst_eq = [bconst_eq; mea_trans(ind_eq, 1)];
+end
+
+if (do_estim_lnv && isa(lnv0, 'stk_noisemodel')...
+        && isa(lnv0.prior, 'stk_prior_gauss') && any(lnv0.prior.eigenvals == 0))
+    trans = lnv0.prior.eigenvect;
+    mea_trans = trans'*lnv0.prior.mean;
+    
+    ind_eq = (lnv0.prior.eigenvals == 0);
+    Aconst_eq = [Aconst_eq; [zeros(sum(ind_eq), nbParam_cov), trans(:, ind_eq)']];
+    bconst_eq = [bconst_eq; mea_trans(ind_eq, 1)];
+end
+
+% Define the function to optimize
+model.param = param0;
 switch do_estim_lnv
     case false
         f = @(u)(f_ (model, u, xi, zi, criterion));
     case true
+        model.lognoisevariance = lnv0;
         f = @(u)(f_with_noise_ (model, u, xi, zi, criterion));
 end
 
+% Optimize
 bounds_available = (~ isempty (lb)) && (~ isempty (ub));
 
 if bounds_available
     A = stk_options_get ('stk_param_estim', 'minimize_box');
-    [u_opt, crit_opt] = stk_minimize_boxconstrained (A, f, u0, lb, ub);
+    [u_opt, crit_opt] = stk_minimize_boxconstrained (A, f, u0, lb, ub, Aconst_eq, bconst_eq);
 else
     A = stk_options_get ('stk_param_estim', 'minimize_unc');
     [u_opt, crit_opt] = stk_minimize_unconstrained (A, f, u0);
 end
 
+% Return result
 if do_estim_lnv
-    lnv_opt = u_opt(end);
-    u_opt(end) = [];
+    index_lnv = (nbParam_cov + 1):length(u_opt);
+    lnv_opt = lnv0;          % Return an object with the same class as lnv0
+    lnv_opt = stk_set_optimizable_parameters(lnv_opt, u_opt(index_lnv));
+    u_opt(index_lnv) = [];
 else
     lnv_opt = model.lognoisevariance;
 end
@@ -164,7 +206,12 @@ end % function
 
 function [l, dl] = f_ (model, u, xi, zi, criterion)
 
-model.param = stk_set_optimizable_parameters (model.param, u);
+if stk_isnoisy(model)
+    model = stk_set_optimizable_parameters(model,...
+        [u; stk_get_optimizable_noise_parameters(model)]);
+else
+    model = stk_set_optimizable_parameters(model, u);
+end
 
 if nargout == 1
     l = criterion (model, xi, zi);
@@ -177,9 +224,7 @@ end % function
 
 function [l, dl] = f_with_noise_ (model, u, xi, zi, criterion)
 
-model.param = stk_set_optimizable_parameters (model.param, u(1:end-1));
-model.lognoisevariance = u(end);
-
+model = stk_set_optimizable_parameters(model, u);
 if nargout == 1
     l = criterion (model, xi, zi);
 else
