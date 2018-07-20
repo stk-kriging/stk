@@ -1,3 +1,11 @@
+2018-07-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim.m: Gather all code related to starting point determination
+
+	* param/estim/stk_param_estim.m: Gather all code related to
+	starting point determination in a single subfunction for clarity.
+	Also, improve support for lnv objects, I hope.
+
 2018-07-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_make_matcov.m: Remove some recent experimental code

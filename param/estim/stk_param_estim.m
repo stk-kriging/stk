@@ -98,30 +98,13 @@ if ~ stk_isnoisy (model)
     model.lognoisevariance = -inf;
 end
 
-% Should we estimate the variance of the noise, too ?
-if ~ isempty (lnv0)
-    % lnv0 present => noise variance *must* be estimated
-    do_estim_lnv = true;
-    stk_param_check_lnv0 (model, lnv0);
-else
-    % Otherwise, noise variance estimation happens when lnv has NaNs
-    lnv0 = model.lognoisevariance;
-    do_estim_lnv = any (isnan (stk_get_optimizable_parameters (lnv0)));
-end
-
 % Default criterion: restricted likelihood (ReML method)
 if isempty (criterion)
     criterion = @stk_param_relik;
 end
 
-% param0: provide a value (if not provided as input argument)
-[param0, lnv0] = provide_param0_value (model, xi, zi, param0, lnv0);
-
-% lnv0: try stk_param_init_lnv if we still have no acceptable value
-if do_estim_lnv && (isnan (lnv0))
-    model.param = param0;
-    lnv0 = stk_param_init_lnv (model, xi, zi);
-end
+% Make sure that we have a starting point in (param0, lnv0)
+[param0, lnv0, do_estim_lnv] = provide_starting_point (model, xi, zi, param0, lnv0);
 
 % TODO: allow user-defined bounds
 [lb, ub] = stk_param_getdefaultbounds (model.covariance_type, param0, xi, zi);
@@ -207,7 +190,7 @@ end
 end % function
 
 
-function [param0, lnv0] = provide_param0_value ... % ---------------------------
+function [param0, lnv0, do_estim_lnv] = provide_starting_point ...
     (model, xi, zi, param0, lnv0)
 
 % The starting points param0 and lnv0 can be provided either directly under the
@@ -218,26 +201,57 @@ function [param0, lnv0] = provide_param0_value ... % ---------------------------
 % a starting point, in which case we must use it.
 if ~ isempty (param0)
     
-    param0 = stk_get_optimizable_parameters (param0);
+    param0_ = stk_get_optimizable_parameters (param0);
     
     % Test if param0 contains nans
-    if any (isnan (param0))
+    if any (isnan (param0_))
         stk_error ('param0 has NaNs', 'InvalidArgument');
     end
     
     % Cast param0 into a variable of the appropriate type (numeric or object)
-    param0 = stk_set_optimizable_parameters (model.param, param0);
+    param0 = stk_set_optimizable_parameters (model.param, param0_);
+    
+    % Now take care of lnv0.
+    % Same rule: if not empty, we have a user-provided starting point.
+    if isempty (lnv0)
+        % When lnv0 is not provided, noise variance estimation happens when lnv has NaNs.
+        do_estim_lnv = any (isnan (stk_get_optimizable_noise_parameters (model)));
+        if do_estim_lnv
+            % We have a user-provided starting point for param0 but not for lnv0.
+            model.param = param0;
+            if isnumeric (lnv0)
+                lnv0 = stk_param_init_lnv (model, xi, zi);
+            else
+                % EXPERIMENTAL (Stroh)
+                lnv0 = stk_param_init (lnv0, model, xi, zi);
+            end
+        end
+    else
+        % When lnv0 is provided, noise variance *must* be estimated
+        do_estim_lnv = true;
+        stk_param_check_lnv0 (model, lnv0);
+    end
     
 else  % Otherwise, try stk_param_init to get a starting point
     
-    lnv0 = stk_get_optimizable_parameters (lnv0);
-    
-    model.lognoisevariance = stk_set_optimizable_parameters ...
-        (model.lognoisevariance, lnv0);
+    if isempty (lnv0)
+        % If needed, stk_param_init will also provide a starting point for lnv0
+        % (This is triggered by the presence of NaNs.)
+        do_estim_lnv = any (isnan (stk_get_optimizable_noise_parameters (model)));
+    else
+        % When lnv0 is provided, noise variance *must* be estimated
+        do_estim_lnv = true;
+        stk_param_check_lnv0 (model, lnv0);
+        % In this case stk_param_init will return lnv0 = model.lognoisevariance,
+        % so we just have to set our starting point there.
+        lnv0_ = stk_get_optimizable_parameters (lnv0);
+        model.lognoisevariance = stk_set_optimizable_parameters ...
+            (model.lognoisevariance, lnv0_);
+    end
     
     [param0, lnv0] = stk_param_init (model, xi, zi);
     
-end
+end % if
 
 end % function
 
