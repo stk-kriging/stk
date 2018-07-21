@@ -106,15 +106,8 @@ end
 % Make sure that we have a starting point in (param0, lnv0)
 [param0, lnv0, do_estim_lnv] = provide_starting_point (model, xi, zi, param0, lnv0);
 
-% Define bounds for optimization
 % TODO: allow user-defined bounds
-if isa(param0, 'stk_covmodel')
-    % if param0 is a stk_covmodel, call directly the good
-    % stk_param_getdefaultbounds function
-    [lb, ub] = stk_param_getdefaultbounds(param0, xi, zi);
-else
-    [lb, ub] = stk_param_getdefaultbounds(model.covariance_type, param0, xi, zi);
-end
+[lb, ub] = stk_param_getdefaultbounds (model.covariance_type, param0, xi, zi);
 
 % Get vector of numerical parameters
 u0 = stk_get_optimizable_parameters(param0);
