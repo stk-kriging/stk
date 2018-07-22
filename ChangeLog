@@ -1,5 +1,14 @@
 2018-07-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Remove some useless try-catch blocks
+
+	* param/classes/stk_get_optimizable_parameters.m: Remove useless
+	try-catch block, which sometimes hides the true cause of the
+	error.
+	* param/classes/stk_set_optimizable_parameters.m: Idem.
+
+2018-07-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
 	stk_param_estim.m: Gather all code related to starting point determination
 
 	* param/estim/stk_param_estim.m: Gather all code related to
