@@ -72,39 +72,30 @@ if isstruct (param)
     
 else
     
-    try
+    if nargin < 3
         
-        if nargin < 3
-            
-            % If param is numeric, the following syntax preserves its size and type
-            param(:) = value;
-            
-        else
-            
-            % Save initial size
-            s = size (param);
-            
-            % If param is numeric, the following syntax preserves its type
-            % but might change its size, depending on what select actually is
-            param(select) = value;
-            
-            if ~ isequal (size (param), s)
-                stk_error ('Invalid select argument.', 'InvalidArgument');
-            end
-            
+        % If param is numeric, the following syntax preserves its size and type
+        param(:) = value;
+        
+    else
+        
+        % Save initial size
+        s = size (param);
+        
+        % If param is numeric, the following syntax preserves its type
+        % but might change its size, depending on what select actually is
+        param(select) = value;
+        
+        if ~ isequal (size (param), s)
+            stk_error ('Invalid select argument.', 'InvalidArgument');
         end
         
-        % Note: if param is an object, what we just did is actually a call to
-        % subsasgn in disguise.  This way of supporting parameter objects has been
-        % introduced in STK 2.0.0 as an "experimental" feature.  It is now
-        % deprecated; overload stk_set_optimizable_parameters () instead.
-        
-    catch
-        
-        stk_error (['stk_set_optimizable_parameters is not implemented for ' ...
-            'objects of class ', class(param), '.'], 'TypeMismatch');
-        
-    end % if
+    end
+    
+    % Note: if param is an object, what we just did is actually a call to
+    % subsasgn in disguise.  This way of supporting parameter objects has been
+    % introduced in STK 2.0.0 as an "experimental" feature.  It is now
+    % deprecated; overload stk_set_optimizable_parameters () instead.
     
 end % if
 
