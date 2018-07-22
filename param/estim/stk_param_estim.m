@@ -110,8 +110,8 @@ end
 [lb, ub] = stk_param_getdefaultbounds (model.covariance_type, param0, xi, zi);
 
 % Get vector of numerical parameters
-u0 = stk_get_optimizable_parameters(param0);
-nbParam_cov = length(u0);
+u0 = stk_get_optimizable_parameters (param0);
+nbParam_cov = length (u0);
 
 if do_estim_lnv
     [lb_lnv, ub_lnv] = stk_param_getdefaultbounds_lnv (model, lnv0, xi, zi);
@@ -127,8 +127,8 @@ nbParam_lnv = length(u0) - nbParam_cov;
 Aconst_eq = [];
 bconst_eq = [];
 
-if (isa(param0, 'stk_covmodel') && isa(param0.prior, 'stk_prior_gauss')...
-        && any(param0.prior.eigenvals == 0))
+if (isa (param0, 'stk_covmodel') && isa (param0.prior, 'stk_prior_gauss') ...
+        && any (param0.prior.eigenvals == 0))
     trans = param0.prior.eigenvect;
     mea_trans = trans'*param0.prior.mean;
     
@@ -138,8 +138,8 @@ if (isa(param0, 'stk_covmodel') && isa(param0.prior, 'stk_prior_gauss')...
     bconst_eq = [bconst_eq; mea_trans(ind_eq, 1)];
 end
 
-if (do_estim_lnv && isa(lnv0, 'stk_noisemodel')...
-        && isa(lnv0.prior, 'stk_prior_gauss') && any(lnv0.prior.eigenvals == 0))
+if (do_estim_lnv && isa(lnv0, 'stk_noisemodel') ...
+        && isa (lnv0.prior, 'stk_prior_gauss') && any (lnv0.prior.eigenvals == 0))
     trans = lnv0.prior.eigenvect;
     mea_trans = trans'*lnv0.prior.mean;
     
@@ -173,7 +173,7 @@ end
 if do_estim_lnv
     index_lnv = (nbParam_cov + 1):length(u_opt);
     lnv_opt = lnv0;          % Return an object with the same class as lnv0
-    lnv_opt = stk_set_optimizable_parameters(lnv_opt, u_opt(index_lnv));
+    lnv_opt = stk_set_optimizable_parameters (lnv_opt, u_opt(index_lnv));
     u_opt(index_lnv) = [];
 else
     lnv_opt = model.lognoisevariance;
