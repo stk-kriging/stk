@@ -129,23 +129,32 @@ bconst_eq = [];
 
 if (isa (param0, 'stk_covmodel') && isa (param0.prior, 'stk_prior_gauss') ...
         && any (param0.prior.eigenvals == 0))
-    trans = param0.prior.eigenvect;
-    mea_trans = trans'*param0.prior.mean;
     
-    ind_eq = (param0.prior.eigenvals == 0);	% index of parameters
-    %(or linear combination of parameters) which must not move.
-    Aconst_eq = [Aconst_eq; [trans(:, ind_eq)', zeros(sum(ind_eq), nbParam_lnv)]];
-    bconst_eq = [bconst_eq; mea_trans(ind_eq, 1)];
+    trans = param0.prior.eigenvect;
+    mea_trans = trans' * param0.prior.mean;
+    
+    ind_eq = (param0.prior.eigenvals == 0);
+    nb_eq = sum (ind_eq);
+    
+    if nb_eq > 0
+        Aconst_eq = [Aconst_eq; [trans(:, ind_eq)', zeros(nb_eq, nbParam_lnv)]];
+        bconst_eq = [bconst_eq; mea_trans(ind_eq, 1)];
+    end
 end
 
 if (do_estim_lnv && isa(lnv0, 'stk_noisemodel') ...
         && isa (lnv0.prior, 'stk_prior_gauss') && any (lnv0.prior.eigenvals == 0))
+    
     trans = lnv0.prior.eigenvect;
     mea_trans = trans'*lnv0.prior.mean;
     
     ind_eq = (lnv0.prior.eigenvals == 0);
-    Aconst_eq = [Aconst_eq; [zeros(sum(ind_eq), nbParam_cov), trans(:, ind_eq)']];
-    bconst_eq = [bconst_eq; mea_trans(ind_eq, 1)];
+    nb_eq = sum (ind_eq);
+    
+    if nb_eq > 0
+        Aconst_eq = [Aconst_eq; [zeros(nb_eq, nbParam_cov), trans(:, ind_eq)']];
+        bconst_eq = [bconst_eq; mea_trans(ind_eq, 1)];
+    end
 end
 
 % Define the function to optimize
