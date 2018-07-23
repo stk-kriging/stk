@@ -20,8 +20,8 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
-%    Copyright (C) 2015 CentraleSupelec & LNE
+%    Copyright (C) 2015, 2017, 2018 CentraleSupelec
+%    Copyright (C) 2015 LNE
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -63,6 +63,12 @@ if isobject (param0)
 elseif ~ isfloat (param0)
     
     stk_error ('Incorrect type for param0.', 'TypeMismatch');
+    
+elseif isempty (param0)
+    
+    % Special case of a covariance function with no parameters
+    lb = [];
+    ub = [];
     
 else
     

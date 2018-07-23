@@ -59,33 +59,24 @@ if isstruct (arg1)
         
         % Assuming that arg1 is a model structure:
         value = stk_get_optimizable_model_parameters (arg1);
-                
+        
     end
     
 else
-   
+    
     if isnumeric (arg1)
         
         param = arg1;
-    
+        
     else
         
-        try
-            
-            % Extract parameter values
-            param = arg1(:);
-            
-            % Note: if param is an object, the previous line is actually a call to
-            % subsref in disguise.  This way of supporting parameter objects has
-            % been introduced in STK 2.0.0 as an "experimental" feature.  It is now
-            % deprecated.
-            
-        catch
-            
-            stk_error (['stk_get_optimizable_parameters is not implemented for ' ...
-                'objects of class ', class(arg1), '.'], 'TypeMismatch');
-            
-        end
+        % Extract parameter values
+        param = arg1(:);
+        
+        % Note: if param is an object, the previous line is actually a call to
+        % subsref in disguise.  This way of supporting parameter objects has
+        % been introduced in STK 2.0.0 as an "experimental" feature.  It is now
+        % deprecated.
         
     end % if
     
