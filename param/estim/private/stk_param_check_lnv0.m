@@ -32,7 +32,7 @@ function stk_param_check_lnv0 (model, lnv0)
 
 % Check that there are no NaNs or Infs
 lnv0_ = stk_get_optimizable_parameters (lnv0);
-if any (isnan (lnv0_) || isinf (lnv0_))
+if any (isnan (lnv0_)) || any (isinf (lnv0_))
     stk_error (['Incorrect value for input argument lnv0.  The components of ' ...
         'the starting point must be neither infinite nor NaN.'], 'InvalidArgument');
 end
