@@ -1,3 +1,27 @@
+2018-07-23  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_runtests.m: Improve the function in various ways
+
+	* misc/test/stk_runtests.m: Improve the function in various ways.
+	First, make it possible to run all the tests in a given set of
+	directories.  Second, display runtime for each directory.  Third,
+	use the internal function stk_runtests_ both in Matlab and in
+	Octave (instead of __run_test_suite__ in Octave).
+
+	stk_param_getdefaultbounds.m: Return [] bounds when param0 is []
+
+	* param/estim/stk_param_getdefaultbounds.m: Return empty bounds
+	when param0 is empty.
+
+2018-07-22  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Remove some useless try-catch blocks
+
+	* param/classes/stk_get_optimizable_parameters.m: Remove useless
+	try-catch block, which sometimes hides the true cause of the
+	error.
+	* param/classes/stk_set_optimizable_parameters.m: Idem.
+
 2018-07-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_estim.m: Gather all code related to starting point determination
