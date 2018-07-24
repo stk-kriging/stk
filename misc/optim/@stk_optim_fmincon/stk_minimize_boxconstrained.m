@@ -42,8 +42,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [u_opt,lik] = stk_minimize_boxconstrained (algo, f, u_init, lb, ub)
+function [u_opt, lik] = stk_minimize_boxconstrained (algo, f, u_init, lb, ub)
 
-[u_opt,lik] = fmincon (f, u_init, [], [], [], [], lb, ub, [], algo.options);
+[u_opt, lik] = fmincon (f, u_init, [], [], [], [], lb, ub, [], algo.options);
 
 end % function

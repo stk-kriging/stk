@@ -1,5 +1,9 @@
 2018-07-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_param_check_lnv0.m: Fix a bug.
+
+	* param/estim/private/stk_param_check_lnv0.m: Fix a bug.
+
 	stk_runtests.m: Improve the function in various ways
 
 	* misc/test/stk_runtests.m: Improve the function in various ways.
