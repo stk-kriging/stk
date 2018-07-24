@@ -1,4 +1,12 @@
 % STK_NOISECOV [deprecated]
+%
+% This function is deprecated and will, sooner or later, be removed.  Use:
+%
+%    stk_covmat (model, 'noise', ...)
+%
+% instead.
+%
+% See also: stk_covmat
 
 % Copyright Notice
 %
