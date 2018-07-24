@@ -1,3 +1,10 @@
+2018-07-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init_lnv.m: Errors out for noiseless models
+
+	* param/estim/stk_param_init_lnv.m: Errors out if called for a
+	noiseless model.
+
 2018-07-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_check_lnv0.m: Fix a bug.
