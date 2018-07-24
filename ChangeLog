@@ -1,5 +1,12 @@
 2018-07-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_param_estim.m: Fix recently introduced error
+
+	* param/estim/stk_param_estim.m (provide_starting_point): Fix
+	recently introduced error in subfunction provide_starting_point.
+	Went unnoticed because this section is not covered by unit
+	tests...
+
 	stk_param_init_lnv.m: Errors out for noiseless models
 
 	* param/estim/stk_param_init_lnv.m: Errors out if called for a

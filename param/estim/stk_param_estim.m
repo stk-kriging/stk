@@ -219,11 +219,11 @@ if ~ isempty (param0)
         if do_estim_lnv
             % We have a user-provided starting point for param0 but not for lnv0.
             model.param = param0;
-            if isnumeric (lnv0)
+            if isnumeric (model.lognoisevariance)
                 lnv0 = stk_param_init_lnv (model, xi, zi);
             else
                 % EXPERIMENTAL (Stroh)
-                lnv0 = stk_param_init (lnv0, model, xi, zi);
+                lnv0 = stk_param_init (model.lognoisevariance, model, xi, zi);
             end
         end
     else
