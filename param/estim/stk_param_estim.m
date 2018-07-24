@@ -120,44 +120,7 @@ if do_estim_lnv
     ub = [ub; ub_lnv];
     u0 = [u0; u0_lnv];
 end
-nbParam_lnv = length(u0) - nbParam_cov;
 
-% If necessary, define equality constraint with matrix
-% Constraint such as A*u0 = b
-Aconst_eq = [];
-bconst_eq = [];
-
-if (isa (param0, 'stk_covmodel') && isa (param0.prior, 'stk_prior_gauss') ...
-        && any (param0.prior.eigenvals == 0))
-    
-    trans = param0.prior.eigenvect;
-    mea_trans = trans' * param0.prior.mean;
-    
-    ind_eq = (param0.prior.eigenvals == 0);
-    nb_eq = sum (ind_eq);
-    
-    if nb_eq > 0
-        Aconst_eq = [Aconst_eq; [trans(:, ind_eq)', zeros(nb_eq, nbParam_lnv)]];
-        bconst_eq = [bconst_eq; mea_trans(ind_eq, 1)];
-    end
-end
-
-if (do_estim_lnv && isa(lnv0, 'stk_noisemodel') ...
-        && isa (lnv0.prior, 'stk_prior_gauss') && any (lnv0.prior.eigenvals == 0))
-    
-    trans = lnv0.prior.eigenvect;
-    mea_trans = trans'*lnv0.prior.mean;
-    
-    ind_eq = (lnv0.prior.eigenvals == 0);
-    nb_eq = sum (ind_eq);
-    
-    if nb_eq > 0
-        Aconst_eq = [Aconst_eq; [zeros(nb_eq, nbParam_cov), trans(:, ind_eq)']];
-        bconst_eq = [bconst_eq; mea_trans(ind_eq, 1)];
-    end
-end
-
-% Define the function to optimize
 model.param = param0;
 switch do_estim_lnv
     case false
@@ -167,18 +130,16 @@ switch do_estim_lnv
         f = @(u)(f_with_noise_ (model, u, xi, zi, criterion));
 end
 
-% Optimize
 bounds_available = (~ isempty (lb)) && (~ isempty (ub));
 
 if bounds_available
     A = stk_options_get ('stk_param_estim', 'minimize_box');
-    [u_opt, crit_opt] = stk_minimize_boxconstrained (A, f, u0, lb, ub, Aconst_eq, bconst_eq);
+    [u_opt, crit_opt] = stk_minimize_boxconstrained (A, f, u0, lb, ub);
 else
     A = stk_options_get ('stk_param_estim', 'minimize_unc');
     [u_opt, crit_opt] = stk_minimize_unconstrained (A, f, u0);
 end
 
-% Return result
 if do_estim_lnv
     index_lnv = (nbParam_cov + 1):length(u_opt);
     lnv_opt = lnv0;          % Return an object with the same class as lnv0

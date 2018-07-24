@@ -42,28 +42,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [u_opt,lik] = stk_minimize_boxconstrained (algo, f, u_init, lb, ub, Aeq, beq)
-
-if nargin == 6 && ~isempty(Aeq)
-    stk_error ('Missing constrain vector.', 'MissingInputArgs');
-end
-
-if nargin < 6
-    Aeq = [];
-    beq = [];
-end
+function [u_opt,lik] = stk_minimize_boxconstrained (algo, f, u_init, lb, ub)
 
 nabla_f = @(u)(nabla_f_ (f, u));
 
-if ~isempty(Aeq)
-    g_eq_c = @(u)(Aeq*u - beq);
-    g_eq_d = @(u)(Aeq);
-    g_eq = {g_eq_c, g_eq_d};
-else
-    g_eq = [];
-end
-
-[u_opt,lik] = feval (algo.sqp, u_init, {f nabla_f}, g_eq , [], lb, ub, ...
+[u_opt,lik] = feval (algo.sqp, u_init, {f nabla_f}, [] , [], lb, ub, ...
     algo.options.maxiter, algo.options.tol);
 
 end % function
