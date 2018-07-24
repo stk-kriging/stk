@@ -1,5 +1,10 @@
 2018-07-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_param_init.m: Errors out if the first arg is not a structure
+
+	* param/estim/stk_param_init.m: Errors out if the first argument
+	is not a structure, since we expect a model structure here.
+
 	stk_param_estim.m: Fix recently introduced error
 
 	* param/estim/stk_param_estim.m (provide_starting_point): Fix
