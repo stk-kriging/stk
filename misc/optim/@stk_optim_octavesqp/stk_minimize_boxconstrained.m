@@ -42,11 +42,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [u_opt,lik] = stk_minimize_boxconstrained (algo, f, u_init, lb, ub)
+function [u_opt, lik] = stk_minimize_boxconstrained (algo, f, u_init, lb, ub)
 
 nabla_f = @(u)(nabla_f_ (f, u));
 
-[u_opt,lik] = feval (algo.sqp, u_init, {f nabla_f}, [] , [], lb, ub, ...
+[u_opt, lik] = feval (algo.sqp, u_init, {f nabla_f}, [], [], lb, ub, ...
     algo.options.maxiter, algo.options.tol);
 
 end % function
