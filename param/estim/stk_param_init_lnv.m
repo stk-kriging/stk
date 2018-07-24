@@ -59,7 +59,7 @@ end
 
 % Make sure that lognoisevariance is -inf for noiseless models
 if ~ stk_isnoisy (model)
-    model.lognoisevariance = -inf;
+    stk_error ('stk_param_estim_lnv only works for noisy models', 'InvalidArgument');
 end
 
 % We will work with the ratio eta = sigma2_noise / sigma2
@@ -99,6 +99,7 @@ end % function
 %!
 %! model = stk_model ('stk_materncov_iso');
 %! model.param = log ([1; 5/2; 1/0.4]);
+%! model.lognoisevariance = nan;
 %! lnv = stk_param_init_lnv (model, xi, zi);
 %!
 %! assert ((isscalar (lnv)) && (lnv > -30) && (lnv < 30));
