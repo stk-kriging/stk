@@ -63,7 +63,7 @@ if ~ stk_isnoisy (model)
 end
 
 if isa(model.lognoisevariance, 'stk_noisevar_param')
-    lnv = stk_param_init_lnv (model.lognoisevariance, model, xi, zi);
+    lnv = stk_param_init (model.lognoisevariance, model, xi, zi);
     % If model.lognoisevariance is a class, switch on the good
     % initialization for lognoisevariance
     
