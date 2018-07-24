@@ -62,31 +62,38 @@ if ~ stk_isnoisy (model)
     stk_error ('stk_param_estim_lnv only works for noisy models', 'InvalidArgument');
 end
 
-% We will work with the ratio eta = sigma2_noise / sigma2
-log_eta_min = -15;  % exp(-15) = 3e-7 approx  -> very small noise
-log_eta_max = +15;  % exp(+15) = 3e+7 approx  -> very large noise
-log_eta_list = linspace (log_eta_min, log_eta_max, 5);
-
-% Initialize parameter search
-log_eta_best = nan;
-aLL_best = +inf;
-
-% Try all values from log_eta_list
-for log_eta = log_eta_list
-    model.lognoisevariance = model.param(1) + log_eta;
-    aLL = stk_param_relik (model, xi, zi);
-    if (~ isnan (aLL)) && (aLL < aLL_best)
-        log_eta_best = log_eta;
-        aLL_best    = aLL;
+if isa(model.lognoisevariance, 'stk_noisevar_param')
+    lnv = stk_param_init (model.lognoisevariance, model, xi, zi);
+    % If model.lognoisevariance is a class, switch on the good
+    % initialization for lognoisevariance
+    
+else %if isnumeric(model.lognoisevariance)
+    % We will work with the ratio eta = sigma2_noise / sigma2
+    log_eta_min = -15;  % exp(-15) = 3e-7 approx  -> very small noise
+    log_eta_max = +15;  % exp(+15) = 3e+7 approx  -> very large noise
+    log_eta_list = linspace (log_eta_min, log_eta_max, 5);
+    
+    % Initialize parameter search
+    log_eta_best = nan;
+    aLL_best = +inf;
+    
+    % Try all values from log_eta_list
+    for log_eta = log_eta_list
+        model.lognoisevariance = model.param(1) + log_eta;
+        aLL = stk_param_relik (model, xi, zi);
+        if (~ isnan (aLL)) && (aLL < aLL_best)
+            log_eta_best = log_eta;
+            aLL_best    = aLL;
+        end
     end
+    
+    if isinf (aLL_best)
+        errmsg = 'Couldn''t find reasonable parameter values... ?!?';
+        stk_error (errmsg, 'AlgorithmFailure');
+    end
+    
+    lnv = model.param(1) + log_eta_best;
 end
-
-if isinf (aLL_best)
-    errmsg = 'Couldn''t find reasonable parameter values... ?!?';
-    stk_error (errmsg, 'AlgorithmFailure');
-end
-
-lnv = model.param(1) + log_eta_best;
 
 end % function
 

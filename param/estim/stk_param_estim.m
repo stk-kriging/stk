@@ -111,6 +111,7 @@ end
 
 % Get vector of numerical parameters
 u0 = stk_get_optimizable_parameters (param0);
+nbParam_cov = length (u0);
 
 if do_estim_lnv
     [lb_lnv, ub_lnv] = stk_param_getdefaultbounds_lnv (model, lnv0, xi, zi);
@@ -120,10 +121,12 @@ if do_estim_lnv
     u0 = [u0; u0_lnv];
 end
 
+model.param = param0;
 switch do_estim_lnv
     case false
         f = @(u)(f_ (model, u, xi, zi, criterion));
     case true
+        model.lognoisevariance = lnv0;
         f = @(u)(f_with_noise_ (model, u, xi, zi, criterion));
 end
 
@@ -138,8 +141,10 @@ else
 end
 
 if do_estim_lnv
-    lnv_opt = u_opt(end);
-    u_opt(end) = [];
+    index_lnv = (nbParam_cov + 1):length(u_opt);
+    lnv_opt = lnv0;          % Return an object with the same class as lnv0
+    lnv_opt = stk_set_optimizable_parameters (lnv_opt, u_opt(index_lnv));
+    u_opt(index_lnv) = [];
 else
     lnv_opt = model.lognoisevariance;
 end
@@ -164,7 +169,12 @@ end % function
 
 function [l, dl] = f_ (model, u, xi, zi, criterion)
 
-model.param = stk_set_optimizable_parameters (model.param, u);
+if stk_isnoisy(model)
+    model = stk_set_optimizable_parameters(model,...
+        [u; stk_get_optimizable_noise_parameters(model)]);
+else
+    model = stk_set_optimizable_parameters(model, u);
+end
 
 if nargout == 1
     l = criterion (model, xi, zi);
@@ -177,9 +187,7 @@ end % function
 
 function [l, dl] = f_with_noise_ (model, u, xi, zi, criterion)
 
-model.param = stk_set_optimizable_parameters (model.param, u(1:end-1));
-model.lognoisevariance = u(end);
-
+model = stk_set_optimizable_parameters(model, u);
 if nargout == 1
     l = criterion (model, xi, zi);
 else
