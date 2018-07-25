@@ -260,8 +260,7 @@ model.lm = lm;
 model.lognoisevariance = lnv;
 
 % Noiseless case?
-noiseless = isequal (lnv, -inf);
-
+noiseless = (~ do_estim_lnv) && (isequal (lnv, -inf));
 
 % list of possible values for the ratio eta = sigma2_noise / sigma2
 if ~ noiseless
