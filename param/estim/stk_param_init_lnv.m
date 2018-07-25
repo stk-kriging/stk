@@ -57,7 +57,13 @@ if (std (double (zi)) == 0)
         'to be unreliable.']);
 end
 
-% Make sure that lognoisevariance is -inf for noiseless models
+% backward compatibility: missing lognoisevariance field
+if ~ isfield (model, 'lognoisevariance')
+    % Special case: assume a noisy model with constant but unknown noise variance
+    model.lognoisevariance = nan;
+end
+
+% Make sure that we are dealing with a noisy model
 if ~ stk_isnoisy (model)
     stk_error ('stk_param_estim_lnv only works for noisy models', 'InvalidArgument');
 end
