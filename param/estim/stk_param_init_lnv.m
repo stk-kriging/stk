@@ -62,6 +62,12 @@ if ~ stk_isnoisy (model)
     stk_error ('stk_param_estim_lnv only works for noisy models', 'InvalidArgument');
 end
 
+% EXPERIMENTAL support for noise model objects
+if ~ isnumeric (model.lognoisevariance)
+    lnv = stk_param_init_lnv_ (model.lognoisevariance, model, xi, zi);
+    return
+end
+
 % We will work with the ratio eta = sigma2_noise / sigma2
 log_eta_min = -15;  % exp(-15) = 3e-7 approx  -> very small noise
 log_eta_max = +15;  % exp(+15) = 3e+7 approx  -> very large noise
