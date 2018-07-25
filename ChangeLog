@@ -1,5 +1,13 @@
 2018-07-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Introduce exceptions to the way missing lnv is handled
+
+	* param/estim/stk_param_init.m: Considers that lnv is nan, instead
+	of -Inf as everywhere else, in case of missing lnv field if lnv
+	estimation is explicitely requested.
+	* param/estim/stk_param_init_lnv.m: Considers that lnv is nan in
+	case of missing lnv field.
+
 	stk_param_init_lnv.m: Experimental support for noise model objects
 
 	* param/estim/stk_param_init_lnv.m: Introduce experimental support

@@ -142,9 +142,15 @@ end
 
 %--- backward compatiblity -----------------------------------------------------
 
-% Make sure that lognoisevariance is -inf for noiseless models
-if ~ stk_isnoisy (model)
-    model.lognoisevariance = -inf;
+% Missing lognoisevariance field
+if ~ isfield (model, 'lognoisevariance')
+    if (nargin < 5) || (~ do_estim_lnv)
+        % Assume a noiseless model
+        model.lognoisevariance = - inf;
+    else
+        % Special case: assume a noisy model with constant but unknown noise variance
+        model.lognoisevariance = nan;
+    end
 end
 
 % Ensure backward compatiblity with respect to model.order / model.lm
