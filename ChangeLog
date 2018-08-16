@@ -1,3 +1,10 @@
+2018-08-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_example_kb09.m: Update unit tests
+
+	* examples/01_kriging_basics/stk_example_kb09.m: Update unit
+	tests, which still referred to the old HOMOSCEDASTIC_NOISE variable.
+
 2018-07-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Introduce exceptions to the way missing lnv is handled

@@ -82,5 +82,4 @@ stk_title ('Prediction and credible intervals');
 stk_labels ('input variable x', 'response z');
 
 
-%!test HOMOSCEDASTIC_NOISE = true;   stk_example_kb09;  close all;
-%!test HOMOSCEDASTIC_NOISE = false;  stk_example_kb09;  close all;
+%!test stk_example_kb09;  close all;
