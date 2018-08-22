@@ -1,3 +1,15 @@
+2018-08-22  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init.m: Clarify how we determine the value of do_estim_lnv
+
+	* param/estim/stk_param_init.m: Clarify how we determine the value
+	of do_estim_lnv.  In the (undocumented) case of an heteroscedastic
+	noise represented by a vector of variances, we ne longer issue an
+	error is do_estim_lnv is true, we simply ignore it.  At the same
+	time, this patch improves the way we deal with noise model
+	objects, since previously we had a few old-style lnv(:)
+	expressions in here.
+
 2018-08-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_example_kb09.m: Update unit tests
