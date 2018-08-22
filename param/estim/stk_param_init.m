@@ -155,6 +155,13 @@ if ~ isfield (model, 'lognoisevariance')
         % Special case: assume a noisy model with constant but unknown noise variance
         model.lognoisevariance = nan;
     end
+    
+elseif isequal (model.lognoisevariance, -inf) && ((nargin >= 5) && do_estim_lnv)
+    
+    % In this special case, we are flexible and consider -inf as a particular
+    % value of the variance in an homoscedastic noise model.
+    model.lognoisevariance = nan;
+    
 end
 
 % Ensure backward compatiblity with respect to model.order / model.lm
@@ -163,38 +170,31 @@ model = stk_model_fixlm (model);
 
 %--- lognoisevariance ? --------------------------------------------------------
 
-lnv = model.lognoisevariance;
-if (isnumeric (lnv)) && (~ isscalar (lnv))  % Backward compatibility
+lnv_ = stk_get_optimizable_noise_parameters (model);
+
+if isempty (lnv_)
     
-    % Old-style support for the heteroscedastic case: a numeric vector of
-    % log-noise variances was stored in model.lognoisevariance (implicitely
-    % associated with the locations xi.
+    % Even is do_estim_lnv was set to true by the caller, we set it back
+    % to false in this case, since there are no parameters to optimize
+    do_estim_lnv = false;
+
+elseif nargin < 5
     
-    % Noise variance estimation not supported in this case
-    if ((nargin >= 5) && do_estim_lnv) || (any (isnan (lnv)))
-        % FIXME: warn that a more modern way of dealing with the heteroscedastic
-        % case is now available in STK
-        stk_error (['model.lognoisevariance is non-scalar and contains ' ...
-            'nans. Noise variance estimation is not supported in the ' ...
-            'heteroscedastic case '], 'InvalidArgument');
-    else
-        do_estim_lnv = false;
-    end
+    % When do_estim_lnv is not set by the user, we set it to true if some
+    % of the parameters are NaNs, which is interpreted as "Estimate me !"
+    do_estim_lnv = any (isnan (lnv_));
     
-else  % General case
+else  % do_estim_lnv set by the caller
     
-    % Estimation of noise variance ?
-    %  * if do_estim_lnv is provided, use it to decide
-    %  * if not, estimation occurs when lnv(:) contains NaNs
+    do_estim_lnv = logical (do_estim_lnv);
     
-    if nargin < 5  % do_estim_lnv not provided
-        do_estim_lnv = any (isnan (lnv(:)));
-    elseif (~ do_estim_lnv) && (any (isnan (lnv(:))))
-        stk_error (sprintf (['do_estim_lnv is false, but some parameter ' ...
+    if (~ do_estim_lnv) && (any (isnan (lnv_)))
+        stk_error (sprintf (['do_estim_lnv is false, but some parameter '    ...
             'values are equal to NaN. If you don''t want the parameters of ' ...
-            'the noise variance model to be estimated, you must provide ' ...
+            'the noise variance model to be estimated, you must provide '    ...
             'values for them!']), 'MissingParameterValue');
     end
+    
 end
 
 if (do_estim_lnv) && (nargout < 2)
@@ -205,6 +205,8 @@ end
 
 
 %--- then, each type of covariance is dealt with specifically ------------------
+
+lnv = model.lognoisevariance;
 
 switch model.covariance_type
     
@@ -458,12 +460,6 @@ end % function
 %! model.lognoisevariance = nan;  % not compatible with do_estim_lnv == false
 %! [model.param, model.lognoisevariance] = ...
 %!     stk_param_init (model, xi, zi, BOX, false);
-
-%!error  % Heteroscedastic case / do_estim_lnv = true
-%! model = stk_model ('stk_materncov32_iso');
-%! lnv = log ((100 + rand (size (zi))) / 1e6);
-%! model.lognoisevariance = lnv;  % here we say that lnv is known
-%! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX, true);
 
 %!test  % Heteroscedastic case / known noise variance
 %! model = stk_model ('stk_materncov32_iso');
