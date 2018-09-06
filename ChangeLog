@@ -1,5 +1,12 @@
 2018-09-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_param_init.m: Noise parameter objects are not allowed
+
+	* param/estim/stk_param_init.m (stk_param_init_): Make it clear
+	that, for the noise model, parameter estimation is only supported
+	in the usual homoscedastic case, and parameter objects are not
+	allowed.
+
 	stk_param_init.m: Do not call stk_param_init_ if param is an object
 
 	* param/estim/stk_param_init.m: Do not call STK's default
