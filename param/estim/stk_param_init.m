@@ -144,6 +144,7 @@ end
 
 % Missing lognoisevariance field
 if ~ isfield (model, 'lognoisevariance')
+    
     if (nargin < 5) || (~ do_estim_lnv)
         % Assume a noiseless model
         model.lognoisevariance = - inf;
@@ -170,15 +171,27 @@ lnv_ = stk_get_optimizable_noise_parameters (model);
 
 if isempty (lnv_)
     
+    % There are no parameters to optimize in the noise model, either because we
+    % are in the noiseless case, ou because we have a noise model object that
+    % does not declare any hyperparameter.  In this case:
+    
     % Even is do_estim_lnv was set to true by the caller, we set it back
     % to false in this case, since there are no parameters to optimize
     do_estim_lnv = false;
-
+    
+    if stk_isnoisy (model)
+        lnv = stk_get_observation_variances (model, xi);
+    else
+        lnv = -inf;
+    end
+    
 elseif nargin < 5
     
     % When do_estim_lnv is not set by the user, we set it to true if some
     % of the parameters are NaNs, which is interpreted as "Estimate me !"
     do_estim_lnv = any (isnan (lnv_));
+    
+    lnv = model.lognoisevariance;
     
 else  % do_estim_lnv set by the caller
     
@@ -191,6 +204,19 @@ else  % do_estim_lnv set by the caller
             'values for them!']), 'MissingParameterValue');
     end
     
+    lnv = model.lognoisevariance;
+    
+end
+
+% After this point, we only accept
+%   a) a scalar lnv (noiseless and homoscedastic cases), which is allowed to be nan,
+%   b) a vector lnv (heteroscedatic case), which cannot be nan.
+%
+% In other words, fancy objects are not allowed, and parameter estimation is
+% only supported in the homoscedastic case.  Here we go:
+if ~ (isnumeric (lnv) && (isscalar (lnv) || ~ any (isnan (lnv))))
+    stk_error (['Parameter estimation for the noise model is ' ...
+        'not supported in this case.'], 'InvalidArgument');
 end
 
 if (do_estim_lnv) && (nargout < 2)
@@ -201,8 +227,6 @@ end
 
 
 %--- then, each type of covariance is dealt with specifically ------------------
-
-lnv = model.lognoisevariance;
 
 switch model.covariance_type
     
@@ -236,6 +260,11 @@ switch model.covariance_type
     otherwise
         errmsg = 'Unsupported covariance type.';
         stk_error (errmsg, 'InvalidArgument');
+end
+
+% Return the original lnv if no parameter estimation was performed
+if ~ do_estim_lnv
+    lnv = model.lognoisevariance;
 end
 
 end % function
