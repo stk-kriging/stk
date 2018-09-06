@@ -91,7 +91,7 @@ if ~ ischar (model.covariance_type)
     model.covariance_type = func2str (model.covariance_type);
 end
 
-if ismember (model.covariance_type, cov_list)
+if (ismember (model.covariance_type, cov_list)) && (isnumeric (model.param))
     
     % An initialization for this covariance type is provided in STK
     [param, lnv] = stk_param_init_ (model, varargin{:});
