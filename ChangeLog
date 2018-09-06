@@ -1,3 +1,10 @@
+2018-09-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init.m: Do not call stk_param_init_ if param is an object
+
+	* param/estim/stk_param_init.m: Do not call STK's default
+	stk_param_init_ procedure if model.param is an object.
+
 2018-08-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_init.m: Clarify how we determine the value of do_estim_lnv
