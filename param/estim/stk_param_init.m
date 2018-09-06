@@ -40,10 +40,12 @@
 % Copyright Notice
 %
 %    Copyright (C) 2015, 2016, 2018 CentraleSupelec
+%    Copyright (C) 2016 LNE
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
 %              Paul Feliot  <paul.feliot@irt-systemx.fr>
+%              Remi Stroh   <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -233,20 +235,20 @@ switch model.covariance_type
     case {'stk_expcov_iso', 'stk_materncov32_iso', 'stk_materncov52_iso', ...
             'stk_gausscov_iso', 'stk_sphcov_iso'}
         [param, lnv] = paraminit_ (model.covariance_type, ...
-            xi, zi, box, model.lm, lnv);
+            xi, zi, box, model.lm, lnv, do_estim_lnv);
         
     case {'stk_expcov_aniso', 'stk_materncov32_aniso', ...
             'stk_materncov52_aniso', 'stk_gausscov_aniso', 'stk_sphcov_aniso'}
         xi = stk_normalize (xi, box);
         c = [model.covariance_type(1:end-5) 'iso'];
-        [param, lnv] = paraminit_ (c, xi, zi, [], model.lm, lnv);
+        [param, lnv] = paraminit_ (c, xi, zi, [], model.lm, lnv, do_estim_lnv);
         param = [param(1); param(2) - log(diff(box, [], 1))'];
         
     case 'stk_materncov_iso'
         nu = 5/2 * size (xi, 2);
         covname_iso = @(param, x, y, diff, pairwise) stk_materncov_iso ...
             ([param(1) log(nu) param(2)], x, y, diff, pairwise);
-        [param, lnv] = paraminit_ (covname_iso, xi, zi, box, model.lm, lnv);
+        [param, lnv] = paraminit_ (covname_iso, xi, zi, box, model.lm, lnv, do_estim_lnv);
         param = [param(1); log(nu); param(2)];
         
     case 'stk_materncov_aniso'
@@ -254,7 +256,7 @@ switch model.covariance_type
         covname_iso = @(param, x, y, diff, pairwise) stk_materncov_iso ...
             ([param(1) log(nu) param(2)], x, y, diff, pairwise);
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (covname_iso, xi, zi, [], model.lm, lnv);
+        [param, lnv] = paraminit_ (covname_iso, xi, zi, [], model.lm, lnv, do_estim_lnv);
         param = [param(1); log(nu); param(2) - log(diff(box, [], 1))'];
         
     otherwise
@@ -270,13 +272,13 @@ end
 end % function
 
 
-function [param, lnv] = paraminit_ (covname_iso, xi, zi, box, lm, lnv)
+function [param, lnv] = paraminit_ (covname_iso, xi, zi, box, lm, lnv, do_estim_lnv)
 
 % Check for special case: constant response
 if (std (double (zi)) == 0)
     warning ('STK:stk_param_init:ConstantResponse', ...
         'Parameter estimation is impossible with constant-response data.');
-    param = [0 0];  if any (isnan (lnv)), lnv = 0; end
+    param = [0 0];  if any (isnan (lnv(:))), lnv(:) = 0; end
     return  % Return some default values
 end
 
@@ -286,9 +288,8 @@ model = stk_model (covname_iso);
 model.lm = lm;
 model.lognoisevariance = lnv;
 
-% Homoscedastic case ?
-homoscedastic = (isscalar (lnv));
-noiseless = homoscedastic && (lnv == -inf);
+% Noiseless case?
+noiseless = (~ do_estim_lnv) && (isequal (lnv, -inf));
 
 % list of possible values for the ratio eta = sigma2_noise / sigma2
 if ~ noiseless
@@ -309,9 +310,9 @@ rho_min  = box_diameter / 50;
 rho_list = logspace (log10 (rho_min), log10 (rho_max), 5);
 
 % Initialize parameter search
-eta_best    = NaN;
 rho_best    = NaN;
 sigma2_best = NaN;
+lnv_best    = NaN;
 aLL_best    = +Inf;
 
 % Try all possible combinations of rho and eta from the lists
@@ -327,17 +328,36 @@ for eta = eta_list
             if ~ (sigma2 > 0), continue; end
             log_sigma2 = log (sigma2);
             
-        elseif homoscedastic && (isnan (lnv))  % Unknown noise variance
+        elseif do_estim_lnv
             
-            model.lognoisevariance = log (eta);
-            [ignd, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU> CG#07
-            if ~ (sigma2 > 0), continue; end
-            log_sigma2 = log (sigma2);
-            model.lognoisevariance = log  (eta * sigma2);
-            
+            if isa (lnv, 'stk_noisemodel')
+                
+                % NOTE/JB: why -log(eta) ???
+                model.param = [-log(eta) -log(rho)];
+                model.lognoisevariance = stk_param_init (lnv, model, xi, zi);
+                nv = stk_covmat_noise (model, xi, [], -1, true);
+                log_sigma2 = log (mean (nv)) - log (eta);
+                sigma2 = exp(log_sigma2);
+                
+            else  % Old-style STK: constant noise variance
+                
+                % Call stk_param_gls with sigma2=1 and lnv=log(eta)
+                model.lognoisevariance = log (eta);
+                [ignd, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU> CG#07
+                if ~ (sigma2 > 0), continue; end
+                
+                % Scale both variances using the GLS estimate
+                log_sigma2 = log (sigma2);
+                model.lognoisevariance = log (eta * sigma2);
+                
+            end
+        
         else % Known variance(s)
+        
+            % Compute the noise variance at all observed locations
+            nv = stk_covmat_noise (model, xi, [], -1, true);
             
-            log_sigma2 = (mean (lnv)) - (log (eta));
+            log_sigma2 = log (mean (nv)) - log (eta);
             sigma2 = exp (log_sigma2);
             
         end
@@ -346,10 +366,10 @@ for eta = eta_list
         model.param(1) = log_sigma2;
         aLL = stk_param_relik (model, xi, zi);
         if ~isnan(aLL) && (aLL < aLL_best)
-            eta_best    = eta;
             rho_best    = rho;
             aLL_best    = aLL;
             sigma2_best = sigma2;
+            lnv_best    = model.lognoisevariance;
         end
     end
 end
@@ -360,11 +380,7 @@ if isinf (aLL_best)
 end
 
 param = log ([sigma2_best; 1/rho_best]);
-
-if (isscalar (lnv)) && (isnan (lnv))
-    % Homoscedatic case with unknown variance... Here is our estimate:
-    lnv = log (eta_best * sigma2_best);
-end
+lnv = lnv_best;
 
 end % function
 
