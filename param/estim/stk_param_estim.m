@@ -175,6 +175,8 @@ if ~ isempty (param0)
             % We have a user-provided starting point for param0 but not for lnv0.
             model.param = param0;
             lnv0 = stk_param_init_lnv (model, xi, zi);
+        else
+            lnv0 = model.lognoisevariance;
         end
     else
         % When lnv0 is provided, noise variance *must* be estimated

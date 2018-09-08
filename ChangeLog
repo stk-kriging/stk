@@ -1,3 +1,9 @@
+2018-09-08  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim.m: Fix a corner case
+
+	* param/estim/stk_param_estim.m: Fix a corner case.
+
 2018-09-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Reorganize parameter estimation (optimization) code
