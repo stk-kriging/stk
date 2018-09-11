@@ -1,5 +1,10 @@
 2018-09-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Refresh the index
+
+	* admin/octpkg/INDEX: Update the index with recently introduced
+	internal functions.
+
 	Refresh quilt patches
 
 	* admin/octpkg/patches/matlab-graphics-axis-Axes.patch: Refresh patch.

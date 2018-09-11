@@ -76,6 +76,7 @@ Parameter estimation
  stk_param_loomse
  stk_param_loopvc
  stk_param_relik
+#stk_param_estim_optim           [internal]
 #stk_param_getdefaultbounds      [internal]
 #stk_param_getdefaultbounds_lnv  [internal]
 #stk_get_optimizable_parameters  [internal]
@@ -113,6 +114,7 @@ Posterior model objects
 #@struct/get_output_data                       [internal]
 #@struct/get_prior_model                       [internal]
 #@struct/stk_get_optimizable_noise_parameters  [internal]
+#@struct/stk_param_getblockselectors           [internal]
 #@struct/stk_replicate_obs_noise               [internal]
 #stk_set_optimizable_model_parameters          [internal]
 #stk_get_optimizable_model_parameters          [internal]
