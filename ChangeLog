@@ -1,5 +1,13 @@
 2018-09-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Refresh quilt patches
+
+	* admin/octpkg/patches/matlab-graphics-axis-Axes.patch: Refresh patch.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Refresh patch.
+	* admin/octpkg/patches/stk-init-rmpath-cleanup.patch: Refresh patch.
+	* admin/octpkg/patches/workaround-octave-bug-46350.patch: Refresh patch.
+
 	stk_param_estim.m: stk_set_optimizable_parameters accepts object values
 
 	* param/estim/stk_param_estim.m: Assume that
