@@ -26,7 +26,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2011-2013 SUPELEC
 %
@@ -59,7 +59,7 @@ function [beta, sigma2, L] = stk_param_gls (model, xi, zi)
 n = size (xi, 1);
 
 % Build the covariance matrix and the design matrix
-[K, P] = stk_make_matcov (model, xi);
+[K, P] = stk_covmat (model, 'response', xi);
 
 % Cast zi into a double-precision array
 zi = double (zi);
