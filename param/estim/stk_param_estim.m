@@ -156,15 +156,13 @@ function [param0, lnv0, do_estim_lnv] = provide_starting_point ...
 % a starting point, in which case we must use it.
 if ~ isempty (param0)
     
-    param0_ = stk_get_optimizable_parameters (param0);
-    
     % Test if param0 contains nans
+    param0_ = stk_get_optimizable_parameters (param0);
     if any (isnan (param0_))
         stk_error ('param0 has NaNs', 'InvalidArgument');
     end
-    
-    % Cast param0 into a variable of the appropriate type (numeric or object)
-    param0 = stk_set_optimizable_parameters (model.param, param0_);
+    % Cast param0 to a variable of the appropriate type (numeric or object)
+    param0 = stk_set_optimizable_parameters (model.param, param0);
     
     % Now take care of lnv0.
     % Same rule: if not empty, we have a user-provided starting point.
@@ -181,7 +179,8 @@ if ~ isempty (param0)
     else
         % When lnv0 is provided, noise variance *must* be estimated
         do_estim_lnv = true;
-        stk_param_check_lnv0 (model, lnv0);
+        % Cast lnv0 to a variable of the appropriate type (numeric or object)
+        lnv0 = stk_set_optimizable_parameters (model.lognoisevariance, lnv0);
     end
     
 else  % Otherwise, try stk_param_init to get a starting point
@@ -193,12 +192,9 @@ else  % Otherwise, try stk_param_init to get a starting point
     else
         % When lnv0 is provided, noise variance *must* be estimated
         do_estim_lnv = true;
-        stk_param_check_lnv0 (model, lnv0);
-        % In this case stk_param_init will return lnv0 = model.lognoisevariance,
-        % so we just have to set our starting point there.
-        lnv0_ = stk_get_optimizable_parameters (lnv0);
-        model.lognoisevariance = stk_set_optimizable_parameters ...
-            (model.lognoisevariance, lnv0_);
+        % Install lnv0 into the model
+        model.lognoisevariance = ...
+            stk_set_optimizable_parameters (model.lognoisevariance, lnv0);
     end
     
     [param0, lnv0] = stk_param_init (model, xi, zi);

@@ -1,3 +1,12 @@
+2018-09-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim.m: stk_set_optimizable_parameters accepts object values
+
+	* param/estim/stk_param_estim.m: Assume that
+	stk_set_optimizable_parameters accepts object values as well.
+	* param/estim/private/stk_param_check_lnv0.m: Delete unused
+	private function.
+
 2018-09-08  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_estim.m: Fix a corner case
