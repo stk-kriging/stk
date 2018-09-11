@@ -1,18 +1,3 @@
---- a/examples/01_kriging_basics/stk_example_kb09.m
-+++ b/examples/01_kriging_basics/stk_example_kb09.m
-@@ -84,5 +84,10 @@
- stk_labels ('input variable x', 'response z');
- 
- 
--%!test HOMOSCEDASTIC_NOISE = true;   stk_example_kb09;  close all;
--%!test HOMOSCEDASTIC_NOISE = false;  stk_example_kb09;  close all;
-+
-+% These tests are disabled in the Octave package release
-+% (see Octave bug #46350, https://savannah.gnu.org/bugs/?46350)
-+% !test HOMOSCEDASTIC_NOISE = true;   stk_example_kb09;  close all;
-+% !test HOMOSCEDASTIC_NOISE = false;  stk_example_kb09;  close all;
-+
-+%!test stk_example_kb09;  close all;
 --- a/iago/stk_optimscript.m
 +++ b/iago/stk_optimscript.m
 @@ -143,12 +143,15 @@

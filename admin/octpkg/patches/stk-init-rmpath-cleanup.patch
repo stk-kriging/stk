@@ -1,6 +1,6 @@
 --- a/stk_init.m
 +++ b/stk_init.m
-@@ -236,27 +236,22 @@
+@@ -243,27 +243,22 @@
  
  regex1 = strcat ('^', escape_regexp (root));
  

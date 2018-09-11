@@ -1,6 +1,6 @@
 --- a/arrays/@stk_dataframe/stk_dataframe.m
 +++ b/arrays/@stk_dataframe/stk_dataframe.m
-@@ -199,11 +199,6 @@
+@@ -210,11 +210,6 @@
  
  x = class (x, 'stk_dataframe');
  
