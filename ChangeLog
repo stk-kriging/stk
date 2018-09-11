@@ -1,3 +1,36 @@
+2018-10-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Introduce noise model objects as an experimental feature (ticket #38)
+
+	* model/gn/@stk_model_gn: Base class for noise model objects.
+	* model/gn/@stk_model_gn/stk_model_gn.m: Class constructor.
+	* model/gn/@stk_model_gn/stk_covmat.m: Compute covariance matrix.
+	* model/gn/@stk_model_gn/cat.m: Prevent concatenation.
+	* model/gn/@stk_model_gn/horzcat.m: Idem.
+	* model/gn/@stk_model_gn/vertcat.m: Idem.
+	* model/gn/@stk_model_gn/get.m: Empty getter.
+	* model/gn/@stk_model_gn/set.m: Empty setter.
+	* model/gn/@stk_model_gn/subsasgn.m: Redirect dot-indexing to set.
+	* model/gn/@stk_model_gn/subsref.m: Redirect dot-indexing to get.
+	* model/gn/@stk_model_gn/disp.m: Overload disp.
+	* model/gn/@stk_model_gn/display.m: Overload display.
+	* model/gn/@stk_model_gn_heteroscedastic0: Provide a first example
+	of noise model class derived from stk_model_gn.
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0.m:
+	Class constructor.
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_variance_eval.m:
+	This is where the variance function is actually computed.
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters.m:
+	Overload STK function.
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds.m: Idem.
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters.m: Idem.
+	* model/gn/@stk_model_gn_heteroscedastic0/disp.m: Overload disp.
+	* model/gn/@stk_model_gn_heteroscedastic0/fieldnames.m: Provide field names.
+	* model/gn/@stk_model_gn_heteroscedastic0/get.m: Getter.
+	* model/gn/@stk_model_gn_heteroscedastic0/set.m: setter.
+	* stk_init.m: Add new directories to the path.
+	* examples/03_miscellaneous/stk_example_misc06.m: An example.
+
 2018-10-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_model_gpposterior.m: Estimate params when lnv is NaN (ticket #93)

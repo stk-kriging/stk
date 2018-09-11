@@ -22,6 +22,17 @@
 
 * Deprecated: `stk_noisecov`.
 
+## Noise model objects [experimental]
+
+* `stk_model_gn`, `stk_model_gn_heteroscedastic0`: New classes
+  representing Gaussian noise models.  Currently in experimental
+  state, these two classes are merely a proof-of-concept.  Other noise
+  model classes can be defined by subclassing `stk_model_gn`.
+  ([ticket #38](https://sourceforge.net/p/kriging/tickets/38/))
+  
+* `stk_example_misc06.m`: Demonstrate the use of noise model objects
+  to estimate the dispersion parameter in an heteroscedatic case.
+
 ## `stk_dataframe` and related classes
 
 * `stk_dataframe`: Accept char vectors (or strings) as `colnames` or
