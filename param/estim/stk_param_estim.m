@@ -156,11 +156,8 @@ function [param0, lnv0, do_estim_lnv] = provide_starting_point ...
 % a starting point, in which case we must use it.
 if ~ isempty (param0)
     
-    % Test if param0 contains nans
-    param0_ = stk_get_optimizable_parameters (param0);
-    if any (isnan (param0_))
-        stk_error ('param0 has NaNs', 'InvalidArgument');
-    end
+    % Test if param0 contains NaNs of Infs
+    assert_is_finite (param0, 'param0');
     % Cast param0 to a variable of the appropriate type (numeric or object)
     param0 = stk_set_optimizable_parameters (model.param, param0);
     
@@ -179,6 +176,8 @@ if ~ isempty (param0)
     else
         % When lnv0 is provided, noise variance *must* be estimated
         do_estim_lnv = true;
+        % Test if lnv0 contains NaNs of Infs
+        assert_is_finite (lnv0, 'lnv0');
         % Cast lnv0 to a variable of the appropriate type (numeric or object)
         lnv0 = stk_set_optimizable_parameters (model.lognoisevariance, lnv0);
     end
@@ -192,6 +191,8 @@ else  % Otherwise, try stk_param_init to get a starting point
     else
         % When lnv0 is provided, noise variance *must* be estimated
         do_estim_lnv = true;
+        % Test if lnv0 contains NaNs of Infs
+        assert_is_finite (lnv0, 'lnv0');        
         % Install lnv0 into the model
         model.lognoisevariance = ...
             stk_set_optimizable_parameters (model.lognoisevariance, lnv0);
@@ -200,6 +201,19 @@ else  % Otherwise, try stk_param_init to get a starting point
     [param0, lnv0] = stk_param_init (model, xi, zi);
     
 end % if
+
+end % function
+
+
+function assert_is_finite (param, param_name)
+
+% Check that there are no NaNs or Infs
+param_ = stk_get_optimizable_parameters (param);
+if ~ all (isfinite (param_))
+    stk_error (sprintf (['Incorrect value for input argument %s.  The components ' ...
+        'of the starting point must be neither infinite nor NaN.'], param_name),   ...
+        'InvalidArgument');
+end
 
 end % function
 

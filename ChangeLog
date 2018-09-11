@@ -1,5 +1,10 @@
 2018-09-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_param_estim.m: Check if the starting points are finite
+
+	* param/estim/stk_param_estim.m: Check if the starting points
+	param0 and lnv0 are finite, i.e., do not contain NaNs or Infs.
+
 	Refresh the index
 
 	* admin/octpkg/INDEX: Update the index with recently introduced
