@@ -183,6 +183,28 @@ Model components: Linear model objects
 #@stk_lm_quadratic/feval    [overload base]
 #@stk_lm_quadratic/isequal  [overload base]
 
+Model components: Noise model objects [experimental]
+ @stk_model_gn/stk_model_gn
+#@stk_model_gn/cat         [overload base]
+#@stk_model_gn/disp        [overload base]
+#@stk_model_gn/display     [overload base]
+#@stk_model_gn/get         [overload base]
+#@stk_model_gn/horzcat     [overload base]
+#@stk_model_gn/set         [overload base]
+#@stk_model_gn/subsasgn    [overload base]
+#@stk_model_gn/subsref     [overload base]
+#@stk_model_gn/vertcat     [overload base]
+#@stk_model_gn/stk_covmat  [internal]
+ @stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0
+#@stk_model_gn_heteroscedastic0/disp                            [overload base]
+#@stk_model_gn_heteroscedastic0/fieldnames                      [overload base]
+#@stk_model_gn_heteroscedastic0/get                             [overload base]
+#@stk_model_gn_heteroscedastic0/set                             [overload base]
+#@stk_model_gn_heteroscedastic0/stk_variance_eval               [overload STK]
+#@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters  [overload STK]
+#@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds      [overload STK]
+#@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters  [overload STK]
+
 Design of experiments (non-sequential): sampling
  stk_sampling_halton_rr2
  stk_sampling_sobol
@@ -270,6 +292,7 @@ Examples: miscellaneous
  stk_example_misc03
  stk_example_misc04
  stk_example_misc05
+ stk_example_misc06
 
 Examples: test functions, datasets, etc.
  stk_dataset_twobumps
