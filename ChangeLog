@@ -1,3 +1,14 @@
+2018-09-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_dataframe.m: Accept char arg when only one row/col (ticket #92)
+
+	* arrays/@stk_dataframe/stk_dataframe.m: Accept char vectors (or
+	strings) as `colnames` or `rownames` argument when there is only
+	one column or one row.  This was, previously, only partially
+	supported for char vectors, and not at all for strings.  Also,
+	clarify a little bit the processing of `rownames` / `colnames'
+	arguments.
+
 2018-09-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_estim.m: Check if the starting points are finite
