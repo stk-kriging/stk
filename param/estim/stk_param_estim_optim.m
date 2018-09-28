@@ -1,4 +1,9 @@
 % STK_PARAM_ESTIM_OPTIMIZE [STK internal]
+%
+% INTERNAL FUNCTION WARNING:
+%
+%    This function is currently considered as internal.  API-breaking
+%    changes are very likely to happen in future releases.
 
 % Copyright Notice
 %
@@ -37,7 +42,7 @@ select = [covparam_select; noiseparam_select];
 
 % Starting point
 v0 = stk_get_optimizable_parameters (model0);
-v0 = v0(select);
+w0 = v0(select);
 
 % Bounds
 % FIXME: this could (should) be implemented directly for models
@@ -55,24 +60,27 @@ bounds_available = (~ isempty (lb)) && (~ isempty (ub));
 
 if bounds_available
     A = stk_options_get ('stk_param_estim', 'minimize_box');
-    [v_opt, crit_opt] = stk_minimize_boxconstrained (A, f, v0, lb, ub);
+    [w_opt, crit_opt] = stk_minimize_boxconstrained (A, f, w0, lb, ub);
 else
     A = stk_options_get ('stk_param_estim', 'minimize_unc');
-    [v_opt, crit_opt] = stk_minimize_unconstrained (A, f, v0);
+    [w_opt, crit_opt] = stk_minimize_unconstrained (A, f, w0);
 end
 
 % Create outputs
-model_opt = stk_set_optimizable_parameters (model0, v_opt, select);
+v_opt = v0;
+v_opt(select) = w_opt;
+model_opt = stk_set_optimizable_parameters (model0, v_opt);
 
 % Create 'info' structure, if requested
 if nargout > 2
     info.criterion = criterion;
     info.crit_opt = crit_opt;
-    info.starting_point = v0;
+    info.starting_point = w0;
+    info.final_point = w_opt;
     info.lower_bounds = lb;
     info.upper_bounds = ub;
     info.param_select = covparam_select;
-    info.lnv_select = noiseparam_select;
+    info.noiseparam_select = noiseparam_select;
 end
 
 end % function
@@ -81,9 +89,11 @@ end % function
 
 
 function [C, dC] = crit_wrapper ...
-    (model, v, xi, zi, criterion, covparam_select, noise_select)
+    (model, w, xi, zi, criterion, covparam_select, noise_select)
 
-model = stk_set_optimizable_parameters (model, v, [covparam_select; noise_select]);
+v = stk_get_optimizable_parameters (model);
+v([covparam_select; noise_select]) = w;
+model = stk_set_optimizable_parameters (model, v);
 
 if nargout == 1
     

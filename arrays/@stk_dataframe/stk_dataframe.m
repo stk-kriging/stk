@@ -85,25 +85,9 @@ elseif isa (x, 'stk_dataframe')
     if strcmp (class (x), 'stk_dataframe')  %#ok<STISA>
         
         if nargin > 1
-            
-            if iscell (colnames)
-                x = set (x, 'colnames', colnames);
-            elseif ~ isempty (colnames)
-                stk_error (['colnames should be either a cell array ' ...
-                    'of strings or [].'], 'InvalidArgument');
-                % Note: [] means "keep x.colnames"
-                %       while {} means "no column names"
-            end
-            
+            x = process_names_df (x, colnames, 'colnames', 2);   
             if nargin > 2
-                if iscell (rownames)
-                    x = set (x, 'rownames', rownames);
-                elseif ~ isempty (rownames)
-                    stk_error (['rownames should be either a cell array ' ...
-                        'of strings or [].'], 'InvalidArgument');
-                    % Note: [] means "keep x.rownames"
-                    %       while {} means "no row names"
-                end
+                x = process_names_df (x, rownames, 'rownames', 1);
             end
         end
         
@@ -118,7 +102,7 @@ elseif isa (x, 'stk_dataframe')
             colnames = x.colnames;
             rownames = x.rownames;
             
-        else % nargin > 1,
+        else % nargin > 1
             
             % colnames = [] means "keep x.colnames"
             if isempty (colnames) && ~ iscell (colnames)
@@ -147,58 +131,16 @@ end
 
 if isempty (x_data)
     
-    % Process colnames argument
-    if isempty (colnames)
-        d = 0;
-        colnames = {};
-    elseif iscell (colnames)
-        d = numel (colnames);
-        colnames = reshape (colnames, 1, d);
-    else
-        stk_error ('colnames should be a cell array', 'TypeMismatch');
-    end
-    
-    % Process rownames argument
-    if isempty (rownames)
-        n = 0;
-        rownames = {};
-    elseif iscell (rownames)
-        n = numel (rownames);
-        rownames = reshape (rownames, n, 1);
-    else
-        stk_error ('rownames should be a cell array', 'TypeMismatch');
-    end
-    
+    [colnames, d] = process_names_empty (colnames, 'colnames', 2);
+    [rownames, n] = process_names_empty (rownames, 'rownames', 1);    
     x_data = zeros (n, d);
     
 else
     
     [n, d] = size (x_data);
-    
-    % Process colnames argument
-    if isempty (colnames)
-        colnames = {};
-    elseif iscell (colnames) && numel (colnames) == d
-        colnames = reshape (colnames, 1, d);
-    elseif ischar (colnames) && d == 1
-        colnames = {colnames};
-    else
-        stk_error (['colnames should be a cell array with d elements, ' ...
-            'where d is the number of columns of the dataframe'], 'IncorrectSize');
-    end
-    
-    % Process rownames argument
-    if isempty (rownames)
-        rownames = {};
-    elseif iscell (rownames) && numel (rownames) == n
-        rownames = reshape (rownames, n, 1);
-    elseif ischar (rownames) && n == 1
-        rownames = {rownames};
-    else
-        stk_error (['rownames should be a cell array with n elements, ' ...
-            'where n is the number of rows of the dataframe'], 'IncorrectSize');
-    end
-    
+    colnames = process_names_0 (colnames, 'colnames', [1 d]);
+    rownames = process_names_0 (rownames, 'rownames', [n 1]);
+        
 end
 
 x = struct ();
@@ -216,6 +158,87 @@ try  %#ok<TRYNC>
 end
 
 end % function
+
+
+function arg = process_names_0 (arg, argname, s)
+
+len = max (s);
+
+if isempty (arg)
+    arg = {};
+else
+    try
+        if iscell (arg)
+            arg = reshape (arg, s);
+        else
+            % Special case: try to interpret arg as a char vector
+            assert (len == 1);
+            arg = {char(arg)};
+        end
+    catch
+        stk_error (errmsg_names (argname, len), 'InvalidArgument');
+    end
+end
+    
+end % function
+
+
+function x = process_names_df (x, arg, argname, dim)
+
+% Note: [] means "keep existing names", while {} means "no names"
+
+if iscell (arg)    
+    x = set (x, argname, arg);    
+elseif ~ isempty (arg)
+    try
+        len = size (x, dim);
+        assert (len == 1);
+        % Special case: try to interpret arg as a char vector
+        x = set (x, argname, {char(arg)});
+    catch
+        stk_error (errmsg_names (argname, len), 'InvalidArgument');
+    end
+end
+
+end % function
+
+
+function [arg, len] = process_names_empty (arg, argname, dim)
+
+if isempty (arg)
+    len = 0;
+    arg = {};
+elseif iscell (arg)
+    len = numel (arg);
+    if dim == 1
+        arg = reshape (arg, len, 1);
+    else
+        arg = reshape (arg, 1, len);
+    end
+else
+    try
+        % Try to interpret colnames as a char vector
+        len = 1;
+        arg = {char(arg)};
+    catch
+        stk_error (errmsg_names (argname, len), 'InvalidArgument');
+    end
+end
+
+end % function
+
+
+function msg = errmsg_names (argname, len)
+
+if len == 1
+    msg = sprintf (['%s was expected to be a string (or char vector), a cell ' ...
+        'array containing such a string (or char vector), or [].'], argname);
+else
+    msg = sprintf (['%s was expected to be a cell array containing %d strings ' ...
+        '(or char vectors), or [].'], argname, len);
+end
+
+end
 
 
 %!test stk_test_class ('stk_dataframe')
@@ -329,10 +352,20 @@ end % function
 
 % Check that we tolerate char arguments for colnames/rownames
 
+%!shared x
+
 %!test
 %! x = stk_dataframe (randn (10, 1), 'NOx');
 %! assert (isequal (x.colnames, {'NOx'}));
 
 %!test
+%! y = stk_dataframe (x, 'toto');
+%! assert (isequal (y.colnames, {'toto'}));
+
+%!test
 %! x = stk_dataframe (randn (1, 2), {}, 'aaa');
 %! assert (isequal (x.rownames, {'aaa'}));
+
+%!test
+%! y = stk_dataframe (x, {}, 'tata');
+%! assert (isequal (y.rownames, {'tata'}));

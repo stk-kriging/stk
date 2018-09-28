@@ -15,6 +15,12 @@
 
 * Deprecated: `stk_noisecov`.
 
+## `stk_dataframe` and related classes
+
+* `stk_dataframe`: Accept char vectors (or strings) as `colnames` or
+  `rownames` argument when there is only one column or one row
+  ([ticket #92](https://sourceforge.net/p/kriging/tickets/92/))
+
 -----
 
 

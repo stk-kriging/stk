@@ -44,7 +44,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function param = stk_set_optimizable_parameters (param, value, select)
+function param = stk_set_optimizable_parameters (param, value)
 
 % This function will catch all calls to stk_set_optimizable_parameters for which
 % arg1 is not an object of a class that implements stk_set_optimizable_parameters.
@@ -54,7 +54,7 @@ if isstruct (param)
     if isfield (param, 'K') && isfield (param, 'P')
         
         % A very special case: parameter structure of a discrete covariance model
-        if ~ (isempty (value) && (nargin < 3 || isempty (select)))
+        if ~ isempty (value)
             stk_error (['Discrete covariance structures have no ' ...
                 'optimizable parameters.'], 'InvalidArgument');
         end
@@ -62,35 +62,14 @@ if isstruct (param)
     else
         
         % Assuming that param is a model structure:
-        if nargin < 3
-            param = stk_set_optimizable_model_parameters (param, value);
-        else
-            param = stk_set_optimizable_model_parameters (param, value, select);
-        end
+        param = stk_set_optimizable_model_parameters (param, value);
         
     end
     
 else
     
-    if nargin < 3
-        
-        % If param is numeric, the following syntax preserves its size and type
-        param(:) = value;
-        
-    else
-        
-        % Save initial size
-        s = size (param);
-        
-        % If param is numeric, the following syntax preserves its type
-        % but might change its size, depending on what select actually is
-        param(select) = value;
-        
-        if ~ isequal (size (param), s)
-            stk_error ('Invalid select argument.', 'InvalidArgument');
-        end
-        
-    end
+    % If param is numeric, the following syntax preserves its size and type
+    param(:) = value;
     
     % Note: if param is an object, what we just did is actually a call to
     % subsasgn in disguise.  This way of supporting parameter objects has been
