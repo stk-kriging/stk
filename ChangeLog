@@ -1,3 +1,14 @@
+2018-09-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_set_optimizable_parameters: Remove the 'select' argument
+
+	* param/classes/stk_set_optimizable_parameters.m: Remove the
+	optional 'select' argument.
+	* core/@stk_model_gpposterior/stk_set_optimizable_parameters.m: Idem.
+	* core/stk_set_optimizable_model_parameters.m: Idem.
+	* param/estim/stk_param_estim_optim.m: Implement selection
+	directly here.
+
 2018-09-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_dataframe.m: Accept char arg when only one row/col (ticket #92)

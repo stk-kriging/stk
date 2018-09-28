@@ -34,8 +34,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function model = stk_set_optimizable_parameters (model, value, select)
+function model = stk_set_optimizable_parameters (model, value)
 
-model.prior = stk_set_optimizable_parameters (model.prior, value, select);
+model.prior = stk_set_optimizable_parameters (model.prior, value);
 
 end % function
