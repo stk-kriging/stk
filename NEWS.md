@@ -13,6 +13,13 @@
   instead of NaN when the derivative with respect to lnv is requested
   for a noiseless model.
 
+* `stk_model_gpposterior`: Trigger parameter estimation when
+  lognoisevariance is NaN.  In the (experimental) case where
+  lognoisevariance is a noise model object, parameter estimation is
+  triggered as soon as at least one of the optimizable parameters of
+  the model is NaN.
+  ([ticket #93](https://sourceforge.net/p/kriging/tickets/93/))
+
 * Deprecated: `stk_noisecov`.
 
 ## `stk_dataframe` and related classes

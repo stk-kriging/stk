@@ -1,3 +1,11 @@
+2018-10-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_model_gpposterior.m: Estimate params when lnv is NaN (ticket #93)
+
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Trigger
+	parameter estimation when lognoisevariance (or some of its
+	optimizable hyperparameters in the object case) is NaN.
+
 2018-09-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_set_optimizable_parameters: Remove the 'select' argument

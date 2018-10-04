@@ -79,10 +79,17 @@ if nargin == 3
             prior_model.lognoisevariance = prior_model.lognoisevariance(:);
         end
         
-        % Check if the covariance model contains parameters
-        % that must be estimated first
-        if (isnumeric (prior_model.param)) && (any (isnan (prior_model.param)))
-            prior_model.param = stk_param_estim (prior_model, xi, zi);
+        % Check if the model contains parameters that must be estimated first
+        % (such parameters have the value NaN)
+        param = stk_get_optimizable_model_parameters (prior_model);
+        if any (isnan (param))
+            noiseparam = stk_get_optimizable_noise_parameters (prior_model);
+            if any (isnan (noiseparam))
+                [prior_model.param, prior_model.lognoisevariance] ...
+                    = stk_param_estim (prior_model, xi, zi);
+            else
+                prior_model.param = stk_param_estim (prior_model, xi, zi);
+            end
         end
         
         % Compute QR factorization        
