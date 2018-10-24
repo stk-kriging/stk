@@ -1,8 +1,15 @@
-% SUBSASGN [overload base function]
+% FIELDNAMES [overload base function]
+%
+% EXPERIMENTAL CLASS WARNING:  The stk_model_gn_heteroscedastic0 class is
+%    currently considered experimental.  STK users who wish to experiment with
+%    it are welcome to do so, but should be aware that API-breaking changes
+%    are likely to happen in future releases.  We invite them to direct any
+%    questions, remarks or comments about this experimental class to the STK
+%    mailing list.
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2018 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,23 +33,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function model = subsasgn (model, idx, value)
+function fn = fieldnames (gn)  %#ok<INUSD>
 
-switch idx(1).type
-    
-    case '.'
-        
-        if length (idx) > 1
-            value = subsasgn (get (model, idx(1).subs), idx(2:end), value);
-        end
-        
-        model = set (model, idx(1).subs, value);
-        
-    case {'{}', '()'}
-        
-        errmsg = 'Illegal assignment';
-        stk_error (errmsg, 'IllegalAssignment');
-        
-end
+fn = {'log_dispersion'; 'variance_function'; 'dispersion'};
 
 end % function

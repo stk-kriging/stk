@@ -1,8 +1,14 @@
-% HORZCAT [overload base function]
+% STK_MODEL_GN [experimental] is the base class for Gaussian noise models
+%
+% EXPERIMENTAL CLASS WARNING:  The stk_model_gn class is currently considered
+%    experimental.  STK users who wish to experiment with it are welcome to do
+%    so, but should be aware that API-breaking changes are likely to happen in
+%    future releases.  We invite them to direct any questions, remarks or
+%    comments about this experimental class to the STK mailing list.
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,9 +32,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function varargout = horzcat (varargin)
+function gn = stk_model_gn ()
 
-stk_error (['Arrays of stk_model_gpposterior objects are not supported. ', ...
-    'Use cell arrays instead.'], 'IllegalOperation');
+gn = class (struct (), 'stk_model_gn', stk_model_base ());
 
 end % function

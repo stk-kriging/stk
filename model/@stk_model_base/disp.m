@@ -1,9 +1,8 @@
-% ISEQUAL [overload base function]
+% DISP [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,23 +26,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-% INTERNAL NOTE: overloaded for Octave 3.6.x compat / see CODING_GUIDELINES
+function disp (gn)
 
-function b = isequal (x, y, varargin)
+fprintf ('<%s>\n', stk_sprintf_sizetype (gn));
 
-if nargin < 2
-    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+loose_spacing = stk_disp_isloose ();
+
+if loose_spacing
+    fprintf ('|\n');
 end
 
-% First, make sure that x and y belong to the same class
-% (either stk_dataframe or some derived class)
-b = isa (x, 'stk_dataframe') && strcmp (class (y), class (x)) ...
-    && isequal (x.data, y.data) ...
-    && isequal (x.colnames, y.colnames) && isequal (x.rownames, y.rownames);
+fprintf ('|   stk_model_base is an ''abstract'' class, which is used\n');
+fprintf ('|   to create derived classes representing actual models.\n');
+fprintf ('|   ==>  Normal STK users should never be reading this ;-)  <==\n');
 
-if b && (nargin > 2)
-    b = isequal (x, varargin{:});
+if loose_spacing
+    fprintf ('|\n');
 end
 
 end % function
-

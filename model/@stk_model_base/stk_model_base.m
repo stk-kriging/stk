@@ -1,9 +1,16 @@
-% ISEQUAL [overload base function]
+% STK_MODEL_BASE [internal]
+%
+% This is meant to become the base class for all STK models.
+%
+% Currently:
+%    * prior models  are defined by model structures (structs) and thus
+%      do not derive from this class;
+%    * the stk_model_gpposterior and stk_model_gn classes already derive
+%      from this class.
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,23 +34,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-% INTERNAL NOTE: overloaded for Octave 3.6.x compat / see CODING_GUIDELINES
+function gn = stk_model_base ()
 
-function b = isequal (x, y, varargin)
-
-if nargin < 2
-    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
-end
-
-% First, make sure that x and y belong to the same class
-% (either stk_dataframe or some derived class)
-b = isa (x, 'stk_dataframe') && strcmp (class (y), class (x)) ...
-    && isequal (x.data, y.data) ...
-    && isequal (x.colnames, y.colnames) && isequal (x.rownames, y.rownames);
-
-if b && (nargin > 2)
-    b = isequal (x, varargin{:});
-end
+gn = class (struct (), 'stk_model_base');
 
 end % function
-

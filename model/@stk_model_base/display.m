@@ -1,8 +1,8 @@
-% VERTCAT [overload base function]
+% DISPLAY [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,9 +26,23 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function varargout = vertcat (varargin)
+function display (x)
 
-stk_error (['Arrays of stk_model_gpposterior objects are not supported. ', ...
-    'Use cell arrays instead.'], 'IllegalOperation');
+name = inputname (1);
+if isempty (name)
+    name = 'ans';
+end
+
+if stk_disp_isloose
+    fprintf ('\n');
+end
+
+fprintf ('%s = ', name);
+
+disp (x);
+
+if stk_disp_isloose
+    fprintf ('\n');
+end
 
 end % function

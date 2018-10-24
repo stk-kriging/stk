@@ -1,9 +1,14 @@
-% ISEQUAL [overload base function]
+% GET [overload base function]
+%
+% EXPERIMENTAL CLASS WARNING:  The stk_model_gn class is currently considered
+%    experimental.  STK users who wish to experiment with it are welcome to do
+%    so, but should be aware that API-breaking changes are likely to happen in
+%    future releases.  We invite them to direct any questions, remarks or
+%    comments about this experimental class to the STK mailing list.
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,23 +32,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-% INTERNAL NOTE: overloaded for Octave 3.6.x compat / see CODING_GUIDELINES
+function value = get (gn, propname)  %#ok<STOUT,INUSL>
 
-function b = isequal (x, y, varargin)
-
-if nargin < 2
-    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+if ~ ischar (propname)
+    errmsg = 'Invalid property name.';
+else
+    errmsg = sprintf ('There is no field named %s.', propname);
 end
 
-% First, make sure that x and y belong to the same class
-% (either stk_dataframe or some derived class)
-b = isa (x, 'stk_dataframe') && strcmp (class (y), class (x)) ...
-    && isequal (x.data, y.data) ...
-    && isequal (x.colnames, y.colnames) && isequal (x.rownames, y.rownames);
-
-if b && (nargin > 2)
-    b = isequal (x, varargin{:});
-end
-
+stk_error (errmsg, 'InvalidArgument');
+        
 end % function
-

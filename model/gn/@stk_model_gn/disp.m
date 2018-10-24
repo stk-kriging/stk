@@ -1,8 +1,14 @@
-% DISPLAY [overload base function]
+% DISP [overload base function]
+%
+% EXPERIMENTAL CLASS WARNING:  The stk_model_gn class is currently considered
+%    experimental.  STK users who wish to experiment with it are welcome to do
+%    so, but should be aware that API-breaking changes are likely to happen in
+%    future releases.  We invite them to direct any questions, remarks or
+%    comments about this experimental class to the STK mailing list.
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,19 +32,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function display (x)
+function disp (gn)
 
-name = inputname (1);
-if isempty (name)
-    name = 'ans';
+fprintf ('<%s>\n', stk_sprintf_sizetype (gn));
+
+loose_spacing = stk_disp_isloose ();
+
+if loose_spacing
+    fprintf ('|\n');
 end
 
-if stk_disp_isloose
-    fprintf ('\n');
+fprintf ('|   stk_model_gn is an ''abstract'' class, which is used to create\n');
+fprintf ('|   derived classes  representing actual  Gaussian noise models.\n');
+fprintf ('|   ==>  Normal STK users should never be reading this ;-)  <==\n');
+
+if loose_spacing
+    fprintf ('|\n');
 end
-
-fprintf ('%s = ', name);
-
-disp (x);
 
 end % function

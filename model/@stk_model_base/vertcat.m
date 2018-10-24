@@ -1,9 +1,8 @@
-% ISEQUAL [overload base function]
+% VERTCAT [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,23 +26,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-% INTERNAL NOTE: overloaded for Octave 3.6.x compat / see CODING_GUIDELINES
+function varargout = vertcat (varargin)  %#ok<STOUT>
 
-function b = isequal (x, y, varargin)
-
-if nargin < 2
-    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
-end
-
-% First, make sure that x and y belong to the same class
-% (either stk_dataframe or some derived class)
-b = isa (x, 'stk_dataframe') && strcmp (class (y), class (x)) ...
-    && isequal (x.data, y.data) ...
-    && isequal (x.colnames, y.colnames) && isequal (x.rownames, y.rownames);
-
-if b && (nargin > 2)
-    b = isequal (x, varargin{:});
-end
+stk_error (['Arrays of model objects are not supported. ', ...
+    'Use cell arrays instead.'], 'IllegalOperation');
 
 end % function
-

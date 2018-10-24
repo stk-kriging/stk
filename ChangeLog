@@ -1,3 +1,79 @@
+2018-10-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Add a base class for model classes
+
+	* model/@stk_model_base: New class, to be used as a base class for
+	all model objects.
+	* model/@stk_model_base/stk_model_base.m: Trivial class constructor.
+	* model/@stk_model_base/cat.m: This function is taken, untouched,
+	from @stk_model_gpposterior and @stk_model_gn.
+	* model/@stk_model_base/disp.m: Idem.
+	* model/@stk_model_base/display.m: Idem.
+	* model/@stk_model_base/get.m: Idem.
+	* model/@stk_model_base/set.m: Idem.
+	* model/@stk_model_base/subsasgn.m: Idem.
+	* model/@stk_model_base/subsref.m: Idem.
+	* model/@stk_model_base/horzcat.m: Idem.
+	* model/@stk_model_base/vertcat.m: Idem.
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Derive from
+	the base class.
+	* model/gn/@stk_model_gn/stk_model_gn.m: Idem
+	* core/@stk_model_gpposterior/display.m: Removed.
+	* core/@stk_model_gpposterior/horzcat.m: Removed.
+	* core/@stk_model_gpposterior/subsasgn.m: Removed.
+	* core/@stk_model_gpposterior/subsref.m: Removed.
+	* core/@stk_model_gpposterior/vertcat.m: Removed.
+	* model/gn/@stk_model_gn/cat.m: Removed.
+	* model/gn/@stk_model_gn/display.m: Removed.
+	* model/gn/@stk_model_gn/get.m: Removed.
+	* model/gn/@stk_model_gn/horzcat.m: Removed.
+	* model/gn/@stk_model_gn/set.m: Removed.
+	* model/gn/@stk_model_gn/subsasgn.m: Removed.
+	* model/gn/@stk_model_gn/subsref.m: Removed.
+	* model/gn/@stk_model_gn/vertcat.m: Removed.
+	* stk_init.m: Add new directory to the path.
+	* admin/octpkg/INDEX: Update the index.
+
+	Introduce noise model objects as an experimental feature (ticket #38)
+
+	* model/gn/@stk_model_gn: Base class for noise model objects.
+	* model/gn/@stk_model_gn/stk_model_gn.m: Class constructor.
+	* model/gn/@stk_model_gn/stk_covmat.m: Compute covariance matrix.
+	* model/gn/@stk_model_gn/cat.m: Prevent concatenation.
+	* model/gn/@stk_model_gn/horzcat.m: Idem.
+	* model/gn/@stk_model_gn/vertcat.m: Idem.
+	* model/gn/@stk_model_gn/get.m: Empty getter.
+	* model/gn/@stk_model_gn/set.m: Empty setter.
+	* model/gn/@stk_model_gn/subsasgn.m: Redirect dot-indexing to set.
+	* model/gn/@stk_model_gn/subsref.m: Redirect dot-indexing to get.
+	* model/gn/@stk_model_gn/disp.m: Overload disp.
+	* model/gn/@stk_model_gn/display.m: Overload display.
+	* model/gn/@stk_model_gn_heteroscedastic0: Provide a first example
+	of noise model class derived from stk_model_gn.
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0.m:
+	Class constructor.
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_variance_eval.m:
+	This is where the variance function is actually computed.
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters.m:
+	Overload STK function.
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds.m: Idem.
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters.m: Idem.
+	* model/gn/@stk_model_gn_heteroscedastic0/disp.m: Overload disp.
+	* model/gn/@stk_model_gn_heteroscedastic0/fieldnames.m: Provide field names.
+	* model/gn/@stk_model_gn_heteroscedastic0/get.m: Getter.
+	* model/gn/@stk_model_gn_heteroscedastic0/set.m: setter.
+	* stk_init.m: Add new directory to the path.
+	* examples/03_miscellaneous/stk_example_misc06.m: An example.
+	* admin/octpkg/INDEX: Update the index.
+
+2018-10-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_model_gpposterior.m: Estimate params when lnv is NaN (ticket #93)
+
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Trigger
+	parameter estimation when lognoisevariance (or some of its
+	optimizable hyperparameters in the object case) is NaN.
+
 2018-09-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_set_optimizable_parameters: Remove the 'select' argument

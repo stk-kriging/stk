@@ -27,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-% INTERNAL NOTE: overloaded for Octave 3.2.x compat / see CODING_GUIDELINES
+% INTERNAL NOTE: overloaded for Octave 3.6.x compat / see CODING_GUIDELINES
 
 function b = isequal (x, y, varargin)
 
@@ -36,7 +36,7 @@ if nargin < 2
 end
 
 % First, make sure that x and y belong to the same class
-% (either stk_dataframe or some derived class)
+% (either stk_model_gpposterior or some derived class)
 b = isa (x, 'stk_model_gpposterior') && strcmp (class (y), class (x)) ...
     && isequal (x.prior_model, y.prior_model)                 ...
     && isequal (x.input_data,  y.input_data)                  ...

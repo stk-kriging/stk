@@ -88,6 +88,18 @@ Parameter estimation
 #stk_get_optimizable_parameters  [internal]
 #stk_set_optimizable_parameters  [internal]
 
+## Base class for model objects
+#@stk_model_base/stk_model_base  [internal]
+#@stk_model_base/cat             [overload base]
+#@stk_model_base/disp            [overload base]
+#@stk_model_base/display         [overload base]
+#@stk_model_base/get             [overload base]
+#@stk_model_base/horzcat         [overload base]
+#@stk_model_base/set             [overload base]
+#@stk_model_base/subsasgn        [overload base]
+#@stk_model_base/subsref         [overload base]
+#@stk_model_base/vertcat         [overload base]
+
 Posterior model objects
  @stk_model_gpposterior/stk_model_gpposterior
  @stk_model_gpposterior/stk_predict
@@ -105,15 +117,10 @@ Posterior model objects
 #@stk_model_gpposterior/stk_make_kreq                         [internal]
 #@stk_model_gpposterior/stk_predict_leaveoneout_direct        [internal]
 #@stk_model_gpposterior/disp                                  [overload base]
-#@stk_model_gpposterior/display                               [overload base]
 #@stk_model_gpposterior/fieldnames                            [overload base]
 #@stk_model_gpposterior/get                                   [overload base]
 #@stk_model_gpposterior/isequal                               [overload base]
 #@stk_model_gpposterior/set                                   [overload base]
-#@stk_model_gpposterior/subsasgn                              [overload base]
-#@stk_model_gpposterior/subsref                               [overload base]
-#@stk_model_gpposterior/horzcat                               [overload base]
-#@stk_model_gpposterior/vertcat                               [overload base]
 
 ## Prior models are currently represented by structures
 #@struct/get_input_data                        [internal]
@@ -188,6 +195,20 @@ Model components: Linear model objects
 #@stk_lm_null/isequal       [overload base]
 #@stk_lm_quadratic/feval    [overload base]
 #@stk_lm_quadratic/isequal  [overload base]
+
+Model components: Noise model objects [experimental]
+ @stk_model_gn/stk_model_gn
+#@stk_model_gn/disp        [overload base]
+#@stk_model_gn/stk_covmat  [internal]
+ @stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0
+#@stk_model_gn_heteroscedastic0/disp                            [overload base]
+#@stk_model_gn_heteroscedastic0/fieldnames                      [overload base]
+#@stk_model_gn_heteroscedastic0/get                             [overload base]
+#@stk_model_gn_heteroscedastic0/set                             [overload base]
+#@stk_model_gn_heteroscedastic0/stk_variance_eval               [overload STK]
+#@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters  [overload STK]
+#@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds      [overload STK]
+#@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters  [overload STK]
 
 Design of experiments (non-sequential): sampling
  stk_sampling_halton_rr2
@@ -276,6 +297,7 @@ Examples: miscellaneous
  stk_example_misc03
  stk_example_misc04
  stk_example_misc05
+ stk_example_misc06
 
 Examples: test functions, datasets, etc.
  stk_dataset_twobumps
