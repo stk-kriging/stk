@@ -27,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-% INTERNAL NOTE: overloaded for Octave 3.2.x compat / see CODING_GUIDELINES
+% INTERNAL NOTE: overloaded for Octave 3.6.x compat / see CODING_GUIDELINES
 
 function b = isequal (x, y, varargin)
 
