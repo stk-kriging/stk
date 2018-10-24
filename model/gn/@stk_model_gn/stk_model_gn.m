@@ -34,6 +34,6 @@
 
 function gn = stk_model_gn ()
 
-gn = class (struct (), 'stk_model_gn');
+gn = class (struct (), 'stk_model_gn', stk_model_base ());
 
 end % function

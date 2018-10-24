@@ -1,8 +1,8 @@
-% DISPLAY [overload base function]
+% HORZCAT [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,19 +26,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function display (x)
+function varargout = horzcat (varargin)  %#ok<STOUT>
 
-name = inputname (1);
-if isempty (name)
-    name = 'ans';
-end
-
-if stk_disp_isloose
-    fprintf ('\n');
-end
-
-fprintf ('%s = ', name);
-
-disp (x);
+stk_error (['Arrays of model objects are not supported. ', ...
+    'Use cell arrays instead.'], 'IllegalOperation');
 
 end % function

@@ -1,14 +1,8 @@
-% HORZCAT [overload base function]
-%
-% EXPERIMENTAL CLASS WARNING:  The stk_model_gn class is currently considered
-%    experimental.  STK users who wish to experiment with it are welcome to do
-%    so, but should be aware that API-breaking changes are likely to happen in
-%    future releases.  We invite them to direct any questions, remarks or
-%    comments about this experimental class to the STK mailing list.
+% DISPLAY [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2015, 2017 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -32,12 +26,23 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function varargout = horzcat (varargin)
+function display (x)
 
-b = cellfun (@(obj) isa (obj, 'stk_model_gn'), varargin);
-i = find (b, 1, 'first');
+name = inputname (1);
+if isempty (name)
+    name = 'ans';
+end
 
-stk_error (sprintf (['Arrays of %s objects are not supported. ', ...
-    'Use cell arrays instead.'], class (varargin{i})), 'IllegalOperation');
+if stk_disp_isloose
+    fprintf ('\n');
+end
+
+fprintf ('%s = ', name);
+
+disp (x);
+
+if stk_disp_isloose
+    fprintf ('\n');
+end
 
 end % function

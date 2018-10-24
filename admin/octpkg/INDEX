@@ -82,6 +82,18 @@ Parameter estimation
 #stk_get_optimizable_parameters  [internal]
 #stk_set_optimizable_parameters  [internal]
 
+## Base class for model objects
+#@stk_model_base/stk_model_base  [internal]
+#@stk_model_base/cat             [overload base]
+#@stk_model_base/disp            [overload base]
+#@stk_model_base/display         [overload base]
+#@stk_model_base/get             [overload base]
+#@stk_model_base/horzcat         [overload base]
+#@stk_model_base/set             [overload base]
+#@stk_model_base/subsasgn        [overload base]
+#@stk_model_base/subsref         [overload base]
+#@stk_model_base/vertcat         [overload base]
+
 Posterior model objects
  @stk_model_gpposterior/stk_model_gpposterior
  @stk_model_gpposterior/stk_predict
@@ -99,15 +111,10 @@ Posterior model objects
 #@stk_model_gpposterior/stk_make_kreq                         [internal]
 #@stk_model_gpposterior/stk_predict_leaveoneout_direct        [internal]
 #@stk_model_gpposterior/disp                                  [overload base]
-#@stk_model_gpposterior/display                               [overload base]
 #@stk_model_gpposterior/fieldnames                            [overload base]
 #@stk_model_gpposterior/get                                   [overload base]
 #@stk_model_gpposterior/isequal                               [overload base]
 #@stk_model_gpposterior/set                                   [overload base]
-#@stk_model_gpposterior/subsasgn                              [overload base]
-#@stk_model_gpposterior/subsref                               [overload base]
-#@stk_model_gpposterior/horzcat                               [overload base]
-#@stk_model_gpposterior/vertcat                               [overload base]
 
 ## Prior models are currently represented by structures
 #@struct/get_input_data                        [internal]
@@ -185,15 +192,7 @@ Model components: Linear model objects
 
 Model components: Noise model objects [experimental]
  @stk_model_gn/stk_model_gn
-#@stk_model_gn/cat         [overload base]
 #@stk_model_gn/disp        [overload base]
-#@stk_model_gn/display     [overload base]
-#@stk_model_gn/get         [overload base]
-#@stk_model_gn/horzcat     [overload base]
-#@stk_model_gn/set         [overload base]
-#@stk_model_gn/subsasgn    [overload base]
-#@stk_model_gn/subsref     [overload base]
-#@stk_model_gn/vertcat     [overload base]
 #@stk_model_gn/stk_covmat  [internal]
  @stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0
 #@stk_model_gn_heteroscedastic0/disp                            [overload base]

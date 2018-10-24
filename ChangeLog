@@ -1,5 +1,39 @@
 2018-10-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Add a base class for model classes
+
+	* model/@stk_model_base: New class, to be used as a base class for
+	all model objects.
+	* model/@stk_model_base/stk_model_base.m: Trivial class constructor.
+	* model/@stk_model_base/cat.m: This function is taken, untouched,
+	from @stk_model_gpposterior and @stk_model_gn.
+	* model/@stk_model_base/disp.m: Idem.
+	* model/@stk_model_base/display.m: Idem.
+	* model/@stk_model_base/get.m: Idem.
+	* model/@stk_model_base/set.m: Idem.
+	* model/@stk_model_base/subsasgn.m: Idem.
+	* model/@stk_model_base/subsref.m: Idem.
+	* model/@stk_model_base/horzcat.m: Idem.
+	* model/@stk_model_base/vertcat.m: Idem.
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Derive from
+	the base class.
+	* model/gn/@stk_model_gn/stk_model_gn.m: Idem
+	* core/@stk_model_gpposterior/display.m: Removed.
+	* core/@stk_model_gpposterior/horzcat.m: Removed.
+	* core/@stk_model_gpposterior/subsasgn.m: Removed.
+	* core/@stk_model_gpposterior/subsref.m: Removed.
+	* core/@stk_model_gpposterior/vertcat.m: Removed.
+	* model/gn/@stk_model_gn/cat.m: Removed.
+	* model/gn/@stk_model_gn/display.m: Removed.
+	* model/gn/@stk_model_gn/get.m: Removed.
+	* model/gn/@stk_model_gn/horzcat.m: Removed.
+	* model/gn/@stk_model_gn/set.m: Removed.
+	* model/gn/@stk_model_gn/subsasgn.m: Removed.
+	* model/gn/@stk_model_gn/subsref.m: Removed.
+	* model/gn/@stk_model_gn/vertcat.m: Removed.
+	* stk_init.m: Add new directory to the path.
+	* admin/octpkg/INDEX: Update the index.
+
 	Introduce noise model objects as an experimental feature (ticket #38)
 
 	* model/gn/@stk_model_gn: Base class for noise model objects.
@@ -28,8 +62,9 @@
 	* model/gn/@stk_model_gn_heteroscedastic0/fieldnames.m: Provide field names.
 	* model/gn/@stk_model_gn_heteroscedastic0/get.m: Getter.
 	* model/gn/@stk_model_gn_heteroscedastic0/set.m: setter.
-	* stk_init.m: Add new directories to the path.
+	* stk_init.m: Add new directory to the path.
 	* examples/03_miscellaneous/stk_example_misc06.m: An example.
+	* admin/octpkg/INDEX: Update the index.
 
 2018-10-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
