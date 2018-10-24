@@ -1,14 +1,8 @@
-% DISPLAY [overload base function]
-%
-% EXPERIMENTAL CLASS WARNING:  The stk_model_gn class is currently considered
-%    experimental.  STK users who wish to experiment with it are welcome to do
-%    so, but should be aware that API-breaking changes are likely to happen in
-%    future releases.  We invite them to direct any questions, remarks or
-%    comments about this experimental class to the STK mailing list.
+% CAT [overload base function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -32,23 +26,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function display (x)
+function varargout = cat (dim, varargin)  %#ok<STOUT,INUSD>
 
-name = inputname (1);
-if isempty (name)
-    name = 'ans';
-end
-
-if stk_disp_isloose
-    fprintf ('\n');
-end
-
-fprintf ('%s = ', name);
-
-disp (x);
-
-if stk_disp_isloose
-    fprintf ('\n');
-end
+stk_error (['Arrays of model objects are not supported. ', ...
+    'Use cell arrays instead.'], 'IllegalOperation');
 
 end % function

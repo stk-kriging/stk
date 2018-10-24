@@ -114,7 +114,7 @@ model.output_data = zi;
 model.kreq        = kreq;
 
 % Create object
-model = class (model, 'stk_model_gpposterior');
+model = class (model, 'stk_model_gpposterior', stk_model_base ());
 
 end % function
 

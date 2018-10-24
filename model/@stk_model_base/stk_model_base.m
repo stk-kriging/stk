@@ -1,10 +1,12 @@
-% VERTCAT [overload base function]
+% STK_MODEL_BASE [internal]
 %
-% EXPERIMENTAL CLASS WARNING:  The stk_model_gn class is currently considered
-%    experimental.  STK users who wish to experiment with it are welcome to do
-%    so, but should be aware that API-breaking changes are likely to happen in
-%    future releases.  We invite them to direct any questions, remarks or
-%    comments about this experimental class to the STK mailing list.
+% This is meant to become the base class for all STK models.
+%
+% Currently:
+%    * prior models  are defined by model structures (structs) and thus
+%      do not derive from this class;
+%    * the stk_model_gpposterior and stk_model_gn classes already derive
+%      from this class.
 
 % Copyright Notice
 %
@@ -32,12 +34,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function varargout = vertcat (varargin)  %#ok<STOUT>
+function gn = stk_model_base ()
 
-b = cellfun (@(obj) isa (obj, 'stk_model_gn'), varargin);
-i = find (b, 1, 'first');
-
-stk_error (sprintf (['Arrays of %s objects are not supported. ', ...
-    'Use cell arrays instead.'], class (varargin{i})), 'IllegalOperation');
+gn = class (struct (), 'stk_model_base');
 
 end % function
