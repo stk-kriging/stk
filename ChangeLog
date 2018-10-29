@@ -1,4 +1,10 @@
-2018-10-27  Julien Bect  <julien.bect@centralesupelec.fr>
+2018-10-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Octave version requirement: fine tuning
+
+	* NEWS.md: Change 3.8.1 to 3.8, no need to be so specific here.
+	* README.md: Make it clear that we only test in 3.8.2.
+	* admin/build_tools/build_octpkg.m: Formally require 3.8.0.
 
 	Raise minimal Octave version to 3.8.1
 

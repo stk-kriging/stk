@@ -2,7 +2,7 @@
 
 ## Required Octave version
 
-* Required Octave version number has been raised to 3.8.1.
+* Required Octave version number has been raised to 3.8.
 
 ## Parameter estimation
 
