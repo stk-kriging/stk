@@ -110,7 +110,7 @@ fprintf (fid, 'License: GPLv3+\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Url: https://sourceforge.net/projects/kriging/\n');
 fprintf (fid, '#\n');
-fprintf (fid, 'Depends: octave (>= 3.6.0)\n');
+fprintf (fid, 'Depends: octave (>= 3.8.1)\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Autoload: no\n');
 fclose (fid);

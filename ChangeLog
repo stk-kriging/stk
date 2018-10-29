@@ -1,3 +1,39 @@
+2018-10-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Raise minimal Octave version to 3.8.1
+
+	* admin/build_tools/build_octpkg.m: Raise minimal Octave version
+	to 3.8.1, which the version currently available in the oldest
+	Ubuntu LTS still supported (namely Trusty).  For the record, the
+	current oldstable release of Debian (namely, Jessie) has Octave
+	3.8.2.
+	* README.md: Modify accordingly.
+	* admin/CODING_GUIDELINES: CG#04, CG#06, CG#11 and CG#12 no longer
+	apply.
+	* arrays/@stk_dataframe/isequal.m: isequal overload is no longer
+	needed (cf CG#04).
+	* arrays/@stk_factorialdesign/isequal.m: Idem.
+	* core/@stk_kreq_qr/isequal.m: Idem.
+	* core/@stk_model_gpposterior/isequal.m: Idem.
+	* lm/@stk_lm_affine/isequal.m: Idem.
+	* lm/@stk_lm_constant/isequal.m: Idem.
+	* lm/@stk_lm_cubic/isequal.m: Idem.
+	* lm/@stk_lm_matrix/isequal.m: Idem.
+	* lm/@stk_lm_null/isequal.m: Idem.
+	* lm/@stk_lm_quadratic/isequal.m: Idem.
+	* misc/optim/@stk_optim_baseclass/isequal.m: Idem.
+	* misc/optim/@stk_optim_fmincon/isequal.m: Idem.
+	* misc/optim/@stk_optim_fminsearch/isequal.m: Idem.
+	* misc/optim/@stk_optim_octavesqp/isequal.m: Idem.
+	* misc/parallel/@stk_parallel_engine_none/isequal.m: Idem.
+	* misc/parallel/@stk_parallel_engine_parfor/isequal.m: Idem.
+	* examples/02_design_of_experiments/stk_example_doe02.m: Use
+	brackets instead of vertcat or horzcat (cf CG#11).
+	* examples/02_design_of_experiments/stk_example_doe03.m: Idem.
+	* examples/02_design_of_experiments/stk_example_doe05.m: Idem.
+	* utils/stk_plot_probdom2d.m: Idem.
+	* admin/octpkg/INDEX: Update the index.
+
 2018-10-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Add a base class for model classes

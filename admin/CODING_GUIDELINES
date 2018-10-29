@@ -46,19 +46,6 @@ Octave 3.6.4 does allow to manipulate instances of user-defined classes
 through MEX-files. Octave 3.8.x probably won't. So don't think of it.
 
 
---- CG#04: Overloading isequal -------------------------------------------------
-
-Overloading the base function 'isequal' is usually not required for user-
-defined classes.
-
-Some old releases of Octave (e.g., 3.6.2), however, have a bug that make
-isequal (x, y) return false when x and y are objects, even if they are
-equal.
-
-Therefore, as long as we want to support those releases, we have have to
-overload isequal (see, e.g., @stk_dataframe).
-
-
 --- CG#05: Calling display () on structures ------------------------------------
 
 Octave fails when display is called on structures that contain strings
@@ -69,13 +56,6 @@ https://savannah.gnu.org/bugs/index.php?49753
 
 As a workaround, we should avoid calling display on such structures
 (espacially, on model structures that contain an stk_lm_* object).
-
-
---- CG#06: Cell arrays of handles ----------------------------------------------
-
-Octave 3.6.2 fails to parse this: C = {@sin @cos};
-
-As a work-around, always use a comma-separated list: C = {@sin, @cos};
 
 
 --- CG#07: Ignoring output arguments -------------------------------------------
@@ -132,40 +112,3 @@ when calling stk_xlabel / stk_ylabel / stk_zlabel to display such variable
 names, as follows:
 
 stk_xlabel (h_axis, xlab, 'interpreter', 'none');
-
-
---- CG#11: Call horzcat/vertcat explicitely ------------------------------------
-
-Horizontal and vertical concatenation of stk_dataframe objects with non-scalar
-numerical arrays fails in Octave 3.6.2 if brackets are used:
-
-   z = [x, y];
-
-or
-
-   z = [x; y];
-
-The reason is that x is considered by Octave to have size 1x1 (the overloaded
-size operator is ignored).
-
-As long as Octave 3.6.x is supported, explicit calls to horzcat and vertcat must
-thus be preferred.
-
-
---- CG#12: Prefer "hold off" to "cla" ------------------------------------------
-
-For some mysterious reason, in Octave 3.6.2, stk_plot1d fails to
-create the legend when used in a loop like this:
-
-while iter < NB_ITER
-
-    % ...
-
-    stk_subplot (2, 1, 1);  cla;
-    stk_plot1d (...);
-
-    % ...
-    
-end
-
-Replacing "cla" with "hold off" fixes the issue.
