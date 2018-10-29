@@ -2,10 +2,7 @@
 %
 % CALL: [K, P1, P2] = stk_covmat_noise (M, X1, X2, DIFF, PAIRWISE)
 %
-% DIFF can be -1, 0, or 1
-%
 % INTERNAL FUNCTION WARNING:
-%
 %    This function is currently considered as internal: API-breaking changes are
 %    likely to happen in future releases.  Please don't rely on it directly.
 
