@@ -65,6 +65,7 @@ Core STK functions
 #stk_covmat_lm               [internal]
 #stk_covmat_noise            [internal]
 #stk_covmat_response         [internal]
+#stk_covmat_null             [internal]
  stk_conditioning
  stk_generate_samplepaths
  stk_isnoisy

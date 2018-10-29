@@ -2,13 +2,15 @@
 %
 % CALL: [K, P1, P2] = stk_covmat_lm (M, X1, X2, DIFF, PAIRWISE)
 %
-% DIFF can be -1 or 0
+% INTERNAL FUNCTION WARNING:
+%    This function is currently considered as internal: API-breaking changes are
+%    likely to happen in future releases.  Please don't rely on it directly.
 %
 % See also: stk_covmat
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -42,7 +44,7 @@ function [K, P1, P2] = stk_covmat_lm (model, x1, x2, diff, pairwise)
 
 % Evaluation points
 n1 = size (x1, 1);
-if (nargin > 2) && (~ isempty (x2)),
+if (nargin > 2) && (~ isempty (x2))
     n2 = size (x2, 1);
 else
     x2 = x1;
@@ -60,25 +62,15 @@ end
 if (nargin < 4) || (diff == -1)
     
     % Compute matrices for the linear part
-    if nargout > 1,
+    if nargout > 1
         P1 = stk_ortho_func (model, x1);
         
-        if nargout > 2,
+        if nargout > 2
             P2 = stk_ortho_func (model, x2);
         end
     end
     
-elseif diff == 0
-    
-    % Derivation wrt a parameter that does not modify the linear models
-    if nargout > 1
-        P1 = zeros (n1, 0);
-        if nargout > 2
-            P2 = zeros (n2, 0);
-        end
-    end
-    
-else % diff is neither -1 nor 0
+else  % currently, linear models are not allowed to have additional hyperparameters
     
     stk_error ('Incorrect diff value.', 'IncorrectArgument');
     

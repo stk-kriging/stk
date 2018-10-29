@@ -2,12 +2,11 @@
 %
 % CALL: [K, P1, P2] = stk_covmat_noise (M, X1, X2, DIFF, PAIRWISE)
 %
-% DIFF can be -1, 0, or 1
-%
 % INTERNAL FUNCTION WARNING:
-%
 %    This function is currently considered as internal: API-breaking changes are
 %    likely to happen in future releases.  Please don't rely on it directly.
+%
+% See also: stk_covmat
 
 % Copyright Notice
 %
@@ -56,7 +55,7 @@ if nargin < 4,  diff = -1;  end
 pairwise = (nargin > 4) && pairwise;
 assert ((n1 == n2) || (~ pairwise));
 
-if autocov && (diff ~= 0) && (stk_isnoisy (model))
+if autocov && (stk_isnoisy (model))
     
     if ~ isnumeric (model.lognoisevariance)
         
@@ -122,10 +121,8 @@ if autocov && (diff ~= 0) && (stk_isnoisy (model))
     
 else  % Return a null matrix
     
-    % There are several cases where we return a null matrix:
+    % We end up here if
     % a) autocov is false: we are actually computing a *cross*-covariance matrix
-    % b) diff = 0: derivative with respect to a parameter that does not modify
-    %    the covariance matrix of the noise
     % c) we are in the noiseless case.
     
     if pairwise

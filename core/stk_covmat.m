@@ -146,9 +146,9 @@ if (nargin < 5) || (isempty (diff))
 else
     try
         diff = double (diff);
-        assert (isscalar (diff));
+        assert (isscalar (diff) && ((diff == -1) || (diff > 0)));
     catch
-        stk_error ('diff should be scalar.', 'IncorrectArgument');
+        stk_error ('diff should be -1 or a positive integer.', 'IncorrectArgument');
     end
 end
 
@@ -178,8 +178,13 @@ switch output
                 (prior_model, x1, x2, -1, pairwise);
         else  % derivative => modify diff value
             ncovparam = length (model.param(:));
-            [varargout{:}] = stk_covmat_noise ...
-                (prior_model, x1, x2, max (0, diff - ncovparam), pairwise);
+            if diff > ncovparam
+                [varargout{:}] = stk_covmat_noise ...
+                    (prior_model, x1, x2, diff - ncovparam, pairwise);
+            else
+                [varargout{:}] = stk_covmat_null ...
+                    (prior_model, x1, x2, [], pairwise);
+            end
         end
         
     case 'latent'
@@ -188,25 +193,31 @@ switch output
                 (prior_model, x1, x2, -1, pairwise);
         else  % derivative => modify diff value
             ncovparam = length (model.param(:));
-            if diff > ncovparam,  diff = 0;  end
-            [varargout{:}] = stk_covmat_latent ...
-                (prior_model, x1, x2, diff, pairwise);
+            if diff <= ncovparam
+                [varargout{:}] = stk_covmat_latent ...
+                    (prior_model, x1, x2, diff, pairwise);
+            else
+                [varargout{:}] = stk_covmat_null ...
+                    (prior_model, x1, x2, [], pairwise);
+            end
         end
         
     case 'lm'
-        % Parameterized linear models are not supported yet
-        if diff ~= 1,  diff = 0;  end
         [varargout{:}] = stk_covmat_lm (prior_model, x1, x2, diff, pairwise);
         
     case 'gp0'
         if diff == -1  % plain value
             [varargout{:}] = stk_covmat_gp0 ...
                 (prior_model, x1, x2, -1, pairwise);
-        else  % derivative => modify diff value
+        else  % derivative
             ncovparam = length (model.param(:));
-            if diff > ncovparam,  diff = 0;  end
-            [varargout{:}] = stk_covmat_gp0 ...
-                (prior_model, x1, x2, diff, pairwise);
+            if diff <= ncovparam
+                [varargout{:}] = stk_covmat_gp0 ...
+                    (prior_model, x1, x2, diff, pairwise);
+            else
+                [varargout{:}] = stk_covmat_null ...
+                    (prior_model, x1, x2, [], pairwise);
+            end
         end
         
     otherwise

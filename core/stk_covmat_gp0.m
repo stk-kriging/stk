@@ -2,7 +2,9 @@
 %
 % CALL: [K, P1, P2] = stk_covmat_gp0 (M, X1, X2, DIFF, PAIRWISE)
 %
-% DIFF can be -1, 0, or anything <= NCOVPARAM
+% INTERNAL FUNCTION WARNING:
+%    This function is currently considered as internal: API-breaking changes are
+%    likely to happen in future releases.  Please don't rely on it directly.
 %
 % See also: stk_covmat
 
@@ -47,7 +49,7 @@ end
 
 % Evaluation points
 n1 = size (x1, 1);
-if (nargin > 2) && (~ isempty (x2)),
+if (nargin > 2) && (~ isempty (x2))
     n2 = size (x2, 1);
 else
     x2 = x1;
@@ -60,16 +62,11 @@ if nargin < 4,  diff = -1;  end
 % Default value for 'pairwise' (arg #5): false
 pairwise = (nargin > 4) && pairwise;
 
-if (diff == -1) || (diff <= length (param))
+if (diff == -1) || (diff > 0 && diff <= length (param))
     
     K = feval (model.covariance_type, model.param, x1, x2, diff, pairwise);
     
-elseif diff == 0
-    
-    % Derivation wrt a parameter that does not modify the gp0 part
-    K = zeros (n1, n2);
-    
-else % Incorrect valuefor the 'diff' argument
+else  % Incorrect valuefor the 'diff' argument
     
     stk_error ('Incorrect diff value.', 'IncorrectArgument');
     
@@ -77,9 +74,10 @@ end % if
 
 % No linear part for the 'gp0' component: return empty matrices if required
 if nargout > 1
-    P1 = zeros (size (x1, 1), 0);
+    P1 = zeros (n1, 0);
+    
     if nargout > 2
-        P2 = zeros (size (x2, 2), 0);
+        P2 = zeros (n2, 0);
     end
 end
 

@@ -2,13 +2,11 @@
 %
 % CALL: [K, P1, P2] = stk_covmat_response (M, X1, X2, DIFF, PAIRWISE)
 %
-% DIFF can be -1, 0, or anything <= NCOVPARAM + 1
-%
 % See also: stk_covmat
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
