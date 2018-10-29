@@ -1,5 +1,9 @@
 # Changes in version 2.6.0
 
+## Required Octave version
+
+* Required Octave version number has been raised to 3.8.1.
+
 ## Parameter estimation
 
 * `stk_param_loomse`: New function to estimate parameters, based on
