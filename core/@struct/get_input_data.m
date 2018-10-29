@@ -28,7 +28,7 @@
 
 function input_data = get_input_data (model)
 
-assert_struct_is_model (model);
+stk_assert_struct_is_model (model);
 
 if isfield (model, 'dim')
     
