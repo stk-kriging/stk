@@ -1,5 +1,17 @@
 2018-10-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Rename assert_struct_is_model.m, adding an stk_ prefix.
+
+	* core/@struct/private/assert_struct_is_model.m: Remove private
+	function, now exists with an stk_ prefix.
+	* misc/error/stk_assert_struct_is_model.m: Replacement for removed
+	private function.
+	* core/@struct/get_input_data.m: Use new function name.
+	* core/@struct/get_output_data.m: Idem.
+	* core/@struct/get_prior_model.m: Idem.
+	* core/@struct/stk_replicate_obs_noise.m: Idem.
+	* admin/octpkg/INDEX: Update INDEX.
+
 	Octave version requirement: fine tuning
 
 	* NEWS.md: Change 3.8.1 to 3.8, no need to be so specific here.

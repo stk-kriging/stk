@@ -517,9 +517,15 @@ Miscellaneous: options, plots...
 #stk_zlabel           [internal]
 
 ## error/warning
-#stk_error                 [internal]
-#stk_assert_no_duplicates  [internal]
-##stk_warning does not exist yet, but it should (?)
+#stk_error                   [internal]
+#stk_assert_box              [internal]
+#stk_assert_no_duplicates    [internal]
+#stk_assert_struct_is_model  [internal]
+#stk_isequal_tolabs          [internal]
+#stk_isequal_tolrel          [internal]
+#stk_is_lhs                  [internal]
+#stk_test_class              [internal]
+#stk_test_dfbinaryop         [internal]
 
 ## misc/text
 #stk_disp_examplewelcome         [internal]
@@ -530,14 +536,6 @@ Miscellaneous: options, plots...
 #stk_sprintf_colvect_fixedpoint  [internal]
 #stk_sprintf_colvect_scientific  [internal]
 #stk_sprintf_framed              [internal]
-
-## testing STK
-#stk_assert_box        [internal]
-#stk_isequal_tolabs    [internal]
-#stk_isequal_tolrel    [internal]
-#stk_is_lhs            [internal]
-#stk_test_class        [internal]
-#stk_test_dfbinaryop   [internal]
 
 ## (embryonic) parallelization engine
 #@stk_parallel_engine_none/stk_parallel_engine_none      [experimental]

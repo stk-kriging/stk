@@ -28,7 +28,7 @@
 
 function output_data = get_output_data (model)
 
-assert_struct_is_model (model);
+stk_assert_struct_is_model (model);
 
 output_data = zeros (0, 1);
 
