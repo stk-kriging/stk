@@ -80,7 +80,7 @@ for i = 1:NB_ITER,
     stk_title (sprintf ('n = %d,  fd = %.2e\n', size (x, 1), fd));
     drawnow;  pause (0.5);
     % enrich the DoE
-    x = vertcat (x, next_x);
+    x = [x; next_x];
 end
 
 

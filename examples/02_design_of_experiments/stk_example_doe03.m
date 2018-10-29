@@ -117,7 +117,7 @@ model.param = log ([SIGMA2; 1/RHO1]);
 %
 
 % Start with the initial design defined above
-data = horzcat (x0, z0);
+data = [x0, z0];
 
 % Number of points to be added adaptively
 NB_ITER = 20;
@@ -159,8 +159,8 @@ while (iter < NB_ITER) && (EI_max > EI_max_stop),
     
     if EI_max > EI_max_stop,
         % Add the new evaluation to the DoE
-        new_row = horzcat (xg(i_max, :), zg(i_max, :));
-        data = vertcat (data, new_row);  %#ok<AGROW>
+        new_row = [xg(i_max, :), zg(i_max, :)];
+        data = [data; new_row];  %#ok<AGROW>
         iter = iter + 1;
     end
     

@@ -1,9 +1,14 @@
-% ISEQUAL [overload base function]
+% STK_ASSERT_STRUCT_IS_MODEL [STK internal]
+%
+% INTERNAL FUNCTION WARNING:
+%    This function is currently considered as internal: API-breaking changes are
+%    likely to happen in future releases.  Please don't rely on it directly.
+%
+% See also: stk_model
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
-%    Copyright (C) 2013 SUPELEC
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -27,23 +32,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-% INTERNAL NOTE: overloaded for Octave 3.6.x compat / see CODING_GUIDELINES
+function stk_assert_struct_is_model (model)
 
-function b = isequal (x, y, varargin)
-
-if nargin < 2
-    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
-end
-
-% First, make sure that x and y belong to the same class
-% (either stk_dataframe or some derived class)
-b = isa (x, 'stk_dataframe') && strcmp (class (y), class (x)) ...
-    && isequal (x.data, y.data) ...
-    && isequal (x.colnames, y.colnames) && isequal (x.rownames, y.rownames);
-
-if b && (nargin > 2)
-    b = isequal (x, varargin{:});
+% Just a quick check
+if isstruct (model) && ~ isfield (model, 'param')
+    
+    stk_error (['The input argument does not look like a valid STK model' ...
+        'structure.'], 'InvalidArgument');
+    
 end
 
 end % function
-

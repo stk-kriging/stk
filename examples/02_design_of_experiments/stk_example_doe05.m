@@ -167,8 +167,8 @@ for iter = 1:(BUDGET - N0)
     end
     
     % Add the new evaluation to the DoE
-    x = vertcat (x, x_new);
-    z = vertcat (z, z_new);
+    x = [x; x_new];
+    z = [z; z_new];
     
     drawnow; % pause
     

@@ -85,7 +85,7 @@ x_obs = intersect (x1, x2, 'rows');
 %% Simulation points
 
 x_sim = stk_sampling_randunif (NB_SIMULATION_POINTS, [], box);
-x_sim = vertcat (x_sim, x_obs);
+x_sim = [x_sim; x_obs];
 
 % FIXME: Optimize the location of simulation points... (IID uniform is perhaps
 %    approximately OK for vague prior models, but *not* for posterior models
