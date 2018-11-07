@@ -1,8 +1,8 @@
-% GET_OUTPUT_DATA returns the output data of the model
+% GET_OUTPUT_DATA [deprecated]
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -28,8 +28,6 @@
 
 function output_data = get_output_data (model)
 
-stk_assert_struct_is_model (model);
-
-output_data = zeros (0, 1);
+output_data = stk_get_output_data (model);
 
 end % function

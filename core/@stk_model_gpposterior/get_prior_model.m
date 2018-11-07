@@ -1,4 +1,4 @@
-% GET_PRIOR_MODEL returns the prior_model structure
+% GET_PRIOR_MODEL [deprecated]
 
 % Copyright Notice
 %

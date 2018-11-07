@@ -62,7 +62,7 @@ if isempty (crit.model)
 else
     
     if isempty (crit.reference_grid)
-        crit.xr = get_input_data (crit.model);
+        crit.xr = stk_get_input_data (crit.model);
     else
         crit.xr = crit.reference_grid;
     end

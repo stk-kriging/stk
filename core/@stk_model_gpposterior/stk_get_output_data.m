@@ -1,4 +1,4 @@
-% GET_INTPUT_DATA [deprecated]
+% GET_OUTPUT_DATA returns the output data of the model
 
 % Copyright Notice
 %
@@ -26,8 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function input_data = get_input_data (model)
+function output_data = stk_get_output_data (model)
 
-input_data = model.input_data;
+output_data = model.output_data;
 
 end % function

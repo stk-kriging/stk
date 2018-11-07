@@ -114,7 +114,7 @@ end % function
 
 function m = compute_current_minimum (crit)
 
-xi = get_input_data (crit.model);
+xi = stk_get_input_data (crit.model);
 
 if isempty (xi)
     m = +inf;

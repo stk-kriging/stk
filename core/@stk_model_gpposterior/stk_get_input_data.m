@@ -1,4 +1,4 @@
-% GET_INTPUT_DATA [deprecated]
+% GET_INTPUT_DATA returns the input data of the model
 
 % Copyright Notice
 %
@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function input_data = get_input_data (model)
+function input_data = stk_get_input_data (model)
 
 input_data = model.input_data;
 

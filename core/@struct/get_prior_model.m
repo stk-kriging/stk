@@ -1,8 +1,8 @@
-% GET_PRIOR_MODEL returns the prior_model structure
+% GET_PRIOR_MODEL [deprecated]
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -28,8 +28,6 @@
 
 function prior_model = get_prior_model (model)
 
-stk_assert_struct_is_model (model);
-
-prior_model = model;
+prior_model = stk_get_prior_model (model);
 
 end % function

@@ -1,8 +1,15 @@
-% GET_INTPUT_DATA [deprecated]
+% STK_GET_OUTPUT_DATA returns the output data of a model
+%
+% CALL: OUTPUT_DATA = stk_get_output_data (MODEL)
+%
+%    returns the OUTPUT_DATA of the MODEL (which is empty if MODEL is
+%    a prior model).
+%
+% See also: stk_get_input_data, stk_get_prior_model
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +33,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function input_data = get_input_data (model)
+function output_data = stk_get_output_data (model)
 
-input_data = model.input_data;
+stk_assert_struct_is_model (model);
+
+output_data = zeros (0, 1);
 
 end % function
