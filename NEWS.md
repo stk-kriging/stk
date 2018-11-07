@@ -26,7 +26,11 @@
 
 * Deprecated: `stk_noisecov`.
 
-## Noise model objects [experimental]
+## Models
+
+* `stk_get_input_data`, `stk_get_output_data`, `stk_get_prior_model`:
+  New getters for model properties, that replace `get_input_data`,
+  `get_output_data` and `stk_get_prior_model` respectively (now deprecated).
 
 * `stk_model_gn`, `stk_model_gn_heteroscedastic0`: New classes
   representing Gaussian noise models.  Currently in experimental

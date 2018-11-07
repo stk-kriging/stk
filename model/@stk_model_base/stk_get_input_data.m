@@ -1,8 +1,8 @@
-% GET_INTPUT_DATA [deprecated]
+% STK_GET_INTPUT_DATA [overload STK function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +26,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function input_data = get_input_data (model)
+function input_data = stk_get_input_data (model)  %#ok<INUSD>
 
-input_data = model.input_data;
+% DESIGN NOTE: all model classes derived from stk_model_base are considered
+% as prior models unless they overload stk_get_prior_model, stk_get_input_data
+% and stk_get_output_data.
+
+% FIXME: size should be 0 x input_dim
+
+input_data = [];
 
 end % function

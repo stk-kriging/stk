@@ -1,4 +1,4 @@
-% GET_OUTPUT_DATA returns the output data of the model
+% GET_OUTPUT_DATA [deprecated]
 
 % Copyright Notice
 %

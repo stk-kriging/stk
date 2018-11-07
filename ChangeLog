@@ -1,3 +1,40 @@
+2018-11-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Add an stk_ prefix to some getters.
+
+	* core/@struct/get_input_data.m: Deprecated.
+	* core/@struct/get_output_data.m: Deprecated.
+	* core/@struct/get_prior_model.m: Deprecated.
+	* model/prior_struct/stk_get_input_data.m: New function, which
+	replaces @struct/get_input_data.m.
+	* model/prior_struct/stk_get_output_data.m: New function, which
+	replaces @struct/get_output_data.m.
+	* model/prior_struct/stk_get_prior_model.m: New function, which
+	replaces @struct/get_prior_model.m.
+	* core/@stk_model_gpposterior/get_input_data.m: Deprecated.
+	* core/@stk_model_gpposterior/get_output_data.m: Deprecated.
+	* core/@stk_model_gpposterior/get_prior_model.m: Deprecated.
+	* core/@stk_model_gpposterior/stk_get_input_data.m: New function,
+	which replaces @stk_model_gpposterior/get_input_data.m.
+	* core/@stk_model_gpposterior/stk_get_output_data.m: New function,
+	which replaces @stk_model_gpposterior/get_output_data.m.
+	* core/@stk_model_gpposterior/stk_get_prior_model.m: New function,
+	which replaces @stk_model_gpposterior/get_prior_model.m.
+	* model/@stk_model_base/stk_get_input_data.m: New function.  All
+	model classes derived from @stk_model_base will behave as prior
+	models unless this is overridden.
+	* model/@stk_model_base/stk_get_output_data.m: Idem.
+	* model/@stk_model_base/stk_get_prior_model.m: Idem.
+	* core/@stk_model_gpposterior/stk_generate_samplepaths.m: Use the
+	new form for the getters, i.e., add an stk_ prefix.
+	* sampling/@stk_sampcrit_akg/feval.m: Idem.
+	* sampling/@stk_sampcrit_akg/set.m: Idem.
+	* sampling/@stk_sampcrit_ei/set.m: Idem.
+	* sampling/@stk_sampcrit_eqi/set.m: Idem.
+	* utils/stk_plot_probdom2d.m: Idem.
+	* stk_init.m: Add new subdirectory to the path.
+	* admin/octpkg/INDEX: Update the index.
+
 2018-10-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Rename assert_struct_is_model.m, adding an stk_ prefix.

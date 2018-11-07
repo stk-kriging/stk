@@ -1,8 +1,8 @@
-% GET_INTPUT_DATA returns the input data of the model
+% GET_INTPUT_DATA [deprecated]
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -28,16 +28,6 @@
 
 function input_data = get_input_data (model)
 
-stk_assert_struct_is_model (model);
-
-if isfield (model, 'dim')
-    
-    input_data = zeros (0, model.dim);
-    
-else
-    
-    input_data = [];
-
-end
+input_data = stk_get_input_data (model);
 
 end % function
