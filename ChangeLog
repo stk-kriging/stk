@@ -1,3 +1,13 @@
+2018-11-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Rename stk_replicate_obs_noise, add help text
+
+	* core/@struct/stk_replicate_obs_noise.m: Renamed from.
+	* A utils/stk_simulate_noise.m: Renamed to.  Add help text.
+	Extract from @struct directory (see tickt #90).
+	* utils/stk_generate_samplepaths.m: Use the new name.
+	* admin/octpkg/INDEX: Update the index.
+
 2018-11-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Rename stk_assert_struct_is_model

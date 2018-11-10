@@ -1,4 +1,23 @@
-% STK_REPLICATE_OBS_NOISE [STK internal]
+% STK_SIMULATE_NOISE simulates random draws of the observation noise
+%
+% CALL: Z = stk_simulate_noise (MODEL, X)
+%
+%    simulates one random draw of the observation noise in the MODEL at
+%    observation points X.  The input argument X can be either a numerical
+%    matrix or a dataframe.  The output Z has the same number of of rows as X.
+%    More precisely, on a factor space of dimension DIM,
+%
+%     * X must have size NS x DIM,
+%     * Z will have size NS x 1,
+%
+%    where NS is the number of simulation points.
+%
+% CALL: Z = stk_simulate_noise (MODEL, X, M)
+%
+%    generates M random draws at once.  In this case, the output argument Z has
+%    size NS x M.
+%
+% See also: stk_generate_samplepaths
 
 % Copyright Notice
 %
@@ -28,11 +47,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function noise_sim = stk_replicate_obs_noise (model, xi, nrep)
+function noise_sim = stk_simulate_noise (model, x, nrep)
 
-stk_assert_model_struct (model);
+if nargin < 3
+    nrep = 1;
+end
 
-ni = size (xi, 1);
+ni = size (x, 1);
 
 if ~ stk_isnoisy (model)  % Noiseless case
     
@@ -41,17 +62,11 @@ if ~ stk_isnoisy (model)  % Noiseless case
 else  % Noisy case
     
     % Standard deviation of the observations
-    s = sqrt (stk_covmat_noise (model, xi, [], -1, true));
+    s = sqrt (stk_covmat_noise (model, x, [], -1, true));
     
     % Simulate noise values
-    if isscalar (s)
-        % Homoscedastic case
-        noise_sim = s * randn (ni, nrep);
-    else
-        % Heteroscedastic case
-        s = reshape (s, ni, 1);
-        noise_sim = bsxfun (@times, s, randn (ni, nrep));
-    end
+    s = reshape (s, ni, 1);
+    noise_sim = bsxfun (@times, s, randn (ni, nrep));
     
 end
 
