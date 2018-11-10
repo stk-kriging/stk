@@ -188,7 +188,7 @@ if conditional
     else % Noisy case
                 
         % Simulate noise values
-        noise_sim = stk_replicate_obs_noise (model, xi, nb_paths);
+        noise_sim = stk_simulate_noise (model, xi, nb_paths);
         
         % Simulate sample paths conditioned on noisy observations
         zsim = stk_conditioning (lambda, zi, zsim, xi_ind, noise_sim);
