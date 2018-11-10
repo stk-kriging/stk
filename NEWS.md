@@ -24,6 +24,8 @@
   the model is NaN.
   ([ticket #93](https://sourceforge.net/p/kriging/tickets/93/))
 
+## Covariance functions
+
 * Deprecated: `stk_noisecov`.
 
 ## Models
@@ -31,6 +33,10 @@
 * `stk_get_input_data`, `stk_get_output_data`, `stk_get_prior_model`:
   New getters for model properties, that replace `get_input_data`,
   `get_output_data` and `stk_get_prior_model` respectively (now deprecated).
+
+* `stk_get_observation_variances.m`: New getter, which returns the
+  vector of variances associated to the observations that have been
+  used to build a model.
 
 * `stk_model_gn`, `stk_model_gn_heteroscedastic0`: New classes
   representing Gaussian noise models.  Currently in experimental

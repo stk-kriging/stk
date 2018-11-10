@@ -41,7 +41,7 @@ if ~ stk_isnoisy (model)  % Noiseless case
 else  % Noisy case
     
     % Standard deviation of the observations
-    s = sqrt (stk_get_observation_variances (model, xi));
+    s = sqrt (stk_covmat_noise (model, xi, [], -1, true));
     
     % Simulate noise values
     if isscalar (s)
