@@ -1,3 +1,22 @@
+2018-11-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Polish stk_get_observation_variances
+
+	* core/stk_get_observation_variances.m: Moved to model/prior_struct.
+	* model/prior_struct/stk_get_observation_variances.m: Moved here
+	from core.  Remove the syntax with two input arguments.
+	* model/@stk_model_base/stk_get_observation_variances.m: All
+	models behave as prior models if this is not overridden.
+	* core/@stk_model_gpposterior/stk_get_observation_variances.m:
+	Minor fix in help text.
+	* model/@stk_model_base/stk_get_input_data.m: Update design note.
+	* model/@stk_model_base/stk_get_output_data.m: Idem.
+	* model/@stk_model_base/stk_get_prior_model.m: Idem.
+	* core/@struct/stk_replicate_obs_noise.m: Call stk_covmat_noise
+	directly.
+	* param/estim/stk_param_init.m: Idem.
+	* admin/octpkg/INDEX: Update the index.
+
 2018-11-09  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Add an stk_ prefix to some getters.

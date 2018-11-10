@@ -30,7 +30,7 @@ function output_data = stk_get_output_data (model)  %#ok<INUSD>
 
 % DESIGN NOTE: all model classes derived from stk_model_base are considered
 % as prior models unless they overload stk_get_prior_model, stk_get_input_data
-% and stk_get_output_data.
+% stk_get_output_data and stk_get_observation_variances.
 
 output_data = zeros (0, 1);
 

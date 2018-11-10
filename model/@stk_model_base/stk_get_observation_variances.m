@@ -26,8 +26,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_get_observation_variances (model)
+function v = stk_get_observation_variances (model)  %#ok<INUSD>
 
-v = stk_covmat_noise (model.prior_model, model.input_data, [], -1, true);
+% DESIGN NOTE: all model classes derived from stk_model_base are considered
+% as prior models unless they overload stk_get_prior_model, stk_get_input_data
+% stk_get_output_data and stk_get_observation_variances.
+
+v = [];
 
 end % function

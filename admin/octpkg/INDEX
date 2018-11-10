@@ -62,7 +62,6 @@ Core STK functions
  stk_conditioning
  stk_generate_samplepaths
  stk_isnoisy
- stk_get_observation_variances
 #stk_ortho_func              [deprecated]
 #stk_cholcov                 [internal]
 #stk_model_fixlm             [internal]
@@ -83,24 +82,26 @@ Parameter estimation
 #stk_set_optimizable_parameters  [internal]
 
 ## Base class for model objects
-#@stk_model_base/stk_model_base       [internal]
-#@stk_model_base/stk_get_input_data   [overload STK]
-#@stk_model_base/stk_get_output_data  [overload STK]
-#@stk_model_base/stk_get_prior_model  [overload STK]
-#@stk_model_base/cat                  [overload base]
-#@stk_model_base/disp                 [overload base]
-#@stk_model_base/display              [overload base]
-#@stk_model_base/get                  [overload base]
-#@stk_model_base/horzcat              [overload base]
-#@stk_model_base/set                  [overload base]
-#@stk_model_base/subsasgn             [overload base]
-#@stk_model_base/subsref              [overload base]
-#@stk_model_base/vertcat              [overload base]
+#@stk_model_base/stk_model_base                 [internal]
+#@stk_model_base/stk_get_input_data             [overload STK]
+#@stk_model_base/stk_get_output_data            [overload STK]
+#@stk_model_base/stk_get_prior_model            [overload STK]
+#@stk_model_base/stk_get_observation_variances  [overload STK]
+#@stk_model_base/cat                            [overload base]
+#@stk_model_base/disp                           [overload base]
+#@stk_model_base/display                        [overload base]
+#@stk_model_base/get                            [overload base]
+#@stk_model_base/horzcat                        [overload base]
+#@stk_model_base/set                            [overload base]
+#@stk_model_base/subsasgn                       [overload base]
+#@stk_model_base/subsref                        [overload base]
+#@stk_model_base/vertcat                        [overload base]
 
 Get/set model properties
  stk_get_input_data
  stk_get_output_data
  stk_get_prior_model
+ stk_get_observation_variances
 
 Posterior model objects
  @stk_model_gpposterior/stk_model_gpposterior

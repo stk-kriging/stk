@@ -180,7 +180,7 @@ if isempty (lnv_)
     do_estim_lnv = false;
     
     if stk_isnoisy (model)
-        lnv = stk_get_observation_variances (model, xi);
+        lnv = log (stk_covmat_noise (model, xi, [], -1, true));
     else
         lnv = -inf;
     end
