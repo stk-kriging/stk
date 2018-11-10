@@ -35,7 +35,7 @@
 
 function input_data = stk_get_input_data (model)
 
-stk_assert_struct_is_model (model);
+stk_assert_model_struct (model);
 
 if isfield (model, 'dim')
     

@@ -30,7 +30,7 @@
 
 function noise_sim = stk_replicate_obs_noise (model, xi, nrep)
 
-stk_assert_struct_is_model (model);
+stk_assert_model_struct (model);
 
 ni = size (xi, 1);
 
