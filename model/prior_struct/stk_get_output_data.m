@@ -35,7 +35,7 @@
 
 function output_data = stk_get_output_data (model)
 
-stk_assert_struct_is_model (model);
+stk_assert_model_struct (model);
 
 output_data = zeros (0, 1);
 

@@ -67,10 +67,7 @@
 
 function [param, lnv] = stk_param_init (model, varargin)
 
-if ~ isstruct (model)
-    stk_error (['The first input argument does not look like ' ...
-        'a valid STK model structure.'], 'InvalidArgument');
-end
+stk_assert_model_struct (model);
 
 cov_list = { ...
     'stk_expcov_iso', ...

@@ -1,4 +1,4 @@
-% STK_ASSERT_STRUCT_IS_MODEL [STK internal]
+% STK_ASSERT_MODEL_STRUCT [STK internal]
 %
 % INTERNAL FUNCTION WARNING:
 %    This function is currently considered as internal: API-breaking changes are
@@ -32,13 +32,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_assert_struct_is_model (model)
+function stk_assert_model_struct (model)
 
 % Just a quick check
-if isstruct (model) && ~ isfield (model, 'param')
+if ~ (isstruct (model) && isfield (model, 'param'))
     
-    stk_error (['The input argument does not look like a valid STK model' ...
-        'structure.'], 'InvalidArgument');
+    stk_error (['The input argument does not look like a valid ' ...
+        'STK model structure.'], 'InvalidArgument');
     
 end
 

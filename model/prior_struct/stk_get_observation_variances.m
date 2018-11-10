@@ -33,7 +33,7 @@
 
 function v = stk_get_observation_variances (model)
 
-stk_assert_struct_is_model (model);
+stk_assert_model_struct (model);
 
 % Ok, model is a prior model structure
 v = [];

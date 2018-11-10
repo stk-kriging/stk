@@ -1,5 +1,19 @@
 2018-11-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Rename stk_assert_struct_is_model
+
+	* misc/error/stk_assert_struct_is_model.m: Renamed from.
+	* misc/error/stk_assert_model_struct.m: Renamed to.
+	* model/prior_struct/stk_get_input_data.m: Use new name.
+	* model/prior_struct/stk_get_observation_variances.m: Idem.
+	* model/prior_struct/stk_get_output_data.m: Idem.
+	* model/prior_struct/stk_get_prior_model.m: Idem.
+	* core/@struct/stk_replicate_obs_noise.m: Idem.
+	* param/estim/stk_param_init.m: Call stk_assert_model_struct
+	instead of re-inventing the wheel.
+	* core/stk_get_optimizable_model_parameters.m: Idem.
+	* core/stk_set_optimizable_model_parameters.m: Idem.
+
 	Polish stk_get_observation_variances
 
 	* core/stk_get_observation_variances.m: Moved to model/prior_struct.

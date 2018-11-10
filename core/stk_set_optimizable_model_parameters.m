@@ -38,11 +38,7 @@
 
 function model = stk_set_optimizable_model_parameters (model, value)
 
-% Just a quick check
-if ~ (isstruct (model) && isfield (model, 'param'))
-    stk_error (['The first input argument does not look like a ' ...
-        'valid STK model structure.'], 'InvalidArgument');
-end
+stk_assert_model_struct (model);
 
 % Covariance parameters
 covparam = stk_get_optimizable_parameters (model.param);

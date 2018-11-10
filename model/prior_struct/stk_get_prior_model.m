@@ -35,7 +35,7 @@
 
 function prior_model = stk_get_prior_model (model)
 
-stk_assert_struct_is_model (model);
+stk_assert_model_struct (model);
 
 prior_model = model;
 

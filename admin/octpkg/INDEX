@@ -532,7 +532,7 @@ Miscellaneous: options, plots...
 #stk_error                   [internal]
 #stk_assert_box              [internal]
 #stk_assert_no_duplicates    [internal]
-#stk_assert_struct_is_model  [internal]
+#stk_assert_model_struct     [internal]
 #stk_isequal_tolabs          [internal]
 #stk_isequal_tolrel          [internal]
 #stk_is_lhs                  [internal]
