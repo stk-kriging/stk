@@ -33,6 +33,8 @@
 
 function select = stk_param_getblockselectors (model)
 
+stk_assert_model_struct (model);
+
 select = cell (2, 1);
 
 % Covariance parameters
