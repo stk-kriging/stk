@@ -71,9 +71,9 @@ if conditional
     model = stk_model_update (model, xi, zi);
 end
 
-xi = get_input_data (model);
-zi = get_output_data (model);
-model = get_prior_model (model);
+xi = stk_get_input_data (model);
+zi = stk_get_output_data (model);
+model = stk_get_prior_model (model);
 
 zsim = stk_generate_samplepaths (model, xi, zi, xt, nb_paths);
 

@@ -1,4 +1,9 @@
-% STK_GET_OBSERVATION_VARIANCES [overload STK function]
+% STK_PARAM_GETBLOCKSELECTORS [STK internal]
+%
+% INTERNAL FUNCTION WARNING:
+%
+%    This function is currently considered as internal, don't rely on it
+%    directly.  API-breaking changes are likely to happen in future releases.
 
 % Copyright Notice
 %
@@ -26,8 +31,20 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_get_observation_variances (model)
+function select = stk_param_getblockselectors (model)
 
-v = stk_covmat_noise (model.prior_model, model.input_data, [], -1, true);
+stk_assert_model_struct (model);
+
+select = cell (2, 1);
+
+% Covariance parameters
+covparam = stk_get_optimizable_parameters (model.param);
+covparam_size = length (covparam);
+select{1} = true (covparam_size, 1);
+
+% Noise parameters
+noiseparam = stk_get_optimizable_noise_parameters (model);
+noiseparam_size = length (noiseparam);
+select{2} = true (noiseparam_size, 1);
 
 end % function

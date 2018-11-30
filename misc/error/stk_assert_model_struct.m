@@ -1,8 +1,14 @@
-% STK_GET_OBSERVATION_VARIANCES [overload STK function]
+% STK_ASSERT_MODEL_STRUCT [STK internal]
+%
+% INTERNAL FUNCTION WARNING:
+%    This function is currently considered as internal: API-breaking changes are
+%    likely to happen in future releases.  Please don't rely on it directly.
+%
+% See also: stk_model
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +32,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_get_observation_variances (model)
+function stk_assert_model_struct (model)
 
-v = stk_covmat_noise (model.prior_model, model.input_data, [], -1, true);
+% Just a quick check
+if ~ (isstruct (model) && isfield (model, 'param'))
+    
+    stk_error (['The input argument does not look like a valid ' ...
+        'STK model structure.'], 'InvalidArgument');
+    
+end
 
 end % function

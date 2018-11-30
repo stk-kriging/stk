@@ -1,13 +1,15 @@
-% STK_PARAM_GETBLOCKSELECTORS [STK internal]
+% STK_GET_OUTPUT_DATA returns the output data of a model
 %
-% INTERNAL FUNCTION WARNING:
+% CALL: OUTPUT_DATA = stk_get_output_data (MODEL)
 %
-%    This function is currently considered as internal, don't rely on it
-%    directly.  API-breaking changes are likely to happen in future releases.
+%    returns the OUTPUT_DATA of the MODEL (which is empty if MODEL is
+%    a prior model).
+%
+% See also: stk_get_input_data, stk_get_prior_model
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -31,18 +33,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function select = stk_param_getblockselectors (model)
+function output_data = stk_get_output_data (model)
 
-select = cell (2, 1);
+stk_assert_model_struct (model);
 
-% Covariance parameters
-covparam = stk_get_optimizable_parameters (model.param);
-covparam_size = length (covparam);
-select{1} = true (covparam_size, 1);
-
-% Noise parameters
-noiseparam = stk_get_optimizable_noise_parameters (model);
-noiseparam_size = length (noiseparam);
-select{2} = true (noiseparam_size, 1);
+output_data = zeros (0, 1);
 
 end % function

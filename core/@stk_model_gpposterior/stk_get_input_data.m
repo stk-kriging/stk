@@ -1,8 +1,8 @@
-% GET_PRIOR_MODEL returns the prior_model structure
+% GET_INTPUT_DATA returns the input data of the model
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,10 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function prior_model = get_prior_model (model)
+function input_data = stk_get_input_data (model)
 
-stk_assert_struct_is_model (model);
-
-prior_model = model;
+input_data = model.input_data;
 
 end % function

@@ -1,8 +1,15 @@
-% STK_GET_OBSERVATION_VARIANCES [overload STK function]
+% STK_GET_PRIOR_MODEL returns the underlying prior model of a model
+%
+% CALL: PRIOR_MODEL = stk_get_prior_model (MODEL)
+%
+%    returns the underlying PRIOR_MODEL of the MODEL (which is equal to MODEL
+%    itself if MODEL is a prior model).
+%
+% See also: stk_get_input_data, stk_get_output_data
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +33,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_get_observation_variances (model)
+function prior_model = stk_get_prior_model (model)
 
-v = stk_covmat_noise (model.prior_model, model.input_data, [], -1, true);
+stk_assert_model_struct (model);
+
+prior_model = model;
 
 end % function

@@ -1,4 +1,4 @@
-% STK_GET_OBSERVATION_VARIANCES [overload STK function]
+% STK_GET_INTPUT_DATA [overload STK function]
 
 % Copyright Notice
 %
@@ -26,8 +26,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_get_observation_variances (model)
+function input_data = stk_get_input_data (model)  %#ok<INUSD>
 
-v = stk_covmat_noise (model.prior_model, model.input_data, [], -1, true);
+% DESIGN NOTE: all model classes derived from stk_model_base are considered
+% as prior models unless they overload stk_get_prior_model, stk_get_input_data
+% stk_get_output_data and stk_get_observation_variances.
+
+% FIXME: size should be 0 x input_dim
+
+input_data = [];
 
 end % function

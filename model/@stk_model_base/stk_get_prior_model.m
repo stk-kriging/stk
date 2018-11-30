@@ -1,12 +1,10 @@
-% STK_REPLICATE_OBS_NOISE [STK internal]
+% STK_GET_PRIOR_MODEL [overload STK function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017, 2018 CentraleSupelec
-%    Copyright (C) 2017 LNE
+%    Copyright (C) 2018 CentraleSupelec
 %
-%    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
-%              Remi Stroh   <remi.stroh@lne.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -28,31 +26,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function noise_sim = stk_replicate_obs_noise (model, xi, nrep)
+function prior_model = stk_get_prior_model (model)
 
-stk_assert_struct_is_model (model);
+% DESIGN NOTE: all model classes derived from stk_model_base are considered
+% as prior models unless they overload stk_get_prior_model, stk_get_input_data
+% stk_get_output_data and stk_get_observation_variances.
 
-ni = size (xi, 1);
-
-if ~ stk_isnoisy (model)  % Noiseless case
-    
-    noise_sim = zeros (ni, nrep);
-    
-else  % Noisy case
-    
-    % Standard deviation of the observations
-    s = sqrt (stk_get_observation_variances (model, xi));
-    
-    % Simulate noise values
-    if isscalar (s)
-        % Homoscedastic case
-        noise_sim = s * randn (ni, nrep);
-    else
-        % Heteroscedastic case
-        s = reshape (s, ni, 1);
-        noise_sim = bsxfun (@times, s, randn (ni, nrep));
-    end
-    
-end
+prior_model = model;
 
 end % function

@@ -69,6 +69,9 @@
 function [param_opt, lnv_opt, info] = stk_param_estim ...
     (model, xi, zi, param0, lnv0, criterion)
 
+stk_assert_model_struct (model);
+% FIXME: Implement stk_param_estim for noise priors too
+
 % Empty is the same as 'not provided'
 if nargin < 6
     criterion = [];

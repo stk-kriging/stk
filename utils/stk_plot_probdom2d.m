@@ -76,8 +76,8 @@ NB_TEST_POINTS = 100 ^ 2;
 
 %% Observation points (points where both objectives hae been evaluated)
 
-x1 = double (get_input_data (model1));
-x2 = double (get_input_data (model2));
+x1 = double (stk_get_input_data (model1));
+x2 = double (stk_get_input_data (model2));
 
 x_obs = intersect (x1, x2, 'rows');
 

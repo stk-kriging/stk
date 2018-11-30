@@ -1,8 +1,8 @@
-% GET_INTPUT_DATA returns the input data of the model
+% STK_GET_OBSERVATION_VARIANCES [overload STK function]
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,18 +26,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function input_data = get_input_data (model)
+function v = stk_get_observation_variances (model)  %#ok<INUSD>
 
-stk_assert_struct_is_model (model);
+% DESIGN NOTE: all model classes derived from stk_model_base are considered
+% as prior models unless they overload stk_get_prior_model, stk_get_input_data
+% stk_get_output_data and stk_get_observation_variances.
 
-if isfield (model, 'dim')
-    
-    input_data = zeros (0, model.dim);
-    
-else
-    
-    input_data = [];
-
-end
+v = [];
 
 end % function

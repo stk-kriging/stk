@@ -1,3 +1,111 @@
+2018-11-30  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Relocate @struct/ inside model/prior_struct (ticket #90)
+
+	* core/@struct/get_input_data.m: Moved from.
+	* core/@struct/get_output_data.m: Moved from.
+	* core/@struct/get_prior_model.m: Moved from.
+	* model/prior_struct/@struct/get_input_data.m: Moved to.
+	* model/prior_struct/@struct/get_output_data.m: Moved to.
+	* model/prior_struct/@struct/get_prior_model.m: Moved to.
+	* model/prior_struct/@struct/README: Provide an explanation.
+	* admin/build_tools/build_octpkg.m: Ignore the README file.
+
+	Move stk_get_optimizable_noise_parameters.m out of @struct/
+
+	* core/@struct/stk_get_optimizable_noise_parameters.m: Moved from.
+	* model/prior_struct/stk_get_optimizable_noise_parameters.m: Moved
+	to. Check that model is a prior model structure.
+	* admin/octpkg/INDEX: Update the index.
+
+2018-11-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Move stk_param_getblockselectors out of @struct/
+
+	* core/@struct/stk_param_getblockselectors.m: Moved from.
+	* model/prior_struct/stk_param_getblockselectors.m: Moved to.
+	* param/estim/stk_param_estim.m: Check that model is a prior model
+	structure.
+	* admin/octpkg/INDEX: Update the index.
+
+	Rename stk_replicate_obs_noise, add help text
+
+	* core/@struct/stk_replicate_obs_noise.m: Renamed from.
+	* A utils/stk_simulate_noise.m: Renamed to.  Add help text.
+	Extract from @struct directory (see ticket #90).
+	* utils/stk_generate_samplepaths.m: Use the new name.
+	* admin/octpkg/INDEX: Update the index.
+
+2018-11-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Rename stk_assert_struct_is_model
+
+	* misc/error/stk_assert_struct_is_model.m: Renamed from.
+	* misc/error/stk_assert_model_struct.m: Renamed to.
+	* model/prior_struct/stk_get_input_data.m: Use new name.
+	* model/prior_struct/stk_get_observation_variances.m: Idem.
+	* model/prior_struct/stk_get_output_data.m: Idem.
+	* model/prior_struct/stk_get_prior_model.m: Idem.
+	* core/@struct/stk_replicate_obs_noise.m: Idem.
+	* param/estim/stk_param_init.m: Call stk_assert_model_struct
+	instead of re-inventing the wheel.
+	* core/stk_get_optimizable_model_parameters.m: Idem.
+	* core/stk_set_optimizable_model_parameters.m: Idem.
+
+	Polish stk_get_observation_variances
+
+	* core/stk_get_observation_variances.m: Moved to model/prior_struct.
+	* model/prior_struct/stk_get_observation_variances.m: Moved here
+	from core.  Remove the syntax with two input arguments.
+	* model/@stk_model_base/stk_get_observation_variances.m: All
+	models behave as prior models if this is not overridden.
+	* core/@stk_model_gpposterior/stk_get_observation_variances.m:
+	Minor fix in help text.
+	* model/@stk_model_base/stk_get_input_data.m: Update design note.
+	* model/@stk_model_base/stk_get_output_data.m: Idem.
+	* model/@stk_model_base/stk_get_prior_model.m: Idem.
+	* core/@struct/stk_replicate_obs_noise.m: Call stk_covmat_noise
+	directly.
+	* param/estim/stk_param_init.m: Idem.
+	* admin/octpkg/INDEX: Update the index.
+
+2018-11-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Add an stk_ prefix to some getters.
+
+	* core/@struct/get_input_data.m: Deprecated.
+	* core/@struct/get_output_data.m: Deprecated.
+	* core/@struct/get_prior_model.m: Deprecated.
+	* model/prior_struct/stk_get_input_data.m: New function, which
+	replaces @struct/get_input_data.m.
+	* model/prior_struct/stk_get_output_data.m: New function, which
+	replaces @struct/get_output_data.m.
+	* model/prior_struct/stk_get_prior_model.m: New function, which
+	replaces @struct/get_prior_model.m.
+	* core/@stk_model_gpposterior/get_input_data.m: Deprecated.
+	* core/@stk_model_gpposterior/get_output_data.m: Deprecated.
+	* core/@stk_model_gpposterior/get_prior_model.m: Deprecated.
+	* core/@stk_model_gpposterior/stk_get_input_data.m: New function,
+	which replaces @stk_model_gpposterior/get_input_data.m.
+	* core/@stk_model_gpposterior/stk_get_output_data.m: New function,
+	which replaces @stk_model_gpposterior/get_output_data.m.
+	* core/@stk_model_gpposterior/stk_get_prior_model.m: New function,
+	which replaces @stk_model_gpposterior/get_prior_model.m.
+	* model/@stk_model_base/stk_get_input_data.m: New function.  All
+	model classes derived from @stk_model_base will behave as prior
+	models unless this is overridden.
+	* model/@stk_model_base/stk_get_output_data.m: Idem.
+	* model/@stk_model_base/stk_get_prior_model.m: Idem.
+	* core/@stk_model_gpposterior/stk_generate_samplepaths.m: Use the
+	new form for the getters, i.e., add an stk_ prefix.
+	* sampling/@stk_sampcrit_akg/feval.m: Idem.
+	* sampling/@stk_sampcrit_akg/set.m: Idem.
+	* sampling/@stk_sampcrit_ei/set.m: Idem.
+	* sampling/@stk_sampcrit_eqi/set.m: Idem.
+	* utils/stk_plot_probdom2d.m: Idem.
+	* stk_init.m: Add new subdirectory to the path.
+	* admin/octpkg/INDEX: Update the index.
+
 2018-10-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Rename assert_struct_is_model.m, adding an stk_ prefix.

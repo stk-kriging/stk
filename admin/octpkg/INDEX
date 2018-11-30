@@ -68,8 +68,8 @@ Core STK functions
 #stk_covmat_null             [internal]
  stk_conditioning
  stk_generate_samplepaths
+ stk_simulate_noise
  stk_isnoisy
- stk_get_observation_variances
 #stk_ortho_func              [deprecated]
 #stk_cholcov                 [internal]
 #stk_model_fixlm             [internal]
@@ -86,51 +86,61 @@ Parameter estimation
 #stk_param_estim_optim           [internal]
 #stk_param_getdefaultbounds      [internal]
 #stk_param_getdefaultbounds_lnv  [internal]
+#stk_param_getblockselectors     [internal]
 #stk_get_optimizable_parameters  [internal]
 #stk_set_optimizable_parameters  [internal]
 
 ## Base class for model objects
-#@stk_model_base/stk_model_base  [internal]
-#@stk_model_base/cat             [overload base]
-#@stk_model_base/disp            [overload base]
-#@stk_model_base/display         [overload base]
-#@stk_model_base/get             [overload base]
-#@stk_model_base/horzcat         [overload base]
-#@stk_model_base/set             [overload base]
-#@stk_model_base/subsasgn        [overload base]
-#@stk_model_base/subsref         [overload base]
-#@stk_model_base/vertcat         [overload base]
+#@stk_model_base/stk_model_base                 [internal]
+#@stk_model_base/stk_get_input_data             [overload STK]
+#@stk_model_base/stk_get_output_data            [overload STK]
+#@stk_model_base/stk_get_prior_model            [overload STK]
+#@stk_model_base/stk_get_observation_variances  [overload STK]
+#@stk_model_base/cat                            [overload base]
+#@stk_model_base/disp                           [overload base]
+#@stk_model_base/display                        [overload base]
+#@stk_model_base/get                            [overload base]
+#@stk_model_base/horzcat                        [overload base]
+#@stk_model_base/set                            [overload base]
+#@stk_model_base/subsasgn                       [overload base]
+#@stk_model_base/subsref                        [overload base]
+#@stk_model_base/vertcat                        [overload base]
+
+Get/set model properties
+ stk_get_input_data
+ stk_get_output_data
+ stk_get_prior_model
+ stk_get_observation_variances
+#@struct/get_input_data                        [deprecated]
+#@struct/get_output_data                       [deprecated]
+#@struct/get_prior_model                       [deprecated]
+#stk_set_optimizable_model_parameters          [internal]
+#stk_get_optimizable_model_parameters          [internal]
+#stk_get_optimizable_noise_parameters          [internal]
 
 Posterior model objects
  @stk_model_gpposterior/stk_model_gpposterior
  @stk_model_gpposterior/stk_predict
  @stk_model_gpposterior/stk_predict_leaveoneout
  @stk_model_gpposterior/stk_model_update
- @stk_model_gpposterior/get_input_data
- @stk_model_gpposterior/get_output_data
- @stk_model_gpposterior/get_prior_model
+#@stk_model_gpposterior/get_input_data                        [deprecated]
+#@stk_model_gpposterior/get_output_data                       [deprecated]
+#@stk_model_gpposterior/get_prior_model                       [deprecated]
 #@stk_model_gpposterior/stk_isnoisy                           [overload STK]
 #@stk_model_gpposterior/stk_generate_samplepaths              [overload STK]
 #@stk_model_gpposterior/stk_get_observation_variances         [overload STK]
 #@stk_model_gpposterior/stk_get_optimizable_parameters        [overload STK]
 #@stk_model_gpposterior/stk_set_optimizable_parameters        [overload STK]
 #@stk_model_gpposterior/stk_get_optimizable_noise_parameters  [overload STK]
+#@stk_model_gpposterior/stk_get_input_data                    [overload STK]
+#@stk_model_gpposterior/stk_get_output_data                   [overload STK]
+#@stk_model_gpposterior/stk_get_prior_model                   [overload STK]
 #@stk_model_gpposterior/stk_make_kreq                         [internal]
 #@stk_model_gpposterior/stk_predict_leaveoneout_direct        [internal]
 #@stk_model_gpposterior/disp                                  [overload base]
 #@stk_model_gpposterior/fieldnames                            [overload base]
 #@stk_model_gpposterior/get                                   [overload base]
 #@stk_model_gpposterior/set                                   [overload base]
-
-## Prior models are currently represented by structures
-#@struct/get_input_data                        [internal]
-#@struct/get_output_data                       [internal]
-#@struct/get_prior_model                       [internal]
-#@struct/stk_get_optimizable_noise_parameters  [internal]
-#@struct/stk_param_getblockselectors           [internal]
-#@struct/stk_replicate_obs_noise               [internal]
-#stk_set_optimizable_model_parameters          [internal]
-#stk_get_optimizable_model_parameters          [internal]
 
 ## The stk_kre_qr class -> not ready to be exposed
 #@stk_kreq_qr/disp                   [overload base]
@@ -527,7 +537,7 @@ Miscellaneous: options, plots...
 #stk_error                   [internal]
 #stk_assert_box              [internal]
 #stk_assert_no_duplicates    [internal]
-#stk_assert_struct_is_model  [internal]
+#stk_assert_model_struct     [internal]
 #stk_isequal_tolabs          [internal]
 #stk_isequal_tolrel          [internal]
 #stk_is_lhs                  [internal]

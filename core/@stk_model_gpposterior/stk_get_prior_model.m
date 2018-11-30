@@ -1,8 +1,8 @@
-% GET_OUTPUT_DATA returns the output data of the model
+% GET_PRIOR_MODEL returns the prior_model structure
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2016 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,10 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function output_data = get_output_data (model)
+function prior_model = stk_get_prior_model (model)
 
-stk_assert_struct_is_model (model);
-
-output_data = zeros (0, 1);
+prior_model = model.prior_model;
 
 end % function

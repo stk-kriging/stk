@@ -1,10 +1,12 @@
-% STK_GET_OBSERVATION_VARIANCES [overload STK function]
+% STK_GET_OPTIMIZABLE_NOISE_PARAMETERS [STK internal]
 
 % Copyright Notice
 %
 %    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2018 LNE
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Authors:  Remi Stroh   <remi.stroh@lne.fr>
+%              Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -26,8 +28,33 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_get_observation_variances (model)
+function [noiseparam, isnoisy] = stk_get_optimizable_noise_parameters (model)
 
-v = stk_covmat_noise (model.prior_model, model.input_data, [], -1, true);
+stk_assert_model_struct (model);
+
+isnoisy = stk_isnoisy (model);
+
+if isnoisy
+    
+    noiseparam = model.lognoisevariance;
+    
+    if isnumeric (noiseparam)
+        
+        if ~ isscalar (noiseparam)
+            % Old-style heteroscedastic case: don't optimize
+            noiseparam = [];
+        end
+        
+    else  % model.lognoisevariance is a parameter object
+        
+        noiseparam = stk_get_optimizable_parameters (noiseparam);
+        
+    end
+    
+else
+    
+    noiseparam = [];
+    
+end
 
 end % function

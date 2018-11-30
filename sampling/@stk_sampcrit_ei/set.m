@@ -43,7 +43,7 @@ switch propname
             crit.model = value;
             
             % Compute current minimum
-            zi = get_output_data (crit.model);
+            zi = stk_get_output_data (crit.model);
             if isempty (zi)
                 crit.current_minimum = +inf;
             else

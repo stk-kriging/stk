@@ -1,12 +1,10 @@
-% STK_GET_OPTIMIZABLE_NOISE_PARAMETERS [STK internal]
+% GET_OUTPUT_DATA returns the output data of the model
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
-%    Copyright (C) 2018 LNE
+%    Copyright (C) 2015, 2016 CentraleSupelec
 %
-%    Authors:  Remi Stroh   <remi.stroh@lne.fr>
-%              Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -28,31 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [noiseparam, isnoisy] = stk_get_optimizable_noise_parameters (model)
+function output_data = stk_get_output_data (model)
 
-isnoisy = stk_isnoisy (model);
-
-if isnoisy
-    
-    noiseparam = model.lognoisevariance;
-    
-    if isnumeric (noiseparam)
-        
-        if ~ isscalar (noiseparam)
-            % Old-style heteroscedastic case: don't optimize
-            noiseparam = [];
-        end
-        
-    else  % model.lognoisevariance is a parameter object
-        
-        noiseparam = stk_get_optimizable_parameters (noiseparam);
-        
-    end
-    
-else
-    
-    noiseparam = [];
-    
-end
+output_data = model.output_data;
 
 end % function

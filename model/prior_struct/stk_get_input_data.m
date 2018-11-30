@@ -1,8 +1,15 @@
-% STK_GET_OBSERVATION_VARIANCES [overload STK function]
+% STK_GET_INTPUT_DATA returns the input data of a model
+%
+% CALL: INPUT_DATA = stk_get_input_data (MODEL)
+%
+%    returns the INPUT_DATA of the MODEL (which is empty if MODEL is
+%    a prior model).
+%
+% See also: stk_get_output_data, stk_get_prior_model
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,8 +33,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_get_observation_variances (model)
+function input_data = stk_get_input_data (model)
 
-v = stk_covmat_noise (model.prior_model, model.input_data, [], -1, true);
+stk_assert_model_struct (model);
+
+if isfield (model, 'dim')
+    
+    input_data = zeros (0, model.dim);
+    
+else
+    
+    input_data = [];
+    
+end
 
 end % function

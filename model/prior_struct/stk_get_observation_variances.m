@@ -2,24 +2,14 @@
 %
 % CALL: V = stk_get_observation_variances (MODEL)
 %
-%    returns the variance of the observations for the posterior MODEL,
-%    which must be an object of class @stk_model_gpposterior.
-%
-% CALL: V = stk_get_observation_variances (MODEL, XI)
-%
-%    returns the variance of the observations that would be obtained at
-%    locations XI according to the prior MODEL, which must be a model structure
-%    (see stk_model).
-%
-% See also: stk_model.
+%    returns the variance of the observations that have been used to build
+%    the MODEL.  The result is empty if MODEL is a prior model.
 
 % Copyright Notice
 %
-%    Copyright (C) 2017, 2018 CentraleSupelec
-%    Copyright (C) 2017 LNE
+%    Copyright (C) 2018 CentraleSupelec
 %
-%    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
-%              Remi Stroh   <remi.stroh@lne.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -41,14 +31,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_get_observation_variances (model, xi)
+function v = stk_get_observation_variances (model)
 
-% Just a quick check
-if ~ (isstruct (model) && isfield (model, 'param'))
-    stk_error (['The first input argument does not look like a ' ...
-        'valid STK model structure.'], 'InvalidArgument');
-end
+stk_assert_model_struct (model);
 
-v = stk_covmat_noise (model, xi, [], -1, true);
+% Ok, model is a prior model structure
+v = [];
 
 end % function

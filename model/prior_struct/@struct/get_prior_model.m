@@ -1,4 +1,4 @@
-% STK_GET_OBSERVATION_VARIANCES [overload STK function]
+% GET_PRIOR_MODEL [deprecated]
 
 % Copyright Notice
 %
@@ -26,8 +26,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function v = stk_get_observation_variances (model)
+function prior_model = get_prior_model (model)
 
-v = stk_covmat_noise (model.prior_model, model.input_data, [], -1, true);
+prior_model = stk_get_prior_model (model);
 
 end % function

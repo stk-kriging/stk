@@ -1,4 +1,4 @@
-% GET_INTPUT_DATA returns the input data of the model
+% GET_INTPUT_DATA [deprecated]
 
 % Copyright Notice
 %
