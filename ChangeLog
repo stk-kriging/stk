@@ -1,3 +1,12 @@
+2018-11-30  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Move stk_get_optimizable_noise_parameters.m out of @struct/
+
+	* core/@struct/stk_get_optimizable_noise_parameters.m: Moved from.
+	* model/prior_struct/stk_get_optimizable_noise_parameters.m: Moved
+	to. Check that model is a prior model structure.
+	* admin/octpkg/INDEX: Update the index.
+
 2018-11-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Move stk_param_getblockselectors out of @struct/

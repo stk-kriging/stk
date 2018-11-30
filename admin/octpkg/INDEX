@@ -104,6 +104,12 @@ Get/set model properties
  stk_get_output_data
  stk_get_prior_model
  stk_get_observation_variances
+#@struct/get_input_data                        [deprecated]
+#@struct/get_output_data                       [deprecated]
+#@struct/get_prior_model                       [deprecated]
+#stk_set_optimizable_model_parameters          [internal]
+#stk_get_optimizable_model_parameters          [internal]
+#stk_get_optimizable_noise_parameters          [internal]
 
 Posterior model objects
  @stk_model_gpposterior/stk_model_gpposterior
@@ -128,14 +134,6 @@ Posterior model objects
 #@stk_model_gpposterior/fieldnames                            [overload base]
 #@stk_model_gpposterior/get                                   [overload base]
 #@stk_model_gpposterior/set                                   [overload base]
-
-## Prior models are currently represented by structures
-#@struct/get_input_data                        [deprecated]
-#@struct/get_output_data                       [deprecated]
-#@struct/get_prior_model                       [deprecated]
-#@struct/stk_get_optimizable_noise_parameters  [internal]
-#stk_set_optimizable_model_parameters          [internal]
-#stk_get_optimizable_model_parameters          [internal]
 
 ## The stk_kre_qr class -> not ready to be exposed
 #@stk_kreq_qr/disp                   [overload base]
