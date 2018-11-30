@@ -30,6 +30,8 @@
 
 function [noiseparam, isnoisy] = stk_get_optimizable_noise_parameters (model)
 
+stk_assert_model_struct (model);
+
 isnoisy = stk_isnoisy (model);
 
 if isnoisy
