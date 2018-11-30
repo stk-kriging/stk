@@ -1,5 +1,16 @@
 2018-11-30  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Relocate @struct/ inside model/prior_struct (ticket #90)
+
+	* core/@struct/get_input_data.m: Moved from.
+	* core/@struct/get_output_data.m: Moved from.
+	* core/@struct/get_prior_model.m: Moved from.
+	* model/prior_struct/@struct/get_input_data.m: Moved to.
+	* model/prior_struct/@struct/get_output_data.m: Moved to.
+	* model/prior_struct/@struct/get_prior_model.m: Moved to.
+	* model/prior_struct/@struct/README: Provide an explanation.
+	* admin/build_tools/build_octpkg.m: Ignore the README file.
+
 	Move stk_get_optimizable_noise_parameters.m out of @struct/
 
 	* core/@struct/stk_get_optimizable_noise_parameters.m: Moved from.

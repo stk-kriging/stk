@@ -1,0 +1,5 @@
+This directory only contains deprecated functions and will be remove in the future.
+
+Overloading some functions for struct objects, using a @struct directory, was a bad idea in the first place.
+
+See https://sourceforge.net/p/kriging/tickets/90/ for more information.
