@@ -63,8 +63,8 @@ if nargin > 0
         covariance_name = covariance_type;
         covariance_type = str2func (covariance_type);
     else
-        stk_error (['covariance_type should be a function name or a handle to ' ...
-            'a function.'], 'TypeMismatch');
+        stk_error (['covariance_type should be a function name '...
+            'or a handle to a function.'], 'TypeMismatch');
     end
 else
     covariance_type = @stk_materncov_iso;
@@ -132,31 +132,8 @@ else
     model.dim = dim;
 end
 
-% For known covariance types, the field param is initialized with a vector of
-% nan of the appropriate size.  This serves as a reminder, for the user, of the
-% correct size for a parameter vector---nothing more.
-switch covariance_name
-    
-    case 'stk_materncov_iso'
-        model.param = nan (3, 1);
-        
-    case {'stk_expcov_iso', 'stk_materncov32_iso', 'stk_materncov52_iso', ...
-            'stk_gausscov_iso', 'stk_sphcov_iso'}
-        model.param = nan (2, 1);
-        
-    case 'stk_materncov_aniso'
-        model.param = nan (2 + model.dim, 1);
-        
-    case {'stk_expcov_aniso', 'stk_materncov32_aniso', ...
-            'stk_materncov52_aniso', 'stk_gausscov_aniso', 'stk_sphcov_aniso'}
-        model.param = nan (1 + model.dim, 1);
-        
-    otherwise
-        model.param = [];
-        
-end % switch
-
-model.lognoisevariance = - inf;
+model.param = [];  % Make it pass stk_assert_model_struct
+[model.param, model.lognoisevariance] = stk_param_init (model);
 
 end % function
 

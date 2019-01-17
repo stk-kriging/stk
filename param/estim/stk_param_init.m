@@ -102,7 +102,7 @@ else
         [param, lnv] = feval (fname, model, varargin{:});
     catch
         err = lasterror ();
-        msg = strrep (err.message, sprintf ('\n'), sprintf ('\n|| '));
+        msg = strrep (err.message, sprintf ('\n'), sprintf ('\n|| ')); %#ok<SPRINTFN>
         msg = sprintf (['Unable to initialize covariance parameters ' ...
             'automatically for covariance functions of type ''%s''.\n\nThe ' ...
             'original error message was:\n|| %s\n'], model.covariance_type, msg);
@@ -117,19 +117,69 @@ end % function
 
 function [param, lnv] = stk_param_init_ (model, xi, zi, box, do_estim_lnv)
 
-if ~ isequal (size (zi), [size(xi, 1) 1]),
+% Used by stk_model
+if nargin < 2
+    
+    if isa (model.covariance_type, 'function_handle')
+        covariance_name = func2str (model.covariance_type);
+    else
+        covariance_name = model.covariance_type;
+    end
+
+    switch covariance_name
+        
+        % Matern covariance function with unknown regularity
+        
+        case 'stk_materncov_iso'
+            param = nan (3, 1);
+        case 'stk_materncov_aniso'
+            param = nan (2 + model.dim, 1);
+            
+        % Other isotropic covariance functions
+        
+        case {'stk_expcov_iso', 'stk_materncov32_iso', ...
+                'stk_materncov52_iso', 'stk_gausscov_iso', ...
+                'stk_sphcov_iso'}
+            param = nan (2, 1);
+        
+        % Other anisotropic covariance functions
+
+        case {'stk_expcov_aniso', 'stk_materncov32_aniso', ...
+                'stk_materncov52_aniso', 'stk_gausscov_aniso', ...
+                'stk_sphcov_aniso'}
+            param = nan (1 + model.dim, 1);
+        
+        otherwise
+            stk_error ('Unexpected covariance name', 'IncorrectArgument');
+    end
+    
+    lnv = - inf;
+    return
+end
+
+
+%--- check dimensions ----------------------------------------------------------
+
+dim = size (xi, 2);
+if isfield (model, 'dim') && ~ isequal (dim, model.dim)
+    errmsg = 'model.dim and size (xi, 2) should be equal.';
+    stk_error (errmsg, 'IncorrectSize');
+end
+
+if ~ isequal (size (zi), [size(xi, 1) 1])
     errmsg = 'zi should be a column, with the same number of rows as xi.';
     stk_error (errmsg, 'IncorrectSize');
 end
 
+
 %--- first, default values for arguments 'box' and 'noisy' ---------------------
 
-if nargin < 4,
+if nargin < 4
     box = [];
 end
 
 if ~ isa (box, 'stk_hrect')
-    if isempty (box),
+    if isempty (box)
         box = stk_boundingbox (xi);  % Default: bounding box
     else
         box = stk_hrect (box);
@@ -229,34 +279,53 @@ switch model.covariance_type
     
     case {'stk_expcov_iso', 'stk_materncov32_iso', 'stk_materncov52_iso', ...
             'stk_gausscov_iso', 'stk_sphcov_iso'}
-        [param, lnv] = paraminit_ (model.covariance_type, ...
-            xi, zi, box, model.lm, lnv);
+        model0 = model;
+        bbox = box;
         
     case {'stk_expcov_aniso', 'stk_materncov32_aniso', ...
             'stk_materncov52_aniso', 'stk_gausscov_aniso', 'stk_sphcov_aniso'}
+        covname_iso = [model.covariance_type(1:end-5) 'iso'];
+        model0 = stk_model (covname_iso, dim);
         xi = stk_normalize (xi, box);
-        c = [model.covariance_type(1:end-5) 'iso'];
-        [param, lnv] = paraminit_ (c, xi, zi, [], model.lm, lnv);
-        param = [param(1); param(2) - log(diff(box, [], 1))'];
+        bbox = [];
         
     case 'stk_materncov_iso'
-        nu = 5/2 * size (xi, 2);
-        covname_iso = @(param, x, y, diff, pairwise) stk_materncov_iso ...
-            ([param(1) log(nu) param(2)], x, y, diff, pairwise);
-        [param, lnv] = paraminit_ (covname_iso, xi, zi, box, model.lm, lnv);
-        param = [param(1); log(nu); param(2)];
+        nu = 5/2 * dim;
+        model0 = stk_model (@stk_materncov_iso, dim);
+        model0.covariance_type = @(param, x, y, diff, pairwise) ...
+            stk_materncov_iso ([param(1) log(nu) param(2)], x, y, diff, pairwise);
+        model0.param(2) = [];
+        bbox = box;
         
     case 'stk_materncov_aniso'
-        nu = 5/2 * size (xi, 2);
-        covname_iso = @(param, x, y, diff, pairwise) stk_materncov_iso ...
-            ([param(1) log(nu) param(2)], x, y, diff, pairwise);
+        nu = 5/2 * dim;
+        model0 = stk_model (@stk_materncov_iso, dim);
+        model0.covariance_type = @(param, x, y, diff, pairwise) ...
+            stk_materncov_iso ([param(1) log(nu) param(2)], x, y, diff, pairwise);
+        model0.param(2) = [];
         xi = stk_normalize (xi, box);
-        [param, lnv] = paraminit_ (covname_iso, xi, zi, [], model.lm, lnv);
-        param = [param(1); log(nu); param(2) - log(diff(box, [], 1))'];
+        bbox = [];
         
     otherwise
         errmsg = 'Unsupported covariance type.';
         stk_error (errmsg, 'InvalidArgument');
+end
+
+model0.lognoisevariance = lnv;
+[param, lnv] = paraminit_ (model0, xi, zi, bbox);
+
+% Back to a full vector of covariance parameters
+switch model.covariance_type
+    
+    case {'stk_expcov_aniso', 'stk_materncov32_aniso', ...
+            'stk_materncov52_aniso', 'stk_gausscov_aniso', 'stk_sphcov_aniso'}
+        param = [param(1); param(2) - log(diff(box, [], 1))'];
+        
+    case 'stk_materncov_iso'
+        param = [param(1); log(nu); param(2)];
+        
+    case 'stk_materncov_aniso'
+        param = [param(1); log(nu); param(2) - log(diff(box, [], 1))'];
 end
 
 % Return the original lnv if no parameter estimation was performed
@@ -267,7 +336,9 @@ end
 end % function
 
 
-function [param, lnv] = paraminit_ (covname_iso, xi, zi, box, lm, lnv)
+function [param, lnv] = paraminit_ (model, xi, zi, box)
+
+lnv = model.lognoisevariance;
 
 % Check for special case: constant response
 if (std (double (zi)) == 0)
@@ -278,10 +349,6 @@ if (std (double (zi)) == 0)
 end
 
 d = size (xi, 2);
-
-model = stk_model (covname_iso);
-model.lm = lm;
-model.lognoisevariance = lnv;
 
 % Homoscedastic case ?
 homoscedastic = (isscalar (lnv));
