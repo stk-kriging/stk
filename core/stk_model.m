@@ -63,8 +63,8 @@ if nargin > 0
         covariance_name = covariance_type;
         covariance_type = str2func (covariance_type);
     else
-        stk_error (['covariance_type should be a function name or a handle to ' ...
-            'a function.'], 'TypeMismatch');
+        stk_error (['covariance_type should be a function name '...
+            'or a handle to a function.'], 'TypeMismatch');
     end
 else
     covariance_type = @stk_materncov_iso;
