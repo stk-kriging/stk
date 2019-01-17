@@ -102,7 +102,7 @@ else
         [param, lnv] = feval (fname, model, varargin{:});
     catch
         err = lasterror ();
-        msg = strrep (err.message, sprintf ('\n'), sprintf ('\n|| '));
+        msg = strrep (err.message, sprintf ('\n'), sprintf ('\n|| ')); %#ok<SPRINTFN>
         msg = sprintf (['Unable to initialize covariance parameters ' ...
             'automatically for covariance functions of type ''%s''.\n\nThe ' ...
             'original error message was:\n|| %s\n'], model.covariance_type, msg);
@@ -117,19 +117,19 @@ end % function
 
 function [param, lnv] = stk_param_init_ (model, xi, zi, box, do_estim_lnv)
 
-if ~ isequal (size (zi), [size(xi, 1) 1]),
+if ~ isequal (size (zi), [size(xi, 1) 1])
     errmsg = 'zi should be a column, with the same number of rows as xi.';
     stk_error (errmsg, 'IncorrectSize');
 end
 
 %--- first, default values for arguments 'box' and 'noisy' ---------------------
 
-if nargin < 4,
+if nargin < 4
     box = [];
 end
 
 if ~ isa (box, 'stk_hrect')
-    if isempty (box),
+    if isempty (box)
         box = stk_boundingbox (xi);  % Default: bounding box
     else
         box = stk_hrect (box);
