@@ -99,7 +99,11 @@ else
         %  function that provides initial estimates for a user-defined
         %  covariance function called XXXX.
         fname = [model.covariance_type '_param_init'];
-        [param, lnv] = feval (fname, model, varargin{:});
+        if nargout == 2
+            [param, lnv] = feval (fname, model, varargin{:});
+        else
+            param = feval (fname, model, varargin{:});
+        end
     catch
         err = lasterror ();
         msg = strrep (err.message, sprintf ('\n'), sprintf ('\n|| ')); %#ok<SPRINTFN>
