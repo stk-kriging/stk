@@ -1,3 +1,17 @@
+2019-01-18  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init.m: Call user-defined _param_init with correct nargout
+
+	* param/estim/stk_param_init.m: Call user-defined _param_init
+	function with the correct number of output arguments.
+
+	stk_model.m: Be more flexible if stk_param_init fails
+
+	* core/stk_model.m: Be more flexible and simply issue a warning if
+	we fail to get a default parameter vector from stk_param_init.
+	Also, do not rely on stk_param_init to get a default value for
+	lnv.
+
 2019-01-17  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Make it possible to use stk_model with user-defined covariances.
