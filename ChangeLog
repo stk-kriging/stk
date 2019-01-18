@@ -1,5 +1,10 @@
 2019-01-18  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_param_init.m: Call user-defined _param_init with correct nargout
+
+	* param/estim/stk_param_init.m: Call user-defined _param_init
+	function with the correct number of output arguments.
+
 	stk_model.m: Be more flexible if stk_param_init fails
 
 	* core/stk_model.m: Be more flexible and simply issue a warning if
