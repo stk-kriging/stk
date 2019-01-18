@@ -133,7 +133,13 @@ else
 end
 
 model.param = [];  % Make it pass stk_assert_model_struct
-[model.param, model.lognoisevariance] = stk_param_init (model);
+try
+    model.param = stk_param_init (model);
+catch
+    warning (lasterr ());
+end
+
+model.lognoisevariance = - inf;
 
 end % function
 
