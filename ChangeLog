@@ -1,5 +1,13 @@
 2019-01-21  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_param_estim.m: Internal changes
+
+	* param/estim/stk_param_estim.m (provide_starting_point): Do not
+	try to cast parameter objects into objects of the appropriate
+	type, simply assume that they are of the appropriate type.  The
+	use of stk_set_optimizable_parameters should be restricted to
+	numerical value arguments.
+
 	stk_model.m: Internal changes
 
 	* core/stk_model.m: Removed unused argument 'covariance_name' from
