@@ -1,5 +1,13 @@
 2019-01-21  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Extract stk_param_init's core to a separate (internal) function
+
+	* param/estim/stk_param_estim_remlgs.m: New internal function,
+	which implements a ReML grid search.  This was previously hidden
+	in stk_param_init.
+	* param/estim/stk_param_init.m: Remove the extracted part.
+	* admin/octpkg/INDEX: Update the index.
+
 	stk_param_estim.m: Internal changes
 
 	* param/estim/stk_param_estim.m (provide_starting_point): Do not

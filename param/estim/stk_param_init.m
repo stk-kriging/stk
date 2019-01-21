@@ -342,33 +342,23 @@ end % function
 
 function [param, lnv] = paraminit_ (model, xi, zi, box)
 
-lnv = model.lognoisevariance;
-
 % Check for special case: constant response
 if (std (double (zi)) == 0)
     warning ('STK:stk_param_init:ConstantResponse', ...
         'Parameter estimation is impossible with constant-response data.');
-    param = [0 0];  if any (isnan (lnv)), lnv = 0; end
+    param = [0 0];
+    if any (isnan (model.lognoisevariance))
+        lnv = 0.0;
+    else
+        lnv = model.lognoisevariance;
+    end
     return  % Return some default values
 end
 
-d = size (xi, 2);
-
-% Homoscedastic case ?
-homoscedastic = (isscalar (lnv));
-noiseless = homoscedastic && (lnv == -inf);
-
-% list of possible values for the ratio eta = sigma2_noise / sigma2
-if ~ noiseless
-    eta_list = 10 .^ (-6:3:0);
-else
-    eta_list = 0;
-end
-
-% list of possible values for the range parameter
+% List of possible values for the range parameter
 if isempty (box)
-    % assume box = repmat([0; 1], 1, d)
-    box_diameter = sqrt (d);
+    % assume box = repmat([0; 1], 1, dim)
+    box_diameter = sqrt (size (xi, 2));
 else
     box_diameter = sqrt (sum (diff (box) .^ 2));
 end
@@ -376,63 +366,9 @@ rho_max  = 2 * box_diameter;
 rho_min  = box_diameter / 50;
 rho_list = logspace (log10 (rho_min), log10 (rho_max), 5);
 
-% Initialize parameter search
-eta_best    = NaN;
-rho_best    = NaN;
-sigma2_best = NaN;
-aLL_best    = +Inf;
+other_params = - log (rho_list');
 
-% Try all possible combinations of rho and eta from the lists
-for eta = eta_list
-    for rho = rho_list
-        
-        % First use sigma2 = 1.0
-        model.param = [0.0, -log(rho)];
-        
-        if noiseless
-            
-            [ignd, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU> CG#07
-            if ~ (sigma2 > 0), continue; end
-            log_sigma2 = log (sigma2);
-            
-        elseif homoscedastic && (isnan (lnv))  % Unknown noise variance
-            
-            model.lognoisevariance = log (eta);
-            [ignd, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU> CG#07
-            if ~ (sigma2 > 0), continue; end
-            log_sigma2 = log (sigma2);
-            model.lognoisevariance = log  (eta * sigma2);
-            
-        else % Known variance(s)
-            
-            log_sigma2 = (mean (lnv)) - (log (eta));
-            sigma2 = exp (log_sigma2);
-            
-        end
-        
-        % Now, compute the antilog-likelihood
-        model.param(1) = log_sigma2;
-        aLL = stk_param_relik (model, xi, zi);
-        if ~isnan(aLL) && (aLL < aLL_best)
-            eta_best    = eta;
-            rho_best    = rho;
-            aLL_best    = aLL;
-            sigma2_best = sigma2;
-        end
-    end
-end
-
-if isinf (aLL_best)
-    errmsg = 'Couldn''t find reasonable parameter values... ?!?';
-    stk_error (errmsg, 'AlgorithmFailure');
-end
-
-param = log ([sigma2_best; 1/rho_best]);
-
-if (isscalar (lnv)) && (isnan (lnv))
-    % Homoscedatic case with unknown variance... Here is our estimate:
-    lnv = log (eta_best * sigma2_best);
-end
+[param, lnv] = stk_param_estim_remlgs (model, xi, zi, other_params);
 
 end % function
 
