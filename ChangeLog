@@ -1,3 +1,10 @@
+2019-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim: Fix a small bug relative to the 'info' ouput.
+
+	* param/estim/stk_param_estim.m: Fix bug.
+	* param/estim/stk_param_estim_optim.m: Fix bug.
+
 2019-01-21  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Extract stk_param_init's core to a separate (internal) function
