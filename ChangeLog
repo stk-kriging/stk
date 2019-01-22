@@ -1,5 +1,11 @@
 2019-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_param_estim_optim.m: Add safety nets.
+
+	* param/estim/stk_param_estim_optim.m: Add safety nets around the
+	call to the optimizer.  If the final value is not better than the
+	initial one, issue an error.
+
 	stk_param_estim: Fix a small bug relative to the 'info' ouput.
 
 	* param/estim/stk_param_estim.m: Fix bug.
