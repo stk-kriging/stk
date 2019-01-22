@@ -72,7 +72,7 @@ v_opt(select) = w_opt;
 model_opt = stk_set_optimizable_parameters (model0, v_opt);
 
 % Create 'info' structure, if requested
-if nargout > 2
+if nargout > 1
     info.criterion = criterion;
     info.crit_opt = crit_opt;
     info.starting_point = w0;
