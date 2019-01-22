@@ -132,7 +132,7 @@ noiseparam_select = select{2} & do_estim_lnv;
 % FIXME: Clarify this confusing situation...
 
 % Call optimization routine
-if nargout > 3
+if nargout > 2
     [model_opt, info] = stk_param_estim_optim ...
         (model, xi, zi, criterion, covparam_select, noiseparam_select);
 else
@@ -151,18 +151,16 @@ end % function
 function [param0, lnv0, do_estim_lnv] = provide_starting_point ...
     (model, xi, zi, param0, lnv0)
 
-% The starting points param0 and lnv0 can be provided either directly under the
-% form of a vector of a numeric parameters, or as parameter objects.  Both cases
-% are covered thanks to the use of stk_get_optimizable_parameters.
-
 % If param0 is not empty, it means that the user has provided
 % a starting point, in which case we must use it.
 if ~ isempty (param0)
     
     % Test if param0 contains NaNs of Infs
     assert_is_finite (param0, 'param0');
-    % Cast param0 to a variable of the appropriate type (numeric or object)
-    param0 = stk_set_optimizable_parameters (model.param, param0);
+    % Cast to the appropriate type
+    if isnumeric (param0)
+        param0 = stk_set_optimizable_parameters (model.param, param0);
+    end
     
     % Now take care of lnv0.
     % Same rule: if not empty, we have a user-provided starting point.
@@ -196,9 +194,12 @@ else  % Otherwise, try stk_param_init to get a starting point
         do_estim_lnv = true;
         % Test if lnv0 contains NaNs of Infs
         assert_is_finite (lnv0, 'lnv0');        
-        % Install lnv0 into the model
-        model.lognoisevariance = ...
-            stk_set_optimizable_parameters (model.lognoisevariance, lnv0);
+        % Cast to the appropriate type
+        if isnumeric (lnv0)
+            lnv0 = stk_set_optimizable_parameters (model.lognoisevariance, param0);
+        end
+        % Install lnv0 in the model
+        model.lognoisevariance = lnv0;
     end
     
     [param0, lnv0] = stk_param_init (model, xi, zi);

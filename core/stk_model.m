@@ -79,7 +79,7 @@ if strcmp (covariance_name, 'stk_discretecov')
 else
     
     % general case
-    model = stk_model_ (covariance_type, covariance_name, varargin{:});
+    model = stk_model_ (covariance_type, varargin{:});
     
 end
 
@@ -116,7 +116,7 @@ end % function
 %%% stk_model_ %%%
 %%%%%%%%%%%%%%%%%%
 
-function model = stk_model_ (covariance_type, covariance_name, dim)
+function model = stk_model_ (covariance_type, dim)
 
 model = struct();
 
@@ -126,7 +126,7 @@ model.covariance_type = covariance_type;
 model.lm = stk_lm_constant ();
 
 % default dimension is d = 1
-if nargin < 3
+if nargin < 2
     model.dim = 1;
 else
     model.dim = dim;

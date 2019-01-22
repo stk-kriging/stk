@@ -1,3 +1,39 @@
+2019-01-22  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim_optim.m: Add safety nets.
+
+	* param/estim/stk_param_estim_optim.m: Add safety nets around the
+	call to the optimizer.  If the final value is not better than the
+	initial one, issue an error.
+
+	stk_param_estim: Fix a small bug relative to the 'info' ouput.
+
+	* param/estim/stk_param_estim.m: Fix bug.
+	* param/estim/stk_param_estim_optim.m: Fix bug.
+
+2019-01-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Extract stk_param_init's core to a separate (internal) function
+
+	* param/estim/stk_param_estim_remlgs.m: New internal function,
+	which implements a ReML grid search.  This was previously hidden
+	in stk_param_init.
+	* param/estim/stk_param_init.m: Remove the extracted part.
+	* admin/octpkg/INDEX: Update the index.
+
+	stk_param_estim.m: Internal changes
+
+	* param/estim/stk_param_estim.m (provide_starting_point): Do not
+	try to cast parameter objects into objects of the appropriate
+	type, simply assume that they are of the appropriate type.  The
+	use of stk_set_optimizable_parameters should be restricted to
+	numerical value arguments.
+
+	stk_model.m: Internal changes
+
+	* core/stk_model.m: Removed unused argument 'covariance_name' from
+	subfunction stk_model_.
+
 2019-01-18  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_init.m: Call user-defined _param_init with correct nargout

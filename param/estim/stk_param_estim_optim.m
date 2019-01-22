@@ -58,6 +58,13 @@ f = @(v)(crit_wrapper (model0, v, xi, zi, criterion, covparam_select, noiseparam
 
 bounds_available = (~ isempty (lb)) && (~ isempty (ub));
 
+% Sanity check (part 1)
+crit0 = f (w0);
+if ~ (isscalar (crit0) && isfinite (crit0))
+    errmsg = '*** PANIC: crit0 is not a finite scalar value. ***';
+    stk_error (errmsg, 'OptimizationFailure');
+end
+
 if bounds_available
     A = stk_options_get ('stk_param_estim', 'minimize_box');
     [w_opt, crit_opt] = stk_minimize_boxconstrained (A, f, w0, lb, ub);
@@ -66,13 +73,20 @@ else
     [w_opt, crit_opt] = stk_minimize_unconstrained (A, f, w0);
 end
 
+% Sanity check (part 2)
+if crit0 < crit_opt
+    s1 = '*** PANIC: Something went SERIOUSLY WRONG during the optimization ***';
+    s2 = sprintf ('crit0 = %f,  crit_opt = %f:  crit0 < crit_opt', crit0, crit_opt);
+    stk_error (sprintf ('%s\n%s\n', s1, s2), 'OptimizationFailure');
+end
+
 % Create outputs
 v_opt = v0;
 v_opt(select) = w_opt;
 model_opt = stk_set_optimizable_parameters (model0, v_opt);
 
 % Create 'info' structure, if requested
-if nargout > 2
+if nargout > 1
     info.criterion = criterion;
     info.crit_opt = crit_opt;
     info.starting_point = w0;
