@@ -89,7 +89,7 @@ for eta = eta_list
         % Now, compute the antilog-likelihood
         param_(1) = log_sigma2;
         model.param = stk_set_optimizable_parameters (model.param, param_);
-        aLL = stk_param_relik (model, xi, zi)
+        aLL = stk_param_relik (model, xi, zi);
         if ~ isnan(aLL) && (aLL < aLL_best)
             eta_best    = eta;
             k_best      = k;
