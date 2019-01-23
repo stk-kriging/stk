@@ -62,7 +62,8 @@ for eta = eta_list
     for k = 1:(size (other_params, 1))
         
         % First use sigma2 = 1.0
-        model.param = [0.0, other_params(k, :)]';
+        param_ = [0.0, other_params(k, :)]';
+        model.param = stk_set_optimizable_parameters (model.param, param_);
         
         if noiseless
             
@@ -86,8 +87,9 @@ for eta = eta_list
         end
         
         % Now, compute the antilog-likelihood
-        model.param(1) = log_sigma2;
-        aLL = stk_param_relik (model, xi, zi);
+        param_(1) = log_sigma2;
+        model.param = stk_set_optimizable_parameters (model.param, param_);
+        aLL = stk_param_relik (model, xi, zi)
         if ~ isnan(aLL) && (aLL < aLL_best)
             eta_best    = eta;
             k_best      = k;
