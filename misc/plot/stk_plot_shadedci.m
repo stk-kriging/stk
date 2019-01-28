@@ -5,7 +5,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2018 CentraleSupelec
+%    Copyright (C) 2015-2019 CentraleSupelec
 %    Copyright (C) 2012, 2013 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -38,10 +38,10 @@ function h_plot = stk_plot_shadedci (varargin)
 x = double (x);
 
 % Avoid a dependency on the stat toolbox in Matlab:
-% norminv (1 - 0.05/2)  = 1.9600
-% norminv (1 - 0.01/2)  = 2.5758
-% norminv (1 - 0.001/2) = 3.2905
-delta0 = [3.2905 2.5758 1.9600];
+% norminv (1 - 0.05/2)  = 1.959964
+% norminv (1 - 0.01/2)  = 2.575829
+% norminv (1 - 0.001/2) = 3.290527
+delta0 = [3.290527 2.575829 1.959964];
 gray_level = [0.95 0.85 0.75];
 
 % Use fill or area ?
@@ -82,7 +82,7 @@ for k = 1:3
     end
     
     if k == 3
-        set (h_plot, 'DisplayName', sprintf ('75%%/85%%/95%% CIs'));
+        set (h_plot, 'DisplayName', sprintf ('95%%/99%%/99.9%% CIs'));
     end
 end
 
