@@ -1,3 +1,9 @@
+2019-01-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_plot_shadedci.m: Fix CI legend
+
+	* misc/plot/stk_plot_shadedci.m: Fix CI legend.
+
 2019-01-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_estim_remlgs.m: Make it work for parameter objects too
