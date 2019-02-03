@@ -77,7 +77,7 @@ Parameter estimation
  stk_param_loopvc
  stk_param_relik
 #stk_param_estim_optim           [internal]
-#stk_param_estim_remlgs.m        [internal]
+#stk_param_estim_remlgs          [internal]
 #stk_param_getdefaultbounds      [internal]
 #stk_param_getdefaultbounds_lnv  [internal]
 #stk_param_getblockselectors     [internal]
