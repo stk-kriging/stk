@@ -1,3 +1,13 @@
+2019-02-03  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Rename two examples
+
+	* examples/03_miscellaneous/stk_example_misc05.m: Renamed from
+	misc06.  This one is going to be release in STK 2.6.0.
+	* examples/03_miscellaneous/stk_example_misc06.m: Renamed from
+	misc05.  This one is not goind to be release in STK 2.6.0.
+	* NEWS.md: Fix corresponding news item.
+
 2019-01-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_plot_shadedci.m: Fix CI legend
