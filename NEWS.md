@@ -1,3 +1,16 @@
+# Changes in version 2.7.0 (?)
+
+## LOO-related stuff
+
+* `stk_param_loomse`: New function to estimate parameters, based on
+  the leave-one-out mean square error.
+
+* `stk_param_loopvc`: New function, which computes the leave-one-out
+  predictive variance.
+
+-----
+
+
 # Changes in version 2.6.0
 
 ## Required Octave version
@@ -6,23 +19,15 @@
 
 ## Parameter estimation
 
-* `stk_param_loomse`: New function to estimate parameters, based on
-  the leave-one-out mean square error.
-
-* `stk_param_loopvc`: New function, which computes the leave-one-out
-  predictive variance.
-
-* Minor compatibility-breaking change: Parameter estimation criteria
-  (such as `stk_param_relik`, `stk_param_loomse`...) now return []
-  instead of NaN when the derivative with respect to lnv is requested
-  for a noiseless model.
-
 * `stk_model_gpposterior`: Trigger parameter estimation when
   lognoisevariance is NaN.  In the (experimental) case where
   lognoisevariance is a noise model object, parameter estimation is
   triggered as soon as at least one of the optimizable parameters of
   the model is NaN.
   ([ticket #93](https://sourceforge.net/p/kriging/tickets/93/))
+
+* `stk_param_relik` now returns [] instead of NaN when the derivative
+  with respect to lnv is requested for a noiseless model.
 
 ## Covariance functions
 
@@ -32,7 +37,7 @@
 
 * `stk_get_input_data`, `stk_get_output_data`, `stk_get_prior_model`:
   New getters for model properties, that replace `get_input_data`,
-  `get_output_data` and `stk_get_prior_model` respectively (now deprecated).
+  `get_output_data` and `get_prior_model` respectively (now deprecated).
 
 * `stk_get_observation_variances.m`: New getter, which returns the
   vector of variances associated to the observations that have been
