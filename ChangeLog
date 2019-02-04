@@ -1,3 +1,16 @@
+2019-02-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init: Deprecate the syntax with do_estim_lnv
+
+	* param/estim/stk_param_init.m: Remove the syntax with
+	do_estim_lnv from the documention.  Explain in the source code
+	that it is deprecated, and add a warning.
+	* examples/03_miscellaneous/stk_example_misc03.m: Remove useless
+	do_estim_lnv argument.
+	* examples/03_miscellaneous/stk_example_misc06.m: Idem.
+	* NEWS.md: Announce this change.  This goes nicely with a similar
+	change made to the stk_model_gpposterior class.
+
 2019-02-03  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Rename two examples

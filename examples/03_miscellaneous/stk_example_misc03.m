@@ -47,7 +47,7 @@ model = stk_model ('stk_materncov52_iso');
 model.lognoisevariance = nan;
 
 % Initial guess for the parameters of the Matern covariance
-[param0, lnv0] = stk_param_init (model, t_obs, S_obs, [], true);
+[param0, lnv0] = stk_param_init (model, t_obs, S_obs);
 
 % Estimate the parameters
 [model.param, model.lognoisevariance] = stk_param_estim ...
@@ -71,7 +71,7 @@ model2.lm = @(t)([ones(length(t),1) sin(2*pi*t/T0) cos(2*pi*t/T0)]);
 model2.lognoisevariance = nan;
 
 % Initial guess for the parameters of the Matern covariance
-[param0, lnv0] = stk_param_init (model2, t_obs, S_obs, [], true);
+[param0, lnv0] = stk_param_init (model2, t_obs, S_obs);
 
 % Estimate the parameters
 [model2.param, model2.lognoisevariance] = ...

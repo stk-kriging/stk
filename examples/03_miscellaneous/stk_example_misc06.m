@@ -157,7 +157,7 @@ for estim = 1:nb_crit
     end
     
     % Initialize parameters
-    [par0, lnv0] = stk_param_init (model, xi, zi, bnd, is_noise);
+    [par0, lnv0] = stk_param_init (model, xi, zi, bnd);
     if correct_sig2_loo && is_loo
         % If is loo, check the problem of the parameter sigma^2
         model.param = par0;

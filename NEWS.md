@@ -19,6 +19,10 @@
 
 ## Parameter estimation
 
+* `stk_param_init`: The syntax with an additional `do_estim_lnv`
+  parameter is now deprecated.  Set model.lognoisevariance to NaN if
+  you want an initial estimate for the variance of the noise.
+
 * `stk_model_gpposterior`: Trigger parameter estimation when
   lognoisevariance is NaN.  In the (experimental) case where
   lognoisevariance is a noise model object, parameter estimation is
