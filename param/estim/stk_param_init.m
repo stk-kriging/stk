@@ -28,13 +28,6 @@
 %   provided,  If missing or empty, the BOX argument defaults to [min(XI);
 %   max(XI)].
 %
-% CALL: [PARAM, LNV] = stk_param_init (MODEL, XI, YI, BOX, DO_ESTIM_LNV)
-%
-%   with DO_ESTIM_LNV = TRUE forces the estimation of the variance of the noise,
-%   regardless of the value of MODEL.lognoisevariance. If FALSE, it prevents
-%   estimation of the variance of the noise, which is only possible if the
-%   'lognoisevariance' field in MODEL is either -Inf or has a finite value.
-%
 % See also stk_example_kb02, stk_example_kb03, stk_example_misc03
 
 % Copyright Notice
@@ -244,7 +237,18 @@ elseif nargin < 5
     
     lnv = model.lognoisevariance;
     
-else  % do_estim_lnv set by the caller
+else  % do_estim_lnv set by the caller (DEPRECATED)
+
+    % CALL: [PARAM, LNV] = stk_param_init (MODEL, XI, YI, BOX, DO_ESTIM_LNV)
+    %
+    %   with DO_ESTIM_LNV = TRUE forces the estimation of the variance of the noise,
+    %   regardless of the value of MODEL.lognoisevariance. If FALSE, it prevents
+    %   estimation of the variance of the noise, which is only possible if the
+    %   'lognoisevariance' field in MODEL is either -Inf or has a finite value.
+
+    % DEPRECATION WARNING
+    warning ('STK:stk_param_init:Deprecated', ...
+        'This way of setting do_estim_lnv is deprecated');
     
     do_estim_lnv = logical (do_estim_lnv);
     
