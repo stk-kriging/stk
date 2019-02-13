@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2017-2019 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -33,7 +33,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function stk_runtests (dirs)
+function test_results = stk_runtests (dirs)
 
 if nargin == 0
     
@@ -52,20 +52,32 @@ else % The input argument is expected to be either a directory name...
 end % if
 
 % Use the replacement that is provided with STK
-stk_runtests_ (dirs);
+res = stk_runtests_ (dirs);
+
+if nargout > 0
+    test_results = res;
+end
 
 end % function
 
 
-function stk_runtests_ (dirs)
+function res = stk_runtests_ (dirs)
 
 t0 = tic ();
 
 % Current directory
 here = pwd ();
 
-% run tests all available tests in each directory
-n_total = 0;  n_pass = 0;  n_files = 0;  n_notest = 0;  n_dirs = 0; err = {};
+% Prepare output struct
+res = struct (       ...
+    'n_total',  0,   ...
+    'n_pass',   0,   ...
+    'n_files',  0,   ...
+    'n_notest', 0,   ...
+    'n_dirs',   0,   ...
+    'err',      {{}} );
+
+% Run tests all available tests in each directory
 for i = 1:(numel (dirs))
     
     if ~ exist (dirs{i}, 'dir')
@@ -75,29 +87,30 @@ for i = 1:(numel (dirs))
     % Get absolute path
     cd (dirs{i});  dirname = pwd ();  cd (here);
     
-    [np, nt, nn, nf, nd, err] = run_all_tests (dirname, dirname, err);
+    [np, nt, nn, nf, nd, res.err] = run_all_tests (dirname, dirname, res.err);
     
-    n_total  = n_total  + nt;
-    n_pass   = n_pass   + np;
-    n_files  = n_files  + nf;
-    n_notest = n_notest + nn;
-    n_dirs   = n_dirs   + nd;
+    res.n_total  = res.n_total  + nt;
+    res.n_pass   = res.n_pass   + np;
+    res.n_files  = res.n_files  + nf;
+    res.n_notest = res.n_notest + nn;
+    res.n_dirs   = res.n_dirs   + nd;
     
 end
 
-runtime = toc (t0);
+res.runtime = toc (t0);
 
-if n_dirs > 1
-    fprintf ('*** Summary for all %d directories:\n', n_dirs);
-    fprintf ('*** --> passed %d/%d tests\n', n_pass, n_total);
-    fprintf ('*** --> %d/%d files had no tests\n', n_notest, n_files);
-    fprintf ('*** --> RUNTIME: %.2f seconds\n\n', runtime);
+if res.n_dirs > 1
+    fprintf ('*** Summary for all %d directories:\n', res.n_dirs);
+    fprintf ('*** --> passed %d/%d tests\n', res.n_pass, res.n_total);
+    fprintf ('*** --> %d/%d files had no tests\n', res.n_notest, res.n_files);
+    fprintf ('*** --> RUNTIME: %.2f seconds\n\n', res.runtime);
 end
 
-if ~ isempty (err)
+if ~ isempty (res.err)
     fprintf ('!!! Summary of failed tests:\n');
-    for i = 1:(size (err, 1))
-        fprintf ('!!! %s [%d/%d]\n', err{i,1}, err{i,2} - err{i,3}, err{i,2});
+    for i = 1:(size (res.err, 1))
+        fprintf ('!!! %s [%d/%d]\n', res.err{i,1}, ...
+            res.err{i,2} - res.err{i,3}, res.err{i,2});
     end
 end
 
