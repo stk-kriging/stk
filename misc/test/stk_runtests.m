@@ -1,10 +1,8 @@
 % STK_RUNTESTS runs all tests in a given directory (or in STK's searchpath).
-%
-% FIXME: missing doc
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2015, 2017-2019 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -35,82 +33,84 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-%% Original Octave doc, to be adapted
-% -*- texinfo -*-
-% @deftypefn  {Function File} {} runtests ()
-% @deftypefnx {Function File} {} runtests (@var{directory})
-% Execute built-in tests for all function files in the specified directory.
-% If no directory is specified, operate on all directories in Octave's
-% search path for functions.
-% @seealso{rundemos, path}
-% @end deftypefn
+function test_results = stk_runtests (dirs)
 
-function stk_runtests (varargin)
-
-if (exist ('OCTAVE_VERSION', 'builtin') == 5) ...
-        && (exist ('__run_test_suite__', 'file') == 2)
+if nargin == 0
     
-    % Use the original __run_test_suite__ function, shipped with Octave
-    if nargin == 0
-        % Scan all STK directories if no input argument is provided
-        directory = fileparts (fileparts (fileparts (mfilename ('fullpath'))));
-    else
-        directory = varargin{1};
+    % Scan all STK directories if no input argument is provided
+    dirs = stk_init ('genpath');
+    
+else % The input argument is expected to be either a directory name...
+    
+    if ischar (dirs)
+        dirs = {dirs};
+    elseif ~ iscell (dirs)  %  ...or a cell array of directory names.
+        stk_error (['A directory name, or a cell array of ' ...
+            'directory names, was expected'], 'TypeMismatch');
     end
     
-    % NOTE: feval prevents Matlab from complaining about the underscores
-    feval ('__run_test_suite__', {directory}, {});
-    
-else % Matlab
-    
-    % Use the replacement that is provided with STK
-    stk_runtests_ (varargin{:});
-    
 end % if
+
+% Use the replacement that is provided with STK
+res = stk_runtests_ (dirs);
+
+if nargout > 0
+    test_results = res;
+end
 
 end % function
 
 
-function stk_runtests_ (directory)
+function res = stk_runtests_ (dirs)
 
-if nargin == 0
-    % scan all STK directories if no input argument is provided
-    dirs = stk_init ('genpath');
-else
-    % otherwise, directory is expected to be a valid directory name
-    if ~ exist (directory, 'dir')
-        error ('Directory not found.');
+t0 = tic ();
+
+% Current directory
+here = pwd ();
+
+% Prepare output struct
+res = struct (       ...
+    'n_total',  0,   ...
+    'n_pass',   0,   ...
+    'n_files',  0,   ...
+    'n_notest', 0,   ...
+    'n_dirs',   0,   ...
+    'err',      {{}} );
+
+% Run tests all available tests in each directory
+for i = 1:(numel (dirs))
+    
+    if ~ exist (dirs{i}, 'dir')
+        stk_error (sprintf ('Directory not found: %s', dirs{i}), 'InvalidArgument');
     end
-    here = pwd ();
-    cd (directory);
-    dirs = {pwd()}; % get absolute path
-    cd (here);
+    
+    % Get absolute path
+    cd (dirs{i});  dirname = pwd ();  cd (here);
+    
+    [np, nt, nn, nf, nd, res.err] = run_all_tests (dirname, dirname, res.err);
+    
+    res.n_total  = res.n_total  + nt;
+    res.n_pass   = res.n_pass   + np;
+    res.n_files  = res.n_files  + nf;
+    res.n_notest = res.n_notest + nn;
+    res.n_dirs   = res.n_dirs   + nd;
+    
 end
 
-% number of directories to be explored
-nb_topdirs = numel(dirs);
+res.runtime = toc (t0);
 
-% run tests all available tests in each directory
-n_total = 0;  n_pass = 0;  n_files = 0;  n_notest = 0;  n_dirs = 0; err = {};
-for i = 1:nb_topdirs
-    [np, nt, nn, nf, nd, err] = run_all_tests (dirs{i}, dirs{i}, err);
-    n_total  = n_total  + nt;
-    n_pass   = n_pass   + np;
-    n_files  = n_files  + nf;
-    n_notest = n_notest + nn;
-    n_dirs   = n_dirs   + nd;
+if res.n_dirs > 1
+    fprintf ('*** Summary for all %d directories:\n', res.n_dirs);
+    fprintf ('*** --> passed %d/%d tests\n', res.n_pass, res.n_total);
+    fprintf ('*** --> %d/%d files had no tests\n', res.n_notest, res.n_files);
+    fprintf ('*** --> RUNTIME: %.2f seconds\n\n', res.runtime);
 end
 
-if n_dirs > 1,
-    fprintf ('*** Summary for all %d directories:\n', n_dirs);
-    fprintf ('*** --> passed %d/%d tests\n', n_pass, n_total);
-    fprintf ('*** --> %d/%d files had no tests\n\n', n_notest, n_files);
-end
-
-if ~ isempty (err)
+if ~ isempty (res.err)
     fprintf ('!!! Summary of failed tests:\n');
-    for i = 1:(size (err, 1))
-        fprintf ('!!! %s [%d/%d]\n', err{i,1}, err{i,2} - err{i,3}, err{i,2});
+    for i = 1:(size (res.err, 1))
+        fprintf ('!!! %s [%d/%d]\n', res.err{i,1}, ...
+            res.err{i,2} - res.err{i,3}, res.err{i,2});
     end
 end
 
@@ -144,6 +144,8 @@ n_dirs   = 1;
 subdirs_class = {};
 subdirs_private = {};
 
+t0 = tic ();
+
 for i = 1:numel (flist)
     f = flist{i};
     ff = fullfile(testdir, f);
@@ -163,11 +165,11 @@ for i = 1:numel (flist)
                 n_total = n_total + n;
                 n_pass  = n_pass  + p;
                 % Record function name if at least one test failed
-                if p < n,
+                if p < n
                     err = [err; {ff, n, p}];
                 end
                 % deal with warnings
-                if ~ isempty (lastwarn ()),
+                if ~ isempty (lastwarn ())
                     fprintf (' (warnings)');
                 end
                 warning (s);
@@ -188,9 +190,12 @@ for i = 1:numel (flist)
         subdirs_private{end+1} = ff;
     end
 end
+
+runtime = toc (t0);
+
 fprintf ('   --> passed %d/%d tests\n', n_pass, n_total);
 fprintf ('   --> %d/%d files had no tests\n', n_notest, n_files);
-fprintf ('\n');
+fprintf ('   --> RUNTIME: %.2f seconds\n\n', runtime);
 
 for i = 1:(length (subdirs_class))
     
