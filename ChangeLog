@@ -1,3 +1,9 @@
+2019-02-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_runtests.m: Return a struct of results
+
+	* misc/test/stk_runtests.m: Return a struct of results.
+
 2019-02-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_init: Deprecate the syntax with do_estim_lnv
