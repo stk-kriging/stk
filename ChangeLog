@@ -1,5 +1,12 @@
 2019-02-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Make it possible to set customized bounds for log(nu).
+
+	* misc/options/stk_options_set.m: Add new options nu_min_dimfun
+	and nu_max_dimfun for stk_param_getdefaultbounds.
+	* param/estim/stk_param_getdefaultbounds.m: Compute nu_min and
+	nu_max using the new options.
+
 	stk_param_getdefaultbounds.m: Lower-case variables names
 
 	* param/estim/stk_param_getdefaultbounds.m: Use lower-case
