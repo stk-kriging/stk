@@ -1,3 +1,10 @@
+2019-02-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_getdefaultbounds.m: Lower-case variables names
+
+	* param/estim/stk_param_getdefaultbounds.m: Use lower-case
+	variables names for tolscale and tolvar.
+
 2019-02-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_runtests.m: Return a struct of results
