@@ -1,5 +1,10 @@
 2019-02-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Make it possible to set all the options at once.
+
+	* misc/options/stk_options_set.m: Make it possible to set all the
+	options at once, using a struct argument.
+
 	Make it possible to set customized bounds for log(nu).
 
 	* misc/options/stk_options_set.m: Add new options nu_min_dimfun

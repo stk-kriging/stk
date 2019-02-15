@@ -45,6 +45,8 @@ switch nargin
     case 1  % reset
         if (ischar (varargin{1})) && strcmp (varargin{1}, 'default')
             options = init_options ();
+        elseif isstruct (varargin{1})
+            options = varargin{1};
         else
             stk_error ('Syntax error', 'SyntaxError');
         end
