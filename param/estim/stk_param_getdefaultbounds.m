@@ -98,15 +98,18 @@ else
         
         case {'stk_materncov_aniso', 'stk_materncov_iso'}
             
-            nu_lb = min (log (0.5), param0(2));
-            nu_ub = max (log (min (50, 10 * dim)), param0(2));
+            nu_min = opts.nu_min_dimfun (dim);
+            nu_max = opts.nu_max_dimfun (dim);
+
+            lognu_lb = min (log (nu_min), param0(2));
+            lognu_ub = max (log (nu_max), param0(2));
             
             range_mid = param0(3:end);
             range_lb  = range_mid(:) - tolscale;
             range_ub  = range_mid(:) + tolscale;
             
-            lb = [logvar_lb; nu_lb; range_lb];
-            ub = [logvar_ub; nu_ub; range_ub];
+            lb = [logvar_lb; lognu_lb; range_lb];
+            ub = [logvar_ub; lognu_ub; range_ub];
             
         case {  'stk_materncov32_aniso', 'stk_materncov32_iso', ...
                 'stk_materncov52_aniso', 'stk_materncov52_iso', ...
