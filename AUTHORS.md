@@ -9,6 +9,7 @@ The following people have helped develop the toolbox in various ways
  * ALEKSOVSKA Ivana
  * ASSOULINE Tom
  * AUTRET Florent
+ * BARRACOSA Bruno
  * BENASSI Romain
  * DABOUSSI Elias
  * DRAUG Carnë
