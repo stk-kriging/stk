@@ -43,7 +43,7 @@
   New getters for model properties, that replace `get_input_data`,
   `get_output_data` and `get_prior_model` respectively (now deprecated).
 
-* `stk_get_observation_variances.m`: New getter, which returns the
+* `stk_get_observation_variances`: New getter, which returns the
   vector of variances associated to the observations that have been
   used to build a model.
 
@@ -53,7 +53,7 @@
   model classes can be defined by subclassing `stk_model_gn`.
   ([ticket #38](https://sourceforge.net/p/kriging/tickets/38/))
   
-* `stk_example_misc05.m`: Demonstrate the use of noise model objects
+* `stk_example_misc05`: Demonstrate the use of noise model objects
   to estimate the dispersion parameter in an heteroscedatic case.
 
 ## `stk_dataframe` and related classes
