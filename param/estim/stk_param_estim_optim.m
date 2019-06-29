@@ -7,7 +7,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2018 CentraleSupelec
+%    Copyright (C) 2015-2019 CentraleSupelec
 %    Copyright (C) 2014 Ashwin Ravisankar
 %    Copyright (C) 2011-2014 SUPELEC
 %
