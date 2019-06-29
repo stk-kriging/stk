@@ -62,6 +62,14 @@
   `rownames` argument when there is only one column or one row
   ([ticket #92](https://sourceforge.net/p/kriging/tickets/92/))
 
+## Graphics
+
+* `stk_plot1d`: Do not create a legend systematically.
+  ([ticket #82](https://sourceforge.net/p/kriging/tickets/82/))
+
+* `stk_legend`: New function to create a legend, using the graphical
+  objects for which a non-empty DisplayName has been provided.
+
 -----
 
 
