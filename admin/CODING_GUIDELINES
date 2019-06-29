@@ -46,6 +46,11 @@ Octave 3.6.4 does allow to manipulate instances of user-defined classes
 through MEX-files. Octave 3.8.x probably won't. So don't think of it.
 
 
+--- CG#04: Overloading isequal -------------------------------------------------
+
+[deprecated]
+
+
 --- CG#05: Calling display () on structures ------------------------------------
 
 Octave fails when display is called on structures that contain strings
@@ -56,6 +61,11 @@ https://savannah.gnu.org/bugs/index.php?49753
 
 As a workaround, we should avoid calling display on such structures
 (espacially, on model structures that contain an stk_lm_* object).
+
+
+--- CG#06: Cell arrays of handles ----------------------------------------------
+
+[deprecated]
 
 
 --- CG#07: Ignoring output arguments -------------------------------------------
@@ -112,3 +122,14 @@ when calling stk_xlabel / stk_ylabel / stk_zlabel to display such variable
 names, as follows:
 
 stk_xlabel (h_axis, xlab, 'interpreter', 'none');
+
+
+--- CG#11: Call horzcat/vertcat explicitely ------------------------------------
+
+[deprecated]
+
+
+--- CG#12: Prefer "hold off" to "cla" ------------------------------------------
+
+[deprecated]
+
