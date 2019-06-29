@@ -56,6 +56,8 @@
 * `stk_example_misc05`: Demonstrate the use of noise model objects
   to estimate the dispersion parameter in an heteroscedatic case.
 
+* `stk_simulate_noise`: New function to simulate noise sample replicates.
+
 ## `stk_dataframe` and related classes
 
 * `stk_dataframe`: Accept char vectors (or strings) as `colnames` or
