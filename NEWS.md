@@ -64,6 +64,9 @@
   `rownames` argument when there is only one column or one row
   ([ticket #92](https://sourceforge.net/p/kriging/tickets/92/))
 
+* `@stk_dataframe/sort`: Argument `dim` can now be skipped, as in the
+  base `sort` function.
+
 ## Graphics
 
 * `stk_plot1d`: Do not create a legend systematically.
