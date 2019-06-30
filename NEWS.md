@@ -67,6 +67,8 @@
 * `@stk_dataframe/sort`: Argument `dim` can now be skipped, as in the
   base `sort` function.
 
+* `@stk_dataframe/unique.`: Overload base function.
+
 ## Graphics
 
 * `stk_plot1d`: Do not create a legend systematically.
