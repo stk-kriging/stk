@@ -1,4 +1,4 @@
-% GET_OUTPUT_DATA returns the output data of the model
+% STK_GET_OUTPUT_DATA returns the output data of the model
 
 % Copyright Notice
 %
