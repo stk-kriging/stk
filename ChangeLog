@@ -1,5 +1,12 @@
 2019-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Move some model getters from core to model/prior_struct
+
+	* core/stk_get_optimizable_model_parameters.m: Move from
+	* core/stk_set_optimizable_model_parameters.m: Move from
+	* model/prior_struct/stk_get_optimizable_model_parameters.m: Move to
+	* model/prior_struct/stk_set_optimizable_model_parameters.m: Move to
+
 	core/@stk_model_gpposterior: Fix some help texts
 
 	* core/@stk_model_gpposterior/stk_get_input_data.m: Fix help text.
