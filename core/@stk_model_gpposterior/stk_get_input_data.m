@@ -1,4 +1,4 @@
-% GET_INTPUT_DATA returns the input data of the model
+% STK_GET_INTPUT_DATA returns the input data of the model
 
 % Copyright Notice
 %

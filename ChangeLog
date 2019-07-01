@@ -1,3 +1,11 @@
+2019-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	core/@stk_model_gpposterior: Fix some help texts
+
+	* core/@stk_model_gpposterior/stk_get_input_data.m: Fix help text.
+	* core/@stk_model_gpposterior/stk_get_output_data.m: Idem.
+	* core/@stk_model_gpposterior/stk_get_prior_model.m: Idem.
+
 2019-06-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_example_misc04.m: Fix a typo
