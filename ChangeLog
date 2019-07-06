@@ -1,3 +1,10 @@
+2019-07-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_cholcov: Honour optional arguments (ticket #94)
+
+	* core/stk_cholcov.m: Honour optional arguments, such as 'lower',
+	when auto-nugget kicks in.
+
 2019-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Move some model getters from core to model/prior_struct
