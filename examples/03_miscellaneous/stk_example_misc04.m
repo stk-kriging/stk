@@ -29,7 +29,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2019 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -83,7 +83,7 @@ model1 = stk_model ('stk_materncov52_aniso', DIM);
 model1.param = stk_param_estim (model1, x_obs, z_obs(:, 1));
 
 model2 = stk_model ('stk_materncov52_aniso', DIM);
-model2.param = stk_param_estim (model2, x_obs, z_obs(:, 1));
+model2.param = stk_param_estim (model2, x_obs, z_obs(:, 2));
 
 stk_figure ('stk_example_misc04 (a)');
 

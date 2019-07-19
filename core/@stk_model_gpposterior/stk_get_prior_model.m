@@ -1,4 +1,4 @@
-% GET_PRIOR_MODEL returns the prior_model structure
+% STK_GET_PRIOR_MODEL returns the prior_model structure
 
 % Copyright Notice
 %

@@ -21,7 +21,8 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2014, 2018 SUPELEC
+%    Copyright (C) 2018, 2019 CentraleSupelec
+%    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -72,7 +73,7 @@ else
         
         epsi = epsi * 10;
         
-        [C, p] = chol (A + epsi * u);
+        [C, p] = chol (A + epsi * u, varargin{:});
         
     end
     
@@ -82,5 +83,32 @@ else
 end
 
 end % function
+
+%!shared  Q, K, L, U, epsi
+%! Q = 0.25 * hadamard(4);
+
+%!test 
+%! K = Q * diag ([1, 0.1, 0.01, 1e-7]) * Q';
+%! [U, epsi] = stk_cholcov (K);
+%!assert (istriu (U))
+%!assert (epsi == 0)
+
+%!test 
+%! K = Q * diag ([1, 0.1, 0.01, 1e-7]) * Q';
+%! [L, epsi] = stk_cholcov (K, 'lower');
+%!assert (istril (L))
+%!assert (epsi == 0)
+
+%!test 
+%! K = Q * diag ([1, 0.1, 0.01, -1e-7]) * Q';
+%! [U, epsi] = stk_cholcov (K);
+%!assert (istriu (U))
+%!assert (epsi > 0)
+
+%!test 
+%! K = Q * diag ([1, 0.1, 0.01, -1e-7]) * Q';
+%! [L, epsi] = stk_cholcov (K, 'lower');
+%!assert (istril (L))
+%!assert (epsi > 0)
 
 %#ok<*SPWRN>

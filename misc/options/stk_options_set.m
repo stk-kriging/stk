@@ -45,6 +45,8 @@ switch nargin
     case 1  % reset
         if (ischar (varargin{1})) && strcmp (varargin{1}, 'default')
             options = init_options ();
+        elseif isstruct (varargin{1})
+            options = varargin{1};
         else
             stk_error ('Syntax error', 'SyntaxError');
         end
@@ -116,6 +118,8 @@ opts.stk_dataframe.openvar_warndlg = true;
 
 opts.stk_param_getdefaultbounds.tolvar = 5.0;
 opts.stk_param_getdefaultbounds.tolscale = 5.0;
+opts.stk_param_getdefaultbounds.nu_min_dimfun = @(d) 0.5;
+opts.stk_param_getdefaultbounds.nu_max_dimfun = @(d) min (50.0, 10 * d);
 
 opts.stk_figure.properties = {'InvertHardcopy', 'off', 'Color', [1 1 1]};
 opts.stk_xlabel.properties = {'FontSize', 10, 'Color', [0.2 0 1]};

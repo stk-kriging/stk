@@ -8,6 +8,8 @@
 * `stk_param_loopvc`: New function, which computes the leave-one-out
   predictive variance.
 
+* `stk_example_misc05`: New example.
+
 -----
 
 
@@ -43,7 +45,7 @@
   New getters for model properties, that replace `get_input_data`,
   `get_output_data` and `get_prior_model` respectively (now deprecated).
 
-* `stk_get_observation_variances.m`: New getter, which returns the
+* `stk_get_observation_variances`: New getter, which returns the
   vector of variances associated to the observations that have been
   used to build a model.
 
@@ -53,14 +55,29 @@
   model classes can be defined by subclassing `stk_model_gn`.
   ([ticket #38](https://sourceforge.net/p/kriging/tickets/38/))
   
-* `stk_example_misc05.m`: Demonstrate the use of noise model objects
+* `stk_example_misc05`: Demonstrate the use of noise model objects
   to estimate the dispersion parameter in an heteroscedatic case.
+
+* `stk_simulate_noise`: New function to simulate noise sample replicates.
 
 ## `stk_dataframe` and related classes
 
 * `stk_dataframe`: Accept char vectors (or strings) as `colnames` or
   `rownames` argument when there is only one column or one row
   ([ticket #92](https://sourceforge.net/p/kriging/tickets/92/))
+
+* `@stk_dataframe/sort`: Argument `dim` can now be skipped, as in the
+  base `sort` function.
+
+* `@stk_dataframe/unique.`: Overload base function.
+
+## Graphics
+
+* `stk_plot1d`: Do not create a legend systematically.
+  ([ticket #82](https://sourceforge.net/p/kriging/tickets/82/))
+
+* `stk_legend`: New function to create a legend, using the graphical
+  objects for which a non-empty DisplayName has been provided.
 
 -----
 

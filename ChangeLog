@@ -1,3 +1,56 @@
+2019-07-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_cholcov: Honour optional arguments (ticket #94)
+
+	* core/stk_cholcov.m: Honour optional arguments, such as 'lower',
+	when auto-nugget kicks in.
+
+2019-07-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Move some model getters from core to model/prior_struct
+
+	* core/stk_get_optimizable_model_parameters.m: Move from
+	* core/stk_set_optimizable_model_parameters.m: Move from
+	* model/prior_struct/stk_get_optimizable_model_parameters.m: Move to
+	* model/prior_struct/stk_set_optimizable_model_parameters.m: Move to
+
+	core/@stk_model_gpposterior: Fix some help texts
+
+	* core/@stk_model_gpposterior/stk_get_input_data.m: Fix help text.
+	* core/@stk_model_gpposterior/stk_get_output_data.m: Idem.
+	* core/@stk_model_gpposterior/stk_get_prior_model.m: Idem.
+
+2019-06-19  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_example_misc04.m: Fix a typo
+
+	* examples/03_miscellaneous/stk_example_misc04.m: Fix a typo.
+
+2019-02-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Make it possible to set all the options at once.
+
+	* misc/options/stk_options_set.m: Make it possible to set all the
+	options at once, using a struct argument.
+
+	Make it possible to set customized bounds for log(nu).
+
+	* misc/options/stk_options_set.m: Add new options nu_min_dimfun
+	and nu_max_dimfun for stk_param_getdefaultbounds.
+	* param/estim/stk_param_getdefaultbounds.m: Compute nu_min and
+	nu_max using the new options.
+
+	stk_param_getdefaultbounds.m: Lower-case variables names
+
+	* param/estim/stk_param_getdefaultbounds.m: Use lower-case
+	variables names for tolscale and tolvar.
+
+2019-02-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_runtests.m: Return a struct of results
+
+	* misc/test/stk_runtests.m: Return a struct of results.
+
 2019-02-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_init: Deprecate the syntax with do_estim_lnv

@@ -74,17 +74,17 @@ else
     
     % constants
     opts = stk_options_get ('stk_param_getdefaultbounds');
-    TOLVAR = opts.tolvar;
-    TOLSCALE = opts.tolscale;
+    tolvar = opts.tolvar;
+    tolscale = opts.tolscale;
     
     % bounds for the variance parameter
     log_empirical_variance = log (var (double (zi)));
     if log_empirical_variance == - Inf
-        logvar_lb = param0(1) - TOLVAR;
-        logvar_ub = param0(1) + TOLVAR;
+        logvar_lb = param0(1) - tolvar;
+        logvar_ub = param0(1) + tolvar;
     else
-        logvar_lb = min (log_empirical_variance, param0(1)) - TOLVAR;
-        logvar_ub = max (log_empirical_variance, param0(1)) + TOLVAR;
+        logvar_lb = min (log_empirical_variance, param0(1)) - tolvar;
+        logvar_ub = max (log_empirical_variance, param0(1)) + tolvar;
     end
     
     dim = size (xi, 2);
@@ -98,15 +98,18 @@ else
         
         case {'stk_materncov_aniso', 'stk_materncov_iso'}
             
-            nu_lb = min (log (0.5), param0(2));
-            nu_ub = max (log (min (50, 10 * dim)), param0(2));
+            nu_min = opts.nu_min_dimfun (dim);
+            nu_max = opts.nu_max_dimfun (dim);
+
+            lognu_lb = min (log (nu_min), param0(2));
+            lognu_ub = max (log (nu_max), param0(2));
             
             range_mid = param0(3:end);
-            range_lb  = range_mid(:) - TOLSCALE;
-            range_ub  = range_mid(:) + TOLSCALE;
+            range_lb  = range_mid(:) - tolscale;
+            range_ub  = range_mid(:) + tolscale;
             
-            lb = [logvar_lb; nu_lb; range_lb];
-            ub = [logvar_ub; nu_ub; range_ub];
+            lb = [logvar_lb; lognu_lb; range_lb];
+            ub = [logvar_ub; lognu_ub; range_ub];
             
         case {  'stk_materncov32_aniso', 'stk_materncov32_iso', ...
                 'stk_materncov52_aniso', 'stk_materncov52_iso', ...
@@ -115,8 +118,8 @@ else
                 'stk_sphcov_aniso',      'stk_sphcov_iso'}
             
             range_mid = param0(2:end);
-            range_lb  = range_mid(:) - TOLSCALE;
-            range_ub  = range_mid(:) + TOLSCALE;
+            range_lb  = range_mid(:) - tolscale;
+            range_ub  = range_mid(:) + tolscale;
             
             lb = [logvar_lb; range_lb];
             ub = [logvar_ub; range_ub];
