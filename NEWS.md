@@ -8,6 +8,8 @@
 * `stk_param_loopvc`: New function, which computes the leave-one-out
   predictive variance.
 
+* `stk_example_misc05`: New example.
+
 -----
 
 
