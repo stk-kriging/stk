@@ -1,3 +1,16 @@
+2019-08-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_options_set: Add help text.
+
+	* misc/options/stk_options_set.m: Add help text.
+
+2019-08-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Undo some changes from cs 00fdd8fa58d4
+
+	* misc/options/stk_options_get.m: Undo changes from cs 00fdd8fa58d4.
+	* arrays/@stk_dataframe/plotmatrix.m: Idem.
+
 2019-07-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_cholcov: Honour optional arguments (ticket #94)

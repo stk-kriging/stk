@@ -23,7 +23,7 @@
 %                   (1)  \_  |  __/   (3)       |
 %                          \_P_/                v
 %
-%    Nodes A, B and C are fixed (pin joints).  Node D is submitted to both an
+%    Nodes A, B and C are fixed (pin joints).  Node P is submitted to both an
 %    horizontal load F1 (e.g., wind) and a vertical load F2 (suspended load).
 %
 %    The design variables are the cross-sections a1, a2 and a3 of the three

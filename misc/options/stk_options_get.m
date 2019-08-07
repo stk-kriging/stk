@@ -1,8 +1,10 @@
 % STK_OPTIONS_GET returns the value of one or all STK options
+%
+% See also: stk_options_set
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2018 CentraleSupelec
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -33,10 +35,10 @@ opts = stk_options_set ();
 
 switch nargin
     
-    case 0, % nothing to do, just return the output
+    case 0  % Nothing to do, just return the output
         argout = opts;
         
-    case 1,
+    case 1
         switch varargin{1}
             
             case 'stk_sf_matern'
@@ -50,7 +52,7 @@ switch nargin
                 argout = opts.(varargin{1});
         end
         
-    otherwise
+    case 2
         switch varargin{1}
             
             case 'stk_param_estim'
@@ -75,6 +77,9 @@ switch nargin
             otherwise
                 argout = opts.(varargin{1}).(varargin{2});
         end
+        
+    otherwise
+        stk_error ('Too many input arguments.', 'TooManyInputArgs');
         
 end
 
