@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2018 CentraleSupelec
+%    Copyright (C) 2016 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -50,7 +50,7 @@ switch nargin
                 argout = opts.(varargin{1});
         end
         
-    otherwise
+    case 2,
         switch varargin{1}
             
             case 'stk_param_estim'
@@ -75,6 +75,9 @@ switch nargin
             otherwise
                 argout = opts.(varargin{1}).(varargin{2});
         end
+        
+    otherwise
+        stk_error ('Too many input arguments.', 'TooManyInputArgs');
         
 end
 
