@@ -33,10 +33,10 @@ opts = stk_options_set ();
 
 switch nargin
     
-    case 0, % nothing to do, just return the output
+    case 0  % Nothing to do, just return the output
         argout = opts;
         
-    case 1,
+    case 1
         switch varargin{1}
             
             case 'stk_sf_matern'
@@ -50,7 +50,7 @@ switch nargin
                 argout = opts.(varargin{1});
         end
         
-    case 2,
+    case 2
         switch varargin{1}
             
             case 'stk_param_estim'
