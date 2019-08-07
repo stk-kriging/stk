@@ -1,7 +1,33 @@
 % STK_OPTIONS_SET sets the value of one or all STK options
+%
+% CALL: stk_options_set ('default')
+%
+%    resets STK's default options.
+%
+% CALL: stk_options_set (OPTS)
+%
+%    sets all options at once using the option structure OPTS.  Such a
+%    structure can be obtained from stk_options_get.
+%
+% CALL: stk_options_set (BLOCKNAME, OPTS)
+%
+%    sets all the options from a block BLOCKNAME, using the option
+%    structure OPTS.  Such a structure can be obtained from
+%    stk_options_get as well.
+%
+% CALL: stk_options_set (BLOCKNAME, OPTNAME, OPTVAL)
+%
+%    sets options BLACKNAME.OPTNAME to the value OPTVAL.
+%
+% CALL: OPTS = stk_options_set (...)
+%
+%    returns the modified option structure, containing all STK's options.
+%
+% See also: stk_options_get
 
 % Copyright Notice
 %
+%    Copyright (C) 201 CentraleSupelec
 %    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2013 SUPELEC

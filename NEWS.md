@@ -79,6 +79,13 @@
 * `stk_legend`: New function to create a legend, using the graphical
   objects for which a non-empty DisplayName has been provided.
 
+## Miscellaneous
+
+* `stk_options_set`: Make it possible to set all options at once using
+  an option structure.
+
+* `stk_options_set`: Documentation.
+
 -----
 
 

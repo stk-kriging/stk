@@ -1,4 +1,6 @@
 % STK_OPTIONS_GET returns the value of one or all STK options
+%
+% See also: stk_options_set
 
 % Copyright Notice
 %
