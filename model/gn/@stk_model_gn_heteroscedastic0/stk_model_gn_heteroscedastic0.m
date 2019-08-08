@@ -1,12 +1,5 @@
 % STK_MODEL_GN_HETEROSCEDASTIC0 [experimental] is an example of noise model
 %
-% EXPERIMENTAL CLASS WARNING:  The stk_model_gn_heteroscedastic0 class is
-%    currently considered experimental.  STK users who wish to experiment with
-%    it are welcome to do so, but should be aware that API-breaking changes
-%    are likely to happen in future releases.  We invite them to direct any
-%    questions, remarks or comments about this experimental class to the STK
-%    mailing list.
-%
 % CALL: GN = stk_model_gn_heteroscedastic0 (VF, PHI)
 %
 %    creates an heteroscedastic Gaussian noise model with variance function VF
@@ -26,6 +19,13 @@
 %
 %    This class can be used as an example of how to create noise model objects
 %    by subclassing stk_model_gn.
+%
+% EXPERIMENTAL CLASS WARNING:  The stk_model_gn_heteroscedastic0 class is
+%    currently considered experimental.  STK users who wish to experiment with
+%    it are welcome to do so, but should be aware that API-breaking changes
+%    are likely to happen in future releases.  We invite them to direct any
+%    questions, remarks or comments about this experimental class to the STK
+%    mailing list.
 
 % Copyright Notice
 %

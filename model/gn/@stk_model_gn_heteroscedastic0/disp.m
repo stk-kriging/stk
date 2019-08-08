@@ -1,11 +1,4 @@
 % DISP [overload base function]
-%
-% EXPERIMENTAL CLASS WARNING:  The stk_model_gn_heteroscedastic0 class is
-%    currently considered experimental.  STK users who wish to experiment with
-%    it are welcome to do so, but should be aware that API-breaking changes
-%    are likely to happen in future releases.  We invite them to direct any
-%    questions, remarks or comments about this experimental class to the STK
-%    mailing list.
 
 % Copyright Notice
 %
