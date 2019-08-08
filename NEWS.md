@@ -54,7 +54,7 @@
   state, these two classes are merely a proof-of-concept.  Other noise
   model classes can be defined by subclassing `stk_model_gn`.
   ([ticket #38](https://sourceforge.net/p/kriging/tickets/38/))
-  
+
 * `stk_example_misc05`: Demonstrate the use of noise model objects
   to estimate the dispersion parameter in an heteroscedatic case.
 
@@ -84,9 +84,9 @@
 ## Miscellaneous
 
 * `stk_options_set`: Make it possible to set all options at once using
-  an option structure.
+  an option structure.  Add help text.
 
-* `stk_options_set`: Documentation.
+* `stk_runtests`: Return test results in a structure.
 
 -----
 
