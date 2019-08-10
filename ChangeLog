@@ -1,3 +1,10 @@
+2019-08-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Turn stk_param_getblockselectors into a subfunction
+
+	* model/prior_struct/stk_param_getblockselectors.m: Deleted.
+	* param/estim/stk_param_estim.m: New subfunction.
+
 2019-08-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_options_set: Add help text.

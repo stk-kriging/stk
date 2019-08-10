@@ -222,6 +222,25 @@ end
 end % function
 
 
+function select = stk_param_getblockselectors (model)
+
+stk_assert_model_struct (model);
+
+select = cell (2, 1);
+
+% Covariance parameters
+covparam = stk_get_optimizable_parameters (model.param);
+covparam_size = length (covparam);
+select{1} = true (covparam_size, 1);
+
+% Noise parameters
+noiseparam = stk_get_optimizable_noise_parameters (model);
+noiseparam_size = length (noiseparam);
+select{2} = true (noiseparam_size, 1);
+
+end % function
+
+
 %!shared f, xi, zi, NI, param0, param1, model
 %!
 %! f = @(x)(- (0.8 * x + sin (5 * x + 1) + 0.1 * sin (10 * x)) );

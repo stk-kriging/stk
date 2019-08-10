@@ -80,7 +80,6 @@ Parameter estimation
 #stk_param_estim_remlgs          [internal]
 #stk_param_getdefaultbounds      [internal]
 #stk_param_getdefaultbounds_lnv  [internal]
-#stk_param_getblockselectors     [internal]
 #stk_get_optimizable_parameters  [internal]
 #stk_set_optimizable_parameters  [internal]
 
