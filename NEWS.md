@@ -25,6 +25,8 @@
   parameter is now deprecated.  Set model.lognoisevariance to NaN if
   you want an initial estimate for the variance of the noise.
 
+* `stk_param_init_lnv`: Refuse noiseless models (error).
+
 * `stk_model_gpposterior`: Trigger parameter estimation when
   lognoisevariance is NaN.  In the (experimental) case where
   lognoisevariance is a noise model object, parameter estimation is
@@ -32,8 +34,15 @@
   the model is NaN.
   ([ticket #93](https://sourceforge.net/p/kriging/tickets/93/))
 
-* `stk_param_relik` now returns [] instead of NaN when the derivative
-  with respect to lnv is requested for a noiseless model.
+* `stk_param_relik`: Return [] instead of NaN when the derivative with
+  respect to lnv is requested for a noiseless model.
+
+* `stk_param_relik`: Detect duplicated observation points automatically
+  and raise an error for noiseless models.
+
+* `stk_param_getdefaultbounds`: Estimation bounds for the regularity
+  parameter of the Matérn covariance function are now customizable through
+  the options `nu_min_dimfun` and `nu_max_dimfun`.
 
 ## Covariance functions
 
