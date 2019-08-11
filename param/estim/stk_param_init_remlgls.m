@@ -27,7 +27,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [param, lnv] = stk_param_estim_remlgs (model, xi, zi, other_params)
+function [param, lnv] = stk_param_init_remlgls (model, xi, zi, other_params)
 
 % Make sure than lnv is numeric
 if ~ isfield (model, 'lognoisevariance')

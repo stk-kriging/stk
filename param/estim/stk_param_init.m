@@ -372,7 +372,7 @@ rho_list = logspace (log10 (rho_min), log10 (rho_max), 5);
 
 other_params = - log (rho_list');
 
-[param, lnv] = stk_param_estim_remlgs (model, xi, zi, other_params);
+[param, lnv] = stk_param_init_remlgls (model, xi, zi, other_params);
 
 end % function
 

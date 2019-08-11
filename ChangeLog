@@ -1,3 +1,12 @@
+2019-08-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Rename stk_param_estim_remlgs to stk_param_init_remlgls
+
+	* param/estim/stk_param_estim_remlgs.m: Renamed from this...
+	* param/estim/stk_param_init_remlgls.m: ...to this.
+	* param/estim/stk_param_init.m: Propagate rename.
+	* admin/octpkg/INDEX: Update index.
+
 2019-08-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Turn stk_param_getblockselectors into a subfunction
