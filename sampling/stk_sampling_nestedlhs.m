@@ -37,7 +37,7 @@
 %
 %   n = [48, 12, 6, 2]; dim = 2;
 %   bnd = stk_hrect([-5, 1; 7, 2]);
-%   levels = [100; 50; 33; 25; 20;];
+%   levels = [100; 50; 33; 25; 20];
 %   x = stk_sampling_nestedlhs(n, dim, bnd, [], levels);
 %
 % REFERENCE

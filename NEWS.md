@@ -97,6 +97,8 @@
 
 * `stk_runtests`: Return test results in a structure.
 
+* `stk_sampling_nesteddesign`: Fix help text.
+
 -----
 
 
