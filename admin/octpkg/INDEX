@@ -2,7 +2,7 @@ stk >> STK, a Small Toolbox for Kriging
 
 ## Copyright Notice
 ##
-##    Copyright (C) 2015-2018 CentraleSupelec
+##    Copyright (C) 2015-2019 CentraleSupelec
 ##    Copyright (C) 2014 SUPELEC
 ##
 ##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -77,9 +77,9 @@ Parameter estimation
  stk_param_loopvc
  stk_param_relik
 #stk_param_estim_optim           [internal]
-#stk_param_estim_remlgs          [internal]
 #stk_param_getdefaultbounds      [internal]
 #stk_param_getdefaultbounds_lnv  [internal]
+#stk_param_init_remlgls          [internal]
 #stk_get_optimizable_parameters  [internal]
 #stk_set_optimizable_parameters  [internal]
 
