@@ -1,5 +1,33 @@
 2019-08-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Rename model/gn to model/noise
+
+	* model/gn/@stk_model_gn/disp.m: Moved from
+	* model/gn/@stk_model_gn/stk_covmat.m: Moved from
+	* model/gn/@stk_model_gn/stk_model_gn.m: Moved from
+	* model/gn/@stk_model_gn_heteroscedastic0/disp.m: Moved from
+	* model/gn/@stk_model_gn_heteroscedastic0/fieldnames.m: Moved from
+	* model/gn/@stk_model_gn_heteroscedastic0/get.m: Moved from
+	* model/gn/@stk_model_gn_heteroscedastic0/set.m: Moved from
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters.m: Moved from
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0.m: Moved from
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds.m: Moved from
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters.m: Moved from
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_variance_eval.m: Moved from
+	* model/noise/@stk_model_gn/disp.m: Moved to
+	* model/noise/@stk_model_gn/stk_covmat.m: Moved to
+	* model/noise/@stk_model_gn/stk_model_gn.m: Moved to
+	* model/noise/@stk_model_gn_heteroscedastic0/disp.m: Moved to
+	* model/noise/@stk_model_gn_heteroscedastic0/fieldnames.m: Moved to
+	* model/noise/@stk_model_gn_heteroscedastic0/get.m: Moved to
+	* model/noise/@stk_model_gn_heteroscedastic0/set.m: Moved to
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters.m: Moved to
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0.m: Moved to
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds.m: Moved to
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters.m: Moved to
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_variance_eval.m: Moved to
+	* stk_init.m: Update path
+
 	Rename stk_param_estim_remlgs to stk_param_init_remlgls
 
 	* param/estim/stk_param_estim_remlgs.m: Renamed from this...
