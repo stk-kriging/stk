@@ -1,5 +1,16 @@
 2019-08-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Rename internal class @stk_optim_baseclass -> @stk_optim_optimizer_
+
+	* misc/optim/@stk_optim_baseclass/stk_optim_baseclass.m: Moved from
+	* misc/optim/@stk_optim_baseclass/stk_optim_isavailable.m: Moved from
+	* misc/optim/@stk_optim_optimizer_/stk_optim_isavailable.m: Moved to
+	* misc/optim/@stk_optim_optimizer_/stk_optim_optimizer_.m: Moved to
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Update
+	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m: Update
+	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Update
+	* admin/octpkg/INDEX: Update
+
 	Rename internal class stk_model_base -> stk_model_
 
 	* model/@stk_model_base/cat.m: Moved from
@@ -16,20 +27,20 @@
 	* model/@stk_model_base/subsasgn.m: Moved from
 	* model/@stk_model_base/subsref.m: Moved from
 	* model/@stk_model_base/vertcat.m: Moved from
-	* model/@stk_model_/cat.m
-	* model/@stk_model_/disp.m
-	* model/@stk_model_/display.m
-	* model/@stk_model_/get.m
-	* model/@stk_model_/horzcat.m
-	* model/@stk_model_/set.m
-	* model/@stk_model_/stk_get_input_data.m
-	* model/@stk_model_/stk_get_observation_variances.m
-	* model/@stk_model_/stk_get_output_data.m
-	* model/@stk_model_/stk_get_prior_model.m
-	* model/@stk_model_/stk_model_.m
-	* model/@stk_model_/subsasgn.m
-	* model/@stk_model_/subsref.m
-	* model/@stk_model_/vertcat.m
+	* model/@stk_model_/cat.m: Moved to:
+	* model/@stk_model_/disp.m: Moved to
+	* model/@stk_model_/display.m: Moved to
+	* model/@stk_model_/get.m: Moved to
+	* model/@stk_model_/horzcat.m: Moved to
+	* model/@stk_model_/set.m: Moved to
+	* model/@stk_model_/stk_get_input_data.m: Moved to
+	* model/@stk_model_/stk_get_observation_variances.m: Moved to
+	* model/@stk_model_/stk_get_output_data.m: Moved to
+	* model/@stk_model_/stk_get_prior_model.m: Moved to
+	* model/@stk_model_/stk_model_.m: Moved to
+	* model/@stk_model_/subsasgn.m: Moved to
+	* model/@stk_model_/subsref.m: Moved to
+	* model/@stk_model_/vertcat.m: Moved to
 	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Update
 	* model/noise/@stk_model_gn/stk_model_gn.m: Update
 	* admin/octpkg/INDEX: Update
