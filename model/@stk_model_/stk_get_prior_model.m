@@ -1,12 +1,4 @@
-% STK_MODEL_BASE [internal]
-%
-% This is meant to become the base class for all STK models.
-%
-% Currently:
-%    * prior models  are defined by model structures (structs) and thus
-%      do not derive from this class;
-%    * the stk_model_gpposterior and stk_model_gn classes already derive
-%      from this class.
+% STK_GET_PRIOR_MODEL [overload STK function]
 
 % Copyright Notice
 %
@@ -34,8 +26,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function gn = stk_model_base ()
+function prior_model = stk_get_prior_model (model)
 
-gn = class (struct (), 'stk_model_base');
+% DESIGN NOTE: all model classes derived from stk_model_ are considered
+% as prior models unless they overload stk_get_prior_model, stk_get_input_data
+% stk_get_output_data and stk_get_observation_variances.
+
+prior_model = model;
 
 end % function

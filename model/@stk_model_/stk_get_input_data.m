@@ -1,4 +1,4 @@
-% STK_GET_OUTPUT_DATA [overload STK function]
+% STK_GET_INTPUT_DATA [overload STK function]
 
 % Copyright Notice
 %
@@ -26,12 +26,14 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function output_data = stk_get_output_data (model)  %#ok<INUSD>
+function input_data = stk_get_input_data (model)  %#ok<INUSD>
 
-% DESIGN NOTE: all model classes derived from stk_model_base are considered
+% DESIGN NOTE: all model classes derived from stk_model_ are considered
 % as prior models unless they overload stk_get_prior_model, stk_get_input_data
 % stk_get_output_data and stk_get_observation_variances.
 
-output_data = zeros (0, 1);
+% FIXME: size should be 0 x input_dim
+
+input_data = [];
 
 end % function
