@@ -1,8 +1,16 @@
-% STK_GET_INTPUT_DATA [overload STK function]
+% STK_MODEL_ [internal]
+%
+% This is meant to become the base class for all STK models.
+%
+% Currently:
+%    * prior models  are defined by model structures (structs) and thus
+%      do not derive from this class;
+%    * the stk_model_gpposterior and stk_model_gn classes already derive
+%      from this class.
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2018, 2019 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,14 +34,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function input_data = stk_get_input_data (model)  %#ok<INUSD>
+function gn = stk_model_ ()
 
-% DESIGN NOTE: all model classes derived from stk_model_base are considered
-% as prior models unless they overload stk_get_prior_model, stk_get_input_data
-% stk_get_output_data and stk_get_observation_variances.
-
-% FIXME: size should be 0 x input_dim
-
-input_data = [];
+gn = class (struct (), 'stk_model_');
 
 end % function

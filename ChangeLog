@@ -1,5 +1,39 @@
 2019-08-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Rename internal class stk_model_base -> stk_model_
+
+	* model/@stk_model_base/cat.m: Moved from
+	* model/@stk_model_base/disp.m: Moved from
+	* model/@stk_model_base/display.m: Moved from
+	* model/@stk_model_base/get.m: Moved from
+	* model/@stk_model_base/horzcat.m: Moved from
+	* model/@stk_model_base/set.m: Moved from
+	* model/@stk_model_base/stk_get_input_data.m: Moved from
+	* model/@stk_model_base/stk_get_observation_variances.m: Moved from
+	* model/@stk_model_base/stk_get_output_data.m: Moved from
+	* model/@stk_model_base/stk_get_prior_model.m: Moved from
+	* model/@stk_model_base/stk_model_base.m: Moved from
+	* model/@stk_model_base/subsasgn.m: Moved from
+	* model/@stk_model_base/subsref.m: Moved from
+	* model/@stk_model_base/vertcat.m: Moved from
+	* model/@stk_model_/cat.m
+	* model/@stk_model_/disp.m
+	* model/@stk_model_/display.m
+	* model/@stk_model_/get.m
+	* model/@stk_model_/horzcat.m
+	* model/@stk_model_/set.m
+	* model/@stk_model_/stk_get_input_data.m
+	* model/@stk_model_/stk_get_observation_variances.m
+	* model/@stk_model_/stk_get_output_data.m
+	* model/@stk_model_/stk_get_prior_model.m
+	* model/@stk_model_/stk_model_.m
+	* model/@stk_model_/subsasgn.m
+	* model/@stk_model_/subsref.m
+	* model/@stk_model_/vertcat.m
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Update
+	* model/noise/@stk_model_gn/stk_model_gn.m: Update
+	* admin/octpkg/INDEX: Update
+
 	Mark @stk_model_gn_heteroscedastic0/stk_variance_eval.m as experimental
 
 	* model/noise/@stk_model_gn_heteroscedastic0/stk_variance_eval.m:

@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017 CentraleSupelec
+%    Copyright (C) 2015-2017, 2019 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -114,7 +114,7 @@ model.output_data = zi;
 model.kreq        = kreq;
 
 % Create object
-model = class (model, 'stk_model_gpposterior', stk_model_base ());
+model = class (model, 'stk_model_gpposterior', stk_model_ ());
 
 end % function
 
