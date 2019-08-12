@@ -194,14 +194,14 @@ Model components: Linear model objects
 
 Model components: Noise model objects [experimental]
  @stk_model_gn/stk_model_gn
-#@stk_model_gn/disp        [overload base]
-#@stk_model_gn/stk_covmat  [internal]
+#@stk_model_gn/disp         [overload base]
+#@stk_model_gn/stk_covmat   [internal]
  @stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0
+#@stk_model_gn_heteroscedastic0/stk_variance_eval               [experimental]
 #@stk_model_gn_heteroscedastic0/disp                            [overload base]
 #@stk_model_gn_heteroscedastic0/fieldnames                      [overload base]
 #@stk_model_gn_heteroscedastic0/get                             [overload base]
 #@stk_model_gn_heteroscedastic0/set                             [overload base]
-#@stk_model_gn_heteroscedastic0/stk_variance_eval               [overload STK]
 #@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters  [overload STK]
 #@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds      [overload STK]
 #@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters  [overload STK]

@@ -1,3 +1,11 @@
+2019-08-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Mark @stk_model_gn_heteroscedastic0/stk_variance_eval.m as experimental
+
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_variance_eval.m:
+	Mark this new function as experimental.
+	* admin/octpkg/INDEX: update index.
+
 2019-08-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Rename model/gn to model/noise
