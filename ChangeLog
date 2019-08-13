@@ -1,3 +1,35 @@
+2019-08-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Rename experimental noise model classes
+
+	* model/noise/@stk_model_gn/disp.m: Moved from
+	* model/noise/@stk_model_gn/stk_covmat.m: Moved from
+	* model/noise/@stk_model_gn/stk_model_gn.m: Moved from
+	* model/noise/@stk_model_gn_heteroscedastic0/disp.m: Moved from
+	* model/noise/@stk_model_gn_heteroscedastic0/fieldnames.m: Moved from
+	* model/noise/@stk_model_gn_heteroscedastic0/get.m: Moved from
+	* model/noise/@stk_model_gn_heteroscedastic0/set.m: Moved from
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters.m: Moved from
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0.m: Moved from
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds.m: Moved from
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters.m: Moved from
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_variance_eval.m: Moved from
+	* model/noise/@stk_gaussiannoise_/disp.m: Moved to
+	* model/noise/@stk_gaussiannoise_/stk_covmat.m: Moved to
+	* model/noise/@stk_gaussiannoise_/stk_gaussiannoise_.m: Moved to
+	* model/noise/@stk_gaussiannoise_het0/disp.m: Moved to
+	* model/noise/@stk_gaussiannoise_het0/fieldnames.m: Moved to
+	* model/noise/@stk_gaussiannoise_het0/get.m: Moved to
+	* model/noise/@stk_gaussiannoise_het0/set.m: Moved to
+	* model/noise/@stk_gaussiannoise_het0/stk_gaussiannoise_het0.m: Moved to
+	* model/noise/@stk_gaussiannoise_het0/stk_get_optimizable_parameters.m: Moved to
+	* model/noise/@stk_gaussiannoise_het0/stk_param_getdefaultbounds.m: Moved to
+	* model/noise/@stk_gaussiannoise_het0/stk_set_optimizable_parameters.m: Moved to
+	* model/noise/@stk_gaussiannoise_het0/stk_variance_eval.m: Moved to
+	* examples/03_miscellaneous/stk_example_misc05.m: Update
+	* model/@stk_model_/stk_model_.m: Update
+	* admin/octpkg/INDEX: Update
+
 2019-08-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Rename internal class @stk_optim_baseclass -> @stk_optim_optimizer_

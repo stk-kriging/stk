@@ -193,18 +193,18 @@ Model components: Linear model objects
 #@stk_lm_quadratic/feval    [overload base]
 
 Model components: Noise model objects [experimental]
- @stk_model_gn/stk_model_gn
-#@stk_model_gn/disp         [overload base]
-#@stk_model_gn/stk_covmat   [internal]
- @stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0
-#@stk_model_gn_heteroscedastic0/stk_variance_eval               [experimental]
-#@stk_model_gn_heteroscedastic0/disp                            [overload base]
-#@stk_model_gn_heteroscedastic0/fieldnames                      [overload base]
-#@stk_model_gn_heteroscedastic0/get                             [overload base]
-#@stk_model_gn_heteroscedastic0/set                             [overload base]
-#@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters  [overload STK]
-#@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds      [overload STK]
-#@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters  [overload STK]
+ @stk_gaussiannoise_/stk_gaussiannoise_
+#@stk_gaussiannoise_/disp                                [overload base]
+#@stk_gaussiannoise_/stk_covmat                          [internal]
+ @stk_gaussiannoise_het0/stk_gaussiannoise_het0
+#@stk_gaussiannoise_het0/stk_variance_eval               [experimental]
+#@stk_gaussiannoise_het0/disp                            [overload base]
+#@stk_gaussiannoise_het0/fieldnames                      [overload base]
+#@stk_gaussiannoise_het0/get                             [overload base]
+#@stk_gaussiannoise_het0/set                             [overload base]
+#@stk_gaussiannoise_het0/stk_get_optimizable_parameters  [overload STK]
+#@stk_gaussiannoise_het0/stk_param_getdefaultbounds      [overload STK]
+#@stk_gaussiannoise_het0/stk_set_optimizable_parameters  [overload STK]
 
 Design of experiments (non-sequential): sampling
  stk_sampling_halton_rr2

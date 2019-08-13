@@ -1,6 +1,6 @@
-% STK_MODEL_GN_HETEROSCEDASTIC0 [experimental] is an example of noise model
+% STK_GAUSSIANNOISE_HET0 [experimental] is an example of noise model
 %
-% CALL: GN = stk_model_gn_heteroscedastic0 (VF, PHI)
+% CALL: GN = stk_gaussiannoise_het0 (VF, PHI)
 %
 %    creates an heteroscedastic Gaussian noise model with variance function VF
 %    and dispersion PHI.  The variance at location x is given by:
@@ -18,9 +18,9 @@
 %    (in other words, the only hyperparameter is the dispersion).
 %
 %    This class can be used as an example of how to create noise model objects
-%    by subclassing stk_model_gn.
+%    by subclassing stk_gaussiannoise_.
 %
-% EXPERIMENTAL CLASS WARNING:  The stk_model_gn_heteroscedastic0 class is
+% EXPERIMENTAL CLASS WARNING:  The stk_gaussiannoise_het0 class is
 %    currently considered experimental.  STK users who wish to experiment with
 %    it are welcome to do so, but should be aware that API-breaking changes
 %    are likely to happen in future releases.  We invite them to direct any
@@ -29,7 +29,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2018, 2019 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -53,7 +53,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function gn = stk_model_gn_heteroscedastic0 (variance_function, dispersion)
+function gn = stk_gaussiannoise_het0 (variance_function, dispersion)
 
 if (nargin < 2) || (isempty (dispersion))
     log_dispersion = nan;  % must be estimated
@@ -64,6 +64,6 @@ end
 gn.log_dispersion = log_dispersion;
 gn.variance_function = variance_function;
 
-gn = class (gn, 'stk_model_gn_heteroscedastic0', stk_model_gn ());
+gn = class (gn, 'stk_gaussiannoise_het0', stk_gaussiannoise_ ());
 
 end % function

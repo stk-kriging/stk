@@ -1,4 +1,6 @@
-% DISP [overload base function]
+% STK_SET_OPTIMIZABLE_PARAMETERS [overload STK internal]
+%
+% See also: stk_get_optimizable_parameters
 
 % Copyright Notice
 %
@@ -26,22 +28,27 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function disp (gn)
+function gn = stk_set_optimizable_parameters (gn, value)
 
-fprintf ('<%s>\n', stk_sprintf_sizetype (gn));
-
-loose_spacing = stk_disp_isloose ();
-
-if loose_spacing
-    fprintf ('|\n');
-end
-
-fprintf ('|   stk_model_gn is an ''abstract'' class, which is used to create\n');
-fprintf ('|   derived classes  representing actual  Gaussian noise models.\n');
-fprintf ('|   ==>  Normal STK users should never be reading this ;-)  <==\n');
-
-if loose_spacing
-    fprintf ('|\n');
+if isa (gn, 'stk_gaussiannoise_het0')
+    
+    if isa (value, 'stk_gaussiannoise_het0')
+        
+        gn.variance_function = value.variance_function;
+        gn.log_dispersion = value.log_dispersion;
+        
+    else
+        
+        % This form of assignment preserves the size and type of gn.log_dispersion
+        gn.log_dispersion(:) = value;
+        
+    end
+    
+else
+    
+    stk_error (['The first input argument was expected to be an ' ...
+        'object of class stk_gaussiannoise_het0'], 'TypeMismatch');
+    
 end
 
 end % function

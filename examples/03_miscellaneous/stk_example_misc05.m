@@ -63,7 +63,7 @@ model = stk_model ('stk_materncov52_iso');
 
 % Variance of the heteroscedastic noise:  tau^2(x) = exp(param) * (x + 1) ^ 2
 % (note that the true variance function for this dataset is not exactly of this form...)
-model.lognoisevariance = stk_model_gn_heteroscedastic0 (@(x) (x + 1) .^ 2, 1.0);
+model.lognoisevariance = stk_gaussiannoise_het0 (@(x) (x + 1) .^ 2, 1.0);
 
 % NOTE: yes, it feels a little weird to store a "noise model" in a field
 % called "lognoisevariance"... but please keep in mind that this is just an
@@ -76,7 +76,7 @@ model.lognoisevariance = stk_model_gn_heteroscedastic0 (@(x) (x + 1) .^ 2, 1.0);
 % and therefore we have to provide an explicit starting point for the
 % estimation procedure
 covparam0 = [0 0];
-gn0 = stk_model_gn_heteroscedastic0 (@(x) (x + 1) .^ 2, 1.0);
+gn0 = stk_gaussiannoise_het0 (@(x) (x + 1) .^ 2, 1.0);
 
 % ReML parameter estimation: here, we estimate jointly the parameters of the
 % covariance function (log-variance, log-range) and the parameter of the
@@ -103,4 +103,4 @@ stk_labels ('input variable x', 'response z');
 
 %!test
 %! stk_example_misc05;  close all;
-%! assert (isa (model.lognoisevariance, 'stk_model_gn_heteroscedastic0'));
+%! assert (isa (model.lognoisevariance, 'stk_gaussiannoise_het0'));

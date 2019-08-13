@@ -1,10 +1,14 @@
-% STK_SET_OPTIMIZABLE_PARAMETERS [overload STK internal]
+% STK_GAUSSIANNOISE_ [experimental] is the base class for Gaussian noise models
 %
-% See also: stk_get_optimizable_parameters
+% EXPERIMENTAL CLASS WARNING:  The stk_gaussiannoise_ class is currently
+%    considered experimental.  STK users who wish to experiment with it are
+%    welcome to do so, but should be aware that API-breaking changes are likely
+%    to happen in future releases.  We invite them to direct any questions,
+%    remarks or comments about this experimental class to the STK mailing list.
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2018, 2019 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -28,27 +32,8 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function gn = stk_set_optimizable_parameters (gn, value)
+function gn = stk_gaussiannoise_ ()
 
-if isa (gn, 'stk_model_gn_heteroscedastic0')
-    
-    if isa (value, 'stk_model_gn_heteroscedastic0')
-        
-        gn.variance_function = value.variance_function;
-        gn.log_dispersion = value.log_dispersion;
-        
-    else
-        
-        % This form of assignment preserves the size and type of gn.log_dispersion
-        gn.log_dispersion(:) = value;
-        
-    end
-    
-else
-    
-    stk_error (['The first input argument was expected to be an ' ...
-        'object of class stk_model_gn_heteroscedastic0'], 'TypeMismatch');
-    
-end
+gn = class (struct (), 'stk_gaussiannoise_', stk_model_ ());
 
 end % function

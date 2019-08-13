@@ -58,10 +58,10 @@
   vector of variances associated to the observations that have been
   used to build a model.
 
-* `stk_model_gn`, `stk_model_gn_heteroscedastic0`: New classes
+* `stk_gaussiannoise_`, `stk_gaussiannoise_het0`: New classes
   representing Gaussian noise models.  Currently in experimental
   state, these two classes are merely a proof-of-concept.  Other noise
-  model classes can be defined by subclassing `stk_model_gn`.
+  model classes can be defined by subclassing `stk_gaussiannoise_`.
   ([ticket #38](https://sourceforge.net/p/kriging/tickets/38/))
 
 * `stk_example_misc05`: Demonstrate the use of noise model objects
