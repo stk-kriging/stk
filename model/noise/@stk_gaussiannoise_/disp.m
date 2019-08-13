@@ -1,10 +1,4 @@
-% STK_MODEL_GN [experimental] is the base class for Gaussian noise models
-%
-% EXPERIMENTAL CLASS WARNING:  The stk_model_gn class is currently considered
-%    experimental.  STK users who wish to experiment with it are welcome to do
-%    so, but should be aware that API-breaking changes are likely to happen in
-%    future releases.  We invite them to direct any questions, remarks or
-%    comments about this experimental class to the STK mailing list.
+% DISP [overload base function]
 
 % Copyright Notice
 %
@@ -32,8 +26,27 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function gn = stk_model_gn ()
+function disp (gn)
 
-gn = class (struct (), 'stk_model_gn', stk_model_ ());
+fprintf ('<%s>\n', stk_sprintf_sizetype (gn));
+
+loose_spacing = stk_disp_isloose ();
+
+if loose_spacing
+    fprintf ('|\n');
+end
+
+fprintf ('|   stk_gaussiannoise_ is an ''abstract'' class, which is used to\n');
+fprintf ('|   create derived classes representing actual Gaussian noise models.\n');
+
+if loose_spacing
+    fprintf ('|\n');
+end
+
+fprintf ('|   ==>  ''Normal'' STK users should never be reading this ;-)  <==\n');
+
+if loose_spacing
+    fprintf ('|\n');
+end
 
 end % function

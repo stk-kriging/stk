@@ -7,7 +7,7 @@
 %   This function is currently considered experimental, since the whole
 %   'noise model classes' thing is.
 %
-%   Classes derived from stk_model_gn must implement this to define the
+%   Classes derived from stk_gaussiannoise_ must implement this to define the
 %   value of the variance at any given point x.
 %
 %   In the future, it might be a good idea to make such a function part of

@@ -5,7 +5,7 @@
 % Currently:
 %    * prior models  are defined by model structures (structs) and thus
 %      do not derive from this class;
-%    * the stk_model_gpposterior and stk_model_gn classes already derive
+%    * the stk_model_gpposterior and stk_gaussiannoise_ classes already derive
 %      from this class.
 
 % Copyright Notice
