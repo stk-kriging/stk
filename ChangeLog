@@ -1,31 +1,42 @@
 2019-08-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Move more functions to model/prior_struct/
+
+	* core/stk_isnoisy.m: Move from
+	* core/stk_model.m: Move from
+	* core/stk_model_fixlm.m: Move from
+	* core/stk_ortho_func.m: Move from
+	* model/prior_struct/stk_isnoisy.m: Move to
+	* model/prior_struct/stk_model.m: Move to
+	* model/prior_struct/stk_model_fixlm.m: Move to
+	* model/prior_struct/stk_ortho_func.m: Move to
+
 	Rename experimental noise model classes
 
-	* model/noise/@stk_model_gn/disp.m: Moved from
-	* model/noise/@stk_model_gn/stk_covmat.m: Moved from
-	* model/noise/@stk_model_gn/stk_model_gn.m: Moved from
-	* model/noise/@stk_model_gn_heteroscedastic0/disp.m: Moved from
-	* model/noise/@stk_model_gn_heteroscedastic0/fieldnames.m: Moved from
-	* model/noise/@stk_model_gn_heteroscedastic0/get.m: Moved from
-	* model/noise/@stk_model_gn_heteroscedastic0/set.m: Moved from
-	* model/noise/@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters.m: Moved from
-	* model/noise/@stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0.m: Moved from
-	* model/noise/@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds.m: Moved from
-	* model/noise/@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters.m: Moved from
-	* model/noise/@stk_model_gn_heteroscedastic0/stk_variance_eval.m: Moved from
-	* model/noise/@stk_gaussiannoise_/disp.m: Moved to
-	* model/noise/@stk_gaussiannoise_/stk_covmat.m: Moved to
-	* model/noise/@stk_gaussiannoise_/stk_gaussiannoise_.m: Moved to
-	* model/noise/@stk_gaussiannoise_het0/disp.m: Moved to
-	* model/noise/@stk_gaussiannoise_het0/fieldnames.m: Moved to
-	* model/noise/@stk_gaussiannoise_het0/get.m: Moved to
-	* model/noise/@stk_gaussiannoise_het0/set.m: Moved to
-	* model/noise/@stk_gaussiannoise_het0/stk_gaussiannoise_het0.m: Moved to
-	* model/noise/@stk_gaussiannoise_het0/stk_get_optimizable_parameters.m: Moved to
-	* model/noise/@stk_gaussiannoise_het0/stk_param_getdefaultbounds.m: Moved to
-	* model/noise/@stk_gaussiannoise_het0/stk_set_optimizable_parameters.m: Moved to
-	* model/noise/@stk_gaussiannoise_het0/stk_variance_eval.m: Moved to
+	* model/noise/@stk_model_gn/disp.m: Move from
+	* model/noise/@stk_model_gn/stk_covmat.m: Move from
+	* model/noise/@stk_model_gn/stk_model_gn.m: Move from
+	* model/noise/@stk_model_gn_heteroscedastic0/disp.m: Move from
+	* model/noise/@stk_model_gn_heteroscedastic0/fieldnames.m: Move from
+	* model/noise/@stk_model_gn_heteroscedastic0/get.m: Move from
+	* model/noise/@stk_model_gn_heteroscedastic0/set.m: Move from
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters.m: Move from
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0.m: Move from
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds.m: Move from
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters.m: Move from
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_variance_eval.m: Move from
+	* model/noise/@stk_gaussiannoise_/disp.m: Move to
+	* model/noise/@stk_gaussiannoise_/stk_covmat.m: Move to
+	* model/noise/@stk_gaussiannoise_/stk_gaussiannoise_.m: Move to
+	* model/noise/@stk_gaussiannoise_het0/disp.m: Move to
+	* model/noise/@stk_gaussiannoise_het0/fieldnames.m: Move to
+	* model/noise/@stk_gaussiannoise_het0/get.m: Move to
+	* model/noise/@stk_gaussiannoise_het0/set.m: Move to
+	* model/noise/@stk_gaussiannoise_het0/stk_gaussiannoise_het0.m: Move to
+	* model/noise/@stk_gaussiannoise_het0/stk_get_optimizable_parameters.m: Move to
+	* model/noise/@stk_gaussiannoise_het0/stk_param_getdefaultbounds.m: Move to
+	* model/noise/@stk_gaussiannoise_het0/stk_set_optimizable_parameters.m: Move to
+	* model/noise/@stk_gaussiannoise_het0/stk_variance_eval.m: Move to
 	* examples/03_miscellaneous/stk_example_misc05.m: Update
 	* model/@stk_model_/stk_model_.m: Update
 	* admin/octpkg/INDEX: Update
@@ -34,10 +45,10 @@
 
 	Rename internal class @stk_optim_baseclass -> @stk_optim_optimizer_
 
-	* misc/optim/@stk_optim_baseclass/stk_optim_baseclass.m: Moved from
-	* misc/optim/@stk_optim_baseclass/stk_optim_isavailable.m: Moved from
-	* misc/optim/@stk_optim_optimizer_/stk_optim_isavailable.m: Moved to
-	* misc/optim/@stk_optim_optimizer_/stk_optim_optimizer_.m: Moved to
+	* misc/optim/@stk_optim_baseclass/stk_optim_baseclass.m: Move from
+	* misc/optim/@stk_optim_baseclass/stk_optim_isavailable.m: Move from
+	* misc/optim/@stk_optim_optimizer_/stk_optim_isavailable.m: Move to
+	* misc/optim/@stk_optim_optimizer_/stk_optim_optimizer_.m: Move to
 	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Update
 	* misc/optim/@stk_optim_fminsearch/stk_optim_fminsearch.m: Update
 	* misc/optim/@stk_optim_octavesqp/stk_optim_octavesqp.m: Update
@@ -45,34 +56,34 @@
 
 	Rename internal class stk_model_base -> stk_model_
 
-	* model/@stk_model_base/cat.m: Moved from
-	* model/@stk_model_base/disp.m: Moved from
-	* model/@stk_model_base/display.m: Moved from
-	* model/@stk_model_base/get.m: Moved from
-	* model/@stk_model_base/horzcat.m: Moved from
-	* model/@stk_model_base/set.m: Moved from
-	* model/@stk_model_base/stk_get_input_data.m: Moved from
-	* model/@stk_model_base/stk_get_observation_variances.m: Moved from
-	* model/@stk_model_base/stk_get_output_data.m: Moved from
-	* model/@stk_model_base/stk_get_prior_model.m: Moved from
-	* model/@stk_model_base/stk_model_base.m: Moved from
-	* model/@stk_model_base/subsasgn.m: Moved from
-	* model/@stk_model_base/subsref.m: Moved from
-	* model/@stk_model_base/vertcat.m: Moved from
-	* model/@stk_model_/cat.m: Moved to:
-	* model/@stk_model_/disp.m: Moved to
-	* model/@stk_model_/display.m: Moved to
-	* model/@stk_model_/get.m: Moved to
-	* model/@stk_model_/horzcat.m: Moved to
-	* model/@stk_model_/set.m: Moved to
-	* model/@stk_model_/stk_get_input_data.m: Moved to
-	* model/@stk_model_/stk_get_observation_variances.m: Moved to
-	* model/@stk_model_/stk_get_output_data.m: Moved to
-	* model/@stk_model_/stk_get_prior_model.m: Moved to
-	* model/@stk_model_/stk_model_.m: Moved to
-	* model/@stk_model_/subsasgn.m: Moved to
-	* model/@stk_model_/subsref.m: Moved to
-	* model/@stk_model_/vertcat.m: Moved to
+	* model/@stk_model_base/cat.m: Move from
+	* model/@stk_model_base/disp.m: Move from
+	* model/@stk_model_base/display.m: Move from
+	* model/@stk_model_base/get.m: Move from
+	* model/@stk_model_base/horzcat.m: Move from
+	* model/@stk_model_base/set.m: Move from
+	* model/@stk_model_base/stk_get_input_data.m: Move from
+	* model/@stk_model_base/stk_get_observation_variances.m: Move from
+	* model/@stk_model_base/stk_get_output_data.m: Move from
+	* model/@stk_model_base/stk_get_prior_model.m: Move from
+	* model/@stk_model_base/stk_model_base.m: Move from
+	* model/@stk_model_base/subsasgn.m: Move from
+	* model/@stk_model_base/subsref.m: Move from
+	* model/@stk_model_base/vertcat.m: Move from
+	* model/@stk_model_/cat.m: Move to:
+	* model/@stk_model_/disp.m: Move to
+	* model/@stk_model_/display.m: Move to
+	* model/@stk_model_/get.m: Move to
+	* model/@stk_model_/horzcat.m: Move to
+	* model/@stk_model_/set.m: Move to
+	* model/@stk_model_/stk_get_input_data.m: Move to
+	* model/@stk_model_/stk_get_observation_variances.m: Move to
+	* model/@stk_model_/stk_get_output_data.m: Move to
+	* model/@stk_model_/stk_get_prior_model.m: Move to
+	* model/@stk_model_/stk_model_.m: Move to
+	* model/@stk_model_/subsasgn.m: Move to
+	* model/@stk_model_/subsref.m: Move to
+	* model/@stk_model_/vertcat.m: Move to
 	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Update
 	* model/noise/@stk_model_gn/stk_model_gn.m: Update
 	* admin/octpkg/INDEX: Update
@@ -87,30 +98,30 @@
 
 	Rename model/gn to model/noise
 
-	* model/gn/@stk_model_gn/disp.m: Moved from
-	* model/gn/@stk_model_gn/stk_covmat.m: Moved from
-	* model/gn/@stk_model_gn/stk_model_gn.m: Moved from
-	* model/gn/@stk_model_gn_heteroscedastic0/disp.m: Moved from
-	* model/gn/@stk_model_gn_heteroscedastic0/fieldnames.m: Moved from
-	* model/gn/@stk_model_gn_heteroscedastic0/get.m: Moved from
-	* model/gn/@stk_model_gn_heteroscedastic0/set.m: Moved from
-	* model/gn/@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters.m: Moved from
-	* model/gn/@stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0.m: Moved from
-	* model/gn/@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds.m: Moved from
-	* model/gn/@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters.m: Moved from
-	* model/gn/@stk_model_gn_heteroscedastic0/stk_variance_eval.m: Moved from
-	* model/noise/@stk_model_gn/disp.m: Moved to
-	* model/noise/@stk_model_gn/stk_covmat.m: Moved to
-	* model/noise/@stk_model_gn/stk_model_gn.m: Moved to
-	* model/noise/@stk_model_gn_heteroscedastic0/disp.m: Moved to
-	* model/noise/@stk_model_gn_heteroscedastic0/fieldnames.m: Moved to
-	* model/noise/@stk_model_gn_heteroscedastic0/get.m: Moved to
-	* model/noise/@stk_model_gn_heteroscedastic0/set.m: Moved to
-	* model/noise/@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters.m: Moved to
-	* model/noise/@stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0.m: Moved to
-	* model/noise/@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds.m: Moved to
-	* model/noise/@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters.m: Moved to
-	* model/noise/@stk_model_gn_heteroscedastic0/stk_variance_eval.m: Moved to
+	* model/gn/@stk_model_gn/disp.m: Move from
+	* model/gn/@stk_model_gn/stk_covmat.m: Move from
+	* model/gn/@stk_model_gn/stk_model_gn.m: Move from
+	* model/gn/@stk_model_gn_heteroscedastic0/disp.m: Move from
+	* model/gn/@stk_model_gn_heteroscedastic0/fieldnames.m: Move from
+	* model/gn/@stk_model_gn_heteroscedastic0/get.m: Move from
+	* model/gn/@stk_model_gn_heteroscedastic0/set.m: Move from
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters.m: Move from
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0.m: Move from
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds.m: Move from
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters.m: Move from
+	* model/gn/@stk_model_gn_heteroscedastic0/stk_variance_eval.m: Move from
+	* model/noise/@stk_model_gn/disp.m: Move to
+	* model/noise/@stk_model_gn/stk_covmat.m: Move to
+	* model/noise/@stk_model_gn/stk_model_gn.m: Move to
+	* model/noise/@stk_model_gn_heteroscedastic0/disp.m: Move to
+	* model/noise/@stk_model_gn_heteroscedastic0/fieldnames.m: Move to
+	* model/noise/@stk_model_gn_heteroscedastic0/get.m: Move to
+	* model/noise/@stk_model_gn_heteroscedastic0/set.m: Move to
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_get_optimizable_parameters.m: Move to
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_model_gn_heteroscedastic0.m: Move to
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_param_getdefaultbounds.m: Move to
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_set_optimizable_parameters.m: Move to
+	* model/noise/@stk_model_gn_heteroscedastic0/stk_variance_eval.m: Move to
 	* stk_init.m: Update path
 
 	Rename stk_param_estim_remlgs to stk_param_init_remlgls
