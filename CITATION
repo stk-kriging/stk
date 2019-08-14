@@ -12,7 +12,7 @@ A BibTeX entry for LaTeX users is:
     author = {Bect, Julien and Vazquez, Emmanuel and others},
     title = {{STK}: a {S}mall ({M}atlab/{O}ctave) {T}oolbox
              for {K}riging. {R}elease $VERNUM},
-    year = {2017},
+    year = {2019},
     url = {http://kriging.sourceforge.net}
   }
 
