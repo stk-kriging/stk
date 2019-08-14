@@ -42,7 +42,8 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
                  areas (such as Geostatistics, Machine Learning,
                  Non-parametric Regression, etc.).
 
-   Copyright:    Large portions are Copyright (C) 2011-2014 SUPELEC.
+   Copyright:    Large portions are Copyright (C) 2011-2014 SUPELEC
+                 and Copyright (C) 2015-2019 CentraleSupelec.
                  See individual copyright notices for more details.
 
    License:      GNU General Public License, version 3 (GPLv3).
