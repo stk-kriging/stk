@@ -195,6 +195,7 @@ Model components: Linear model objects
 Model components: Noise model objects [experimental]
  @stk_gaussiannoise_/stk_gaussiannoise_
 #@stk_gaussiannoise_/disp                                [overload base]
+#@stk_gaussiannoise_/stk_isnoisy.m                       [overload STK]
 #@stk_gaussiannoise_/stk_covmat                          [internal]
  @stk_gaussiannoise_het0/stk_gaussiannoise_het0
 #@stk_gaussiannoise_het0/stk_variance_eval               [experimental]
