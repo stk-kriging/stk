@@ -1,5 +1,14 @@
 2019-08-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Implement stk_covmat_noise for all models
+
+	* core/stk_covmat_noise.m: Move from
+	* model/prior_struct/stk_covmat_noise.m: Move to
+	* core/@stk_model_gpposterior/stk_covmat_noise.m: New function
+	* model/@stk_model_/stk_covmat_noise.m: New function
+	* model/noise/@stk_gaussiannoise_/stk_covmat_noise.m: New function
+	* admin/octpkg/INDEX: Update
+
 	Implement stk_isnoisy for noise models
 
 	* model/noise/@stk_gaussiannoise_/stk_isnoisy.m: New function
