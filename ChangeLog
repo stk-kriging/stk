@@ -1,5 +1,54 @@
 2019-08-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Move @stk_model_gpposterior to model/ directory
+
+	* core/@stk_model_gpposterior/disp.m: Move from
+	* core/@stk_model_gpposterior/fieldnames.m: Move from
+	* core/@stk_model_gpposterior/get.m: Move from
+	* core/@stk_model_gpposterior/get_input_data.m: Move from
+	* core/@stk_model_gpposterior/get_output_data.m: Move from
+	* core/@stk_model_gpposterior/get_prior_model.m: Move from
+	* core/@stk_model_gpposterior/set.m: Move from
+	* core/@stk_model_gpposterior/stk_covmat_noise.m: Move from
+	* core/@stk_model_gpposterior/stk_generate_samplepaths.m: Move from
+	* core/@stk_model_gpposterior/stk_get_input_data.m: Move from
+	* core/@stk_model_gpposterior/stk_get_observation_variances.m: Move from
+	* core/@stk_model_gpposterior/stk_get_optimizable_noise_parameters.m: Move from
+	* core/@stk_model_gpposterior/stk_get_optimizable_parameters.m: Move from
+	* core/@stk_model_gpposterior/stk_get_output_data.m: Move from
+	* core/@stk_model_gpposterior/stk_get_prior_model.m: Move from
+	* core/@stk_model_gpposterior/stk_isnoisy.m: Move from
+	* core/@stk_model_gpposterior/stk_make_kreq.m: Move from
+	* core/@stk_model_gpposterior/stk_model_gpposterior.m: Move from
+	* core/@stk_model_gpposterior/stk_model_update.m: Move from
+	* core/@stk_model_gpposterior/stk_predict.m: Move from
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout.m: Move from
+	* core/@stk_model_gpposterior/stk_predict_leaveoneout_direct.m: Move from
+	* core/@stk_model_gpposterior/stk_set_optimizable_parameters.m: Move from
+	* model/@stk_model_gpposterior/disp.m: Move to
+	* model/@stk_model_gpposterior/fieldnames.m: Move to
+	* model/@stk_model_gpposterior/get.m: Move to
+	* model/@stk_model_gpposterior/get_input_data.m: Move to
+	* model/@stk_model_gpposterior/get_output_data.m: Move to
+	* model/@stk_model_gpposterior/get_prior_model.m: Move to
+	* model/@stk_model_gpposterior/set.m: Move to
+	* model/@stk_model_gpposterior/stk_covmat_noise.m: Move to
+	* model/@stk_model_gpposterior/stk_generate_samplepaths.m: Move to
+	* model/@stk_model_gpposterior/stk_get_input_data.m: Move to
+	* model/@stk_model_gpposterior/stk_get_observation_variances.m: Move to
+	* model/@stk_model_gpposterior/stk_get_optimizable_noise_parameters.m: Move to
+	* model/@stk_model_gpposterior/stk_get_optimizable_parameters.m: Move to
+	* model/@stk_model_gpposterior/stk_get_output_data.m: Move to
+	* model/@stk_model_gpposterior/stk_get_prior_model.m: Move to
+	* model/@stk_model_gpposterior/stk_isnoisy.m: Move to
+	* model/@stk_model_gpposterior/stk_make_kreq.m: Move to
+	* model/@stk_model_gpposterior/stk_model_gpposterior.m: Move to
+	* model/@stk_model_gpposterior/stk_model_update.m: Move to
+	* model/@stk_model_gpposterior/stk_predict.m: Move to
+	* model/@stk_model_gpposterior/stk_predict_leaveoneout.m: Move to
+	* model/@stk_model_gpposterior/stk_predict_leaveoneout_direct.m: Move to
+	* model/@stk_model_gpposterior/stk_set_optimizable_parameters.m: Move to
+
 	Implement stk_covmat_noise for all models
 
 	* core/stk_covmat_noise.m: Move from
