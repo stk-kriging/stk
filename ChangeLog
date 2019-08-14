@@ -1,3 +1,9 @@
+2019-08-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Implement stk_isnoisy for noise models
+
+	* model/noise/@stk_gaussiannoise_/stk_isnoisy.m: New function
+
 2019-08-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Move more functions to model/prior_struct/
