@@ -73,8 +73,6 @@ Parameter estimation
  stk_param_gls
  stk_param_init
  stk_param_init_lnv
- stk_param_loomse
- stk_param_loopvc
  stk_param_relik
 #stk_param_estim_optim           [internal]
 #stk_param_getdefaultbounds      [internal]
@@ -297,7 +295,6 @@ Examples: miscellaneous
  stk_example_misc03
  stk_example_misc04
  stk_example_misc05
- stk_example_misc06
 
 Examples: test functions, datasets, etc.
  stk_dataset_twobumps
