@@ -1,3 +1,9 @@
+2019-09-03  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Makefile: Use ${OCTAVE} from environment if defined
+
+	* Makefile: Use ${OCTAVE} from environment if defined.
+
 2019-08-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Move @stk_model_gpposterior to model/ directory
