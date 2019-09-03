@@ -1,6 +1,6 @@
 ## Copyright Notice
 ##
-##    Copyright (C) 2015, 2017 CentraleSupelec
+##    Copyright (C) 2015, 2017, 2019 CentraleSupelec
 ##
 ##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -47,7 +47,8 @@ SF_DIR=${BUILD_DIR}/sourceforge
 OF_DIR=${BUILD_DIR}/octaveforge
 
 ## Programs
-OCT_EVAL=octave --no-gui --eval
+OCTAVE ?= octave
+OCT_EVAL=${OCTAVE} --no-gui --silent --norc --eval
 OFWGET=wget --quiet http://octave.sourceforge.net
 
 ## File names for the OF release
