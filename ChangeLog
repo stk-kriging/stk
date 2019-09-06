@@ -1,3 +1,9 @@
+2019-09-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	CITATION: Make bibtex refence year configurable
+
+	* CITATION: Make bibtex refence year configurable.
+
 2019-09-03  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Makefile: Use ${OCTAVE} from environment if defined
