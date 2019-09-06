@@ -1,5 +1,11 @@
 2019-09-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	INDEX: Fix sections and re-organize a little
+
+	* admin/octpkg/INDEX: Fix sections and re-organize a little.
+	* model/noise/@stk_gaussiannoise_/stk_gaussiannoise_.m: Mark as
+	internal.
+
 	RELEASE.md: Fix release instructions
 
 	* admin/RELEASE.md: Fix release instructions.
