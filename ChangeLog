@@ -1,5 +1,9 @@
 2019-09-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	RELEASE.md: Fix release instructions
+
+	* admin/RELEASE.md: Fix release instructions.
+
 	CITATION: Make bibtex reference year configurable
 
 	* CITATION: Make bibtex reference year configurable.

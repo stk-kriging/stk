@@ -89,9 +89,9 @@ Assume, say, that we want to release STK version 4.5 (hum... not yet...).
 
         hg update default
                 
-        # In stk_version.m, update version number to "4.6-dev" (or "5.0-dev")
+        # In stk_version.m, update version number to "4.6.0" (or "5.0.0")
         # and modify copyright years if appropriate.
-        hg commit -m "Update version number to 4.6-dev"
+        hg commit -m "Update version number to 4.6.0"
 
  * Release (STK project)
    * Upload "allpurpose" and "octpkg" tarballs to Sourceforge's FRS.
