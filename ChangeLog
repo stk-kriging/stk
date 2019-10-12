@@ -1,3 +1,10 @@
+2019-10-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_factorialdesign.m: Provide missing help text
+
+	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Provide
+	missing help text.
+
 2019-09-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	INDEX: Fix sections and re-organize a little

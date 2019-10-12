@@ -1,8 +1,24 @@
 % STK_FACTORIALDESIGN constructs a "full factorial design" array
+%
+% CALL: D = stk_factorialdesign (LEVELS)
+%
+%   creates a full factorial design with levels LEVELS{1} for the first
+%   variable, LEVELS{2} for the second variable, etc.  The output is an object
+%   of the stk_factorialdesign class, which derives from stk_dataframe.
+%
+% CALL: D = stk_factorialdesign (LEVELS, COLNAMES)
+%
+%    allows to specify column names for the dataframe D.
+%
+% CALL: D = stk_factorialdesign (LEVELS, COLNAMES, ROWNAMES)
+%
+%    allows to specify row names as well.
+%
+% See also: stk_dataframe, stk_hrect
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2019 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
