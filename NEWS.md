@@ -17,9 +17,10 @@
 ## Documentation
 
 * `stk_factorialdesign`: Provide missing help text.
+  ([ticket #91](https://sourceforge.net/p/kriging/tickets/91/))
 
 * Fix HTML doc (`INDEX` structure was broken).
-
+  
 
 # Changes in version 2.6.0
 
