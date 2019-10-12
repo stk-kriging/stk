@@ -1,4 +1,4 @@
-% STK_ORTHO_FUNC  [deprecated]
+% STK_ORTHO_FUNC [deprecated]
 %
 % CALL: P = stk_ortho_func (MODEL, X)
 %

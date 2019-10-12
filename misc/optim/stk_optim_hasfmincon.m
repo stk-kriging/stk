@@ -1,4 +1,4 @@
-% STK_OPTIM_HASFMINCON is a deprecated function
+% STK_OPTIM_HASFMINCON [deprecated]
 %
 % stk_optim_hasfmincon is deprecated and will be removed
 % from future releases of STK. Use

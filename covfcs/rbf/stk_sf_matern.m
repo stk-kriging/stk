@@ -1,4 +1,4 @@
-% STK_SF_MATERN is deprecated, use stk_rbf_matern instead
+% STK_SF_MATERN [deprecated]
 %
 % See also: stk_rbf_matern
 

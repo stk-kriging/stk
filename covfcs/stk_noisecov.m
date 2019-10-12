@@ -1,4 +1,6 @@
 % STK_NOISECOV [deprecated]
+%
+% See also: stk_covmat_noise
 
 % Copyright Notice
 %

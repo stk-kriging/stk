@@ -1,5 +1,16 @@
 2019-10-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Polish/uniformize one-line help for deprecated functions
+
+	* covfcs/rbf/stk_sf_gausscorr.m: Polish one-line help text.
+	* covfcs/rbf/stk_sf_matern.m: Idem.
+	* covfcs/rbf/stk_sf_matern32.m: Idem.
+	* covfcs/rbf/stk_sf_matern52.m: Idem.
+	* covfcs/stk_noisecov.m: Idem.
+	* misc/optim/stk_optim_hasfmincon.m: Idem.
+	* misc/optim/stk_select_optimizer.m: Idem.
+	* model/prior_struct/stk_ortho_func.m: Idem.
+
 	stk_factorialdesign.m: Provide missing help text  (ticket #91)
 
 	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Provide
