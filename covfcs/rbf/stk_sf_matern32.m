@@ -1,4 +1,4 @@
-% STK_SF_MATERN32 is deprecated, use stk_rbf_matern32 instead
+% STK_SF_MATERN32 [deprecated]
 %
 % See also: stk_rbf_matern32
 

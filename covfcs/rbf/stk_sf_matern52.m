@@ -1,4 +1,4 @@
-% STK_SF_MATERN52 is deprecated, use stk_rbf_matern52 instead
+% STK_SF_MATERN52 [deprecated]
 %
 % See also: stk_rbf_matern52
 

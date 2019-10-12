@@ -1,4 +1,4 @@
-% STK_SF_GAUSSCORR is deprecated, use stk_rbf_gauss instead
+% STK_SF_GAUSSCORR [deprecated]
 %
 % See also: stk_rbf_gauss
 

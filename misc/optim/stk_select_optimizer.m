@@ -1,4 +1,4 @@
-% STK_SELECT_OPTIMIZER is a deprecated function
+% STK_SELECT_OPTIMIZER [deprecated]
 %
 % stk_select_optimizer is deprecated and will be removed
 % from future releases of STK. Use
