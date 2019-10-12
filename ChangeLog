@@ -1,6 +1,6 @@
 2019-10-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
-	stk_factorialdesign.m: Provide missing help text
+	stk_factorialdesign.m: Provide missing help text  (ticket #91)
 
 	* arrays/@stk_factorialdesign/stk_factorialdesign.m: Provide
 	missing help text.
