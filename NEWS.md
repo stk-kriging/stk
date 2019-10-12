@@ -12,6 +12,14 @@
 
 -----
 
+# Changes in version 2.6.1
+
+## Documentation
+
+* `stk_factorialdesign`: Provide missing help text.
+
+* Fix HTML doc (`INDEX` structure was broken).
+
 
 # Changes in version 2.6.0
 
