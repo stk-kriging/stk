@@ -73,7 +73,6 @@ Core STK functions
 #stk_ortho_func              [deprecated]
 #stk_cholcov                 [internal]
 #stk_model_fixlm             [internal]
-#stk_covmat_noise            [internal]
 
 Parameter estimation
  stk_param_estim
