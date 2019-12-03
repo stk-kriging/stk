@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2018 CentraleSupelec
+%    Copyright (C) 2015-2018, 2019 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -420,8 +420,11 @@ end
 
 gcc_version_warning = [];
 isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
-use_silent = (~ isoctave) && ...  % Matlab-only:
-    (~ isempty (strfind (help ('mex'), '-silent')));
+
+persistent use_silent
+if isoctave && (isempty (use_silent))
+    use_silent = false;
+end
 
 if compile
     
@@ -439,12 +442,23 @@ if compile
         else
             warning_state = warning ('off', 'MATLAB:mex:GccVersion_link');
             lastwarn ('');
-            if use_silent
-                % -silent is only supported in recent versions of Mtlab
+            
+            if isempty (use_silent)
+                % Try with -silent (only supported in recent versions of Matlab)
+                try
+                    mex ('-silent', src_files{:}, include);
+                    use_silent = true;
+                catch
+                    % Try without -silent
+                    mex (src_files{:}, include);
+                    use_silent = false;
+                end
+            elseif use_silent
                 mex ('-silent', src_files{:}, include);
             else
                 mex (src_files{:}, include);
             end
+            
             [lastmsg, lastid] = lastwarn ();
             if strfind (lastid, 'GccVersion')
                 gcc_version_warning.msg = lastmsg;
