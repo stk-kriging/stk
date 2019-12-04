@@ -109,9 +109,11 @@ hold on;  plot (xi(:, 1), xi(:, 2), DOT_STYLE{:});
 
 %% ESTIMATE THE PARAMETERS OF THE COVARIANCE FUNCTION
 
+% Uncomment to use a little bit of "regularization noise":
+% model.lognoisevariance = 2 * log (1e-4);  % Noise std = 1e-4 (small)
+
 % Compute an initial guess for the parameters of the Matern covariance (param0)
-% and a reasonable log-variance for a small "regularization noise"
-[param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
+param0 = stk_param_init (model, xi, zi, BOX);
 
 % % Alternative: user-defined initial guess for the parameters of
 % % the Matern covariance (see "help stk_materncov_aniso" for more information)
