@@ -51,19 +51,19 @@ CASENUM = 1;
 
 switch CASENUM
     
-    case 1,  % the classical BRANIN-HOO test function
+    case 1  % The classical BRANIN-HOO test function
         f = @stk_testfun_braninhoo;
         DIM = 2;
         BOX = [[-5; 10], [0; 15]];
         NI = 20;
         
-    case 2,  % another test function
+    case 2  % Another test function
         f_ = inline (['exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2' ...
             '+ 3*sin(4*pi*x1)'], 'x1', 'x2');
         f  = @(x)(f_(x(:, 1), x(:, 2)));
         DIM = 2;
         BOX = [[-1; 1], [-1; 1]];
-        NI = 40;  % this second function is much harder to approximate
+        NI = 40;  % This second function is much harder to approximate.
         
 end
 
