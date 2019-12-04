@@ -1,5 +1,10 @@
 2019-12-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	01_kriging_basics/stk_example_kb03.m: Fix comment
+
+	* examples/01_kriging_basics/stk_example_kb03.m: Fix comment about
+	"numerical noise".
+
 	01_kriging_basics/stk_example_kb03.m: Source formatting
 
 	* examples/01_kriging_basics/stk_example_kb03.m: Source formatting.
