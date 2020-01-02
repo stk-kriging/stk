@@ -1,3 +1,9 @@
+2020-01-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_generate_samplepaths.m: Remove outdated comment
+
+	* utils/stk_generate_samplepaths.m: Remove outdated comment.
+
 2019-12-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	01_kriging_basics/stk_example_kb03.m: Fix comment
