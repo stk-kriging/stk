@@ -1,4 +1,4 @@
-% STK_DISTRIB_NORMAL_PDF  [STK internal]
+% STK_DISTRIB_NORMAL_PDF [STK internal]
 
 % Copyright Notice
 %

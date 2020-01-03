@@ -1,3 +1,41 @@
+2020-01-03  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_model_gpposterior/stk_model_update.m: Improve clarity
+
+	* model/@stk_model_gpposterior/stk_model_update.m: Add comments
+	and rename a variable for clarity.
+
+	@stk_model_gpposterior/stk_{set,get]_optimizable_parameters.m: Fix bug
+
+	* model/@stk_model_gpposterior/stk_get_optimizable_parameters.m:
+	Fix erroneous property name.
+	* model/@stk_model_gpposterior/stk_set_optimizable_parameters.m:
+	Idem.
+
+2020-01-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_generate_samplepaths.m: Remove outdated comment
+
+	* utils/stk_generate_samplepaths.m: Remove outdated comment.
+
+2019-12-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	01_kriging_basics/stk_example_kb03.m: Fix comment
+
+	* examples/01_kriging_basics/stk_example_kb03.m: Fix comment about
+	"numerical noise".
+
+	01_kriging_basics/stk_example_kb03.m: Source formatting
+
+	* examples/01_kriging_basics/stk_example_kb03.m: Source formatting.
+
+2019-12-03  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Make STK startup faster
+
+	* stk_init.m: Make STK startup faster using a better way of
+	checking if -silent is supported by mex.
+
 2019-10-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Polish/uniformize one-line help for deprecated functions

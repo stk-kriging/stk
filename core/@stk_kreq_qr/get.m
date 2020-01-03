@@ -1,4 +1,4 @@
-% GET  [STK internal]
+% GET [overload base function]
 %
 % CALL: value = get (kreq, propname)
 %

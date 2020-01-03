@@ -78,9 +78,6 @@
 
 function zsim = stk_generate_samplepaths (model, varargin)
 
-% Note: we know that none of the input argument is an stk_dataframe object
-%  (otherwise we would have ended up in @stk_dataframe/stk_generate_samplepaths)
-
 switch nargin
     
     case {0, 1}
@@ -119,7 +116,6 @@ end
 
 %--- Process input arguments ---------------------------------------------------
 
-% Extract row names from xt
 xt = double (xt);
 
 % Check nb_paths argument

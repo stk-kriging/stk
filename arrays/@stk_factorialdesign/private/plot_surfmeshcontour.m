@@ -1,4 +1,4 @@
-% PLOT_SURFMESHCONTOUR  [STK internal]
+% PLOT_SURFMESHCONTOUR [STK internal]
 
 % Copyright Notice
 %
