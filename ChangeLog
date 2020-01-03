@@ -1,5 +1,11 @@
 2020-01-03  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_make_matcov.m: Do not convert inputs to double
+
+	* core/stk_make_matcov.m: Do not convert inputs to double.  Each
+	particular covariance function should be able to decide what kind
+	of input it accepts.
+
 	@stk_model_gpposterior/stk_model_update.m: Improve clarity
 
 	* model/@stk_model_gpposterior/stk_model_update.m: Add comments

@@ -59,10 +59,7 @@ end
 
 %=== process input arguments
 
-x0 = double (x0);
-
 if (nargin > 2) && (~ isempty (x1))
-    x1 = double (x1);
     make_matcov_auto = false;
 else
     x1 = x0;
