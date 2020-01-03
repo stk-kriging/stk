@@ -68,7 +68,7 @@ Sigma2 = exp (param(1));
 invRho = exp (param(2));
 
 % check parameter values
-if ~ (Sigma2 > 0) || ~ (invRho > 0),
+if ~ (Sigma2 > 0) || ~ (invRho > 0)
     error ('Incorrect parameter value.');
 end
 
@@ -83,13 +83,13 @@ if isempty (x0) || isempty (y0) || isempty (param0) || ...
     x0 = x;  y0 = y;  param0 = param;  pairwise0 = pairwise;
 end
 
-if diff == -1,
+if diff == -1
     % compute the value (not a derivative)
     k = Sigma2 * stk_rbf_gauss (D, -1);
-elseif diff == 1,
+elseif diff == 1
     % diff wrt param(1) = log(Sigma2)
     k = Sigma2 * stk_rbf_gauss (D, -1);
-elseif diff == 2,
+elseif diff == 2
     % diff wrt param(3) = - log(invRho)
     k = D .* (Sigma2 * stk_rbf_gauss (D, 1));
 else

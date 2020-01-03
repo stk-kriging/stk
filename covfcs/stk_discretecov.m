@@ -54,17 +54,17 @@ function K = stk_discretecov (param, x, y, diff, pairwise)
 x = double (x);
 y = double (y);
 
-if (nargin >= 4) && (diff ~= -1),
+if (nargin >= 4) && (diff ~= -1)
     stk_error ('diff should be equal to -1', 'InvalidArgument');
 end
 
-if nargin < 5,
+if nargin < 5
     pairwise = false;
 end
 
 %--- compute covariance matrix -------------------------------------------------
 
-if ~pairwise,
+if ~pairwise
     K = param.K(x, y);
 else
     idx = sub2ind (size (param.K), x, y);

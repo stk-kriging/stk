@@ -69,7 +69,7 @@ if nargin < 5, pairwise = false; end
 
 % check size consistency
 dim = size (x, 2);
-if (size (y, 2) ~= dim),
+if (size (y, 2) ~= dim)
     stk_error ('xi and yi have incompatible sizes.', 'InvalidArgument');
 end
 
@@ -87,7 +87,7 @@ Nu     = exp (param(2));
 invRho = exp (param(3:end));
 
 % check parameter values
-if ~ (Sigma2 > 0) || ~ (Nu > 0) || ~ all (invRho >= 0),
+if ~ (Sigma2 > 0) || ~ (Nu > 0) || ~ all (invRho >= 0)
     error ('Incorrect parameter value.');
 end
 
@@ -106,23 +106,23 @@ if isempty (x0) || isempty (y0) || isempty (param0) ...
     compute_Kx_cache = true;
 end
 
-if diff == -1,
+if diff == -1
     %%% compute the value (not a derivative)
     k = Sigma2 * stk_rbf_matern (Nu, D, -1);
-elseif diff == 1,
+elseif diff == 1
     %%% diff wrt param(1) = log(Sigma2)
     k = Sigma2 * stk_rbf_matern (Nu, D, -1);
-elseif diff == 2,
+elseif diff == 2
     %%% diff wrt param(2) = log(Nu)
     k = Nu * Sigma2 * stk_rbf_matern (Nu, D, 1);
-elseif (diff >= 3) && (diff <= nb_params),
+elseif (diff >= 3) && (diff <= nb_params)
     %%% diff wrt param(diff) = - log(invRho(diff-2))
     ind = diff - 2;
     if compute_Kx_cache || isempty (Kx_cache)
         Kx_cache = 1./(D+eps) .* (Sigma2 * stk_rbf_matern (Nu, D, 2));
         compute_Kx_cache = false;
     end
-    if pairwise,
+    if pairwise
         k = (xs(:, ind) - ys(:, ind)) .^ 2 .* Kx_cache;
     else
         k = (bsxfun (@minus, xs(:, ind), ys(:, ind)')) .^ 2 .* Kx_cache;
