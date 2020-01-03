@@ -10,7 +10,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2018, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -36,6 +36,6 @@
 
 function value = stk_get_optimizable_parameters (model)
 
-value = stk_get_optimizable_parameters (model.prior);
+value = stk_get_optimizable_parameters (model.prior_model);
 
 end % function
