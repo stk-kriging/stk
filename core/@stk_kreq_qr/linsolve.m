@@ -1,4 +1,4 @@
-% LINSOLVE  [STK internal]
+% LINSOLVE [STK internal]
 %
 % CALL: w = linsolve (kreq, rs)
 %

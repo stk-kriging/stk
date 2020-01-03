@@ -1,4 +1,4 @@
-% STK_DISTRIB_NORMAL_CDF  [STK internal]
+% STK_DISTRIB_NORMAL_CDF [STK internal]
 
 % Copyright Notice
 %

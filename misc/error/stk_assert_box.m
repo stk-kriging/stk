@@ -1,4 +1,4 @@
-% STK_ASSERT_BOX  [STK internal]
+% STK_ASSERT_BOX [STK internal]
 
 % Copyright Notice
 %

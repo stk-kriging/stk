@@ -1,4 +1,4 @@
-% STK_DISTRIB_BIVNORM_CDF  [STK internal]
+% STK_DISTRIB_BIVNORM_CDF [STK internal]
 
 % Copyright Notice
 %

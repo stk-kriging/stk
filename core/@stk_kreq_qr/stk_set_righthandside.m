@@ -1,4 +1,4 @@
-% STK_SET_RIGHTHANDSIDE  [STK internal]
+% STK_SET_RIGHTHANDSIDE [STK internal]
 %
 % CALL: kreq = stk_set_righthandside (kreq, Kti, Pt)
 %

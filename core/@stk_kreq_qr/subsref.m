@@ -1,4 +1,4 @@
-% SUBSREF  [STK internal]
+% SUBSREF [overload base function]
 %
 % CALL: value = subsref (kreq, idx)
 %

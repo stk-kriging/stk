@@ -1,4 +1,4 @@
-% STK_KREQ_QR  [STK internal]
+% STK_KREQ_QR [STK internal]
 %
 % CALL: kreq = stk_kreq_qr (model, xi, xt)
 %
