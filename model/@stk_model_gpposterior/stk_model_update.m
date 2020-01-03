@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -28,6 +28,9 @@
 
 function M = stk_model_update (M, x_new, z_new, lnv_new)
 
+% FIXME: We should check in this function if prior_model.lognoisevariance
+% is an object, because if it is, things will not work properly (as it is).
+
 lnv_current = M.prior_model.lognoisevariance;
 
 if nargin < 4  % lnv not provided (homoscedastic case only)
@@ -40,7 +43,7 @@ if nargin < 4  % lnv not provided (homoscedastic case only)
             'new observations points X_NEW.']), 'NotEnoughInputArguments');
     end
     
-    heteroscedastic = false;
+    oldstyle_heteroscedastic = false;
     
 elseif ~ isempty (lnv_new)  % lnv provided (heteroscedastic case only)
     
@@ -62,13 +65,16 @@ elseif ~ isempty (lnv_new)  % lnv provided (heteroscedastic case only)
     % Make sure that lnv is a column vector
     lnv_new = lnv_new(:);
     
-    heteroscedastic = true;
+    oldstyle_heteroscedastic = true;
 end
 
 M.input_data = [M.input_data; x_new];
 M.output_data = [M.output_data; z_new];
 
-if heteroscedastic
+% In the "old style" heteroscedastic case, we have a value of the noise
+% variance provided for each observation, and thus lognoisevariance is a
+% vector whose length equals the sample size.
+if oldstyle_heteroscedastic
     M.prior_model.lognoisevariance = [lnv_current; lnv_new];
 end
 
