@@ -1,4 +1,4 @@
-% STK_CHOLCOV  [STK internal]
+% STK_CHOLCOV [STK internal]
 %
 % CALL: C = stk_cholcov (A, ...)
 %

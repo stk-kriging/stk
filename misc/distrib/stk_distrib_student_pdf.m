@@ -1,4 +1,4 @@
-% STK_DISTRIB_STUDENT_PDF  [STK internal]
+% STK_DISTRIB_STUDENT_PDF [STK internal]
 
 % Copyright Notice
 %

@@ -1,4 +1,4 @@
-% STK_SQUARED_SEMINORM  [STK internal]
+% STK_SQUARED_SEMINORM [STK internal]
 %
 % CALL: s = stk_squared_seminorm (kreq, zi)
 %
