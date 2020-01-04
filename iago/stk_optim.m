@@ -41,7 +41,8 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
+%    Copyright (C) 2015, 2020 CentraleSupelec
+%    Copyright (C) 2015 Ivana Aleksovska
 %
 %    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
 %              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -78,7 +79,7 @@ algo = stk_optim_init (f, dim, box, varargin);
 if isempty (zi) && (~ isempty (xi))
     [xi, zi, algo] = stk_optim_addevals (algo, [], [], xi);
 else
-    assert ((stk_length (xi)) == (stk_length (zi)));
+    assert (stk_get_sample_size (xi) == stk_get_sample_size (zi));
 end
 
 iter_history = struct ('x_opt', {}, 'f_opt', {});
@@ -98,8 +99,6 @@ for i = 1:N
     
     % Compute sampling criterion
     [zp, crit_xg] = algo.samplingcrit (algo, xi, zi);
-    assert ((stk_length (algo.xg0)) == (stk_length (crit_xg)));  %%%TEMP
-    assert ((stk_length (algo.xg0)) == (stk_length (zp)));       %%%TEMP
     
     % Pick a new evaluation point
     min_crit = min (crit_xg);
@@ -163,9 +162,9 @@ for i = 1:N
     % end
     
     % HISTORY: Count current number of observations
-    if size (zi, 2) == 1, % One-column representation
-        nb_obs = stk_length (zi);
-    elseif size (zi, 2) == 3,  % Three-columns representation
+    if size (zi, 2) == 1  % One-column representation
+        nb_obs = stk_get_sample_size (zi);
+    elseif size (zi, 2) == 3  % Three-columns representation
         nb_obs = sum (zi.nb_obs);
     else
         error ('Unsupported representation of evaluation results.');
@@ -320,7 +319,7 @@ if algo.dim == 1,
     xnew = algo.xg0(idx_min, :);
     xlab = 'x';
 else
-    xx = (1:(stk_length (algo.xg0)))';
+    xx = (1:(stk_get_sample_size (algo.xg0)))';
     xnew = idx_min;
     xlab = 'index';
 end
@@ -372,7 +371,7 @@ if ~ isempty (zi)
     plot(xi, zi(:, 1), MARKER1{:})
     if size (zi, 2) == 3
         nb_obs = zi.nb_obs; 
-        for i = 1:(stk_length (zi))
+        for i = 1:(stk_get_sample_size (zi))
             if nb_obs(i) > 1
                 h = text (xi(i), zi(i), sprintf ('%d', nb_obs(i)));
                 set (h, 'Color', 'k', 'FontWeight', 'bold', 'FontSize', 13);

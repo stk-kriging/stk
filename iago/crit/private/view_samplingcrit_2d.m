@@ -2,11 +2,12 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2020 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
 %              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
+%              Julien Bect       <julien.bect@supelec.fr>
 
 % Copying Permission Statement
 %
@@ -36,7 +37,7 @@ XIDOT_STYLE    = {'o', 'MarkerFaceColor', 'none', 'MarkerSize', 8, 'LineWidth', 
 NEWDOT_STYLE = {'bs', 'MarkerFaceColor', 'b', 'MarkerSize', 12};
 
 xt0 = algo.disp_xvals;
-ni = stk_length(xi);
+ni = stk_get_sample_size (xi);
 % zt0 = algo.disp_zvals;
 
 [XX, YY] = meshgrid(xt0.data(:, 1), xt0.data(:,2));

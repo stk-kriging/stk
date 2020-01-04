@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2018 CentraleSupelec
+%    Copyright (C) 2015-2018, 2020 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -70,7 +70,7 @@ end
 
 %--- Choose nb_blocks & block_size ---------------------------------------------
 
-n_obs = size (M_post.input_data, 1);
+n_obs = stk_get_sample_size (M_post);
 
 if isempty (block_size)
     MAX_RS_SIZE = 5e6;  SIZE_OF_DOUBLE = 8;  % in bytes

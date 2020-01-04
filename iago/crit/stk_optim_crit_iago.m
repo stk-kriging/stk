@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2020 CentraleSupelec
 %    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
 %
 %    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
@@ -43,10 +43,10 @@ end
 
 %% SIMULATION + INITIAL PREDICTION
 
-ni = stk_length (xi);  xi_ind = (1:ni)';
+ni = stk_get_sample_size (xi);  xi_ind = (1:ni)';
 
-xc = algo.xg0;  nc = stk_length (xc);  % candidate points
-xg = [xi; xc];  ng = ni + nc;          % evaluations points & candidate points
+xc = algo.xg0;  nc = stk_get_sample_size (xc);  % candidate points
+xg = [xi; xc];  ng = ni + nc;                   % evaluations & candidate points
 
 if algo.disp,  view_init (algo, xi, zi, xg);  end
 

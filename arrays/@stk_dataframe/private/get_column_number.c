@@ -4,6 +4,7 @@
  *                                                                           *
  * Copyright Notice                                                          *
  *                                                                           *
+ *    Copyright (C) 2020 CentraleSupélec                                     *
  *    Copyright (C) 2013 SUPELEC                                             *
  *                                                                           *
  *    Author:  Julien Bect  <julien.bect@centralesupelec.fr>                 *
@@ -33,9 +34,10 @@
 #include "string.h"
 #include "stk_mex.h"
 
-#define ICOL_INFO     -5           /* will be a -4 in the end */
-#define ICOL_ROWNAMES -4           /* will be a -3 in the end */
-#define ICOL_COLNAMES -3           /* will be a -2 in the end */
+#define ICOL_SAMPLESIZE -6         /* will be a -5 in the end */
+#define ICOL_INFO       -5         /* will be a -4 in the end */
+#define ICOL_ROWNAMES   -4         /* will be a -3 in the end */
+#define ICOL_COLNAMES   -3         /* will be a -2 in the end */
 #define ICOL_ENTIRE_DATAFRAME -2   /* will be a -1 in the end */
 
 int get_column_number(const mxArray* mxColNames, char* s)
@@ -53,6 +55,9 @@ int get_column_number(const mxArray* mxColNames, char* s)
     
     if (strcmp (s, "colnames") == 0)
         return ICOL_COLNAMES;
+    
+    if (strcmp (s, "sample_size") == 0)
+        return ICOL_SAMPLESIZE;
     
     ncol = mxGetNumberOfElements (mxColNames);
     if (ncol == 0) {

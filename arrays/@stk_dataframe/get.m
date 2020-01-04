@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2020 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -31,16 +32,19 @@ function value = get (x, propname)
 icol = get_column_number (x.colnames, propname);
 
 switch icol
-    case -4 % 'info'
+    case -5  % 'sample_size'
+        value = size (x.data, 1);
+        
+    case -4  % 'info'
         value = x.info;
         
-    case -3 % 'rownames'
+    case -3  % 'rownames'
         value = x.rownames;
         
-    case -2 % 'colnames'
+    case -2  % 'colnames'
         value = x.colnames;
         
-    case -1 % get entire array
+    case -1  % Get entire array
         value = x.data;
         
     otherwise

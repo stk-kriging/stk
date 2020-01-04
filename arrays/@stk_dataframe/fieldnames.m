@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2020 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -31,26 +31,26 @@ function fn = fieldnames (x)
 
 % Non-empty column names
 cn = x.colnames;
-cn = cn(~ cellfun (@isempty, cn));
+cn = cn(~ cellfun (@isempty, cn))';
 
 % Non-empty row names
 rn = x.rownames;
-rn = rn(~ cellfun (@isempty, rn))';
+rn = rn(~ cellfun (@isempty, rn));
 
-fn = [cn rn reserved_field_names()];
+fn = [cn; rn; reserved_field_names()];
 
 end % function
 
 
 %!test
 %! x = stk_dataframe (rand (3, 2), {'u' 'v'});
-%! s1 = sort (fieldnames (x));
-%! s2 = {'colnames' 'data' 'info' 'rownames' 'u' 'v'};
-%! assert (all (strcmp (s1, s2)));
+%! assert (isequal (sort (fieldnames (x)), ...
+%!    {'colnames'; 'data'; 'info'; 'rownames'; 'sample_size'; 'u'; 'v'}));
 
 %!test
 %! x = stk_dataframe (rand (3, 2));
 %! x.rownames(2:3) = {'aa', 'bb'};
 %! x.colnames{2} = 'toto';
 %! assert (isequal (fieldnames (x), ...
-%!    {'toto' 'aa' 'bb' 'data' 'info' 'rownames' 'colnames'}));
+%!    {'toto'; 'aa'; 'bb'; 'data'; 'info'; ...
+%!     'rownames'; 'colnames'; 'sample_size'}));

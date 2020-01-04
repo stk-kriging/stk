@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2018, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -30,7 +30,7 @@ function prior_model = stk_get_prior_model (model)
 
 % DESIGN NOTE: all model classes derived from stk_model_ are considered
 % as prior models unless they overload stk_get_prior_model, stk_get_input_data
-% stk_get_output_data and stk_get_observation_variances.
+% stk_get_output_data, stk_get_sample_size and stk_get_observation_variances.
 
 prior_model = model;
 

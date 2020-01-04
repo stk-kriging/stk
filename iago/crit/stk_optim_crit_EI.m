@@ -7,7 +7,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2020 CentraleSupelec
 %    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
 %
 %    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
@@ -47,7 +47,7 @@ end
 
 xg = algo.xg0;
 xi = xg(xi_ind, :);
-ni = stk_length(xi);
+ni = stk_get_sample_size (xi);
 
 %% INITIAL PREDICTION
 model_xg = stk_model('stk_discretecov', algo.model, xg);

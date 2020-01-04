@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -35,8 +35,8 @@ end
 
 % NOTE: we assume that there are no repetitions in (x, z)
 
-n = stk_length (x);      assert (stk_length (z) == n);
-m = stk_length (x_new);  assert (stk_length (z_new) == m);
+n = stk_get_sample_size (x);      assert (stk_get_sample_size (z) == n);
+m = stk_get_sample_size (x_new);  assert (stk_get_sample_size (z_new) == m);
 
 % Convert z to the three-column representation (mean, var, nb_obs)
 if size (z, 2) == 1

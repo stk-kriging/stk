@@ -1,11 +1,12 @@
-% FIELDNAMES [overload base function]
+% STK_GET_SAMPLE_SIZE [overload STK function]
 
 % Copyright Notice
 %
 %    Copyright (C) 2020 CentraleSupelec
-%    Copyright (C) 2016 SUPELEC
+%    Copyright (C) 2014 SUPELEC
 %
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
+%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -27,11 +28,13 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function fn = fieldnames (model)
+function n = stk_get_sample_size (x)
 
-fn = {'prior_model'; 'sample_size'; 'input_data'; 'output_data'};
-
-% Note: kreq is a 'hidden' field that might change in future versions of STK,
-% we don't want ordinary users to see it
+n = size (x.data, 1);
 
 end % function
+
+
+%!test
+%! x = stk_dataframe ([1 2; 3 4; 5 6]);
+%! assert (isequal (stk_get_sample_size (x), 3));

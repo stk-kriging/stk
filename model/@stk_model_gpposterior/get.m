@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -33,6 +33,9 @@ switch propname
     case {'prior_model', 'input_data', 'output_data', 'kreq'}
         % rem: kreq is a hidden property
         value = model.(propname);
+        
+    case 'sample_size'
+        value = size (model.input_data, 1);
         
     otherwise
         if ~ ischar (propname)

@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2020 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -28,6 +29,6 @@
 
 function c = reserved_field_names ()
 
-c = {'data', 'info', 'rownames', 'colnames'};
+c = {'data'; 'info'; 'rownames'; 'colnames'; 'sample_size'};
 
 end % function
