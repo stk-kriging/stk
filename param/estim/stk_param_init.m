@@ -32,7 +32,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018, 2020 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -163,7 +163,7 @@ if isfield (model, 'dim') && ~ isequal (dim, model.dim)
     stk_error (errmsg, 'IncorrectSize');
 end
 
-if ~ isequal (size (zi), [size(xi, 1) 1])
+if ~ isequal (size (zi), [stk_get_sample_size(xi) 1])
     errmsg = 'zi should be a column, with the same number of rows as xi.';
     stk_error (errmsg, 'IncorrectSize');
 end

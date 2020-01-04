@@ -2,9 +2,9 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017 CentraleSupelec
+%    Copyright (C) 2015-2017, 2020 CentraleSupelec
 %
-%    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -46,19 +46,16 @@ else
     str_prior_model = ['<' stk_sprintf_sizetype(model.prior_model) '>'];
 end
 
-if size (model.input_data, 1) == 0
+if stk_get_sample_size (model) == 0
     str_input_data = '--';
-else
-    str_input_data = ['<' stk_sprintf_sizetype(model.input_data) '>'];
-end
-
-if size (model.output_data, 1) == 0
     str_output_data = '--';
 else
+    str_input_data = ['<' stk_sprintf_sizetype(model.input_data) '>'];
     str_output_data = ['<' stk_sprintf_sizetype(model.output_data) '>'];
 end
 
 fprintf ('|        prior_model: %s\n', str_prior_model);
+fprintf ('|        sample_size: %d\n', stk_get_sample_size (model));
 fprintf ('|         input_data: %s\n', str_input_data);
 fprintf ('|        output_data: %s\n', str_output_data);
 

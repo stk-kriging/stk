@@ -4,7 +4,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2017 CentraleSupelec
+%    Copyright (C) 2016, 2017, 2020 CentraleSupelec
 %    Copyright (C) 2016 EDF R&D
 %
 %    Authors:  Tom Assouline, Florent Autret & Stefano Duhamel (for EDF R&D)
@@ -45,7 +45,7 @@ if nargin < 3
     if stk_isnoisy (crit.model)
         
         if isa (crit.point_batch_size, 'function_handle')
-            n = stk_length (get (crit.model, 'input_data'));
+            n = stk_get_sample_size (crit.model);
             pbs = feval (crit.point_batch_size, x, n);
         else
             pbs = crit.point_batch_size;

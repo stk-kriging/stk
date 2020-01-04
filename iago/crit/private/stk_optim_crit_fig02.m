@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2020 CentraleSupelec
 %
 %    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
 %              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -33,11 +33,11 @@ function stk_optim_crit_fig02 (algo, x, p)
 figure (algo.disp_fignum_base + algo.disp_fignum_critshift + 2);
 
 % x-axis: actual x-values in 1D, indices otherwise
-if algo.dim == 1,
+if algo.dim == 1
     x = double (x);
     xlab = 'x';
 else
-    x = (1:(stk_length (x)))';
+    x = (1:(stk_get_sample_size (x)))';
     xlab = 'index';
 end
 

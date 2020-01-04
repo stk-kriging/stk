@@ -2,7 +2,8 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
+%    Copyright (C) 2015, 2020 CentraleSupelec
+%    Copyright (C) 2015 Ivana Aleksovska
 %
 %    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
 %              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -66,7 +67,7 @@ options = {'samplingcritname', 'CEM'};  % (IAGO algorithm)
 % options = {'samplingcritname', 'IID', ...
 %     'samplingcrit', @(algo, x_obs, z_obs)(deal ( ...
 %     stk_predict_withrep (algo.model, x_obs, z_obs, algo.xg0), ...
-%     ones (stk_length (algo.xg0), 1)))};
+%     ones (stk_get_sample_size (algo.xg0), 1)))};
 
 % Homoscedastic noise, known noise variance
 options = [options {'noisevariance', NOISEVARIANCE}];

@@ -1,3 +1,55 @@
+2020-01-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Use `sample_size` property
+
+	* iago/crit/private/stk_optim_crit_fig02.m: Use `sample_size` property.
+	* iago/crit/private/view_samplingcrit_2d.m: Idem.
+	* iago/crit/stk_optim_crit_EI.m: Idem.
+	* iago/crit/stk_optim_crit_SUR.m: Idem.
+	* iago/crit/stk_optim_crit_iago.m: Idem.
+	* iago/rep/stk_gather_repetitions.m: Idem.
+	* iago/stk_optim.m: Idem.
+	* iago/stk_optimscript2.m: Idem.
+	* iago/utils/stk_optim_init.m: Idem.
+	* param/estim/stk_param_estim.m: Idem.
+	* param/estim/stk_param_init.m: Idem.
+	* param/estim/stk_param_init_lnv.m: Idem.
+	* sampling/@stk_sampcrit_eqi/feval.m: Idem.
+	* model/@stk_model_gpposterior/stk_model_update.m: Idem.
+	* model/@stk_model_gpposterior/stk_predict.m: Idem.
+	* model/@stk_model_gpposterior/stk_predict_leaveoneout_direct.m: Idem.
+
+	Add `sample_size` property to models
+
+	* model/@stk_model_gpposterior/fieldnames.m: Add `sample_size` to
+	the list of field names.  Fix output orientation for consistency
+	with the base function.
+	* model/@stk_model_gpposterior/get.m: Implement `sample_size`
+	property.
+	* model/@stk_model_gpposterior/disp.m: Display `sample_size`
+	property.
+	* model/@stk_model_gpposterior/stk_get_sample_size.m: Fast getter.
+	* model/@stk_model_/stk_get_prior_model.m: Update design note.
+	* model/@stk_model_/stk_get_input_data.m: Idem.
+	* model/@stk_model_/stk_get_observation_variances.m: Idem.
+	* model/@stk_model_/stk_get_output_data.m: Idem.
+	* admin/octpkg/INDEX: Update index.
+
+	Add `sample_size` property to arrays
+
+	* arrays/@stk_dataframe/private/reserved_field_names.m: Add
+	`sample_size` to the list of field names. Return a column.
+	* arrays/@stk_dataframe/get.m: Implement `sample_size` property.
+	* arrays/@stk_dataframe/private/get_column_number.c: Idem.
+	* arrays/@stk_dataframe/stk_get_sample_size.m: Fast getter.
+	* arrays/generic/stk_get_sample_size.m: Idem for generic arrays.
+	* arrays/@stk_dataframe/fieldnames.m: Fix output orientation for
+	consistency with the base function.  Fix unit test.
+	* arrays/@stk_factorialdesign/fieldnames.m: Idem.
+	* arrays/@stk_dataframe/stk_length.m: Deprecate.
+	* arrays/generic/stk_length.m: Deprecate.
+	* admin/octpkg/INDEX: Update index.
+
 2020-01-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	admin/octpkg/patches: Update patches

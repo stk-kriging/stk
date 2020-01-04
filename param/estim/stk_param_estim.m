@@ -36,7 +36,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2018 CentraleSupelec
+%    Copyright (C) 2015-2018, 2020 CentraleSupelec
 %    Copyright (C) 2017 LNE
 %    Copyright (C) 2014 A. Ravisankar
 %    Copyright (C) 2011-2014 SUPELEC
@@ -85,7 +85,7 @@ end
 
 % Size checking: xi, zi
 zi_data = double (zi);
-if ~ isequal (size (zi_data), [stk_length(xi) 1])
+if ~ isequal (size (zi_data), [stk_get_sample_size(xi) 1])
     errmsg = 'zi should be a column, with the same number of rows as xi.';
     stk_error (errmsg, 'IncorrectSize');
 end

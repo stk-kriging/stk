@@ -17,7 +17,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2018, 2020 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -45,7 +45,7 @@
 function lnv = stk_param_init_lnv (model, xi, zi)
 
 % size checking: xi, zi
-if ~ isequal (size (zi), [size(xi, 1) 1])
+if ~ isequal (size (zi), [stk_get_sample_size(xi) 1])
     errmsg = 'zi should be a column, with the same number of rows as xi.';
     stk_error (errmsg, 'IncorrectSize');
 end

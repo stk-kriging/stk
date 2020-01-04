@@ -47,7 +47,7 @@ if nargin < 4  % lnv not provided (homoscedastic case only)
     
 elseif ~ isempty (lnv_new)  % lnv provided (heteroscedastic case only)
     
-    if (size (M.input_data, 1) ~= 1) && (isscalar (lnv_current))
+    if (stk_get_sample_size (M) ~= 1) && (isscalar (lnv_current))
         if lnv_current == -inf
             s1 = 'a noiseless';
             s2 = 'noiseless';

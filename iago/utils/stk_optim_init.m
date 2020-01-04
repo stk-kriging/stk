@@ -6,7 +6,8 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
+%    Copyright (C) 2015, 2020 CentraleSupelec
+%    Copyright (C) Ivana Aleksovska
 %
 %    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
 %              Emmanuel Vazquez  <emmanuel.vazquez@supelec.fr>
@@ -189,7 +190,7 @@ algo.stoprule               = logical (algo.stoprule);
 %% CANDIDATE POINTS
 if ~isempty(algo.searchgrid_xvals)
     algo.xg0 = algo.searchgrid_xvals;
-    algo.searchgrid_size = stk_length(algo.xg0);
+    algo.searchgrid_size = stk_get_sample_size (algo.xg0);
 else
     algo.xg0 = stk_sampling_maximinlhs(algo.searchgrid_size, algo.dim, algo.box, 100);
     if dim == 1

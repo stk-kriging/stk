@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2020 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -30,13 +30,14 @@
 function fn = fieldnames (x)
 
 fn = fieldnames (x.stk_dataframe);
-fn = [{'levels' 'stk_dataframe'} fn];
+fn = [{'levels'; 'stk_dataframe'}; fn];
 
 end % function
+
 
 %!test
 %! x = stk_factorialdesign ({0:1, 3:5}, {'u' 'v'});
 %! fn1 = sort (fieldnames (x));
-%! fn2 = {'colnames', 'data', 'info', 'levels', ...
-%!        'rownames', 'stk_dataframe', 'u', 'v'};
+%! fn2 = {'colnames'; 'data'; 'info'; 'levels'; ...
+%!        'rownames'; 'sample_size'; 'stk_dataframe'; 'u'; 'v'};
 %! assert (isequal (fn1, fn2));

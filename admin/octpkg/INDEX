@@ -89,6 +89,7 @@ Parameter estimation
 #@stk_model_/stk_get_input_data             [overload STK]
 #@stk_model_/stk_get_output_data            [overload STK]
 #@stk_model_/stk_get_prior_model            [overload STK]
+#@stk_model_/stk_get_sample_size            [overload STK]
 #@stk_model_/stk_get_observation_variances  [overload STK]
 #@stk_model_/cat                            [overload base]
 #@stk_model_/disp                           [overload base]
@@ -130,6 +131,7 @@ Posterior model objects
 #@stk_model_gpposterior/stk_get_input_data                    [overload STK]
 #@stk_model_gpposterior/stk_get_output_data                   [overload STK]
 #@stk_model_gpposterior/stk_get_prior_model                   [overload STK]
+#@stk_model_gpposterior/stk_get_sample_size                   [overload STK]
 #@stk_model_gpposterior/stk_make_kreq                         [internal]
 #@stk_model_gpposterior/stk_predict_leaveoneout_direct        [internal]
 #@stk_model_gpposterior/disp                                  [overload base]
@@ -317,19 +319,20 @@ Examples: test functions, datasets, etc.
 #stk_distrib_bivnorm_cdf     [internal]
 
 ## A first step towards supporting more than nomal priors...
-#stk_distrib_logpdf       [internal]
-#stk_distrib_logpdf_grad  [internal]
+#stk_distrib_logpdf          [internal]
+#stk_distrib_logpdf_grad     [internal]
 
 Miscellaneous: arrays
  stk_boundingbox
  stk_feval
- stk_length
+ stk_get_sample_size
  stk_normalize
  stk_rescale
  @stk_dataframe/stk_dataframe
  @stk_factorialdesign/stk_factorialdesign
  @stk_factorialdesign/ndgrid
  @stk_hrect/stk_hrect
+#stk_length                  [deprecated]
 
 Miscellaneous: Pareto optimality
  stk_dominatedhv
@@ -349,7 +352,8 @@ Miscellaneous: validation of models
 
 #@stk_dataframe/stk_boundingbox           [overload STK]
 #@stk_dataframe/stk_conditioning          [overload STK]
-#@stk_dataframe/stk_length                [overload STK]
+#@stk_dataframe/stk_get_sample_size       [overload STK]
+#@stk_dataframe/stk_length                [deprecated]
 #@stk_dataframe/stk_normalize             [overload STK]
 #@stk_dataframe/stk_rescale               [overload STK]
 #@stk_dataframe/apply                     [internal]

@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016-2018 CentraleSupelec
+%    Copyright (C) 2016-2018, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect      <julien.bect@centralesupelec.fr>
 %             Stefano Duhamel  <stefano.duhamel@supelec.fr>
@@ -32,7 +32,7 @@ function [LOO_pred, LOO_res] = stk_predict_leaveoneout_direct (M_post)
 % Heteroscedatic noise ?
 heteroscedastic = ~ isscalar (M_post.prior_model.lognoisevariance);
 
-n = size (M_post.input_data, 1);
+n = stk_get_sample_size (M_post);
 zp_mean = zeros (n, 1);
 zp_var = zeros (n, 1);
 
