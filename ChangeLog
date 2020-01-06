@@ -1,3 +1,10 @@
+2020-01-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	admin/octpkg/patches: Update patches
+
+	* admin/octpkg/patches/remove-buildmex.patch: Update patch.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Update patch.
+
 2020-01-03  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_make_matcov.m: Do not convert inputs to double
