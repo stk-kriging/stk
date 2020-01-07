@@ -1,4 +1,4 @@
-% STK_PREDICT [overload STK function]
+% STK_PREDICT_ [STK internal]
 
 % Copyright Notice
 %
@@ -28,7 +28,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [zp, lambda, mu, K] = stk_predict (M_post, xt)
+function [zp, lambda, mu, K] = stk_predict_ (M_post, xt)
 
 % TODO: these should become options
 block_size = [];

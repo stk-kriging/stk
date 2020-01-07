@@ -1,5 +1,21 @@
 2020-01-08  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Re-organise prediction code
+
+	* core/stk_predict.m: Now reduced to a simple gateway that
+	processes all possible calling syntaxes and then delegates to
+	`stk_predict` for the actual computations, for all types of
+	models.  The shorter calling syntax is now documented.
+	* model/@stk_model_/stk_predict_.m: New function, that simply
+	raises an error message.  Derived classes must implement it.
+	* model/@stk_model_gpposterior/stk_predict.m: Renamed from.
+	* model/@stk_model_gpposterior/stk_predict_.m: Renamed to.
+	* model/prior_struct/stk_predict_.m: New function, which computes
+	a trivial prediction for prior models.
+	* model/noise/@stk_gaussiannoise_/stk_predict_.m: New function,
+	which computes a trivial prediction for noise models.
+	* admin/octpkg/INDEX: Update index.
+
 	@stk_gaussiannoise_het0/stk_variance_eval.m: Fix empty x case
 
 	* model/noise/@stk_gaussiannoise_het0/stk_variance_eval.m: Return
