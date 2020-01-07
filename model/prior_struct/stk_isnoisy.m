@@ -1,4 +1,4 @@
-% STK_ISNOISY returns false for noiseless models
+% STK_ISNOISY returns false for noiseless models, true otherwise
 %
 % CALL: ISNOISY = stk_isnoisy (MODEL)
 %
@@ -11,8 +11,8 @@
 %       optional),
 %
 %     * MODEL.lognoisevariance is equal to -inf  (this is the default for a
-%       model created by stk_model and the currently recommended way for
-%       declaring a noiseless model),
+%       model created by stk_model and the currently recommended way to declare
+%       a noiseless model),
 %
 %     * MODEL.lognoisevariance is a vector of -inf  (heteroscedastic case with
 %       all variances set to zero).
@@ -28,7 +28,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016-2018 CentraleSupelec
+%    Copyright (C) 2016-2018, 2020 CentraleSupelec
 %    Copyright (C) 2017-2018 LNE
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>

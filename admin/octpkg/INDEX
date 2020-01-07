@@ -62,7 +62,6 @@ Core STK functions
  stk_conditioning
  stk_generate_samplepaths
  stk_simulate_noise
- stk_isnoisy
 #stk_ortho_func              [deprecated]
 #stk_cholcov                 [internal]
 #stk_model_fixlm             [internal]
@@ -106,6 +105,7 @@ Get/set model properties
  stk_get_output_data
  stk_get_prior_model
  stk_get_observation_variances
+ stk_isnoisy
 #@struct/get_input_data                        [deprecated]
 #@struct/get_output_data                       [deprecated]
 #@struct/get_prior_model                       [deprecated]
