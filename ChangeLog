@@ -1,5 +1,10 @@
 2020-01-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Minor changes relative to `stk_isnoisy`.
+
+	* admin/octpkg/INDEX: Classify as model property getter.
+	* model/prior_struct/stk_isnoisy.m: Polish help text.
+
 	Use `sample_size` property
 
 	* iago/crit/private/stk_optim_crit_fig02.m: Use `sample_size` property.
