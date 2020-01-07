@@ -1,4 +1,4 @@
-# Changes in version 2.7.0 (?)
+# Changes in version 2.8.0 (?)
 
 ## LOO-related stuff (ready for release ?)
 
@@ -11,6 +11,23 @@
 * `stk_example_misc06`: New example.
 
 -----
+
+
+# Changes in version 2.7.0
+
+## Arrays
+
+* `@stk_model_gpposterior/stk_{set,get}_optimizable_parameters.m`: Fix
+  a bug (erroneous property name).
+
+## Miscellaneous
+
+* `stk_init.m`: Make STK startup faster.
+
+* Internal: source formatting, comments, etc.
+
+-----
+
 
 # Changes in version 2.6.1
 

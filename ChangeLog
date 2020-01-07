@@ -18,7 +18,7 @@
 	* model/@stk_model_gpposterior/stk_model_update.m: Add comments
 	and rename a variable for clarity.
 
-	@stk_model_gpposterior/stk_{set,get]_optimizable_parameters.m: Fix bug
+	@stk_model_gpposterior/stk_{set,get}_optimizable_parameters.m: Fix bug
 
 	* model/@stk_model_gpposterior/stk_get_optimizable_parameters.m:
 	Fix erroneous property name.
