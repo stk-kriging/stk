@@ -1,11 +1,20 @@
-% STK_PREDICT performs a kriging prediction from data
+% STK_PREDICT performs a kriging prediction
 %
+% CALL: ZP = stk_predict (MODEL, XP)
 % CALL: ZP = stk_predict (MODEL, XI, ZI, XP)
 %
-%    performs a kriging prediction at the points XP, given the observations
-%    (XI, ZI) and the prior MODEL. The input arguments XI, ZI, and XP can be
-%    either numerical matrices or dataframes. More precisely, on a factor space
-%    of dimension DIM,
+%    performs a kriging prediction at the points XP, given the MODEL and,
+%    if available, the data (XI, ZI).
+%
+%    The MODEL argument can be either a prior model structure (as provided
+%    by stk_model) or a model object (for instance, a posterior model
+%    represented by an stk_model_gpposterior object).  If MODEL is already
+%    a posterior object and some additional data (XI, ZI) is provided, the
+%    model is first updated with the data before the prediction is actually
+%    carried out.
+%
+%    The input arguments XI, ZI, and XP can be either numerical matrices or
+%    dataframes. More precisely, on an input space of dimension DIM,
 %
 %     * XI must have size NI x DIM,
 %     * ZI must have size NI x 1,
@@ -14,8 +23,8 @@
 %    where NI is the number of observations and NP the number of prediction
 %    points. The output ZP is a dataframe of size NP x 2, with:
 %
-%     * the kriging predictor in the first column (ZP.mean), and
-%     * the kriging variance in the second column (ZP.var).
+%     * the prediction mean in the first column (ZP.mean), and
+%     * the prediction variance in the second column (ZP.var).
 %
 %    From a Bayesian point of view, ZP.mean and ZP.var are respectively the
 %    posterior mean and variance of the Gaussian process prior MODEL given the
@@ -23,12 +32,12 @@
 %    (posterior) variance of the latent Gaussian process, not the variance of a
 %    future noisy observation at location XP.
 %
-% CALL: [ZP, LAMBDA, MU] = stk_predict (MODEL, XI, ZI, XP)
+% CALL: [ZP, LAMBDA, MU] = stk_predict (MODEL, ...)
 %
 %    also returns the matrix of kriging weights LAMBDA and the matrix of
 %    Lagrange multipliers MU.
 %
-% CALL: [ZP, LAMBDA, MU, K] = stk_predict (MODEL, XI, ZI, XP)
+% CALL: [ZP, LAMBDA, MU, K] = stk_predict (MODEL, ...)
 %
 %    also returns the posterior covariance matrix K at the locations XP (this is
 %    an NP x NP covariance matrix). From a frequentist point of view, K can be
@@ -42,7 +51,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018, 2020 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -68,12 +77,31 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function varargout = stk_predict (M_prior, x_obs, z_obs, x_prd)
+function varargout = stk_predict (model, varargin)
 
-M_post = stk_model_gpposterior (M_prior, x_obs, z_obs);
+% Support for several syntaxes
+switch nargin
+    
+    case {0, 1}
+        stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+        
+    case 2  % CALL: [...] = stk_predict (MODEL, X_PRD)
+        x_prd = varargin{1};
+        
+    case 3  % CALL: [...] = stk_predict (MODEL, DATA, X_PRD)
+        stk_error ('This syntax is not implemented yet.', 'NotImplemented');
+        model = stk_model_gpposterior (model, varargin{1});
+        x_prd = varargin{2};
+        
+    case 4  % CALL: [...] = stk_predict (MODEL, X_OBS, Z_OBS, X_PRD)
+        model = stk_model_gpposterior (model, varargin{1}, varargin{2});
+        x_prd = varargin{3};
+         
+        
+end % switch
 
 varargout = cell (1, max (1, nargout));
-[varargout{:}] = stk_predict (M_post, x_prd);
+[varargout{:}] = stk_predict_ (model, x_prd);
 
 end % function
 
@@ -98,8 +126,8 @@ end % function
 
 %!error y_prd1 = stk_predict ();
 %!error y_prd1 = stk_predict (model);
-%!error y_prd1 = stk_predict (model, x_obs);
-%!error y_prd1 = stk_predict (model, x_obs, z_obs);
+%!test  y_prd1 = stk_predict (model, x_prd);
+%!error y_prd1 = stk_predict (model, data, x_prd);
 %!test  y_prd1 = stk_predict (model, x_obs, z_obs, x_prd);
 %!error y_prd1 = stk_predict (model, [x_obs; x_obs], [z_obs; z_obs], x_prd);
 

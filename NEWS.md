@@ -15,6 +15,22 @@
 
 # Changes in version 2.7.0
 
+## Prediction
+
+* `stk_predict.m` now officially supports a shorter calling syntax:
+
+        [zp, ...] = skt_predict (model, x_prd)
+
+  that can be used either to compute predictions from any type of
+  model (proper prior model structures, posterior model object,
+  (experimental) noise model objects, etc.).
+
+* `@stk_model_gpposterior/stk_predict.m`: no longer exists.  The base
+  `stk_predict` function now provides the recommended interface for
+  all possible types of models, and then dispatches to the (new)
+  internal function `stk_predict_` to do the actual computations (but
+  do not rely on it directly, since this is an internal function).
+
 ## Arrays
 
 * `stk_dataframe` arrays now possess a `sample_size` property, which
