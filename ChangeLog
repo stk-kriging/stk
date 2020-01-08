@@ -1,5 +1,10 @@
 2020-01-08  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_gaussiannoise_het0/stk_variance_eval.m: Fix empty x case
+
+	* model/noise/@stk_gaussiannoise_het0/stk_variance_eval.m: Return
+	the correct output when x is empty.
+
 	stk_gaussiannoise_het0.m: Provide a default constructor
 
 	* model/noise/@stk_gaussiannoise_het0/stk_gaussiannoise_het0.m:

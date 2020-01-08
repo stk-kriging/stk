@@ -27,7 +27,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2018, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -60,7 +60,12 @@ switch diff
     case {-1, 1}
         % -1 means "no derivative"
         % +1 means "derivative wrt log_dispersion"
-        v = exp (gn.log_dispersion) * feval (gn.variance_function, double (x));
+        if isempty (x)
+            v = zeros (0, 1);
+        else
+            v = exp (gn.log_dispersion) ...
+                * feval (gn.variance_function, double (x));
+        end
     otherwise
         stk_error ('diff should be either -1 or +1', 'IncorrectArgument');
 end

@@ -29,7 +29,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2018, 2019 CentraleSupelec
+%    Copyright (C) 2018-2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
