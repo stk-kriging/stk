@@ -57,6 +57,10 @@ function gn = stk_gaussiannoise_het0 (variance_function, dispersion)
 
 if (nargin < 2) || (isempty (dispersion))
     log_dispersion = nan;  % must be estimated
+    
+    if nargin == 0
+        variance_function = @(x) 1.0;
+    end
 else
     log_dispersion = log (dispersion);
 end

@@ -1,3 +1,10 @@
+2020-01-08  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_gaussiannoise_het0.m: Provide a default constructor
+
+	* model/noise/@stk_gaussiannoise_het0/stk_gaussiannoise_het0.m:
+	Provide a default constructor.
+
 2020-01-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Minor changes relative to `stk_isnoisy`.
