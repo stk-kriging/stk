@@ -1,3 +1,11 @@
+2020-02-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim_optim.m: Generate a warning instead of an error
+
+	* param/estim/stk_param_estim_optim.m: Generate a warning instead
+	of an error when the optimization algorithms returns a points that
+	is not better than the starting point.
+
 2020-01-08  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Re-organise prediction code
