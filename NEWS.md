@@ -46,6 +46,12 @@
 * `@stk_model_gpposterior/stk_{set,get}_optimizable_parameters.m`: Fix
   a bug (erroneous property name).
 
+## Sequential design of experiments
+
+* `@stk_sampcrit_akg/set.m`: Remove replicated input points when the AKG
+  reference grid is construted using Scott's original method (i.e., taking
+  past observations points plus the candidate point).
+
 ## Miscellaneous
 
 * `stk_init.m`: Make STK startup faster.
