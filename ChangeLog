@@ -1,3 +1,11 @@
+2020-02-19  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_sampcrit_akg/set.m: Remove replicated input points in xr
+
+	* sampling/@stk_sampcrit_akg/set.m: Remove replicated input points
+	when the AKG reference grid is construted using Scott's original
+	method.
+
 2020-02-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_estim_optim.m: Generate a warning instead of an error

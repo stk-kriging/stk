@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -62,7 +62,7 @@ if isempty (crit.model)
 else
     
     if isempty (crit.reference_grid)
-        crit.xr = stk_get_input_data (crit.model);
+        crit.xr = unique (stk_get_input_data (crit.model), 'rows');
     else
         crit.xr = crit.reference_grid;
     end
