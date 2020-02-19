@@ -1,5 +1,11 @@
 2020-02-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_example_doe05.m: Make it possible to use the exact KG
+
+	* examples/02_design_of_experiments/stk_example_doe05.m: Make it
+	possible to use the exact KG criterion instead of Scott's
+	approximation (previously, only the latter was proposed).
+
 	@stk_sampcrit_akg/set.m: Remove replicated input points in xr
 
 	* sampling/@stk_sampcrit_akg/set.m: Remove replicated input points

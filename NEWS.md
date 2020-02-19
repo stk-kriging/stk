@@ -52,6 +52,12 @@
   reference grid is construted using Scott's original method (i.e., taking
   past observations points plus the candidate point).
 
+## Examples
+
+* `stk_example_doe05.m`: Make it possible to use the exact KG criterion
+  instead of Scott's approximation (previously, only the latter was
+  proposed).
+
 ## Miscellaneous
 
 * `stk_init.m`: Make STK startup faster.

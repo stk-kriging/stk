@@ -11,7 +11,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017 CentraleSupelec
+%    Copyright (C) 2015-2017, 2020 CentraleSupelec
 %    Copyright (C) 2016 EDF R&D
 %    Copyright (C) 2013, 2014 SUPELEC
 %
@@ -83,7 +83,14 @@ switch SAMPCRIT_NAME
         POINT_BATCH_SIZE = @(x, n) BUDGET - n;
         sampcrit = stk_sampcrit_eqi ([], QUANTILE_ORDER, POINT_BATCH_SIZE);
     case 'AKG'
+        % Use the "approximate KG" criterion, with Scott's original method
+        % for the construction of the reference grid (i.e., taking past
+        % observations points plus the candidate point as the reference grid). 
         sampcrit = stk_sampcrit_akg ();
+    case 'KG'
+        % Use the "exact KG" criterion, with can be obtained by taking the
+        % reference grid equal to the entire input grid
+        sampcrit = stk_sampcrit_akg ([], xg);
 end
 
 
