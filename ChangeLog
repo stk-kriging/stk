@@ -1,5 +1,11 @@
 2020-02-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Remove deprecated CG#12 marks
+
+	* examples/02_design_of_experiments/stk_example_doe03.m: Remove
+	deprecated CG#12 mark.
+	* examples/02_design_of_experiments/stk_example_doe05.m: Idem.
+
 	stk_example_doe05.m: Fix figure title
 
 	* examples/02_design_of_experiments/stk_example_doe05.m: Fix
