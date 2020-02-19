@@ -38,8 +38,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-stk_disp_examplewelcome;
-stk_figure ('stk_example_eqi_test');
+stk_disp_examplewelcome;  stk_figure ('stk_example_doe05');
 
 
 %% Problem definition
