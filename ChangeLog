@@ -1,5 +1,11 @@
 2020-02-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_example_doe05.m: Fix final display
+
+	* examples/02_design_of_experiments/stk_example_doe05.m: Fix the
+	final display for the case where the algorithm stops prematurely,
+	and add a warning too.
+
 	stk_example_doe05.m: Make it possible to use the exact KG
 
 	* examples/02_design_of_experiments/stk_example_doe05.m: Make it
