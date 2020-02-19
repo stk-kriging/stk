@@ -159,7 +159,8 @@ for iter = 1:(BUDGET - N0)
         plot (xg, crit_val);  xlim (BOX);  ylabel (SAMPCRIT_NAME);
     end
     
-    if all (crit_val == 0),  break,  end
+    % Stop if the criterion becomes equal to zero everywhere
+    if all (crit_val == 0),  break;  end
     
     % Pick the point where the EQI is maximum as our next evaluation point
     [crit_max, i_max] = max (crit_val);
@@ -184,8 +185,14 @@ end
 % Display the final DoE
 data = stk_dataframe ([x z], {'x', 'z'});  disp (data);
 
+% Premature stopping ?
+if iter < (BUDGET - N0)
+    warning ('The algorithm stopped prematurely.');
+    iter = iter - 1;
+end
+
 % Total number of evaluations ?
-fprintf ('\nNumber of evaluations: %d + %d = %d.\n\n', N0, BUDGET - N0, BUDGET);
+fprintf ('\nNumber of evaluations: %d + %d = %d.\n\n', N0, iter, N0 + iter);
 
 
 %#ok<*AGROW>
