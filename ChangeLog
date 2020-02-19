@@ -1,6 +1,9 @@
 2020-02-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
-	stk_example_doe05.m: Fix final display
+	stk_example_doe05.m: Fix figure title
+
+	* examples/02_design_of_experiments/stk_example_doe05.m: Fix
+	figure title to reflect the actual name of the example.
 
 	* examples/02_design_of_experiments/stk_example_doe05.m: Fix the
 	final display for the case where the algorithm stops prematurely,
