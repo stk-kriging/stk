@@ -1,5 +1,9 @@
 2020-02-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_example_doe05.m: Fix comments
+
+	* examples/02_design_of_experiments/stk_example_doe05.m: Fix comments.
+
 	stk_example_doe05.m: Various minor improvements
 
 	* examples/02_design_of_experiments/stk_example_doe05.m: Various
