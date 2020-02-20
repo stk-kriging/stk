@@ -74,7 +74,7 @@ BUDGET = 100;           % Total evaluation budget
 REESTIM_PERIOD = 10;    % How often should we re-estimate the cov parameters ?
 SAMPCRIT_NAME = 'AKG';  % Choose a particular sampling criterion
 
-% Note: the two criteria proposed here compute an "expected improvement" of
+% Note: the three criteria proposed here compute an "expected improvement" of
 % some kind.  As such, they return positive values, and must be maximized.
 
 switch SAMPCRIT_NAME
@@ -146,7 +146,7 @@ for iter = 1:(BUDGET - N0)
     % Instanciate sampling criterion object with model
     sampcrit.model = model;
     
-    % Compute the EQI criterion on the grid
+    % Compute the sampling criterion on the grid
     [crit_val, z_pred] = sampcrit (xg);
     
     if mod (iter, PLOT_PERIOD) == 1
@@ -166,7 +166,8 @@ for iter = 1:(BUDGET - N0)
     % Stop if the criterion becomes equal to zero everywhere
     if all (crit_val == 0),  break;  end
     
-    % Pick the point where the EQI is maximum as our next evaluation point
+    % Pick the point where the sampling criterion is maximum
+    % as our next evaluation point
     [crit_max, i_max] = max (crit_val);
     x_new = xg(i_max, :);
     
