@@ -46,7 +46,8 @@ stk_disp_examplewelcome;  stk_figure ('stk_example_doe05');
 % The goal is to find the minimum of f on the domain BOX.
 
 % 1D test function
-f = @(x)(x .* sin (x));            % Define a 1D test function
+f = @(x)(x .* sin (x));            % Define a 1D test function...
+% f = @(x)((x - 6) .^ 2)           % ...or another one?
 DIM = 1;                           % Dimension of the factor space
 BOX = stk_hrect ([0; 12], {'x'});  % Factor space (hyper-rectangle object)
 
@@ -84,7 +85,7 @@ switch SAMPCRIT_NAME
     case 'AKG'
         % Use the "approximate KG" criterion, with Scott's original method
         % for the construction of the reference grid (i.e., taking past
-        % observations points plus the candidate point as the reference grid). 
+        % observations points plus the candidate point as the reference grid).
         sampcrit = stk_sampcrit_akg ();
     case 'KG'
         % Use the "exact KG" criterion, with can be obtained by taking the
@@ -149,13 +150,17 @@ for iter = 1:(BUDGET - N0)
     [crit_val, z_pred] = sampcrit (xg);
     
     if mod (iter, PLOT_PERIOD) == 1
+        
         % Figure: upper panel
         stk_subplot (2, 1, 1);  cla;
         stk_plot1d ([],[], xg, zg, z_pred);
         hold on;  plot (x, z, 'k.');
+        title (sprintf ('n = %d + %d = %d.\n\n', N0, iter - 1, N0 + iter - 1));
+        
         % Figure: lower panel
         stk_subplot (2, 1, 2);  cla;
         plot (xg, crit_val);  xlim (BOX);  ylabel (SAMPCRIT_NAME);
+        
     end
     
     % Stop if the criterion becomes equal to zero everywhere
