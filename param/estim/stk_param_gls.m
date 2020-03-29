@@ -26,7 +26,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016, 2021 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2021, 2022 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2011-2013 SUPELEC
 %
@@ -54,15 +54,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [beta, sigma2, L] = stk_param_gls (model, xi, zi)
+function [beta, sigma2, L] = stk_param_gls (model, varargin)
 
-n = size (xi, 1);
+data = stk_process_data_arg (0, varargin{:});
 
 % Build the covariance matrix and the design matrix
-[K, P] = stk_make_matcov (model, xi);
+[K, P] = stk_make_matcov (model, data);
 
 % Cast zi into a double-precision array
-zi = double (zi);
+zi = double (stk_get_output_data (data));
 
 % Compute the Generalized Least Squares (GLS) estimate
 L = stk_cholcov (K, 'lower');
@@ -75,6 +75,7 @@ if nargin > 1
     % "best" unbiased estimate of sigma2 (best wrt the quadratic risk, among
     % all unbiased estimates which are quadratic in the residuals)
     r = length (beta);
+    n = stk_get_sample_size (data);
     sigma2 = 1 / (n - r) * sum ((u - W * beta) .^ 2);
 end
 

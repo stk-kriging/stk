@@ -1,15 +1,22 @@
-% STK_GET_INTPUT_DATA returns the input data of a model
+% STK_GET_INPUT_DATA returns the input data of a model or stk_iodata object
 %
 % CALL: INPUT_DATA = stk_get_input_data (MODEL)
 %
 %    returns the INPUT_DATA of the MODEL (which is empty if MODEL is
 %    a prior model).
 %
+% CALL: INPUT_DATA = stk_get_input_data (DATA)
+%
+%    returns the INPUT_DATA of the stk_iodata object DATA.
+%
+% Note: for a posterior model, the input data of the model object coincides
+% with the input data of the underlying stk_iodata object.
+%
 % See also: stk_get_output_data, stk_get_prior_model
 
 % Copyright Notice
 %
-%    Copyright (C) 2017, 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 

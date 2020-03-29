@@ -58,14 +58,11 @@ end
 
 %--- Prepare the output arguments ----------------------------------------------
 
+zp_a = nan (nt, 1);
 zp_v = zeros (nt, 1);
-compute_prediction = ~ isempty (M_post.output_data);
 
-% compute the kriging prediction, or just the variances ?
-if compute_prediction
-    zp_a = zeros (nt, 1);
-else
-    zp_a = nan (nt, 1);
+if M_post.compute_predictions
+    zi = double (stk_get_output_data (M_post.data));
 end
 
 %--- Choose nb_blocks & block_size ---------------------------------------------
@@ -112,8 +109,8 @@ for block_num = 1:nb_blocks
     kreq = stk_make_kreq (M_post, xt_);
     
     % compute the kriging mean
-    if compute_prediction
-        zp_a(idx) = (get (kreq, 'lambda'))' * (double (M_post.output_data));
+    if M_post.compute_predictions
+        zp_a(idx) = (get (kreq, 'lambda'))' * zi;
     end
     
     % The full lambda_mu matrix is only needed when nargout > 1
@@ -151,13 +148,12 @@ if ~ stk_isnoisy (M_prior)
     
     % FIXME: Fix the kreq object instead ?
     
-    xi = double (M_post.input_data);
-    zi = double (M_post.output_data);
+    xi = double (stk_get_input_data (M_post.data));
     
     [b, loc] = ismember (xt, xi, 'rows');
     if sum (b) > 0
         
-        if compute_prediction
+        if M_post.compute_predictions
             zp_a(b) = zi(loc(b));
         end
         

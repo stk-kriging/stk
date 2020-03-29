@@ -111,9 +111,10 @@ z0 = z0 + sqrt (NOISE_VARIANCE) * randn (size (z0));
 %% Specification of the model (Gaussian process prior)
 
 model0 = stk_model (@stk_materncov52_iso);
+model0.lognoisevariance = nan;
 
-% Assume that the variance of the observation noise is known
-model0.lognoisevariance = log (NOISE_VARIANCE);
+% Remark: replace `nan` with `log (NOISE_VARIANCE)` in the previous line
+% if you want to assume that the variance of the noise is known
 
 % Add a prior on covariance parameters (log (sigma^2), log (1/rho))
 model0.prior.mean = log ([1.0; 1/4.0]);
@@ -127,20 +128,23 @@ model0.prior.invcov = diag (1 ./ [+inf log(2)^2]);
 % Plot only once in a while
 PLOT_PERIOD = 5;
 
-% Start from the initial design
-x = x0;
-z = z0;
+% Gather repetitions (makes it possible to let iter -> infinity)
+REP_MODE = 'gather';  % Try 'ignore' instead if you want to slow things down...
 
-for iter = 1:(BUDGET - N0)
+% Initial data
+x = x0;  z = z0;  data = stk_iodata (x0, z0, 'rep_mode', REP_MODE);
+
+for iter = 1:(BUDGET - N0 + 1)
     
     if mod (iter, REESTIM_PERIOD) == 1
-        % Create posterior model object from scratch
+        % Construct a posterior model object from scratch
         % (covariance function parameters estimated by marginal MAP)
-        model = stk_model_gpposterior (model0, x, z);
+        model = stk_model_gpposterior (model0, data);
     else
-        % Update posterior model object
-        % (covariance function parameters not re-estimated)
-        model = stk_model_update (model, x_new, z_new);
+        % Construct a new posterior model object
+        % but keep previous ovariance function parameters (not re-estimated)
+        model0_ = stk_get_prior_model (model);
+        model = stk_model_gpposterior (model0_, data);
     end
     
     % Instanciate sampling criterion object with model
@@ -150,12 +154,14 @@ for iter = 1:(BUDGET - N0)
     [crit_val, z_pred] = sampcrit (xg);
     
     if mod (iter, PLOT_PERIOD) == 1
-        
+               
         % Figure: upper panel
         stk_subplot (2, 1, 1);  cla;
         stk_plot1d ([],[], xg, zg, z_pred);
-        hold on;  plot (x, z, 'k.');
-        title (sprintf ('n = %d + %d = %d.\n\n', N0, iter - 1, N0 + iter - 1));
+        hold on;  plot (x, z, 'ro', 'MarkerFaceColor', 'y', 'MarkerSize', 3);
+        title (sprintf ('n = %d + %d = %d  //  noise std = %.3f', ...
+            N0, iter - 1, N0 + iter - 1, ...
+            exp (0.5 * model.prior_model.lognoisevariance)));
         
         % Figure: lower panel
         stk_subplot (2, 1, 2);  cla;
@@ -164,7 +170,8 @@ for iter = 1:(BUDGET - N0)
     end
     
     % Stop if the criterion becomes equal to zero everywhere
-    if all (crit_val == 0),  break;  end
+    % or if the budget has been spent
+    if all (crit_val == 0) || (N0 + iter > BUDGET),  break;  end
     
     % Pick the point where the sampling criterion is maximum
     % as our next evaluation point
@@ -179,21 +186,23 @@ for iter = 1:(BUDGET - N0)
         hold on;  plot (x_new, crit_max, 'ro', 'MarkerFaceColor', 'y');
     end
     
-    % Add the new evaluation to the DoE
-    x = [x; x_new];
-    z = [z; z_new];
+    % Add the new evaluation to the dataset
+    x = [x; x_new];  z = [z; z_new];  data = stk_update (data, x_new, z_new);
     
-    drawnow; % pause
+    drawnow;  % pause
     
 end
 
-% Display the final DoE
-data = stk_dataframe ([x z], {'x', 'z'});  disp (data);
+iter = iter - 1;
+
+% Display the final dataset
+tab = stk_iodata (x, z, 'rep_mode', 'gather');
+disp (stk_dataframe ([data.input_data, data.output_data, data.output_nrep], ...
+    {'x', 'z_mean', 'n_rep'}));
 
 % Premature stopping ?
-if iter < (BUDGET - N0)
+if N0 + iter < BUDGET
     warning ('The algorithm stopped prematurely.');
-    iter = iter - 1;
 end
 
 % Total number of evaluations ?

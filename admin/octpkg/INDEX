@@ -90,7 +90,9 @@ Simulations
 #@stk_model_/stk_predict_                   [internal]
 #@stk_model_/stk_covmat_noise               [overload STK]
 #@stk_model_/stk_get_input_data             [overload STK]
+#@stk_model_/stk_get_input_dim              [overload STK]
 #@stk_model_/stk_get_output_data            [overload STK]
+#@stk_model_/stk_get_output_dim              [overload STK]
 #@stk_model_/stk_get_prior_model            [overload STK]
 #@stk_model_/stk_get_sample_size            [overload STK]
 #@stk_model_/stk_get_observation_variances  [overload STK]
@@ -106,7 +108,9 @@ Simulations
 
 Get/set model properties
  stk_get_input_data
+ stk_get_input_dim
  stk_get_output_data
+ stk_get_output_dim
  stk_get_prior_model
  stk_get_observation_variances
  stk_isnoisy
@@ -114,18 +118,40 @@ Get/set model properties
 #stk_get_optimizable_model_parameters          [internal]
 #stk_get_optimizable_noise_parameters          [internal]
 
+Input/output data: the @stk_iodata class
+ @stk_iodata/stk_iodata
+ @stk_iodata/stk_get_input_data
+ @stk_iodata/stk_get_input_dim
+ @stk_iodata/stk_get_output_data
+ @stk_iodata/stk_get_output_dim
+ @stk_iodata/stk_get_output_nrep
+ @stk_iodata/stk_get_output_var
+ @stk_iodata/stk_get_sample_size
+ @stk_iodata/stk_normalize_input_data
+ @stk_iodata/stk_normalize_output_data
+ @stk_iodata/stk_update
+#@stk_iodata/stk_warn_about_constant_response  [internal]
+#@stk_iodata/stk_assert_no_duplicates          [overload STK]
+#@stk_iodata/stk_sprintf_sizetype              [overload STK]
+#@stk_iodata/disp                              [overload base]
+#@stk_iodata/display                           [overload base]
+#@stk_iodata/get                               [overload base]
+#@stk_iodata/set                               [overload base]
+#@stk_iodata/subsasgn                          [overload base]
+#@stk_iodata/subsref                           [overload base]
+
 Posterior model objects
  @stk_model_gpposterior/stk_model_gpposterior
  @stk_model_gpposterior/stk_predict_leaveoneout
  @stk_model_gpposterior/stk_model_update
 #@stk_model_gpposterior/stk_covmat_noise                      [overload STK]
 #@stk_model_gpposterior/stk_isnoisy                           [overload STK]
-#@stk_model_gpposterior/stk_generate_samplepaths              [overload STK]
 #@stk_model_gpposterior/stk_get_observation_variances         [overload STK]
 #@stk_model_gpposterior/stk_get_optimizable_parameters        [overload STK]
 #@stk_model_gpposterior/stk_set_optimizable_parameters        [overload STK]
 #@stk_model_gpposterior/stk_get_optimizable_noise_parameters  [overload STK]
 #@stk_model_gpposterior/stk_get_input_data                    [overload STK]
+#@stk_model_gpposterior/stk_get_input_dim                     [overload STK]
 #@stk_model_gpposterior/stk_get_output_data                   [overload STK]
 #@stk_model_gpposterior/stk_get_prior_model                   [overload STK]
 #@stk_model_gpposterior/stk_get_sample_size                   [overload STK]
@@ -549,6 +575,7 @@ Miscellaneous: unit tests
 #stk_test_class              [internal]
 #stk_test_dfbinaryop         [internal]
 #stk_test_critgrad           [internal]
+#stk_process_data_arg        [internal]
 
 ## misc/text
 #stk_disp_examplewelcome         [internal]
@@ -589,3 +616,7 @@ Miscellaneous: unit tests
 #stk_param_estim_withrep         [experimental]
 #stk_predict_withrep             [experimental]
 #stk_quadrature                  [experimental]
+
+## TEMP (iodata branch)
+#essai_stk_iodata
+#likelihood_challenge

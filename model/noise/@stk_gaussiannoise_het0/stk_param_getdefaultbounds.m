@@ -26,15 +26,19 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [lb, ub] = stk_param_getdefaultbounds (gn0, xi, zi)
+function [lb, ub] = stk_param_getdefaultbounds (gn0, varargin)
 
-v = feval (gn0.variance_function, xi);
+data = stk_process_data_arg (0, varargin{:});
+
+v = feval (gn0.variance_function, stk_get_input_data (data));
 
 b = (v > 0);
 if ~ any (b)
     stk_error (['The variance function is zero at all ' ...
         'observed locations'], 'VarianceFunctionNowherePositive');
 end
+
+error ('NOT FINISHED');
 
 % Keep only the noisy observations
 u = zi(b);

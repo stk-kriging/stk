@@ -30,10 +30,16 @@ function value = get (model, propname)
 
 switch propname
     
-    case {'prior_model', 'input_data', 'output_data', 'kreq'}
+    case {'prior_model', 'data', 'kreq'}
         % rem: kreq is a hidden property
         value = model.(propname);
-        
+
+    case 'input_data'
+        value = stk_get_input_data (model.data);
+
+    case 'output_data'
+        value = stk_get_output_data (model.data);
+
     case 'sample_size'
         value = size (model.input_data, 1);
         

@@ -32,7 +32,10 @@ function [LOO_pred, LOO_res] = stk_predict_leaveoneout_direct (M_post)
 % Heteroscedatic noise ?
 heteroscedastic = ~ isscalar (M_post.prior_model.lognoisevariance);
 
-n = stk_get_sample_size (M_post);
+x_obs = stk_get_input_data (M_post.data);
+z_obs = stk_get_output_data (M_post.data);
+
+n = stk_get_sample_size (x_obs);
 zp_mean = zeros (n, 1);
 zp_var = zeros (n, 1);
 
@@ -40,8 +43,8 @@ prior_model = M_post.prior_model;
 
 for i = 1:n
     
-    xx = M_post.input_data;   xx(i, :) = [];  xt = M_post.input_data(i, :);
-    zz = M_post.output_data;  zz(i, :) = [];
+    xx = x_obs;  xx(i, :) = [];  xt = x_obs(i, :);
+    zz = z_obs;  zz(i, :) = [];
     
     % In the heteroscedastic case, the vector of log-variances for the
     % noise is stored in prior_model.lognoisevariance.  This vector must be
@@ -65,7 +68,7 @@ LOO_pred = stk_dataframe ([zp_mean zp_var], {'mean', 'var'});
 if nargout ~= 1
     
     % Compute "raw" residuals
-    raw_res = M_post.output_data - zp_mean;
+    raw_res = z_obs - zp_mean;
     
     % Compute normalized residual
     noisevariance = stk_get_observation_variances (M_post);
@@ -80,10 +83,12 @@ end
 if nargout == 0
     
     % Plot predictions VS observations (left planel)...
-    stk_subplot (1, 2, 1);  stk_plot_predvsobs (M_post.output_data, LOO_pred);
+    stk_subplot (1, 2, 1);
+    stk_plot_predvsobs (z_obs, LOO_pred);
     
     % ...and normalized residuals (right panel)
-    stk_subplot (1, 2, 2);   stk_plot_histnormres (LOO_res.norm_res);
+    stk_subplot (1, 2, 2);
+    stk_plot_histnormres (LOO_res.norm_res);
     
 end
 

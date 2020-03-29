@@ -112,7 +112,7 @@ end % function
 %#ok<*CTCH,*LERR>
 
 
-function [param, lnv] = stk_param_init_ (model, xi, zi, box, do_estim_lnv)
+function [param, lnv] = stk_param_init_ (model, varargin)
 
 % Used by stk_model
 if nargin < 2
@@ -154,33 +154,37 @@ if nargin < 2
     return
 end
 
+[data, varargin] = stk_process_data_arg (2, varargin{:});
+
 
 %--- check dimensions ----------------------------------------------------------
 
-dim = size (xi, 2);
-if isfield (model, 'dim') && ~ isequal (dim, model.dim)
-    errmsg = 'model.dim and size (xi, 2) should be equal.';
-    stk_error (errmsg, 'IncorrectSize');
-end
-
-if ~ isequal (size (zi), [stk_get_sample_size(xi) 1])
-    errmsg = 'zi should be a column, with the same number of rows as xi.';
+dim = stk_get_input_dim (data);
+if isfield (model, 'dim') && ~ isequal (model.dim, dim)
+    errmsg = 'model.dim should match data.input_dim.';
     stk_error (errmsg, 'IncorrectSize');
 end
 
 
-%--- first, default values for arguments 'box' and 'noisy' ---------------------
+%--- first, default values for arguments 'box' and 'do_estim_lnv' --------------
 
-if nargin < 4
-    box = [];
-end
-
-if ~ isa (box, 'stk_hrect')
-    if isempty (box)
-        box = stk_boundingbox (xi);  % Default: bounding box
+if isa (varargin{1}, 'stk_hrect')
+    box = varargin{1};
+else
+    if isempty (varargin{1})
+        % Default: bounding box
+        box = stk_boundingbox (stk_get_input_data (data));
     else
-        box = stk_hrect (box);
+        box = stk_hrect (varargin{1});
     end
+end
+
+missing_do_estim_lnv = isempty (varargin{2});
+if missing_do_estim_lnv
+    do_estim_lnv = false;
+else
+    do_estim_lnv = logical (varargin{2});
+    assert (isscalar (do_estim_lnv));
 end
 
 
@@ -189,7 +193,7 @@ end
 % Missing lognoisevariance field
 if ~ isfield (model, 'lognoisevariance')
     
-    if (nargin < 5) || (~ do_estim_lnv)
+    if ~ do_estim_lnv
         % Assume a noiseless model
         model.lognoisevariance = - inf;
     else
@@ -197,7 +201,7 @@ if ~ isfield (model, 'lognoisevariance')
         model.lognoisevariance = nan;
     end
     
-elseif isequal (model.lognoisevariance, -inf) && ((nargin >= 5) && do_estim_lnv)
+elseif isequal (model.lognoisevariance, -inf) && do_estim_lnv
     
     % In this special case, we are flexible and consider -inf as a particular
     % value of the variance in an homoscedastic noise model.
@@ -224,12 +228,12 @@ if isempty (lnv_)
     do_estim_lnv = false;
     
     if stk_isnoisy (model)
-        lnv = log (stk_covmat_noise (model, xi, [], -1, true));
+        lnv = log (stk_covmat_noise (model, data, [], -1, true));
     else
         lnv = -inf;
     end
     
-elseif nargin < 5
+elseif missing_do_estim_lnv
     
     % When do_estim_lnv is not set by the user, we set it to true if some
     % of the parameters are NaNs, which is interpreted as "Estimate me !"
@@ -294,7 +298,7 @@ switch model.covariance_type
             'stk_materncov52_aniso', 'stk_gausscov_aniso', 'stk_sphcov_aniso'}
         covname_iso = [model.covariance_type(1:end-5) 'iso'];
         model0 = stk_model (covname_iso, dim);
-        xi = stk_normalize (xi, box);
+        data = stk_normalize_input_data (data, box);
         bbox = [];
         
     case 'stk_materncov_iso'
@@ -311,7 +315,7 @@ switch model.covariance_type
         model0.covariance_type = @(param, x, y, diff, pairwise) ...
             stk_materncov_iso ([param(1) log(nu) param(2)], x, y, diff, pairwise);
         model0.param(2) = [];
-        xi = stk_normalize (xi, box);
+        data = stk_normalize_input_data (data, box);
         bbox = [];
         
     otherwise
@@ -320,7 +324,7 @@ switch model.covariance_type
 end
 
 model0.lognoisevariance = lnv;
-[param, lnv] = paraminit_ (model0, xi, zi, bbox);
+[param, lnv] = paraminit_ (model0, data, bbox);
 
 % Back to a full vector of covariance parameters
 switch model.covariance_type
@@ -344,12 +348,10 @@ end
 end % function
 
 
-function [param, lnv] = paraminit_ (model, xi, zi, box)
+function [param, lnv] = paraminit_ (model, data, box)
 
 % Check for special case: constant response
-if (std (double (zi)) == 0)
-    warning ('STK:stk_param_init:ConstantResponse', ...
-        'Parameter estimation is impossible with constant-response data.');
+if stk_warn_about_constant_response (data)
     param = [0 0];
     if any (isnan (model.lognoisevariance))
         lnv = 0.0;
@@ -362,7 +364,7 @@ end
 % List of possible values for the range parameter
 if isempty (box)
     % assume box = repmat([0; 1], 1, dim)
-    box_diameter = sqrt (size (xi, 2));
+    box_diameter = sqrt (stk_get_input_dim (data));
 else
     box_diameter = sqrt (sum (diff (box) .^ 2));
 end
@@ -372,7 +374,7 @@ rho_list = logspace (log10 (rho_min), log10 (rho_max), 5);
 
 other_params = - log (rho_list');
 
-[param, lnv] = stk_param_init_remlgls (model, xi, zi, other_params);
+[param, lnv] = stk_param_init_remlgls (model, data, other_params);
 
 end % function
 

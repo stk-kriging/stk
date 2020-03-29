@@ -46,18 +46,15 @@ else
     str_prior_model = ['<' stk_sprintf_sizetype(model.prior_model) '>'];
 end
 
-if stk_get_sample_size (model) == 0
-    str_input_data = '--';
-    str_output_data = '--';
+if isempty (model.data)
+    str_data = '--';
 else
-    str_input_data = ['<' stk_sprintf_sizetype(model.input_data) '>'];
-    str_output_data = ['<' stk_sprintf_sizetype(model.output_data) '>'];
+    str_data = ['<' stk_sprintf_sizetype(model.data) '>'];
 end
 
 fprintf ('|        prior_model: %s\n', str_prior_model);
 fprintf ('|        sample_size: %d\n', stk_get_sample_size (model));
-fprintf ('|         input_data: %s\n', str_input_data);
-fprintf ('|        output_data: %s\n', str_output_data);
+fprintf ('|               data: %s\n', str_data);
 
 if loose_spacing
     fprintf ('|\n\n');

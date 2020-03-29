@@ -1,12 +1,12 @@
 % STK_KREQ_QR [STK internal]
 %
-% CALL: kreq = stk_kreq_qr (model, xi, xt)
+% CALL: KREQ = stk_kreq_qr (MODEL, DATA, X_PRED)
 %
 %    constructs an stk_kreq_qr object.
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2017 CentraleSupelec
+%    Copyright (C) 2016, 2017, 2020 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -31,7 +31,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function kreq = stk_kreq_qr (model, xi, xt)
+function kreq = stk_kreq_qr (model, data, x_pred)
 
 if nargin == 0
     
@@ -40,7 +40,7 @@ if nargin == 0
     
 else
     
-    [Kii, Pi] = stk_make_matcov (model, xi);
+    [Kii, Pi] = stk_make_matcov (model, data);
     [n, r] = size (Pi);
     
     % heuristics: scale Pi to (try to) avoid conditioning issues later
@@ -56,7 +56,7 @@ else
     % Check for duplicated rows if R is close to singular
     u = abs (diag (R));
     if (~ stk_isnoisy (model)) && (min (u) < eps * max (u))
-        stk_assert_no_duplicates (xi);
+        stk_assert_no_duplicates (data);
     end
     
     kreq = struct ('n', n, 'r', r, 'P_scaling', P_scaling, ...
@@ -68,7 +68,7 @@ kreq = class (kreq, 'stk_kreq_qr');
 
 % prepare the right-hand side of the kriging equation
 if nargin > 2
-    [Kti, Pt] = stk_make_matcov (model, xt, xi);
+    [Kti, Pt] = stk_make_matcov (model, x_pred, data);
     kreq = stk_set_righthandside (kreq, Kti, Pt);
 end
 

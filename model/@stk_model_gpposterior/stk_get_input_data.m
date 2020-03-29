@@ -1,8 +1,10 @@
-% STK_GET_INTPUT_DATA returns the input data of the model
+% @STK_MODEL_GPPOSTERIOR/STK_GET_INPUT_DATA [overload STK function]
+%
+% See also: stk_get_input_data
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -28,6 +30,6 @@
 
 function input_data = stk_get_input_data (model)
 
-input_data = model.input_data;
+input_data = stk_get_input_data (model.data);
 
 end % function

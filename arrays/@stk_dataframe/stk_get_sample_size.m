@@ -1,4 +1,6 @@
 % STK_GET_SAMPLE_SIZE [overload STK function]
+%
+% See also: stk_get_sample_size
 
 % Copyright Notice
 %

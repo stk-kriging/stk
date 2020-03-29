@@ -1,4 +1,6 @@
 % STK_GET_SAMPLE_SIZE [overload STK function]
+%
+% See also: stk_get_sample_size
 
 % Copyright Notice
 %
@@ -28,6 +30,6 @@
 
 function n = stk_get_sample_size (model)
 
-n = size (model.input_data, 1);
+n = stk_get_sample_size (model.data);
 
 end % function

@@ -1,4 +1,6 @@
-% STK_GET_INTPUT_DATA [overload STK function]
+% @STK_MODEL_/STK_GET_INPUT_DATA [overload STK function]
+%
+% See also: stk_get_input_data
 
 % Copyright Notice
 %

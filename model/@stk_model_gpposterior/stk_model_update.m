@@ -62,23 +62,19 @@ elseif ~ isempty (lnv_new)  % lnv provided (heteroscedastic case only)
             'Z_NEW).'], s1, s2), 'NotEnoughInputArguments');
     end
     
-    % Make sure that lnv is a column vector
-    lnv_new = lnv_new(:);
-    
     oldstyle_heteroscedastic = true;
 end
 
-M.input_data = [M.input_data; x_new];
-M.output_data = [M.output_data; z_new];
+M.data = stk_update (M.data, x_new, z_new);
 
 % In the "old style" heteroscedastic case, we have a value of the noise
 % variance provided for each observation, and thus lognoisevariance is a
 % vector whose length equals the sample size.
 if oldstyle_heteroscedastic
-    M.prior_model.lognoisevariance = [lnv_current; lnv_new];
+    M.prior_model.lognoisevariance = [lnv_current; lnv_new(:)];
 end
 
-M.kreq = stk_kreq_qr (M.prior_model, M.input_data);
+M.kreq = stk_kreq_qr (M.prior_model, M.data);
 
 end % function
 

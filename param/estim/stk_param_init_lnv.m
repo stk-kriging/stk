@@ -42,20 +42,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function lnv = stk_param_init_lnv (model, xi, zi)
+function lnv = stk_param_init_lnv (model, varargin)
 
-% size checking: xi, zi
-if ~ isequal (size (zi), [stk_get_sample_size(xi) 1])
-    errmsg = 'zi should be a column, with the same number of rows as xi.';
-    stk_error (errmsg, 'IncorrectSize');
-end
+data = stk_process_data_arg (0, varargin{:});
 
-% Warn about special case: constant response
-if (std (double (zi)) == 0)
-    warning ('STK:stk_param_estim_lnv:ConstantResponse', ['Constant- ' ...
-        'response data: the output of stk_param_estim_lnv is likely ' ...
-        'to be unreliable.']);
-end
+stk_warn_about_constant_response (data);
 
 % backward compatibility: missing lognoisevariance field
 if ~ isfield (model, 'lognoisevariance')
@@ -70,7 +61,7 @@ end
 
 % EXPERIMENTAL support for noise model objects
 if ~ isnumeric (model.lognoisevariance)
-    lnv = stk_param_init_lnv_ (model.lognoisevariance, model, xi, zi);
+    lnv = stk_param_init_lnv_ (model.lognoisevariance, model, data);
     return
 end
 
@@ -86,7 +77,7 @@ aLL_best = +inf;
 % Try all values from log_eta_list
 for log_eta = log_eta_list
     model.lognoisevariance = model.param(1) + log_eta;
-    aLL = stk_param_relik (model, xi, zi);
+    aLL = stk_param_relik (model, data);
     if (~ isnan (aLL)) && (aLL < aLL_best)
         log_eta_best = log_eta;
         aLL_best    = aLL;

@@ -21,14 +21,14 @@
 %    generates NB_PATHS sample paths at once.  In this case, the output argument
 %    ZSIM has size NS x NB_PATHS.
 %
-% CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT)
+% NOTE: Conditional simulations
 %
-%    generates one sample path ZSIM, using the kriging model MODEL and the
-%    evaluation points XT, conditional on the evaluations (XI, ZI).
+%    This functions generates "conditional simulations" if MODEL is a
+%    posterior model object.  In order to simulate conditional sample paths
+%    from a prior model object MODEL and data (XI, ZI), use:
 %
-% CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT, NB_PATHS)
-%
-%    generates NB_PATHS conditional sample paths at once.
+%    MODEL = stk_model_update (MODEL, XI, ZI);
+%    SIM = stk_generate_samplepaths (MODEL, ...);
 %
 % NOTE: Sample size limitation
 %
@@ -50,7 +50,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2018, 2021 CentraleSupelec
+%    Copyright (C) 2015-2018, 2021, 2022 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -78,64 +78,59 @@
 
 function zsim = stk_generate_samplepaths (model, varargin)
 
-switch nargin
+if nargin < 2
+    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
     
-    case {0, 1}
-        stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
-        
-    case 2
-        % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT)
-        xt = varargin{1};
-        nb_paths = 1;
-        conditional = false;
-        
-    case 3
-        % CALL: ZSIM = stk_generate_samplepaths (MODEL, XT, NB_PATHS)
-        xt = varargin{1};
-        nb_paths = varargin{2};
-        conditional = false;
-        
-    case 4
-        % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT)
-        xi = varargin{1};
-        zi = varargin{2};
-        xt = varargin{3};
-        nb_paths = 1;
-        conditional = true;
-        
-    otherwise
-        % CALL: ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT, NB_PATHS)
-        xi = varargin{1};
-        zi = varargin{2};
-        xt = varargin{3};
-        nb_paths = varargin{4};
-        conditional = true;
-        
+elseif nargin > 3
+    % One of the following (deprecated) syntaxes:
+    %    ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT)
+    %    ZSIM = stk_generate_samplepaths (MODEL, XI, ZI, XT, NB_PATHS)
+    
+    model = stk_model_update (model, varargin{1}, varargin{2});
+    varargin(1:2) = [];
+    
 end
 
+zsim = stk_generate_samplepaths_ (model, varargin{:});
+
+end
+
+
+function zsim = stk_generate_samplepaths_ (model, xt, nb_paths)
 
 %--- Process input arguments ---------------------------------------------------
 
 xt = double (xt);
 
 % Check nb_paths argument
-nb_paths = double (nb_paths);
-if ~ isscalar (nb_paths) || ~ (nb_paths > 0)
-    stk_error ('nb_paths must be a positive scalar', 'Invalid argument');
+if nargin < 3
+    nb_paths = 1;
+else
+    nb_paths = double (nb_paths);
+    if ~ isscalar (nb_paths) || ~ (nb_paths > 0)
+        stk_error ('nb_paths must be a positive scalar', 'Invalid argument');
+    end
 end
 
 
 %--- Extend xt with the observation points, if needed --------------------------
 
+n = stk_get_sample_size (model);
+conditional = (n > 0);
+
 if conditional
     
-    % Keep only numerical data for xi, zi
-    xi = double (xi);
-    zi = double (zi);
+    data = model.data;  % FIXME: Write/use a getter instead
+    M_prior = stk_get_prior_model (model);
     
     % Conditioning by kriging => we must simulate on the observation points too
+    xi = double (stk_get_input_data (data));
     xt = [xi; xt];
-    xi_ind = 1:(size (xi, 1));
+    xi_ind = 1:n;
+    
+else
+    
+    M_prior = model;
     
 end
 
@@ -154,9 +149,9 @@ duplicates_detected = (size (xt_unique, 1) < size (xt, 1));
 % (even if there no duplicates, it is not guaranteed
 %  that xt_unique and xt are equal)
 if duplicates_detected
-    K = stk_make_matcov (model, xt_unique, xt_unique);
+    K = stk_make_matcov (M_prior, xt_unique, xt_unique);
 else
-    K = stk_make_matcov (model, xt, xt);
+    K = stk_make_matcov (M_prior, xt, xt);
 end
 
 % Cholesky factorization of the covariance matrix
@@ -173,18 +168,21 @@ if duplicates_detected,  zsim = zsim(j, :);  end
 
 if conditional
     
-    % Carry out the kriging prediction at points xt
-    [~, lambda] = stk_predict (model, xi, zi, xt);
+    % Compute the kriging weights at points xt
+    [~, lambda] = stk_predict (model, xt);
     
-    if ~ stk_isnoisy (model)
+    % Extract observations
+    zi = double (stk_get_output_data (data));
+    
+    if ~ stk_isnoisy (M_prior)
         
         % Simulate sample paths conditioned on noiseless observations
         zsim = stk_conditioning (lambda, zi, zsim, xi_ind);
         
     else % Noisy case
-                
+        
         % Simulate noise values
-        noise_sim = stk_simulate_noise (model, xi, nb_paths);
+        noise_sim = stk_simulate_noise (M_prior, data, nb_paths);
         
         % Simulate sample paths conditioned on noisy observations
         zsim = stk_conditioning (lambda, zi, zsim, xi_ind, noise_sim);

@@ -15,7 +15,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018, 2020 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -41,16 +41,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [C, covparam_diff, noiseparam_diff] = stk_param_relik (model, xi, zi)
+function [C, covparam_diff, noiseparam_diff] = stk_param_relik (model, varargin)
 
-zi = double (zi);
-
-% Check the size of zi
-n = size (xi, 1);
-if ~ isequal (size (zi), [n 1])
-    stk_error (['zi must be a column vector, with the same' ...
-        'same number of rows as x_obs.'], 'IncorrectSize');
-end
+data = stk_process_data_arg (0, varargin{:});
 
 % Parameters of the covariance function
 covparam = stk_get_optimizable_parameters (model.param);
@@ -69,15 +62,17 @@ end
 
 %% Compute the (opposite of) the restricted log-likelihood
 
-[K, P] = stk_make_matcov (model, xi);
+[K, P] = stk_make_matcov (model, data);
 q = size (P, 2);
 simple_kriging = (q == 0);
 
 % Choleski factorization: K = U' * U, with upper-triangular U
 [U, epsi] = stk_cholcov (K);
 if (~ isnoisy) && (epsi > 0)
-    stk_assert_no_duplicates (xi);
+    stk_assert_no_duplicates (data);
 end
+
+n = stk_get_sample_size (data);
 
 if ~ simple_kriging
     
@@ -105,6 +100,7 @@ end
 ldetWKW = 2 * sum (log (diag (U)));
 
 % Compute (W' yi)' * G^(-1) * (W' yi) as v' * v, with v = U' \ (W' * yi)
+zi = double (stk_get_output_data (data));
 if simple_kriging
     yyi = zi;
 else
@@ -114,6 +110,26 @@ v = linsolve (U, yyi, struct ('UT', true, 'TRANSA', true));
 attache = sum (v .^ 2);
 
 C = 0.5 * ((n - q) * log(2 * pi) + ldetWKW + attache);
+
+% Correction for repetitions (if needed)
+nrep = stk_get_output_nrep (data);
+if ~ isempty (nrep)
+    
+    % FIXME: too bad, we cannot rely on stk_get_observation_variances here,
+    %   since model is a priori model struct at this point... to be fixed later.
+    
+    % Get 'equivalent' noise variance (i.e., already divided by nrep)
+    noise_var = stk_covmat_noise (model, data, [], -1, true);
+    
+    empirical_var = stk_get_output_var (data);
+    
+    temp_cfrep = empirical_var ./ noise_var;
+    corrections_for_repetitions = ...
+        (nrep - 1) * log (2 * pi) + nrep .* log (nrep) ...
+        + (nrep - 1) .* log (noise_var) + temp_cfrep;
+    
+    C = C + 0.5 * sum (corrections_for_repetitions);
+end
 
 
 %% Add priors
@@ -156,6 +172,7 @@ if nargout >= 2
     z = H * zi;
     
     for diff = 1:covparam_size
+        xi = stk_get_input_data (data);
         V = feval (model.covariance_type, model.param, xi, xi, diff);
         covparam_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
     end
@@ -171,9 +188,19 @@ if nargout >= 2
         else
             noiseparam_diff = zeros (noiseparam_size, 1);
             for diff = 1:noiseparam_size
-                V = stk_covmat_noise (model, xi, [], diff);
+                
+                % FIXME: Leverage the fact that V is a diagonal matrix ?
+                V = stk_covmat_noise (model, data, [], diff);
                 noiseparam_diff(diff) = 1/2 * (sum (sum (H .* V)) - z' * V * z);
+                
+                % Correction for repetitions (if needed)
+                if ~ isempty (nrep)
+                    noiseparam_diff(diff) = noiseparam_diff(diff) ...
+                        + 0.5 * sum ((nrep - 1 - temp_cfrep) ...
+                                     .* (diag (V)) ./ noise_var);
+                end
             end
+            
             if NOISEPRIOR
                 noiseparam_diff = noiseparam_diff ...
                     - stk_distrib_logpdf_grad (model.noiseprior, noiseparam);
@@ -203,7 +230,7 @@ end % function
 
 %!error [C, dC1, dC2] = stk_param_relik ();
 %!error [C, dC1, dC2] = stk_param_relik (model);
-%!error [C, dC1, dC2] = stk_param_relik (model, xi);
+%!test  [C, dC1, dC2] = stk_param_relik (model, stk_iodata (xi, zi));
 %!test  [C, dC1, dC2] = stk_param_relik (model, xi, zi);
 
 %!test

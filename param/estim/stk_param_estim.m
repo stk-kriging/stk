@@ -66,35 +66,22 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [param_opt, lnv_opt, info] = stk_param_estim ...
-    (model, xi, zi, param0, lnv0, criterion)
+function [param_opt, lnv_opt, info] = stk_param_estim (model, varargin)
+
+[data, varargin] = stk_process_data_arg (3, varargin{:});
+
+[param_opt, lnv_opt, info] = stk_param_estim_ (model, data, varargin{:});
+
+end % function
+
+
+function [param_opt, lnv_opt, info] = ...
+    stk_param_estim_ (model, data, param0, lnv0, criterion)
 
 stk_assert_model_struct (model);
 % FIXME: Implement stk_param_estim for noise priors too
 
-% Empty is the same as 'not provided'
-if nargin < 6
-    criterion = [];
-    if nargin < 5
-        lnv0 = [];
-        if nargin < 4
-            param0 = [];
-        end
-    end
-end
-
-% Size checking: xi, zi
-zi_data = double (zi);
-if ~ isequal (size (zi_data), [stk_get_sample_size(xi) 1])
-    errmsg = 'zi should be a column, with the same number of rows as xi.';
-    stk_error (errmsg, 'IncorrectSize');
-end
-
-% Warn about special case: constant response
-if (std (zi_data) == 0)
-    warning ('STK:stk_param_estim:ConstantResponse', ['Constant-response ' ...
-        'data: the output of stk_param_estim is likely to be unreliable.']);
-end
+stk_warn_about_constant_response (data);
 
 % Make sure that lognoisevariance is -inf for noiseless models
 if ~ stk_isnoisy (model)
@@ -107,7 +94,8 @@ if isempty (criterion)
 end
 
 % Make sure that we have a starting point in (param0, lnv0)
-[param0, lnv0, do_estim_lnv] = provide_starting_point (model, xi, zi, param0, lnv0);
+[param0, lnv0, do_estim_lnv] = ...
+    provide_starting_point (model, data, param0, lnv0);
 
 % Set the starting point
 model.param = param0;
@@ -132,13 +120,8 @@ noiseparam_select = select{2} & do_estim_lnv;
 % FIXME: Clarify this confusing situation...
 
 % Call optimization routine
-if nargout > 2
-    [model_opt, info] = stk_param_estim_optim ...
-        (model, xi, zi, criterion, covparam_select, noiseparam_select);
-else
-    model_opt = stk_param_estim_optim ...
-        (model, xi, zi, criterion, covparam_select, noiseparam_select);
-end
+[model_opt, info] = stk_param_estim_optim ...
+    (model, data, criterion, covparam_select, noiseparam_select);
 
 param_opt = model_opt.param;
 lnv_opt = model_opt.lognoisevariance;
@@ -149,7 +132,7 @@ end % function
 
 
 function [param0, lnv0, do_estim_lnv] = provide_starting_point ...
-    (model, xi, zi, param0, lnv0)
+    (model, data, param0, lnv0)
 
 % If param0 is not empty, it means that the user has provided
 % a starting point, in which case we must use it.
@@ -170,7 +153,7 @@ if ~ isempty (param0)
         if do_estim_lnv
             % We have a user-provided starting point for param0 but not for lnv0.
             model.param = param0;
-            lnv0 = stk_param_init_lnv (model, xi, zi);
+            lnv0 = stk_param_init_lnv (model, data);
         else
             lnv0 = model.lognoisevariance;
         end
@@ -202,7 +185,7 @@ else  % Otherwise, try stk_param_init to get a starting point
         model.lognoisevariance = lnv0;
     end
     
-    [param0, lnv0] = stk_param_init (model, xi, zi);
+    [param0, lnv0] = stk_param_init (model, data);
     
 end % if
 
