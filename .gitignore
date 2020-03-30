@@ -10,8 +10,5 @@ build
 *orig
 *.info
 
-sandbox
-profile_results
-
 .pc/applied-patches
 .pc/*.patch
