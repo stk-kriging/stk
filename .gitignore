@@ -1,14 +1,22 @@
+# Build directory
 build
+
+# Compiled MEX files
 *.mex
-*.mexa64
 *.mexglx
 *.mexw32
 *.mexw64
+*.mexa64
+*.mexmaci64
+
+# Information about compliex MEX files
+*.info
+
+# Various temporary files
 *.o
 *~
 *.asv
-*orig
-*.info
 
+# Quilt
 .pc/applied-patches
 .pc/*.patch
