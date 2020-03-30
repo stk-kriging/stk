@@ -9,7 +9,7 @@ build
 *.mexa64
 *.mexmaci64
 
-# Information about compliex MEX files
+# Information about compiled MEX files
 *.info
 
 # Various temporary files
