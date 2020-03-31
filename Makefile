@@ -1,6 +1,6 @@
 ## Copyright Notice
 ##
-##    Copyright (C) 2015, 2017, 2019 CentraleSupelec
+##    Copyright (C) 2015, 2017, 2019, 2020 CentraleSupelec
 ##
 ##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -30,7 +30,7 @@ VERNUM=$(shell cat stk_version.m | grep -o "v = '.*'" \
 .PHONY: all release \
   octaveforge-release octaveforge-package octaveforge-htmldoc \
   sourceforge-release sourceforge-allpurpose sourceforge-octpkg \
-  forgedoc-inspect check_hg_clean clean
+  forgedoc-inspect check_git_clean clean
 
 all: release forgedoc-inspect
 
@@ -76,26 +76,26 @@ OFGOODIES=\
   ${OF_DOC_INSPECT}/news.png \
   ${OF_DOC_INSPECT}/homepage.png
 
-# File containing the hg id of the changeset being built
-HG_STAMP=${BUILD_DIR}/hg.id
+# File containing the git SHA-1 of the revision being built
+GIT_STAMP=${BUILD_DIR}/git.stamp
 
-# Extract hg info
-HG_OLD_ID := $(shell test -e $(HG_STAMP) && cat $(HG_STAMP))
-HG_ID     := $(shell hg parent --template '{node}')
-HG_DATE   := $(shell hg log --rev $(HG_ID) --template {date\|isodate})
+# Extract git info
+GIT_OLD_SHA := $(shell test -e $(GIT_STAMP) && cat $(GIT_STAMP))
+GIT_SHA     := $(shell git rev-parse HEAD)
+GIT_DATE    := $(shell git log -1 --pretty=format:%cd --date=iso)
 
-# Update hg stamp file if the id has changed
+# Update git stamp file if the revision has changed
 DUMMY := $(shell                        \
-  test "$(HG_OLD_ID)" != "$(HG_ID)"     \
+  test "$(GIT_OLD_SHA)" != "$(GIT_SHA)"     \
   && mkdir -p $(BUILD_DIR)              \
-  && echo "$(HG_ID)" > "$(HG_STAMP)")
+  && echo "$(GIT_SHA)" > "$(GIT_STAMP)")
 
 # Follows the recommendations of https://reproducible-builds.org/docs/archives
 define create_tarball
 $(shell cd $(dir $(1))                                     \
     && find $(notdir $(1)) -print0                         \
     | LC_ALL=C sort -z                                     \
-    | tar c --mtime="$(HG_DATE)" --mode=a+rX,u+w,go-w,ug-s \
+    | tar c --mtime="$(GIT_DATE)" --mode=a+rX,u+w,go-w,ug-s \
             --owner=root --group=root --numeric-owner      \
             --no-recursion --null -T - -f -                \
     | gzip -9n > "$(2)")
@@ -128,8 +128,8 @@ ${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_TIMESTAMP} | ${OF_DIR}
 	$(call create_tarball,$(OF_OCTPKG_UNPACKED),$@)
 	@echo
 
-${OF_OCTPKG_TIMESTAMP}: ${HG_STAMP} | check_hg_clean ${OF_DIR}
-	@${OCT_EVAL} "cd admin; build octpkg ${OF_DIR} ${HG_DATE}"
+${OF_OCTPKG_TIMESTAMP}: ${GIT_STAMP} | check_git_clean ${OF_DIR}
+	@${OCT_EVAL} "cd admin; build octpkg ${OF_DIR} ${GIT_DATE}"
 	@touch ${OF_OCTPKG_TIMESTAMP}
 
 # Create tar.gz archive (this should create a tarball
@@ -141,7 +141,7 @@ ${OF_DOC_TARBALL}: ${OF_DOC_TIMESTAMP}
 	$(call create_tarball,$(OF_DOC_UNPACKED),$@)
 	@echo
 
-${OF_DOC_TIMESTAMP}: ${OF_OCTPKG_TARBALL} ${HG_STAMP} | check_hg_clean ${OF_DIR}
+${OF_DOC_TIMESTAMP}: ${OF_OCTPKG_TARBALL} ${GIT_STAMP} | check_git_clean ${OF_DIR}
 	@${OCT_EVAL} "cd admin; build forgedoc ${OF_DOC_UNPACKED} ${OF_OCTPKG_TARBALL}"
 	@touch ${OF_DOC_TIMESTAMP}
 
@@ -166,8 +166,8 @@ ${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_TIMESTAMP} | ${SF_DIR}
 	@echo Create all-purpose tarball: $@
 	$(call create_tarball,$(SF_ALLPURP_UNPACKED),$@)
 
-${SF_ALLPURP_TIMESTAMP}: ${SF_OCTPKG_TARBALL} ${HG_STAMP} | check_hg_clean ${SF_DIR}
-	@${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL} ${HG_DATE}"
+${SF_ALLPURP_TIMESTAMP}: ${SF_OCTPKG_TARBALL} ${GIT_STAMP} | check_git_clean ${SF_DIR}
+	@${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL} ${GIT_DATE}"
 	@touch ${SF_ALLPURP_TIMESTAMP}
 
 ${SF_OCTPKG_TARBALL}: ${OF_OCTPKG_TARBALL} | ${SF_DIR}
@@ -199,9 +199,9 @@ ${OFGOODIES}: | ${OF_DOC_INSPECT}
 
 ##### Mercurial-related tricks #####
 
-check_hg_clean:
-ifneq ($(shell hg st),)
-	$(error Your hg clone is not clean, stopping here.  Use 'hg status' to see what's going on..)
+check_git_clean:
+ifneq ($(shell git status --porcelain),)
+	$(error Your git clone is not clean, stopping here.  Use 'git status' to see what is going on..)
 endif
 
 

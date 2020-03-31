@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2020 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -66,7 +66,7 @@ mkdir (fullfile (unpacked_dir, 'src'));
 mkdir (fullfile (unpacked_dir, 'doc'));
 
 % List of directories that must be ignored by process_directory ()
-ignore_list = {'.hg', '.pc', 'admin', 'misc/mole/matlab', 'build', 'sandbox'};
+ignore_list = {'.git', '.pc', 'admin', 'misc/mole/matlab', 'build'};
 
 % Prepare sed program for renaming MEX-functions (prefix/suffix by __)
 sed_program = prepare_sed_rename_mex (release_dir);
@@ -166,7 +166,7 @@ end % function
 function process_file (s, unpacked_dir, sed_program, release_date)
 
 % Regular expressions
-regex_ignore = '(~|\.(hgignore|hgtags|mexglx|mex|mexa64|mexw64|o|tmp|orig|info))$';
+regex_ignore = '(~|\.(git.*|mex.*|o|tmp|info))$';
 regex_mfile = '\.m$';
 regex_copy_src = '\.[ch]$';
 

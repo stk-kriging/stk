@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017 CentraleSupelec
+%    Copyright (C) 2015-2017, 2020 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -50,11 +50,11 @@ if exist (unpacked_dir, 'dir')
 end
 mkdir (unpacked_dir);
 
-% Export files using 'hg archive'
-fprintf ('Exporting with "hg archive" ... ');
+% Export files using 'git archive'
+fprintf ('Exporting with "git archive" ... ');
 cd (root_dir);
-system (sprintf (['hg archive --exclude admin --exclude .pc ' ...
- '--exclude ''.hg*'' --exclude Makefile %s'], unpacked_dir));
+system (sprintf (['git archive --format=tar HEAD ' ...
+                  '| tar -x -C %s'], unpacked_dir));
 fprintf ('done.\n\n');
 
 % Instantiate CITATION template
