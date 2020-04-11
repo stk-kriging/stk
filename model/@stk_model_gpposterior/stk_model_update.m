@@ -78,7 +78,6 @@ if oldstyle_heteroscedastic
     M.prior_model.lognoisevariance = [lnv_current; lnv_new];
 end
 
-% FIXME: use @stk_kreq/stk_update ?
 M.kreq = stk_kreq_qr (M.prior_model, M.input_data);
 
 end % function

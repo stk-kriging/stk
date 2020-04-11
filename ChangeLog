@@ -1,3 +1,11 @@
+2020-04-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Delete unused internal function @stk_kreq_qr/stk_update.m
+
+	* core/@stk_kreq_qr/stk_update.m: Delete unused internal function.
+	* model/@stk_model_gpposterior/stk_model_update.m: Remove comment.
+	* admin/octpkg/INDEX: Update index.
+
 2020-02-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_example_doe05.m: Fix comments

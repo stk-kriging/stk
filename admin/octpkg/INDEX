@@ -150,7 +150,6 @@ Posterior model objects
 #@stk_kreq_qr/stk_kreq_qr            [internal]
 #@stk_kreq_qr/stk_set_righthandside  [internal]
 #@stk_kreq_qr/stk_squared_seminorm   [internal]
-#@stk_kreq_qr/stk_update             [internal]
 
 Model components: covariance functions
  stk_expcov_aniso
