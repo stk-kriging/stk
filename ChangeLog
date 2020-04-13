@@ -1,3 +1,16 @@
+2020-04-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Remove some deprecated functions
+
+	* model/@stk_model_gpposterior/get_input_data.m: Remove deprecated function.
+	* model/@stk_model_gpposterior/get_output_data.m: Idem.
+	* model/@stk_model_gpposterior/get_prior_model.m: Idem.
+	* model/prior_struct/@struct/README: Remove no-longer-needed explanation.
+	* model/prior_struct/@struct/get_input_data.m: Idem.
+	* model/prior_struct/@struct/get_output_data.m: Idem.
+	* model/prior_struct/@struct/get_prior_model.m: Idem.
+	* admin/octpkg/INDEX: Update index.
+
 2020-04-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Delete unused internal function @stk_kreq_qr/stk_update.m

@@ -31,6 +31,11 @@
   internal function `stk_predict_` to do the actual computations (but
   do not rely on it directly, since this is an internal function).
 
+## Models
+
+* `get_input_data`, `get_output_data`, `get_prior_model`: Removed
+  (these getters were already deprecated, cf. STK 2.6.0 release notes).
+
 ## Arrays
 
 * `stk_dataframe` arrays now possess a `sample_size` property, which
