@@ -63,6 +63,10 @@
   instead of Scott's approximation (previously, only the latter was
   proposed).
 
+* `stk_example_doe06.m`: New example script, which illustrates a
+  simple sequential design strategy to estimate an excursion set
+  (failure region) and its volume (probability of failure).
+
 ## Miscellaneous
 
 * `stk_init.m`: Make STK startup faster.
