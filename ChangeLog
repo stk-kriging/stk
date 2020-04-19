@@ -1,3 +1,11 @@
+2020-04-26  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_example_doe06.m: New example script
+
+	* examples/02_design_of_experiments/stk_example_doe06.m: New script.
+	* examples/02_design_of_experiments/stk_example_doe03.m: Minor changes.
+	* admin/octpkg/INDEX: Add new script to the index.
+
 2020-04-21  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	examples/02_design_of_experiments: Fix comments in two scripts

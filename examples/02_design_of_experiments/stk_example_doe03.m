@@ -92,6 +92,11 @@ z0.colnames = {'z'};
 % words, the variance and range parameters of the covariance function are
 % provided by the user rather than estimated from data).
 %
+% NOTE: in a "real life" application, the hyper-parameters would not be
+% fixed but estimated from data.  Fixed parameters are used here for the
+% sake of illustration: estimating them would require a larger initial
+% design, which in turn would spoil the fun from a sequential design point
+% of view (because the example is very simple).
 
 model = stk_model ('stk_materncov52_iso');
 % NOTE: the suffix '_iso' indicates an ISOTROPIC covariance function, but the
@@ -99,9 +104,9 @@ model = stk_model ('stk_materncov52_iso');
 
 % Parameters for the Matern covariance function
 % ("help stk_materncov52_iso" for more information)
-SIGMA2 = 4.0 ^ 2;  % variance parameter
-RHO1 = 2.0;        % scale (range) parameter
-model.param = log ([SIGMA2; 1/RHO1]);
+SIGMA2 = 4.0 ^ 2;  % Variance parameter
+RHO = 2.0;         % Length scale (range) parameter
+model.param = log ([SIGMA2; 1/RHO]);
 
 % Play with the parameter of the model to understand their influence on the
 % behaviour of the algorithm !
