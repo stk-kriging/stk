@@ -1,3 +1,10 @@
+2020-04-21  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	examples/02_design_of_experiments: Fix comments in two scripts
+
+	* examples/02_design_of_experiments/stk_example_doe03.m: Fix comment.
+	* examples/02_design_of_experiments/stk_example_doe05.m: Idem.
+
 2020-04-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Remove some deprecated functions

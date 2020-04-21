@@ -57,7 +57,7 @@ BOX = stk_hrect ([0; 12], {'x'});  % Factor space (hyper-rectangle object)
 NT = 400;  % Number of points in the grid
 xg = stk_sampling_regulargrid (NT, DIM, BOX);
 
-% Give names explicit names to the points of the grid
+% Give explicit names to the points of the grid
 xg.rownames = arrayfun ...
     (@(i)(sprintf ('xg(%03d)', i)), 1:NT, 'UniformOutput', false)';
 
@@ -77,7 +77,7 @@ N0 = 3;
 % Construction of the initial design
 x0 = stk_sampling_regulargrid (N0, DIM, BOX);
 
-% Give names explicit names to the points in the initial design
+% Give explicit names to the points in the initial design
 x0.rownames = arrayfun ...
     (@(i)(sprintf ('x0(%03d)', i)), 1:N0, 'UniformOutput', false)';
 
