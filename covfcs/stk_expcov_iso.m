@@ -27,7 +27,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2018 CentraleSupelec
+%    Copyright (C) 2016, 2018, 2020 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -63,6 +63,11 @@ x = double (x);
 y = double (y);
 if nargin < 4, diff = -1; end
 if nargin < 5, pairwise = false; end
+
+% check param
+if numel (param) ~= 2
+    stk_error ('param should have two elements.', 'InvalidArgument');
+end
 
 % extract parameters from the "param" vector
 Sigma2 = exp (param(1));
@@ -108,6 +113,8 @@ end % function
 %! param = log ([1.0; 2.5]);
 %! x = stk_sampling_randunif (5, dim);
 %! y = stk_sampling_randunif (5, dim);
+
+%!error K = stk_expcov_iso ([param; 1.234], x, y);
 
 %!error stk_expcov_iso ();
 %!error stk_expcov_iso (param);

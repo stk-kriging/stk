@@ -1,3 +1,14 @@
+2020-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_*cov_iso.m: Check param length
+
+	* covfcs/stk_expcov_iso.m: Check param length, add unit test.
+	* covfcs/stk_gausscov_iso.m: Idem.
+	* covfcs/stk_materncov32_iso.m: Idem.
+	* covfcs/stk_materncov52_iso.m: Idem.
+	* covfcs/stk_materncov_iso.m: Idem.
+	* covfcs/stk_sphcov_iso.m: Idem.
+
 2020-04-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_example_doe06.m: New example script
