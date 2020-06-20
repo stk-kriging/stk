@@ -59,9 +59,6 @@ Core STK functions
  stk_predict
  stk_predict_leaveoneout
  stk_pmisclass
- stk_conditioning
- stk_generate_samplepaths
- stk_simulate_noise
 #stk_ortho_func              [deprecated]
 #stk_cholcov                 [internal]
 #stk_model_fixlm             [internal]
@@ -82,6 +79,11 @@ Parameter estimation
 #stk_param_init_remlgls          [internal]
 #stk_get_optimizable_parameters  [internal]
 #stk_set_optimizable_parameters  [internal]
+
+Simulations
+ stk_conditioning
+ stk_generate_samplepaths
+ stk_simulate_noise
 
 ## Base class for model objects
 #@stk_model_/stk_model_                     [internal]
@@ -220,9 +222,9 @@ Design of experiments (non-sequential): sampling
  stk_sampling_regulargrid
  stk_sampling_vdc_rr2
 
-Design of experiments (non-sequential): criterions
+Design of experiments (non-sequential): criteria
 ## note: some are in misc/design, others in misc/dist...
-## Shouldn't they all be in sampling/criterions ?
+## Shouldn't they all be in sampling/criteria ?
  stk_filldist
 #stk_filldist_discretized   [internal]
 #stk_filldist_exact         [internal]

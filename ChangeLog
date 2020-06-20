@@ -1,3 +1,10 @@
+2020-06-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	INDEX: Add dedicated category for simulation functions
+
+	* admin/octpkg/INDEX: Create a dedicated category for
+	simulation-related functions.
+
 2020-05-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_*cov_iso.m: Check param length
