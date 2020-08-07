@@ -180,6 +180,6 @@ DOI: 10.1007/s11222-011-9241-4.
 
    to ask for help on STK, and the ticket manager:
 
-   <https://sourceforge.net/p/kriging/tickets>
+   <https://github.com/stk-kriging/stk/issues>
 
-   to report bugs or ask for new features.
+   to report bugs or ask for new features (do not hesitate to do so!).
