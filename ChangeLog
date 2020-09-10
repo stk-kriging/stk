@@ -1,3 +1,10 @@
+2020-09-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_sampcrit_emmi_eval.m: Fix bibliography
+
+	* sampling/stk_sampcrit_emmi_eval.m: Cite the published paper of
+	Svenson and Santner instead of the technical report.
+
 2020-06-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	INDEX: Add dedicated category for simulation functions

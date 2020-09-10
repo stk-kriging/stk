@@ -34,16 +34,16 @@
 %
 % REFERENCES
 %
-%   [1] Svenson J.D. and Santner T.J. Multiobjective optimization of
-%       expensive black-box functions via expected maximin improvement.
-%       Technical report, Tech. rep., 43210, Ohio University, Columbus,
-%       Ohio, 2010
+%   [1] Svenson, J., & Santner, T. (2016).  Multiobjective optimization of
+%       expensive-to-evaluate deterministic computer simulator models.
+%       Computational Statistics & Data Analysis, 94, 250-264,
+%       DOI: 10.1016/j.csda.2015.08.011.
 %
 % See also: stk_sampcrit_ehvi_eval
 
 % Copyright Notice
 %
-%    Copyright (C) 2017, 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018, 2020 CentraleSupelec
 %    Copyright (C) 2016 IRT SystemX
 %
 %    Author:  Paul Feliot  <paul.feliot@irt-systemx.fr>
