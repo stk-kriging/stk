@@ -109,7 +109,7 @@ if diff == -1
     k = Sigma2 * stk_rbf_matern32 (D, -1);
 elseif diff == 1
     %%% diff wrt param(1) = log(Sigma2)
-    k = Sigma2 * stk_rbf_matern32 (D, -1);
+    k = Sigma2 * stk_rbf_matern32 (D, 1);
 elseif (diff >= 2) && (diff <= nb_params)
     %%% diff wrt param(diff) = - log(invRho(diff-1))
     ind = diff - 1;

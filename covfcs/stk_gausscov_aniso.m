@@ -108,7 +108,7 @@ if diff == -1
     k = Sigma2 * stk_rbf_gauss (D, -1);
 elseif diff == 1
     % Differentiate wrt param(1) = log (Sigma2)
-    k = Sigma2 * stk_rbf_gauss (D, -1);
+    k = Sigma2 * stk_rbf_gauss (D, 1);
 elseif (diff >= 2) && (diff <= nb_params)
     % Differentiate wrt param(diff) = - log (invRho(diff-1))
     ind = diff - 1;

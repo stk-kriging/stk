@@ -97,7 +97,7 @@ if diff == -1
     k = Sigma2 * stk_rbf_matern (Nu, D, -1);
 elseif diff == 1
     %%% diff wrt param(1) = log(Sigma2)
-    k = Sigma2 * stk_rbf_matern (Nu, D, -1);
+    k = Sigma2 * stk_rbf_matern (Nu, D, 1);
 elseif diff == 2
     %%% diff wrt param(2) = log(Nu)
     k = Nu * Sigma2 * stk_rbf_matern (Nu, D, 1);

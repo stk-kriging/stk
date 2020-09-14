@@ -94,7 +94,7 @@ if diff == -1
     k = Sigma2 * stk_rbf_exponential (D, -1);
 elseif diff == 1
     %%% diff wrt param(1) = log(Sigma2)
-    k = Sigma2 * stk_rbf_exponential (D, -1);
+    k = Sigma2 * stk_rbf_exponential (D, 1);
 elseif diff == 2
     %%% diff wrt param(3) = - log(invRho)
     k = D .* (Sigma2 * stk_rbf_exponential (D, 1));
