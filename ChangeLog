@@ -1,3 +1,9 @@
+2020-09-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_dataframe/plot.m: Fix argument parsing
+
+	* arrays/@stk_dataframe/plot.m: Fix argument parsing.
+
 2020-09-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_sampcrit_emmi_eval.m: Fix bibliography

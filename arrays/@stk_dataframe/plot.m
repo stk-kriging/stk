@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017 CentraleSupelec
+%    Copyright (C) 2015-2017, 2020 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -217,30 +217,63 @@ elseif length (varargin) == 1  % S
     plot_elem = struct ('x', {x}, 'z', {z}, 'S', varargin(1));
     keyval_pairs = {};
     
-elseif ischar (varargin{2})  % S, key, val, ...
-    
-    plot_elem = struct ('x', {x}, 'z', {z}, 'S', varargin(1));
-    keyval_pairs = parse_keyval_ (varargin{2:end});
-    
-elseif length (varargin) == 2  % key, val
+elseif length (varargin) == 2  % key, val  OR  x2, z2 ?
     
     plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
-    keyval_pairs = varargin;
     
-elseif ~ ischar (varargin{3})  % S, x, z, ...
+    if ischar (varargin{1})
+        keyval_pairs = parse_keyval_ (varargin{:});
+    else
+        plot_elem_ = struct ('x', varargin(1), 'z', varargin(2), 'S', []);
+        plot_elem = [plot_elem plot_elem_];
+        keyval_pairs = {};
+    end
     
-    plot_elem = struct ('x', {x}, 'z', {z}, 'S', varargin(1));
-    [plot_elem_, keyval_pairs] = parse_args__ (varargin{2:end});
-    plot_elem = [plot_elem plot_elem_];
+else  % Three or more remaining arguments
+    %    1) S, key, val, ... ?
+    %    2) S, x2, z2, ... ?
+    %    3) key, val, key, val, ... ?
+    %    4) x2, z2, ... ?
     
-else  % key, val, key, val, ...
-    
-    plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
-    keyval_pairs = parse_keyval_ (varargin{:});
-    
+    if ~ ischar (varargin{1})  % x2, z2, ...
+        
+        plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
+        [plot_elem_, keyval_pairs] = parse_args__ (varargin);
+        plot_elem = [plot_elem plot_elem_];
+        
+    elseif ~ ischar (varargin{2})  % S, x2, z2, ...  OR  key, val, key, val, ...
+        
+        if ~ ischar (varargin{3})  % S, x2, z2, ...
+            
+            plot_elem = struct ('x', {x}, 'z', {z}, 'S', varargin(1));
+            [plot_elem_, keyval_pairs] = parse_args__ (varargin{2:end});
+            plot_elem = [plot_elem plot_elem_];
+            
+        else  % key, val, key, val, ...
+            
+            plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
+            keyval_pairs = parse_keyval_ (varargin{:});
+            
+        end
+        
+    else  % S, key, val, ...  OR  key, val, key, val, ...
+        
+        if mod (length (varargin), 2) == 1  % S, key, val, ...
+            
+            plot_elem = struct ('x', {x}, 'z', {z}, 'S', varargin(1));
+            keyval_pairs = parse_keyval_ (varargin{2:end});
+            
+        else  % key, val, key, val, ...
+            
+            plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
+            keyval_pairs = parse_keyval_ (varargin{:});
+            
+        end
+    end
 end
 
 end % function
+
 
 function keyval_pairs = parse_keyval_ (key, val, varargin)
 
