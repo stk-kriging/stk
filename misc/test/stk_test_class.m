@@ -1,4 +1,8 @@
-% STK_TEST_CLASS is a unit test that any STK class should pass
+% STK_TEST_CLASS  [STK internal]
+%
+% INTERNAL FUNCTION WARNING:
+%    This function is considered as internal: API-breaking changes are
+%    likely to happen in future releases.  Please don't rely on it.
 
 % Copyright Notice
 %

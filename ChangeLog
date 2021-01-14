@@ -1,3 +1,16 @@
+2021-14-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_test_critgrad.m: New function to check partial derivatives
+
+	* misc/test/stk_test_critgrad.m: New function to check partial
+	derivatives of parameter selection criteria.
+	* param/estim/stk_param_loomse.m: More unit tests.
+	* param/estim/stk_param_loopvc.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+	* misc/test/stk_test_class.m: Internal function warning.
+	* misc/test/stk_test_dfbinaryop.m: Idem.
+	* admin/octpkg/INDEX: Update index.
+
 2020-09-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_dataframe/plot.m: Fix argument parsing

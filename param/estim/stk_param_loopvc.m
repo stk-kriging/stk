@@ -196,13 +196,14 @@ end % function
 %! DELTA = 1e-6;
 %!
 %! model = stk_model ('stk_materncov52_iso', DIM);
+%! model.param = [1 1];
+%!
 %! xi = stk_sampling_halton_rr2 (NI, DIM, BOX);
 %! zi = stk_feval (f, xi);
 %!
-%! model.param = [1 1];
-%! [C1, dC] = stk_param_loopvc (model, xi, zi);
-%!
-%! model.param = model.param + DELTA * [0 1];
-%! C2 = stk_param_loopvc (model, xi, zi);
-%!
-%! assert (stk_isequal_tolrel (dC(2), (C2 - C1) / DELTA, TOL_REL));
+%! for range = [0.3 2 10]
+%!     model.param(2) = - log (range);
+%!     diff = 2;
+%!     assert (stk_test_critgrad ...
+%!         (@stk_param_loopvc, model, xi, zi, diff, 1e-6));
+%! end

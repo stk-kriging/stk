@@ -1,4 +1,8 @@
-% STK_TEST_DFBINARYOP ...
+% STK_TEST_DFBINARYOP [STK internal]
+%
+% INTERNAL FUNCTION WARNING:
+%    This function is considered as internal: API-breaking changes are
+%    likely to happen in future releases.  Please don't rely on it.
 
 % Copyright Notice
 %
