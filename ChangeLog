@@ -1,3 +1,10 @@
+2021-15-01  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_gls.m: Use linsolve to solve triangular systems
+
+	* param/estim/stk_param_gls.m: Use linsolve to solve triangular
+	systems.
+
 2021-14-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_test_critgrad.m: New function to check partial derivatives

@@ -26,7 +26,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2021 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2011-2013 SUPELEC
 %
@@ -66,8 +66,8 @@ zi = double (zi);
 
 % Compute the Generalized Least Squares (GLS) estimate
 L = stk_cholcov (K, 'lower');
-W = L \ P;
-u = L \ zi;
+W = linsolve (L, P, struct ('LT', true));
+u = linsolve (L, zi, struct ('LT', true));
 beta = (W' * W) \ (W' * u);
 
 if nargin > 1
