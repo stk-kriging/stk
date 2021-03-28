@@ -1,3 +1,10 @@
+2021-03-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_gls.m: Rely on mldivide
+
+	* param/estim/stk_param_gls.m: Rely on mldivide to do the job,
+	instead of writing the normal equations explicitely.
+
 2021-15-01  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_gls.m: Use linsolve to solve triangular systems

@@ -2,7 +2,7 @@
 %
 % CALL: BETA = stk_param_gls (MODEL, XI, ZI)
 %
-%   computes the generalised least squares estimate BETA of the vector of
+%   computes a generalised least squares estimate BETA of the vector of
 %   coefficients for the linear part of MODEL, where XI and ZI stand for
 %   the evaluation points and observed responses, respectively.
 %
@@ -68,7 +68,7 @@ zi = double (zi);
 L = stk_cholcov (K, 'lower');
 W = linsolve (L, P, struct ('LT', true));
 u = linsolve (L, zi, struct ('LT', true));
-beta = (W' * W) \ (W' * u);
+beta = W \ u;
 
 if nargin > 1
     % Assuming that the actual covariance matrice is sigma^2 K, compute the
@@ -78,7 +78,7 @@ if nargin > 1
     sigma2 = 1 / (n - r) * sum ((u - W * beta) .^ 2);
 end
 
-end % end function stk_param_gls
+end % function
 
 
 %!shared xi, zi, model, beta, sigma2

@@ -17,6 +17,7 @@ The following people have helped develop the toolbox in various ways
  * DUTRIEUX Héloïse
  * FELIOT Paul
  * FRASNEDO Sophie
+ * GEORG Niklas
  * JAN Benoit
  * KETTANI Othmane
  * KRAUTH Alexandra
