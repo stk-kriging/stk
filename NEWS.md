@@ -15,6 +15,10 @@
 
 # Changes in version 2.7.0
 
+## Required Matlab version
+
+* Required Matlab version number has been raised to R2009b.
+
 ## Prediction
 
 * `stk_predict.m` now officially supports a shorter calling syntax:
