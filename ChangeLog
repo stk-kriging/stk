@@ -1,5 +1,21 @@
 2021-03-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Deprecate CG#07
+
+	* admin/CODING_GUIDELINES: Deprecated CG#07.
+	* arrays/@stk_factorialdesign/private/plot_surfmeshcontour.m: Use ~.
+	* iago/rep/stk_gather_repetitions.m: Use ~.
+	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog.m: Use ~.
+	* misc/optim/@stk_optim_octavesqp/stk_minimize_boxconstrained.m: Use ~.
+	* misc/text/stk_disp_getformat.m: Use ~.
+	* misc/text/stk_disp_isloose.m: Use ~.
+	* param/estim/stk_param_init_remlgls.m: Use ~.
+	* sampling/stk_sampcrit_akg_eval.m: Use ~.
+	* sampling/stk_sampling_maximinlhs.m: Use ~.
+	* sampling/stk_sampling_nesteddesign.m: Use ~.
+	* sampling/stk_sampling_nestedlhs.m: Use ~.
+	* utils/stk_generate_samplepaths.m: Use ~.
+
 	README.md: Raise minimal Matlab version to R2009b
 
 	* README.md: Raise minimal Matlab version to R2009b (we are in

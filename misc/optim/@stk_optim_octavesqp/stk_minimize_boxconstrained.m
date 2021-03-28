@@ -16,7 +16,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2018, 2021 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %
 %    Authors:  Julien Bect        <julien.bect@centralesupelec.fr>
@@ -57,6 +57,6 @@ function df = nabla_f_ (f, u)
 % Note: with this implementation, f_val is computed twice
 %   (once when f is called by sqp, and once again when nabla_f is called)
 
-[ignd, df] = f (u);  %#ok<ASGLU> CG#07
+[~, df] = f (u);
 
 end % function

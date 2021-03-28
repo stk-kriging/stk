@@ -96,7 +96,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017, 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018, 2021 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -207,7 +207,7 @@ end % function
 %!
 %! nc = 20;
 %! xc = stk_sampling_regulargrid (nc, 1, [0; 1]);
-%! [zp, ignd1, ignd2, K] = stk_predict (M_prior, xi, zi, [xi; xc]);  % See CG#07
+%! [zp, ~, ~, K] = stk_predict (M_prior, xi, zi, [xi; xc]);
 %!
 %! ir = 1:ni;  ic = ni + (1:nc);
 %!

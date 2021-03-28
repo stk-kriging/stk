@@ -21,7 +21,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017, 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018, 2021 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -111,7 +111,7 @@ function x = generatedesign_ (n, d)
 x = zeros (n, d);
 
 for i = 1:d % for each dimension, draw a random permutation
-    [ignd, x(:,i)] = sort (rand (n,1));  %#ok<ASGLU> CG#07
+    [~, x(:,i)] = sort (rand (n,1));
 end
 
 x = (x - rand (size (x))) / n;

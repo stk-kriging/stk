@@ -13,9 +13,9 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2021 CentraleSupelec
 %
-%    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
 % Copying Permission Statement
 %
@@ -103,7 +103,7 @@ catch
         
         try
             
-            [fmt, spc] = format (); %#ok<ASGLU> CG#07
+            [~, spc] = format ();
             assert (ismember (spc, {'compact', 'loose'}));
             method = 3;
             

@@ -50,7 +50,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2018 CentraleSupelec
+%    Copyright (C) 2015-2018, 2021e CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -145,7 +145,7 @@ end
 %--- Generate unconditional sample paths --------------------------------------
 
 % Pick unique simulation points
-[xt_unique, ignd, j] = unique (xt, 'rows');  %#ok<ASGLU> CG#07
+[xt_unique, ~, j] = unique (xt, 'rows');
 
 % Did we actually find duplicates in xt ?
 duplicates_detected = (size (xt_unique, 1) < size (xt, 1));
@@ -174,7 +174,7 @@ if duplicates_detected,  zsim = zsim(j, :);  end
 if conditional
     
     % Carry out the kriging prediction at points xt
-    [ignd, lambda] = stk_predict (model, xi, zi, xt);  %#ok<ASGLU> CG#07
+    [~, lambda] = stk_predict (model, xi, zi, xt);
     
     if ~ stk_isnoisy (model)
         

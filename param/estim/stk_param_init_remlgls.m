@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016, 2018, 2019 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018, 2019, 2021 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -67,14 +67,14 @@ for eta = eta_list
         
         if noiseless
             
-            [ignd, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU> CG#07
+            [~, sigma2] = stk_param_gls (model, xi, zi);
             if ~ (sigma2 > 0), continue; end
             log_sigma2 = log (sigma2);
             
         elseif homoscedastic && (isnan (lnv))  % Unknown noise variance
             
             model.lognoisevariance = log (eta);
-            [ignd, sigma2] = stk_param_gls (model, xi, zi);  %#ok<ASGLU> CG#07
+            [~, sigma2] = stk_param_gls (model, xi, zi);
             if ~ (sigma2 > 0), continue; end
             log_sigma2 = log (sigma2);
             model.lognoisevariance = log  (eta * sigma2);

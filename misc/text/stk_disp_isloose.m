@@ -15,7 +15,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2021 CentraleSupelec
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -41,7 +41,7 @@
 
 function b = stk_disp_isloose ()
 
-[fmt, spc] = stk_disp_getformat (); %#ok<ASGLU> CG#07
+[~, spc] = stk_disp_getformat ();
 
 b = strcmp (spc, 'loose');
 

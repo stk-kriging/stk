@@ -452,8 +452,8 @@ function [x, obj, info, iter, nf, lambda] = sqp_quadprog ...
     try
         % Call quadprog to solve the QP subproblem
         quadprog_options = optimset ('Display', 'off');
-        [p, ignd1, quadprog_exitflag, ignd2, lambda] = quadprog ...
-            (B, c, -C, -d, F, g, [], [], x, quadprog_options);  %#ok<ASGLU> CG#07
+        [p, ~, quadprog_exitflag, ~, lambda] = quadprog ...
+            (B, c, -C, -d, F, g, [], [], x, quadprog_options);
     catch
         warning (ws);
         rethrow (lasterror ());

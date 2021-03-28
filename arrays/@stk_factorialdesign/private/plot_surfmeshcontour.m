@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2017 CentraleSupelec
+%    Copyright (C) 2016, 2017, 2021 CentraleSupelec
 %    Copyright (C) 2013 Valentin Resseguier
 %    Copyright (C) 2012-2014 SUPELEC
 %
@@ -121,8 +121,8 @@ try
     % in particular when options are provided. Let's try that first.
     
     if strcmp (func2str (plotfun), 'contour')
-        [ignd, h_plot] = contour ...
-            (h_axes, x, y, z, varargin{:});  %#ok<ASGLU> CG#07
+        [~, h_plot] = contour ...
+            (h_axes, x, y, z, varargin{:});
     else
         h_plot = plotfun (h_axes, x, y, z, varargin{:});
     end
@@ -149,7 +149,7 @@ catch  %#ok<CTCH>
     try
         
         if strcmp (func2str (plotfun), 'contour')
-            [ignd, h_plot] = contour (x, y, z, numarg{:});  %#ok<ASGLU> CG#07
+            [~, h_plot] = contour (x, y, z, numarg{:});
         else
             h_plot = plotfun (x, y, z, numarg{:});
         end

@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2020 CentraleSupelec
+%    Copyright (C) 2015, 2020, 2021 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -97,7 +97,7 @@ end
     
 % Second, deal with those that are not repetitions of any existing evaluation
 % point (but there may still be repetitions *inside* z_new)
-[ignd, idx, pos] = unique (double (x_new), 'rows', 'first');  %#ok<ASGLU> CG#07
+[~, idx, pos] = unique (double (x_new), 'rows', 'first');
 nb_unique = length (idx);
 % Note: Octave doesn't support the 'stable' option, so we just reorder manually
 [idx_stable, k] = sort (idx);

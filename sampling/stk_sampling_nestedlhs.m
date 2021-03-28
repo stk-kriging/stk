@@ -49,10 +49,11 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017, 2018, 2021 CentraleSupelec
 %    Copyright (C) 2017 LNE
-%    Copyright (C) 2017, 2018 CentraleSupelec
 %
-%    Authors:  Remi Stroh  <remi.stroh@lne.fr>
+%    Author:  Remi Stroh  <remi.stroh@lne.fr>
+%
 
 % Copying Permission Statement
 %
@@ -181,7 +182,7 @@ for k_lev = nLev:-1:1; %begin by the end
         
         X_new_kl = NaN(n_new_k, dim);    %the matrix to add
         
-        [ignd, random_index] = sort(rand(n_new_k, dim), 1);  %#ok<ASGLU> CG#07
+        [~, random_index] = sort(rand(n_new_k, dim), 1);
         for i = 1:dim
             X_new_kl(:, i) = list_nb_new_k(random_index(:, i), i);
         end

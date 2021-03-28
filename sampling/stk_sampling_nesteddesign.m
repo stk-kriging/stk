@@ -46,10 +46,10 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2017, 2018, 2021 CentraleSupelec
 %    Copyright (C) 2017 LNE
-%    Copyright (C) 2017, 2018 CentraleSupelec
 %
-%    Authors:   Remi Stroh         <remi.stroh@lne.fr>
+%    Author:  Remi Stroh  <remi.stroh@lne.fr>
 
 % Copying Permission Statement
 %
@@ -159,7 +159,7 @@ for k_lev = (nLev - 1):-1:1
     dist_new_prev = min( stk_dist(X_new_k, X_prev), [], 2);
     
     % 3: Keep the farthest
-    [ignd, ind_dist] = sort(dist_new_prev, 'descend');  %#ok<ASGLU> CG#07
+    [~, ind_dist] = sort (dist_new_prev, 'descend');
     ind_select = ind_dist( 1:((n(k_lev) - n(k_lev + 1)) ), 1);
     
     best_design(row_currentLevel(1, k_lev, n), :) = double( X_new_k(ind_select, :) );
