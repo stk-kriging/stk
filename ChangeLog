@@ -1,3 +1,10 @@
+2021-06-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_example_kb07.m: Add a second figure
+
+	* examples/01_kriging_basics/stk_example_kb07.m: Add a second
+	figure where nu is fixed to 5/2 and rho varies.
+
 2021-03-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Deprecate CG#07

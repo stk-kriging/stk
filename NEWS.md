@@ -63,6 +63,9 @@
 
 ## Examples
 
+* `stk_example_kb07.m`: Add a second figure where nu is fixed to 5/2
+  and rho varies.
+
 * `stk_example_doe05.m`: Make it possible to use the exact KG criterion
   instead of Scott's approximation (previously, only the latter was
   proposed).
