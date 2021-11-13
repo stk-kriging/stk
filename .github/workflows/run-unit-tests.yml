@@ -1,0 +1,39 @@
+name: run-unit-tests
+
+on: [push, pull_request]
+
+jobs:
+  run-unit-tests-matlab:
+    # Apparently only Ubuntu workers support MATLAB actions for now
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Only very recent releases are available:
+        release: [R2021b, R2021a, R2020b, R2020a]
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v2
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v1
+        with:
+          release: ${{ matrix.release }}
+      - name: Run script
+        uses: matlab-actions/run-command@v1
+        with:
+          command: >
+            diary ('stk_runtests.log');
+            stk_init;
+            fprintf ('\n==========\n\n');
+            ver;
+            fprintf ('\n==========\n\n');
+            results = stk_runtests ();
+            fprintf ('\n==========\n\n');
+            disp (results);
+            fprintf ('\n==========\n\n');
+            diary ('off');
+            assert (results.n_total == results.n_pass);
+      - name: Upload concatenated results
+        uses: actions/upload-artifact@v2
+        with:
+          name: run-unit-tests-matlab-${{ matrix.release }}
+          path: stk_runtests.log
