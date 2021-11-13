@@ -1,3 +1,12 @@
+2021-11-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	github: Run unit tests in MATLAB with Github Actions
+
+	* .github/workflows/run-unit-tests.yml: Run unit tests in MATLAB
+	with Github Actions on several recent releases.  Save the logs as
+	artifacts.
+	* README.md: Add a few badges.
+
 2021-06-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_example_kb07.m: Add a second figure
