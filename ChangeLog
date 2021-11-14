@@ -1,5 +1,9 @@
 2021-11-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	README.md: Use default style for licence badge
+
+	* README.md: Use default style for licence badge.
+
 	.github/workflows/run-unit-tests.yml: Rename last step
 
 	* .github/workflows/run-unit-tests.yml: Rename last step
