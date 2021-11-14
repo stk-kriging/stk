@@ -1,3 +1,9 @@
+2021-11-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	* misc/parallel/@stk_parallel_engine_parfor/stk_parallel_engine_parfor.m:
+	Remove unit test, which was creating problems for continuous
+	integration using Github Actions.  Not a very interesting test anyway.
+
 2021-11-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	github: Run unit tests in MATLAB with Github Actions

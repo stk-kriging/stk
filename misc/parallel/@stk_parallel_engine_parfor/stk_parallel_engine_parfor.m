@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017 CentraleSupelec
+%    Copyright (C) 2017, 2021 CentraleSupelec
 %    Copyright (C) 2013 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -57,9 +57,3 @@ pareng = class (struct(), 'stk_parallel_engine_parfor');
 end % function
 
 %#ok<*DPOOL>
-
-
-%!test
-%! if exist ('matlabpool') || exist ('parpool')
-%!     stk_test_class ('stk_parallel_engine_parfor')
-%! end
