@@ -32,7 +32,7 @@ jobs:
             fprintf ('\n==========\n\n');
             diary ('off');
             assert (results.n_total == results.n_pass);
-      - name: Upload concatenated results
+      - name: "Upload build artifact: log file"
         uses: actions/upload-artifact@v2
         with:
           name: run-unit-tests-matlab-${{ matrix.release }}
