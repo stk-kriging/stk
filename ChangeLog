@@ -1,3 +1,13 @@
+2021-11-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	iago: Remove 'showprogress' option
+
+	* iago/crit/stk_optim_crit_SUR.m: Remove 'showprogress' option.
+	* iago/crit/stk_optim_crit_iago.m: Idem
+	* iago/stk_optim.m: Idem
+	* iago/stk_optimscript.m: Idem
+	* iago/utils/stk_optim_init.m: Idem
+
 2021-11-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	README.md: Use default style for licence badge

@@ -22,7 +22,6 @@
 %                                     after each evaluation?
 %       'estimnoise', false           estimate noise variance?
 %       'noisevariance', 0.0          noise variance
-%       'showprogress', true          display progress
 %       'pause', 0                    pause at each iteration
 %       'disp', false                 show plots
 %       'disp_xvals', []              optional x values for display

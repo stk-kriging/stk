@@ -81,10 +81,6 @@ end
 
 for test_ind = 1:ng
     
-    if algo.showprogress,
-        stk_disp_progress ('    test point', test_ind, ng);
-    end
-    
     xi_ind(ni+1) = test_ind;
     xi = xg(xi_ind, :);
     

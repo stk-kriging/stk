@@ -6,8 +6,8 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016, 2020 CentraleSupelec
-%    Copyright (C) 2015 CentraleSupelec & Ivana Aleksovska
+%    Copyright (C) 2015, 2016, 2020 CentraleSupelec
+%    Copyright (C) 2015 Ivana Aleksovska
 %
 %    Authors:  Ivana Aleksovska  <ivanaaleksovska@gmail.com>
 %              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
@@ -116,10 +116,6 @@ end
 
 while ~CONDH_OK
     for ic = 1:nc
-        
-        if algo.showprogress,
-            stk_disp_progress ('  ..', ic, nc);
-        end
         
         % Index of candidate point in xg
         ind_candi = ni + ic;

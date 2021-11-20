@@ -52,7 +52,6 @@ options = {
     'estimparams', true
     'noisevariance', 0.0
     'gather_repetitions', []
-    'showprogress', true
     'pause', 0
     'disp', false
     'disp_xvals', []
@@ -179,7 +178,6 @@ end
 
 algo.estimparams            = logical (algo.estimparams);
 algo.gather_repetitions     = logical (algo.gather_repetitions);
-algo.showprogress           = logical (algo.showprogress);
 algo.disp                   = logical (algo.disp);
 algo.show1dsamplepaths      = logical (algo.show1dsamplepaths);
 algo.searchgrid_unique      = logical (algo.searchgrid_unique);

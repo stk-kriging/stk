@@ -153,4 +153,3 @@ options = [options {'pause', false}];
 % The last test (currently) fails because, when repetitions are gathered,
 % we (currently) cannot rely on stk_param_estim to estimate lnv. An easy
 % way out is to disable rep gathering
-
