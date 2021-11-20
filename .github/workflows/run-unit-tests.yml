@@ -31,7 +31,7 @@ jobs:
             disp (results);
             fprintf ('\n==========\n\n');
             diary ('off');
-            assert (results.n_total == results.n_pass);
+            assert (results.n_total == (results.n_pass + results.n_xfail));
       - name: "Upload build artifact: log file"
         uses: actions/upload-artifact@v2
         with:

@@ -72,6 +72,7 @@ here = pwd ();
 res = struct (       ...
     'n_total',  0,   ...
     'n_pass',   0,   ...
+    'n_xfail',  0,   ...
     'n_files',  0,   ...
     'n_notest', 0,   ...
     'n_dirs',   0,   ...
@@ -87,10 +88,12 @@ for i = 1:(numel (dirs))
     % Get absolute path
     cd (dirs{i});  dirname = pwd ();  cd (here);
     
-    [np, nt, nn, nf, nd, res.err] = run_all_tests (dirname, dirname, res.err);
+    [np, nt, nx, nn, nf, nd, res.err] = ...
+        run_all_tests (dirname, dirname, res.err);
     
     res.n_total  = res.n_total  + nt;
     res.n_pass   = res.n_pass   + np;
+    res.n_xfail  = res.n_xfail  + nx;
     res.n_files  = res.n_files  + nf;
     res.n_notest = res.n_notest + nn;
     res.n_dirs   = res.n_dirs   + nd;
@@ -101,7 +104,8 @@ res.runtime = toc (t0);
 
 if res.n_dirs > 1
     fprintf ('*** Summary for all %d directories:\n', res.n_dirs);
-    fprintf ('*** --> passed %d/%d tests\n', res.n_pass, res.n_total);
+    fprintf ('*** --> passed %d/%d tests', res.n_pass, res.n_total);
+    fprintf ('  [%d expected failures]\n', res.n_xfail);
     fprintf ('*** --> %d/%d files had no tests\n', res.n_notest, res.n_files);
     fprintf ('*** --> RUNTIME: %.2f seconds\n\n', res.runtime);
 end
@@ -121,7 +125,7 @@ end % function
 % run_all_tests %
 %%%%%%%%%%%%%%%%%
 
-function [n_pass, n_total, n_notest, n_files, n_dirs, err] ...
+function [n_pass, n_total, n_xfail, n_notest, n_files, n_dirs, err] ...
     = run_all_tests (testdir, basedir, err)
 
 % list directory content
@@ -136,6 +140,7 @@ fflush (stdout);
 % init counters
 n_total  = 0;
 n_pass   = 0;
+n_xfail  = 0;
 n_files  = 0;
 n_notest = 0;
 n_dirs   = 1;
@@ -157,20 +162,25 @@ for i = 1:numel (flist)
             s = warning_off ();
             try
                 % Do the actual tests.
-                [p, n] = stk_test (ff, 'quiet', stdout);
+                [p, n, nx] = stk_test (ff, 'quiet', stdout);
                 % Note: the presence of the third argument (fid=stdout) forces
                 % stk_test in batch mode, which means that it doesn't stop at
                 % the first failed test.
                 print_pass_fail (n, p);
                 n_total = n_total + n;
                 n_pass  = n_pass  + p;
+                n_xfail = n_xfail + nx;
                 % Record function name if at least one test failed
                 if p < n
                     err = [err; {ff, n, p}];
                 end
-                % deal with warnings
+                % Deal with warnings
                 if ~ isempty (lastwarn ())
                     fprintf (' (warnings)');
+                end
+                % Indicate if there were expected failures
+                if nx > 0
+                    fprintf (' [%d expected failures]', nx);
                 end
                 warning (s);
             catch
@@ -193,17 +203,19 @@ end
 
 runtime = toc (t0);
 
-fprintf ('   --> passed %d/%d tests\n', n_pass, n_total);
+fprintf (['   --> passed %d/%d tests ' ...
+    '[%d expected failures]\n'], n_pass, n_total, n_xfail);
 fprintf ('   --> %d/%d files had no tests\n', n_notest, n_files);
 fprintf ('   --> RUNTIME: %.2f seconds\n\n', runtime);
 
 for i = 1:(length (subdirs_class))
     
-    [p, n, nnt, nf, nd, err] = run_all_tests ...
+    [p, n, nx, nnt, nf, nd, err] = run_all_tests ...
         (subdirs_class{i}, pwd(), err);
     
     n_total  = n_total  + n;
     n_pass   = n_pass   + p;
+    n_xfail  = n_xfail  + nx;
     n_files  = n_files  + nf;
     n_notest = n_notest + nnt;
     n_dirs   = n_dirs   + nd;
@@ -211,11 +223,12 @@ end
 
 for i = 1:(length (subdirs_private))
     
-    [p, n, nnt, nf, nd, err] = run_all_tests ...
+    [p, n, nx, nnt, nf, nd, err] = run_all_tests ...
         (subdirs_private{i}, subdirs_private{i}, err);
     
     n_total  = n_total  + n;
     n_pass   = n_pass   + p;
+    n_xfail  = n_xfail  + nx;
     n_files  = n_files  + nf;
     n_notest = n_notest + nnt;
     n_dirs   = n_dirs   + nd;

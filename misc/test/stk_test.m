@@ -423,8 +423,8 @@ for x__i = 1:length(x__blockidx)-1
                 nb_expected_failures = nb_expected_failures + 1;
             else
                 x__msg = sprintf ('%stest failed\n%s', SIGNAL_FAIL, lasterr ());
-                x__success = 0;
             end
+            x__success = 0;
             if (isempty (lasterr ()))
                 error ('empty error text, probably Ctrl-C --- aborting');
             end
