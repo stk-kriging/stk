@@ -1,5 +1,10 @@
 2021-11-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	github: Run unit tests in Octave too
+
+	* .github/workflows/run-unit-tests.yml: Run unit tests in Octave
+	too (in Ubuntu).
+
 	tests: Deal with expected failures
 
 	* misc/test/stk_test.m: Expected failures are no longer reported
