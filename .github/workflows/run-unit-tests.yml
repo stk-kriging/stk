@@ -2,12 +2,27 @@ name: run-unit-tests
 
 on: [push, pull_request]
 
+env:
+  TEST_SCRIPT: >
+    diary ('stk_runtests.log');
+    stk_init;
+    fprintf ('\n==========\n\n');
+    ver;
+    fprintf ('\n==========\n\n');
+    results = stk_runtests ();
+    fprintf ('\n==========\n\n');
+    disp (results);
+    fprintf ('\n==========\n\n');
+    diary ('off');
+    assert (results.n_total == (results.n_pass + results.n_xfail));
+
 jobs:
   run-unit-tests-matlab:
     # Apparently only Ubuntu workers support MATLAB actions for now
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest]
         # Only very recent releases are available:
         release: [R2021b, R2021a, R2020b, R2020a]
     steps:
@@ -17,23 +32,34 @@ jobs:
         uses: matlab-actions/setup-matlab@v1
         with:
           release: ${{ matrix.release }}
-      - name: Run script
+      - name: Run test script
         uses: matlab-actions/run-command@v1
         with:
-          command: >
-            diary ('stk_runtests.log');
-            stk_init;
-            fprintf ('\n==========\n\n');
-            ver;
-            fprintf ('\n==========\n\n');
-            results = stk_runtests ();
-            fprintf ('\n==========\n\n');
-            disp (results);
-            fprintf ('\n==========\n\n');
-            diary ('off');
-            assert (results.n_total == (results.n_pass + results.n_xfail));
+          command: ${{ env.TEST_SCRIPT }}
       - name: "Upload build artifact: log file"
         uses: actions/upload-artifact@v2
         with:
           name: run-unit-tests-matlab-${{ matrix.release }}
+          path: stk_runtests.log
+  run-unit-tests-octave:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-20.04]
+        # ubuntu-18.04: provides Octave 4.2.2, which has a problem with
+        # MEX files insides private directories making STK unusable
+        # https://savannah.gnu.org/bugs/?func=detailitem&item_id=53856
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install package
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install octave liboctave-dev
+      - name: Run test script
+        run: octave --eval "${{ env.TEST_SCRIPT }}"
+      - name: "Upload build artifact: log file"
+        uses: actions/upload-artifact@v2
+        with:
+          name: run-unit-tests-octave-${{ matrix.os }}
           path: stk_runtests.log
