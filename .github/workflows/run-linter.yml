@@ -6,10 +6,11 @@ env:
   TEST_SCRIPT: >
     cd ('./admin');
     m = stk_mlint_all ();
+    cd ('..');
     writetable (struct2table (m), 'stk_mlint_all.csv');
 
 jobs:
-  run-unit-tests-matlab:
+  run-linter-matlab:
     # Apparently only Ubuntu workers support MATLAB actions for now
     runs-on: ubuntu-latest
     strategy:
