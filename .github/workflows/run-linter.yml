@@ -1,0 +1,34 @@
+name: run-linter
+
+on: [push, pull_request]
+
+env:
+  TEST_SCRIPT: >
+    cd ('./admin');
+    m = stk_mlint_all ();
+    writetable (struct2table (m), 'stk_mlint_all.csv');
+
+jobs:
+  run-unit-tests-matlab:
+    # Apparently only Ubuntu workers support MATLAB actions for now
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        # Only very recent releases are available:
+        release: [R2021b, R2021a, R2020b, R2020a]
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v2
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v1
+        with:
+          release: ${{ matrix.release }}
+      - name: Run test script
+        uses: matlab-actions/run-command@v1
+        with:
+          command: ${{ env.TEST_SCRIPT }}
+      - name: "Upload mlint result (CSV file)"
+        uses: actions/upload-artifact@v2
+        with:
+          name: stk_mlint_all-${{ matrix.release }}
+          path: stk_mlint_all.csv
