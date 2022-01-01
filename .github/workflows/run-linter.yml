@@ -5,9 +5,10 @@ on: [push, pull_request]
 env:
   TEST_SCRIPT: >
     cd ('./admin');
-    m = stk_mlint_all ();
+    [m, b_ok] = stk_mlint_all ();
     cd ('..');
     writetable (struct2table (m), 'stk_mlint_all.csv');
+    if ~ b_ok,  error ('linter error');  end
 
 jobs:
   run-linter-matlab:

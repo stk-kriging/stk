@@ -61,7 +61,7 @@ if ischar(s)
     if size(s, 1) > 1
         s = cellstr (s);  % Handle string arrays by conversion to cellstr
     end
-elseif ~iscellstr(s)
+elseif ~ iscellstr (s)  %#ok<ISCLSTR> 
     error ('index: S must be a string, string array, or cellstr');
 end
 

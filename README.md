@@ -3,6 +3,7 @@
 [![license](https://img.shields.io/github/license/stk-kriging/stk)](COPYING)
 [![last commit](https://img.shields.io/github/last-commit/stk-kriging/stk/master)](https://github.com/stk-kriging/stk/commits/main)
 [![unit tests](https://github.com/stk-kriging/stk/actions/workflows/run-unit-tests.yml/badge.svg)](https://github.com/stk-kriging/stk/actions?query=workflow%3Arun-unit-tests++)
+[![run-linter](https://github.com/stk-kriging/stk/actions/workflows/run-linter.yml/badge.svg)](https://github.com/stk-kriging/stk/actions/workflows/run-linter.yml)
 
 This README file is part of
 

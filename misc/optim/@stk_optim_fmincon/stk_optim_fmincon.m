@@ -41,7 +41,7 @@
 function algo = stk_optim_fmincon (varargin)
 
 % Some default options
-options = optimset (        ...
+options0 = optimset (        ...
     'Display',      'off',  ...
     'GradObj',      'on',   ...
     'MaxFunEvals',  500,    ...
@@ -54,8 +54,14 @@ ws = warning ('off', 'all');
 try
     % Try to use the interior-point algorithm, which has been
     % found to provide satisfactory results in many cases
-    options = optimset (options, 'algorithm', 'interior-point');
+    options = optimset (options0, 'algorithm', 'interior-point');
+catch
+    % FIXME: This is brutal.  We should catch selectively the error raised
+    % by Matlab when (in old releases) 'algorithm' is not a legal parameter
+    % name or (does this exist?) 'interior-point' is not an algorithm name.
+    options = options0;
 end
+
 warning (ws);
 
 % TODO: see if the 'UseParallel' option can be useful
