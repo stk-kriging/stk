@@ -285,7 +285,7 @@ function [x, obj, info, iter, nf, lambda] = sqp_quadprog ...
     % constraint function given by user without gradient
     globals.cifcn = @empty_cf;
     if (iscell (cif))
-      if (length (cif) > 0)
+      if (~ isempty (cif))
         globals.cifcn = cif{1};
       end % if
     elseif (~ isempty (cif))

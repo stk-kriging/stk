@@ -1,7 +1,28 @@
+2022-01-03  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix some linter messages
+
+	* admin/stk_mlint_all.m: Make some linter errors 'critical', which
+	means that the corresponding github action will fail if one of
+	these reappears.
+	* .github/workflows/run-linter.yml: Let the github fail if the
+	linter status flag is false.
+	* README.md: Display linter action badge.
+	* admin/build_tools/generate_htmldoc.m: Fix some linter messages.
+	* admin/octpkg/post_install.m: Idem.
+	* misc/benchmarks/stk_benchmark_uppertriangular.m: Idem.
+	* misc/mole/linsolve/linsolve.m: Idem.
+	* misc/mole/matlab/index.m: Idem.
+	* misc/optim/@stk_optim_fmincon/stk_optim_fmincon.m: Idem.
+	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog.m: Idem.
+	* misc/test/stk_test.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+	* stk_init.m: Idem.
+
 2021-12-08  Julien Bect  <julien.bect@centralesupelec.fr>
 
     github: Run linter
-	
+
 	* admin/stk_mlint_all.m: A function to run the linter on
 	all the M-files of the toolbox.
 	* .github/workflows/run-linter.yml: Github action.

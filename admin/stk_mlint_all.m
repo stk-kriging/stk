@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function m = stk_mlint_all (root)
+function [m, b_ok] = stk_mlint_all (root)
 
 if nargin == 0
     root = fileparts (fileparts (mfilename ('fullpath')));
@@ -34,7 +34,15 @@ end
 
 m = stk_mlint_all_ (root);
 
-fprintf ('\n\nSYMMARY:\n')
+% Linter messages that trigger a global error
+% (this list will be growing progressively)
+critical_errors = {'ISCLSTR', 'ISMT', 'MINV', 'MSNU', 'NOPAR', 'NOPAR2', ...
+    'NOPRT', 'RESWD', 'STREMP', 'STRIN', 'STTOK', 'TRYNC'};
+
+b_ok = ~ any (ismember ({m.id}, critical_errors));
+
+% FIXME: Display critical errors separately
+fprintf ('\n\nSUMMARY:\n')
 [msg, ~, ic] = unique ({m.id});
 for k = 1:(length (msg))
     fprintf ('% 3d %s\n', sum (ic == k), msg{k});

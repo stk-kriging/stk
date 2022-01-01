@@ -71,7 +71,7 @@ W = randn (n);
 
 tic ();
 for i = 1:NREP
-    M1 = W * inv (K) * (W');
+    M1 = W * (inv (K)) * (W');
 end
 t1 = toc ();
 

@@ -105,7 +105,7 @@ s = (char (fread (fid)))';
 fclose (fid);
 
 s = regexprep (s, '<pre>.*</pre>', ...
-    ["<div id=\"GPLv3\">\n" s_GPLv3 "</div>\n"]);
+    ['<div id=\"GPLv3\">\n' s_GPLv3 '</div>\n']);
 s = regexprep (s, '<h2 class="tbdesc">.*?package</a></p>', '');
 
 fid = fopen_ (fn_copying, 'wt');

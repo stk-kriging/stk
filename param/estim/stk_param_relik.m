@@ -82,7 +82,7 @@ end
 if ~ simple_kriging
     
     % Construct a "filtering matrix" A = W'
-    [Q, R_ignored] = qr (P);  %#ok<NASGU> %the second argument *must* be here
+    [Q, R_ignored] = qr (P);  %#ok<ASGLU> %the second argument *must* be here
     W = Q(:, (q+1):n);
     
     % Compute G = W' * K * W, the covariance matrix of filtered observations

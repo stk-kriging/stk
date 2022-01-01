@@ -460,7 +460,7 @@ if compile
             end
             
             [lastmsg, lastid] = lastwarn ();
-            if strfind (lastid, 'GccVersion')
+            if ~ isempty (strfind (lastid, 'GccVersion'))  %#ok<STREMP> 
                 gcc_version_warning.msg = lastmsg;
                 gcc_version_warning.id = lastid;
             end
@@ -632,7 +632,7 @@ function_dir = fullfile (mole_dir, funct_name);
 
 w = which (funct_name);
 
-if (isempty (w)) || (~ isempty (strfind (w, root)))  % if the function is absent
+if (isempty (w)) || (~ isempty (strfind (w, root)))  %#ok<STREMP> % if the function is absent
     
     function_mfile = fullfile (function_dir, [funct_name '.m']);
     

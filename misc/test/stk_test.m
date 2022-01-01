@@ -281,8 +281,8 @@ for x__i = 1:length(x__blockidx)-1
             x__vars = deblank (x__vars);
             if (~ isempty (x__vars))
                 x__shared_names = {};
-                while ~isempty(x__vars),
-                    [x__shared_names{end+1}, x__vars] = strtok(x__vars, ', ');
+                while ~isempty(x__vars)
+                    [x__shared_names{end+1}, x__vars] = strtok(x__vars, ', ');  %#ok<STTOK> 
                 end
                 x__shared_vals = repmat({[]}, 1, length(x__shared_names));
             else
