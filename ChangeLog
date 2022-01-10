@@ -1,3 +1,15 @@
+2022-01-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Source formatting: Space after function name
+
+	* iago/crit/stk_optim_crit_EI.m: Space after function name.
+	* iago/crit/stk_optim_crit_SUR.m: Idem.
+	* model/prior_struct/stk_model.m: Idem.
+	* param/estim/stk_param_loomse.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+	* sampling/stk_sampcrit_akg_eval.m: Idem.
+	* sampling/stk_sampcrit_ei_eval.m: Idem.
+
 2022-01-03  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Fix some linter messages

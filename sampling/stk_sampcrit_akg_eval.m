@@ -201,7 +201,7 @@ end % function
 %! zi = [1; 0.9; 0.6; 0.1] - 10;
 %! ni = 4;
 %!
-%! M_prior = stk_model('stk_materncov32_iso');
+%! M_prior = stk_model ('stk_materncov32_iso');
 %! M_prior.param = log ([1.0; 2.1]);
 %! M_prior.lognoisevariance = 0.678;
 %!

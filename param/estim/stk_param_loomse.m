@@ -135,8 +135,8 @@ end % function
 %! NU     = 4.0;  % regularity parameter
 %! RHO1   = 0.4;  % scale (range) parameter
 %!
-%! model = stk_model('stk_materncov_aniso', DIM);
-%! model.param = log([SIGMA2; NU; 1/RHO1 * ones(DIM, 1)]);
+%! model = stk_model ('stk_materncov_aniso', DIM);
+%! model.param = log ([SIGMA2; NU; 1/RHO1 * ones(DIM, 1)]);
 
 %!error [C, dC1, dC2] = stk_param_loomse ();
 %!error [C, dC1, dC2] = stk_param_loomse (model);
