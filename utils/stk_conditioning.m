@@ -153,7 +153,7 @@ end % function
 %! zi = (1:NI)';  % linear response ;-)
 %!
 %! % Carry out the kriging prediction at points xt
-%! model = stk_model ('stk_materncov52_iso');
+%! model = stk_model (@stk_materncov52_iso);
 %! model.param = log ([1.0; 2.9]);
 %! [ignore_zp, lambda] = stk_predict (model, xi, [], xt);
 %!

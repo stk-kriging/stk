@@ -51,7 +51,7 @@ ni = stk_get_sample_size (xi);
 
 %% INITIAL PREDICTION
 % zp = stk_predict (algo.model, xi_ind, zi, xg);
-model_xg = stk_model ('stk_discretecov', algo.model, xg);
+model_xg = stk_model (@stk_discretecov, algo.model, xg);
 [model_xg, zi] = stk_fakenorep (model_xg, zi);
 zp = stk_predict(model_xg, xi_ind, zi, []);
 zpmean = zp.mean;

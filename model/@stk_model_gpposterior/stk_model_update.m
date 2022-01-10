@@ -85,7 +85,7 @@ end % function
 
 %!shared x_obs, z_obs, ref, M_prior, x_new, z_new, lnv_new
 %! [x_obs, z_obs, ref] = stk_dataset_twobumps ('noisy2');
-%! M_prior = stk_model ('stk_materncov52_iso');
+%! M_prior = stk_model (@stk_materncov52_iso);
 %! M_prior.param = [-0.15; 0.38];
 %! M_prior.lognoisevariance = 2 * log (ref.noise_std);
 %! x_new = [-0.79; -0.79];

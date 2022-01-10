@@ -45,7 +45,7 @@ end % function
 %! xt = (linspace (1, 2, 15))';  zt = sin (xt);
 %!
 %! % Prior model
-%! M0 = stk_model ('stk_materncov32_iso');
+%! M0 = stk_model (@stk_materncov32_iso);
 %! M0.param = log ([1.0; 2.1]);
 %!
 %! M1 = stk_model_update (M0, x1, z1);

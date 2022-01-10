@@ -71,7 +71,7 @@ end % function
 
 function M_prior = test_A_init ()
 
-% M_prior = stk_model ('stk_materncov32_iso');
+% M_prior = stk_model (@stk_materncov32_iso);
 % M_prior.param = [0; 0];
 
 % This works even in very releases of STK

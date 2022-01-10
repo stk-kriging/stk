@@ -209,7 +209,7 @@ end % function
 %! z_obs = sin (x_obs);
 %! x_prd = x0(idx_prd);
 %!
-%! M_prior = stk_model ('stk_materncov32_iso');
+%! M_prior = stk_model (@stk_materncov32_iso);
 %! M_prior.param = log ([1.0; 2.1]);
 %!
 %! M_post = stk_model_gpposterior (M_prior, x_obs, z_obs);
@@ -243,13 +243,13 @@ end % function
 %! assert (all (isnan (y_prd_nan.mean)));
 
 %!test % discrete model (prediction indices provided)
-%! M_prior1 = stk_model ('stk_discretecov', M_prior, x0);
+%! M_prior1 = stk_model (@stk_discretecov, M_prior, x0);
 %! M_post1 = stk_model_gpposterior (M_prior1, idx_obs, z_obs);
 %! y_prd1 = stk_predict (M_post1, idx_prd);
 %! assert (stk_isequal_tolrel (y_prd, y_prd1));
 
 %!test % discrete model (prediction indices *not* provided)
-%! M_prior1 = stk_model ('stk_discretecov', M_prior, x0);
+%! M_prior1 = stk_model (@stk_discretecov, M_prior, x0);
 %! M_post1 = stk_model_gpposterior (M_prior1, idx_obs, z_obs);
 %! y_prd1 = stk_predict (M_post1, []);  % predict them all!
 %! assert (stk_isequal_tolrel (y_prd, y_prd1(idx_prd, :)));

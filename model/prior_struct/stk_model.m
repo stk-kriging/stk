@@ -146,50 +146,50 @@ end % function
 
 %!test model = stk_model ();
 
-%!test model = stk_model ('stk_expcov_iso');
-%!test model = stk_model ('stk_expcov_iso', 1);
-%!test model = stk_model ('stk_expcov_iso', 3);
+%!test model = stk_model (@stk_expcov_iso);
+%!test model = stk_model (@stk_expcov_iso, 1);
+%!test model = stk_model (@stk_expcov_iso, 3);
 
-%!test model = stk_model ('stk_expcov_aniso');
-%!test model = stk_model ('stk_expcov_aniso', 1);
-%!test model = stk_model ('stk_expcov_aniso', 3);
+%!test model = stk_model (@stk_expcov_aniso);
+%!test model = stk_model (@stk_expcov_aniso, 1);
+%!test model = stk_model (@stk_expcov_aniso, 3);
 
-%!test model = stk_model ('stk_materncov_iso');
-%!test model = stk_model ('stk_materncov_iso', 1);
-%!test model = stk_model ('stk_materncov_iso', 3);
+%!test model = stk_model (@stk_materncov_iso);
+%!test model = stk_model (@stk_materncov_iso, 1);
+%!test model = stk_model (@stk_materncov_iso, 3);
 
-%!test model = stk_model ('stk_materncov_aniso');
-%!test model = stk_model ('stk_materncov_aniso', 1);
-%!test model = stk_model ('stk_materncov_aniso', 3);
+%!test model = stk_model (@stk_materncov_aniso);
+%!test model = stk_model (@stk_materncov_aniso, 1);
+%!test model = stk_model (@stk_materncov_aniso, 3);
 
-%!test model = stk_model ('stk_materncov32_iso');
-%!test model = stk_model ('stk_materncov32_iso', 1);
-%!test model = stk_model ('stk_materncov32_iso', 3);
+%!test model = stk_model (@stk_materncov32_iso);
+%!test model = stk_model (@stk_materncov32_iso, 1);
+%!test model = stk_model (@stk_materncov32_iso, 3);
 
-%!test model = stk_model ('stk_materncov32_aniso');
-%!test model = stk_model ('stk_materncov32_aniso', 1);
-%!test model = stk_model ('stk_materncov32_aniso', 3);
+%!test model = stk_model (@stk_materncov32_aniso);
+%!test model = stk_model (@stk_materncov32_aniso, 1);
+%!test model = stk_model (@stk_materncov32_aniso, 3);
 
-%!test model = stk_model ('stk_materncov52_iso');
-%!test model = stk_model ('stk_materncov52_iso', 1);
-%!test model = stk_model ('stk_materncov52_iso', 3);
+%!test model = stk_model (@stk_materncov52_iso);
+%!test model = stk_model (@stk_materncov52_iso, 1);
+%!test model = stk_model (@stk_materncov52_iso, 3);
 
-%!test model = stk_model ('stk_materncov52_aniso');
-%!test model = stk_model ('stk_materncov52_aniso', 1);
-%!test model = stk_model ('stk_materncov52_aniso', 3);
+%!test model = stk_model (@stk_materncov52_aniso);
+%!test model = stk_model (@stk_materncov52_aniso, 1);
+%!test model = stk_model (@stk_materncov52_aniso, 3);
 
-%!test model = stk_model ('stk_gausscov_iso');
-%!test model = stk_model ('stk_gausscov_iso', 1);
-%!test model = stk_model ('stk_gausscov_iso', 3);
+%!test model = stk_model (@stk_gausscov_iso);
+%!test model = stk_model (@stk_gausscov_iso, 1);
+%!test model = stk_model (@stk_gausscov_iso, 3);
 
-%!test model = stk_model ('stk_gausscov_aniso');
-%!test model = stk_model ('stk_gausscov_aniso', 1);
-%!test model = stk_model ('stk_gausscov_aniso', 3);
+%!test model = stk_model (@stk_gausscov_aniso);
+%!test model = stk_model (@stk_gausscov_aniso, 1);
+%!test model = stk_model (@stk_gausscov_aniso, 3);
 
-%!test model = stk_model ('stk_sphcov_iso');
-%!test model = stk_model ('stk_sphcov_iso', 1);
-%!test model = stk_model ('stk_sphcov_iso', 3);
+%!test model = stk_model (@stk_sphcov_iso);
+%!test model = stk_model (@stk_sphcov_iso, 1);
+%!test model = stk_model (@stk_sphcov_iso, 3);
 
-%!test model = stk_model ('stk_sphcov_aniso');
-%!test model = stk_model ('stk_sphcov_aniso', 1);
-%!test model = stk_model ('stk_sphcov_aniso', 3);
+%!test model = stk_model (@stk_sphcov_aniso);
+%!test model = stk_model (@stk_sphcov_aniso, 1);
+%!test model = stk_model (@stk_sphcov_aniso, 3);

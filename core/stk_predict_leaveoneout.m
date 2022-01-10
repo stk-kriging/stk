@@ -81,7 +81,7 @@ end % function
 %! n = 20;
 %! x_obs = stk_sampling_regulargrid (n, 1, [0; 2*pi]);
 %! z_obs = stk_feval (@sin, x_obs);
-%! model = stk_model ('stk_materncov32_iso');
+%! model = stk_model (@stk_materncov32_iso);
 %! model.param = log ([1; 5]);
 
 %!test  % one output

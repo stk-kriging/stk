@@ -61,7 +61,7 @@ stk_title  ('True function and noisy observed data');
 % Define a model with a constant but unknown mean (ordinary kriging)
 % and a Matern covariance function, the parameters of which will be
 % estimated from the data.
-model = stk_model ('stk_materncov_iso');
+model = stk_model (@stk_materncov_iso);
 
 % Indicate that with the noise variance to be estimated
 model.lognoisevariance = nan;

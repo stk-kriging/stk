@@ -97,7 +97,7 @@ end % function
 %! for j = 0:2
 %!     for k = 1:(length (lm_list))
 %!         
-%!         model = stk_model ('stk_materncov32_iso', d);
+%!         model = stk_model (@stk_materncov32_iso, d);
 %!         model.lm = lm_list{k};
 %!         model.param = log ([1; 5]);
 %!         

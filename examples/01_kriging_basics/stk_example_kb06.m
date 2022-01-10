@@ -67,7 +67,7 @@ param0 = log ([SIGMA2; NU; 1/RHO1]);
 
 %% Ordinary kriging (constant mean)
 
-model = stk_model ('stk_materncov_iso', DIM);
+model = stk_model (@stk_materncov_iso, DIM);
 model.lognoisevariance = 2 * log (1e-10);
 % model.lm = stk_lm_constant is the default
 

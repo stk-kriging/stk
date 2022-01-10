@@ -55,7 +55,7 @@ xi_ind = ref.xi_ind;
 
 %% Specification of the model
 
-model = stk_model ('stk_materncov_iso');
+model = stk_model (@stk_materncov_iso);
 
 % Parameters for the Matern covariance
 % ("help stk_materncov_iso" for more information)

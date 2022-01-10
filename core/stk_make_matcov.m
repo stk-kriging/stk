@@ -89,7 +89,7 @@ end % function
 
 %!shared model, model2, x0, x1, n0, n1, d, Ka, Kb, Kc, Pa, Pb, Pc
 %! n0 = 20;  n1 = 10;  d = 4;
-%! model = stk_model ('stk_materncov52_aniso', d);
+%! model = stk_model (@stk_materncov52_aniso, d);
 %! model.lm = stk_lm_affine;
 %! model.param = log ([1.0; 2.1; 2.2; 2.3; 2.4]);
 %! model2 = model;  model2.lognoisevariance = log(0.01);

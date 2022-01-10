@@ -46,7 +46,7 @@ NU     = 2.5;  % Regularity parameter
 RHO    = 0.4;  % Scale (range) parameter
 
 % Model
-model = stk_model ('stk_materncov_iso');
+model = stk_model (@stk_materncov_iso);
 model.param = log ([SIGMA2; NU; 1/RHO]);
 
 NB_PATHS = 10;

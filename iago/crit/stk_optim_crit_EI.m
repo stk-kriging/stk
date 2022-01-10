@@ -50,7 +50,7 @@ xi = xg(xi_ind, :);
 ni = stk_get_sample_size (xi);
 
 %% INITIAL PREDICTION
-model_xg = stk_model ('stk_discretecov', algo.model, xg);
+model_xg = stk_model (@stk_discretecov, algo.model, xg);
 zp = stk_predict (model_xg, xi_ind, zi, []);
 
 %% ACTIVATE DISPLAY?

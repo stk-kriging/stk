@@ -1,5 +1,60 @@
 2022-01-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Calling stk_model with a function handle is better
+
+	* core/stk_make_matcov.m: Call stk_model with a function handle.
+	* core/stk_model_update.m: Idem.
+	* core/stk_predict.m: Idem.
+	* core/stk_predict_leaveoneout.m: Idem.
+	* covfcs/stk_discretecov.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb01.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb01n.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb02.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb02n.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb03.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb05.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb06.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb07.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb08.m: Idem.
+	* examples/01_kriging_basics/stk_example_kb09.m: Idem.
+	* examples/02_design_of_experiments/stk_example_doe03.m: Idem.
+	* examples/02_design_of_experiments/stk_example_doe04.m: Idem.
+	* examples/02_design_of_experiments/stk_example_doe05.m: Idem.
+	* examples/02_design_of_experiments/stk_example_doe06.m: Idem.
+	* examples/03_miscellaneous/stk_example_misc02.m: Idem.
+	* examples/03_miscellaneous/stk_example_misc03.m: Idem.
+	* examples/03_miscellaneous/stk_example_misc04.m: Idem.
+	* examples/03_miscellaneous/stk_example_misc05.m: Idem.
+	* iago/crit/stk_optim_crit_EI.m: Idem.
+	* iago/crit/stk_optim_crit_SUR.m: Idem.
+	* iago/crit/stk_optim_crit_iago.m: Idem.
+	* iago/utils/stk_optim_init.m: Idem.
+	* misc/benchmarks/stk_benchmark_logdet.m: Idem.
+	* misc/benchmarks/stk_benchmark_loocv.m: Idem.
+	* misc/benchmarks/stk_benchmark_paramestim.m: Idem.
+	* misc/benchmarks/stk_benchmark_predict.m: Idem.
+	* model/@stk_model_gpposterior/get.m: Idem.
+	* model/@stk_model_gpposterior/set.m: Idem.
+	* model/@stk_model_gpposterior/stk_model_gpposterior.m: Idem.
+	* model/@stk_model_gpposterior/stk_model_update.m: Idem.
+	* model/@stk_model_gpposterior/stk_predict_.m: Idem.
+	* model/@stk_model_gpposterior/stk_predict_leaveoneout.m: Idem.
+	* model/noise/@stk_gaussiannoise_het0/set.m: Idem.
+	* model/prior_struct/stk_covmat_noise.m: Idem.
+	* model/prior_struct/stk_model.m: Idem.
+	* model/prior_struct/stk_ortho_func.m: Idem.
+	* param/estim/stk_param_estim.m: Idem.
+	* param/estim/stk_param_gls.m: Idem.
+	* param/estim/stk_param_init.m: Idem.
+	* param/estim/stk_param_init_lnv.m: Idem.
+	* param/estim/stk_param_loomse.m: Idem.
+	* param/estim/stk_param_loopvc.m: Idem.
+	* param/estim/stk_param_relik.m: Idem.
+	* sampling/stk_sampcrit_akg_eval.m: Idem.
+	* sampling/stk_sampcrit_ei_eval.m: Idem.
+	* utils/stk_conditioning.m: Idem.
+	* utils/stk_generate_samplepaths.m: Idem.
+
 	Source formatting: Space after function name
 
 	* iago/crit/stk_optim_crit_EI.m: Space after function name.

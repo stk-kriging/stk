@@ -110,7 +110,7 @@ z0 = z0 + sqrt (NOISE_VARIANCE) * randn (size (z0));
 
 %% Specification of the model (Gaussian process prior)
 
-model0 = stk_model ('stk_materncov52_iso');
+model0 = stk_model (@stk_materncov52_iso);
 
 % Assume that the variance of the observation noise is known
 model0.lognoisevariance = log (NOISE_VARIANCE);

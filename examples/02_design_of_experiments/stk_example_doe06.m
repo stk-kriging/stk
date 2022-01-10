@@ -131,7 +131,7 @@ data_init = [x_init, z_init];  display (data_init);
 %% Specification of a Gaussian process prior
 
 % Same as in stk_example_doe03 (read explanation there).
-model = stk_model ('stk_materncov52_iso');
+model = stk_model (@stk_materncov52_iso);
 SIGMA2 = 4.0 ^ 2;  % Variance parameter
 RHO = 0.5;         % Length scale (range) parameter
 model.param = log ([SIGMA2; 1/RHO]);

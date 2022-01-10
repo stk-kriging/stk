@@ -41,7 +41,7 @@ algo.dim = dim;
 algo.box = box;
 
 %% DEFAULT MODEL SPECIFICATION
-model = stk_model ('stk_materncov_aniso', dim);
+model = stk_model (@stk_materncov_aniso, dim);
 model.param = nan (dim + 2, 1);
 
 %% PROCESS OPTIONS

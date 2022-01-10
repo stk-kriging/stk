@@ -121,7 +121,7 @@ end % function
 %! z_obs = sin (double (x_obs));
 %! x_prd = x0(idx_prd);
 %!
-%! model = stk_model ('stk_materncov32_iso');
+%! model = stk_model (@stk_materncov32_iso);
 %! model.param = log ([1.0; 2.1]);
 
 %!error y_prd1 = stk_predict ();

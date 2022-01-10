@@ -43,7 +43,7 @@ t = (0:0.01:30)';
 
 %% Gaussian process model with constant prior mean
 
-model = stk_model ('stk_materncov52_iso');
+model = stk_model (@stk_materncov52_iso);
 model.lognoisevariance = nan;
 
 % Initial guess for the parameters of the Matern covariance
@@ -66,7 +66,7 @@ hold on;  plot (t, S_posterior.mean, 'r-');
 T0 = 2 * pi;
 
 % Construct a prior model with sinusoidal trend
-model2 = stk_model ('stk_materncov52_iso');
+model2 = stk_model (@stk_materncov52_iso);
 model2.lm = @(t)([ones(length(t),1) sin(2*pi*t/T0) cos(2*pi*t/T0)]);
 model2.lognoisevariance = nan;
 

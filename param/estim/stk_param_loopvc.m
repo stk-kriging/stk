@@ -136,7 +136,7 @@ end % function
 %! NU     = 4.0;  % regularity parameter
 %! RHO1   = 0.4;  % scale (range) parameter
 %!
-%! model = stk_model ('stk_materncov_aniso', DIM);
+%! model = stk_model (@stk_materncov_aniso, DIM);
 %! model.param = log ([SIGMA2; NU; 1/RHO1 * ones(DIM, 1)]);
 
 %!error [C, dC1, dC2] = stk_param_loopvc ();
@@ -168,7 +168,7 @@ end % function
 %!shared xi, zi, model, TOL_REL
 %! xi = [-1 -.6 -.2 .2 .6 1]';
 %! zi = [-0.11 1.30 0.23 -1.14 0.36 -0.37]';
-%! model = stk_model ('stk_materncov_iso');
+%! model = stk_model (@stk_materncov_iso);
 %! model.param = log ([1.0 4.0 2.5]);
 %! model.lognoisevariance = log (0.01);
 %! TOL_REL = 0.01;
@@ -195,7 +195,7 @@ end % function
 %! TOL_REL = 1e-2;
 %! DELTA = 1e-6;
 %!
-%! model = stk_model ('stk_materncov52_iso', DIM);
+%! model = stk_model (@stk_materncov52_iso, DIM);
 %! model.param = [1 1];
 %!
 %! xi = stk_sampling_halton_rr2 (NI, DIM, BOX);

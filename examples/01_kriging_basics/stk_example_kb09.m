@@ -57,7 +57,7 @@ zt = ref.zt;
 % Define a model with a constant but unknown mean (ordinary kriging)
 % and a Matern 5/2 covariance function, the parameters of which will be
 % estimated from the data.
-model = stk_model ('stk_materncov52_iso');
+model = stk_model (@stk_materncov52_iso);
 
 % Variance of the heteroscedastic noise (assumed to be known).
 % Note that ref.noise_std is a *vector* in this case.

@@ -51,7 +51,7 @@ zi = [1.00; 1.10; 0.20; 0.35];
 
 %% SPECIFICATION OF THE MODEL & REML ESTIMATION
 
-model = stk_model ('stk_materncov_iso');
+model = stk_model (@stk_materncov_iso);
 
 % small "regularization noise".
 model.lognoisevariance = 2 * log (1e-6);

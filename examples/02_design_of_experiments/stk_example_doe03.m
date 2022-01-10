@@ -98,7 +98,7 @@ z0.colnames = {'z'};
 % design, which in turn would spoil the fun from a sequential design point
 % of view (because the example is very simple).
 
-model = stk_model ('stk_materncov52_iso');
+model = stk_model (@stk_materncov52_iso);
 % NOTE: the suffix '_iso' indicates an ISOTROPIC covariance function, but the
 % distinction isotropic / anisotropic is irrelevant here since DIM = 1.
 

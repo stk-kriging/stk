@@ -83,7 +83,7 @@ end % function
 %!shared xi, zi, M_prior, xt, zp, EIref, EI1, EI2, EI3
 %! xi = [0; 0.2; 0.7; 0.9];
 %! zi = [1; 0.9; 0.6; 0.1];
-%! M_prior = stk_model ('stk_materncov32_iso');
+%! M_prior = stk_model (@stk_materncov32_iso);
 %! M_prior.param = log ([1.0; 2.1]);
 %! xt = stk_sampling_regulargrid (20, 1, [0; 1]);
 %! zp = stk_predict (M_prior, xi, zi, xt);

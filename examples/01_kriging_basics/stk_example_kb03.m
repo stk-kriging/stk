@@ -90,7 +90,7 @@ axis (BOX);  stk_title ('function to be approximated');
 %% CHOOSE A KRIGING (GAUSSIAN PROCESS) MODEL
 
 % We start with a generic (anisotropic) Matern covariance function.
-model = stk_model ('stk_materncov_aniso', DIM);
+model = stk_model (@stk_materncov_aniso, DIM);
 
 % As a default choice, a constant (but unknown) mean is used,
 % i.e.,  model.lm = stk_lm_constant.

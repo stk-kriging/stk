@@ -76,7 +76,7 @@ if NOISY,
     zi = zi + noise_std * randn (ni, 1);
 end
 
-model = stk_model ('stk_materncov_iso');
+model = stk_model (@stk_materncov_iso);
 
 if ~ NOISY,
     % Noiseless case: set a small "regularization" noise

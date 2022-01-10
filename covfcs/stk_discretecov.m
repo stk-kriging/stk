@@ -78,13 +78,13 @@ end % function
 %! n0 = 20; n1 = 10; dim = 4;
 %! x0 = stk_sampling_randunif (n0, dim);
 %! x1 = stk_sampling_randunif (n1, dim);
-%! model = stk_model ('stk_materncov52_aniso', dim);
+%! model = stk_model (@stk_materncov52_aniso, dim);
 %! model.lm = stk_lm_affine ();
 %! model.param = log ([1.0; 2.1; 2.2; 2.3; 2.4]);
 
 %!test % without noise, pairwise = false
 %! model.lognoisevariance = - inf;
-%! model2 = stk_model ('stk_discretecov', model, x0);
+%! model2 = stk_model (@stk_discretecov, model, x0);
 %! idx = [1 4 9];
 %! [K1, P1] = stk_make_matcov (model,  x0(idx, :));
 %! [K2, P2] = stk_make_matcov (model2, idx');
@@ -98,7 +98,7 @@ end % function
 
 %!test % with noise, pairwise = false
 %! model.lognoisevariance = log (0.01);
-%! model2 = stk_model ('stk_discretecov', model, x0);
+%! model2 = stk_model (@stk_discretecov, model, x0);
 %! idx = [1 4 9];
 %! [K1, P1] = stk_make_matcov (model,  x0(idx, :));
 %! [K2, P2] = stk_make_matcov (model2, idx');

@@ -109,7 +109,7 @@ end % function
 %! xi = (linspace (-1, 1, ni))' + 0.2 * (randn (ni, 1));
 %! zi = stk_feval (f, xi);
 %!
-%! model = stk_model ('stk_materncov_iso');
+%! model = stk_model (@stk_materncov_iso);
 %! model.param = log ([1; 5/2; 1/0.4]);
 %! model.lognoisevariance = nan;
 %! lnv = stk_param_init_lnv (model, xi, zi);

@@ -50,7 +50,7 @@ xg = [xi; xc];  ng = ni + nc;                   % evaluations & candidate points
 
 if algo.disp,  view_init (algo, xi, zi, xg);  end
 
-model_xg = stk_model ('stk_discretecov', algo.model, xg);
+model_xg = stk_model (@stk_discretecov, algo.model, xg);
 [model_xg, zi] = stk_fakenorep (model_xg, zi);
 zg_sim0 = stk_generate_samplepaths (model_xg, (1:ng)', algo.nsamplepaths);
 [zg_pred, lambda] = stk_predict (model_xg, xi_ind, zi, []);

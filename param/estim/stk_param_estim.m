@@ -252,7 +252,7 @@ end % function
 %! RHO1   = 0.4;  % scale (range) parameter
 %! param0 = log ([SIGMA2; NU; 1/RHO1]);
 %!
-%! model = stk_model ('stk_materncov_iso');
+%! model = stk_model (@stk_materncov_iso);
 
 %!test  % noiseless
 %! zi = stk_feval (f, xi);
@@ -298,7 +298,7 @@ end % function
 %!error param = stk_param_estim (model, xi);
 
 %!test % Constant response
-%! model = stk_model ('stk_materncov52_iso');
+%! model = stk_model (@stk_materncov52_iso);
 %! n = 10;  x = stk_sampling_regulargrid (n, 1, [0; 1]);  z = ones (size (x));
 %! param = stk_param_estim (model, x, z);
 %! assert ((all (isfinite (param))) && (length (param) == 2));

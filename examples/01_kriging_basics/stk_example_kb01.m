@@ -73,7 +73,7 @@ stk_labels ('input variable x', 'response z');
 % The following line defines a model with a constant but unknown mean (ordinary
 % kriging) and a Matern covariance function. (Some default parameters are also
 % set, but we override them below.)
-model = stk_model ('stk_materncov_iso');
+model = stk_model (@stk_materncov_iso);
 
 % NOTE: the suffix '_iso' indicates an ISOTROPIC covariance function, but the
 % distinction isotropic / anisotropic is irrelevant here since DIM = 1.

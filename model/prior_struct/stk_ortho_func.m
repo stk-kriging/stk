@@ -72,7 +72,7 @@ end % function
 
 %!shared model, x, n, d
 %! n = 15; d = 4;
-%! model = stk_model ('stk_materncov_aniso', d);
+%! model = stk_model (@stk_materncov_aniso, d);
 %! x = stk_sampling_randunif (n, d);
 %! model = rmfield (model, 'lm');  % Test the old .order approach
 

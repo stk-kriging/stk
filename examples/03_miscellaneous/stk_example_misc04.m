@@ -79,10 +79,10 @@ z_obs(:, 2) = f2 (x_obs.data);  %         ... but see Octave bug #49267
 
 %% Stationary GP models
 
-model1 = stk_model ('stk_materncov52_aniso', DIM);
+model1 = stk_model (@stk_materncov52_aniso, DIM);
 model1.param = stk_param_estim (model1, x_obs, z_obs(:, 1));
 
-model2 = stk_model ('stk_materncov52_aniso', DIM);
+model2 = stk_model (@stk_materncov52_aniso, DIM);
 model2.param = stk_param_estim (model2, x_obs, z_obs(:, 2));
 
 stk_figure ('stk_example_misc04 (a)');

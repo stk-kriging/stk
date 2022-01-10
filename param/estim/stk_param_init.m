@@ -379,7 +379,7 @@ end % function
 
 %!test
 %! xi = (1:10)';  zi = sin (xi);
-%! model = stk_model ('stk_materncov52_iso');
+%! model = stk_model (@stk_materncov52_iso);
 %! model.param = stk_param_init (model, xi, zi, [1; 10], false);
 %! xt = (1:9)' + 0.5;  zt = sin (xt);
 %! zp = stk_predict (model, xi, zi, xt);
@@ -389,7 +389,7 @@ end % function
 %! f = @(x) sin (x);
 %! xi = stk_sampling_regulargrid (10, 1);  zi = stk_feval (f, xi);
 %! shift = 1000;  scale = 0.01;
-%! model = stk_model ('stk_materncov32_iso');
+%! model = stk_model (@stk_materncov32_iso);
 %! p1 = stk_param_init (model, xi, zi);
 %! p2 = stk_param_init (model, xi, shift + scale .* zi);
 %! assert (stk_isequal_tolabs (p2(1), p1(1) + log (scale^2), 1e-10))
@@ -409,63 +409,63 @@ end % function
 %! zt = stk_feval (f, xt);                        % Values of f on the grid
 
 %!test
-%! model = stk_model ('stk_materncov_iso');
+%! model = stk_model (@stk_materncov_iso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
 %! model.param = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
-%! model = stk_model ('stk_materncov_aniso');
+%! model = stk_model (@stk_materncov_aniso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
 %! model.param = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
-%! model = stk_model ('stk_materncov32_iso');
+%! model = stk_model (@stk_materncov32_iso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
 %! model.param = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
-%! model = stk_model ('stk_materncov32_aniso');
+%! model = stk_model (@stk_materncov32_aniso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
 %! model.param = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
-%! model = stk_model ('stk_materncov52_iso');
+%! model = stk_model (@stk_materncov52_iso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
 %! model.param = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
-%! model = stk_model ('stk_materncov52_aniso');
+%! model = stk_model (@stk_materncov52_aniso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
 %! model.param = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
-%! model = stk_model ('stk_gausscov_iso');
+%! model = stk_model (@stk_gausscov_iso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
 %! model.param = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
-%! model = stk_model ('stk_gausscov_aniso');
+%! model = stk_model (@stk_gausscov_aniso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
 %! model.param = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test  % Homoscedastic case / do_estim_lnv = true
-%! model = stk_model ('stk_materncov32_iso');
+%! model = stk_model (@stk_materncov32_iso);
 %! [model.param, model.lognoisevariance] = ...
 %!     stk_param_init (model, xi, zi, BOX, true);
 %! [model.param, model.lognoisevariance] = ...
@@ -475,13 +475,13 @@ end % function
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!error  % Homoscedastic case / do_estim_lnv = false / model.lnv = nan
-%! model = stk_model ('stk_materncov32_iso');
+%! model = stk_model (@stk_materncov32_iso);
 %! model.lognoisevariance = nan;  % not compatible with do_estim_lnv == false
 %! [model.param, model.lognoisevariance] = ...
 %!     stk_param_init (model, xi, zi, BOX, false);
 
 %!test  % Heteroscedastic case / known noise variance
-%! model = stk_model ('stk_materncov32_iso');
+%! model = stk_model (@stk_materncov32_iso);
 %! lnv = log ((100 + rand (size (zi))) / 1e6);
 %! model.lognoisevariance = lnv;  % here we say that lnv is known
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
@@ -491,7 +491,7 @@ end % function
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!shared model, x, z
-%! model = stk_model ('stk_materncov52_iso');
+%! model = stk_model (@stk_materncov52_iso);
 %! n = 10;  x = stk_sampling_regulargrid (n, 1, [0; 1]);  z = ones (size (x));
 
 %!test % Constant response, noiseless model

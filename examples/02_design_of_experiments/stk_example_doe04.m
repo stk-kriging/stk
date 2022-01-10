@@ -53,7 +53,7 @@ n = 400;
 x = stk_sampling_regulargrid (n, DIM, BOX);  x.colnames = {'x'};
 z = stk_feval (f, x);
 
-model = stk_model ('stk_materncov52_iso');
+model = stk_model (@stk_materncov52_iso);
 model.param = log ([0.1 0.8]);
 
 

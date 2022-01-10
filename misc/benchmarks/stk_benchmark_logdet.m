@@ -32,7 +32,7 @@ NREP = 100; n = 200; % test on large matrices
 
 d = 2;
 x = stk_sampling_maximinlhs (n, d, [], 10);
-model = stk_model ('stk_materncov52_aniso', d);
+model = stk_model (@stk_materncov52_aniso, d);
 model.param = zeros (size (model.param));
 
 propname = {                       ...

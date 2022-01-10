@@ -59,7 +59,7 @@ stk_disp_examplewelcome;  stk_figure ('stk_example_misc05');
 
 %% Gaussian process model
 
-model = stk_model ('stk_materncov52_iso');
+model = stk_model (@stk_materncov52_iso);
 
 % Variance of the heteroscedastic noise:  tau^2(x) = exp(param) * (x + 1) ^ 2
 % (note that the true variance function for this dataset is not exactly of this form...)

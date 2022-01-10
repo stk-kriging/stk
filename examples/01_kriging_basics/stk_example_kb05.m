@@ -74,7 +74,7 @@ xi_ind = ref.xi_ind;
 % The following line defines a model with a constant but unknown mean
 % (ordinary kriging) and a Matern covariance function. (Some default
 % parameters are also set, but we override them below.)
-model = stk_model ('stk_materncov_iso');
+model = stk_model (@stk_materncov_iso);
 
 % Parameters for the Matern covariance
 % ("help stk_materncov_iso" for more information)
