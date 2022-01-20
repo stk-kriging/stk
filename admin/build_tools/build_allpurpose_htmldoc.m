@@ -89,7 +89,7 @@ s_table = sprintf ("\
       <img src=\"images/download.png\"/>\n\
     </td>\n\
     <td class=\"download_link\">\n\
-      <a href=\"http://sourceforge.net/projects/kriging/files/stk/\" class=\"download_link\">\n\
+      <a href=\"https://github.com/stk-kriging/stk/releases\" class=\"download_link\">\n\
       Download STK</a>\n\
     </td>\n\
   </tr></table>\n\
