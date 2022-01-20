@@ -13,7 +13,7 @@ A BibTeX entry for LaTeX users is:
     title = {{STK}: a {S}mall ({M}atlab/{O}ctave) {T}oolbox
              for {K}riging. {R}elease $VERNUM},
     year = {$YEAR},
-    url = {http://kriging.sourceforge.net}
+    url = {https://github.com/stk-kriging/stk/}
   }
 
 We have invested a lot of time and effort in the development of STK.
