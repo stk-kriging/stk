@@ -1,3 +1,9 @@
+2022-01-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_generate_samplepaths.m: Fix copyright notice
+
+	* utils/stk_generate_samplepaths.m: Fix copyright notice.
+
 2022-01-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Calling stk_model with a function handle is better
