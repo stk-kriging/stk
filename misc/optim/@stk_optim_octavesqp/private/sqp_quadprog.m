@@ -186,7 +186,7 @@
 %    This file is part of
 %
 %            STK: a Small (Matlab/Octave) Toolbox for Kriging
-%               (http://sourceforge.net/projects/kriging)
+%               (https://github.com/stk-kriging/stk/)
 %
 %    STK is free software: you can redistribute it and/or modify it under
 %    the terms of the GNU General Public License as published by the Free
