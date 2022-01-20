@@ -46,9 +46,9 @@
   can be read using the usual dot-indexing notation or through the
   (slightly faster) getter `stk_get_sample_size`.
 
-* `stk_model_gpposterior` also have a `sample_size` property, which
-  corresponds to the sample size of the underlying data set and can be
-  read similarly.
+* `stk_model_gpposterior` objects also have a `sample_size` property,
+  which corresponds to the sample size of the underlying data set and
+  can be read similarly.
 
 * `stk_length`: deprecated (use `stk_get_sample_size` instead).
 
