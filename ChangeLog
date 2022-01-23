@@ -1,3 +1,9 @@
+2022-01-23  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Makefile: sourceforge -> github in variable names & targets
+
+	* Makefile: sourceforge -> github in variable names & targets.
+
 2022-01-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_generate_samplepaths.m: Fix copyright notice

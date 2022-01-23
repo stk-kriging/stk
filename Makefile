@@ -1,6 +1,6 @@
 ## Copyright Notice
 ##
-##    Copyright (C) 2015, 2017, 2019, 2020 CentraleSupelec
+##    Copyright (C) 2015, 2017, 2019, 2020, 2022 CentraleSupelec
 ##
 ##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -9,7 +9,7 @@
 ##    This file is part of
 ##
 ##            STK: a Small (Matlab/Octave) Toolbox for Kriging
-##               (http://sourceforge.net/projects/kriging)
+##               (https://github.com/stk-kriging/stk/)
 ##
 ##    STK is free software: you can redistribute it and/or modify it under
 ##    the terms of the GNU General Public License as published by the Free
@@ -29,21 +29,21 @@ VERNUM=$(shell cat stk_version.m | grep -o "v = '.*'" \
 
 .PHONY: all release \
   octaveforge-release octaveforge-package octaveforge-htmldoc \
-  sourceforge-release sourceforge-allpurpose sourceforge-octpkg \
+  github-release github-allpurpose github-octpkg \
   forgedoc-inspect check_git_clean clean
 
 all: release forgedoc-inspect
 
-release: octaveforge-release sourceforge-release
+release: octaveforge-release github-release
 
 # "dist rule" expected by OF admins
 # (build packages only, not OF html doc or forgedoc-inspect)
-dist: octaveforge-package sourceforge-release
+dist: octaveforge-package github-release
 
 
 ## Directories
 BUILD_DIR=${CURDIR}/build
-SF_DIR=${BUILD_DIR}/sourceforge
+SF_DIR=${BUILD_DIR}/github
 OF_DIR=${BUILD_DIR}/octaveforge
 
 ## Programs
@@ -149,17 +149,17 @@ ${OF_DIR}:
 	@mkdir -p ${OF_DIR}
 
 
-##### ALLPURP: SourceForge Matlab/Octave Release #####
+##### ALLPURP: Github Matlab/Octave Release #####
 
-sourceforge-release: sourceforge-allpurpose sourceforge-octpkg
+github-release: github-allpurpose github-octpkg
 	@echo
 	@echo === tarballs for the *stk project* FRS ===
 	@ls -lh ${SF_DIR}/*.tar.gz
 	@echo
 
-sourceforge-allpurpose: ${SF_ALLPURP_TARBALL}
+github-allpurpose: ${SF_ALLPURP_TARBALL}
 
-sourceforge-octpkg: ${SF_OCTPKG_TARBALL}
+github-octpkg: ${SF_OCTPKG_TARBALL}
 
 ${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_TIMESTAMP} | ${SF_DIR}
 	@echo
