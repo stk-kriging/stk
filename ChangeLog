@@ -1,3 +1,9 @@
+2022-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_example_kb10.m: Fix typo.
+
+	* stk_example_kb10.m: Fix typo.
+
 2022-01-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Makefile: sourceforge -> github in variable names & targets

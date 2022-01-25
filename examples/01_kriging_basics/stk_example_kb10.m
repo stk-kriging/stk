@@ -54,7 +54,7 @@ y = stk_testfun_borehole (x);                % Obtain the responses on the DoE x
 M_prior = stk_model (@stk_materncov52_aniso, d);  % prior
 M_prior.param = stk_param_estim (M_prior, x, y);  % ReML parameter estimation
 
-% Compye LOO predictions and residuals
+% Compute LOO predictions and residuals
 [y_LOO, res_LOO] = stk_predict_leaveoneout (M_prior, x, y);
 
 % Plot predictions VS observations (left planel)
