@@ -1,5 +1,10 @@
 2022-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Add missing 'hold off' in some plotting functions
+
+	* utils/stk_plot_histnormres.m: Add missing 'hold off'.
+	* utils/stk_plot_predvsobs.m: Idem.
+
 	stk_example_kb10.m: Fix typo.
 
 	* stk_example_kb10.m: Fix typo.

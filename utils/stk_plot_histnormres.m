@@ -67,7 +67,7 @@ M = max (3, max (abs (xlim ())));  xlim ([-M, M]);
 % Plot reference N(0, 1) pdf
 rr = linspace (-M, M, 100);
 pdf_ref = 1 / (sqrt (2 * pi)) * (exp (- 0.5 * (rr .^ 2)));
-h.ref_pdf = plot (rr, pdf_ref, 'r--');
+h.ref_pdf = plot (rr, pdf_ref, 'r--');  hold off;
 
 % Apply options
 if ~ isempty (opts)

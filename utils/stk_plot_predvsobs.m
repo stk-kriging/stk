@@ -55,7 +55,7 @@ end
 h.data = plot (h_axes, y, y_pred, 'kd');  hold on;
 
 % Plot "reference" line y_LOO = y
-h.refline = plot (h_axes, xlim, xlim, 'r--');
+h.refline = plot (h_axes, xlim, xlim, 'r--');  hold off;
 
 % Apply options
 if ~ isempty (opts)
