@@ -62,7 +62,7 @@ The STK toolbox comes in two flavours:
 
  * an "all purpose" release, which is suitable for use both with
    [GNU Octave](http://www.gnu.org/software/octave/)
-   and with [Matlab](www.mathworks.com/products/matlab/).
+   and with [Matlab](https://www.mathworks.com/products/matlab/).
  * an Octave package, for people who want to install and use STK as a
    regular [Octave package](http://www.gnu.org/software/octave/doc/interpreter/Packages.html#Packages).
 
