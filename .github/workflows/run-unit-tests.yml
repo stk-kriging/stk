@@ -71,7 +71,7 @@ jobs:
       - name: Install Octave & tools
         run: |
           sudo apt-get update
-          sudo apt-get -y install octave liboctave-dev quilt
+          sudo apt-get -y install octave liboctave-dev quilt markdown
       - name: Install generate_html package
         run: octave --eval "pkg install -forge generate_html"
       - name: Build tarballs
