@@ -1,3 +1,9 @@
+2022-01-26  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Refresh README.md
+
+	* README.md: Update sourceforge -> github + other changes.
+
 2022-01-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Add missing 'hold off' in some plotting functions

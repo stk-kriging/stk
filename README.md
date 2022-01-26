@@ -8,7 +8,7 @@
 This README file is part of
 
 *STK: a Small (Matlab/Octave) Toolbox for Kriging*  
-<http://sourceforge.net/projects/kriging>
+<https://github.com/stk-kriging/stk/>
 
 STK is free software: you can redistribute it and/or modify it under
 the terms of the GNU General Public License as published by the Free
@@ -53,7 +53,7 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
    License:      GNU General Public License, version 3 (GPLv3).
                  See COPYING for the full license.
 
-   URL:          <http://sourceforge.net/projects/kriging>
+   URL:          <https://github.com/stk-kriging/stk/>
 
 
 ## One toolbox, two flavours
@@ -78,10 +78,8 @@ Hint: if you're not sure about the version that you have...
 
 ### Quick start with the "all purpose" release (Matlab/Octave)
 
-Download and unpack an archive of the "all purpose" release from the
-[STK project](https://sourceforge.net/projects/kriging/)
-[file release system](https://sourceforge.net/projects/kriging/files/)
-on SourceForge.
+Download and unpack an archive of the "all purpose"
+[release](https://github.com/stk-kriging/stk/releases).
 
 Run `stk_init.m` in either Octave or Matlab.
 
@@ -96,7 +94,7 @@ basics" series.
 
 Assuming that you have a working Internet connection, typing `pkg install -forge stk`
 (from within Octave) will automatically download the latest STK package tarball from the
-[Octave Forge](http://octave.sourceforge.net/stk/index.html)
+[Octave Forge](http://octave.sourceforge.net/)
 [file release system](https://sourceforge.net/projects/octave/files/)
 on SourceForge and install it for you.
 
@@ -180,10 +178,14 @@ DOI: 10.1007/s11222-011-9241-4.
    Use the "help" mailing-list:
 
    <kriging-help@lists.sourceforge.net>
-   <https://sourceforge.net/p/kriging/mailman>
+   (register/browse the archives: [here](https://sourceforge.net/p/kriging/mailman))
 
    to ask for help on STK, and the ticket manager:
 
    <https://github.com/stk-kriging/stk/issues>
 
    to report bugs or ask for new features (do not hesitate to do so!).
+
+   If you use STK in Octave, you can also have a look there:
+   
+   <https://octave.sourceforge.io/support-help.php>
