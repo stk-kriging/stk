@@ -63,3 +63,21 @@ jobs:
         with:
           name: run-unit-tests-octave-${{ matrix.os }}
           path: stk_runtests.log
+  build-tarballs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Install Octave & tools
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install octave liboctave-dev quilt
+      - name: Install generate_html package
+        run: octave --eval "pkg install -forge generate_html"
+      - name: Build tarballs
+        run: make release
+      - name: "Upload artifacts: build directory"
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-dir
+          path: build/
