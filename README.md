@@ -126,7 +126,8 @@ the third example in the "Kriging basics" series.
 
 ### Requirements and recommendations for use with Matlab
 
-   The STK works with Matlab R2009b or newer.
+   The STK works with
+   [Matlab R2009b or newer](https://en.wikipedia.org/wiki/MATLAB#Release_history).
 
    The Optimization Toolbox is recommended.
 
