@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017, 2020 CentraleSupelec
+%    Copyright (C) 2015-2017, 2020, 2022 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -53,8 +53,9 @@ mkdir (unpacked_dir);
 % Export files using 'git archive'
 fprintf ('Exporting with "git archive" ... ');
 cd (root_dir);
-system (sprintf (['git archive --format=tar HEAD ' ...
-                  '| tar -x -C %s'], unpacked_dir));
+cmd = sprintf (['git archive --format=tar HEAD ' ...
+		'| tar -x -C %s'], unpacked_dir);
+assert (system (cmd) == 0);
 fprintf ('done.\n\n');
 
 % Instantiate CITATION template

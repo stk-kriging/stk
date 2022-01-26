@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017, 2020 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2020, 2022 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -186,7 +186,8 @@ else
         
         dst = fullfile (unpacked_dir, 'inst', s);
         mkdir_recurs (fileparts (dst));
-        system (sprintf ('sed --file %s %s > %s', sed_program, s, dst));
+	cmd = sprintf ('sed --file %s %s > %s', sed_program, s, dst);
+        assert (system (cmd) == 0);
         
     elseif ~ isempty (regexp (s, regex_copy_src, 'once'))
         

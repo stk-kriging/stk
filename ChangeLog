@@ -1,5 +1,11 @@
 2022-01-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	build: Wrap system calls in asserts
+
+	* admin/build_tools/build_allpurpose.m: Wrap system calls in asserts.
+	* admin/build_tools/build_octpkg.m: Idem.
+	* admin/build_tools/generate_htmldoc.m: Idem.
+
 	admin/octpkg/patches: Refresh patches
 
 	* admin/octpkg/patches/matlab-graphics-axis-Axes.patch: Refresh.
