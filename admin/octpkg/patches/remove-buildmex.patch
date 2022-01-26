@@ -175,7 +175,7 @@
 -            end
 -            
 -            [lastmsg, lastid] = lastwarn ();
--            if strfind (lastid, 'GccVersion')
+-            if ~ isempty (strfind (lastid, 'GccVersion'))  %#ok<STREMP> 
 -                gcc_version_warning.msg = lastmsg;
 -                gcc_version_warning.id = lastid;
 -            end

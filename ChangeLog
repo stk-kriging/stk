@@ -1,5 +1,11 @@
 2022-01-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	admin/octpkg/patches: Refresh patches
+
+	* admin/octpkg/patches/matlab-graphics-axis-Axes.patch: Refresh.
+	* admin/octpkg/patches/remove-buildmex.patch: Refresh.
+	* admin/octpkg/patches/stk-init-rmpath-cleanup.patch: Refresh.
+
 	Refresh README.md
 
 	* README.md: Update sourceforge -> github + other changes.

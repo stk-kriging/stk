@@ -1,6 +1,6 @@
 --- a/arrays/@stk_dataframe/stk_dataframe.m
 +++ b/arrays/@stk_dataframe/stk_dataframe.m
-@@ -210,11 +210,6 @@
+@@ -152,11 +152,6 @@
  
  x = class (x, 'stk_dataframe');
  
@@ -14,7 +14,7 @@
  
 --- a/arrays/@stk_factorialdesign/stk_factorialdesign.m
 +++ b/arrays/@stk_factorialdesign/stk_factorialdesign.m
-@@ -112,11 +112,6 @@
+@@ -128,11 +128,6 @@
      x = struct ();  x.levels = levels;
      x = class (x, 'stk_factorialdesign', df);
      
