@@ -1,5 +1,9 @@
 2022-01-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	build: Makefile: Remove reference to Mercurial
+
+	* Makefile: Remove reference to Mercurial
+
 	build: New patch for stk_init
 
 	* admin/octpkg/patches/stk-init-mole-cleanup.patch: New patch to

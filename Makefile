@@ -197,7 +197,7 @@ ${OFGOODIES}: | ${OF_DOC_INSPECT}
 	   && ${OFWGET}/$(notdir $@)
 
 
-##### Mercurial-related tricks #####
+##### Check git status #####
 
 check_git_clean:
 ifneq ($(shell git status --porcelain),)
