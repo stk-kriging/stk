@@ -42,7 +42,7 @@ if nargin == 0
     command = 'pkg_load';
 end
 
-% Deduce the root of STK from the path to this script
+% Deduce the root of STK from the path to this function
 root = fileparts (mfilename ('fullpath'));
 
 switch command
