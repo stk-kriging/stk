@@ -4,7 +4,7 @@ To cite this release of STK in publications use:
 
   Julien Bect, Emmanuel Vazquez and others ($YEAR).
   STK: a Small (Matlab/Octave) Toolbox for Kriging. Release $VERNUM.
-  URL http://kriging.sourceforge.net
+  URL https://github.com/stk-kriging/stk/
 
 A BibTeX entry for LaTeX users is:
 
