@@ -1,5 +1,12 @@
 2022-01-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	build: Fix path issue
+
+	* admin/build.m: Do not add root dir to the path.
+	* admin/build_tools/check_index_file.m: Remove unused portion.
+	* admin/build_tools/get_public_mfile_list.m: Take extra precautions.
+	* admin/build_tools/get_version_number.m: Add root dir to the path.
+
 	build: Makefile: Remove reference to Mercurial
 
 	* Makefile: Remove reference to Mercurial

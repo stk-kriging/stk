@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2022 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -28,21 +28,6 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function check_index_file (index_file, public_mfile_list)
-
-if nargin < 2,
-    
-    admin_dir = fileparts (mfilename ('fullpath'));
-    
-    if nargin < 1,
-        index_file = fullfile (admin_dir, 'octave-pkg', 'INDEX');
-    end
-    
-    if nargin < 2,
-        root = fullfile (admin_dir, '..');
-        public_mfile_list = get_public_mfile_list (root);
-    end
-    
-end
 
 [indexed, ignored] = parse_index_file (index_file);
 

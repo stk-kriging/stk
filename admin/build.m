@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2022 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -33,8 +33,7 @@ function build (target, varargin)
 admin_dir = fileparts (mfilename ('fullpath'));
 root_dir  = fileparts (admin_dir);
 
-% Addpaths
-addpath (root_dir);  % contains stk_version and stk_init
+% Add build tools to the path
 addpath (fullfile (admin_dir, 'build_tools'));
 
 % Build target

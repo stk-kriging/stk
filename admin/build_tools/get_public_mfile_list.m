@@ -2,6 +2,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2022 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -29,12 +30,20 @@
 function L = get_public_mfile_list (root)
 
 here = pwd ();
+old_path = path ();
+
 try
+    % Make sure that we call the *correct* version of stk_init
     cd (root);
+    addpath (root);
+
     dir_list = stk_init ('genpath');
     dir_list = [root dir_list];
+
+    path (old_path);
     cd (here);
 catch
+    path (old_path);
     cd (here);
     rethrow (lasterror ());
 end

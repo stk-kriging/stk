@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015 CentraleSupelec
+%    Copyright (C) 2015, 2022 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -29,6 +29,10 @@
 
 function version_number = get_version_number ()
 
+old_path = path ();
+build_tools_dir = fileparts (mfilename ('fullpath'));
+addpath (fileparts (fileparts (build_tools_dir)));
+
 version_number = stk_version ();
 
 % -dev --> .0   (this makes it possible to test building on default)
@@ -38,5 +42,7 @@ version_number = regexprep (version_number, '-dev$', '.0');
 if isempty (regexp (version_number, '^[0-9]+\.[0-9]+\.[0-9]+$'))
     error ('Incorrect version number.');
 end
+
+path (old_path);
 
 end % function
