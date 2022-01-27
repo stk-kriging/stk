@@ -1,5 +1,12 @@
 2022-01-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	MOLE: linsolve is no longer needed
+
+	* misc/mole/linsolve/linsolve.m: Deleted.
+	* admin/octpkg/patches/stk-init-mole-cleanup.patch: Refresh patch.
+	* misc/mole/README: Remove linsolve.
+	* stk_init.m: Remove linsolve.
+
 	build: Fix path issue
 
 	* admin/build.m: Do not add root dir to the path.

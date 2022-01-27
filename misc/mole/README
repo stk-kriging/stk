@@ -31,5 +31,4 @@ Other functions are provided in single-function subdirectories:
 
       o isoctave
       o corr
-      o linsolve
       o quantile

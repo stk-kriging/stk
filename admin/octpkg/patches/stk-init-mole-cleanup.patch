@@ -29,7 +29,7 @@ Index: stk/stk_init.m
  % graphics_toolkit
  %  * For Octave users: graphics_toolkit is missing in some old version of Octave
  %  * For Matlab users: there is no function named graphics_toolkit in Matlab.
-@@ -327,9 +313,7 @@ install_mole_function ('linsolve', opts{
+@@ -321,9 +307,7 @@ install_mole_function ('isrow', opts{:})
  install_mole_function ('quantile', opts{:});
  
  % cleanup

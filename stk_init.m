@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2018, 2019 CentraleSupelec
+%    Copyright (C) 2015-2018, 2019, 2022 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -604,12 +604,6 @@ install_mole_function ('graphics_toolkit', opts{:});
 %  * For Octave users: ?
 %  * For Matlab users: missing in R2007a
 install_mole_function ('isrow', opts{:});
-
-% linsolve
-%  * For Octave users: linsolve has been missing in Octave for a long time
-%    (up to 3.6.4)
-%  * For Matlab users: ?
-install_mole_function ('linsolve', opts{:});
 
 % quantile
 %  * For Octave users: ?
