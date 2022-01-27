@@ -1,4 +1,4 @@
-% BUILD_OCTAVE_PACKAGE
+% BUILD_OCTPKG
 
 % Copyright Notice
 %
