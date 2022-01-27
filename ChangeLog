@@ -1,5 +1,11 @@
 2022-01-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	build: New patch for stk_init
+
+	* admin/octpkg/patches/stk-init-mole-cleanup.patch: New patch to
+	trim some Matlab-related things out of stk_init.
+	* admin/octpkg/patches/series: Add the patch to the series.
+
 	build: Wrap system calls in asserts
 
 	* admin/build_tools/build_allpurpose.m: Wrap system calls in asserts.

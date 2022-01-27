@@ -1,0 +1,42 @@
+Index: stk/stk_init.m
+===================================================================
+--- stk.orig/stk_init.m
++++ stk/stk_init.m
+@@ -284,25 +284,11 @@ end % function
+ function stk_init__config_mole (root, do_addpath, prune_unused)
+ 
+ mole_dir = fullfile (root, 'misc', 'mole');
+-isoctave = (exist ('OCTAVE_VERSION', 'builtin') == 5);
+ 
+-if isoctave
+-    recursive_rmdir_state = confirm_recursive_rmdir (0);
+-end
++recursive_rmdir_state = confirm_recursive_rmdir (0);
+ 
+ opts = {root, mole_dir, do_addpath, prune_unused};
+ 
+-% Provide missing octave functions for Matlab users
+-% TODO: extract functions that are REALLY needed in separate directories
+-%       and get rid of the others !
+-if (exist ('OCTAVE_VERSION', 'builtin') ~= 5)  % if Matlab
+-    if do_addpath
+-        addpath (fullfile (mole_dir, 'matlab'));
+-    end
+-elseif prune_unused
+-    rmdir (fullfile (mole_dir, 'matlab'), 's');
+-end
+-
+ % graphics_toolkit
+ %  * For Octave users: graphics_toolkit is missing in some old version of Octave
+ %  * For Matlab users: there is no function named graphics_toolkit in Matlab.
+@@ -327,9 +313,7 @@ install_mole_function ('linsolve', opts{
+ install_mole_function ('quantile', opts{:});
+ 
+ % cleanup
+-if isoctave
+-    confirm_recursive_rmdir (recursive_rmdir_state);
+-end
++confirm_recursive_rmdir (recursive_rmdir_state);
+ 
+ end % function
+ 
