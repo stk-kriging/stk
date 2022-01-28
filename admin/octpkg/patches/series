@@ -5,4 +5,4 @@ remove-buildmex.patch
 workaround-octave-bug-46350.patch
 matlab-graphics-axis-Axes.patch
 stk-init-rmpath-cleanup.patch
-stk-init-mole-cleanup.patch
+stk-init-mole-delete.patch

@@ -115,9 +115,6 @@ fprintf (fid, '#\n');
 fprintf (fid, 'Autoload: no\n');
 fclose (fid);
 
-% post_install: a function that is run after the installation of the package
-copyfile (fullfile (pkg_bits_dir, 'post_install.m'), unpacked_dir);
-
 % Makefile
 copyfile (fullfile (pkg_bits_dir, 'Makefile'), ...
     fullfile (unpacked_dir, 'src'));

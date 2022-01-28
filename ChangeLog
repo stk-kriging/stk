@@ -1,5 +1,15 @@
 2022-01-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Remove the MOLE from the Octave package entirely
+
+	* stk_init.m: Update comments.
+	* admin/octpkg/patches/stk-init-mole-cleanup.patch: Rename from.
+	* admin/octpkg/patches/stk-init-mole-delete.patch: Rename to.
+	Delete everything related to the MOLE inside stk_init.
+	* admin/octpkg/patches/series: Refresh.
+	* admin/octpkg/post_install.m: Delete (no longer needed).
+	* admin/build_tools/build_octpkg.m: Refresh.
+
 	Raise required Octave version number to 4.0.0
 
 	* README.md: Raise required Octave version number to 4.0.0.

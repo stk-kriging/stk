@@ -595,13 +595,13 @@ elseif prune_unused
 end
 
 % graphics_toolkit
-%  * For Octave users: graphics_toolkit is missing in some old version of Octave
+%  * For Octave users: available in Octave >= 4.0.0
 %  * For Matlab users: there is no function named graphics_toolkit in Matlab.
 %    Our implementation returns either 'matlab-jvm' or 'matlab-nojvm'.
 install_mole_function ('graphics_toolkit', opts{:});
 
 % quantile
-%  * For Octave users: ?
+%  * For Octave users: available in Octave >= 4.0.0
 %  * For Matlab users: quantile is missing from Matlab itself, but it provided
 %    by the Statistics toolbox if you're rich enough to afford it.
 install_mole_function ('quantile', opts{:});
