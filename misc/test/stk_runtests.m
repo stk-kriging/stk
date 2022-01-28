@@ -296,8 +296,7 @@ function s = warning_off ()
 s = warning ('off', 'all');
 
 % Check whether warnings can be still be recovered by lastwarn
-%   (this is not the case in Octave 3.8.2, for example;
-%    see https://savannah.gnu.org/bugs/?41028)
+%   (see https://savannah.gnu.org/bugs/?41028)
 
 lastwarn ('');
 warning ('ah:ah', 'toto');

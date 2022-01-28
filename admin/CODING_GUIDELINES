@@ -33,17 +33,12 @@ The current recommendation for checking the value of nargin in STK is as follows
 
 --- CG#02: Nested functions ----------------------------------------------------
 
-The support for nested function was introduced in Octave 3.8:
-
-https://www.gnu.org/software/octave/NEWS-3.8.html
-
-Until STK's requirement is raised to Octave 3.8, don't use nested functions.
+[deprecated]
 
 
 --- CG#03: MEX-file in class directories ---------------------------------------
 
-Octave 3.6.4 does allow to manipulate instances of user-defined classes
-through MEX-files. Octave 3.8.x probably won't. So don't think of it.
+TODO: Check if it is allowed in Octave 4.0.0 and newer.
 
 
 --- CG#04: Overloading isequal -------------------------------------------------
@@ -111,8 +106,6 @@ catch
     % works in Matlab (introduced prior to 2006a according to the online doc)
     crit.quantile_value = - sqrt (2) * erfcinv (2 * order);  % CG#09
 end
-
-Note that the second syntax only works in Octave 3.8 and later.
 
 
 --- CG#10: Disable TeX interpreter for variables names -------------------------

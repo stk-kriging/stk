@@ -116,17 +116,13 @@ the third example in the "Kriging basics" series.
 
 ### Requirements and recommendations for use with GNU Octave
 
-   The STK is tested to work with GNU Octave 3.8.2 or newer, but
-   should probably also work with Octave 3.8.0 and 3.8.1.
-
-   Older versions of Octave (<= 3.6.2) are no longer supported, and
-   are known to contain bugs that prevent some STK functions from
-   working properly.
+   The STK is tested to work with 
+   [GNU Octave 4.0.0 or newer](https://wiki.octave.org/Release_History).
 
 
 ### Requirements and recommendations for use with Matlab
 
-   The STK works with
+   The STK is tested to work with
    [Matlab R2009b or newer](https://en.wikipedia.org/wiki/MATLAB#Release_history).
 
    The Optimization Toolbox is recommended.

@@ -15,9 +15,11 @@
 
 # Changes in version 2.7.0
 
-## Required Matlab version
+## Required Matlab/Octave version
 
 * Required Matlab version number has been raised to R2009b.
+
+* Required Octave version number has been raised to 4.0.0.
 
 ## Prediction
 

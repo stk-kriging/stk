@@ -1,5 +1,13 @@
 2022-01-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Raise required Octave version number to 4.0.0
+
+	* README.md: Raise required Octave version number to 4.0.0.
+	* admin/build_tools/build_octpkg.m: Iem.
+	* admin/CODING_GUIDELINES: Update.
+	* arrays/@stk_hrect/stk_hrect.m: Refer to CG#08.
+	* misc/test/stk_runtests.m: Remove reference to 3.8.2.
+
 	Avoid using isrow
 
 	* admin/CODING_GUIDELINES: Explain why.
