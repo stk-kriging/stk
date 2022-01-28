@@ -29,6 +29,5 @@ Directories
 
 Other functions are provided in single-function subdirectories:
 
-      o isoctave
-      o corr
+      o graphics_toolkit
       o quantile

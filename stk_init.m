@@ -600,11 +600,6 @@ end
 %    Our implementation returns either 'matlab-jvm' or 'matlab-nojvm'.
 install_mole_function ('graphics_toolkit', opts{:});
 
-% isrow
-%  * For Octave users: ?
-%  * For Matlab users: missing in R2007a
-install_mole_function ('isrow', opts{:});
-
 % quantile
 %  * For Octave users: ?
 %  * For Matlab users: quantile is missing from Matlab itself, but it provided

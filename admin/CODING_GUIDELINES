@@ -73,13 +73,16 @@ As a workaround, we should avoid calling display on such structures
 [deprecated]
 
 
---- CG#08: Using ismatrix ------------------------------------------------------
+--- CG#08: Using ismatrix, isrow, etc.------------------------------------------
 
 The ismatrix function has only been introduced in Matlab R2010b.
 
 Octave has had ismatrix for a long time, but the ismatrix function
 that is present in Octave 3.8 and before is not compatible with the
 one introduced in Matlab R2010b.
+
+Moreover, in Octave 4.x, ismatrix does not work properly with objects that
+have an overload size() method.
 
 The simplest solution is to completely avoid ismatrix and use instead:
 
@@ -88,6 +91,12 @@ The simplest solution is to completely avoid ismatrix and use instead:
 or, to specifically test for a numeric matrix:
 
     is_matrix = (isnumeric (x)) && (ndims (x) == 2);
+
+This recommendation will be removed when the minimum release for Matlab and
+Octave is raised respectively to R2010b (September 2010) and 5.1 (February 2019).
+
+Similar considerations apply to isrow, iscolumn and other functions
+(https://www.gnu.org/software/octave/NEWS-5.1.html).
 
 
 --- CG#09: Use erfcinv instead of norminv --------------------------------------

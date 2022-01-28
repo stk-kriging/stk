@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017, 2020 CentraleSupelec
+%    Copyright (C) 2015-2017, 2020, 2022 CentraleSupelec
 %    Copyright (C) 2013, 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -72,24 +72,33 @@ end
 %--- Deal with various forms for x and z ----------------------------------
 
 if isempty (x)  % Special: x not provided
-    
+
+    [n, d] = size (z);
+
     % Tolerate row vector for z
-    if isrow (z),  z = z';  end
-    
+    if (d > 1) && (isequal (size (z), [1 d]))  % isrow CG#08
+        n = d;
+        z = z';
+    end
+
     % Create a default x
-    x = (1:(size (z, 1)))';
-    
+    x = (1:n)';
+
 else  % General case
-    
+
+    [n, d] = size (x);
+
     % Tolerate row vector for x
-    if isrow (x),  x = x';  end
-    
-    % Number of points
-    n = size (x, 1);
-    
+    if (d > 1) && (isequal (size (x), [1 d]))  % isrow CG#08
+        n = d;
+        x = x';
+    end
+
     % Tolerate row vector for z
-    if isequal (size (z), [1 n]),  z = z';  end
-    
+    if isequal (size (z), [1 n])  % isrow CG#08
+        z = z';
+    end
+
 end
 
 %--- Plot and set labels --------------------------------------------------
@@ -166,13 +175,13 @@ end
 
 % Then, process remaining arguments recursively
 if isempty (varargin)
-    
+
     % Special case: x has been omitted, and there are no additional args
     plot_elem = struct ('x', [], 'z', {arg1}, 'S', []);
     keyval_pairs = {};
-    
+
 elseif ischar (varargin{1})
-    
+
     % Special case: x has been omitted, and there *are* additional args
     if mod (length (varargin), 2)
         S = [];
@@ -182,12 +191,12 @@ elseif ischar (varargin{1})
         keyval_pairs = parse_keyval_ (varargin{2:end});
     end
     plot_elem = struct ('x', [], 'z', {arg1}, 'S', {S});
-    
+
 else
-    
+
     % General case
     [plot_elem, keyval_pairs] = parse_args__ (arg1, varargin{:});
-    
+
 end
 
 end % function
@@ -202,25 +211,25 @@ if ischar (x) || ischar (z)
 end
 
 if isempty (varargin)
-    
+
     plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
     keyval_pairs = {};
-    
+
 elseif ~ ischar (varargin{1})  % expect another (x, z) pair after this one
-    
+
     plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
     [plot_elem_, keyval_pairs] = parse_args__ (varargin{:});
     plot_elem = [plot_elem plot_elem_];
-    
+
 elseif length (varargin) == 1  % S
-    
+
     plot_elem = struct ('x', {x}, 'z', {z}, 'S', varargin(1));
     keyval_pairs = {};
-    
+
 elseif length (varargin) == 2  % key, val  OR  x2, z2 ?
-    
+
     plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
-    
+
     if ischar (varargin{1})
         keyval_pairs = parse_keyval_ (varargin{:});
     else
@@ -228,46 +237,46 @@ elseif length (varargin) == 2  % key, val  OR  x2, z2 ?
         plot_elem = [plot_elem plot_elem_];
         keyval_pairs = {};
     end
-    
+
 else  % Three or more remaining arguments
     %    1) S, key, val, ... ?
     %    2) S, x2, z2, ... ?
     %    3) key, val, key, val, ... ?
     %    4) x2, z2, ... ?
-    
+
     if ~ ischar (varargin{1})  % x2, z2, ...
-        
+
         plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
         [plot_elem_, keyval_pairs] = parse_args__ (varargin);
         plot_elem = [plot_elem plot_elem_];
-        
+
     elseif ~ ischar (varargin{2})  % S, x2, z2, ...  OR  key, val, key, val, ...
-        
+
         if ~ ischar (varargin{3})  % S, x2, z2, ...
-            
+
             plot_elem = struct ('x', {x}, 'z', {z}, 'S', varargin(1));
             [plot_elem_, keyval_pairs] = parse_args__ (varargin{2:end});
             plot_elem = [plot_elem plot_elem_];
-            
+
         else  % key, val, key, val, ...
-            
+
             plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
             keyval_pairs = parse_keyval_ (varargin{:});
-            
+
         end
-        
+
     else  % S, key, val, ...  OR  key, val, key, val, ...
-        
+
         if mod (length (varargin), 2) == 1  % S, key, val, ...
-            
+
             plot_elem = struct ('x', {x}, 'z', {z}, 'S', varargin(1));
             keyval_pairs = parse_keyval_ (varargin{2:end});
-            
+
         else  % key, val, key, val, ...
-            
+
             plot_elem = struct ('x', {x}, 'z', {z}, 'S', []);
             keyval_pairs = parse_keyval_ (varargin{:});
-            
+
         end
     end
 end
@@ -278,24 +287,24 @@ end % function
 function keyval_pairs = parse_keyval_ (key, val, varargin)
 
 if nargin == 0
-    
+
     keyval_pairs = {};
-    
+
 elseif nargin == 1
-    
+
     errmsg = 'Syntax error. Incomplete key-value pair';
     stk_error (errmsg, 'NotEnoughInputArgs');
-    
+
 elseif ~ ischar (key)
-    
+
     display (key);
     stk_error (['Syntax error. At his point, we were expecting a ' ...
         'key-value pair, but key is not a string.'], 'TypeMismatch');
-    
+
 else
-    
+
     keyval_pairs = [{key, val} parse_keyval_(varargin{:})];
-    
+
 end
 
 end % function

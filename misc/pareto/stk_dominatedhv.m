@@ -47,7 +47,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2018, 2022 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -74,9 +74,12 @@
 function result = stk_dominatedhv (y, y_ref, do_decomposition)
 
 % Missing or empty y_ref: will use [0 0 ... 0] as a reference point
-if nargin < 2,
+if nargin < 2
     y_ref = [];
-elseif ~ ((isnumeric (y_ref)) && ((isempty (y_ref)) || (isrow (y_ref))))
+else
+    y_ref = double (y_ref);
+    d = size (y_ref, 2);
+    assert ((d > 0) && (isequal (size (y_ref), [1 d])));  % isrow CG#08
     stk_error ('y_ref should be a numeric row vector.', 'IncorrectSize');
 end
 

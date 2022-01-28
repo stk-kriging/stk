@@ -1,3 +1,15 @@
+2022-01-28  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Avoid using isrow
+
+	* admin/CODING_GUIDELINES: Explain why.
+	* misc/mole/isrow/isrow.m: Delete.
+	* stk_init.m: isrow removed from the MOLE.
+	* misc/mole/README: Minor update.
+	* admin/octpkg/patches/stk-init-mole-cleanup.patch: Refresh patch.
+	* arrays/@stk_dataframe/plot.m: Don't use isrow.
+	* misc/pareto/stk_dominatedhv.m: Don't use isrow.
+
 2022-01-26  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	MOLE: linsolve is no longer needed
