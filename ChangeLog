@@ -1,3 +1,10 @@
+2022-01-31  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	utils/stk_plot_histnormres.m: Ensure non-zero number of bins
+
+	* utils/stk_plot_histnormres.m: Make sure that we have a non-zero
+	number of bins using Sturges' rule.
+
 2022-01-28  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Remove the MOLE from the Octave package entirely
