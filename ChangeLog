@@ -1,5 +1,11 @@
 2022-02-03  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_predict_leaveoneout.m: Avoid complex-valued norm_res
+
+	* model/@stk_model_gpposterior/stk_predict_leaveoneout.m: Prevent
+	norm_res from being complex-valued by cancelling negative elements
+	in dR.
+
 	utils/stk_plot_histnormres.m: Ensure non-zero binsize
 
 	* utils/stk_plot_histnormres.m: Introduce a safety net for samples

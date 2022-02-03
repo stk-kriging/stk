@@ -65,7 +65,7 @@ if nargout ~= 1
     
     % Compute normalized residual
     % norm_res = (zi - zp_mean) ./ (sqrt (noisevariance + zp_var));
-    norm_res = (sqrt (dR)) .* raw_res;
+    norm_res = (sqrt (max (0, dR))) .* raw_res;
     
     % Pack results into a dataframe
     LOO_res = stk_dataframe (horzcat (raw_res, norm_res), ...
