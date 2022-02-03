@@ -53,10 +53,18 @@ end
 % Choose the number of bins using the Freedman-Diaconis rule
 n = length (norm_res);
 q = quantile (norm_res, [0 0.25 0.75 1]);
-binsize = 2 * (q(3) - q(2)) * (n ^ (- 1/3));
+norm_res_range = q(4) - q(1);
+norm_res_iqr = q(3) - q(2);
+if norm_res_iqr >= 0.1 * norm_res_range
+    % For reasonably large norm_res_iqr, we use teh FD rule
+    binsize = 2 * norm_res_iqr * (n ^ (- 1/3));
+else
+    % Safety net for small (possibly zero) norm_res_iqr
+    binsize = 0.2 * norm_res_range * (n ^ (- 1/3));
+end
 nbins = ceil ((q(4) - q(1)) / binsize);
 
-% Make sure that we have a non-zero number of bins using Sturges' rule
+% Use the number of bins provided by Sturges' rule as a minimum
 nbins = max (nbins, 1 + log2 (n));
 
 % Compute and plot histogram pdf
