@@ -1,5 +1,10 @@
 2022-02-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	build_octpkg.m: Exclude misc/mole entirely
+
+	* admin/build_tools/build_octpkg.m: Exclude misc/mole entirely.
+	* admin/octpkg/patches/stk-init-mole-delete.patch: Simplify patch.
+
 	startup.m: Run stk_init automatically for in-place use
 
 	* startup.m: New script that runs stk_init automatically for
