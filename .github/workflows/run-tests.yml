@@ -1,4 +1,4 @@
-name: run-unit-tests
+name: run-tests
 
 on: [push, pull_request]
 
@@ -17,7 +17,7 @@ env:
     assert (results.n_total == (results.n_pass + results.n_xfail));
 
 jobs:
-  run-unit-tests-matlab:
+  run-tests-matlab:
     # Apparently only Ubuntu workers support MATLAB actions for now
     runs-on: ${{ matrix.os }}
     strategy:
@@ -36,12 +36,12 @@ jobs:
         uses: matlab-actions/run-command@v1
         with:
           command: ${{ env.TEST_SCRIPT }}
-      - name: "Upload build artifact: log file"
+      - name: "Upload artifact: log file"
         uses: actions/upload-artifact@v2
         with:
-          name: run-unit-tests-matlab-${{ matrix.release }}
+          name: run-tests-matlab-${{ matrix.release }}
           path: stk_runtests.log
-  run-unit-tests-octave:
+  run-tests-octave:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -58,10 +58,10 @@ jobs:
           sudo apt-get -y install octave liboctave-dev
       - name: Run test script
         run: octave --eval "${{ env.TEST_SCRIPT }}"
-      - name: "Upload build artifact: log file"
+      - name: "Upload artifact: log file"
         uses: actions/upload-artifact@v2
         with:
-          name: run-unit-tests-octave-${{ matrix.os }}
+          name: run-tests-octave-${{ matrix.os }}
           path: stk_runtests.log
   build-tarballs:
     runs-on: ubuntu-latest

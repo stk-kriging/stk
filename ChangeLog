@@ -1,5 +1,11 @@
 2022-02-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Rename github action: run-unit-tests.yml -> run-tests.yml
+
+	* .github/workflows/run-unit-tests.yml: Rename from.
+	* .github/workflows/run-tests.yml: Rename to.
+	* README.md: Update badge.
+
 	build_octpkg.m: Exclude misc/mole entirely
 
 	* admin/build_tools/build_octpkg.m: Exclude misc/mole entirely.
