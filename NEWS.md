@@ -80,6 +80,8 @@
 
 * `stk_init.m`: Make STK startup faster.
 
+* `startup.m`: Run `stk_init` automatically for in-place use.
+
 * Internal: source formatting, comments, etc.
 
 -----

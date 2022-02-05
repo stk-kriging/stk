@@ -1,3 +1,13 @@
+2022-02-05  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	startup.m: Run stk_init automatically for in-place use
+
+	* startup.m: New script that runs stk_init automatically for
+	in-place use.
+	* admin/build_tools/build_octpkg.m: Do not include startup.m in
+	the Octave package release.
+	* NEWS.md: Advertise new script.
+
 2022-02-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Remove old (hg) release instructions
