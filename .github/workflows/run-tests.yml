@@ -17,12 +17,12 @@ env:
     assert (results.n_total == (results.n_pass + results.n_xfail));
 
 jobs:
-  run-tests-matlab:
+
+  runtests-inplace-matlab:
     # Apparently only Ubuntu workers support MATLAB actions for now
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [ubuntu-latest]
         # Only very recent releases are available:
         release: [R2021b, R2021a, R2020b, R2020a]
     steps:
@@ -32,23 +32,18 @@ jobs:
         uses: matlab-actions/setup-matlab@v1
         with:
           release: ${{ matrix.release }}
-      - name: Run test script
+      - name: Run test suite
         uses: matlab-actions/run-command@v1
         with:
           command: ${{ env.TEST_SCRIPT }}
       - name: "Upload artifact: log file"
         uses: actions/upload-artifact@v2
         with:
-          name: run-tests-matlab-${{ matrix.release }}
+          name: runtests-inplace-matlab-${{ matrix.release }}-log
           path: stk_runtests.log
-  run-tests-octave:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-20.04]
-        # ubuntu-18.04: provides Octave 4.2.2, which has a problem with
-        # MEX files insides private directories making STK unusable
-        # https://savannah.gnu.org/bugs/?func=detailitem&item_id=53856
+
+  runtests-inplace-octave:
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -56,13 +51,14 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get -y install octave liboctave-dev
-      - name: Run test script
+      - name: Run test suite
         run: octave --eval "${{ env.TEST_SCRIPT }}"
       - name: "Upload artifact: log file"
         uses: actions/upload-artifact@v2
         with:
-          name: run-tests-octave-${{ matrix.os }}
+          name: runtests-inplace-octave-log
           path: stk_runtests.log
+
   build-tarballs:
     runs-on: ubuntu-latest
     steps:
@@ -76,8 +72,37 @@ jobs:
         run: octave --eval "pkg install -forge generate_html"
       - name: Build tarballs
         run: make release
-      - name: "Upload artifacts: build directory"
+      - name: "Upload artifacts: Octave package"
         uses: actions/upload-artifact@v2
         with:
-          name: build-dir
-          path: build/
+          name: octpkg-tarball
+          path: build/octaveforge/stk-*.tar.gz
+
+  runtests-tarball-octpkg:
+    runs-on: ubuntu-latest
+    needs: build-tarballs
+    steps:
+      - name: Download build dir
+        uses: actions/download-artifact@v2
+        with:
+          name: octpkg-tarball
+      - name: TEMP
+        run: find .
+      - name: Get tarball name
+        run: |
+          OCTPKG_TARBALL=`ls stk-?.?.?.tar.gz`
+          echo OCTPKG_TARBALL=$OCTPKG_TARBALL
+          echo "octpkg_tarball=$OCTPKG_TARBALL" >> $GITHUB_ENV
+      - name: Install Octave & tools
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install octave liboctave-dev
+      - name: Install STK package
+        run: octave --eval "pkg install ${{ env.octpkg_tarball }}"
+      - name: Run test suite
+        run: octave --eval "pkg load stk;  ${{ env.TEST_SCRIPT }}"
+      - name: "Upload artifact: log file"
+        uses: actions/upload-artifact@v2
+        with:
+          name: runtests-tarball-octpkg-log
+          path: stk_runtests.log
