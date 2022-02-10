@@ -1,3 +1,10 @@
+2022-02-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	run-tests.yml: Test Octage package tarball on ubuntu-latest
+
+	* .github/workflows/run-tests.yml: Test Octage package tarball on
+	Ubuntu latest.
+
 2022-02-05  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Rename github action: run-unit-tests.yml -> run-tests.yml
