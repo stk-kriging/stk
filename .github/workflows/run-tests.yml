@@ -18,20 +18,18 @@ env:
 
 jobs:
 
-  runtests-inplace-matlab:
+  runtests-inplace-mat:
     # Apparently only Ubuntu workers support MATLAB actions for now
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # Only very recent releases are available:
-        release: [R2021b, R2021a, R2020b, R2020a]
     steps:
       - name: Check out source repository
         uses: actions/checkout@v2
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v1
         with:
-          release: ${{ matrix.release }}
+          # Test in-place only on the latest version of Matlab
+          # (https://github.com/matlab-actions/setup-matlab/#set-up-matlab)
+          release: R2021b
       - name: Run test suite
         uses: matlab-actions/run-command@v1
         with:
@@ -39,15 +37,15 @@ jobs:
       - name: "Upload artifact: log file"
         uses: actions/upload-artifact@v2
         with:
-          name: runtests-inplace-matlab-${{ matrix.release }}-log
+          name: runtests-inplace-mat-log
           path: stk_runtests.log
 
-  runtests-inplace-octave:
+  runtests-inplace-oct:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Install package
+      - name: Install Octave
         run: |
           sudo apt-get update
           sudo apt-get -y install octave liboctave-dev
@@ -56,7 +54,7 @@ jobs:
       - name: "Upload artifact: log file"
         uses: actions/upload-artifact@v2
         with:
-          name: runtests-inplace-octave-log
+          name: runtests-inplace-oct-log
           path: stk_runtests.log
 
   build-tarballs:
@@ -72,22 +70,25 @@ jobs:
         run: octave --eval "pkg install -forge generate_html"
       - name: Build tarballs
         run: make release
+      - name: "Upload artifacts: all-purpose release"
+        uses: actions/upload-artifact@v2
+        with:
+          name: allpurpose-tarball
+          path: build/github/stk-?.?.?-allpurpose.tar.gz
       - name: "Upload artifacts: Octave package"
         uses: actions/upload-artifact@v2
         with:
           name: octpkg-tarball
-          path: build/octaveforge/stk-*.tar.gz
+          path: build/octaveforge/stk-?.?.?.tar.gz
 
-  runtests-tarball-octpkg:
+  runtests-octpkg:
     runs-on: ubuntu-latest
     needs: build-tarballs
     steps:
-      - name: Download build dir
+      - name: Download Octave package
         uses: actions/download-artifact@v2
         with:
           name: octpkg-tarball
-      - name: TEMP
-        run: find .
       - name: Get tarball name
         run: |
           OCTPKG_TARBALL=`ls stk-?.?.?.tar.gz`
@@ -104,5 +105,66 @@ jobs:
       - name: "Upload artifact: log file"
         uses: actions/upload-artifact@v2
         with:
-          name: runtests-tarball-octpkg-log
+          name: runtests-octpkg-log
           path: stk_runtests.log
+
+  runtests-allpurpose-mat:
+    runs-on: ubuntu-latest
+    needs: build-tarballs
+    strategy:
+      matrix:
+        # Test all available versions of Matlab
+        # (https://github.com/matlab-actions/setup-matlab/#set-up-matlab)
+        release: [R2021b, R2021a, R2020b, R2020a]
+    steps:
+      - name: Download allpurpose release
+        uses: actions/download-artifact@v2
+        with:
+          name: allpurpose-tarball
+      - name: Get tarball name
+        run: |
+          ALLPURPOSE_TARBALL=`ls stk-?.?.?-allpurpose.tar.gz`
+          echo ALLPURPOSE_TARBALL=$ALLPURPOSE_TARBALL
+          echo "allpurpose_tarball=$ALLPURPOSE_TARBALL" >> $GITHUB_ENV
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v1
+        with:
+          release: ${{ matrix.release }}
+      - name: Unpack tarball
+        run: tar xzvf ${{ env.allpurpose_tarball }}
+      - name: Run test suite
+        uses: matlab-actions/run-command@v1
+        with:
+          command: cd stk;  ${{ env.TEST_SCRIPT }}
+      - name: "Upload artifact: log file"
+        uses: actions/upload-artifact@v2
+        with:
+          name: runtests-allpurpose-mat-${{ matrix.release }}-log
+          path: stk/stk_runtests.log
+
+  runtests-allpurpose-oct:
+    runs-on: ubuntu-latest
+    needs: build-tarballs
+    steps:
+      - name: Download allpurpose release
+        uses: actions/download-artifact@v2
+        with:
+          name: allpurpose-tarball
+      - name: Get tarball name
+        run: |
+          ALLPURPOSE_TARBALL=`ls stk-?.?.?-allpurpose.tar.gz`
+          echo ALLPURPOSE_TARBALL=$ALLPURPOSE_TARBALL
+          echo "allpurpose_tarball=$ALLPURPOSE_TARBALL" >> $GITHUB_ENV
+      - name: Install Octave
+        run: |
+          sudo apt-get update
+          sudo apt-get -y install octave liboctave-dev
+      - name: Unpack tarball
+        run: tar xzvf ${{ env.allpurpose_tarball }}
+      - name: Run test suite
+        run: octave --eval "cd stk;  ${{ env.TEST_SCRIPT }}"
+      - name: "Upload artifact: log file"
+        uses: actions/upload-artifact@v2
+        with:
+          name: runtests-allpurpose-oct-log
+          path: stk/stk_runtests.log
