@@ -1,3 +1,9 @@
+2022-02-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	.gitattributes: Convert CRLF to LF automatically for text files
+
+	* .gitattributes: Convert CRLF to LF automatically for text files.
+
 2022-02-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	run-tests.yml: Test the all purpose release on ubuntu-latest
