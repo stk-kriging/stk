@@ -85,6 +85,9 @@
 * `stk_select_optimizer.m`, `stk_optim_hasfmincon.m`: Removed
   (had been deprecated since 2015, and were never part of the public API).
 
+* `README.md`: Explain how to initialize STK when using the Parallel
+  Computing Toolbox in Matlab, by means of the `pctRunOnAll` function.
+
 * Internal: source formatting, comments, etc.
 
 -----

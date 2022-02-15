@@ -81,7 +81,16 @@ Hint: if you're not sure about the version that you have...
 Download and unpack an archive of the "all purpose"
 [release](https://github.com/stk-kriging/stk/releases).
 
-Run `stk_init.m` in either Octave or Matlab.
+Run `stk_init` in either Octave or Matlab.  One way to do so is to navigate
+to the root directory of STK and then simply type:
+```
+stk_init
+```
+Alternatively, if you don't want to change the current directory, you can use:
+```
+run /path/to/stk/stk_init.m
+```
+Note that this second approach is suitable for inclusion in your `startup` script.
 
 After that, you should be able to run the examples located in the `examples`
 directory.  All of them are scripts, the file name of which starts with
@@ -89,6 +98,13 @@ the `stk_example_` prefix.
 
 For instance, type `stk_example_kb03` to run the third example in the "Kriging
 basics" series.
+
+Remark: when using STK with Mathworks' Parallel Computing Toolbox, it is
+important to run `stk_init` within each worker.  This can be achieved using:
+```
+pctRunOnAll run /path/to/stk/stk_init.m
+```
+
 
 ### Quick start with the Octave package release (Octave only)
 

@@ -1,5 +1,11 @@
 2022-02-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	README.md: Explain how to initialize STK when using the PCT
+
+	* README.md: Explain how to initialize STK when using the Parallel
+	Computing Toolbox in Matlab, by means of the `pctRunOnAll` function.
+	* NEWS.md: Advertise the change.
+
 	Remove two deprecated functions
 
 	* misc/optim/stk_optim_hasfmincon.m: Remove deprecated function.
