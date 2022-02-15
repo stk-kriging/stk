@@ -500,7 +500,6 @@ Miscellaneous: optimizers for parameter estimation
 #@stk_optim_octavesqp/stk_minimize_unconstrained   [overload STK]
 #stk_optim_testmin_box                             [internal]
 #stk_optim_testmin_unc                             [internal]
-#stk_select_optimizer                              [deprecated]
 #@stk_optim_optimizer_/stk_optim_optimizer_        [internal]
 #@stk_optim_optimizer_/stk_optim_isavailable       [overload STK]
 

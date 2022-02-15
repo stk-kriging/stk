@@ -82,6 +82,9 @@
 
 * `startup.m`: Run `stk_init` automatically for in-place use.
 
+* `stk_select_optimizer.m`, `stk_optim_hasfmincon.m`: Removed
+  (had been deprecated since 2015, and were never part of the public API).
+
 * Internal: source formatting, comments, etc.
 
 -----

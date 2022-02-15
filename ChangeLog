@@ -1,5 +1,13 @@
 2022-02-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Remove two deprecated functions
+
+	* misc/optim/stk_optim_hasfmincon.m: Remove deprecated function.
+	* misc/optim/stk_select_optimizer.m: Remove deprecated function.
+	* admin/octpkg/INDEX: Update Octave package index.
+	* admin/build_tools/build_octpkg.m: Update build process.
+	* NEWS.md: Advertise the removal.
+
 	stk_init.m: Call stk_options_set with the 'default' argument
 
 	* stk_init.m: Call stk_options_set with the 'default' argument.
