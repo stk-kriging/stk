@@ -1,5 +1,12 @@
 2022-02-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_init.m: Call stk_options_set with the 'default' argument
+
+	* stk_init.m: Call stk_options_set with the 'default' argument.
+	This can make a different in situations where stk_init is called
+	during a Matlab/Octave session where STK was previously
+	initialized.
+
 	stk_options_set.m: Fix copyright notice
 
 	* misc/options/stk_options_set.m: Fix copyright notice.

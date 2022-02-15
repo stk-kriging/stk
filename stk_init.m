@@ -125,7 +125,7 @@ if exist ('OCTAVE_VERSION', 'builtin') == 5  % Octave
 end
 
 % Set default options
-stk_options_set ();
+stk_options_set ('default');
 
 % Select default "parallelization engine"
 stk_parallel_engine_set ();
