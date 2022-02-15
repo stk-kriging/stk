@@ -1,3 +1,9 @@
+2022-02-15  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_options_set.m: Fix copyright notice
+
+	* misc/options/stk_options_set.m: Fix copyright notice.
+
 2022-02-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	.gitattributes: Convert CRLF to LF automatically for text files

@@ -27,7 +27,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 201 CentraleSupelec
+%    Copyright (C) 2019 CentraleSupelec
 %    Copyright (C) 2015-2017 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC & A. Ravisankar
 %    Copyright (C) 2013 SUPELEC
