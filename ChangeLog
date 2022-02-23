@@ -1,3 +1,10 @@
+2022-02-23  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_init.m: Update the list of functions that contain persistents
+
+	* stk_init.m (stk_init__clear_persistents): Update the list of
+	functions that contain persistent variables.
+
 2022-02-15  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	README.md: Explain how to initialize STK when using the PCT

@@ -31,7 +31,7 @@
 /admin          export-ignore
 Makefile        export-ignore
 
-# Handle EOLs automatically for files detected as text 
+# Handle EOLs automatically for files detected as text
 * text=auto
 
 # These files are text and should be normalized (Convert crlf => lf)
