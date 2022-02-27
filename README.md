@@ -96,8 +96,11 @@ After that, you should be able to run the examples located in the `examples`
 directory.  All of them are scripts, the file name of which starts with
 the `stk_example_` prefix.
 
-For instance, type `stk_example_kb03` to run the third example in the "Kriging
-basics" series.
+For instance, type
+```
+stk_example_kb03
+```
+to run the third example in the "kriging basics" series.
 
 Remark: when using STK with Mathworks' Parallel Computing Toolbox, it is
 important to run `stk_init` within each worker.  This can be achieved using:
