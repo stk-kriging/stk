@@ -108,7 +108,10 @@ pctRunOnAll run /path/to/stk/stk_init.m
 
 ### Quick start with the Octave package release (Octave only)
 
-Assuming that you have a working Internet connection, typing `pkg install -forge stk`
+Assuming that you have a working Internet connection, typing
+```
+pkg install -forge stk
+```
 (from within Octave) will automatically download the latest STK package tarball from the
 [Octave Forge](http://octave.sourceforge.net/)
 [file release system](https://sourceforge.net/projects/octave/files/)
@@ -116,12 +119,21 @@ on SourceForge and install it for you.
 
 Alternatively, if you want to install an older (or beta) release, you can download
 the tarball from either the STK project FRS or the Octave Forge FRS, and install it
-with `pkg install FILENAME.tar.gz`.
+with
+```
+pkg install FILENAME.tar.gz
+```
 
-After that, you can load STK using `pkg load stk`.
+After that, you can load STK using
+```
+pkg load stk
+```
 
-To check that STK is properly loaded, try for instance `stk_example_kb03` to run
-the third example in the "Kriging basics" series.
+To check that STK is properly loaded, try for instance
+```
+stk_example_kb03
+```
+to run the third example in the "kriging basics" series.
 
 
 ## Requirements and recommendations
@@ -132,7 +144,7 @@ the third example in the "Kriging basics" series.
 
 ### Requirements and recommendations for use with GNU Octave
 
-   The STK is tested to work with 
+   The STK is tested to work with
    [GNU Octave 4.0.0 or newer](https://wiki.octave.org/Release_History).
 
 
@@ -200,5 +212,5 @@ DOI: 10.1007/s11222-011-9241-4.
    to report bugs or ask for new features (do not hesitate to do so!).
 
    If you use STK in Octave, you can also have a look there:
-   
+
    <https://octave.sourceforge.io/support-help.php>

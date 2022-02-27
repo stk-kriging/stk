@@ -1,3 +1,10 @@
+2022-02-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	README.md: Prefer triple backquotes
+
+	* README.md: Prefer triple backquotes to emphasize commands
+	to be typed.
+
 2022-02-23  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_init.m: Update the list of functions that contain persistents
