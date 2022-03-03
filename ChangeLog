@@ -1,3 +1,11 @@
+2022-03-03  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_testfun_hartman4s.m: Scaled Hartman4 test function
+
+	* examples/test_functions/stk_testfun_hartman4s.m: New test
+	function ("scaled Hartman4") from Picheny et al (2013).
+	* admin/octpkg/INDEX: Update Octave package index.
+
 2022-02-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	README.md: Prefer triple backquotes
