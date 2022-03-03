@@ -50,7 +50,7 @@
 %
 % REFERENCES
 %
-%  [1] V. Picheny, T. Wagner & D. Ginsbourger (2013),  A benchmark
+%  [1] V. Picheny, T. Wagner & D. Ginsbourger (2013).  A benchmark
 %      of kriging-based infill criteria for noisy optimization.
 %      Structural and Multidisciplinary Optimization, 48:607-626.
 %
