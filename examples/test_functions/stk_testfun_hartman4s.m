@@ -40,7 +40,7 @@
 %       f(x) = -3.134353168721454.
 %
 %    Slightly better function values can be found in the neighborhood of
-%    this point.  For instant, with
+%    this point.  For instance, with
 %
 %       x = [0.18744768 0.19414868 0.558005333 0.26476409]
 %
