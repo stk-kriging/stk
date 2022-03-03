@@ -1,4 +1,4 @@
-# Changes in version 2.8.0 (?)
+# Changes in version x.y.z (?)
 
 ## LOO-related stuff (ready for release ?)
 
@@ -9,6 +9,16 @@
   predictive variance.
 
 * `stk_example_misc06`: New example.
+
+-----
+
+
+# Changes in version 2.8.0
+
+## Test functions
+
+* `stk_testfun_hartman4s.m`: New test function ("scaled Hartman4")
+  from Picheny et al (2013).
 
 -----
 
