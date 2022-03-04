@@ -54,25 +54,25 @@ function res = stk_isequal_tolabs(a, b, tolabs)
 
 DEFAULT_TOLABS = 1e-8;
 
-if nargin == 2,
+if nargin == 2
     tolabs = DEFAULT_TOLABS;
 end
 
-if isstruct(a) && isstruct(b),
+if isstruct(a) && isstruct(b)
     
     L = fieldnames(a);
-    if ~isequal(fieldnames(b), L),
+    if ~ isequal (fieldnames(b), L)
         res = false;
         return;
     end
     res = true;
-    for k = 1:length(L),
-        if ~isfield(b, L{k}),
+    for k = 1:length(L)
+        if ~ isfield (b, L{k})
             res = false;
             return;
         end
         res = stk_isequal_tolabs(a.(L{k}), b.(L{k}), tolabs);
-        if ~ res,
+        if ~ res
             return;
         end
     end
@@ -87,8 +87,8 @@ elseif ischar (a) && ischar (b)
     
 elseif iscell (a) && iscell (b)
     
-    for i = 1:numel(a),
-        if ~stk_isequal_tolabs (a{i}, b{i}, tolabs);
+    for i = 1:numel(a)
+        if ~ stk_isequal_tolabs (a{i}, b{i}, tolabs)
             res = false;
             return;
         end

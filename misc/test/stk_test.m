@@ -177,7 +177,7 @@ if (iscell (x__file))
     end
 end
 if (isempty (x__file))
-    if (exist (x__name) == 3)
+    if (exist (x__name) == 3)  %#ok<EXIST> 
         fprintf (x__fid, '%s%s source code with tests for dynamically linked function not found\n', SIGNAL_EMPTY, x__name);
     else
         fprintf (x__fid, '%s%s does not exist in path\n', SIGNAL_EMPTY, x__name);

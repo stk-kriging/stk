@@ -165,7 +165,7 @@ quotient = [1; quotient];	% no multiplication at the first level
 row_highLevels   = @(M, k, numb)(numb(M) - ( (numb(k) - 1):-1:0));
 row_currentLevel = @(M, k, numb)(numb(M) - ( (numb(k) - 1):-1:numb(k + 1)) );
 
-for k_lev = nLev:-1:1; %begin by the end
+for k_lev = nLev:-1:1  % Begin by the end
     
     list_nb = (1:n(k_lev))';           % list of all values we must get after this loop
     n_new_k = n(k_lev) - n(k_lev + 1);	% number of new value to add
