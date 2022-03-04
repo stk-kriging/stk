@@ -29,7 +29,7 @@
 
 function pareng = stk_parallel_engine_parfor()
 
-if exist ('parpool')
+if exist ('parpool')  %#ok<EXIST> 
     
     try
         parpool ();

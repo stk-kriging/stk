@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2021 CentraleSupelec
+%    Copyright (C) 2021, 2022 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -36,16 +36,33 @@ m = stk_mlint_all_ (root);
 
 % Linter messages that trigger a global error
 % (this list will be growing progressively)
-critical_errors = {'ISCLSTR', 'ISMT', 'MINV', 'MSNU', 'NOPAR', 'NOPAR2', ...
-    'NOPRT', 'RESWD', 'STREMP', 'STRIN', 'STTOK', 'TRYNC'};
+critical_errors = {'EXIST', 'ISCLSTR', 'ISMT', 'MINV', 'MSNU', 'NOPAR', ...
+    'NOPAR2', 'NOPRT', 'NOSEL', 'RESWD', 'STREMP', 'STRIN', 'STTOK', ...
+    'TRYNC'};
 
 b_ok = ~ any (ismember ({m.id}, critical_errors));
 
-% FIXME: Display critical errors separately
+% Summarize all linter warnings
 fprintf ('\n\nSUMMARY:\n')
 [msg, ~, ic] = unique ({m.id});
 for k = 1:(length (msg))
-    fprintf ('% 3d %s\n', sum (ic == k), msg{k});
+    if ismember (msg{k}, critical_errors)
+        s_crit = ' [CRITICAL]';
+    else
+        s_crit = '';
+    end
+    fprintf ('% 3d %s%s\n', sum (ic == k), msg{k}, s_crit);
+end
+
+% Display critical errors separately
+if ~ b_ok
+    fprintf ('\n\n CRITICAL ERRORS:\n\n');
+    for i = 1:(length (m))
+        if ismember (m(i).id, critical_errors)
+            disp (m(i));
+            fprintf ('\n');
+        end
+    end
 end
 
 end % function

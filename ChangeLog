@@ -1,3 +1,16 @@
+2022-03-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix more linter warnings
+
+	* admin/stk_mlint_all.m: Display critical errors separately.  Add
+	'EXIST' and 'NOSEL' to the list of critical errors.
+	* misc/parallel/@stk_parallel_engine_parfor/stk_parallel_engine_parfor.m:
+	Fix warnings.
+	* misc/test/stk_isequal_tolabs.m: Idem.
+	* misc/test/stk_isequal_tolrel.m: Idem.
+	* misc/test/stk_test.m: Idem.
+	* sampling/stk_sampling_nestedlhs.m: Idem.
+
 2022-03-03  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_testfun_hartman4s.m: Scaled Hartman4 test function
