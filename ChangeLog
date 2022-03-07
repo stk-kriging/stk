@@ -1,3 +1,12 @@
+2022-03-07  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Contributing guidelines
+
+	* doc/dev/CONTRIBUTING.md: Explain the contribution process.
+	* README.md: Link to CONTRIBUTING.md
+	* admin/build_tools/build_octpkg.m: Copy CONTRIBUTING.md to the
+	doc directory in the Octave package release.
+
 2022-03-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Fix more linter warnings

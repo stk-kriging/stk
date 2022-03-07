@@ -65,6 +65,9 @@ mkdir (fullfile (unpacked_dir, 'src'));
 % doc: an optional directory containing documentation for the package
 mkdir (fullfile (unpacked_dir, 'doc'));
 
+% doc/dev: information for developpers
+mkdir (fullfile (unpacked_dir, 'doc', 'dev'));
+
 % List of directories that must be ignored by process_directory ()
 ignore_list = {'.git', '.pc', 'admin', 'misc/mole', 'build'};
 
@@ -206,19 +209,22 @@ else
     elseif strcmp (s, 'AUTHORS.md')
         
         % Put AUTHORS.md in the documentation directory
-        % (not a standard Octave package file, .md is fine)
         copyfile (s, fullfile (unpacked_dir, 'doc'));
         
     elseif strcmp (s, 'README.md')
-        
+
         % Put README.md in the documentation directory
-        % (not a standard Octave package file, .md is fine)
         copy_readme (s, fullfile (unpacked_dir, 'doc'), release_date);
-        
+
+    elseif strcmp (s, 'doc/dev/CONTRIBUTING.md')
+
+	% Put CONTRIBUTING.md in the doc/dev directory
+        copyfile (s, fullfile (unpacked_dir, 'doc', 'dev'));
+
     elseif strcmp (s, 'CITATION')
         
         copy_citation (s, unpacked_dir, release_date);
-        
+    
     else
         
         error (sprintf ('Don''t know what to do with file %s', s));

@@ -217,3 +217,10 @@ DOI: 10.1007/s11222-011-9241-4.
    If you use STK in Octave, you can also have a look there:
 
    <https://octave.sourceforge.io/support-help.php>
+
+
+## How to contribute
+
+   The contribution process is explained in
+   [CONTRIBUTING.md](doc/dev/CONTRIBUTING.md).
+
