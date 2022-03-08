@@ -2,10 +2,8 @@
 
 	Contributing guidelines
 
-	* doc/dev/CONTRIBUTING.md: Explain the contribution process.
-	* README.md: Link to CONTRIBUTING.md
-	* admin/build_tools/build_octpkg.m: Copy CONTRIBUTING.md to the
-	doc directory in the Octave package release.
+	* .github/CONTRIBUTING.md: Explain the contribution process.
+	* README.md: Link to CONTRIBUTING.md on GitHub.
 
 2022-03-04  Julien Bect  <julien.bect@centralesupelec.fr>
 

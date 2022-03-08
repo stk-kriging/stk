@@ -222,5 +222,5 @@ DOI: 10.1007/s11222-011-9241-4.
 ## How to contribute
 
    The contribution process is explained in
-   [CONTRIBUTING.md](doc/dev/CONTRIBUTING.md).
+   [CONTRIBUTING.md](https://github.com/stk-kriging/stk/blob/master/.github/CONTRIBUTING.md).
 

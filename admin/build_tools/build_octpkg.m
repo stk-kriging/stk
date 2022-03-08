@@ -216,11 +216,6 @@ else
         % Put README.md in the documentation directory
         copy_readme (s, fullfile (unpacked_dir, 'doc'), release_date);
 
-    elseif strcmp (s, 'doc/dev/CONTRIBUTING.md')
-
-	% Put CONTRIBUTING.md in the doc/dev directory
-        copyfile (s, fullfile (unpacked_dir, 'doc', 'dev'));
-
     elseif strcmp (s, 'CITATION')
         
         copy_citation (s, unpacked_dir, release_date);
