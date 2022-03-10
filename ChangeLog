@@ -1,3 +1,11 @@
+2022-03-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_testfun_hartman6.m: Hartman6 test function
+
+	* examples/test_functions/stk_testfun_hartman6.m: New test
+	function ("Hartman6") from the Dixon & Szego (1978) benchmark.
+	* admin/octpkg/INDEX: Update Octave package index.
+
 2022-03-07  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Contributing guidelines

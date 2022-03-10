@@ -20,6 +20,9 @@
 * `stk_testfun_hartman4s.m`: New test function ("scaled Hartman4")
   from Picheny et al (2013).
 
+* `stk_testfun_hartman6.m`: New test function ("Hartman6") from the
+  Dixon & Szego (1978) benchmark.
+
 -----
 
 
