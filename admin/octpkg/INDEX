@@ -306,6 +306,7 @@ Examples: test functions, datasets, etc.
  stk_testfun_braninhoo
  stk_testfun_goldsteinprice
  stk_testfun_hartman4s
+ stk_testfun_hartman6
  stk_testfun_twobumps
  stk_testcase_truss3
  stk_testfun_truss3_bb
