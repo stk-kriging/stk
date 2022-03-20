@@ -1,31 +1,39 @@
-% STK_TESTFUN_HARTMAN4S computes the scaled "Hartman4" function
+% STK_TESTFUN_HARTMAN4 computes the "Hartman4" function
 %
-%    The scaled Hartman4 function is a test function in dimension 4,
-%    which seems to have been introduced by [1].
+% CALL: Y = stk_testfun_hartman4 (X)
 %
-%    It is usually minimized over [0, 1]^4.
+%    computes the value Y of the Hartman4 function at X.
+%
+%    The Hartman4 function is a test function in dimension 4,
+%    which is usually minimized over [0, 1]^4. 
 %
 % HISTORICAL REMARKS
 %
-%    This function belongs, up to a scaling, to a general class of test
-%    functions introduced by Hartman [2].
+%    This function belongs to a general class of test functions introduced
+%    by Hartman [1].  The particular set of coefficients used in the
+%    Hartman4 function seems to have been introduced by [2].
 %
-%    Picheny & co-authors [1] refer to Dixon & Szego [3] for this test
+%    Note that the test function used in [2] is a scaled version of the
+%    one implemented here, which can be recovered as follows:
+%
+%      y = (1.1 + stk_testfun_hartman4 (x)) / 0.839;
+%
+%    Picheny & co-authors [2] refer to Dixon & Szego [3] for this test
 %    function, but it turns out that [3] only contains two sorts of
 %    "Hartman functions", in dimensions three and six.
 %
 %    In fact, this function appears to have been obtained by truncating
 %    the sum at the fourth coordinate in the six-dimensional Hartman
-%    function of [3] and then rescaling.
+%    function of [3].
 %
 % IMPLEMENTATION
 %
-%    This implementation has been written from scratch using [1] as a
+%    This implementation has been written from scratch using [2] as a
 %    reference, and then checked for correctness with respect to [4, 5].
 %
 %    Only minor differences, of the order of 1e-15, were observed with
 %    respect to [5].  The implementation in [4], however, uses a different
-%    scaling: the leading term is 1/0.8387 instead of 1/0.839 in [1, 5].
+%    scaling: the leading term is 1/0.8387 instead of 1/0.839 in [2, 5].
 %
 % GLOBAL MINIMUM
 %
@@ -34,10 +42,9 @@
 %       x = [0.1873 0.1906 0.5566 0.2647].
 %
 %    The corresponding function value, with our definition of the test
-%    function taken from [1]  (the one in [4] uses a slightly different
-%    normalizing constant, see above)  is:
+%    function, is:
 %
-%       f(x) = -3.134353168721454.
+%       f(x) = -3.729722308557300.
 %
 %    Slightly better function values can be found in the neighborhood of
 %    this point.  For instance, with
@@ -46,16 +53,16 @@
 %
 %    we get
 %
-%       f(x) = -3.134493969530741.
+%       f(x) = -3.729840440436292.
 %
 % REFERENCES
 %
-%  [1] V. Picheny, T. Wagner & D. Ginsbourger (2013).  A benchmark
+%  [1] J. K. Hartman (1973).  Some experiments in global optimization.
+%      Naval Research Logistics Quarterly, 20(3):569-576.
+%
+%  [2] V. Picheny, T. Wagner & D. Ginsbourger (2013).  A benchmark
 %      of kriging-based infill criteria for noisy optimization.
 %      Structural and Multidisciplinary Optimization, 48:607-626.
-%
-%  [2] J. K. Hartman (1973).  Some experiments in global optimization.
-%      Naval Research Logistics Quarterly, 20(3):569-576.
 %
 %  [3] L. C. W. Dixon & G. P. Szego (1978).  Towards Global
 %      Optimization 2, North-Holland, Amsterdam, The Netherlands
@@ -125,7 +132,7 @@
 %    ANY WAY  OUT OF THE USE  OF THIS SOFTWARE,  EVEN  IF ADVISED  OF THE
 %    POSSIBILITY OF SUCH DAMAGE.
 
-function y = stk_testfun_hartman4s (x)
+function y = stk_testfun_hartman4 (x)
 
 x = double (x);
 
@@ -151,10 +158,7 @@ inner_sum = sum ( ...
     (bsxfun (@minus, x, shiftdim (P, -1))) .^ 2), 2);
 
 % Compute the outer sum
-outer_sum = sum (bsxfun (@times, shiftdim (C, -1), exp (- inner_sum)), 3);
-
-% Final scaling
-y = (1.1 - outer_sum) / 0.839;
+y = - sum (bsxfun (@times, shiftdim (C, -1), exp (- inner_sum)), 3);
 
 end % function
 
@@ -162,6 +166,6 @@ end % function
 %!test
 %! x = [0.1873      0.1906      0.5566       0.2647     ;
 %!      0.18744768  0.19414868  0.558005333  0.26476409];
-%! y = stk_testfun_hartman4s (x);
+%! y = stk_testfun_hartman4 (x);
 %! assert (stk_isequal_tolabs (y, ...
-%!     [-3.134353168721454; -3.134493969530741], 1e-15));
+%!     [-3.729722308557300; -3.729840440436292], 1e-15));
