@@ -1,3 +1,12 @@
+2022-03-20  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Provide unscaled Hartman4 function
+
+	* examples/test_functions/stk_testfun_hartman4s.m: Rename from...
+	* examples/test_functions/stk_testfun_hartman4.m: ...Rename to.  Remove
+	output scaling, adapt help text & unit tests.
+	* admin/octpkg/INDEX: Update Octave package index.
+
 2022-03-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_testfun_hartman6.m: Hartman6 test function
