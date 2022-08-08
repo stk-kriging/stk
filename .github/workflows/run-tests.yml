@@ -1,3 +1,37 @@
+## Copyright Notice
+##
+##    Copyright (C) 2022 CentraleSupelec
+##
+##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+
+## Copying Permission Statement  (STK toolbox)
+##
+##    This file is part of
+##
+##            STK: a Small (Matlab/Octave) Toolbox for Kriging
+##               (https://github.com/stk-kriging/stk/)
+##
+##    STK is free software: you can redistribute it and/or modify it under
+##    the terms of the GNU General Public License as published by the Free
+##    Software Foundation,  either version 3  of the License, or  (at your
+##    option) any later version.
+##
+##    STK is distributed  in the hope that it will  be useful, but WITHOUT
+##    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY
+##    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public
+##    License for more details.
+##
+##    You should  have received a copy  of the GNU  General Public License
+##    along with STK.  If not, see <http://www.gnu.org/licenses/>.
+
+## Copying Permission Statement  (this file)
+##
+##    To the extent possible under law,  Julien Bect  has waived all copy-
+##    right and related or neighboring rights to run-tests.yml.  This work
+##    is published from France.
+##
+##    License: CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
+
 name: run-tests
 
 on: [push, pull_request]
@@ -16,6 +50,13 @@ env:
     diary ('off');
     assert (results.n_total == (results.n_pass + results.n_xfail));
 
+## The following actions are used:
+##  * https://github.com/actions/checkout             v3
+##  * https://github.com/actions/upload-artifact      v3
+##  * https://github.com/actions/download-artifact    v3
+##  * https://github.com/matlab-actions/setup-matlab  v1
+##  * https://github.com/matlab-actions/run-command   v1
+
 jobs:
 
   runtests-inplace-mat:
@@ -23,19 +64,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out source repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v1
         with:
           # Test in-place only on the latest version of Matlab
           # (https://github.com/matlab-actions/setup-matlab/#set-up-matlab)
-          release: R2021b
+          release: R2022a
       - name: Run test suite
         uses: matlab-actions/run-command@v1
         with:
           command: ${{ env.TEST_SCRIPT }}
       - name: "Upload artifact: log file"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: runtests-inplace-mat-log
           path: stk_runtests.log
@@ -44,7 +85,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install Octave
         run: |
           sudo apt-get update
@@ -52,7 +93,7 @@ jobs:
       - name: Run test suite
         run: octave --eval "${{ env.TEST_SCRIPT }}"
       - name: "Upload artifact: log file"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: runtests-inplace-oct-log
           path: stk_runtests.log
@@ -61,7 +102,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install Octave & tools
         run: |
           sudo apt-get update
@@ -71,12 +112,12 @@ jobs:
       - name: Build tarballs
         run: make release
       - name: "Upload artifacts: all-purpose release"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: allpurpose-tarball
           path: build/github/stk-?.?.?-allpurpose.tar.gz
       - name: "Upload artifacts: Octave package"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: octpkg-tarball
           path: build/octaveforge/stk-?.?.?.tar.gz
@@ -86,7 +127,7 @@ jobs:
     needs: build-tarballs
     steps:
       - name: Download Octave package
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: octpkg-tarball
       - name: Get tarball name
@@ -103,7 +144,7 @@ jobs:
       - name: Run test suite
         run: octave --eval "pkg load stk;  ${{ env.TEST_SCRIPT }}"
       - name: "Upload artifact: log file"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: runtests-octpkg-log
           path: stk_runtests.log
@@ -115,10 +156,10 @@ jobs:
       matrix:
         # Test all available versions of Matlab
         # (https://github.com/matlab-actions/setup-matlab/#set-up-matlab)
-        release: [R2021b, R2021a, R2020b, R2020a]
+        release: [R2022a, R2021b, R2021a, R2020b, R2020a]
     steps:
       - name: Download allpurpose release
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: allpurpose-tarball
       - name: Get tarball name
@@ -137,7 +178,7 @@ jobs:
         with:
           command: cd stk;  ${{ env.TEST_SCRIPT }}
       - name: "Upload artifact: log file"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: runtests-allpurpose-mat-${{ matrix.release }}-log
           path: stk/stk_runtests.log
@@ -147,7 +188,7 @@ jobs:
     needs: build-tarballs
     steps:
       - name: Download allpurpose release
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: allpurpose-tarball
       - name: Get tarball name
@@ -164,7 +205,7 @@ jobs:
       - name: Run test suite
         run: octave --eval "cd stk;  ${{ env.TEST_SCRIPT }}"
       - name: "Upload artifact: log file"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: runtests-allpurpose-oct-log
           path: stk/stk_runtests.log

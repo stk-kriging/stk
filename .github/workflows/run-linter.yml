@@ -1,3 +1,37 @@
+## Copyright Notice
+##
+##    Copyright (C) 2022 CentraleSupelec
+##
+##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+
+## Copying Permission Statement  (STK toolbox)
+##
+##    This file is part of
+##
+##            STK: a Small (Matlab/Octave) Toolbox for Kriging
+##               (https://github.com/stk-kriging/stk/)
+##
+##    STK is free software: you can redistribute it and/or modify it under
+##    the terms of the GNU General Public License as published by the Free
+##    Software Foundation,  either version 3  of the License, or  (at your
+##    option) any later version.
+##
+##    STK is distributed  in the hope that it will  be useful, but WITHOUT
+##    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY
+##    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public
+##    License for more details.
+##
+##    You should  have received a copy  of the GNU  General Public License
+##    along with STK.  If not, see <http://www.gnu.org/licenses/>.
+
+## Copying Permission Statement  (this file)
+##
+##    To the extent possible under law,  Julien Bect  has waived all copy-
+##    right and related or neighboring rights to run-linter.yml. This work
+##    is published from France.
+##
+##    License: CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
+
 name: run-linter
 
 on: [push, pull_request]
@@ -10,6 +44,12 @@ env:
     writetable (struct2table (m), 'stk_mlint_all.csv');
     if ~ b_ok,  error ('linter error');  end
 
+## The following actions are used:
+##  * https://github.com/actions/checkout             v3
+##  * https://github.com/actions/download-artifact    v3
+##  * https://github.com/matlab-actions/setup-matlab  v1
+##  * https://github.com/matlab-actions/run-command   v1
+
 jobs:
   run-linter-matlab:
     # Apparently only Ubuntu workers support MATLAB actions for now
@@ -20,7 +60,7 @@ jobs:
         release: [R2021b, R2021a, R2020b, R2020a]
     steps:
       - name: Check out source repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v1
         with:
@@ -30,7 +70,7 @@ jobs:
         with:
           command: ${{ env.TEST_SCRIPT }}
       - name: "Upload mlint result (CSV file)"
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: stk_mlint_all-${{ matrix.release }}
           path: stk_mlint_all.csv

@@ -1,3 +1,10 @@
+2022-08-08  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	.github/workflows: Update actions
+
+	* .github/workflows/run-linter.yml: Update actions.
+	* .github/workflows/run-tests.yml: Idem.
+
 2022-03-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Provide unscaled Hartman4 function
