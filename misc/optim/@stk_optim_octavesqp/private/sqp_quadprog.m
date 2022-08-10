@@ -828,3 +828,4 @@ end % function
 %!error sqp_quadprog (1, cell (3,1), cell (2,1), cell (2,1),[],[],[], ones (2,2))
 %!error sqp_quadprog (1, cell (3,1), cell (2,1), cell (2,1),[],[],[],-1)
 
+%#ok<*NASGU> 

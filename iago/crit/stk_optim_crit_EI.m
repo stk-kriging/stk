@@ -34,11 +34,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [zp, samplingcrit] = stk_optim_crit_EI (algo, xi_ind, zi)
+function [zp, samplingcrit] = stk_optim_crit_EI (algo, xi_ind, zi)  %#ok<STOUT,INUSD> 
 
 error ('This function needs a big rehaul (see stk_optim_crit_iago).');
 
-if stk_isnoisy (algo.model)
+if stk_isnoisy (algo.model)  %#ok<UNRCH> 
     error ('The EI criterion is not defined for noisy evaluations');
 else
     % Make sure that lognoisevariance is -inf for noiseless models
@@ -65,7 +65,7 @@ EI = stk_distrib_normal_ei (Mn, zp.mean, sqrt(zp.var), true);
 samplingcrit = - (Mn + EI);
 
 %% DISPLAY SAMPLING CRITERION?
-if algo.disp,
+if algo.disp
     [~, ind_min] = min(samplingcrit);  xinew = xg(ind_min, :); %%%TEMP
     view_samplingcrit(algo, xg, xi, xinew, samplingcrit, 2);
 end

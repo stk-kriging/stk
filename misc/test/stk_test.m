@@ -605,8 +605,8 @@ end % function
 function body = x__extract_test_code (nm)
 
 fid = fopen (nm, 'rt');
-if fid == -1,
-    error(sprintf('File %s cannot be opened.', nm));
+if fid == -1
+    error ( sprintf ('File %s cannot be opened.', nm));  %#ok<SPERR> 
 end
 
 body = '';

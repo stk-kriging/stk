@@ -40,7 +40,7 @@ end
 
 switch TESTCASE_NUM
     
-    case 1,  % A one-dimensional test case
+    case 1  % A one-dimensional test case
         
         DIM = 1;
         BOX = [-1.0; 1.0];
@@ -56,13 +56,16 @@ switch TESTCASE_NUM
         xi_ind = [22 57 72 87];
         xi = xt(xi_ind, :);
         
-    case 2,  % A two-dimensional test case
+    case 2  % A two-dimensional test case
         
         DIM = 2;
         BOX = [[-1; 1], [-1; 1]];
         
-        f_ = inline ('exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2 + 3*sin(4*pi*x1)', ...
-            'x1', 'x2');  f0 = @(x)(- f_(x(:, 1), x(:, 2)));
+        f0 = @(x)(                        ...
+            exp (1.8 * (x(:,1) + x(:,2))) ...
+            + 3 * x(:,1)                  ...
+            + 6 * x(:,2) .^2              ...
+            + 3 * sin (4 * pi * x(:,1)));
         
         NOISEVARIANCE = 2 ^ 2;
         
@@ -120,7 +123,7 @@ if KNOWN_NOISE_VARIANCE
     options = [options {'noisevariance', NOISEVARIANCE}];
 else
     % Homoscedastic noise, unknown noise variance
-    options = [options {'noisevariance', nan}];
+    options = [options {'noisevariance', nan}];  %#ok<UNRCH> 
 end
 
 % Activate display (figures) and provide ground truth

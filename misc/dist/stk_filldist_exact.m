@@ -146,7 +146,7 @@ end % function
 
 function y = add_symm(x, box) %----------------------------------------------------------
 
-[n d] = size(x);
+[n, d] = size(x);
 k = 2 * d + 1;
 y = repmat(x, k, 1);
 

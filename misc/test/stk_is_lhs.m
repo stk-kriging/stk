@@ -50,10 +50,10 @@ function b = stk_is_lhs (x, n, dim, box)
 
 x = double (x);
 
-if nargin == 1,
-    [n dim] = size (x);
-elseif nargin == 2,
-    if size (x, 1) ~= n,
+if nargin == 1
+    [n, dim] = size (x);
+elseif nargin == 2
+    if size (x, 1) ~= n
         b = false;  return;
     end
     dim = size (x, 2);
@@ -75,7 +75,7 @@ else
     xmax = box.upper_bounds;
 end
 
-for j = 1:dim,
+for j = 1:dim
     
     y = x(:,j);
     
@@ -85,7 +85,7 @@ for j = 1:dim,
     
     y = (y - xmin(j)) / (xmax(j) - xmin(j));
     y = ceil (y * n);
-    if ~ isequal (sort (y), (1:n)'),
+    if ~ isequal (sort (y), (1:n)')
         b = false;  return;
     end
     

@@ -31,11 +31,11 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [zp, samplingcrit] = stk_optim_crit_SUR (algo, xi_ind, zi, type)
+function [zp, samplingcrit] = stk_optim_crit_SUR (algo, xi_ind, zi, type)  %#ok<STOUT,INUSD> 
 
 error ('This function needs a big rehaul (see stk_optim_crit_iago).');
 
-if nargin < 4
+if nargin < 4  %#ok<UNRCH> 
     type = 1;
 end
 
@@ -69,7 +69,7 @@ samplingcrit = zeros(ng, 1);
 heteroscedastic_noise = ~ isscalar (algo.noisevariance);
 
 % Prepare future noise variance
-if isinf (algo.futurebatchsize),
+if isinf (algo.futurebatchsize)
     % Pretend that the future observation will be noiseless
     heteroscedastic_noise = false;
     noisevariance = 0;
@@ -116,8 +116,10 @@ for test_ind = 1:ng
     end
 end
 
+
 %% DISPLAY SAMPLING CRITERION?
-if algo.disp,
+
+if algo.disp
     [~, ind_min] = min(samplingcrit);  xinew = xg(ind_min, :); %%%TEMP
     view_samplingcrit(algo, xg, xi, xinew, samplingcrit, 2);
 end

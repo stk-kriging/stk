@@ -62,7 +62,8 @@ for i = 1:NREP
 end
 t3 = toc ();
 
-t = [t1 t2 t3]'
+t = [t1 t2 t3]';
+display (t);
 
 
 %% Second test: W * K^(-1) * W'
@@ -89,4 +90,5 @@ for i = 1:NREP
 end
 t3 = toc ();
 
-t = [t1 t2 t3]'
+t = [t1 t2 t3]';
+display (t);

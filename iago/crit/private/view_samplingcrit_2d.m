@@ -31,7 +31,6 @@
 
 function view_samplingcrit_2d (algo, xg, xi, xinew, samplingcrit, h_fig) % Hcond + minimizer pos
 
-CONTOUR_LINES = 40; % number of levels in contour plots
 XGDOT_STYLE    = {'ko', 'MarkerFaceColor', 'k', 'MarkerSize', 3};
 XIDOT_STYLE    = {'o', 'MarkerFaceColor', 'none', 'MarkerSize', 8, 'LineWidth', 2, 'MarkerEdgeColor', [0.0 1.0 1.0]};
 NEWDOT_STYLE = {'bs', 'MarkerFaceColor', 'b', 'MarkerSize', 12};

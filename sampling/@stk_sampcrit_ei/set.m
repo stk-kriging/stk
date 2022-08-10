@@ -47,7 +47,6 @@ switch propname
             if isempty (zi)
                 crit.current_minimum = +inf;
             else
-                n = size (zi, 1);
                 crit.current_minimum = min (zi);
             end
             
