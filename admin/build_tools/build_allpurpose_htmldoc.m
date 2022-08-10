@@ -70,7 +70,7 @@ fclose (fid);
 
 tmp = regexp (s, ...
     '<div class="package_box_contents">.*?</div>', 'match');
-s_package_box = tmp{1};
+s_package_box = tmp{1};  %#ok<NASGU> 
 
 % Reconstruct table
 

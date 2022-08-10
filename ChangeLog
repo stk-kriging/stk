@@ -1,3 +1,29 @@
+2022-08-10  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Fix more linter warnings
+
+	* admin/stk_mlint_all.m: Add 'NASGU', NBRAK2', 'NCOMMA', 'SPERR', and
+	'UNRCH' to the list of critical errors.
+	* .github/workflows/run-linter.yml: Use R2022a as well.
+	* admin/build_tools/build_allpurpose_htmldoc.m: Fix warnings.
+	* admin/build_tools/generate_htmldoc.m: Idem.
+	* admin/build_tools/get_allpurpose_html_options.m: Idem.
+	* iago/crit/private/view_init_2d.m: Idem.
+	* iago/crit/private/view_samplingcrit_2d.m: Idem.
+	* iago/crit/stk_optim_crit_EI.m: Idem.
+	* iago/crit/stk_optim_crit_SUR.m: Idem.
+	* iago/crit/stk_optim_crit_iago.m: Idem.
+	* iago/rep/stk_fakenorep.m: Idem.
+	* iago/stk_optimscript.m: Idem.
+	* iago/utils/stk_quadrature.m: Idem.
+	* misc/benchmarks/stk_benchmark_uppertriangular.m: Idem.
+	* misc/dist/stk_filldist_exact.m: Idem.
+	* misc/distrib/stk_distrib_bivnorm_cdf.m: Idem.
+	* misc/optim/@stk_optim_octavesqp/private/sqp_quadprog.m: Idem.
+	* misc/test/stk_is_lhs.m: Idem.
+	* misc/test/stk_test.m: Idem.
+	* sampling/@stk_sampcrit_ei/set.m: Idem.
+
 2022-08-08  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	.github/workflows: Update actions

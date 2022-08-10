@@ -66,12 +66,12 @@ q = nan (size (z1));
 
 b1 = (sigma1 == 0.0);
 if any (b1)  % First component is zero a.s.
-    [p(b1) q(b1)] = handle_singular_case (b1, z1, z2, sigma2);
+    [p(b1), q(b1)] = handle_singular_case (b1, z1, z2, sigma2);
 end
 
 b2 = (~ b1) & (sigma2 == 0.0);
 if any (b2)  % Second component is zero a.s.
-    [p(b2) q(b2)] = handle_singular_case (b2, z2, z1, sigma1);
+    [p(b2), q(b2)] = handle_singular_case (b2, z2, z1, sigma1);
 end
 
 %--- Deal with the general case ------------------------------------------------
@@ -86,7 +86,7 @@ end
 end % function
 
 
-function [p q] = handle_singular_case (b1, z1, z2, sigma2)
+function [p, q] = handle_singular_case (b1, z1, z2, sigma2)
 
 z1_ = z1(b1);
 z2_ = z2(b1);
@@ -99,7 +99,7 @@ q = ones (s);
 
 b1p = (z1_ >= 0);
 if any (b1p)
-    [p(b1p) q(b1p)] = stk_distrib_normal_cdf (z2_(b1p), 0, sigma2_(b1p));
+    [p(b1p), q(b1p)] = stk_distrib_normal_cdf (z2_(b1p), 0, sigma2_(b1p));
 end
 
 end % function

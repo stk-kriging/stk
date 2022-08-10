@@ -106,6 +106,6 @@ fullfile (vpars.pkgroot, "index.html"));
 
 %%--- Footer -------------------------------------------------------------------
 
-options.footer = ["</div>\n</body>\n</html>\n"];
+options.footer = "</div>\n</body>\n</html>\n";
 
 end % function

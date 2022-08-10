@@ -41,9 +41,8 @@ zt0 = algo.disp_zvals;
 zp_ = stk_predict_withrep (algo.model, xi, zi, xt0);
 
 figure(1)
-h1 = subplot(2,2,1);
+subplot(2,2,1);
 contour(xt0, zt0, CONTOUR_LINES);
-%originalSize = get(gca, 'Position'); colorbar; set(h1, 'Position', originalSize);
 colorbar
 hold on
 plot (xg.data(:, 1), xg.data(:, 2), XGDOT_STYLE{:});

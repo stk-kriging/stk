@@ -104,7 +104,7 @@ std_tol = (max (zc_pred.mean) - median (zc_pred.mean)) * 1e-10;
 heteroscedastic_noise = ~ isscalar (algo.noisevariance);
 
 % Prepare future noise variance
-if isinf (algo.futurebatchsize),
+if isinf (algo.futurebatchsize)
     % Pretend that the future observation will be noiseless
     heteroscedastic_noise = false;
     noisevariance = 0;

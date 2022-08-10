@@ -38,8 +38,8 @@ end
 
 % Check that octpkg has been built
 if (~ exist (octpkg_tarball, 'file'))
-    error (sprintf ...
-        ('%s does not exist: build octpkg first.', octpkg_tarball));
+    error (sprintf ('%s does not exist: build octpkg first.', ...
+        octpkg_tarball));  %#ok<SPERR> 
 end
 
 % Install package (even if it's already installed)

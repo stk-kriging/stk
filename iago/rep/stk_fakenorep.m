@@ -28,7 +28,7 @@
 
 function [model, zi] = stk_fakenorep (model, zi)
 
-[n d] = size (zi);
+[n, d] = size (zi);
 
 lnv = model.lognoisevariance;
 
