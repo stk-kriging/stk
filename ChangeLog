@@ -1,3 +1,10 @@
+2022-08-23  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	CONTRIBUTING.md: Requirements for an acceptable contribution
+
+	* .github/CONTRIBUTING.md: Explain (some of) the requirements for
+	an acceptable contribution.
+
 2022-08-10  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Fix more linter warnings
