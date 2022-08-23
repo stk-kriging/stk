@@ -24,7 +24,7 @@ In order to be acceptable, a contribution must:
 1. follow as much as possible existing coding practices in the STK
    code base.  See also [admin/CODING_GUIDELINES](../admin/CODING_GUIDELINES).
 
-2. pass all unit tests on recent version of Matlab and Octave.  This
+2. pass all unit tests on recent versions of Matlab and Octave.  This
    is checked by the [Github actions](workflows/), which are run
    automatically for all pushes and pull requests.
 
