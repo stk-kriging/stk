@@ -15,13 +15,19 @@
 %  [2] Dixon L.C.W., Szego G.P., Towards Global Optimization 2, North-
 %      Holland, Amsterdam, The Netherlands (1978)
 
-% Copyright Notice
+% Author
 %
-%    Copyright (C) 2012-2014 SUPELEC
-%
-%    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
+%    Julien Bect  <julien.bect@centralesupelec.fr>
 
-% Copying Permission Statement
+% Copying Permission Statement  (this file)
+%
+%    To the extent possible under law, CentraleSupélec has waived all
+%    copyright and related or neighboring rights to
+%    stk_testfun_braninhoo.m.  This work is published from France.
+%
+%    License: CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
+
+% Copying Permission Statement  (STK toolbox as a whole)
 %
 %    This file is part of
 %

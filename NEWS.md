@@ -17,11 +17,15 @@
 
 ## Test functions
 
+* `stk_testfun_hartman3.m`, `stk_testfun_hartman6.m`: New test
+  functions ("Hartman3" and "Hartman6") from the Dixon & Szego (1978)
+  benchmark.
+
 * `stk_testfun_hartman4.m`: New test function ("Hartman4") based on
   Picheny et al (2013), with a different scaling.
 
-* `stk_testfun_hartman6.m`: New test function ("Hartman6") from the
-  Dixon & Szego (1978) benchmark.
+* Most test functions in `examples/test_functions` are now also
+  available under the CC0 license (see each file).
 
 -----
 

@@ -49,7 +49,7 @@
 
 function y = stk_testfun_goldsteinprice (x)
 
-if nargin == 0,
+if nargin == 0
     visu_goldsteinprice ();
     return;
 end

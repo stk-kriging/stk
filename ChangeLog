@@ -1,3 +1,26 @@
+2022-12-16  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	More Hartman functions
+
+	* examples/test_functions/stk_testfun_hartman_generic.m: Generic
+	implementation of Hartman functions (Dixon-Szego diagonal form).
+	* examples/test_functions/stk_testfun_hartman3.m: New function.
+	* examples/test_functions/stk_testfun_hartman4.m: Rewrite using generic.
+	* examples/test_functions/stk_testfun_hartman6.m: Rewrite using generic.
+	* admin/octpkg/INDEX: Update Octave package index.
+
+	CC0 licence for some existing test functions
+
+	* examples/test_functions/stk_testfun_braninhoo.m: Apply CC0.
+	* examples/test_functions/stk_testfun_twobumps.m: Reformat existing header.
+	* examples/test_functions/stk_testcase_truss3.m: Idem.
+	* examples/test_functions/stk_testfun_truss3_bb.m: Idem.
+	* examples/test_functions/stk_testfun_truss3_vol.m: Idem.
+
+	stk_testcase_truss3.m: Polish help text
+
+	* examples/test_functions/stk_testcase_truss3.m: Polish help text.
+
 2022-12-13  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	.github/workflows: Use Matlab R2022b as well

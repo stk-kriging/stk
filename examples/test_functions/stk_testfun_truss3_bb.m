@@ -4,20 +4,17 @@
 %
 % See also: stk_testcase_truss3, stk_testfun_truss3_vol
 
-% Copyright Notice
+% Author
 %
-%    This file: stk_testfun_truss3_bb.m was written in 2017
-%                        by Julien Bect <julien.bect@centralesupelec.fr>.
+%    Julien Bect  <julien.bect@centralesupelec.fr>
+
+% Copying Permission Statement  (this file)
 %
-%    To the extent possible under law,  the author(s)  have dedicated all
-%    copyright and related and neighboring rights to this file to the pub-
-%    lic domain worldwide. This file is distributed without any warranty.
+%    To the extent possible under law, CentraleSupélec has waived all
+%    copyright and related or neighboring rights to
+%    stk_testfun_truss3_bb.m.  This work is published from France.
 %
-%    This work is published from France.
-%
-%    You should have received a copy of the  CC0 Public Domain Dedication
-%    along with this file.  If not, see
-%                    <http://creativecommons.org/publicdomain/zero/1.0/>.
+%    License: CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
 
 % Copying Permission Statement (STK toolbox as a whole)
 %
