@@ -1,9 +1,9 @@
-% STK_TESTFUN_HARTMAN6 computes the "Hartman6" function
+% STK_TESTFUN_HARTMAN3 computes the "Hartman3" function
 %
-%    The Hartman6 function is a test function in dimension 6, which is
+%    The Hartman3 function is a test function in dimension 3, which is
 %    part of the famous Dixon & Szego benchmark [1] in global optimization.
 %
-%    It is usually minimized over [0, 1]^6.
+%    It is usually minimized over [0, 1]^3.
 %
 % HISTORICAL REMARKS
 %
@@ -11,26 +11,25 @@
 %    introduced by Hartman [2], hence the name.
 %
 %    The particular set of coefficients used in the definition of the
-%    "Hartman6" function, however, seems to have been introduced by [1].
+%    "Hartman3" function, however, seems to have been introduced by [1].
 %
 % GLOBAL MINIMUM
 %
-%    According to [4], the function has one global minimum at
+%    According to [5], the function has one global minimum at
 %
-%       x = [0.20169 0.150011 0.476874 0.275332 0.311652 0.657300].
-%
-%    The corresponding function value is:
-%
-%       f(x) = -3.322368011391339
-%
-%    A slightly lower value is attained [5] at
-%
-%       x = [0.20168952 0.15001069 0.47687398 ...
-%            0.27533243 0.31165162 0.65730054]
+%       x = [0.1, 0.55592003, 0.85218259].
 %
 %    The corresponding function value is:
 %
-%       f(x) = -3.322368011415512
+%       f(x) = -3.862634748621772.
+%
+%    A slightly lower value is attained [4] at
+%
+%       x = [0.114614 0.554649 0.852547].
+%
+%    The corresponding function value is:
+%
+%       f(x) = -3.862747199255087
 %
 %    The exact global optimum does not appear to be known.
 %
@@ -62,7 +61,7 @@
 %
 %    To the extent possible under law, CentraleSupélec has waived all
 %    copyright and related or neighboring rights to
-%    stk_testfun_hartman6.m.  This work is published from France.
+%    stk_testfun_hartman3.m.  This work is published from France.
 %
 %    License: CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
 
@@ -86,23 +85,17 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function y = stk_testfun_hartman6 (x)
+function y = stk_testfun_hartman3 (x)
 
-a = [                               ...
-    [ 10.00   0.05   3.00  17.00 ]; ...
-    [  3.00  10.00   3.50   8.00 ]; ...
-    [ 17.00  17.00   1.70   0.05 ]; ...
-    [  3.50   0.10  10.00  10.00 ]; ...
-    [  1.70   8.00  17.00   0.10 ]; ...
-    [  8.00  14.00   8.00  14.00 ]];
+a = [                          ...
+    [  3.0   0.1   3.0   0.1]; ...
+    [ 10.0  10.0  10.0  10.0]; ...
+    [ 30.0  35.0  30.0  35.0]];
 
 p = [                                   ...
-    [ 0.1312  0.2329  0.2348  0.4047 ]; ...
-    [ 0.1696  0.4135  0.1451  0.8828 ]; ...
-    [ 0.5569  0.8307  0.3522  0.8732 ]; ...
-    [ 0.0124  0.3736  0.2883  0.5743 ]; ...
-    [ 0.8283  0.1004  0.3047  0.1091 ]; ...
-    [ 0.5886  0.9991  0.6650  0.0381 ]];
+    [ 0.3689  0.4699  0.1091  0.03815]; ...
+    [ 0.1170  0.4387  0.8732  0.57430]; ...
+    [ 0.2673  0.7470  0.5547  0.88280]];
 
 c = [1.0  1.2  3.0  3.2];
 
@@ -112,11 +105,11 @@ end % function
 
 
 %!test
-%! x1 = [0.20169 0.150011 0.476874 0.275332 0.311652 0.657300];
-%! y1 = -3.322368011391339;
+%! x1 = [0.1, 0.55592003, 0.85218259];
+%! y1 = -3.862634748621772;
 %!
-%! x2 = [0.20168952 0.15001069 0.47687398 0.27533243 0.31165162 0.65730054];
-%! y2 = -3.322368011415512;
+%! x2 = [0.114614 0.554649 0.852547];
+%! y2 = -3.862747199255087;
 %!
-%! y = stk_testfun_hartman6 ([x1; x2]);
+%! y = stk_testfun_hartman3 ([x1; x2]);
 %! assert (stk_isequal_tolabs (y, [y1; y2], 1e-15))

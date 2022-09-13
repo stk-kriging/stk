@@ -10,17 +10,20 @@
 %
 %    for x in [-1.0; 1.0].
 
-% Copyright Notice
+% Authors
 %
-%    Copyright (C) 2016 CentraleSupelec
-%
-%    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
-%              Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
-%
-%    This response function (its opposite, actually) has been present as an
-%    example in the STK toolbox since the very first releases (STK 1.0, 2011).
+%    Julien Bect       <julien.bect@centralesupelec.fr>
+%    Emmanuel Vazquez  <emmanuel.vazquez@centralesupelec.fr>
 
-% Copying Permission Statement  (STK toolbox)
+% Copying Permission Statement  (this file)
+%
+%    To the extent possible under law, CentraleSupélec has waived all
+%    copyright and related or neighboring rights to
+%    stk_testfun_twobumps.m.  This work is published from France.
+%
+%    License: CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
+
+% Copying Permission Statement  (STK toolbox as a whole)
 %
 %    This file is part of
 %
@@ -39,14 +42,6 @@
 %
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-
-% Copying Permission Statement  (this file)
-%
-%    To the extent possible under law,  Julien Bect  and Emmanuel Vazquez
-%    have waived  all copyright  and related  or neighboring rights to
-%    stk_testfun_twobumps.m.  This work is published from France.
-%
-%    License: CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
 
 function z = stk_testfun_twobumps (x)
 

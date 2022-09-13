@@ -7,8 +7,8 @@
 %
 %     * .constants: all the numerical constants for this problem,
 %
-%     * .search_domain: an stk_hrect object that specifies the search domain
-%       of the optimization problem.
+%     * .search_domain: an stk_hrect object that specifies the search
+%       domain of the optimization problem.
 %
 % TEST CASE OVERVIEW
 %
@@ -23,16 +23,18 @@
 %                   (1)  \_  |  __/   (3)       |
 %                          \_P_/                v
 %
-%    Nodes A, B and C are fixed (pin joints).  Node P is submitted to both an
-%    horizontal load F1 (e.g., wind) and a vertical load F2 (suspended load).
+%    Nodes A, B and C are fixed (pin joints).  Node P is submitted to both
+%    an horizontal load F1 (e.g., wind) and a vertical load F2 (suspended
+%    load).
 %
 %    The design variables are the cross-sections a1, a2 and a3 of the three
-%    bars, and the horizontal position w of the vertical bar.  The quantities
-%    of interest are the total volume of the structure, the mechanical
-%    (tensile) stress in the bars, and the displacement of P.  Various
-%    formulations of optimization problems can be considered, depending on
-%    which quantities are selected as contraints and objectives, and whether
-%    or not uncertainties are taken into account (robust formulations).
+%    bars, and the horizontal position w of the vertical bar.  The
+%    quantities of interest are the total volume of the structure, the
+%    mechanical (tensile) stress in the bars, and the displacement of P.
+%    Various formulations of optimization problems can be considered,
+%    depending on which quantities are selected as contraints and
+%    objectives, and whether or not uncertainties are taken into account
+%    (robust formulations).
 %
 % NUMERICAL CONSTANTS
 %
@@ -53,18 +55,18 @@
 %     * .F2_mean: mean (nominal) value of the vertical load [N]
 %     *  .F2_std: standard deviation of the vertical load [N].
 %
-%    The standard deviations .F1_std and .F2_std are used in the formulation
-%    of robust optimization problems related to this test case [see 1, chap 11].
+%    The standard deviations F1_std and F2_std are used in the formulation
+%    of robust optimization problems [see 1, chap 11].
 %    
 % NUMERICAL FUNCTIONS
 %
-%    Two numerical functions are provided to compute the quantities of interest
-%    of this test case:
+%    Two numerical functions are provided to compute the quantities of
+%    interest of this test case:
 %
 %     * stk_testfun_truss3_vol: computes the total volume of the structure,
 %
-%     * stk_testfun_truss3_bb: computes the tensile stress in the bars and the
-%       displacement of P.
+%     * stk_testfun_truss3_bb: computes the tensile stress in the bars and
+%       the displacement of P.
 %
 %    Both functions have the same syntax:
 %
@@ -72,11 +74,12 @@
 %
 %       Z = stk_testfun_truss3_bb (X, CONST)
 %
-%    where CONST is a structure containing the necessary numerical constants.
-%    To use the constants from [1], pass TC.constants as second input argument.
+%    where CONST is a structure containing the necessary numerical
+%    constants.  To use the constants from [1], pass TC.constants as
+%    second input argument.
 %
-%    Both function accept as first input argument an N x D matrix (or data
-%    frame) where D is either 4 or 6:
+%    Both functions accept as first input argument an N x D matrix
+%    (or data frame) where D is either 4 or 6:
 %
 %     * columns 1--3: cross-section a1, a2 and a3,
 %
@@ -84,9 +87,9 @@
 %
 %     * column 5-6 (optional): horizontal and vertical loads F1, F2.
 %
-%    The second function is named 'bb' for 'black box', as it plays the role of
-%    a (supposedly expensive to evaluate) black box computer model for this
-%    test case.  The output Z has five columns, corresponding to:
+%    The second function is named 'bb' for 'black box', as it plays the
+%    role of a (supposedly expensive to evaluate) black box computer model
+%    for this test case.  The output Z has five columns, corresponding to:
 %
 %     * columns 1--2: horizontal and vertical displacement y1, y2 of P,
 %
@@ -124,6 +127,18 @@
 %      Biomedical Engineering,  1(6):333-337,  1985.
 %
 % See also: stk_testfun_truss3_vol, stk_testfun_truss3_bb
+
+% Author
+%
+%    Julien Bect  <julien.bect@centralesupelec.fr>
+
+% Copying Permission Statement  (this file)
+%
+%    To the extent possible under law, CentraleSupélec has waived all
+%    copyright and related or neighboring rights to
+%    stk_testcase_truss3.m.  This work is published from France.
+%
+%    License: CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
 
 % Copyright Notice
 %
