@@ -70,7 +70,7 @@ jobs:
         with:
           # Test in-place only on the latest version of Matlab
           # (https://github.com/matlab-actions/setup-matlab/#set-up-matlab)
-          release: R2022a
+          release: R2022b
       - name: Run test suite
         uses: matlab-actions/run-command@v1
         with:
@@ -156,7 +156,7 @@ jobs:
       matrix:
         # Test all available versions of Matlab
         # (https://github.com/matlab-actions/setup-matlab/#set-up-matlab)
-        release: [R2022a, R2021b, R2021a, R2020b, R2020a]
+        release: [R2022b, R2022a, R2021b, R2021a, R2020b, R2020a]
     steps:
       - name: Download allpurpose release
         uses: actions/download-artifact@v3
