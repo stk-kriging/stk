@@ -1,3 +1,9 @@
+2022-12-169  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Makefile: Add quote around strings in Octave calls
+
+	* Makefile: Add quote around strings in Octave calls
+
 2022-12-16  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	More Hartman functions

@@ -85,19 +85,19 @@ GIT_SHA     := $(shell git rev-parse HEAD)
 GIT_DATE    := $(shell git log -1 --pretty=format:%cd --date=iso)
 
 # Update git stamp file if the revision has changed
-DUMMY := $(shell                        \
-  test "$(GIT_OLD_SHA)" != "$(GIT_SHA)"     \
-  && mkdir -p $(BUILD_DIR)              \
+DUMMY := $(shell \
+  test "$(GIT_OLD_SHA)" != "$(GIT_SHA)" \
+  && mkdir -p $(BUILD_DIR) \
   && echo "$(GIT_SHA)" > "$(GIT_STAMP)")
 
 # Follows the recommendations of https://reproducible-builds.org/docs/archives
 define create_tarball
-$(shell cd $(dir $(1))                                     \
-    && find $(notdir $(1)) -print0                         \
-    | LC_ALL=C sort -z                                     \
+$(shell cd $(dir $(1)) \
+    && find $(notdir $(1)) -print0 \
+    | LC_ALL=C sort -z \
     | tar c --mtime="$(GIT_DATE)" --mode=a+rX,u+w,go-w,ug-s \
-            --owner=root --group=root --numeric-owner      \
-            --no-recursion --null -T - -f -                \
+            --owner=root --group=root --numeric-owner \
+            --no-recursion --null -T - -f - \
     | gzip -9n > "$(2)")
 endef
 
@@ -129,7 +129,7 @@ ${OF_OCTPKG_TARBALL}: ${OF_OCTPKG_TIMESTAMP} | ${OF_DIR}
 	@echo
 
 ${OF_OCTPKG_TIMESTAMP}: ${GIT_STAMP} | check_git_clean ${OF_DIR}
-	@${OCT_EVAL} "cd admin; build octpkg ${OF_DIR} ${GIT_DATE}"
+	@${OCT_EVAL} "cd admin; build octpkg '${OF_DIR}' '${GIT_DATE}'"
 	@touch ${OF_OCTPKG_TIMESTAMP}
 
 # Create tar.gz archive (this should create a tarball
@@ -142,7 +142,7 @@ ${OF_DOC_TARBALL}: ${OF_DOC_TIMESTAMP}
 	@echo
 
 ${OF_DOC_TIMESTAMP}: ${OF_OCTPKG_TARBALL} ${GIT_STAMP} | check_git_clean ${OF_DIR}
-	@${OCT_EVAL} "cd admin; build forgedoc ${OF_DOC_UNPACKED} ${OF_OCTPKG_TARBALL}"
+	@${OCT_EVAL} "cd admin; build forgedoc '${OF_DOC_UNPACKED}' '${OF_OCTPKG_TARBALL}'"
 	@touch ${OF_DOC_TIMESTAMP}
 
 ${OF_DIR}:
@@ -167,7 +167,7 @@ ${SF_ALLPURP_TARBALL}: ${SF_ALLPURP_TIMESTAMP} | ${SF_DIR}
 	$(call create_tarball,$(SF_ALLPURP_UNPACKED),$@)
 
 ${SF_ALLPURP_TIMESTAMP}: ${SF_OCTPKG_TARBALL} ${GIT_STAMP} | check_git_clean ${SF_DIR}
-	@${OCT_EVAL} "cd admin; build allpurpose ${SF_DIR} ${SF_OCTPKG_TARBALL} ${GIT_DATE}"
+	@${OCT_EVAL} "cd admin; build allpurpose '${SF_DIR}' '${SF_OCTPKG_TARBALL}' '${GIT_DATE}'"
 	@touch ${SF_ALLPURP_TIMESTAMP}
 
 ${SF_OCTPKG_TARBALL}: ${OF_OCTPKG_TARBALL} | ${SF_DIR}
