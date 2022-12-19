@@ -60,7 +60,7 @@
 
 % Copying Permission Statement  (this file)
 %
-%    To the extent possible under law, CentraleSupélec has waived all
+%    To the extent possible under law, CentraleSupelec has waived all
 %    copyright and related or neighboring rights to
 %    stk_testfun_hartman6.m.  This work is published from France.
 %
