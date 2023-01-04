@@ -47,7 +47,7 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
                  Non-parametric Regression, etc.).
 
    Copyright:    Large portions are Copyright (C) 2011-2014 SUPELEC
-                 and Copyright (C) 2015-2022 CentraleSupelec.
+                 and Copyright (C) 2015-2023 CentraleSupelec.
                  See individual copyright notices for more details.
 
    License:      GNU General Public License, version 3 (GPLv3).
