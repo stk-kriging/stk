@@ -34,7 +34,7 @@ stk >> STK, a Small Toolbox for Kriging
 ##     versions of STK, no need to adertise them.
 ##
 ##  2) Internal: these functions are mostly intended for internal
-##     use in STK. Although it might be occasionnaly useful for
+##     use in STK. Although it might be occasionally useful for
 ##     advanced users to call them directly, they are not considered
 ##     as part of the public API and therefore not as stable as
 ##     public API functions. Use at your own risk.
