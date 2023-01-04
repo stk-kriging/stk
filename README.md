@@ -148,7 +148,7 @@ to run the third example in the "kriging basics" series.
 ### Requirements and recommendations for use with GNU Octave
 
    The STK is tested to work with
-   [GNU Octave 4.0.0 or newer](https://wiki.octave.org/Release_History).
+   [GNU Octave 4.0.1 or newer](https://wiki.octave.org/Release_History).
 
 
 ### Requirements and recommendations for use with Matlab

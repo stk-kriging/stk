@@ -38,7 +38,7 @@ The current recommendation for checking the value of nargin in STK is as follows
 
 --- CG#03: MEX-file in class directories ---------------------------------------
 
-TODO: Check if it is allowed in Octave 4.0.0 and newer.
+TODO: Check if it is allowed in Octave 4.0.1 and newer.
 
 
 --- CG#04: Overloading isequal -------------------------------------------------

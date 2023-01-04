@@ -1,5 +1,14 @@
 2023-01-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Raise required Octave version number to 4.0.1
+
+	* README.md: Raise required Octave version number to 4.0.1.
+	* admin/build_tools/build_octpkg.m: Idem.
+	* admin/CODING_GUIDELINES: Update.
+	* NEWS.md: Advertise the change.
+
+2023-01-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
 	Update quilt patches
 
 	* admin/octpkg/patches/matlab-graphics-axis-Axes.patch: Update patch.
@@ -255,7 +264,7 @@
 	Raise required Octave version number to 4.0.0
 
 	* README.md: Raise required Octave version number to 4.0.0.
-	* admin/build_tools/build_octpkg.m: Iem.
+	* admin/build_tools/build_octpkg.m: Idem.
 	* admin/CODING_GUIDELINES: Update.
 	* arrays/@stk_hrect/stk_hrect.m: Refer to CG#08.
 	* misc/test/stk_runtests.m: Remove reference to 3.8.2.

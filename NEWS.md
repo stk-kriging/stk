@@ -15,6 +15,10 @@
 
 # Changes in version 2.8.0
 
+## Required Matlab/Octave version
+
+* Required Octave version number has been raised to 4.0.1.
+
 ## Test functions
 
 * `stk_testfun_hartman3.m`, `stk_testfun_hartman6.m`: New test

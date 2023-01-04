@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017, 2020, 2022 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2020, 2022, 2023 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -113,7 +113,7 @@ fprintf (fid, 'License: GPLv3+\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Url: https://github.com/stk-kriging/stk/\n');
 fprintf (fid, '#\n');
-fprintf (fid, 'Depends: octave (>= 4.0.0)\n');
+fprintf (fid, 'Depends: octave (>= 4.0.1)\n');
 fprintf (fid, '#\n');
 fprintf (fid, 'Autoload: no\n');
 fclose (fid);
