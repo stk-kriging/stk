@@ -1,6 +1,6 @@
 --- a/stk_init.m
 +++ b/stk_init.m
-@@ -99,9 +99,6 @@
+@@ -99,9 +99,6 @@ end % function
  
  function stk_init__pkg_load (root)
  

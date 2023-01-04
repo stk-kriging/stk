@@ -1,6 +1,6 @@
 --- a/iago/stk_optimscript.m
 +++ b/iago/stk_optimscript.m
-@@ -143,12 +143,15 @@
+@@ -146,12 +146,15 @@ options = [options {'pause', false}];
  %!test  CRIT = 'IAGO';  stk_optimscript;
  %!error CRIT = 'EI';    stk_optimscript;  % EI cannot be used in the noisy case
  

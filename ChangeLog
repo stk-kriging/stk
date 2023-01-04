@@ -1,4 +1,17 @@
-2022-12-169  Julien Bect  <julien.bect@centralesupelec.fr>
+2023-01-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Update quilt patches
+
+	* admin/octpkg/patches/matlab-graphics-axis-Axes.patch: Update patch.
+	* admin/octpkg/patches/prevent-PKG_ADD-loop.patch: Idem.
+	* admin/octpkg/patches/prevent-PKG_DEL-loop.patch: Idem.
+	* admin/octpkg/patches/remove-buildmex.patch: Idem.
+	* admin/octpkg/patches/remove-testprivatemex.patch: Idem.
+	* admin/octpkg/patches/stk-init-mole-delete.patch: Idem.
+	* admin/octpkg/patches/stk-init-rmpath-cleanup.patch: Idem.
+	* admin/octpkg/patches/workaround-octave-bug-46350.patch: Idem.
+
+2022-12-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Makefile: Add quote around strings in Octave calls
 

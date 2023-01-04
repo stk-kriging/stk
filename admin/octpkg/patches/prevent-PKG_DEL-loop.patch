@@ -1,6 +1,6 @@
 --- a/stk_init.m
 +++ b/stk_init.m
-@@ -136,9 +136,6 @@
+@@ -136,9 +136,6 @@ stk_init__clear_persistents ();
  % Remove STK subdirectories from the path
  stk_init__rmpath (root);
  

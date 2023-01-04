@@ -1,7 +1,5 @@
-Index: stk/stk_init.m
-===================================================================
---- stk.orig/stk_init.m
-+++ stk/stk_init.m
+--- a/stk_init.m
++++ b/stk_init.m
 @@ -53,9 +53,6 @@ switch command
      case 'pkg_unload'
          stk_init__pkg_unload (root);
@@ -12,7 +10,7 @@ Index: stk/stk_init.m
      case 'clear_persistents'
          % Note: this implies munlock
          stk_init__clear_persistents ();
-@@ -181,9 +178,6 @@ end
+@@ -187,9 +184,6 @@ end
  % Add STK folders to the path
  addpath (path{:});
  
@@ -22,7 +20,7 @@ Index: stk/stk_init.m
  end % function
  
  
-@@ -279,78 +273,3 @@ s = strrep (s, '+', '\+');
+@@ -285,78 +279,3 @@ s = strrep (s, '+', '\+');
  s = strrep (s, '.', '\.');
  
  end % function

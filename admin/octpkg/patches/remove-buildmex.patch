@@ -1,6 +1,6 @@
 --- a/stk_init.m
 +++ b/stk_init.m
-@@ -75,18 +75,6 @@
+@@ -75,18 +75,6 @@ switch command
          % Return the list of all STK "public" subdirectories
          output = stk_init__genpath (root);
          
@@ -19,7 +19,7 @@
      otherwise
          error ('Unknown command.');
          
-@@ -103,9 +91,6 @@
+@@ -103,9 +91,6 @@ function stk_init__pkg_load (root)
  % that contain persistent variables
  stk_init__clear_persistents ();
  
@@ -29,7 +29,7 @@
  % Add STK subdirectories to the path
  stk_init__addpath (root);
  
-@@ -300,225 +285,6 @@
+@@ -306,225 +291,6 @@ s = strrep (s, '.', '\.');
  
  end % function
  

@@ -1,6 +1,6 @@
 --- a/stk_init.m
 +++ b/stk_init.m
-@@ -87,10 +87,6 @@
+@@ -87,10 +87,6 @@ switch command
          % Provide make information for STK's MEX-files
          output = stk_init__get_make_info ();
          
@@ -11,7 +11,7 @@
      otherwise
          error ('Unknown command.');
          
-@@ -114,16 +110,8 @@
+@@ -114,16 +110,8 @@ stk_init__clear_persistents ();
  stk_init__build_mex (root, false);
  
  % Add STK subdirectories to the path
@@ -26,9 +26,9 @@
 -end
 -
  % Set default options
- stk_options_set ();
+ stk_options_set ('default');
  
-@@ -537,40 +525,6 @@
+@@ -543,40 +531,6 @@ info(k).includes = [{'stk_mex.h'} includ
  
  end % function
  
