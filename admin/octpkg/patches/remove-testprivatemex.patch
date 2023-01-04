@@ -28,7 +28,7 @@
  % Set default options
  stk_options_set ('default');
  
-@@ -543,40 +531,6 @@ info(k).includes = [{'stk_mex.h'} includ
+@@ -536,40 +524,6 @@ info(k).includes = [{'stk_mex.h'} includ
  
  end % function
  

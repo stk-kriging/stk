@@ -20,7 +20,7 @@
  end % function
  
  
-@@ -285,78 +279,3 @@ s = strrep (s, '+', '\+');
+@@ -278,78 +272,3 @@ s = strrep (s, '+', '\+');
  s = strrep (s, '.', '\.');
  
  end % function

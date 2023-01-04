@@ -29,7 +29,7 @@
  % Add STK subdirectories to the path
  stk_init__addpath (root);
  
-@@ -306,225 +291,6 @@ s = strrep (s, '.', '\.');
+@@ -299,225 +284,6 @@ s = strrep (s, '.', '\.');
  
  end % function
  
