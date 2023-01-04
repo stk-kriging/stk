@@ -1,18 +1,3 @@
-# Changes in version x.y.z (?)
-
-## LOO-related stuff (ready for release ?)
-
-* `stk_param_loomse`: New function to estimate parameters, based on
-  the leave-one-out mean square error.
-
-* `stk_param_loopvc`: New function, which computes the leave-one-out
-  predictive variance.
-
-* `stk_example_misc06`: New example.
-
------
-
-
 # Changes in version 2.8.0
 
 ## Required Matlab/Octave version
