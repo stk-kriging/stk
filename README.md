@@ -28,7 +28,7 @@ along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
    Version:      See stk_version.m
 
-   Authors:      See AUTHORS.md file
+   Authors:      See [AUTHORS](./AUTHORS.md) file
 
    Maintainers:  Julien Bect <julien.bect@centralesupelec.fr>
                  and Emmanuel Vazquez <emmanuel.vazquez@centralesupelec.fr>
