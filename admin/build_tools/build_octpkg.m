@@ -53,7 +53,7 @@ if ~ exist (release_dir, 'dir')
 end
 
 % Directory that will contain the unpacked octave package
-unpacked_dir = fullfile (release_dir, 'stk');
+unpacked_dir = fullfile (release_dir, 'stk-octpkg');
 if exist (unpacked_dir, 'dir')
     rmdir (unpacked_dir, 's');
 end

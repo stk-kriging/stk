@@ -44,7 +44,7 @@ if ~ exist (release_dir, 'dir')
 end
 
 % Directory that will contain the unpacked octave package
-unpacked_dir = fullfile (release_dir, 'stk');
+unpacked_dir = fullfile (release_dir, 'stk-allpurpose');
 if exist (unpacked_dir, 'dir')
     rmdir (unpacked_dir, 's');
 end
@@ -60,10 +60,10 @@ fprintf ('done.\n\n');
 
 % Instantiate CITATION template
 cd (release_dir);
-copy_citation ('stk/CITATION', 'stk', release_date);
+copy_citation (fullfile (root_dir, 'CITATION'), unpacked_dir, release_date);
 
 % Write explicit version number in README.md
-copy_readme ('stk/README.md', 'stk', release_date);
+copy_readme (fullfile (root_dir, 'README.md'), unpacked_dir, release_date);
 
 % Build HTML doc
 htmldoc_dir = fullfile (unpacked_dir, 'doc', 'html');
