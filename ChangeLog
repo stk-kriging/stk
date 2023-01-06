@@ -11,7 +11,8 @@
 	the Octave Forge release.  There is only one release now, the
 	github one (still with two tarballs).
 	* admin/build_tools/build_allpurpose.m: Update paths.
-	* admin/build_tools/build_octpkg.m: Update paths.
+	* admin/build_tools/build_octpkg.m: Idem.
+	* .github/workflows/run-tests.yml: Idem.
 
 	Raise minimal (tested) Matlab version number to R2014a
 

@@ -115,12 +115,12 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: allpurpose-tarball
-          path: build/github/stk-?.?.?-allpurpose.tar.gz
+          path: build/stk-?.?.?-allpurpose.tar.gz
       - name: "Upload artifacts: Octave package"
         uses: actions/upload-artifact@v3
         with:
           name: octpkg-tarball
-          path: build/octaveforge/stk-?.?.?.tar.gz
+          path: build/stk-?.?.?-octpkg.tar.gz
 
   runtests-octpkg:
     runs-on: ubuntu-latest
@@ -132,7 +132,7 @@ jobs:
           name: octpkg-tarball
       - name: Get tarball name
         run: |
-          OCTPKG_TARBALL=`ls stk-?.?.?.tar.gz`
+          OCTPKG_TARBALL=`ls stk-?.?.?-octpkg.tar.gz`
           echo OCTPKG_TARBALL=$OCTPKG_TARBALL
           echo "octpkg_tarball=$OCTPKG_TARBALL" >> $GITHUB_ENV
       - name: Install Octave & tools

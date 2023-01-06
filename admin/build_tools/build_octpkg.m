@@ -47,13 +47,13 @@ pkg_bits_dir = fullfile ('admin', 'octpkg');
 % Get a valid version number (without an extension such as '-dev')
 version_number = get_version_number ();
 
-% Create release_dir if necessaryrelease_dir
+% Create release_dir if necessary
 if ~ exist (release_dir, 'dir')
     mkdir (release_dir);
 end
 
 % Directory that will contain the unpacked octave package
-unpacked_dir = fullfile (release_dir, 'stk-octpkg');
+unpacked_dir = fullfile (release_dir, 'stk');
 if exist (unpacked_dir, 'dir')
     rmdir (unpacked_dir, 's');
 end

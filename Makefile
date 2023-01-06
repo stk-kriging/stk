@@ -40,14 +40,16 @@ OCTAVE ?= octave
 OCT_EVAL=${OCTAVE} --no-gui --silent --norc --eval
 
 ## File names for the octpkg release
-OCTPKG_UNPACKED=${BUILD_DIR}/stk-octpkg
+OCTPKG_DIR=${BUILD_DIR}/octpkg
+OCTPKG_UNPACKED=${OCTPKG_DIR}/stk
 OCTPKG_UNPACKED_TIMESTAMP=${OCTPKG_UNPACKED}.dir.timestamp
-OCTPKG_TARBALL=stk-${VERNUM}-octpkg.tar.gz
+OCTPKG_TARBALL=${BUILD_DIR}/stk-${VERNUM}-octpkg.tar.gz
 
 ## File names for the allpurpose release
-ALLPURPOSE_UNPACKED=${BUILD_DIR}/stk-allpurpose
+ALLPURPOSE_DIR=${BUILD_DIR}/allpurpose
+ALLPURPOSE_UNPACKED=${ALLPURPOSE_DIR}/stk
 ALLPURPOSE_UNPACKED_TIMESTAMP=${ALLPURPOSE_UNPACKED}.dir.timestamp
-ALLPURPOSE_TARBALL=stk-${VERNUM}-allpurpose.tar.gz
+ALLPURPOSE_TARBALL=${BUILD_DIR}/stk-${VERNUM}-allpurpose.tar.gz
 
 # File containing the git SHA-1 of the revision being built
 GIT_TIMESTAMP=${BUILD_DIR}/git.stamp
@@ -94,7 +96,7 @@ ${OCTPKG_TARBALL}: ${OCTPKG_UNPACKED_TIMESTAMP}
 	@echo
 
 ${OCTPKG_UNPACKED_TIMESTAMP}: ${GIT_TIMESTAMP} | check_git_clean
-	@${OCT_EVAL} "cd admin; build octpkg '${BUILD_DIR}' '${GIT_DATE}'"
+	@${OCT_EVAL} "cd admin; build octpkg '${OCTPKG_DIR}' '${GIT_DATE}'"
 	@touch ${OCTPKG_UNPACKED_TIMESTAMP}
 
 
@@ -108,7 +110,7 @@ ${ALLPURPOSE_TARBALL}: ${ALLPURPOSE_UNPACKED_TIMESTAMP}
 	$(call create_tarball,$(ALLPURPOSE_UNPACKED),$@)
 
 ${ALLPURPOSE_UNPACKED_TIMESTAMP}: ${OCTPKG_TARBALL} ${GIT_TIMESTAMP} | check_git_clean
-	@${OCT_EVAL} "cd admin; build allpurpose '${BUILD_DIR}' '${OCTPKG_TARBALL}' '${GIT_DATE}'"
+	@${OCT_EVAL} "cd admin; build allpurpose '${ALLPURPOSE_DIR}' '${OCTPKG_TARBALL}' '${GIT_DATE}'"
 	@touch ${ALLPURPOSE_UNPACKED_TIMESTAMP}
 
 

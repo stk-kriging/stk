@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017, 2020, 2022 CentraleSupelec
+%    Copyright (C) 2015-2017, 2020, 2022, 2023 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -44,7 +44,7 @@ if ~ exist (release_dir, 'dir')
 end
 
 % Directory that will contain the unpacked octave package
-unpacked_dir = fullfile (release_dir, 'stk-allpurpose');
+unpacked_dir = fullfile (release_dir, 'stk');
 if exist (unpacked_dir, 'dir')
     rmdir (unpacked_dir, 's');
 end
