@@ -8,8 +8,6 @@
 	* admin/build_tools/build_allpurpose.m: Update paths.
 	* admin/build_tools/build_octpkg.m: Update paths.
 
-2023-01-06  Julien Bect  <julien.bect@centralesupelec.fr>
-
 	Raise minimal (tested) Matlab version number to R2014a
 
 	* README.md: Raise minimal (tested) Matlab version number to R2014a.
@@ -23,8 +21,6 @@
 	* admin/build_tools/build_octpkg.m: Idem.
 	* admin/CODING_GUIDELINES: Update.
 	* NEWS.md: Advertise the change.
-
-2023-01-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Update quilt patches
 
