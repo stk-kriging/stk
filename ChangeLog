@@ -1,4 +1,14 @@
-2023-01-04  Julien Bect  <julien.bect@centralesupelec.fr>
+2023-01-06  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Simplify build process
+
+	* Makefile: Remove the distinction between the github release and
+	the Octave Forge release.  There is only one release now, the
+	github one (still with two tarballs).
+	* admin/build_tools/build_allpurpose.m: Update paths.
+	* admin/build_tools/build_octpkg.m: Update paths.
+
+2023-01-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Raise minimal (tested) Matlab version number to R2014a
 
