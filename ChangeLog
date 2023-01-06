@@ -1,5 +1,12 @@
 2023-01-04  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	Raise minimal (tested) Matlab version number to R2014a
+
+	* README.md: Raise minimal (tested) Matlab version number to R2014a.
+	* NEWS.md: Advertise the change.
+
+2023-01-04  Julien Bect  <julien.bect@centralesupelec.fr>
+
 	Raise required Octave version number to 4.0.1
 
 	* README.md: Raise required Octave version number to 4.0.1.

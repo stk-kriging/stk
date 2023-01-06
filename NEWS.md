@@ -15,9 +15,12 @@
 
 # Changes in version 2.8.0
 
-## Required Octave version
+## Required Matlab/Octave version
+
+* Minimal (tested) Matlab version number has been raised to R2014a.
 
 * Required Octave version number has been raised to 4.0.1.
+  (There are known problems with 4.0.0.)
 
 ## Test functions
 

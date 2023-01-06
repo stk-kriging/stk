@@ -108,7 +108,6 @@ important to run `stk_init` within each worker.  This can be achieved using:
 pctRunOnAll run /path/to/stk/stk_init.m
 ```
 
-
 ### Quick start with the Octave package release (Octave only)
 
 Assuming that you have a working Internet connection, typing
@@ -150,11 +149,10 @@ to run the third example in the "kriging basics" series.
    The STK is tested to work with
    [GNU Octave 4.0.1 or newer](https://wiki.octave.org/Release_History).
 
-
 ### Requirements and recommendations for use with Matlab
 
    The STK is tested to work with
-   [Matlab R2009b or newer](https://en.wikipedia.org/wiki/MATLAB#Release_history).
+   [Matlab R2014a or newer](https://en.wikipedia.org/wiki/MATLAB#Release_history).
 
    The Optimization Toolbox is recommended.
 
