@@ -65,9 +65,6 @@ mkdir (fullfile (unpacked_dir, 'src'));
 % doc: an optional directory containing documentation for the package
 mkdir (fullfile (unpacked_dir, 'doc'));
 
-% doc/dev: information for developpers
-mkdir (fullfile (unpacked_dir, 'doc', 'dev'));
-
 % List of directories that must be ignored by process_directory ()
 ignore_list = {'.git', '.pc', 'admin', 'misc/mole', 'build'};
 
@@ -175,8 +172,7 @@ if ~ isempty (regexp (s, regex_ignore, 'once')) ...
         || strcmp (s, 'startup.m') ...
         || strcmp (s, 'misc/distrib/README') ...
         || strcmp (s, 'misc/pareto/private/wfg.README') ...
-        || strcmp (s, 'model/prior_struct/@struct/README') ...
-        || strcmp (s, 'doc/dev/model.texi')
+        || strcmp (s, 'model/prior_struct/@struct/README')
     
 else
     
