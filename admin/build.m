@@ -50,9 +50,6 @@ switch target
     case 'octpkg'
         build_octpkg (root_dir, varargin{:});
 
-    case 'forgedoc'
-        generate_htmldoc (root_dir, varargin{:}, 'forgedoc');
-
     otherwise
         error ('Unknown target');
 end

@@ -1,3 +1,11 @@
+2023-01-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Simplify HTML doc build
+
+	* admin/build_tools/generate_htmldoc.m: Remove `flavour` option.
+	* build.m: Propagate.
+	* admin/build_tools/build_allpurpose_htmldoc.m: Propagate.
+
 2023-01-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Simplify build process
