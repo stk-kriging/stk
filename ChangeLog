@@ -1,3 +1,9 @@
+2023-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	htmldoc: Increase font size to 16px
+
+	* admin/htmldoc/stk.css: Increase font size to 16px.
+
 2023-01-09  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Simplify HTML doc build
