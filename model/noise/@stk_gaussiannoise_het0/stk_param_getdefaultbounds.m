@@ -38,7 +38,7 @@ if ~ any (b)
         'observed locations'], 'VarianceFunctionNowherePositive');
 end
 
-error ('NOT FINISHED');
+error ('NOT FINISHED');  %#ok<*UNRCH,*STOUT>
 
 % Keep only the noisy observations
 u = zi(b);
