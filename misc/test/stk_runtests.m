@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017-2019 CentraleSupelec
+%    Copyright (C) 2015, 2017-2019, 2023 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -33,29 +33,53 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function test_results = stk_runtests (dirs)
+function test_results = stk_runtests (varargin)
 
-if nargin == 0
-    
-    % Scan all STK directories if no input argument is provided
+p = inputParser ();
+addOptional (p, 'dirs', '', @(d) (ischar (d) || iscell (d)));
+addParameter (p, 'save', false, @islogical);
+addParameter (p, 'output_dir', pwd (), @(d) exist (d, 'dir'));
+parse (p, varargin{:});
+
+% Process 'dirs' arguments
+dirs = p.Results.dirs;
+if isempty (dirs)
+    % Scan all STK directories
     dirs = stk_init ('genpath');
-    
-else % The input argument is expected to be either a directory name...
-    
-    if ischar (dirs)
-        dirs = {dirs};
-    elseif ~ iscell (dirs)  %  ...or a cell array of directory names.
-        stk_error (['A directory name, or a cell array of ' ...
-            'directory names, was expected'], 'TypeMismatch');
+elseif ischar (dirs)
+    dirs = {dirs};
+end
+
+if p.Results.save
+
+    % Backup diary state
+    saved_diary_state = strcmp (get (0, 'Diary'), 'on');
+    if saved_diary_state
+        saved_diary_file = get (0, 'DiaryFile');
+        diary ('off');
     end
-    
-end % if
+
+    % Start our own diary
+    diary_file = fullfile (p.Results.output_dir, 'stk_runtests.log');
+    diary (diary_file);
+end
 
 % Use the replacement that is provided with STK
-res = stk_runtests_ (dirs);
+test_results = stk_runtests_ (dirs);
 
-if nargout > 0
-    test_results = res;
+if p.Results.save
+
+    % Save results
+    results_file = fullfile (p.Results.output_dir, 'stk_runtests.mat');
+    save (results_file, 'test_results');
+
+    % Stop logging
+    diary ('off');
+
+    % Restore diary state
+    if saved_diary_state
+        diary (saved_diary_file);
+    end
 end
 
 end % function
@@ -69,35 +93,38 @@ t0 = tic ();
 here = pwd ();
 
 % Prepare output struct
-res = struct (       ...
-    'n_total',  0,   ...
-    'n_pass',   0,   ...
-    'n_xfail',  0,   ...
-    'n_files',  0,   ...
-    'n_notest', 0,   ...
-    'n_dirs',   0,   ...
-    'err',      {{}} );
+res = struct (                          ...
+    'datetime',       datestr (now ()), ...
+    'stk_version',    stk_version (),   ...
+    'matlab_version', ver (),           ...
+    'n_total',        0,                ...
+    'n_pass',         0,                ...
+    'n_xfail',        0,                ...
+    'n_files',        0,                ...
+    'n_notest',       0,                ...
+    'n_dirs',         0,                ...
+    'err',            {{}}              );
 
 % Run tests all available tests in each directory
 for i = 1:(numel (dirs))
-    
+
     if ~ exist (dirs{i}, 'dir')
         stk_error (sprintf ('Directory not found: %s', dirs{i}), 'InvalidArgument');
     end
-    
+
     % Get absolute path
     cd (dirs{i});  dirname = pwd ();  cd (here);
-    
+
     [np, nt, nx, nn, nf, nd, res.err] = ...
         run_all_tests (dirname, dirname, res.err);
-    
+
     res.n_total  = res.n_total  + nt;
     res.n_pass   = res.n_pass   + np;
     res.n_xfail  = res.n_xfail  + nx;
     res.n_files  = res.n_files  + nf;
     res.n_notest = res.n_notest + nn;
     res.n_dirs   = res.n_dirs   + nd;
-    
+
 end
 
 res.runtime = toc (t0);
@@ -209,10 +236,10 @@ fprintf ('   --> %d/%d files had no tests\n', n_notest, n_files);
 fprintf ('   --> RUNTIME: %.2f seconds\n\n', runtime);
 
 for i = 1:(length (subdirs_class))
-    
+
     [p, n, nx, nnt, nf, nd, err] = run_all_tests ...
         (subdirs_class{i}, pwd(), err);
-    
+
     n_total  = n_total  + n;
     n_pass   = n_pass   + p;
     n_xfail  = n_xfail  + nx;
@@ -222,10 +249,10 @@ for i = 1:(length (subdirs_class))
 end
 
 for i = 1:(length (subdirs_private))
-    
+
     [p, n, nx, nnt, nf, nd, err] = run_all_tests ...
         (subdirs_private{i}, subdirs_private{i}, err);
-    
+
     n_total  = n_total  + n;
     n_pass   = n_pass   + p;
     n_xfail  = n_xfail  + nx;

@@ -1,3 +1,10 @@
+2023-02-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_runtests.m: Optionnally, save the result to a mat-file
+
+	* misc/test/stk_runtests.m: Optionnally, save the result to a
+	mat-file and log the ouput to a diary.
+
 2023-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	htmldoc: Increase font size to 16px
