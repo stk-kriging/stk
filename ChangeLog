@@ -1,3 +1,35 @@
+2023-06-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Provide utility to run the test suite on all available Matlabs
+
+	* admin/stk_runtests_allmatlabs.m: Run the test suite on all
+	available Matlabs.
+	* admin/stk_runtests_allmatlabs_summary.m: Summarize the results.
+	This function is called by the main one, but can also be used
+	on its own if the tests have been run previously.
+	* .gitignore: Ignore output dir.
+
+2023-02-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_runtests.m: Optionnally, save the result to a mat-file
+
+	* misc/test/stk_runtests.m: Optionnally, save the result to a
+	mat-file and log the ouput to a diary.
+
+2023-01-14  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	htmldoc: Increase font size to 16px
+
+	* admin/htmldoc/stk.css: Increase font size to 16px.
+
+2023-01-09  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Simplify HTML doc build
+
+	* admin/build_tools/generate_htmldoc.m: Remove `flavour` option.
+	* build.m: Propagate.
+	* admin/build_tools/build_allpurpose_htmldoc.m: Propagate.
+
 2023-01-06  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Remove old 'dev' documentation from the released tarballs

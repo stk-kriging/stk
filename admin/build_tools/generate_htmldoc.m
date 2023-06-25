@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017, 2022 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2022, 2023 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -28,10 +28,10 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function success = generate_htmldoc ...
-    (root_dir, htmldoc_dir, octpkg_tarball, flavour)
+    (root_dir, htmldoc_dir, octpkg_tarball)
 
 if (exist ('OCTAVE_VERSION', 'builtin') ~= 5)
-    warning ('Cannot build forgedoc from Matlab.');
+    warning ('Cannot build HTML doc from Matlab.');
     success = false;
     return;
 end
@@ -48,14 +48,7 @@ pkg ('load', 'generate_html');
 pkg ('install', octpkg_tarball);
 
 % Options for generate_package_html
-switch flavour
-    case 'forgedoc'
-        options = get_html_options ('octave-forge');
-    case 'allpurpose'
-        options = get_allpurpose_html_options ();
-    otherwise
-        error ('Unknown flavour');
-end
+options = get_allpurpose_html_options ();
 
 % Generate HTML documentation
 fprintf ('Generating HTML documentation for OF...\n');

@@ -32,7 +32,7 @@ function build_allpurpose_htmldoc ...
 
 % Generate the documentation
 base_dir = fileparts (htmldoc_dir);
-generate_htmldoc (root_dir, base_dir, octpkg_tarball, 'allpurpose');
+generate_htmldoc (root_dir, base_dir, octpkg_tarball);
 movefile (fullfile (base_dir, 'stk'), htmldoc_dir);
 
 % Directories
