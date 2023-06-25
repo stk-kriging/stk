@@ -20,3 +20,6 @@ build
 # Quilt
 .pc/applied-patches
 .pc/*.patch
+
+# Test output
+admin/stk_runtests_allmatlabs
