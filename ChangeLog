@@ -1,3 +1,14 @@
+2023-06-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Provide utility to run the test suite on all available Matlabs
+
+	* admin/stk_runtests_allmatlabs.m: Run the test suite on all
+	available Matlabs.
+	* admin/stk_runtests_allmatlabs_summary.m: Summarize the results.
+	This function is called by the main one, but can also be used
+	on its own if the tests have been run previously.
+	* .gitignore: Ignore output dir.
+
 2023-02-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_runtests.m: Optionnally, save the result to a mat-file
