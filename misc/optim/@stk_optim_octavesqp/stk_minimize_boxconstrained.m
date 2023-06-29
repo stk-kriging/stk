@@ -44,19 +44,70 @@
 
 function [u_opt, lik] = stk_minimize_boxconstrained (algo, f, u_init, lb, ub)
 
-nabla_f = @(u)(nabla_f_ (f, u));
+% Re-initialize wrapper
+f_wrap ();
 
-[u_opt, lik] = feval (algo.sqp, u_init, {f nabla_f}, [], [], lb, ub, ...
-    algo.options.maxiter, algo.options.tol);
+% Wrap the wrappers
+f_ = @(u)(f_wrap (f, u, lb, ub));
+df_ = @(u)(df_wrap (f, u, lb, ub));
+
+% sqp is very fragile, so we enclose is in a try-catch block
+% (see, notably: https://savannah.gnu.org/bugs/index.php?64369)
+try %#ok<TRYNC>
+    [u_opt, lik] = feval (algo.sqp, u_init, {f_ df_}, [], [], lb, ub, ...
+        algo.options.maxiter, algo.options.tol);  %#ok<ASGLU>
+end
+
+% Get u_opt and lik from the wrapper
+[lik, ~, u_opt] = f_wrap ();
 
 end % function
 
 
-function df = nabla_f_ (f, u)
+function df_val = df_wrap (f, u, lb, ub)
 
-% Note: with this implementation, f_val is computed twice
-%   (once when f is called by sqp, and once again when nabla_f is called)
+[~, df_val] = f_wrap (f, u, lb, ub);
 
-[~, df] = f (u);
+end % function
+
+
+function [f_val, df_val, u] = f_wrap (f, u, lb, ub)
+
+persistent u_last u_best f_val_last f_val_best df_val_last df_val_best
+
+% No args => reinit
+if nargin == 0
+
+    f_val = f_val_best;
+    df_val = df_val_best;
+    u = u_best;
+
+    u_last = [];
+    u_best = [];
+    f_val_last = [];
+    f_val_best = Inf;
+    df_val_last = [];
+    df_val_best = [];
+
+    return
+end
+
+if isequal (u, u_last)
+    f_val = f_val_last;
+    df_val = df_val_last;
+    return
+end
+
+[f_val, df_val] = f (u);
+
+u_last = u;
+f_val_last = f_val;
+df_val_last = df_val;
+
+if (f_val < f_val_best) && (all (u >= lb)) && (all (u <= ub))
+    u_best = u;
+    f_val_best = f_val;
+    df_val_best = df_val;
+end
 
 end % function
