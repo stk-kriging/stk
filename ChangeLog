@@ -1,5 +1,12 @@
 2023-06-25  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	@stk_optim_octavesq: Catch sqp error (closes tickets #38 and #39)
+
+	* misc/optim/@stk_optim_octavesqp/stk_minimize_boxconstrained.m:
+	Catch sqp errors and return the best point found so far.
+
+2023-06-25  Julien Bect  <julien.bect@centralesupelec.fr>
+
 	Provide utility to run the test suite on all available Matlabs
 
 	* admin/stk_runtests_allmatlabs.m: Run the test suite on all
