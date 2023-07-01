@@ -29,6 +29,6 @@
 
 function v = stk_version ()
 
-v = '2.8.0';
+v = '2.8.1';
 
 end % function
