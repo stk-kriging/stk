@@ -13,6 +13,26 @@
 -----
 
 
+# Changes in version 2.8.1
+
+## Parameter estimation
+
+* `@stk_optim_octavesqp/stk_minimize_boxconstrained.m`: Catch `sqp`
+  errors and return the best point found so far.
+
+## Maintainer tools
+
+* `stk_runtests.m`: Optionnally, save the result to a mat-file.
+
+* `stk_runtests_allmatlabs.m`: Run the test suite on all available
+  versions of Matlab.
+
+* `admin/build_tools`: Simplify HTML doc build (we no longer need to
+  build a documentation for Octave Forge).
+
+-----
+
+
 # Changes in version 2.8.0
 
 ## Required Matlab/Octave version
