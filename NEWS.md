@@ -2,7 +2,7 @@
 
 ## Parameter estimation
 
-* `@stk_optim_octavesqp/stk_minimize_boxconstrained.m`: Catch sqp
+* `@stk_optim_octavesqp/stk_minimize_boxconstrained.m`: Catch `sqp`
   errors and return the best point found so far.
 
 ## Maintainer tools
@@ -14,6 +14,8 @@
 
 * `admin/build_tools`: Simplify HTML doc build (we no longer need to
   build a documentation for Octave Forge).
+
+-----
 
 
 # Changes in version 2.8.0
