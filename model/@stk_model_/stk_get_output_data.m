@@ -1,4 +1,6 @@
-% STK_GET_OUTPUT_DATA [overload STK function]
+% @STK_MODEL_/STK_GET_OUTPUT_DATA [overload STK function]
+%
+% See also: stk_get_output_data
 
 % Copyright Notice
 %

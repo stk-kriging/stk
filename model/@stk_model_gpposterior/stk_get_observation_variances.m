@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2018, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -28,6 +28,6 @@
 
 function v = stk_get_observation_variances (model)
 
-v = stk_covmat_noise (model.prior_model, model.input_data, [], -1, true);
+v = stk_covmat_noise (model.prior_model, model.data, [], -1, true);
 
 end % function

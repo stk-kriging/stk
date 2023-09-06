@@ -5,11 +5,18 @@
 %    returns the OUTPUT_DATA of the MODEL (which is empty if MODEL is
 %    a prior model).
 %
+% CALL: OUTPUT_DATA = stk_get_output_data (DATA)
+%
+%    returns the OUTPUT_DATA of the stk_iodata object DATA.
+%
+% Note: for a posterior model, the output data of the model object coincides
+% with the output data of the underlying stk_iodata object.
+%
 % See also: stk_get_input_data, stk_get_prior_model
 
 % Copyright Notice
 %
-%    Copyright (C) 2017, 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 

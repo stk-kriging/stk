@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017, 2019 CentraleSupelec
+%    Copyright (C) 2015-2017, 2019, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,92 +26,107 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function model = stk_model_gpposterior (prior_model, xi, zi)
+function model = stk_model_gpposterior (prior_model, varargin)
 
-if nargin == 3
+switch nargin
     
-    if iscell (xi)
-        % Legacy support for experimental hidden feature, to be removed
-        kreq = xi{2};  xi = xi{1};
-    else
-        kreq = [];
-    end
-    
-    % Check the size of zi
-    n = size (xi, 1);
-    if ~ (isempty (zi) || isequal (size (zi), [n 1]))
-        stk_error (['zi must either be empty or have the ' ...
-            'same number of rows as x_obs.'], 'IncorrectSize');
-    end
-    
-    if isempty (kreq)
+    case 0  % Default constructor
+        prior_model = [];
+        data = stk_iodata ();
         
-        % Currently, prior models are represented exclusively as structures
-        if ~ isstruct (prior_model)
-            stk_error (['Input argument ''prior_model'' must be a ' ...
-                'prior model structure.'], 'InvalidArgument');
+    case 2  % CALL: POSTERIOR = stk_model_gpposterior (PRIOR, DATA)
+        stk_assert_model_struct (prior_model);
+        data = varargin{1};
+        if ~ isa (data, 'stk_iodata')
+            stk_error (['An stk_iodata object was expected as second ' ...
+                'input argument, since stk_model_gpposterior was ' ...
+                'called with two input arguments.'], 'IncorrectArgument');
         end
         
-        % Make sure that lognoisevariance is -inf for noiseless models
-        if ~ stk_isnoisy (prior_model)
-            prior_model.lognoisevariance = -inf;
-        end
+    case 3  % CALL: POSTERIOR = stk_model_gpposterior (PRIOR, X_OBS, Z_OBS)
+        stk_assert_model_struct (prior_model);
+        data = stk_iodata (varargin{1}, varargin{2});
         
-        % Backward compatibility:
-        %   accept model structures with missing 'dim' field
-        if (~ isfield (prior_model, 'dim')) || (isempty (prior_model.dim))
-            prior_model.dim = size (xi, 2);
-        elseif ~ isempty (xi) && (prior_model.dim ~= size (xi, 2))
-            stk_error (sprintf (['The number of columns of xi (which is %d) ' ...
-                'is different from the value of prior_model.dim (which is '   ...
-                '%d).'], size (xi, 2), prior_model.dim), 'InvalidArgument');
-        end
+    otherwise
+        stk_error ('Incorrect number of input arguments.', 'SyntaxError');
         
-        % Check prior_model.lognoisevariance
-        if ~ isscalar (prior_model.lognoisevariance)
-            if (~ isvector (prior_model.lognoisevariance)) && (length ...
-                    (prior_model.lognoisevariance) == n)
-                stk_error (['M_prior.lognoisevariance must be either ' ...
-                    'a scalar or a vector of length size (xi, 1).'], ...
-                    'InvalidArgument');
-            end
-            % Make sure that lnv is a column vector
-            prior_model.lognoisevariance = prior_model.lognoisevariance(:);
-        end
-        
-        % Check if the model contains parameters that must be estimated first
-        % (such parameters have the value NaN)
-        param = stk_get_optimizable_model_parameters (prior_model);
-        if any (isnan (param))
-            noiseparam = stk_get_optimizable_noise_parameters (prior_model);
-            if any (isnan (noiseparam))
-                [prior_model.param, prior_model.lognoisevariance] ...
-                    = stk_param_estim (prior_model, xi, zi);
-            else
-                prior_model.param = stk_param_estim (prior_model, xi, zi);
-            end
-        end
-        
-        % Compute QR factorization        
-        kreq = stk_kreq_qr (prior_model, xi);
-    end
+end % switch
+
+% FIXME: check model.dim
+
+switch data.output_dim
     
-elseif nargin == 0
+    case 0
+        % SPECIAL CASE: used to construct partial GP models that can
+        % provide prediction variances but no actual predictions.
+        compute_predictions = false;
+        
+    case 1
+        % This the usual case
+        compute_predictions = true;
+        
+    otherwise
+        stk_error ('Multi-output models are not supported yet', ...
+            'NotImplementedYet');
+        
+end % switch
+
+if isempty (prior_model)  % Default constructor only
     
-    prior_model = [];
-    xi = [];
-    zi = [];
     kreq = [];
     
 else
-    stk_error ('Incorrect number of input arguments.', 'SyntaxError');
+    
+    % Make sure that lognoisevariance is -inf for noiseless models
+    if ~ stk_isnoisy (prior_model)
+        prior_model.lognoisevariance = -inf;
+    end
+    
+    % Backward compatibility:
+    %   accept model structures with missing 'dim' field
+    if (~ isfield (prior_model, 'dim')) || (isempty (prior_model.dim))
+        prior_model.dim = data.input_dim;
+    elseif prior_model.dim ~= data.input_dim
+        stk_error (sprintf (['The input dimension of the data (which is ' ...
+            '%d) differs from prior_model.dim (which is %d).'], ...
+            data.input_dim, prior_model.dim), 'InvalidArgument');
+    end
+    
+    % Check prior_model.lognoisevariance
+    if ~ isscalar (prior_model.lognoisevariance)
+        if ~ (isvector (prior_model.lognoisevariance) && ...
+                (length (prior_model.lognoisevariance) == data.sample_size))
+            stk_error (['M_prior.lognoisevariance must be either a scalar ' ...
+                'or a vector of length equal to the sample size.'], ...
+                'InvalidArgument');
+        end
+        % Make sure that lnv is a column vector
+        prior_model.lognoisevariance = prior_model.lognoisevariance(:);
+    end
+    
+    % Check if the model contains parameters that must be estimated first
+    % (such parameters have the value NaN)
+    param = stk_get_optimizable_model_parameters (prior_model);
+    if any (isnan (param))
+        noiseparam = stk_get_optimizable_noise_parameters (prior_model);
+        
+        if any (isnan (noiseparam))
+            [prior_model.param, prior_model.lognoisevariance] ...
+                = stk_param_estim (prior_model, data);
+        else
+            prior_model.param = stk_param_estim (prior_model, data);
+        end
+    end
+    
+    % Compute QR factorization
+    kreq = stk_kreq_qr (prior_model, data);
 end
 
 % Prepare object fields
 model.prior_model = prior_model;
-model.input_data  = xi;
-model.output_data = zi;
-model.kreq        = kreq;
+model.data = data;
+model.kreq = kreq;
+model.compute_predictions = compute_predictions;
 
 % Create object
 model = class (model, 'stk_model_gpposterior', stk_model_ ());
@@ -132,10 +147,6 @@ end % function
 %!test  M_post = stk_model_gpposterior (M_prior, x_obs, z_obs);
 %!error M_post = stk_model_gpposterior (M_prior, x_obs, [z_obs; z_obs]);
 %!error M_post = stk_model_gpposterior (M_prior, x_obs, [z_obs; z_obs], 3.441);
-
-%!test % hidden feature
-%! kreq = stk_kreq_qr (M_prior, x_obs);
-%! M_post = stk_model_gpposterior (M_prior, {x_obs, kreq}, z_obs);
 
 %!test % NaNs in prior_model.param
 %! DIM = 1;  M = stk_model (@stk_materncov52_aniso, DIM);

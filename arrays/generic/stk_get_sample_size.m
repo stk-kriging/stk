@@ -4,6 +4,11 @@
 %
 %    returns the size N of the sample represented by the array X, in other
 %    words, the number of rows.
+%
+% CALL:  N = stk_get_sample_size (MODEL)
+%
+%    returns the size N of the underlying data if MODEL is a posterior model,
+%    and N = 0 if MODEL is a prior model.
 
 % Copyright Notice
 %
@@ -31,11 +36,26 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function n = stk_get_sample_size (x)
+function n = stk_get_sample_size (obj)
 
-n = size (x, 1);
+if isstruct (obj)
+
+    % If we end up here, obj is expected to be a prior model struct:
+    stk_assert_model_struct (obj);
+
+    % Prior model: no data
+    n = 0;
+    
+else  % assume that obj is some kind of array (e.g., double precision)
+
+    n = size (obj, 1);
+    
+end
 
 end % function
 
 
 %!assert (stk_get_sample_size ([1 2; 3 4; 5 6]) == 3);
+
+%!assert (stk_get_sample_size (stk_model ()) == 0);
+

@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -42,7 +42,7 @@ switch propname
             'be updated automatically whenever it is needed.']), ...
             'ReadOnlyProperty');
         
-    case {'input_data', 'output_data'}
+    case {'data', 'input_data', 'output_data'}
         stk_error (sprintf (['Property %s is read-only.\n\nHINT: Use ' ...
             'stk_model_update to add new evaluations results ' ...
             'to an existing stk_model_gpposterior object.'], ...

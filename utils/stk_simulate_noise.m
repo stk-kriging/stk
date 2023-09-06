@@ -17,11 +17,15 @@
 %    generates M random draws at once.  In this case, the output argument Z has
 %    size NS x M.
 %
+% FIXME: NOTE
+%
+%    Observation with reptitions / 'gather' mode / x can be iodata !
+%
 % See also: stk_generate_samplepaths
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2018, 2020 CentraleSupelec
 %    Copyright (C) 2017 LNE
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -53,11 +57,11 @@ if nargin < 3
     nrep = 1;
 end
 
-ni = size (x, 1);
+m = stk_get_sample_size (x);
 
 if ~ stk_isnoisy (model)  % Noiseless case
     
-    noise_sim = zeros (ni, nrep);
+    noise_sim = zeros (m, nrep);
     
 else  % Noisy case
     
@@ -65,8 +69,8 @@ else  % Noisy case
     s = sqrt (stk_covmat_noise (model, x, [], -1, true));
     
     % Simulate noise values
-    s = reshape (s, ni, 1);
-    noise_sim = bsxfun (@times, s, randn (ni, nrep));
+    s = reshape (s, m, 1);  % FIXME: Do we really need a reshape here?
+    noise_sim = bsxfun (@times, s, randn (m, nrep));
     
 end
 

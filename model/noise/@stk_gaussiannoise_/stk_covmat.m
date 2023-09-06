@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017, 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018, 2020 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -32,14 +32,26 @@
 
 function [K, P1, P2] = stk_covmat (gn, x1, x2, diff, pairwise)
 
-% Number of evaluations points
-n1 = size (x1, 1);
-if (nargin > 2) && (~ isempty (x2))
-    n2 = size (x2, 1);
-    autocov = false;  % In this case the result is zero
+% Auto- or cross-covariance matrix ?
+% (for noise models, cross-covariance matrices are equal to zero)
+autocov = (nargin <= 2) || (isequal (x2, []));
+
+% Process input argument: x1
+if isa (x1, 'stk_iodata')
+    if autocov
+        nrep = x1.output_nrep;
+    end
+    x1 = stk_get_input_data (x1);
 else
+    nrep = [];
+end
+n1 = stk_get_sample_size (x1);
+
+% Process input argument: x2
+if autocov
     n2 = n1;
-    autocov = true;   % In this case the result is a diagonal matrix
+else
+    n2 = stk_get_sample_size (x2);
 end
 
 % Defaut value for 'diff' (arg #4): -1
@@ -51,7 +63,12 @@ assert ((n1 == n2) || (~ pairwise));
 
 if autocov
     
-    K = stk_variance_eval (gn, double (x1), diff);
+    K = stk_variance_eval (gn, x1, diff);
+    assert (isequal (size (K), [n1 1]));
+    
+    if ~ isempty (nrep)
+        K = K ./ nrep;
+    end
     
     if ~ pairwise
         K = diag (K);

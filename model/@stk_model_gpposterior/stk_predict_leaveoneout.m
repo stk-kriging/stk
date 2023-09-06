@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017, 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018, 2020 CentraleSupelec
 %    Copyright (C) 2017 LNE
 %
 %    Authors:  Remi Stroh   <remi.stroh@lne.fr>
@@ -34,7 +34,7 @@ prior_model = M_post.prior_model;
 
 % Compute the covariance matrix, and the trend matrix
 % (this covariance matrix K takes the noise into account)
-[K, P] = stk_make_matcov (prior_model, M_post.input_data);
+[K, P] = stk_make_matcov (prior_model, M_post.data);
 simple_kriging = (size (P, 2) == 0);
 
 % If simple kriging, just compute the inverse covariance matrix
@@ -50,9 +50,9 @@ end
 dR = diag (R);  % The diagonal of the LOO matrix
 
 % Mean
-zi = M_post.output_data;
-raw_res = R * zi ./ dR;  % Compute "raw" residuals
-zp_mean = zi - raw_res;  % LOO prediction
+z_obs = stk_get_output_data (M_post.data);
+raw_res = R * z_obs ./ dR;  % Compute "raw" residuals
+zp_mean = z_obs - raw_res;  % LOO prediction
 
 % Variance
 noisevariance = stk_get_observation_variances (M_post);
@@ -76,10 +76,12 @@ end
 if nargout == 0
     
     % Plot predictions VS observations (left planel)...
-    stk_subplot (1, 2, 1);  stk_plot_predvsobs (M_post.output_data, LOO_pred);
+    stk_subplot (1, 2, 1);
+    stk_plot_predvsobs (z_obs, LOO_pred);
     
     % ...and normalized residuals (right panel)
-    stk_subplot (1, 2, 2);   stk_plot_histnormres (LOO_res.norm_res);
+    stk_subplot (1, 2, 2);
+    stk_plot_histnormres (LOO_res.norm_res);
     
 end
 
@@ -91,16 +93,16 @@ end % function
 %! n = 20;  d = 1;
 %! x_obs = stk_sampling_regulargrid (n, d, [0; 2*pi]);
 %! z_obs = stk_feval (@sin, x_obs);
-%! 
+%!
 %! lm_list = {stk_lm_null, stk_lm_constant, stk_lm_affine};
-%! 
+%!
 %! for j = 0:2
 %!     for k = 1:(length (lm_list))
 %!         
 %!         model = stk_model (@stk_materncov32_iso, d);
 %!         model.lm = lm_list{k};
 %!         model.param = log ([1; 5]);
-%!         
+%!
 %!         switch j  % test various scenarios for lognoisevariance
 %!             case 0
 %!                 model.lognoisevariance = -inf;
@@ -109,14 +111,14 @@ end % function
 %!             case 2
 %!                 model.lognoisevariance = (1 + rand (n, 1)) * 1e-3;
 %!         end
-%!         
+%!
 %!         M_post = stk_model_gpposterior (model, x_obs, z_obs);
-%!         
+%!
 %!         [loo_pred, loo_res] = stk_predict_leaveoneout (M_post);
 %!         [direct_pred, direct_res] = stk_predict_leaveoneout_direct (M_post);
-%!         
+%!
 %!         assert (stk_isequal_tolrel (loo_pred, direct_pred));
 %!         assert (stk_isequal_tolrel (loo_res, direct_res));
-%!         
+%!
 %!     end
 %! end

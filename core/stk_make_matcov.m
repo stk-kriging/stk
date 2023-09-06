@@ -68,11 +68,25 @@ end
 
 pairwise = (nargin > 3) && pairwise;
 
+if isa (x0, 'stk_iodata')
+    x0_data = stk_get_input_data (x0);
+else
+    x0_data = x0;
+end
+
+if isa (x1, 'stk_iodata')
+    x1_data = stk_get_input_data (x1);
+else
+    x1_data = x1;
+end
+
 %=== compute the covariance matrix
 
-K = feval (model.covariance_type, model.param, x0, x1, -1, pairwise);
+K = feval (model.covariance_type, model.param, x0_data, x1_data, -1, pairwise);
 
 if make_matcov_auto && stk_isnoisy (model)
+    % Here we really need to pass x0 (not only x0_data) to stk_covmat_noise
+    % because it carries the information about repetitions.
     K = K + stk_covmat_noise (model, x0, [], -1, pairwise);
 end
 
@@ -80,7 +94,7 @@ end
 
 if nargout > 1
     
-    P = stk_ortho_func (model, x0);
+    P = stk_ortho_func (model, x0_data);
     
 end
 

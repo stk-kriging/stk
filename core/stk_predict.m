@@ -4,7 +4,7 @@
 % CALL: ZP = stk_predict (MODEL, XI, ZI, XP)
 %
 %    performs a kriging prediction at the points XP, given the MODEL and,
-%    if available, the data (XI, ZI).
+%    if available, additional data provided as a pair (XI, ZI).
 %
 %    The MODEL argument can be either a prior model structure (as provided
 %    by stk_model) or a model object (for instance, a posterior model
@@ -87,16 +87,15 @@ switch nargin
         
     case 2  % CALL: [...] = stk_predict (MODEL, X_PRD)
         x_prd = varargin{1};
-        
-    case 3  % CALL: [...] = stk_predict (MODEL, DATA, X_PRD)
-        stk_error ('This syntax is not implemented yet.', 'NotImplemented');
-        model = stk_model_gpposterior (model, varargin{1});
-        x_prd = varargin{2};
+
+    case 3
+        stk_error ('Incorrect number of input arguments', ...
+            'SyntaxError');
         
     case 4  % CALL: [...] = stk_predict (MODEL, X_OBS, Z_OBS, X_PRD)
         model = stk_model_gpposterior (model, varargin{1}, varargin{2});
         x_prd = varargin{3};
-         
+        
         
 end % switch
 

@@ -48,7 +48,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [lb, ub] = stk_param_getdefaultbounds (covariance_type, param0, xi, zi)
+function [lb, ub] = stk_param_getdefaultbounds ...
+    (covariance_type, param0, varargin)
+
+data = stk_process_data_arg (0, varargin{:});
 
 if isobject (param0)
     
@@ -78,7 +81,7 @@ else
     tolscale = opts.tolscale;
     
     % bounds for the variance parameter
-    log_empirical_variance = log (var (double (zi)));
+    log_empirical_variance = log (var (stk_get_output_data (data)));
     if log_empirical_variance == - Inf
         logvar_lb = param0(1) - tolvar;
         logvar_ub = param0(1) + tolvar;
@@ -86,9 +89,7 @@ else
         logvar_lb = min (log_empirical_variance, param0(1)) - tolvar;
         logvar_ub = max (log_empirical_variance, param0(1)) + tolvar;
     end
-    
-    dim = size (xi, 2);
-    
+       
     if ~ ischar (covariance_type)
         % Assume that model.covariance_type is a handle
         covariance_type = func2str (covariance_type);
@@ -98,6 +99,7 @@ else
         
         case {'stk_materncov_aniso', 'stk_materncov_iso'}
             
+            dim = stk_get_input_dim (data);
             nu_min = opts.nu_min_dimfun (dim);
             nu_max = opts.nu_max_dimfun (dim);
 
@@ -132,7 +134,7 @@ else
                 % function called XXXX (in the case, where this covariance
                 % has parameters type double).
                 fname = [covariance_type '_getdefaultbounds'];
-                [lb, ub] = feval (fname, param0, xi, zi);
+                [lb, ub] = feval (fname, param0, data);
             catch
                 err = lasterror ();
                 msg = strrep (err.message, sprintf ('\n'), sprintf ('\n|| '));

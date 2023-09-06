@@ -26,14 +26,12 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function value = get (gn, propname)  %#ok<STOUT,INUSL>
+function value = get (gn, propname)
 
 if ~ ischar (propname)
-    errmsg = 'Invalid property name.';
-else
-    errmsg = sprintf ('There is no field named %s.', propname);
+    stk_error ('Invalid property name.', 'InvalidArgument');
 end
 
-stk_error (errmsg, 'InvalidArgument');
+value = gn.(propname);
         
 end % function

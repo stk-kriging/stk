@@ -31,7 +31,9 @@
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
 function [lb_lnv, ub_lnv] = stk_param_getdefaultbounds_lnv ...
-    (model, lnv0, xi, zi) %#ok<INUSL>
+    (model, lnv0, varargin) %#ok<INUSL>
+
+data = stk_process_data_arg (0, varargin{:});
 
 if isnumeric (lnv0)
     
@@ -40,7 +42,11 @@ if isnumeric (lnv0)
         TOLVAR = 0.5;
         
         % Bounds for the variance parameter
-        empirical_variance = var (zi);
+        empirical_variance = var (stk_get_output_data (data));
+        z_var = stk_get_output_var (data);
+        if ~ isempty (z_var)
+            empirical_variance = empirical_variance + mean (z_var);
+        end
         lb_lnv = log (eps);
         ub_lnv = log (empirical_variance) + TOLVAR;
         
@@ -59,7 +65,7 @@ if isnumeric (lnv0)
     
 else  % parameter object
     
-    [lb_lnv, ub_lnv] = stk_param_getdefaultbounds (lnv0, xi, zi);
+    [lb_lnv, ub_lnv] = stk_param_getdefaultbounds (lnv0, data);
     
 end
 

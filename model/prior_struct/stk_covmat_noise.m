@@ -8,7 +8,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018, 20 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -36,14 +36,25 @@
 
 function [K, P1, P2] = stk_covmat_noise (model, x1, x2, diff, pairwise)
 
-% Number of evaluations points
-n1 = size (x1, 1);
-if (nargin > 2) && (~ isempty (x2))
-    n2 = size (x2, 1);
-    autocov = false;  % In this case the result is zero
-else
+% Auto- or cross-covariance matrix ?
+% (for noise models, cross-covariance matrices are equal to zero)
+autocov = (nargin <= 2) || (isequal (x2, []));
+
+% Process input argument: x1
+if autocov
+    if isa (x1, 'stk_iodata')
+        nrep = x1.output_nrep;
+    else
+        nrep = [];
+    end
+end
+n1 = stk_get_sample_size (x1);
+
+% Process input argument: x2
+if autocov
     n2 = n1;
-    autocov = true;   % In this case the result is a diagonal matrix
+else
+    n2 = stk_get_sample_size (x2);
 end
 
 % Defaut value for 'diff' (arg #4): -1
@@ -62,6 +73,8 @@ if autocov && (diff ~= 0) && (stk_isnoisy (model))
         
     else  % Classical STK noise variance representation(s)
         
+        % FIXME: Replace this section with appropriate noise objects
+                
         if isscalar (model.lognoisevariance) % Homoscedastic case
             
             % Note: the value of x1 is ignored in this case, which is normal.
@@ -75,16 +88,26 @@ if autocov && (diff ~= 0) && (stk_isnoisy (model))
             end
             
             if pairwise
+                
                 if model.lognoisevariance == -inf
                     K = zeros (n1, 1);
                 else
                     K = repmat (exp (model.lognoisevariance), n1, 1);
                 end
+                
+                if ~ isempty (nrep)
+                    K = K ./ nrep;
+                end
+                
             else
                 if model.lognoisevariance == -inf
                     K = zeros (n1);
                 else
-                    K = (exp (model.lognoisevariance)) * (eye (n1));
+                    K = repmat (exp (model.lognoisevariance), n1, 1);
+                    if ~ isempty (nrep)
+                        K = K ./ nrep;
+                    end
+                    K = diag (K);
                 end
             end
             
@@ -111,8 +134,13 @@ if autocov && (diff ~= 0) && (stk_isnoisy (model))
             end
             
             K = exp (model.lognoisevariance(:));
+            
+            if ~ isempty (nrep)
+                K = K ./ nrep;
+            end
+            
             if ~ pairwise
-                K = diag (exp (model.lognoisevariance));
+                K = diag (K);
             end
         end
     end

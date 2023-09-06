@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016, 2018, 2019, 2021 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018, 2019, 2021, 2022 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -27,7 +27,15 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [param, lnv] = stk_param_init_remlgls (model, xi, zi, other_params)
+function [param, lnv] = stk_param_init_remlgls (model, varargin)
+
+[data, varargin] = stk_process_data_arg (1, varargin{:});
+
+if isempty(varargin{1})
+    stk_error ('Not enough input arguments.', 'NotEnoughInputArgs');
+else
+    other_params = varargin{1};
+end
 
 % Make sure than lnv is numeric
 if ~ isfield (model, 'lognoisevariance')
@@ -67,14 +75,14 @@ for eta = eta_list
         
         if noiseless
             
-            [~, sigma2] = stk_param_gls (model, xi, zi);
+            [~, sigma2] = stk_param_gls (model, data);
             if ~ (sigma2 > 0), continue; end
             log_sigma2 = log (sigma2);
             
         elseif homoscedastic && (isnan (lnv))  % Unknown noise variance
             
             model.lognoisevariance = log (eta);
-            [~, sigma2] = stk_param_gls (model, xi, zi);
+            [~, sigma2] = stk_param_gls (model, data);
             if ~ (sigma2 > 0), continue; end
             log_sigma2 = log (sigma2);
             model.lognoisevariance = log  (eta * sigma2);
@@ -89,7 +97,7 @@ for eta = eta_list
         % Now, compute the antilog-likelihood
         param_(1) = log_sigma2;
         model.param = stk_set_optimizable_parameters (model.param, param_);
-        aLL = stk_param_relik (model, xi, zi);
+        aLL = stk_param_relik (model, data);
         if ~ isnan(aLL) && (aLL < aLL_best)
             eta_best    = eta;
             k_best      = k;
