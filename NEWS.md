@@ -10,6 +10,10 @@
 
 * `stk_example_misc06`: New example.
 
+## Covariance functions
+
+* `stk_nullcov`: New function, which computes a null covariance matrix.
+
 -----
 
 

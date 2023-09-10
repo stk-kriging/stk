@@ -158,6 +158,7 @@ Model components: covariance functions
  stk_materncov52_iso
  stk_materncov_aniso
  stk_materncov_iso
+ stk_nullcov
  stk_sphcov_aniso
  stk_sphcov_iso
  stk_discretecov

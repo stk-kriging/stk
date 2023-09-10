@@ -1,5 +1,16 @@
 2023-09-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
+	stk_nullcov.m: New function, which computes a null covariance matrix
+
+	* stk_nullcov.m: New function, which computes a null covariance matrix.
+	* model/prior_struct/stk_covmat_noise.m: Use `stk_nullcov`.
+	* admin/octpkg/INDEX: Update Octave package index.
+	* NEWS.md: Advertise the change.
+
+	[Changes imported manually from branch `lm-param`, written in 2021.]
+
+2023-09-11  Julien Bect  <julien.bect@centralesupelec.fr>
+
 	stk_covmat_noise.m: Remove unused outputs P1, P2
 
 	* model/@stk_model_/stk_covmat_noise.m: Remove unused outputs P1, P2.
