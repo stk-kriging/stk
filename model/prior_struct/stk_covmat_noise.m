@@ -34,7 +34,18 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function K = stk_covmat_noise (model, x1, x2, diff, pairwise)
+function K = stk_covmat_noise (model, varargin)
+
+if stk_isnoisy (model)
+    K = stk_covmat_noise_ (model, varargin{:});
+else
+    K = stk_nullcov ([], varargin{:});
+end
+
+end % function
+
+
+function K = stk_covmat_noise_ (model, x1, x2, diff, pairwise)
 
 % Number of evaluations points
 n1 = size (x1, 1);
@@ -53,7 +64,7 @@ if nargin < 4,  diff = -1;  end
 pairwise = (nargin > 4) && pairwise;
 assert ((n1 == n2) || (~ pairwise));
 
-if autocov && (diff ~= 0) && (stk_isnoisy (model))
+if autocov && (diff ~= 0)
 
     if ~ isnumeric (model.lognoisevariance)
 
@@ -120,11 +131,9 @@ if autocov && (diff ~= 0) && (stk_isnoisy (model))
 else  % Return a null matrix
 
     % There are several cases where we return a null matrix:
-    % a) autocov is false: we are actually computing a *cross*-covariance
-    %    matrix.
-    % b) diff = 0: derivative with respect to a parameter that does not
-    %    modify the covariance matrix of the noise.
-    % c) we are in the noiseless case.
+    % a) autocov is false: we are actually computing a *cross*-covariance matrix
+    % b) diff = 0: derivative with respect to a parameter that does not modify
+    %    the covariance matrix of the noise
 
     if pairwise
         K = zeros (n1, 1);
