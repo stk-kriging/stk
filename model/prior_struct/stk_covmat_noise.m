@@ -8,7 +8,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018, 2021 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -34,7 +34,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [K, P1, P2] = stk_covmat_noise (model, x1, x2, diff, pairwise)
+function K = stk_covmat_noise (model, x1, x2, diff, pairwise)
 
 % Number of evaluations points
 n1 = size (x1, 1);
@@ -54,26 +54,26 @@ pairwise = (nargin > 4) && pairwise;
 assert ((n1 == n2) || (~ pairwise));
 
 if autocov && (diff ~= 0) && (stk_isnoisy (model))
-    
+
     if ~ isnumeric (model.lognoisevariance)
-        
+
         % EXPERIMENTAL: User-defined noise variance models...
         K = stk_covmat (model.lognoisevariance, x1, [], diff, pairwise);
-        
+
     else  % Classical STK noise variance representation(s)
-        
+
         if isscalar (model.lognoisevariance) % Homoscedastic case
-            
+
             % Note: the value of x1 is ignored in this case, which is normal.
             %       Only the size of x1 actually matters.
-            
+
             % Currently there is only one parameter (lognoisevariance).
             % This will change when we implement parameterized variance models...
             if (diff ~= -1) && (diff ~= 1)
                 stk_error (['diff should be either -1 or +1 in the ' ...
                     'homoscedastic case'], 'IncorrectArgument');
             end
-            
+
             if pairwise
                 if model.lognoisevariance == -inf
                     K = zeros (n1, 1);
@@ -87,62 +87,51 @@ if autocov && (diff ~= 0) && (stk_isnoisy (model))
                     K = (exp (model.lognoisevariance)) * (eye (n1));
                 end
             end
-            
+
         else % Heteroscedastic
-            
+
             % Old-style STK support for heteroscedasticity: the noise variances
             % corresponding to the locations x1(1,:) to x1(end,:) are assumed to
             % be stored in model.lognoisevariance (ugly).
-            
+
             % FIXME: Flawed design...  We assume that x1 is equal to the set of
             % observation points.  Since we cannot check it, x1 is *also*
             % ignored in this case (which is much less normal...).
-            
+
             s = size (model.lognoisevariance);
             if ~ ((isequal (s, [1, n1])) || (isequal (s, [n1, 1])))
                 fprintf ('lognoisevariance has size:\n');  display (s);
                 stk_error (sprintf (['lognoisevariance was expected to be either a ' ...
                     'scalar or a vector of length %d\n'], n1), 'IncorrectSize');
             end
-            
+
             % There are no parameters in this case
             if diff ~= -1
                 error ('diff ~= -1 is not allowed in the heteroscedastic case');
             end
-            
+
             K = exp (model.lognoisevariance(:));
             if ~ pairwise
                 K = diag (exp (model.lognoisevariance));
             end
         end
     end
-    
+
 else  % Return a null matrix
-    
+
     % There are several cases where we return a null matrix:
-    % a) autocov is false: we are actually computing a *cross*-covariance matrix
-    % b) diff = 0: derivative with respect to a parameter that does not modify
-    %    the covariance matrix of the noise
+    % a) autocov is false: we are actually computing a *cross*-covariance
+    %    matrix.
+    % b) diff = 0: derivative with respect to a parameter that does not
+    %    modify the covariance matrix of the noise.
     % c) we are in the noiseless case.
-    
+
     if pairwise
         K = zeros (n1, 1);
     else
         K = zeros (n1, n2);
     end
-    
-end
 
-
-%% Compute matrices for the linear part
-
-% No linear part for the 'noise' output: return empty matrices if required
-if nargout > 1
-    P1 = zeros (n1, 0);
-    
-    if nargout > 2
-        P2 = zeros (n2, 0);
-    end
 end
 
 end % function
@@ -157,43 +146,36 @@ end % function
 %! x1 = stk_sampling_randunif (n1, d);
 %! x2 = stk_sampling_randunif (n2, d);
 
-%!error [KK, PP] = stk_covmat_noise ();
-%!error [KK, PP] = stk_covmat_noise (model);
+%!error KK = stk_covmat_noise ();
+%!error KK = stk_covmat_noise (model);
 
-%!test  [Ka, Pa] = stk_covmat_noise (model, x1);                           % (1)
-%!test  [K1, P1] = stk_covmat_noise (model, x1, []);
-%!test  [K2, P2] = stk_covmat_noise (model, x1, [], -1);
-%!test  [K3, P3] = stk_covmat_noise (model, x1, [], -1, false);
+%!test  Ka = stk_covmat_noise (model, x1);                           % (1)
+%!test  K1 = stk_covmat_noise (model, x1, []);
+%!test  K2 = stk_covmat_noise (model, x1, [], -1);
+%!test  K3 = stk_covmat_noise (model, x1, [], -1, false);
 %!assert (isequal (size (Ka), [n1 n1]));
-%!assert (isequal (size (Pa), [n1 0]));
-%!assert (isequal (P1, Pa) && (isequal (K1, Ka)))
-%!assert (isequal (P2, Pa) && (isequal (K2, Ka)))
-%!assert (isequal (P3, Pa) && (isequal (K3, Ka)))
+%!assert (isequal (K1, Ka))
+%!assert (isequal (K2, Ka))
+%!assert (isequal (K3, Ka))
 
-%!test  [Kb, Pb] = stk_covmat_noise (model, x1, x1);                       % (2)
-%!test  [K1, P1] = stk_covmat_noise (model, x1, x1, -1);
-%!test  [K2, P2] = stk_covmat_noise (model, x1, x1, -1, false);
+%!test  Kb = stk_covmat_noise (model, x1, x1);                       % (2)
+%!test  K1 = stk_covmat_noise (model, x1, x1, -1);
+%!test  K2 = stk_covmat_noise (model, x1, x1, -1, false);
 %!assert (isequal (size (Kb), [n1 n1]));
-%!assert (isequal (size (Pb), [n1 0]));
-%!assert (isequal (P1, Pb) && (isequal (K1, Kb)))
-%!assert (isequal (P2, Pb) && (isequal (K2, Kb)))
+%!assert (isequal (K1, Kb))
+%!assert (isequal (K2, Kb))
 
-%!test  [Kc, Pc] = stk_covmat_noise (model, x1, x2);                       % (3)
-%!test  [K1, P1] = stk_covmat_noise (model, x1, x2, -1);
-%!test  [K2, P2] = stk_covmat_noise (model, x1, x2, -1, false);
+%!test  Kc = stk_covmat_noise (model, x1, x2);                       % (3)
+%!test  K1 = stk_covmat_noise (model, x1, x2, -1);
+%!test  K2 = stk_covmat_noise (model, x1, x2, -1, false);
 %!assert (isequal (size (Kc), [n1 n2]));
-%!assert (isequal (size (Pc), [n1 0]));
-%!assert (isequal (P1, Pc) && (isequal (K1, Kc)))
-%!assert (isequal (P2, Pc) && (isequal (K2, Kc)))
+%!assert (isequal (K1, Kc))
+%!assert (isequal (K2, Kc))
 
 % In the noiseless case, (1) and (2) should give the same results
 %!assert (isequal (Kb, Ka));
 
 % In the noisy case, however...
-%!test  [Ka, Pa] = stk_covmat_noise (model2, x1);                         % (1')
-%!test  [Kb, Pb] = stk_covmat_noise (model2, x1, x1);                     % (2')
+%!test  Ka = stk_covmat_noise (model2, x1);                         % (1')
+%!test  Kb = stk_covmat_noise (model2, x1, x1);                     % (2')
 %!error assert (isequal (Kb, Ka));
-
-% The second output depends on x1 only => should be the same for (1)--(3)
-%!assert (isequal (Pa, Pb));
-%!assert (isequal (Pa, Pc));
