@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2019 CentraleSupelec
+%    Copyright (C) 2019, 2021 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,21 +26,9 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [K, P1, P2] = stk_covmat_noise (model, varargin)
+function K = stk_covmat_noise (model, varargin)
 
-if nargout <= 1
-    
-    K = stk_covmat_noise (model.prior, varargin{:});
-    
-elseif nargout == 2
-    
-    [K, P1] = stk_covmat_noise (model.prior, varargin{:});
-    
-else
-    
-    [K, P1, P2] = stk_covmat_noise (model.prior, varargin{:});
-    
-end
+K = stk_covmat_noise (model.prior, varargin{:});
 
 end % function
 

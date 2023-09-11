@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2019 CentraleSupelec
+%    Copyright (C) 2019, 2021 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -26,11 +26,10 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [K, P1, P2] = stk_covmat_noise (model, x1, x2, diff, pairwise)
+function K = stk_covmat_noise (model, x1, x2, diff, pairwise)
 
 stk_error (['Classes derived from stk_model_ must implement ' ...
     'stk_covmat_noise.'], 'IncompleteClassImplementation');
-
 
 end % function
 
