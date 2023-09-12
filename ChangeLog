@@ -1,3 +1,16 @@
+2023-09-12  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Remove deprecated stk_sf_*.m functions
+
+	* covfcs/rbf/stk_sf_gausscorr.m: Deleted.
+	* covfcs/rbf/stk_sf_matern.m: Deleted.
+	* covfcs/rbf/stk_sf_matern32.m: Deleted.
+	* covfcs/rbf/stk_sf_matern52.m: Deleted.
+	* misc/options/stk_options_get.m: Remove special case.
+	* misc/options/stk_options_set.m: Remove special case.
+	* admin/octpkg/INDEX: Update Octave package index.
+	* NEWS.md: Advertise the change.
+
 2023-09-11  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_nullcov.m: New function, which computes a null covariance matrix

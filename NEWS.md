@@ -14,6 +14,8 @@
 
 * `stk_nullcov`: New function, which computes a null covariance matrix.
 
+* `stk_sf_*.m`: Removed.  (Had been deprecated since 2.4.0.)
+
 -----
 
 

@@ -172,13 +172,6 @@ Model components: radial basis functions
  stk_rbf_matern52
  stk_rbf_spherical
 
-## Note: stk_sf_* were previously considered as experimental
-##  -> in principle, they can be removed at any time
-#stk_sf_gausscorr    [deprecated]
-#stk_sf_matern       [deprecated]
-#stk_sf_matern32     [deprecated]
-#stk_sf_matern52     [deprecated]
-
 Model components: linear model objects
  @stk_lm_affine/stk_lm_affine
  @stk_lm_constant/stk_lm_constant

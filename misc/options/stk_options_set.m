@@ -65,9 +65,9 @@ if isempty (options)
 end
 
 switch nargin
-    
+
     case 0  % nothing to do, just return the output
-        
+
     case 1  % reset
         if (ischar (varargin{1})) && strcmp (varargin{1}, 'default')
             options = init_options ();
@@ -76,24 +76,13 @@ switch nargin
         else
             stk_error ('Syntax error', 'SyntaxError');
         end
-        
+
     case 2
-        switch varargin{1}
-            
-            case 'stk_sf_matern'
-                % TODO: Remove this warning in STK 3.x
-                warning (sprintf([ ...
-                    'stk_sf_matern and the corresponding options have been ' ...
-                    'deprecated.\n\nPlease use stk_rbf_matern instead.\n']));
-                options.stk_rbf_matern = varargin{2};
-                
-            otherwise
-                options.(varargin{1}) = varargin{2};
-        end
-        
+        options.(varargin{1}) = varargin{2};
+
     case 3
         switch varargin{1}
-            
+
             case 'stk_param_estim'
                 if strcmp (varargin{2}, 'optim_display_level')
                     % TODO: Remove this warning in STK 3.x
@@ -105,21 +94,14 @@ switch nargin
                 else
                     options.stk_param_estim.(varargin{2}) = varargin{3};
                 end
-                
-            case 'stk_sf_matern'
-                % TODO: Remove this warning in STK 3.x
-                warning (sprintf([ ...
-                    'stk_sf_matern and the corresponding options have been ' ...
-                    'deprecated.\n\nPlease use stk_rbf_matern instead.\n']));
-                options.stk_rbf_matern.(varargin{2}) = varargin{3};
-                
+
             otherwise
                 options.(varargin{1}).(varargin{2}) = varargin{3};
         end
-        
+
     otherwise
         stk_error ('Incorrect number of input arguments.', 'SyntaxError');
-        
+
 end
 
 if nargout > 0
