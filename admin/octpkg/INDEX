@@ -148,6 +148,7 @@ Posterior model objects
 #@stk_kreq_qr/stk_squared_seminorm   [internal]
 
 Model components: covariance functions
+ stk_discretecov
  stk_expcov_aniso
  stk_expcov_iso
  stk_gausscov_aniso
@@ -161,7 +162,6 @@ Model components: covariance functions
  stk_nullcov
  stk_sphcov_aniso
  stk_sphcov_iso
- stk_discretecov
 #stk_noisecov        [deprecated]
 
 Model components: radial basis functions
