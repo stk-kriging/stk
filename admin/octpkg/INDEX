@@ -180,6 +180,10 @@ Model components: linear model objects
  @stk_lm_null/stk_lm_null
  @stk_lm_quadratic/stk_lm_quadratic
  stk_lm_polynomial
+#@stk_lm_/stk_lm_                                             [internal]
+#@stk_lm_/cat                                                 [overload base]
+#@stk_lm_/disp                                                [overload base]
+#@stk_lm_/horzcat                                             [overload base]
 #@stk_lm_affine/feval                                         [overload base]
 #@stk_lm_constant/feval                                       [overload base]
 #@stk_lm_cubic/feval                                          [overload base]

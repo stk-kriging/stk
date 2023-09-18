@@ -8,7 +8,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017, 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018, 2021 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -41,7 +41,7 @@ else
     lm = struct ('data', data);
 end
 
-lm = class (lm, 'stk_lm_matrix');
+lm = class (lm, 'stk_lm_matrix', stk_lm_ ());
 
 end % function
 

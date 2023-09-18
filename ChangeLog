@@ -1,3 +1,21 @@
+2023-09-18  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	@stk_lm_: Base class for @tk_lm_* objects
+
+	* lm/@stk_lm_/stk_lm_.m: Constructor.
+	* lm/@stk_lm_/cat.m: Overload base function.
+	* lm/@stk_lm_/disp.m: Overload base function.
+	* lm/@stk_lm_/horzcat.m: Overload base function.
+	* lm/@stk_lm_affine/stk_lm_affine.m: Derive from base class.
+	* lm/@stk_lm_constant/stk_lm_constant.m: Idem.
+	* lm/@stk_lm_cubic/stk_lm_cubic.m: Idem.
+	* lm/@stk_lm_matrix/stk_lm_matrix.m: Idem.
+	* lm/@stk_lm_null/stk_lm_null.m: Idem.
+	* lm/@stk_lm_quadratic/stk_lm_quadratic.m: Idem.
+	* admin/octpkg/INDEX: Update Octave package index.
+
+	[Changes imported manually from branch `lm-param`, written in 2021.]
+
 2023-09-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Remove deprecated stk_sf_*.m functions
