@@ -6,7 +6,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2017, 2018 CentraleSupelec
+%    Copyright (C) 2017, 2018, 2021 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -33,7 +33,7 @@
 
 function lm = stk_lm_cubic ()
 
-lm = class (struct (), 'stk_lm_cubic');
+lm = class (struct (), 'stk_lm_cubic', stk_lm_ ());
 
 end % function
 
