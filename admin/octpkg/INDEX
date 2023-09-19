@@ -333,7 +333,6 @@ Miscellaneous: arrays
  @stk_factorialdesign/stk_factorialdesign
  @stk_factorialdesign/ndgrid
  @stk_hrect/stk_hrect
-#stk_length                                                   [deprecated]
 
 Miscellaneous: Pareto optimality
  stk_dominatedhv
@@ -354,7 +353,6 @@ Miscellaneous: validation of models
 #@stk_dataframe/stk_boundingbox                               [overload STK]
 #@stk_dataframe/stk_conditioning                              [overload STK]
 #@stk_dataframe/stk_get_sample_size                           [overload STK]
-#@stk_dataframe/stk_length                                    [deprecated]
 #@stk_dataframe/stk_normalize                                 [overload STK]
 #@stk_dataframe/stk_rescale                                   [overload STK]
 #@stk_dataframe/apply                                         [internal]

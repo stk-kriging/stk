@@ -16,6 +16,10 @@
 
 * `stk_sf_*.m`: Removed.  (Had been deprecated since 2.4.0.)
 
+## Arrays
+
+* `stk_length`: Removed.  (Had been deprecated since 2.7.0.)
+
 -----
 
 

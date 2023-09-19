@@ -1,3 +1,12 @@
+2023-09-19  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Removed deprecated stk_length function
+
+	* arrays/generic/stk_length.m: Removed.
+	* arrays/@stk_dataframe/stk_length.m: Removed.
+	* admin/octpkg/INDEX: Update Octave package index.
+	* NEWS.md: Advertise the change.
+
 2023-09-18  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	@stk_lm_: Base class for @tk_lm_* objects
@@ -18,7 +27,7 @@
 
 2023-09-12  Julien Bect  <julien.bect@centralesupelec.fr>
 
-	Remove deprecated stk_sf_*.m functions
+	Remove deprecated stk_sf_* functions
 
 	* covfcs/rbf/stk_sf_gausscorr.m: Deleted.
 	* covfcs/rbf/stk_sf_matern.m: Deleted.
