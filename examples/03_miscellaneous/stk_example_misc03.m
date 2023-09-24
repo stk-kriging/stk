@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2023 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -50,8 +50,7 @@ model.lognoisevariance = nan;
 [param0, lnv0] = stk_param_init (model, t_obs, S_obs);
 
 % Estimate the parameters
-[model.param, model.lognoisevariance] = stk_param_estim ...
-    (model, t_obs, S_obs, param0, lnv0);
+model = stk_param_estim (model, t_obs, S_obs, param0, lnv0);
 
 % Carry out the kriging prediction
 S_posterior = stk_predict (model, t_obs, S_obs, t);
@@ -74,8 +73,7 @@ model2.lognoisevariance = nan;
 [param0, lnv0] = stk_param_init (model2, t_obs, S_obs);
 
 % Estimate the parameters
-[model2.param, model2.lognoisevariance] = ...
-    stk_param_estim (model2, t_obs, S_obs, param0, lnv0);
+model2 = stk_param_estim (model2, t_obs, S_obs, param0, lnv0);
 
 % Carry out the kriging prediction
 S_posterior = stk_predict (model2, t_obs, S_obs, t);

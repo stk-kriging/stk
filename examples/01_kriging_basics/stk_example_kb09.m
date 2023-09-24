@@ -11,7 +11,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018, 2023 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -64,7 +64,7 @@ model = stk_model (@stk_materncov52_iso);
 model.lognoisevariance = 2 * log (ref.noise_std);
 
 % ReML parameter estimation
-model.param = stk_param_estim (model, xi, zi);
+model = stk_param_estim (model, xi, zi);
 
 
 %% Generate conditional sample paths

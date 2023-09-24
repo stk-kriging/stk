@@ -27,7 +27,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2018 CentraleSupelec
+%    Copyright (C) 2018, 2023 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -81,8 +81,7 @@ gn0 = stk_gaussiannoise_het0 (@(x) (x + 1) .^ 2, 1.0);
 % ReML parameter estimation: here, we estimate jointly the parameters of the
 % covariance function (log-variance, log-range) and the parameter of the
 % variance function
-[model.param, model.lognoisevariance] = ...
-    stk_param_estim (model, xi, zi, covparam0, gn0);
+model = stk_param_estim (model, xi, zi, covparam0, gn0);
 
 % Display models
 model,  gn = model.lognoisevariance

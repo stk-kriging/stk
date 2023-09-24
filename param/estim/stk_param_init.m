@@ -366,56 +366,56 @@ end % function
 %!test
 %! model = stk_model (@stk_materncov_iso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
-%! model.param = stk_param_estim (model, xi, zi, param0);
+%! model = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
 %! model = stk_model (@stk_materncov_aniso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
-%! model.param = stk_param_estim (model, xi, zi, param0);
+%! model = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
 %! model = stk_model (@stk_materncov32_iso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
-%! model.param = stk_param_estim (model, xi, zi, param0);
+%! model = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
 %! model = stk_model (@stk_materncov32_aniso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
-%! model.param = stk_param_estim (model, xi, zi, param0);
+%! model = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
 %! model = stk_model (@stk_materncov52_iso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
-%! model.param = stk_param_estim (model, xi, zi, param0);
+%! model = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
 %! model = stk_model (@stk_materncov52_aniso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
-%! model.param = stk_param_estim (model, xi, zi, param0);
+%! model = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
 %! model = stk_model (@stk_gausscov_iso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
-%! model.param = stk_param_estim (model, xi, zi, param0);
+%! model = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
 %!test
 %! model = stk_model (@stk_gausscov_aniso);
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
-%! model.param = stk_param_estim (model, xi, zi, param0);
+%! model = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
 
@@ -424,7 +424,7 @@ end % function
 %! lnv = log ((100 + rand (size (zi))) / 1e6);
 %! model.lognoisevariance = lnv;  % here we say that lnv is known
 %! [param0, model.lognoisevariance] = stk_param_init (model, xi, zi, BOX);
-%! model.param = stk_param_estim (model, xi, zi, param0);
+%! model = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (isequal (model.lognoisevariance, lnv));  % should be untouched
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)

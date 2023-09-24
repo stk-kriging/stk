@@ -13,7 +13,7 @@
 
 % Copyright Notice
 %
-%    Copyright 2016 CentraleSupelec
+%    Copyright (C) 2016, 2023 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
@@ -50,13 +50,13 @@ DOT_STYLE = {'ro', 'MarkerFaceColor', 'r', 'MarkerSize', 4};
 CASENUM = 1;
 
 switch CASENUM
-    
+
     case 1  % The classical BRANIN-HOO test function
         f = @stk_testfun_braninhoo;
         DIM = 2;
         BOX = [[-5; 10], [0; 15]];
         NI = 20;
-        
+
     case 2  % Another test function
         f_ = inline (['exp(1.8*(x1+x2)) + 3*x1 + 6*x2.^2' ...
             '+ 3*sin(4*pi*x1)'], 'x1', 'x2');
@@ -64,7 +64,7 @@ switch CASENUM
         DIM = 2;
         BOX = [[-1; 1], [-1; 1]];
         NI = 40;  % This second function is much harder to approximate.
-        
+
 end
 
 % Optional: create an hyper-rectangle object for the input space
@@ -124,7 +124,7 @@ param0 = stk_param_init (model, xi, zi, BOX);
 % param0 = log ([SIGMA2; NU; 1/RHO1; 1/RHO2]);
 % model.lognoisevariance = 2 * log (1e-5);
 
-model.param = stk_param_estim (model, xi, zi, param0);
+model = stk_param_estim (model, xi, zi, param0)
 
 
 %% CARRY OUT KRIGING PREDICITION AND VISUALIZE

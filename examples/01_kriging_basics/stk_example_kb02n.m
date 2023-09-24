@@ -11,7 +11,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018, 2023 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -71,9 +71,7 @@ model.lognoisevariance = nan;
 
 % Here, the parameters of the Matern covariance function are estimated
 % by the REML (REstricted Maximum Likelihood) method.
-[model.param, model.lognoisevariance] = stk_param_estim (model, xi, zi);
-
-model
+model = stk_param_estim (model, xi, zi)
 
 fprintf ('True noise variance = %.4f\n', ref.noise_std ^ 2);
 fprintf ('Estimated noise variance = %.4f\n\n', exp (model.lognoisevariance));

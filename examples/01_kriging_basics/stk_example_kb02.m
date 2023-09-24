@@ -11,7 +11,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018, 2023 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -68,9 +68,7 @@ model = stk_model (@stk_materncov_iso);
 
 % Here, the parameters of the Matern covariance function are estimated
 % by the REML (REstricted Maximum Likelihood) method.
-model.param = stk_param_estim (model, xi, zi);
-
-model
+model = stk_param_estim (model, xi, zi)
 
 
 %% Carry out the kriging prediction and display the result

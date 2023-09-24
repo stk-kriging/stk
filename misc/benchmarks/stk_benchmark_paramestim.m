@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2023 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:  Julien Bect       <julien.bect@centralesupelec.fr>
@@ -32,12 +32,12 @@ function stk_benchmark_paramestim ()
 
 NREP = 20;
 
-for noise_std = [0 0.1],
-    for ni = [10 50],
+for noise_std = [0 0.1]
+    for ni = [10 50]
         
         t = zeros (1, NREP + 1);
         
-        for i = 1:(NREP + 1),
+        for i = 1:(NREP + 1)
             tic;
             test_function (ni, noise_std);
             t(i) = toc;
@@ -72,13 +72,13 @@ xi = stk_sampling_maximinlhs (ni, DIM, BOX, NITER);  % evaluation points
 
 zi = stk_feval (f, xi);  % evaluation results
 
-if NOISY,
+if NOISY
     zi = zi + noise_std * randn (ni, 1);
 end
 
 model = stk_model (@stk_materncov_iso);
 
-if ~ NOISY,
+if ~ NOISY
     % Noiseless case: set a small "regularization" noise
     % the (log)variance of which is provided by stk_param_init
     model.lognoisevariance = 1e-10;
@@ -89,6 +89,7 @@ else
 end
 
 % Estimate the parameters
-model.param = stk_param_estim (model, xi, zi, log ([1.0; 4.0; 1/0.4]));
+model = stk_param_estim ...
+    (model, xi, zi, log ([1.0; 4.0; 1/0.4])); %#ok<NASGU>
 
 end

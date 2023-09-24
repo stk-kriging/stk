@@ -13,6 +13,7 @@
 
 % Copyright Notice
 %
+%    Copyright (C) 2023 centraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -64,7 +65,7 @@ RHO1   = 0.4;  % scale (range) parameter
 param0 = log ([SIGMA2; NU; 1/RHO1]);
 
 % Estimate covariance parameters (without prior)
-model.param = stk_param_estim (model, xi, zi, param0);
+model = stk_param_estim (model, xi, zi, param0);
 param_opt_reml = model.param;
 
 
@@ -85,7 +86,7 @@ for k = 1:length (std_list),
     model.prior.invcov = eye (length (param0)) ./ (std_list(k)^2);
     
     % Estimate covariance parameters (with a prior)
-    model.param = stk_param_estim (model, xi, zi, param0);
+    model = stk_param_estim (model, xi, zi, param0);
     param_opt(:, k) = model.param;
     
     % Carry out kriging prediction

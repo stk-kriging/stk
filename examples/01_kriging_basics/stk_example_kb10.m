@@ -13,7 +13,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CentraleSupelec
+%    Copyright (C) 2016, 2023 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -52,7 +52,7 @@ y = stk_testfun_borehole (x);                % Obtain the responses on the DoE x
 
 % Build Gaussian process model
 M_prior = stk_model (@stk_materncov52_aniso, d);  % prior
-M_prior.param = stk_param_estim (M_prior, x, y);  % ReML parameter estimation
+M_prior = stk_param_estim (M_prior, x, y);        % ReML parameter estimation
 
 % Compute LOO predictions and residuals
 [y_LOO, res_LOO] = stk_predict_leaveoneout (M_prior, x, y);
