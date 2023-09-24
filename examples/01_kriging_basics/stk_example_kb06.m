@@ -12,7 +12,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2016 CantraleSupelec
+%    Copyright (C) 2016, 2023 CentraleSupelec
 %    Copyright (C) 2011-2014 SUPELEC
 %
 %    Authors:   Julien Bect       <julien.bect@centralesupelec.fr>
@@ -72,7 +72,7 @@ model.lognoisevariance = 2 * log (1e-10);
 % model.lm = stk_lm_constant is the default
 
 % Estimate the parameters of the covariance
-model.param = stk_param_estim (model, xi, zi, param0);
+model = stk_param_estim (model, xi, zi, param0);
 
 % Carry out kriging prediction
 zp = stk_predict (model, xi, zi, xt);
@@ -88,7 +88,7 @@ stk_title ('Ordinary kriging');  ylim ([-5 5]);
 model.lm = stk_lm_affine;
 
 % Re-estimate the parameters of the covariance
-model.param = stk_param_estim (model, xi, zi, param0);
+model = stk_param_estim (model, xi, zi, param0);
 
 % Carry out kriging prediction
 zp = stk_predict (model, xi, zi, xt);

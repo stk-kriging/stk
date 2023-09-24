@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015-2017, 2019 CentraleSupelec
+%    Copyright (C) 2015-2017, 2019, 2023 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -29,34 +29,34 @@
 function model = stk_model_gpposterior (prior_model, xi, zi)
 
 if nargin == 3
-    
+
     if iscell (xi)
         % Legacy support for experimental hidden feature, to be removed
         kreq = xi{2};  xi = xi{1};
     else
         kreq = [];
     end
-    
+
     % Check the size of zi
     n = size (xi, 1);
     if ~ (isempty (zi) || isequal (size (zi), [n 1]))
         stk_error (['zi must either be empty or have the ' ...
             'same number of rows as x_obs.'], 'IncorrectSize');
     end
-    
+
     if isempty (kreq)
-        
+
         % Currently, prior models are represented exclusively as structures
         if ~ isstruct (prior_model)
             stk_error (['Input argument ''prior_model'' must be a ' ...
                 'prior model structure.'], 'InvalidArgument');
         end
-        
+
         % Make sure that lognoisevariance is -inf for noiseless models
         if ~ stk_isnoisy (prior_model)
             prior_model.lognoisevariance = -inf;
         end
-        
+
         % Backward compatibility:
         %   accept model structures with missing 'dim' field
         if (~ isfield (prior_model, 'dim')) || (isempty (prior_model.dim))
@@ -66,7 +66,7 @@ if nargin == 3
                 'is different from the value of prior_model.dim (which is '   ...
                 '%d).'], size (xi, 2), prior_model.dim), 'InvalidArgument');
         end
-        
+
         % Check prior_model.lognoisevariance
         if ~ isscalar (prior_model.lognoisevariance)
             if (~ isvector (prior_model.lognoisevariance)) && (length ...
@@ -78,31 +78,26 @@ if nargin == 3
             % Make sure that lnv is a column vector
             prior_model.lognoisevariance = prior_model.lognoisevariance(:);
         end
-        
+
         % Check if the model contains parameters that must be estimated first
         % (such parameters have the value NaN)
         param = stk_get_optimizable_model_parameters (prior_model);
-        if any (isnan (param))
-            noiseparam = stk_get_optimizable_noise_parameters (prior_model);
-            if any (isnan (noiseparam))
-                [prior_model.param, prior_model.lognoisevariance] ...
-                    = stk_param_estim (prior_model, xi, zi);
-            else
-                prior_model.param = stk_param_estim (prior_model, xi, zi);
-            end
+        noiseparam = stk_get_optimizable_noise_parameters (prior_model);
+        if any (isnan (param)) || any (isnan (noiseparam))
+            prior_model = stk_param_estim (prior_model, xi, zi);
         end
-        
-        % Compute QR factorization        
+
+        % Compute QR factorization
         kreq = stk_kreq_qr (prior_model, xi);
     end
-    
+
 elseif nargin == 0
-    
+
     prior_model = [];
     xi = [];
     zi = [];
     kreq = [];
-    
+
 else
     stk_error ('Incorrect number of input arguments.', 'SyntaxError');
 end

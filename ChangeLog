@@ -8,6 +8,31 @@
 	initial estimate for the variance of the noise.
 	* NEWS.md: Advertise the change.
 
+2023-09-24  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim.m: Return the model, not the parameters
+
+	* param/estim/stk_param_estim.m: Return the model with estimated
+	parameters instead of the parameters themselves.
+	* examples/01_kriging_basics/stk_example_kb02.m: Propagate.
+	* examples/01_kriging_basics/stk_example_kb02n.m: Propagate.
+	* examples/01_kriging_basics/stk_example_kb03.m: Propagate.
+	* examples/01_kriging_basics/stk_example_kb06.m: Propagate.
+	* examples/01_kriging_basics/stk_example_kb09.m: Propagate.
+	* examples/01_kriging_basics/stk_example_kb10.m: Propagate.
+	* examples/03_miscellaneous/stk_example_misc02.m: Propagate.
+	* examples/03_miscellaneous/stk_example_misc03.m: Propagate.
+	* examples/03_miscellaneous/stk_example_misc04.m: Propagate.
+	* examples/03_miscellaneous/stk_example_misc05.m: Propagate.
+	* examples/03_miscellaneous/stk_example_misc06.m: Propagate.
+	* iago/rep/stk_param_estim_withrep.m: Propagate.
+	* misc/benchmarks/stk_benchmark_paramestim.m: Propagate.
+	* model/@stk_model_gpposterior/stk_model_gpposterior.m: Propagate.
+	* param/estim/stk_param_init.m: Propagate.
+	* NEWS.md: Advertise the change.
+
+	[Partially imported from branch `lm-param`, written in 2021.]
+
 2023-09-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Removed deprecated stk_length function

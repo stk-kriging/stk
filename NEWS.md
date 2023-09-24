@@ -12,6 +12,9 @@
 
 ## Parameter estimation
 
+* `stk_param_estim` [API-breaking change]: Now returns the model with
+  estimated parameters directly, instead of the parameters themselves.
+
 * `stk_param_init`: The syntax with an additional `do_estim_lnv`
   parameter (deprecated since 2.6.0.) is no longer supported.  Set
   model.lognoisevariance to NaN if you want an initial estimate for
@@ -21,7 +24,7 @@
 
 * `stk_nullcov`: New function, which computes a null covariance matrix.
 
-* `stk_sf_*.m`: Removed.  (Had been deprecated since 2.4.0.)
+* `stk_sf_*`: Removed.  (Had been deprecated since 2.4.0.)
 
 ## Arrays
 

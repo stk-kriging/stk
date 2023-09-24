@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2018 CentraleSupelec
+%    Copyright (C) 2015, 2018, 2023 CentraleSupelec
 %
 %    Author:  Julien Bect  <julien.bect@supelec.fr>
 
@@ -34,37 +34,40 @@ function [param, lnv] = stk_param_estim_withrep (model, xi, zi)
 %   things too)
 
 switch size (zi, 2)
-    
-    case 1,  % The usual one-column representation of evaluation results
-        
-        [param, lnv] = stk_param_estim (model, xi, zi);
-        
-    case 3,  % Three-column representation of evaluation results
+
+    case 1  % The usual one-column representation of evaluation results
+
+        model = stk_param_estim (model, xi, zi);
+        param = model.param;
         lnv = model.lognoisevariance;
-        
+
+    case 3  % Three-column representation of evaluation results
+        lnv = model.lognoisevariance;
+
         if (isscalar (lnv)) && (lnv == -inf) && (~ all (zi.nb_obs == 1))
-            
+
             stk_error (['Three-column representation of evaluations with ' ...
                 'repetitions is not supported in the noiseless case.'], ...
                 'IncompatibleArguments');
 
         elseif (any (isnan (lnv)))
-            
+
             stk_error (['Three-column representation of evaluations with ' ...
                 'repetitions is not supported yet when the variance of the ' ...
                 'noise in unknown.'], 'IncompatibleArguments');
 
         else % This works in all remaining cases
-            
+
             model.lognoisevariance = lnv - (log (zi.nb_obs));
-            
+
         end
-                
-        param = stk_param_estim (model, xi, zi.mean);
-        
+
+        model = stk_param_estim (model, xi, zi.mean);
+        param = model.param;
+
     otherwise
         error ('Ooops.  I don''t know how to handle this case.');
-        
+
 end % switch
 
 end % function
