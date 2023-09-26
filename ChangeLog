@@ -8,6 +8,14 @@
 	initial estimate for the variance of the noise.
 	* NEWS.md: Advertise the change.
 
+2023-09-26  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_estim_withrep.m: Return the model, not the parameters
+
+	* iago/rep/stk_param_estim_withrep.m: Return the model with
+	estimated parameters instead of the parameters themselves.
+	* iago/stk_optim.m: Propagate.
+
 2023-09-24  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	stk_param_estim.m: Return the model, not the parameters
