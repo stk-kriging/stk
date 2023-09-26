@@ -92,8 +92,8 @@ for i = 1:N
         fprintf('parameter estimation ..');
         % Note: in the case of heteroscedastic noise, model.lognoisevariance
         % should *already* contain the vector of log-variances.
-        [algo.model.param, algo.model.lognoisevariance] = ...
-            stk_param_estim_withrep (algo.model, xi, zi);  fprintf('done\n');
+        algo.model = stk_param_estim_withrep (algo.model, xi, zi);
+        fprintf('done\n');
     end
     
     % Compute sampling criterion

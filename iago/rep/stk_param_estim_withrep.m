@@ -26,7 +26,7 @@
 %    You should  have received a copy  of the GNU  General Public License
 %    along with STK.  If not, see <http://www.gnu.org/licenses/>.
 
-function [param, lnv] = stk_param_estim_withrep (model, xi, zi)
+function model = stk_param_estim_withrep (model, xi, zi)
 
 % NOTE: the fact that we need to write such a function shows that
 %   we should have a dedicated class for these three-columnd dataframes
@@ -38,8 +38,6 @@ switch size (zi, 2)
     case 1  % The usual one-column representation of evaluation results
 
         model = stk_param_estim (model, xi, zi);
-        param = model.param;
-        lnv = model.lognoisevariance;
 
     case 3  % Three-column representation of evaluation results
         lnv = model.lognoisevariance;
@@ -59,11 +57,10 @@ switch size (zi, 2)
         else % This works in all remaining cases
 
             model.lognoisevariance = lnv - (log (zi.nb_obs));
+            model = stk_param_estim (model, xi, zi.mean);
+            model.lognoisevariance = lnv;
 
         end
-
-        model = stk_param_estim (model, xi, zi.mean);
-        param = model.param;
 
     otherwise
         error ('Ooops.  I don''t know how to handle this case.');
