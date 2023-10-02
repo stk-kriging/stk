@@ -32,7 +32,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2016, 2018, 2020 CentraleSupelec
+%    Copyright (C) 2015, 2016, 2018, 2020, 2023 CentraleSupelec
 %    Copyright (C) 2012-2014 SUPELEC
 %
 %    Authors:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -82,10 +82,10 @@ if ~ ischar (model.covariance_type)
 end
 
 if (ismember (model.covariance_type, cov_list)) && (isnumeric (model.param))
-    
+
     % An initialization for this covariance type is provided in STK
     [param, lnv] = stk_param_init_ (model, varargin{:});
-    
+
 else
     try
         % Undocumented feature: make it possible to define a XXXX_param_init
@@ -112,11 +112,11 @@ end % function
 %#ok<*CTCH,*LERR>
 
 
-function [param, lnv] = stk_param_init_ (model, xi, zi, box, do_estim_lnv)
+function [param, lnv] = stk_param_init_ (model, xi, zi, box)
 
 % Used by stk_model
 if nargin < 2
-    
+
     if isa (model.covariance_type, 'function_handle')
         covariance_name = func2str (model.covariance_type);
     else
@@ -124,32 +124,32 @@ if nargin < 2
     end
 
     switch covariance_name
-        
+
         % Matern covariance function with unknown regularity
-        
+
         case 'stk_materncov_iso'
             param = nan (3, 1);
         case 'stk_materncov_aniso'
             param = nan (2 + model.dim, 1);
-            
-        % Other isotropic covariance functions
-        
+
+            % Other isotropic covariance functions
+
         case {'stk_expcov_iso', 'stk_materncov32_iso', ...
                 'stk_materncov52_iso', 'stk_gausscov_iso', ...
                 'stk_sphcov_iso'}
             param = nan (2, 1);
-        
-        % Other anisotropic covariance functions
+
+            % Other anisotropic covariance functions
 
         case {'stk_expcov_aniso', 'stk_materncov32_aniso', ...
                 'stk_materncov52_aniso', 'stk_gausscov_aniso', ...
                 'stk_sphcov_aniso'}
             param = nan (1 + model.dim, 1);
-        
+
         otherwise
             stk_error ('Unexpected covariance name', 'IncorrectArgument');
     end
-    
+
     lnv = - inf;
     return
 end
@@ -186,23 +186,9 @@ end
 
 %--- backward compatiblity -----------------------------------------------------
 
-% Missing lognoisevariance field
+% Missing lognoisevariance field: assume a noiseless model
 if ~ isfield (model, 'lognoisevariance')
-    
-    if (nargin < 5) || (~ do_estim_lnv)
-        % Assume a noiseless model
-        model.lognoisevariance = - inf;
-    else
-        % Special case: assume a noisy model with constant but unknown noise variance
-        model.lognoisevariance = nan;
-    end
-    
-elseif isequal (model.lognoisevariance, -inf) && ((nargin >= 5) && do_estim_lnv)
-    
-    % In this special case, we are flexible and consider -inf as a particular
-    % value of the variance in an homoscedastic noise model.
-    model.lognoisevariance = nan;
-    
+    model.lognoisevariance = - inf;
 end
 
 % Ensure backward compatiblity with respect to model.order / model.lm
@@ -214,89 +200,58 @@ model = stk_model_fixlm (model);
 lnv_ = stk_get_optimizable_noise_parameters (model);
 
 if isempty (lnv_)
-    
+
     % There are no parameters to optimize in the noise model, either because we
     % are in the noiseless case, ou because we have a noise model object that
     % does not declare any hyperparameter.  In this case:
-    
-    % Even is do_estim_lnv was set to true by the caller, we set it back
-    % to false in this case, since there are no parameters to optimize
     do_estim_lnv = false;
-    
+
     if stk_isnoisy (model)
         lnv = log (stk_covmat_noise (model, xi, [], -1, true));
     else
         lnv = -inf;
     end
-    
-elseif nargin < 5
-    
-    % When do_estim_lnv is not set by the user, we set it to true if some
-    % of the parameters are NaNs, which is interpreted as "Estimate me !"
+
+else
+
+    % do_estim_lnv is set to true if some of the parameters are NaNs,
+    % which is interpreted as "Estimate me !"
     do_estim_lnv = any (isnan (lnv_));
-    
+
     lnv = model.lognoisevariance;
-    
-else  % do_estim_lnv set by the caller (DEPRECATED)
 
-    % CALL: [PARAM, LNV] = stk_param_init (MODEL, XI, YI, BOX, DO_ESTIM_LNV)
-    %
-    %   with DO_ESTIM_LNV = TRUE forces the estimation of the variance of the noise,
-    %   regardless of the value of MODEL.lognoisevariance. If FALSE, it prevents
-    %   estimation of the variance of the noise, which is only possible if the
-    %   'lognoisevariance' field in MODEL is either -Inf or has a finite value.
-
-    % DEPRECATION WARNING
-    warning ('STK:stk_param_init:Deprecated', ...
-        'This way of setting do_estim_lnv is deprecated');
-    
-    do_estim_lnv = logical (do_estim_lnv);
-    
-    if (~ do_estim_lnv) && (any (isnan (lnv_)))
-        stk_error (sprintf (['do_estim_lnv is false, but some parameter '    ...
-            'values are equal to NaN. If you don''t want the parameters of ' ...
-            'the noise variance model to be estimated, you must provide '    ...
-            'values for them!']), 'MissingParameterValue');
+    % Make sure that we are the homoscedastic case.
+    % Fancy objects are not supported here.
+    if ~ (isnumeric (lnv) && (isscalar (lnv)))
+        stk_error (['Parameter estimation for the noise model is ' ...
+            'not supported in this case.'], 'InvalidArgument');
     end
-    
-    lnv = model.lognoisevariance;
-    
-end
 
-% After this point, we only accept
-%   a) a scalar lnv (noiseless and homoscedastic cases), which is allowed to be nan,
-%   b) a vector lnv (heteroscedatic case), which cannot be nan.
-%
-% In other words, fancy objects are not allowed, and parameter estimation is
-% only supported in the homoscedastic case.  Here we go:
-if ~ (isnumeric (lnv) && (isscalar (lnv) || ~ any (isnan (lnv))))
-    stk_error (['Parameter estimation for the noise model is ' ...
-        'not supported in this case.'], 'InvalidArgument');
-end
+    if nargout < 2
+        warning (['stk_param_init will be computing an estimation of the ' ...
+            'variance of the noise, perhaps should you call the function ' ...
+            'with two output arguments?']);
+    end
 
-if (do_estim_lnv) && (nargout < 2)
-    warning (['stk_param_init will be computing an estimation of the ' ...
-        'variance of the noise, perhaps should you call the function ' ...
-        'with two output arguments?']);
 end
 
 
 %--- then, each type of covariance is dealt with specifically ------------------
 
 switch model.covariance_type
-    
+
     case {'stk_expcov_iso', 'stk_materncov32_iso', 'stk_materncov52_iso', ...
             'stk_gausscov_iso', 'stk_sphcov_iso'}
         model0 = model;
         bbox = box;
-        
+
     case {'stk_expcov_aniso', 'stk_materncov32_aniso', ...
             'stk_materncov52_aniso', 'stk_gausscov_aniso', 'stk_sphcov_aniso'}
         covname_iso = [model.covariance_type(1:end-5) 'iso'];
         model0 = stk_model (covname_iso, dim);
         xi = stk_normalize (xi, box);
         bbox = [];
-        
+
     case 'stk_materncov_iso'
         nu = 5/2 * dim;
         model0 = stk_model (@stk_materncov_iso, dim);
@@ -304,7 +259,7 @@ switch model.covariance_type
             stk_materncov_iso ([param(1) log(nu) param(2)], x, y, diff, pairwise);
         model0.param(2) = [];
         bbox = box;
-        
+
     case 'stk_materncov_aniso'
         nu = 5/2 * dim;
         model0 = stk_model (@stk_materncov_iso, dim);
@@ -313,7 +268,7 @@ switch model.covariance_type
         model0.param(2) = [];
         xi = stk_normalize (xi, box);
         bbox = [];
-        
+
     otherwise
         errmsg = 'Unsupported covariance type.';
         stk_error (errmsg, 'InvalidArgument');
@@ -324,14 +279,14 @@ model0.lognoisevariance = lnv;
 
 % Back to a full vector of covariance parameters
 switch model.covariance_type
-    
+
     case {'stk_expcov_aniso', 'stk_materncov32_aniso', ...
             'stk_materncov52_aniso', 'stk_gausscov_aniso', 'stk_sphcov_aniso'}
         param = [param(1); param(2) - log(diff(box, [], 1))'];
-        
+
     case 'stk_materncov_iso'
         param = [param(1); log(nu); param(2)];
-        
+
     case 'stk_materncov_aniso'
         param = [param(1); log(nu); param(2) - log(diff(box, [], 1))'];
 end
@@ -380,7 +335,7 @@ end % function
 %!test
 %! xi = (1:10)';  zi = sin (xi);
 %! model = stk_model (@stk_materncov52_iso);
-%! model.param = stk_param_init (model, xi, zi, [1; 10], false);
+%! model.param = stk_param_init (model, xi, zi, [1; 10]);
 %! xt = (1:9)' + 0.5;  zt = sin (xt);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (sum ((zt - zp.mean) .^ 2) < 1e-3);
@@ -463,22 +418,6 @@ end % function
 %! model.param = stk_param_estim (model, xi, zi, param0);
 %! zp = stk_predict (model, xi, zi, xt);
 %! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
-
-%!test  % Homoscedastic case / do_estim_lnv = true
-%! model = stk_model (@stk_materncov32_iso);
-%! [model.param, model.lognoisevariance] = ...
-%!     stk_param_init (model, xi, zi, BOX, true);
-%! [model.param, model.lognoisevariance] = ...
-%!     stk_param_estim (model, xi, zi);
-%! zp = stk_predict (model, xi, zi, xt);
-%! assert (model.lognoisevariance > -inf);
-%! assert (max ((zp.mean - zt) .^ 2) < 1e-3)
-
-%!error  % Homoscedastic case / do_estim_lnv = false / model.lnv = nan
-%! model = stk_model (@stk_materncov32_iso);
-%! model.lognoisevariance = nan;  % not compatible with do_estim_lnv == false
-%! [model.param, model.lognoisevariance] = ...
-%!     stk_param_init (model, xi, zi, BOX, false);
 
 %!test  % Heteroscedastic case / known noise variance
 %! model = stk_model (@stk_materncov32_iso);

@@ -10,6 +10,13 @@
 
 * `stk_example_misc06`: New example.
 
+## Parameter estimation
+
+* `stk_param_init`: The syntax with an additional `do_estim_lnv`
+  parameter (deprecated since 2.6.0.) is no longer supported.  Set
+  model.lognoisevariance to NaN if you want an initial estimate for
+  the variance of the noise.
+
 ## Covariance functions
 
 * `stk_nullcov`: New function, which computes a null covariance matrix.

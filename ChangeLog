@@ -1,3 +1,13 @@
+2023-10-02  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	stk_param_init.m: Remove do_estim_lnv argument
+
+	* param/estim/stk_param_init.m: The syntax with an additional
+	`do_estim_lnv` parameter (deprecated since 2.6.0.) is no longer
+	supported.  Set model.lognoisevariance to NaN if you want an
+	initial estimate for the variance of the noise.
+	* NEWS.md: Advertise the change.
+
 2023-09-19  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Removed deprecated stk_length function
