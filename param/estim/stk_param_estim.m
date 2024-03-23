@@ -127,7 +127,7 @@ noiseparam_select = select{2} & do_estim_lnv;
 % FIXME: Clarify this confusing situation...
 
 % Call optimization routine
-if nargout > 2
+if nargout > 1
     [model_opt, info] = stk_param_estim_optim ...
         (model, xi, zi, criterion, covparam_select, noiseparam_select);
 else
