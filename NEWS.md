@@ -30,6 +30,14 @@
 
 * `stk_length`: Removed.  (Had been deprecated since 2.7.0.)
 
+## Test functions
+
+* `stk_testfun_threehumpscamel`, `stk_testfun_sixhumpscamel`: New test
+  functions.
+
+* Most test functions in `examples/test_functions` are now also
+  available under the CC0 license (see each file).
+
 -----
 
 

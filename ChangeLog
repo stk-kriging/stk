@@ -1,3 +1,12 @@
+2024-08-07  Romain Ait Abdelmalek-Lomenech  <romain.ait@centralesupelec.fr>
+
+	Add camel test functions, with three and six humps
+
+	* examples/test_functions/stk_testfun_sixhumpscamel.m: New tets function.
+	* examples/test_functions/stk_testfun_threehumpscamel.m: New tets function.
+	* admin/octpkg/INDEX: Update Octave package index.
+	* NEWS.md: Advertise the change.
+
 2024-03-28  Romain Ait Abdelmalek-Lomenech  <romain.ait@centralesupelec.fr>
 
 	stk_param_estim.m: Fix nargout condition
