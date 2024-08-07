@@ -307,6 +307,8 @@ Examples: test functions, datasets, etc.
  stk_testfun_hartman4
  stk_testfun_hartman6
  stk_testfun_hartman_generic
+ stk_testfun_sixhumpscamel
+ stk_testfun_threehumpscamel
  stk_testfun_twobumps
  stk_testcase_truss3
  stk_testfun_truss3_bb
