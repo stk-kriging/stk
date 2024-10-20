@@ -123,7 +123,7 @@ if KNOWN_NOISE_VARIANCE
     options = [options {'noisevariance', NOISEVARIANCE}];
 else
     % Homoscedastic noise, unknown noise variance
-    options = [options {'noisevariance', nan}];  %#ok<UNRCH> 
+    options = [options {'noisevariance', nan}];
 end
 
 % Activate display (figures) and provide ground truth

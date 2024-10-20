@@ -269,3 +269,9 @@ for estim = 1:nb_crit
 
     fprintf ('\n\n');
 end
+
+
+%#ok<*UNRCH>
+
+%!test
+%! stk_example_misc06;  close all;

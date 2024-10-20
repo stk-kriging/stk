@@ -241,6 +241,6 @@ fprintf ('| Volume estimate (%s): %.4f%%  [ref: %.4f%%]\n\n', ...
          vol_estim_type, vol_estim * 100, vol_ref * 100);
 
 
-%#ok<*SPERR>
+%#ok<*SPERR,*UNRCH>
 
 %!test stk_example_doe06;  close all;
