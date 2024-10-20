@@ -1,6 +1,6 @@
 ## Copyright Notice
 ##
-##    Copyright (C) 2022 CentraleSupelec
+##    Copyright (C) 2022, 2024 CentraleSupelec
 ##
 ##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
 
@@ -45,32 +45,28 @@ env:
     if ~ b_ok,  error ('linter error');  end
 
 ## The following actions are used:
-##  * https://github.com/actions/checkout             v3
-##  * https://github.com/actions/download-artifact    v3
-##  * https://github.com/matlab-actions/setup-matlab  v1
-##  * https://github.com/matlab-actions/run-command   v1
+##  * https://github.com/actions/checkout             v4
+##  * https://github.com/actions/download-artifact    v4
+##  * https://github.com/matlab-actions/setup-matlab  v2
+##  * https://github.com/matlab-actions/run-command   v2
 
 jobs:
   run-linter-matlab:
     # Apparently only Ubuntu workers support MATLAB actions for now
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        # Only very recent releases are available:
-        release: [R2022b, R2022a, R2021b, R2021a, R2020b, R2020a]
     steps:
       - name: Check out source repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up MATLAB
-        uses: matlab-actions/setup-matlab@v1
+        uses: matlab-actions/setup-matlab@v2
         with:
-          release: ${{ matrix.release }}
+          release: latest
       - name: Run test script
-        uses: matlab-actions/run-command@v1
+        uses: matlab-actions/run-command@v2
         with:
           command: ${{ env.TEST_SCRIPT }}
       - name: "Upload mlint result (CSV file)"
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: stk_mlint_all-${{ matrix.release }}
           path: stk_mlint_all.csv
