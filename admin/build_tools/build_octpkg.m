@@ -2,7 +2,7 @@
 
 % Copyright Notice
 %
-%    Copyright (C) 2015, 2017, 2020, 2022, 2023 CentraleSupelec
+%    Copyright (C) 2015, 2017, 2020, 2022-2024 CentraleSupelec
 %    Copyright (C) 2014 SUPELEC
 %
 %    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
@@ -270,14 +270,12 @@ function descr = parse_description_field (root_dir)
 
 fid = fopen_ (fullfile (root_dir, 'README.md'), 'rt');
 
-s = [];
-
 %--- Step 1: find first description line ---------------------------------
 
-while 1,
+while 1
     
     L = fgetl (fid);
-    if ~ ischar (L),
+    if ~ ischar (L)
         error ('Corrupted README.md file ?');
     end
     
