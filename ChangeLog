@@ -1,3 +1,12 @@
+2024-10-27  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	examples/test_functions: Polish doc
+
+	* examples/test_functions/stk_testfun_braninhoo.m: Polish doc.
+	* examples/test_functions/stk_testfun_goldsteinprice.m: Idem.
+	* examples/test_functions/stk_testfun_hartman3.m: Idem.
+	* examples/test_functions/stk_testfun_hartman6.m: Idem.
+
 2024-10-20  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	Source formatting, unit test

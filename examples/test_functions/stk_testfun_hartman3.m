@@ -1,5 +1,9 @@
 % STK_TESTFUN_HARTMAN3 computes the "Hartman3" function
 %
+% CALL: Y = stk_testfun_hartman3 (X)
+%
+%    computes the value Y of the Hartman3 function at X.
+%
 %    The Hartman3 function is a test function in dimension 3, which is
 %    part of the famous Dixon & Szego benchmark [1] in global optimization.
 %

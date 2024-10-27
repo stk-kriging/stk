@@ -1,5 +1,9 @@
 % STK_TESTFUN_GOLDSTEINPRICE computes the Goldstein-Price function
 %
+% CALL: Y = stk_testfun_goldsteinprice (X)
+%
+%    computes the value Y of the Goldstein-Price function at X.
+%
 %    The Goldstein-Price function [1] is a classical test function for
 %    global optimization algorithms, which belongs to the well-known
 %    Dixon-Szego test set [2].

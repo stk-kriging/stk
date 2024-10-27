@@ -1,5 +1,9 @@
 % STK_TESTFUN_HARTMAN6 computes the "Hartman6" function
 %
+% CALL: Y = stk_testfun_hartman6 (X)
+%
+%    computes the value Y of the Hartman6 function at X.
+%
 %    The Hartman6 function is a test function in dimension 6, which is
 %    part of the famous Dixon & Szego benchmark [1] in global optimization.
 %
