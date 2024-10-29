@@ -1,7 +1,7 @@
 % STK_TESTFUN_HARTMAN_GENERIC compute the value of a Hartman function
 %
 % CALL: Y = stk_testfun_hartman_generic (X, A, P, C)
-% 
+%
 %    computes the value Y of the Hartman function with parameters A, P, C,
 %    at the points contained in X.
 %
@@ -42,10 +42,6 @@
 %
 % See also stk_testfun_hartman3, stk_testfun_hartman4, stk_testfun_hartman6
 
-% Author
-%
-%    Julien Bect  <julien.bect@centralesupelec.fr>
-
 % IMPLEMENTATION
 %
 %    This implementation has been written from scratch using [1, 3] as
@@ -55,11 +51,16 @@
 
 % Copying Permission Statement  (this file)
 %
-%    To the extent possible under law, CentraleSupelec has waived all
-%    copyright and related or neighboring rights to
-%    stk_testfun_hartman_generic.m.  This work is published from France.
+%    Written in 2022 by Julien Bect <julien.bect@centralesupelec.fr>
 %
-%    License: CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
+%    To the extent possible under law, CentraleSupelec has dedicated all
+%    copyright and related and neighboring rights to this software to the
+%    public domain worldwide. This software is distributed without any
+%    warranty.
+%
+%    You should have received a copy of the CC0 Public Domain Dedication
+%    along with this software. If not, see
+%                    <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 % Copying Permission Statement  (STK toolbox as a whole)
 %

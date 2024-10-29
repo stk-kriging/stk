@@ -5,7 +5,7 @@
 %    computes the value Y of the Hartman4 function at X.
 %
 %    The Hartman4 function is a test function in dimension 4,
-%    which is usually minimized over [0, 1]^4. 
+%    which is usually minimized over [0, 1]^4.
 %
 % HISTORICAL REMARKS
 %
@@ -62,17 +62,18 @@
 %      Kriging-Based Optimization for Computer Experiments.  R package
 %      version 2.1.1.  URL: https://CRAN.R-project.org/package=DiceOptim.
 
-% Author
-%
-%    Julien Bect  <julien.bect@centralesupelec.fr>
-
 % Copying Permission Statement  (this file)
 %
-%    To the extent possible under law, CentraleSupelec has waived all
-%    copyright and related or neighboring rights to
-%    stk_testfun_hartman4.m.  This work is published from France.
+%    Written in 2022 by Julien Bect <julien.bect@centralesupelec.fr>
 %
-%    License: CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
+%    To the extent possible under law, CentraleSupelec has dedicated all
+%    copyright and related and neighboring rights to this software to the
+%    public domain worldwide. This software is distributed without any
+%    warranty.
+%
+%    You should have received a copy of the CC0 Public Domain Dedication
+%    along with this software. If not, see
+%                    <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 % Copying Permission Statement  (STK toolbox as a whole)
 %

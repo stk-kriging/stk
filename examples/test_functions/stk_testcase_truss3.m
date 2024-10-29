@@ -57,7 +57,7 @@
 %
 %    The standard deviations F1_std and F2_std are used in the formulation
 %    of robust optimization problems [see 1, chap 11].
-%    
+%
 % NUMERICAL FUNCTIONS
 %
 %    Two numerical functions are provided to compute the quantities of
@@ -128,17 +128,18 @@
 %
 % See also: stk_testfun_truss3_vol, stk_testfun_truss3_bb
 
-% Author
-%
-%    Julien Bect  <julien.bect@centralesupelec.fr>
-
 % Copying Permission Statement  (this file)
 %
-%    To the extent possible under law, CentraleSupelec has waived all
-%    copyright and related or neighboring rights to
-%    stk_testcase_truss3.m.  This work is published from France.
+%    Written in 2017 by Julien Bect <julien.bect@centralesupelec.fr>
 %
-%    License: CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
+%    To the extent possible under law, CentraleSupelec has dedicated all
+%    copyright and related and neighboring rights to this software to the
+%    public domain worldwide. This software is distributed without any
+%    warranty.
+%
+%    You should have received a copy of the CC0 Public Domain Dedication
+%    along with this software. If not, see
+%                    <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 % Copyright Notice
 %

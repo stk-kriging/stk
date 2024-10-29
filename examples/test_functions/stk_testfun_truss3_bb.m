@@ -4,17 +4,18 @@
 %
 % See also: stk_testcase_truss3, stk_testfun_truss3_vol
 
-% Author
-%
-%    Julien Bect  <julien.bect@centralesupelec.fr>
-
 % Copying Permission Statement  (this file)
 %
-%    To the extent possible under law, CentraleSupelec has waived all
-%    copyright and related or neighboring rights to
-%    stk_testfun_truss3_bb.m.  This work is published from France.
+%    Written in 2017 by Julien Bect <julien.bect@centralesupelec.fr>
 %
-%    License: CC0  <http://creativecommons.org/publicdomain/zero/1.0/>
+%    To the extent possible under law, CentraleSupelec has dedicated all
+%    copyright and related and neighboring rights to this software to the
+%    public domain worldwide. This software is distributed without any
+%    warranty.
+%
+%    You should have received a copy of the CC0 Public Domain Dedication
+%    along with this software. If not, see
+%                    <http://creativecommons.org/publicdomain/zero/1.0/>.
 
 % Copying Permission Statement (STK toolbox as a whole)
 %
@@ -45,20 +46,20 @@ x_ = double (x);
 % Check input size
 [n, dim] = size (x_);
 switch dim
-    
+
     case 4
         % Use nominal loads
         F = zeros (n, 2);
         F(:, 1) = const.F1_mean;
         F(:, 2) = const.F2_mean;
         x_ = [x_ F];
-        
+
     case 6
         % Loads have been provided as well
-        
+
     otherwise
         error ('Incorrect number of variables.');
-        
+
 end
 
 % Extract variables
@@ -96,23 +97,23 @@ C = E * a ./ LL;
 y = zeros (n, 2);  % Displacement of node P
 s = zeros (n, 3);  % Tensile stress in the bars
 for i = 1:n
-    
+
     % Rectangular matrix A for Equ. 9.1 in Das (1997) p.65, gives the
     % equilibrium relation between tensile forces and loads (small displacements)
     A = [cos_theta(i) sin_theta(i); 0 1; -cos_alpha(i) sin_alpha(i)];
-    
+
     % Stiffness matrix
     K = A' * (diag (C(i, :))) * A;
-    
+
     % Compute the displacement of node P
     y(i, :) = F(i, :) / K;
-    
+
     % Bar elongations
     delta = y(i, :) * A';
-    
+
     % Tensile stresses (Hooke's law)
     s(i, :) = E * delta ./ LL(i, :);
-    
+
 end
 
 % Output: return displacement of node P and tensile stresses (five outputs)

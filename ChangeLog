@@ -1,3 +1,20 @@
+2024-10-29  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	examples/test_functions: Polish copying permission statements
+
+	* examples/test_functions/stk_testcase_truss3.m: Polish copying
+	permission statement.
+	* examples/test_functions/stk_testfun_hartman3.m: Idem.
+	* examples/test_functions/stk_testfun_hartman4.m: Idem.
+	* examples/test_functions/stk_testfun_hartman6.m: Idem.
+	* examples/test_functions/stk_testfun_hartman_generic.m: Idem.
+	* examples/test_functions/stk_testfun_sixhumpscamel.m: Idem.
+	* examples/test_functions/stk_testfun_threehumpscamel.m: Idem.
+	* examples/test_functions/stk_testfun_truss3_bb.m: Idem.
+	* examples/test_functions/stk_testfun_truss3_vol.m: Idem.
+	* examples/test_functions/stk_testfun_twobumps.m: Idem.
+	* examples/test_functions/stk_testfun_braninhoo.m: Source formatting
+
 2024-10-27  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	examples/test_functions: Polish doc

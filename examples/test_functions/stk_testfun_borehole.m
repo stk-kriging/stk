@@ -38,7 +38,7 @@
 %
 %  [3] Surjanovic, S. & Bingham, D.  Virtual Library of Simulation Experiments:
 %      Test Functions and Datasets.  Retrieved February 1, 2016, from
-%      http://www.sfu.ca/~ssurjano/borehole.html. 
+%      http://www.sfu.ca/~ssurjano/borehole.html.
 
 % Copyright Notice
 %
