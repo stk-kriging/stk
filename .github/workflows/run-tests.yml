@@ -1,29 +1,3 @@
-## Copyright Notice
-##
-##    Copyright (C) 2022-2024 CentraleSupelec
-##
-##    Author:  Julien Bect  <julien.bect@centralesupelec.fr>
-
-## Copying Permission Statement  (STK toolbox)
-##
-##    This file is part of
-##
-##            STK: a Small (Matlab/Octave) Toolbox for Kriging
-##               (https://github.com/stk-kriging/stk/)
-##
-##    STK is free software: you can redistribute it and/or modify it under
-##    the terms of the GNU General Public License as published by the Free
-##    Software Foundation,  either version 3  of the License, or  (at your
-##    option) any later version.
-##
-##    STK is distributed  in the hope that it will  be useful, but WITHOUT
-##    ANY WARRANTY;  without even the implied  warranty of MERCHANTABILITY
-##    or FITNESS  FOR A  PARTICULAR PURPOSE.  See  the GNU  General Public
-##    License for more details.
-##
-##    You should  have received a copy  of the GNU  General Public License
-##    along with STK.  If not, see <http://www.gnu.org/licenses/>.
-
 ## Copying Permission Statement  (this file)
 ##
 ##    To the extent possible under law,  Julien Bect  has waived all copy-
@@ -51,9 +25,9 @@ env:
     assert (results.n_total == (results.n_pass + results.n_xfail));
 
 ## The following actions are used:
-##  * https://github.com/actions/checkout             v4
-##  * https://github.com/actions/upload-artifact      v4
-##  * https://github.com/actions/download-artifact    v4
+##  * https://github.com/actions/checkout             v6
+##  * https://github.com/actions/upload-artifact      v6
+##  * https://github.com/actions/download-artifact    v6
 ##  * https://github.com/matlab-actions/setup-matlab  v2
 ##  * https://github.com/matlab-actions/run-command   v2
 
@@ -64,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out source repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Set up MATLAB
         uses: matlab-actions/setup-matlab@v2
         with:
@@ -76,7 +50,7 @@ jobs:
         with:
           command: ${{ env.TEST_SCRIPT }}
       - name: "Upload artifact: log file"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: runtests-inplace-mat-log
           path: stk_runtests.log
@@ -85,15 +59,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install Octave
         run: |
           sudo apt-get update
-          sudo apt-get -y install octave liboctave-dev
+          sudo apt-get -y install octave octave-dev
       - name: Run test suite
         run: octave --eval "${{ env.TEST_SCRIPT }}"
       - name: "Upload artifact: log file"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: runtests-inplace-oct-log
           path: stk_runtests.log
@@ -102,22 +76,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install Octave & tools
         run: |
           sudo apt-get update
-          sudo apt-get -y install octave liboctave-dev quilt markdown
+          sudo apt-get -y install octave octave-dev quilt markdown
       - name: Install generate_html package
         run: octave --eval "pkg install -forge generate_html"
       - name: Build tarballs
         run: make release
       - name: "Upload artifacts: all-purpose release"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: allpurpose-tarball
           path: build/stk-?.?.?-allpurpose.tar.gz
       - name: "Upload artifacts: Octave package"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: octpkg-tarball
           path: build/stk-?.?.?-octpkg.tar.gz
@@ -127,7 +101,7 @@ jobs:
     needs: build-tarballs
     steps:
       - name: Download Octave package
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: octpkg-tarball
       - name: Get tarball name
@@ -138,13 +112,13 @@ jobs:
       - name: Install Octave & tools
         run: |
           sudo apt-get update
-          sudo apt-get -y install octave liboctave-dev
+          sudo apt-get -y install octave octave-dev
       - name: Install STK package
         run: octave --eval "pkg install ${{ env.octpkg_tarball }}"
       - name: Run test suite
         run: octave --eval "pkg load stk;  ${{ env.TEST_SCRIPT }}"
       - name: "Upload artifact: log file"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: runtests-octpkg-log
           path: stk_runtests.log
@@ -156,10 +130,10 @@ jobs:
       matrix:
         # Test some recent versions of Matlab
         # (https://github.com/matlab-actions/setup-matlab/#set-up-matlab)
-        release: [R2024b, R2024a, R2023b, R2023a, R2022b, R2022a, R2021b, R2021a, R2020b]
+        release: [R2025b, R2025a, R2024b, R2023b, R2023a, R2022b, R2022a]
     steps:
       - name: Download allpurpose release
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: allpurpose-tarball
       - name: Get tarball name
@@ -179,7 +153,7 @@ jobs:
         with:
           command: cd stk;  ${{ env.TEST_SCRIPT }}
       - name: "Upload artifact: log file"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: runtests-allpurpose-mat-${{ matrix.release }}-log
           path: stk/stk_runtests.log
@@ -189,7 +163,7 @@ jobs:
     needs: build-tarballs
     steps:
       - name: Download allpurpose release
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: allpurpose-tarball
       - name: Get tarball name
@@ -200,13 +174,13 @@ jobs:
       - name: Install Octave
         run: |
           sudo apt-get update
-          sudo apt-get -y install octave liboctave-dev
+          sudo apt-get -y install octave octave-dev
       - name: Unpack tarball
         run: tar xzvf ${{ env.allpurpose_tarball }}
       - name: Run test suite
         run: octave --eval "cd stk;  ${{ env.TEST_SCRIPT }}"
       - name: "Upload artifact: log file"
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: runtests-allpurpose-oct-log
           path: stk/stk_runtests.log
