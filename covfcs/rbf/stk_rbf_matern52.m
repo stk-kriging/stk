@@ -45,7 +45,7 @@
 function k = stk_rbf_matern52 (h, diff)
 
 % default: compute the value (not a derivative)
-if nargin < 2,
+if nargin < 2
     diff = -1;
 end
 
@@ -57,11 +57,11 @@ k = exp (- t);
 b = (k > 0);
 t = t(b);
 
-if diff <= 0,  % value of the covariance function
+if diff <= 0  % value of the covariance function
     
     k(b) = (1 + t + t.^2/3) .* k(b);
     
-elseif diff == 1,  % derivative wrt h
+elseif diff == 1  % derivative wrt h
     
     k(b) = C * -t/3 .* (1 + t) .* k(b);
     

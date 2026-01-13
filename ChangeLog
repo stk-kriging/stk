@@ -1,3 +1,15 @@
+2026-01-13  Julien Bect  <julien.bect@centralesupelec.fr>
+
+	Source formatting
+
+	* admin/stk_mlint_all.m: Add 'KEYBOARDFUN' to the list of critical
+	warnings.
+	* covfcs/rbf/stk_rbf_exponential.m: Remove call to `keyboard()`.
+	* covfcs/rbf/stk_rbf_gauss.m: Source formatting.
+	* covfcs/rbf/stk_rbf_matern.m: Source formatting.
+	* covfcs/rbf/stk_rbf_matern32.m: Source formatting.
+	* covfcs/rbf/stk_rbf_matern52.m: Source formatting.
+
 2024-10-29  Julien Bect  <julien.bect@centralesupelec.fr>
 
 	examples/test_functions: Polish copying permission statements

@@ -46,7 +46,7 @@
 function k = stk_rbf_matern (nu, h, diff)
 
 % default: compute the value (not a derivative)
-if nargin < 3,
+if nargin < 3
     diff = -1;
 end
 
@@ -55,9 +55,9 @@ if ~ ((isscalar (nu)) && (nu > 0))
 end
 
 % Handle the case of VERY large nu
-if nu > 1e305,
+if nu > 1e305
     % nu = 1e306 is so large thatn even gammaln (nu) is not defined !
-    if diff <= 0,
+    if diff <= 0
         k = stk_rbf_gauss (h);  return;
     else
         % Cannot compute or approximate the derivative for such a large nu
@@ -70,13 +70,13 @@ TOL = 10 * eps;
 
 % We have no analytical expression for the derivative with respect to nu,
 % even if nu is 3/2, 5/2 or +Inf
-if diff ~= 1,
+if diff ~= 1
     
-    if abs (nu - 1.5) < TOL,
+    if abs (nu - 1.5) < TOL
                 
         k = stk_rbf_matern32 (h, diff - 1);  return;
         
-    elseif abs (nu - 2.5) < TOL,
+    elseif abs (nu - 2.5) < TOL
         
         k = stk_rbf_matern52 (h, diff - 1);  return;
                
@@ -136,7 +136,7 @@ function y = besselk_ (nu, x)
 
 opts = stk_options_get('stk_rbf_matern');
 
-if size(x, 1) < opts.min_size_for_parallelization,
+if size(x, 1) < opts.min_size_for_parallelization
     y = besselk(nu, x);
 else
     y = stk_parallel_feval(@(t)(besselk(nu, t)), x, true, opts.min_block_size);

@@ -53,15 +53,15 @@
 function k = stk_rbf_gauss (h, diff)
 
 % default: compute the value (not a derivative)
-if nargin < 2,
+if nargin < 2
     diff = -1;
 end
 
-if diff <= 0,  % value of the covariance function
+if diff <= 0  % value of the covariance function
     
     k = exp (- h .^ 2);
     
-elseif diff == 1,  % derivative wrt h
+elseif diff == 1  % derivative wrt h
     
     k = - 2 * h .* exp (- h .^ 2);
     

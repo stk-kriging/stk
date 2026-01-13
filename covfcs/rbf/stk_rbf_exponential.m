@@ -74,10 +74,6 @@ if (nargin > 1) && (diff > 0)
     
 end
 
-if any (isnan (k))
-    keyboard
-end
-
 end % function
 
 

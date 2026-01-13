@@ -45,7 +45,7 @@
 function k = stk_rbf_matern32 (h, diff)
 
 % default: compute the value (not a derivative)
-if nargin < 2,
+if nargin < 2
     diff = -1;
 end
 
@@ -56,11 +56,11 @@ t  = C * abs (h);
 k = exp (- t);
 b = (k > 0);
 
-if diff <= 0,  % value of the covariance function
+if diff <= 0  % value of the covariance function
     
     k(b) = (1 + t(b)) .* k(b);
     
-elseif diff == 1,  % derivative wrt h
+elseif diff == 1  % derivative wrt h
     
     k(b) = - C * t(b) .* k(b);
     
